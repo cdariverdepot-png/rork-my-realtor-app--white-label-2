@@ -1,0 +1,370 @@
+import React, { useEffect } from "react";
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  ArrowLeft,
+  Bed,
+  Bath,
+  Maximize,
+  CalendarDays,
+  MessageSquare,
+  Heart,
+} from "lucide-react-native";
+import { brand, fonts } from "@/constants/colors";
+import { avatarPlaceholder } from "@/constants/assets";
+import { useBrand } from "@/contexts/BrandContext";
+import { useListings } from "@/contexts/ListingsContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { useEngagement } from "@/contexts/EngagementContext";
+import PressableScale from "@/components/PressableScale";
+import Reveal from "@/components/Reveal";
+import { ListingDetailSkeleton } from "@/components/Skeleton";
+import { bustedUri } from "@/lib/imageUri";
+
+const { height: H } = Dimensions.get("window");
+
+/** Detail modal for a single curated listing, with the realtor's personal take. */
+export default function ListingDetail() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { brand: b } = useBrand();
+  const realtor = b.realtor;
+  const firstName = realtor.name.split(" ")[0] ?? realtor.name;
+  const { all, hydrated } = useListings();
+  const { isFavorited, toggleListing } = useFavorites();
+  const { recordView } = useEngagement();
+  const item = all.find((l) => l.id === id) ?? all[0];
+
+  useEffect(() => {
+    if (item?.id) recordView(item.id);
+  }, [item?.id, recordView]);
+
+  if (!hydrated) {
+    return <ListingDetailSkeleton />;
+  }
+  if (!item) {
+    return <View style={[styles.root, { alignItems: "center", justifyContent: "center" }]} />;
+  }
+
+  return (
+    <View style={styles.root}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={[styles.heroImg, { height: H * 0.62 }]}>
+          <Image source={{ uri: bustedUri(item.images?.[0] ?? item.image, item.updatedAt) }} style={StyleSheet.absoluteFill} contentFit="cover" />
+          <LinearGradient
+            colors={["rgba(8,26,21,0.6)", "rgba(8,26,21,0)", "rgba(8,26,21,0.85)"]}
+            locations={[0, 0.4, 1]}
+            style={StyleSheet.absoluteFill}
+          />
+          <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
+            <PressableScale
+              onPress={() => router.back()}
+              hitSlop={12}
+              haptic="light"
+              scaleTo={0.9}
+              style={styles.back}
+            >
+              <ArrowLeft size={18} color={brand.ivory} strokeWidth={1.5} />
+            </PressableScale>
+            <View style={styles.topRight}>
+              <PressableScale
+                hitSlop={12}
+                onPress={() => toggleListing("favorites", item.id)}
+                haptic="light"
+                scaleTo={0.9}
+                style={styles.back}
+              >
+                <Heart
+                  size={16}
+                  color={isFavorited(item.id) ? brand.gold : brand.ivory}
+                  fill={isFavorited(item.id) ? brand.gold : "transparent"}
+                  strokeWidth={1.8}
+                />
+              </PressableScale>
+              <View style={styles.tag}>
+                <View style={styles.tagDot} />
+                <Text style={styles.tagText}>{item.tag.toUpperCase()}</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.heroBottom}>
+            <Text style={styles.neighborhood}>{item.neighborhood.toUpperCase()}</Text>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.price}>{item.price}</Text>
+          </View>
+        </View>
+
+        <Reveal delay={60}>
+        <View style={styles.specsRow}>
+          <Spec icon={<Bed size={18} color={brand.forest} strokeWidth={1.5} />} label={`${item.beds} bedrooms`} />
+          <View style={styles.specDivider} />
+          <Spec icon={<Bath size={18} color={brand.forest} strokeWidth={1.5} />} label={`${item.baths} baths`} />
+          <View style={styles.specDivider} />
+          <Spec icon={<Maximize size={18} color={brand.forest} strokeWidth={1.5} />} label={item.sqft} />
+        </View>
+        </Reveal>
+
+        <Reveal delay={140}>
+        <View style={styles.takeCard}>
+          <View style={styles.takeHead}>
+            {b.portraitUrl ? (
+              <Image source={{ uri: b.portraitUrl }} style={styles.avatar} contentFit="cover" />
+            ) : (
+              <View style={[styles.avatar, styles.avatarFallback]}>
+                <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />
+              </View>
+            )}
+            <View>
+              <Text style={styles.takeKicker}>{firstName.toUpperCase()}'S TAKE</Text>
+              <Text style={styles.takeName}>From {firstName}, personally</Text>
+            </View>
+          </View>
+          <Text style={styles.takeBody}>{item.elizaTake}</Text>
+        </View>
+        </Reveal>
+
+        <Reveal delay={220}>
+        <View style={styles.detailsBlock}>
+          <Text style={styles.detailsKicker}>THE FACTS</Text>
+          <Detail label="Neighborhood" value={item.neighborhood} />
+          <Detail label="Price" value={item.price} />
+          <Detail label="Bedrooms" value={String(item.beds)} />
+          <Detail label="Bathrooms" value={String(item.baths)} />
+          <Detail label="Interior" value={item.sqft} />
+          <Detail label="Status" value={item.tag} />
+          <Detail label="Showings" value="Private · by appointment" last />
+        </View>
+        </Reveal>
+
+        <View style={{ height: insets.bottom + 120 }} />
+      </ScrollView>
+
+      <View style={[styles.dock, { paddingBottom: insets.bottom + 12 }]}>
+        <PressableScale
+          onPress={() => router.replace("/messages")}
+          haptic="light"
+          style={styles.dockSecondary}
+        >
+          <MessageSquare size={16} color={brand.ivory} strokeWidth={1.5} />
+          <Text style={styles.dockSecondaryText}>Ask {firstName}</Text>
+        </PressableScale>
+        <PressableScale
+          onPress={() => router.replace({ pathname: "/book", params: { listingId: item.id } })}
+          haptic="medium"
+          scaleTo={0.96}
+          style={styles.dockPrimary}
+        >
+          <CalendarDays size={16} color={brand.forestDeep} strokeWidth={2} />
+          <Text style={styles.dockPrimaryText}>Book private showing</Text>
+        </PressableScale>
+      </View>
+    </View>
+  );
+}
+
+function Spec({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <View style={styles.spec}>
+      {icon}
+      <Text style={styles.specLabel}>{label}</Text>
+    </View>
+  );
+}
+
+function Detail({ label, value, last }: { label: string; value: string; last?: boolean }) {
+  return (
+    <View style={[styles.detailRow, last && { borderBottomWidth: 0 }]}>
+      <Text style={styles.detailLabel}>{label}</Text>
+      <Text style={styles.detailValue}>{value}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: brand.paper },
+  heroImg: { width: "100%", backgroundColor: brand.forest },
+  topBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  topRight: { flexDirection: "row", alignItems: "center", gap: 10 },
+  back: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(244,239,230,0.3)",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(8,26,21,0.35)",
+  },
+  tag: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    backgroundColor: "rgba(8,26,21,0.5)",
+    borderWidth: 1,
+    borderColor: "rgba(244,239,230,0.25)",
+  },
+  tagDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: brand.goldLight },
+  tagText: { fontFamily: fonts.sansMedium, color: brand.ivory, fontSize: 10, letterSpacing: 2 },
+  heroBottom: { position: "absolute", left: 24, right: 24, bottom: 28 },
+  neighborhood: {
+    fontFamily: fonts.sansMedium,
+    color: brand.goldLight,
+    fontSize: 11,
+    letterSpacing: 3,
+    marginBottom: 12,
+  },
+  title: {
+    fontFamily: fonts.serif,
+    color: brand.ivory,
+    fontSize: 38,
+    lineHeight: 42,
+    letterSpacing: -0.8,
+    marginBottom: 12,
+  },
+  price: {
+    fontFamily: fonts.serifItalic,
+    color: brand.goldLight,
+    fontSize: 22,
+  },
+  specsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 22,
+    paddingHorizontal: 24,
+    backgroundColor: brand.paper,
+    borderBottomWidth: 1,
+    borderBottomColor: brand.hairline,
+    justifyContent: "space-between",
+  },
+  spec: { flexDirection: "row", alignItems: "center", gap: 8, flex: 1 },
+  specDivider: { width: 1, height: 22, backgroundColor: brand.hairline },
+  specLabel: {
+    fontFamily: fonts.sans,
+    color: brand.ink,
+    fontSize: 12,
+    letterSpacing: 0.4,
+  },
+  takeCard: {
+    margin: 24,
+    padding: 22,
+    backgroundColor: brand.forest,
+  },
+  takeHead: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    marginBottom: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(244,239,230,0.18)",
+  },
+  avatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: brand.gold,
+  },
+  avatarFallback: {
+    backgroundColor: "#07070A",
+    overflow: "hidden",
+  },
+  takeKicker: {
+    fontFamily: fonts.sansMedium,
+    color: brand.goldLight,
+    fontSize: 10,
+    letterSpacing: 3,
+    marginBottom: 4,
+  },
+  takeName: {
+    fontFamily: fonts.serifItalic,
+    color: brand.ivory,
+    fontSize: 14,
+  },
+  takeBody: {
+    fontFamily: fonts.serifItalic,
+    color: brand.ivory,
+    fontSize: 17,
+    lineHeight: 26,
+  },
+  detailsBlock: {
+    paddingHorizontal: 24,
+    paddingTop: 8,
+  },
+  detailsKicker: {
+    fontFamily: fonts.sansMedium,
+    color: brand.goldDeep,
+    fontSize: 10,
+    letterSpacing: 3,
+    marginBottom: 8,
+  },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: brand.hairline,
+  },
+  detailLabel: { fontFamily: fonts.sans, color: brand.muted, fontSize: 13 },
+  detailValue: { fontFamily: fonts.serif, color: brand.ink, fontSize: 14 },
+  dock: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    flexDirection: "row",
+    gap: 10,
+    backgroundColor: brand.forestDeep,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(244,239,230,0.12)",
+  },
+  dockSecondary: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: "rgba(244,239,230,0.3)",
+  },
+  dockSecondaryText: {
+    fontFamily: fonts.sansSemi,
+    color: brand.ivory,
+    fontSize: 12,
+    letterSpacing: 1.5,
+  },
+  dockPrimary: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 16,
+    backgroundColor: brand.ivory,
+  },
+  dockPrimaryText: {
+    fontFamily: fonts.sansSemi,
+    color: brand.forestDeep,
+    fontSize: 12,
+    letterSpacing: 1.8,
+  },
+});

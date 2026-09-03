@@ -1,0 +1,10 @@
+{
+  "$schema": "https://rork.com/schema/rork.json",
+  "apps": [
+    {
+      "name": "My Realtor App",
+      "path": "expo",
+      "framework": "react-native"
+    }
+  ]
+}
