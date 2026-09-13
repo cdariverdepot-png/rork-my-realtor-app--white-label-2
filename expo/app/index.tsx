@@ -545,11 +545,11 @@ const styles = StyleSheet.create({
 
   // ── Landing screen ──
   landingRoot: { flex: 1, backgroundColor: dark.bg },
-  landingBg: { ...StyleSheet.absoluteFillObject },
+  landingBg: { ...StyleSheet.absoluteFill },
   landingScroll: { flexGrow: 1, justifyContent: "center", paddingHorizontal: 28 },
   landingCenter: { alignItems: "center", width: "100%" },
   landingMonoWrap: { width: 88, height: 88, alignItems: "center", justifyContent: "center", marginBottom: 28 },
-  landingMonoRing: { ...StyleSheet.absoluteFillObject, borderRadius: 44, borderWidth: 1, borderColor: "rgba(210,163,67,0.4)" },
+  landingMonoRing: { ...StyleSheet.absoluteFill, borderRadius: 44, borderWidth: 1, borderColor: "rgba(210,163,67,0.4)" },
   landingMono: { fontFamily: fonts.serifItalic, color: brand.goldLight, fontSize: 34, letterSpacing: 1 },
   landingBrand: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 13, letterSpacing: 5, marginBottom: 14, textAlign: "center", textShadowColor: "rgba(0,0,0,0.65)", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 12 },
   landingTagline: { fontFamily: fonts.serif, color: "rgba(244,239,230,0.9)", fontSize: 16, lineHeight: 24, textAlign: "center", marginBottom: 44, letterSpacing: 0.3, textShadowColor: "rgba(0,0,0,0.65)", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 10 },

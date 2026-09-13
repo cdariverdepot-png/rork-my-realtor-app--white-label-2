@@ -437,7 +437,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 // ── Styles ───────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: dark.bg },
-  bgImage: { ...StyleSheet.absoluteFillObject },
+  bgImage: { ...StyleSheet.absoluteFill },
   topBar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 22, paddingBottom: 8 },
   iconBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: "rgba(244,239,230,0.18)", alignItems: "center", justifyContent: "center" },
   brandWord: { fontFamily: fonts.serif, color: brand.ivory, fontSize: 18, letterSpacing: 6 },
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
   scroll: { flexGrow: 1, justifyContent: "center", paddingHorizontal: 28, paddingTop: 24 },
   center: { alignItems: "center", width: "100%" },
   monogramWrap: { width: 92, height: 92, alignItems: "center", justifyContent: "center", marginBottom: 32 },
-  monogramRing: { ...StyleSheet.absoluteFillObject, borderRadius: 46, borderWidth: 1, borderColor: "rgba(210,163,67,0.45)" },
+  monogramRing: { ...StyleSheet.absoluteFill, borderRadius: 46, borderWidth: 1, borderColor: "rgba(210,163,67,0.45)" },
   monogram: { fontFamily: fonts.serifItalic, color: brand.goldLight, fontSize: 36, letterSpacing: 1 },
   eyebrow: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 10, letterSpacing: 4, textAlign: "center", marginBottom: 18 },
   title: { fontFamily: fonts.serif, color: brand.ivory, fontSize: 32, lineHeight: 38, letterSpacing: -0.5, textAlign: "center", marginBottom: 14 },

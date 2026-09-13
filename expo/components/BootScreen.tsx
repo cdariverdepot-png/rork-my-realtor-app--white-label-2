@@ -161,7 +161,7 @@ export default function BootScreen({ onFinish }: Props) {
 
 const styles = {
   fill: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "#000000",
     alignItems: "center" as const,
     justifyContent: "center" as const,

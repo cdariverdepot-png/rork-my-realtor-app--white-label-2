@@ -1705,7 +1705,7 @@ const styles = StyleSheet.create({
     backgroundColor: admin.surfaceHi, position: "relative", marginBottom: 4,
     shadowColor: admin.gold, shadowOpacity: 0.3, shadowRadius: 20, shadowOffset: { width: 0, height: 4 }, elevation: 10,
   },
-  heroPortraitRing: { ...StyleSheet.absoluteFillObject, borderRadius: 60, borderWidth: 1.5, borderColor: admin.hairlineGold },
+  heroPortraitRing: { ...StyleSheet.absoluteFill, borderRadius: 60, borderWidth: 1.5, borderColor: admin.hairlineGold },
   heroPortraitFallback: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#07070A" },
   heroGreeting: {
     fontFamily: fonts.serif, color: admin.text, fontSize: 32, letterSpacing: -0.8,
@@ -1723,7 +1723,7 @@ const styles = StyleSheet.create({
     marginTop: 20, borderRadius: 22, overflow: "hidden",
     borderWidth: 1, borderColor: admin.hairlineGoldSoft,
   },
-  previewTint: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(10,11,14,0.20)" },
+  previewTint: { ...StyleSheet.absoluteFill, backgroundColor: "rgba(10,11,14,0.20)" },
   previewRow: { flexDirection: "row", gap: 16, padding: 16, alignItems: "center" },
 
   phoneFrame: {
@@ -1737,7 +1737,7 @@ const styles = StyleSheet.create({
     width: 34, height: 5, borderRadius: 3, backgroundColor: "#141519", zIndex: 4,
   },
   miniHero: { flex: 1.42, justifyContent: "flex-end", backgroundColor: "#1A1713" },
-  miniHeroFallback: { ...StyleSheet.absoluteFillObject, backgroundColor: "#07070A" },
+  miniHeroFallback: { ...StyleSheet.absoluteFill, backgroundColor: "#07070A" },
   miniIcon: {
     position: "absolute", top: 11, alignSelf: "center",
     width: 16, height: 16, borderRadius: 4, overflow: "hidden",
@@ -1933,7 +1933,7 @@ const styles = StyleSheet.create({
 
   /* Magazine overlay */
   magazineOverlay: {
-    ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(5,6,8,0.92)",
+    ...StyleSheet.absoluteFill, backgroundColor: "rgba(5,6,8,0.92)",
     alignItems: "center", justifyContent: "center",
   },
   magazineOverlayContent: { gap: 8, width: "75%" },

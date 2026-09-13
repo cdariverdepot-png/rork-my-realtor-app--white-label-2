@@ -11,14 +11,14 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
-import * as Contacts from "expo-contacts";
+import * as Contacts from "expo-contacts/legacy";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import {
   ArrowLeft,
   Check,
   FileSpreadsheet,
-  Linkedin,
+  BriefcaseBusiness,
   Mail,
   Smartphone,
   UserPlus,
@@ -259,7 +259,7 @@ export default function ClientsImport() {
             <SourceCard
               busy={busy === "linkedin"}
               onPress={() => importFromFile("linkedin")}
-              Icon={Linkedin}
+              Icon={BriefcaseBusiness}
               title="LinkedIn connections"
               sub="Settings → Data Privacy → Get a copy → Connections.csv"
             />

@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   heroScrim: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "rgba(8,26,21,0.62)",
   },
   heroInner: {

@@ -274,7 +274,7 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
 
 const styles = StyleSheet.create({
   root: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: dark.bg,
     zIndex: 9998,
   },

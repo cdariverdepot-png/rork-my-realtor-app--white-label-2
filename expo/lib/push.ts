@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
-import Constants from "expo-constants";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import { supabase } from "@/lib/supabase";
 
 /**
@@ -37,6 +37,8 @@ function projectId(): string | undefined {
  */
 export async function getPushToken(): Promise<string | null> {
   if (Platform.OS === "web") return null;
+  // Expo Go does not support remote push registration; development builds do.
+  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) return null;
   if (!Device.isDevice) return null;
 
   try {

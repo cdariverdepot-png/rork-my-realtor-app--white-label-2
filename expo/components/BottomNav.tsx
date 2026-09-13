@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   barTint: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   row: {
     flexDirection: "row",

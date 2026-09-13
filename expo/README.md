@@ -2,8 +2,8 @@
 
 ## Updated Expo workflow
 
-The onboarding update targets Expo SDK 54 (React Native 0.81 / React 19.1).
-Run these commands from the `expo` directory, using Node 20.19 or newer
+The onboarding update targets Expo SDK 57 (React Native 0.86 / React 19.2).
+Run these commands from the `expo` directory, using Node 20.19.4 or a supported newer LTS
 and pnpm with the included lockfile:
 
 ```sh
@@ -12,9 +12,15 @@ pnpm run expo:start
 ```
 
 For a browser preview use `pnpm run expo:web`. The existing Rork start
-commands are retained. Use an Expo Go build compatible with SDK 54,
+commands are retained. Use an Expo Go build compatible with SDK 57,
 or a development build. Push-notification delivery needs a development
 build and device testing; a successful JavaScript export does not verify it.
+
+SDK 57 requires rebuilding existing native development/production apps; do
+not send an SDK 57 JavaScript update to an SDK 54 native binary. The newer
+native baseline requires iOS 16.4 or later and Xcode 26.4 or later to build iOS.
+Application identifiers, authentication storage, and profile storage keys are
+unchanged by this upgrade. No database migration or data reset is needed.
 
 Checks: `pnpm run typecheck`, `pnpm test`, and
 `pnpm exec expo export --platform all`.

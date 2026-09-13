@@ -401,7 +401,7 @@ const field = StyleSheet.create({
 });
 
 const sheet = StyleSheet.create({
-  backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(4,5,7,0.72)" },
+  backdrop: { ...StyleSheet.absoluteFill, backgroundColor: "rgba(4,5,7,0.72)" },
   sheet: {
     position: "absolute",
     left: 0,

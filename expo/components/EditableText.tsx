@@ -153,7 +153,7 @@ const editStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(8,9,12,0.6)" },
+  backdrop: { ...StyleSheet.absoluteFill, backgroundColor: "rgba(8,9,12,0.6)" },
   center: { flex: 1, justifyContent: "center", paddingHorizontal: 28 },
   sheet: {
     backgroundColor: brand.paper,

@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: admin.surfaceHi,
   },
-  thumbHidden: { ...StyleSheet.absoluteFillObject, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(5,6,8,0.55)" },
+  thumbHidden: { ...StyleSheet.absoluteFill, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(5,6,8,0.55)" },
   cardTopRow: { flexDirection: "row", alignItems: "center", marginBottom: 7 },
   statusBadge: {
     flexDirection: "row",
