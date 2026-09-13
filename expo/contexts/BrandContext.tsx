@@ -2,9 +2,11 @@ import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { isKvEnabled } from "@/lib/kvStore";
+import { isKvEnabled, kvSet } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
+import { requiredStatus } from "@/constants/sections";
+import { preserveProfile } from "@/lib/preserveProfile";
 import { realtor as seedRealtor, personalNote as seedNote, marketBeat as seedBeat, testimonials as seedTestimonials, recentlyClosed as seedClosed } from "@/constants/realtor";
 import { neighborhoods as seedNeighborhoods, marketPulse as seedPulse, type Neighborhood } from "@/constants/insights";
 import { assets as seedAssets } from "@/constants/assets";
@@ -109,6 +111,8 @@ export type Concierge = { eyebrow: string; title: string };
 export type CuratedSection = { eyebrow: string; title: string };
 export type SocialProofSection = { eyebrow: string; title: string; closedKicker: string };
 export type QuickContactSection = { kicker: string; title: string; sub: string };
+/** Optional content is intentionally tri-state: empty is not the same as removed. */
+export type ContentSectionState = "present" | "empty" | "hidden";
 
 export type Brand = {
   realtor: RealtorProfile;
@@ -126,6 +130,8 @@ export type Brand = {
   curated: CuratedSection;
   social: SocialProofSection;
   quickContact: QuickContactSection;
+  /** Canonical section visibility, shared by every theme renderer. */
+  sectionStates?: Record<string, ContentSectionState>;
   credentials: CredentialsRecord;
   theme: ThemeConfig;
   /** True once the realtor has explicitly picked any theme axis. Guards the
@@ -492,7 +498,9 @@ function scrubDemoContent(b: Brand, isDemo: boolean, fallback: Brand): Brand {
  * identity to decide whether the correction needs writing back.
  */
 function normalizeBrand(b: Brand, isDemo: boolean, fallback: Brand): Brand {
-  return scrubDemoContent(migrateLegacyTheme(b, isDemo), isDemo, fallback);
+  // Existing saved content is user-owned, including legacy themes and copy
+  // identical to demo text. Demo isolation happens at the context boundary.
+  return b;
 }
 
 /**
@@ -586,7 +594,7 @@ const buildGuidedStarter = (current: Brand): Brand => {
 };
 
 export const [BrandProvider, useBrand] = createContextHook(() => {
-  const { realtorId, realtorRecord, demoViewMode } = useAuth();
+  const { realtorId, realtorRecord, demoViewMode, unlockSharingCredentials } = useAuth();
   const [brand, setBrand] = useState<Brand>(() => buildSeed());
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [revision, setRevision] = useState<number>(0);
@@ -606,11 +614,8 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Scoped keys.
-  // demoViewMode MUST pin to the "demo" scope. Previously this read the signed-in
-  // realtor's id, so opening the showcase hydrated *their* saved brand on top of the
-  // Eliza seed — which is why edits appeared to cross between the demo and the
-  // realtor's own client view. The demo owns its own scope, always.
-  const scope = demoViewMode ? "demo" : realtorId ? realtorId : "demo";
+  // Keep authenticated persistence stable while the separate demo view is open.
+  const scope = realtorId ? realtorId : "demo";
   const STORAGE_KEY = `${scope}:brand.v2`;
   const REVISION_KEY = `${scope}:brand.rev.v2`;
   const CHANNEL = `${scope}:brand:v2`;
@@ -618,10 +623,9 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
 
   // Real realtors get a neutral white-label brand seeded from their record;
   // only the demo realtor (and demo-view mode) gets the full Eliza Vance showcase.
-  const isDemoScope = demoViewMode || !realtorId || realtorId === DEMO_REALTOR_ID;
-  // When demoViewMode is forced, ignore the realtor's own record so the demo
-  // stays purely Eliza Vance with no real-realtor details leaking in.
-  const effectiveRecord = demoViewMode ? undefined : realtorRecord;
+  const isDemoScope = !realtorId || realtorId === DEMO_REALTOR_ID;
+  // The read-only demo is selected at the presentation boundary below.
+  const effectiveRecord = realtorRecord;
   const seed = useMemo(
     () => buildSeed(effectiveRecord, isDemoScope),
     [effectiveRecord, isDemoScope]
@@ -643,12 +647,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
         if (mounted && raw) {
           const parsed = JSON.parse(raw) as Partial<Brand>;
           const base = seed;
-          const merged: Brand = {
-            ...base,
-            ...parsed,
-            realtor: { ...base.realtor, ...(parsed.realtor ?? {}) },
-            credentials: { ...base.credentials, ...(parsed.credentials ?? {}) },
-          };
+          const merged: Brand = preserveProfile(base, parsed);
           const normalized = normalizeBrand(merged, isDemoScope, seed);
           setBrand(normalized);
           // A correction that only lives in memory loses: the durable sync pushes the
@@ -735,7 +734,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       revRef.current = data.rev;
       setRevision(data.rev);
       // Peers can be running an un-migrated copy — normalize on the way in.
-      const incoming = migrateLegacyTheme(data.brand, isDemoScopeRef.current);
+      const incoming = preserveProfile(brandRef.current, data.brand);
       setBrand(incoming);
       void persist(incoming, data.rev);
     });
@@ -798,12 +797,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       revRef.current = Math.max(revRef.current, row.rev);
       setRevision(revRef.current);
       const base = seed;
-      const merged: Brand = {
-        ...base,
-        ...row.value,
-        realtor: { ...base.realtor, ...(row.value.realtor ?? {}) },
-        credentials: { ...base.credentials, ...(row.value.credentials ?? {}) },
-      };
+      const merged: Brand = preserveProfile(base, row.value);
       // THIS is what kept the showcase content alive. The initial durable fetch is
       // applied `forced`, so it lands regardless of revision — un-normalized — moments
       // after local hydration had already cleaned the brand. Every ingress point
@@ -857,6 +851,21 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
     update(() => seed);
   }, [update, seed]);
 
+  /** Save must finish local persistence before onboarding can advance. */
+  const saveBrand = useCallback(async (next: Brand) => {
+    if (demoViewMode) throw new Error("The demo is read-only.");
+    const saved = { ...next, updatedAt: Date.now() };
+    const rev = Math.max(revRef.current + 1, Date.now());
+    await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(saved)], [REVISION_KEY, String(rev)]]);
+    if (supabase) await kvSet(KV_KEY, saved, rev, true);
+    if (requiredStatus(saved).complete) await unlockSharingCredentials();
+    brandRef.current = saved;
+    revRef.current = rev;
+    setBrand(saved);
+    setRevision(rev);
+    broadcast(saved, rev);
+  }, [demoViewMode, STORAGE_KEY, REVISION_KEY, KV_KEY, broadcast, unlockSharingCredentials]);
+
   /**
    * Fills the empty template with generic starter copy for the "guided
    * walkthrough" onboarding path, keeping the realtor's own identity.
@@ -883,6 +892,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   const value = useMemo(
     () => ({
       brand: demoViewMode ? demoBrand : visibleBrand,
+      savedBrand: brand,
       theme: demoViewMode ? demoTheme : themeTokens,
       hydrated: demoViewMode ? true : hydrated,
       revision,
@@ -890,11 +900,12 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       previewingDraft: !demoViewMode && draftPreview !== null,
       setDraftPreview,
       update,
+      saveBrand,
       reset,
       seedPlaceholders,
       refresh,
     }),
-    [demoViewMode, demoBrand, demoTheme, visibleBrand, draftPreview, themeTokens, hydrated, revision, syncStatus, update, reset, seedPlaceholders, refresh]
+    [brand, demoViewMode, demoBrand, demoTheme, visibleBrand, draftPreview, themeTokens, hydrated, revision, syncStatus, update, saveBrand, reset, seedPlaceholders, refresh]
   );
 
   return value;

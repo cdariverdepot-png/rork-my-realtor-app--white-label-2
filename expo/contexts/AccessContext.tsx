@@ -56,7 +56,7 @@ function normalize(code: string): string {
 export const [AccessProvider, useAccess] = createContextHook(() => {
   const { realtorId, lookupRealtorByCode, realtorRecord } = useAuth();
   const [config, setConfig] = useState<AccessConfig>({
-    clientCodeEnabled: true,
+    clientCodeEnabled: false,
     clientCode: "",
     updatedAt: 0,
   });
@@ -75,6 +75,8 @@ export const [AccessProvider, useAccess] = createContextHook(() => {
 
   // Load access config for the current realtor
   useEffect(() => {
+    setHydrated(false);
+    setConfig({ clientCodeEnabled: false, clientCode: "", updatedAt: 0 });
     if (!realtorId) {
       setHydrated(true);
       return;
@@ -88,16 +90,12 @@ export const [AccessProvider, useAccess] = createContextHook(() => {
           setConfig((prev) => ({ ...prev, ...parsed }));
         }
         // Also set client code from realtor record
-        if (realtorRecord?.client_code) {
-          setConfig((prev) =>
-            prev.clientCode
-              ? prev
-              : {
+        if (mounted && realtorRecord?.client_code) {
+          setConfig((prev) => ({
                   ...prev,
                   clientCode: realtorRecord.client_code,
-                  clientCodeEnabled: realtorRecord.client_code_enabled ?? true,
-                }
-          );
+                  clientCodeEnabled: realtorRecord.client_code_enabled === true,
+                }));
         }
       } catch (e) {
         console.log("[access] hydrate error", e);
@@ -167,6 +165,9 @@ export const [AccessProvider, useAccess] = createContextHook(() => {
       // Look up the code in Supabase / local cache
       const record = await lookupRealtorByCode(code);
       if (!record) return { role: "invalid" };
+      // A code may exist in the realtor record before setup, but it is not an
+      // invitation until the base app has been created and credentials unlocked.
+      if (record.client_code_enabled !== true) return { role: "invalid" };
 
       // Check if this is the realtor's own code (for admin access)
       // Realtors also sign in with email/password, but the code can be a shortcut
@@ -187,6 +188,15 @@ export const [AccessProvider, useAccess] = createContextHook(() => {
     // No-op for now — lookupRealtorByCode already tries Supabase first
   }, []);
 
+  /** Unlock credentials only after the realtor has completed required setup. */
+  const publishClientCode = useCallback(() => {
+    update((c) => ({ ...c, clientCodeEnabled: true }));
+    if (supabase && realtorId) {
+      void supabase.from("realtors").update({ client_code_enabled: true }).eq("id", realtorId)
+        .then(({ error }) => { if (error) console.log("[access] unlock failed", error.message); });
+    }
+  }, [update, realtorId]);
+
   return {
     hydrated,
     clientCodeEnabled: config.clientCodeEnabled,
@@ -195,7 +205,7 @@ export const [AccessProvider, useAccess] = createContextHook(() => {
     setClientCodeEnabled,
     validateCode,
     refresh,
-    publishClientCode: () => {},
+    publishClientCode,
     setClientCode: () => {},
     regenerateClientCode: () => {},
   };

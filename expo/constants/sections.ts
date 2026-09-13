@@ -19,8 +19,8 @@
  * instead of from the authored order, so any subset still reads as intentional.
  */
 
-import type { Brand } from "@/contexts/BrandContext";
-import { hasCredentials } from "@/components/Credentials";
+import type { Brand, ContentSectionState } from "@/contexts/BrandContext";
+import { hasCredentials } from "@/lib/credentials";
 
 /* ------------------------------ Required floor ------------------------------ */
 
@@ -158,14 +158,12 @@ export const CLIENT_SECTIONS: ClientSection[] = [
   { id: "hero", isReady: () => true, structural: true },
   {
     id: "listings",
-    // Always shown. Listings are the reason a client opens the app at all, so
-    // an empty collection becomes an explicit "coming soon" rather than a gap —
-    // a missing section here would read as a broken app, not a spare one.
-    isReady: () => true,
+    // Empty collections collapse in the client-facing result.
+    isReady: ({ visibleListingCount }) => visibleListingCount > 0,
   },
   {
     id: "note",
-    isReady: ({ brand: b }) => filled(b.note.body[0]) || filled(b.note.body[1]),
+    isReady: ({ brand: b }) => b.note.body.some(filled),
   },
   { id: "credentials", isReady: ({ brand: b }) => hasCredentials(b.credentials) },
   {
@@ -181,7 +179,7 @@ export const CLIENT_SECTIONS: ClientSection[] = [
   { id: "concierge", isReady: () => true, structural: true },
   {
     id: "social",
-    isReady: ({ brand: b }) => b.testimonials.length > 0 || b.recentlyClosed.length > 0,
+    isReady: ({ brand: b }) => b.testimonials.some(t => filled(t.quote)) || b.recentlyClosed.some(d => filled(d.address)),
   },
   { id: "support", isReady: () => true, structural: true },
   { id: "footer", isReady: () => true, structural: true },
@@ -189,7 +187,7 @@ export const CLIENT_SECTIONS: ClientSection[] = [
 
 /** The sections that will actually render, in order. */
 export function visibleSections(ctx: SectionContext): ClientSectionId[] {
-  return CLIENT_SECTIONS.filter((s) => s.isReady(ctx)).map((s) => s.id);
+  return CLIENT_SECTIONS.filter((s) => sectionState(ctx.brand, s.id, s.isReady(ctx)) === "present").map((s) => s.id);
 }
 
 /* ------------------------------ Rhythm ------------------------------ */
@@ -211,4 +209,9 @@ export function revealDelays(ids: ClientSectionId[]): Record<string, number> {
     out[id] = STAGGER_START + i * STAGGER_STEP;
   });
   return out;
+}
+
+
+export function sectionState(brand: Brand, id: ClientSectionId, contentReady: boolean): ContentSectionState {
+  return brand.sectionStates?.[id] === "hidden" ? "hidden" : contentReady ? "present" : "empty";
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Animated,
   Easing,
@@ -51,11 +52,11 @@ export default function Portal() {
     lookupRealtorByCode,
   } = useAuth();
 
-  const entryParam = useLocalSearchParams<{ entry?: string }>().entry;
+  const { entry: entryParam, invite } = useLocalSearchParams<{ entry?: string; invite?: string }>();
   const initialStage: Stage = entryParam === "realtor" ? "realtor-signin" : entryParam === "client" ? "code" : "entry";
 
   const [stage, setStage] = useState<Stage>(initialStage);
-  const [code, setCode] = useState<string>("");
+  const [code, setCode] = useState<string>(invite ?? "");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -65,6 +66,26 @@ export default function Portal() {
   const [resolvedRealtorName, setResolvedRealtorName] = useState<string>("");
   const [resolvedBrandName, setResolvedBrandName] = useState<string>("");
   const [resolvedMonogram, setResolvedMonogram] = useState<string>("");
+
+  useEffect(() => {
+    let mounted = true;
+    if (isAuthenticated || entryParam === "realtor") return;
+    void (async () => {
+      const pending = await AsyncStorage.getItem("onboarding.pendingInvite.v1");
+      const accepted = invite ? { code: invite } : pending ? JSON.parse(pending) as { code: string } : null;
+      if (!accepted) return;
+      const record = await lookupRealtorByCode(accepted.code);
+      if (!mounted || !record || !record.client_code_enabled) return;
+      setResolvedRealtorId(record.id);
+      setResolvedRealtorName(record.name);
+      setResolvedBrandName(record.brand_name);
+      setResolvedMonogram(record.monogram);
+      await AsyncStorage.setItem("onboarding.pendingInvite.v1", JSON.stringify(accepted));
+      setCode(accepted.code);
+      setStage("client-setup");
+    })().catch(() => {});
+    return () => { mounted = false; };
+  }, [isAuthenticated, entryParam, invite, lookupRealtorByCode]);
 
   // Auto-route if already authenticated
   useEffect(() => {
@@ -109,11 +130,12 @@ export default function Portal() {
     setError(null);
     try {
       const record = await lookupRealtorByCode(code);
-      if (!record) {
-        setError("That code isn't recognized. Check and try again.");
+      if (!record || record.client_code_enabled !== true) {
+        setError(record ? "This app is still being set up by your realtor." : "That code isn't recognized. Check and try again.");
         setCode(""); triggerShake(); return;
       }
       if (Platform.OS !== "web") Haptics.selectionAsync();
+      await AsyncStorage.setItem("onboarding.pendingInvite.v1", JSON.stringify({ code }));
       setResolvedRealtorId(record.id);
       setResolvedRealtorName(record.name);
       setResolvedBrandName(record.brand_name || record.name.split(" ").pop()?.toUpperCase() || "");
@@ -197,7 +219,7 @@ export default function Portal() {
     stage === "entry" ? "Choose how you'd like to continue."
     : stage === "code" ? "Enter the 6-character code your realtor shared with you."
     : stage === "realtor-setup" ? "You'll manage your listings, brand, and clients from here."
-    : stage === "realtor-signin" ? "Sign back into your admin studio."
+    : stage === "realtor-signin" ? "Sign back into your dashboard."
     : stage === "client-setup" ? `Create your private profile. ${resolvedRealtorName?.split(" ")[0] || "Your realtor"} will see you on the roster.`
     : stage === "client-full" ? `${resolvedRealtorName?.split(" ")[0] || "This agent"} isn't accepting new clients at the moment.`
     : "Sign in to your private profile.";
@@ -474,7 +496,7 @@ const styles = StyleSheet.create({
   switchHint: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.55)", fontSize: 12 },
   switchLink: { fontFamily: fonts.sansSemi, color: brand.goldLight, fontSize: 12, letterSpacing: 1.2 },
   footer: { position: "absolute", left: 0, right: 0, bottom: 0, alignItems: "center", justifyContent: "center", paddingTop: 10, paddingHorizontal: 28 },
-  forgotRow: { alignItems: "center", paddingTop: 4, paddingBottom: 10 },
+  forgotRow: { alignItems: "center", marginTop: 18, paddingTop: 14, paddingBottom: 14, minHeight: 48 },
   forgotText: {
     fontFamily: fonts.sansMedium,
     color: "rgba(244,239,230,0.5)",

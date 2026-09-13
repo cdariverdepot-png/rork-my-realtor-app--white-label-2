@@ -2,20 +2,11 @@ import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { brand, fonts } from "@/constants/colors";
 import { useBrand } from "@/contexts/BrandContext";
-import type { CredentialsRecord } from "@/contexts/BrandContext";
+import { hasCredentials } from "@/lib/credentials";
+export { hasCredentials } from "@/lib/credentials";
 import SectionLabel from "./SectionLabel";
 
 /** True when there is at least one fact worth showing a client. */
-export function hasCredentials(c: CredentialsRecord | undefined): boolean {
-  if (!c) return false;
-  return (
-    c.designations.length > 0 ||
-    c.education.length > 0 ||
-    c.awards.length > 0 ||
-    c.memberships.length > 0 ||
-    c.languages.length > 0
-  );
-}
 
 /**
  * Proof-by-qualification, sitting between the personal note (the emotional

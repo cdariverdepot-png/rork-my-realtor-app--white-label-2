@@ -13,6 +13,7 @@ import { registerDevice, sendPush } from "@/lib/push";
 export type NotifKind = "new" | "price" | "status" | "personal" | "appointment";
 
 export type NotifItem = {
+  audience?: "realtor";
   id: string; kind: NotifKind; title: string; body: string;
   listingId?: string; recipientIds?: string[]; read: boolean; createdAt: number;
 };
@@ -77,11 +78,12 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
     ch.on("broadcast", { event: "push" }, (payload) => {
       const n = payload.payload as NotifItem; if (!n?.id) return;
       setItems((prev) => { if (prev.some((p) => p.id === n.id)) return prev; const next = [n, ...prev]; void persist(next); return next; });
-      void presentLocal(n); surface(n); bumpRev();
+      if (n.audience !== "realtor" || isAdmin) { void presentLocal(n); surface(n); }
+      bumpRev();
     });
     ch.subscribe(); channelRef.current = ch;
     return () => { ch.unsubscribe(); channelRef.current = null; };
-  }, [hydrated, persist, presentLocal, surface, bumpRev, CHANNEL]);
+  }, [hydrated, persist, presentLocal, surface, bumpRev, CHANNEL, isAdmin]);
 
   const applyRemote = useCallback((row: { value: NotifItem[]; rev: number }, meta?: { initial?: boolean; forced?: boolean }) => {
     if (!Array.isArray(row?.value)) return;
@@ -157,7 +159,23 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
     setItems((prev) => { const next = prev.map((n) => (n.id === id ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
   }, [persist, bumpRev]);
 
-  const unreadCount = items.filter((n) => !n.read).length;
+  const notifyClientJoined = useCallback((clientId: string, name: string) => {
+    if (!realtorId || demoViewMode) return;
+    const n: NotifItem = { id: `client-joined:${clientId}`, kind: "personal", audience: "realtor",
+      title: "New client joined", body: `${name} completed their profile. View their details in Clients.`,
+      read: false, createdAt: Date.now() };
+    setItems(prev => {
+      if (prev.some(item => item.id === n.id)) return prev;
+      const next = [n, ...prev]; void persist(next); return next;
+    });
+    bumpRev();
+    void channelRef.current?.send({ type: "broadcast", event: "push", payload: n });
+    void sendPush({ realtorId, audience: { kind: "realtor" }, title: n.title, body: n.body,
+      data: { clientId, route: "/admin/clients" } });
+  }, [realtorId, demoViewMode, persist, bumpRev]);
 
-  return { items, hydrated, permission, unreadCount, foreground, dismissForeground, requestPermission, broadcastFromRealtor, markAllRead, markRead, refresh, pushToken: pushTokenRef.current };
+  const visibleItems = items.filter(n => n.audience !== "realtor" || isAdmin);
+  const unreadCount = visibleItems.filter((n) => !n.read).length;
+
+  return { items: visibleItems, hydrated, permission, unreadCount, foreground, dismissForeground, requestPermission, broadcastFromRealtor, notifyClientJoined, markAllRead, markRead, refresh, pushToken: pushTokenRef.current };
 });

@@ -17,8 +17,8 @@ const Q_W = W - 48;
 
 export default function SocialProof() {
   const { brand: b, theme } = useBrand();
-  const testimonials = b.testimonials;
-  const recentlyClosed = b.recentlyClosed;
+  const testimonials = b.testimonials.filter(t => t.quote.trim());
+  const recentlyClosed = b.recentlyClosed.filter(d => d.address.trim());
   const realtor = b.realtor;
   const [idx, setIdx] = useState<number>(0);
   const ref = useRef<FlatList>(null);

@@ -16,7 +16,12 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import NeutralContentCanvas from "@/components/NeutralContentCanvas";
+import ThemeImagePosition from "@/components/ThemeImagePosition";
+import { imagePosition } from "@/lib/themeImages";
+import { editorSave } from "@/lib/editorSave";
+import { useListings, type ManagedListing } from "@/contexts/ListingsContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
@@ -287,12 +292,16 @@ const SECTIONS: { id: SectionId; label: string }[] = [
 
 export default function StudioScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ section?: string }>();
   const insets = useSafeAreaInsets();
   const { isAdmin, hydrated } = useAuth();
-  const { brand: live, update, syncStatus, setDraftPreview } = useBrand();
+  const { brand: live, saveBrand, syncStatus, setDraftPreview } = useBrand();
+  const [saving, setSaving] = useState(false);
+  const { all: liveListings, saveListings } = useListings();
+  const [listingEdits, setListingEdits] = useState<Record<string, Partial<ManagedListing>>>({});
 
   const [draft, setDraft] = useState<Brand>(live);
-  const [active, setActive] = useState<SectionId>("profile");
+  const [active, setActive] = useState<SectionId>(params.section === "theme" ? "theme" : "profile");
   const [dirty, setDirty] = useState<boolean>(false);
   const [tabsAtEnd, setTabsAtEnd] = useState<boolean>(false);
   const tabsRef = useRef<ScrollView>(null);
@@ -379,17 +388,24 @@ export default function StudioScreen() {
     setDirty(true);
   };
 
-  /** Push the unpublished draft into the client-facing screens, then go look at it. */
-  const previewDraft = () => {
-    if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
-    setDraftPreview(dirty ? draft : null);
-    router.push("/");
-  };
-
-  const save = () => {
-    update(() => draft);
+  const save = async () => {
+    if (saving) return;
+    setSaving(true);
+    const firstCompletion = !requiredStatus(live).complete && required.complete;
+    try {
+      if (params.section !== "theme" && Object.keys(listingEdits).length) {
+        await saveListings(liveListings.map(l => listingEdits[l.id] ? { ...l, ...listingEdits[l.id], updatedAt: Date.now() } : l));
+      }
+      await saveBrand(editorSave(live, draft, params.section === "theme" ? "theme" : "content"));
+    } catch {
+      setSaving(false);
+      Alert.alert("Couldn’t save", "Your edits are still here. Please try again.");
+      return;
+    }
+    setSaving(false);
     setDraftPreview(null);
     setDirty(false);
+    setListingEdits({});
     // Work is never held hostage — edits always save. What changes below the
     // floor is the promise: this is stored, but it is not yet a finished app.
     flashConfirm(
@@ -397,17 +413,19 @@ export default function StudioScreen() {
         ? `Saved · ${required.missing.length} still needed before clients see a finished app`
         : offline
           ? "Saved · will sync when you're back online"
-          : "Published to your clients"
+          : "Saved · your app is ready to preview and share when you choose"
     );
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
+    if (required.complete) router.replace(firstCompletion ? "/admin/ready" : "/admin");
   };
 
   /** Throw away the unpublished draft and snap back to what clients currently see. */
   const discard = () => {
     const drop = () => {
       setDraft(live);
+      setListingEdits({});
       setDirty(false);
       setDraftPreview(null);
       if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
@@ -430,15 +448,16 @@ export default function StudioScreen() {
       return;
     }
     if (Platform.OS === "web") {
-      if (typeof window !== "undefined" && window.confirm("Save your changes and push them live?")) {
-        save();
+      if (typeof window !== "undefined" && window.confirm("Save your changes?")) {
+        void save();
+        return;
       } else {
         setDraftPreview(null);
       }
       router.back();
       return;
     }
-    Alert.alert("Unpublished changes", "These edits haven't been pushed to your clients yet.", [
+    Alert.alert("Unsaved changes", "Save your edits before leaving?", [
       { text: "Keep editing", style: "cancel" },
       {
         text: "Discard",
@@ -449,10 +468,9 @@ export default function StudioScreen() {
         },
       },
       {
-        text: "Save & push live",
+        text: "Save changes",
         onPress: () => {
-          save();
-          router.back();
+          void save();
         },
       },
     ]);
@@ -466,26 +484,19 @@ export default function StudioScreen() {
 
   return (
     <View style={styles.root}>
-      <StudioBackdrop source={SECTION_BG[active]} />
 
       <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
         <Pressable hitSlop={12} onPress={leave} style={styles.iconBtn}>
           <ArrowLeft size={18} color={brand.ivory} strokeWidth={1.5} />
         </Pressable>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.brandName}>STUDIO</Text>
+          <Text style={styles.brandName}>{params.section === "theme" ? "THEMES" : "EDIT CONTENT"}</Text>
           <Text style={styles.brandSub}>{headTitle.toUpperCase()}</Text>
         </View>
-        <Pressable
-          hitSlop={12}
-          onPress={previewDraft}
-          style={[styles.iconBtn, dirty && styles.iconBtnLive]}
-        >
-          <Eye size={16} color={dirty ? brand.goldLight : brand.ivory} strokeWidth={1.5} />
-        </Pressable>
+        <View style={styles.iconBtn} />
       </View>
 
-      <View style={styles.tabsWrap}>
+      {params.section === "theme" && <View style={styles.tabsWrap}>
         <ScrollView
           ref={tabsRef}
           horizontal
@@ -497,7 +508,7 @@ export default function StudioScreen() {
           }}
           scrollEventThrottle={16}
         >
-          {SECTIONS.map((s) => {
+          {SECTIONS.filter(s => params.section === "theme" ? s.id === "theme" : s.id !== "theme").map((s) => {
             const on = s.id === active;
             return (
               <KeyCap
@@ -527,27 +538,26 @@ export default function StudioScreen() {
             </View>
           </View>
         )}
-      </View>
-
-
+      </View>}
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: insets.bottom + 140 }}
           showsVerticalScrollIndicator={false}
         >
-          {active === "profile" && <ProfileSection draft={draft} setBrand={setBrand} />}
-          {active === "credentials" && <CredentialsSection draft={draft} setBrand={setBrand} />}
-          {active === "theme" && <ThemeSection draft={draft} setBrand={setBrand} />}
-          {active === "hero" && <HeroSection draft={draft} setBrand={setBrand} />}
-          {active === "note" && <NoteSection draft={draft} setBrand={setBrand} />}
-          {active === "market" && <MarketSection draft={draft} setBrand={setBrand} />}
-          {active === "concierge" && <ConciergeSection draft={draft} setBrand={setBrand} />}
-          {active === "voices" && <VoicesSection draft={draft} setBrand={setBrand} />}
-          {active === "closed" && <ClosedSection draft={draft} setBrand={setBrand} />}
-          {active === "neighborhoods" && <NeighborhoodsSection draft={draft} setBrand={setBrand} />}
-          {active === "pulse" && <PulseSection draft={draft} setBrand={setBrand} />}
-          {active === "footer" && <FooterSection draft={draft} setBrand={setBrand} />}
+          {params.section === "theme" ? <ThemeSection draft={draft} setBrand={setBrand} /> :
+            <NeutralContentCanvas draft={draft} onChange={setBrand}
+              listings={liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
+              onListingChange={(id, patch) => { setListingEdits(edits => ({ ...edits, [id]: { ...edits[id], ...patch } })); setDirty(true); }} details={{
+              hero: <><ProfileSection draft={draft} setBrand={setBrand} /><HeroSection draft={draft} setBrand={setBrand} /></>,
+              note: <NoteSection draft={draft} setBrand={setBrand} />,
+              credentials: <CredentialsSection draft={draft} setBrand={setBrand} />,
+              beat: <MarketSection draft={draft} setBrand={setBrand} />,
+              concierge: <ConciergeSection draft={draft} setBrand={setBrand} />,
+              social: <><VoicesSection draft={draft} setBrand={setBrand} /><ClosedSection draft={draft} setBrand={setBrand} /></>,
+              footer: <FooterSection draft={draft} setBrand={setBrand} />,
+              additional: <><NeighborhoodsSection draft={draft} setBrand={setBrand} /><PulseSection draft={draft} setBrand={setBrand} /></>,
+            }} />}
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -605,9 +615,10 @@ export default function StudioScreen() {
         </Pressable>
         <Pressable
           onPress={save}
-          disabled={!dirty}
+          disabled={!dirty || saving}
           style={({ pressed }) => [
             styles.saveBtn,
+            dirty && required.complete && styles.saveBtnReady,
             !dirty && { opacity: 0.45 },
             pressed && dirty && { opacity: 0.92 },
           ]}
@@ -632,10 +643,10 @@ export default function StudioScreen() {
           <Text style={styles.saveText}>
             {dirty
               ? required.complete
-                ? "Save & push live"
+                ? "Save & continue"
                 : "Save progress"
               : required.complete
-                ? "Everything is live"
+                ? "Saved · ready to share"
                 : "Saved · not finished"}
           </Text>
         </Pressable>
@@ -660,7 +671,6 @@ function ProfileSection({ draft, setBrand }: SectionProps) {
     <View>
       <SectionHeader title="Who you are" hint="Your name, contact and city — used everywhere in the app." />
       <PortraitField uri={draft.portraitUrl} onChange={(uri) => setBrand((d) => ({ ...d, portraitUrl: uri }))} label="HERO PORTRAIT" hint="Tap to choose a new portrait." />
-      <PortraitField uri={draft.iconUrl} onChange={(uri) => setBrand((d) => ({ ...d, iconUrl: uri }))} label="APP ICON" hint="The square mark clients see on their home screen." />
       <Field label="FULL NAME" value={r.name} onChange={(v) => set("name", v)} placeholder={ph.profile.name} />
       <PickerField
         label="TITLE"
@@ -1140,9 +1150,12 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
           font={activeFont}
           surface={activeSurface}
           realtor={draft.realtor}
+          portraitUrl={draft.portraitUrl}
+          themeConfig={draft.theme}
         />
       </View>
 
+      {target === "hero" && <ThemeImagePosition draft={draft} onChange={setBrand} />}
       {/* ── What the frame is showing — glass segmented, sits with the preview ── */}
       <View style={styles.tpTargetRow}>
         {PREVIEW_TARGETS.map((t) => {
@@ -1490,12 +1503,16 @@ function ThemePreview({
   font,
   surface,
   realtor,
+  portraitUrl,
+  themeConfig,
 }: {
   target: PreviewTarget;
   accent: (typeof THEME_ACCENTS)[ThemeAccent];
   font: (typeof THEME_FONTS)[ThemeFont];
   surface: (typeof THEME_SURFACES)[ThemeSurface];
   realtor: Brand["realtor"];
+  portraitUrl: string;
+  themeConfig: ThemeConfig;
 }) {
   const ink = "#211C12";
   const mark = copyOr(realtor.brandName || realtor.name, "Your name");
@@ -1590,7 +1607,8 @@ function ThemePreview({
     <View style={{ backgroundColor: surface.paper }}>
       <View style={styles.tpBand}>
         <Image
-          source={PREVIEW_PHOTO}
+          source={portraitUrl ? { uri: portraitUrl } : PREVIEW_PHOTO}
+          contentPosition={imagePosition(themeConfig)}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           transition={300}
@@ -2940,6 +2958,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(210,163,67,0.55)",
     overflow: "hidden",
   },
+  saveBtnReady: { backgroundColor: "#2E8B57", borderColor: "#70C58B" },
   saveText: {
     fontFamily: fonts.sansSemi,
     color: brand.textOnDark,

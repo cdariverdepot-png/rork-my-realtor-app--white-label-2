@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { listings as seedListings, type Listing as SeedListing } from "@/constants/realtor";
 import { supabase } from "@/lib/supabase";
-import { isKvEnabled } from "@/lib/kvStore";
+import { isKvEnabled, kvSet } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import { scrapeListing } from "@/lib/scrapeListing";
@@ -269,6 +269,17 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     [persist, broadcast, demoViewMode]
   );
 
+  const saveListings = useCallback(async (next: ManagedListing[]) => {
+    if (demoViewMode) throw new Error("The demo is read-only.");
+    const rev = Math.max(revRef.current + 1, Date.now());
+    if (supabase) await kvSet(KV_KEY, next, rev, true);
+    await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(next)], [REVISION_KEY, String(rev)]]);
+    revRef.current = rev;
+    setItems(next);
+    setRevision(rev);
+    broadcast(next, rev);
+  }, [demoViewMode, KV_KEY, STORAGE_KEY, REVISION_KEY, broadcast]);
+
   const stamp = (l: ManagedListing): ManagedListing => ({ ...l, updatedAt: Date.now() });
 
   const add = useCallback((l: ManagedListing) => { update([stamp(l), ...items]); }, [items, update]);
@@ -360,6 +371,6 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
 
   return useMemo(() => ({
     all: effectiveItems, visible, hydrated: demoViewMode ? true : hydrated, revision, syncStatus,
-    add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, refresh, refreshFromSource,
-  }), [effectiveItems, visible, demoViewMode, hydrated, revision, syncStatus, add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, refresh, refreshFromSource]);
+    add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, saveListings, refresh, refreshFromSource,
+  }), [effectiveItems, visible, demoViewMode, hydrated, revision, syncStatus, add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, saveListings, refresh, refreshFromSource]);
 });

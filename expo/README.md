@@ -1,5 +1,29 @@
 # Welcome to your Rork app
 
+## Updated Expo workflow
+
+The onboarding update targets Expo SDK 54 (React Native 0.81 / React 19.1).
+Run these commands from the `expo` directory, using Node 20.19 or newer
+and pnpm with the included lockfile:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm run expo:start
+```
+
+For a browser preview use `pnpm run expo:web`. The existing Rork start
+commands are retained. Use an Expo Go build compatible with SDK 54,
+or a development build. Push-notification delivery needs a development
+build and device testing; a successful JavaScript export does not verify it.
+
+Checks: `pnpm run typecheck`, `pnpm test`, and
+`pnpm exec expo export --platform all`.
+
+Existing saved realtor content and legacy themes are preserved on load.
+Missing nested fields receive defaults; existing arrays and hidden-section
+choices are retained. The credential SQL migration was applied by the owner
+to production; do not treat a Git push as permission to reset user records.
+
 ## Project info
 
 This is a native cross-platform mobile app created with [Rork](https://rork.com)

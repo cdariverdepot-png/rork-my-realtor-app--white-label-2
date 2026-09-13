@@ -30,10 +30,11 @@ function isBucketMissingError(e: unknown): boolean {
 
 /** Decode a base64 string into a Uint8Array suitable for Supabase upload. */
 function base64ToBytes(b64: string): Uint8Array {
+  const buffer = (globalThis as { Buffer?: { from(value: string, encoding: string): { toString(encoding: string): string } } }).Buffer;
   const binary = typeof atob === "function"
     ? atob(b64)
-    : globalThis.Buffer
-      ? globalThis.Buffer.from(b64, "base64").toString("binary")
+    : buffer
+      ? buffer.from(b64, "base64").toString("binary")
       : "";
   const out = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) out[i] = binary.charCodeAt(i);

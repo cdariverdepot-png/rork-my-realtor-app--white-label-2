@@ -17,6 +17,7 @@ import { useMessages } from "@/contexts/MessagesContext";
 import { useNotifications } from "@/contexts/NotificationsContext";
 import { useAppointments } from "@/contexts/AppointmentsContext";
 import { useClients } from "@/contexts/ClientsContext";
+import { useClientProfiles } from "@/contexts/ClientProfileContext";
 import Hero from "@/components/Hero";
 import CuratedListings from "@/components/CuratedListings";
 import PersonalNote from "@/components/PersonalNote";
@@ -32,7 +33,7 @@ import GrainOverlay from "@/components/GrainOverlay";
 import SwipeToSwitch from "@/components/SwipeToSwitch";
 import SetupGate from "@/components/SetupGate";
 import {
-  CLIENT_SECTIONS,
+  visibleSections,
   requiredStatus,
   revealDelays,
   type ClientSectionId,
@@ -43,8 +44,9 @@ import {
 export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { hydrated, isAuthenticated, isAdmin, previewAdmin, viewAsClient, enterDemoView } = useAuth();
+  const { hydrated, isAuthenticated, isAdmin, isClient, previewAdmin, viewAsClient, demoViewMode, enterDemoView } = useAuth();
   const { brand: b } = useBrand();
+  const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
 
   // Redirect admins to dashboard — unless they're previewing the client side
   useEffect(() => {
@@ -53,6 +55,15 @@ export default function Home() {
       router.replace("/admin");
     }
   }, [hydrated, isAuthenticated, isAdmin, viewAsClient, router]);
+
+  // A valid invite creates the relationship, but never grants the app before
+  // the required client profile has been saved. The profile context is scoped
+  // to the authenticated realtor/client pair and preserves partial answers.
+  useEffect(() => {
+    if (hydrated && profilesHydrated && isClient && !demoViewMode && !myProfileShared) {
+      router.replace("/client-profile");
+    }
+  }, [hydrated, profilesHydrated, isClient, demoViewMode, myProfileShared, router]);
 
   // Preview admin bypass — show pure Eliza Vance demo client experience
   const handleExploreDemo = useCallback(async () => {
@@ -68,7 +79,7 @@ export default function Home() {
   }
 
   // Unauthenticated — show landing screen
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !demoViewMode) {
     return <LandingScreen onExploreDemo={handleExploreDemo} insets={insets} />;
   }
 
@@ -175,7 +186,7 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
 function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const router = useRouter();
   const { viewAsClient, demoViewMode, exitViewAsClient, exitDemoView } = useAuth();
-  const { canEdit, editing, dirty, begin, cancel, save, guardExit, previewBrand, previewListings } =
+  const { editing, dirty, cancel, save, guardExit, previewBrand, previewListings } =
     useEditMode();
 
   // Exiting the realtor's own template preview — go back to admin.
@@ -267,7 +278,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     [previewBrand, visibleListingCount]
   );
   const visible = useMemo(
-    () => CLIENT_SECTIONS.filter((s) => s.isReady(sectionCtx)).map((s) => s.id),
+    () => visibleSections(sectionCtx),
     [sectionCtx]
   );
   const delays = useMemo(() => revealDelays(visible), [visible]);
@@ -428,16 +439,6 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
             <View style={styles.previewDivider} />
             <X size={13} color={brand.ivory} strokeWidth={2} />
           </Pressable>
-          {canEdit && !editing ? (
-            <Pressable
-              onPress={begin}
-              style={({ pressed }) => [styles.editPill, pressed && { opacity: 0.8 }]}
-              hitSlop={8}
-            >
-              <Pencil size={12} color={brand.nightDeep} strokeWidth={2} />
-              <Text style={styles.editPillText}>EDIT</Text>
-            </Pressable>
-          ) : null}
         </View>
       ) : null}
 
@@ -455,7 +456,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
             style={({ pressed }) => [styles.saveBtn, !dirty && { opacity: 0.45 }, pressed && { opacity: 0.88 }]}
           >
             <Check size={15} color={brand.ivory} strokeWidth={2} />
-            <Text style={styles.saveText}>{dirty ? "PUBLISH CHANGES" : "NO CHANGES"}</Text>
+            <Text style={styles.saveText}>{dirty ? "SAVE CHANGES" : "NO CHANGES"}</Text>
           </Pressable>
         </View>
       ) : null}

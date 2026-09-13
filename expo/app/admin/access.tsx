@@ -91,7 +91,7 @@ export default function AccessSettings() {
             <View>
               <Text style={styles.cardEyebrow}>CLIENT CODE</Text>
               <Text style={styles.cardHint}>
-                {clientCodeEnabled ? "Required at signup" : "Optional · signup is open"}
+                {clientCodeEnabled ? "Invitations enabled" : "New invitations paused"}
               </Text>
             </View>
             <Switch

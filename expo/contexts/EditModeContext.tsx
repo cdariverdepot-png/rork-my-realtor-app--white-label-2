@@ -138,7 +138,7 @@ export const [EditModeProvider, useEditMode] = createContextHook(() => {
       }
       Alert.alert(
         "Unsaved changes",
-        "You have edits that haven't been published to your clients yet.",
+        "You have unsaved edits. Save them before leaving.",
         [
           { text: "Keep editing", style: "cancel" },
           {

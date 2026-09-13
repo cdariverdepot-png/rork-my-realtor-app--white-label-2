@@ -51,7 +51,7 @@ export const PLAN_TIERS: PlanTier[] = [
     price: "$0",
     priceNote: "forever",
     features: [
-      "The complete Brand Studio",
+      "The complete content editor and theme tools",
       "Your photography, fonts and colours",
       "Listings, documents and showings",
       "3 client invitations",

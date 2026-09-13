@@ -18,7 +18,7 @@ const WEEK = 7 * DAY;
 const MAX_EVENTS = 500;
 
 export const [EngagementProvider, useEngagement] = createContextHook(() => {
-  const { realtorId } = useAuth();
+  const { realtorId, demoViewMode } = useAuth();
   const scope = realtorId ? realtorId : "demo";
   const STORAGE_KEY = `${scope}:engagement.views.v1`;
 
@@ -50,9 +50,9 @@ export const [EngagementProvider, useEngagement] = createContextHook(() => {
   }, [STORAGE_KEY]);
 
   const recordView = useCallback((listingId: string) => {
-    if (!listingId) return;
+    if (!listingId || demoViewMode) return;
     setViews((prev) => { const last = prev[prev.length - 1]; if (last && last.listingId === listingId && Date.now() - last.ts < 5000) return prev; const next = [...prev, { listingId, ts: Date.now() }].slice(-MAX_EVENTS); persist(next); return next; });
-  }, [persist]);
+  }, [persist, demoViewMode]);
 
   const viewsThisWeek = useMemo<ListingViewCount[]>(() => {
     const cutoff = Date.now() - WEEK; const tally = new Map<string, number>();

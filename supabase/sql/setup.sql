@@ -44,8 +44,8 @@ create table if not exists public.realtors (
   password_hash       text not null,
   brand_name          text not null default '',
   monogram            text not null default '',
-  client_code         text not null unique,
-  client_code_enabled boolean not null default true,
+  client_code         text unique,
+  client_code_enabled boolean not null default false,
   created_at          timestamptz not null default now(),
   updated_at          timestamptz not null default now()
 );
@@ -134,7 +134,7 @@ returns trigger
 language plpgsql
 as $$
 begin
-  if new.client_code is null or new.client_code = '' then
+  if new.client_code_enabled and (new.client_code is null or new.client_code = '') then
     new.client_code := public.generate_client_code(lower(trim(new.email)));
   end if;
   new.updated_at := now();

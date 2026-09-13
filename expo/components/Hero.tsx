@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { brand, fonts } from "@/constants/colors";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
+import { imagePosition } from "@/lib/themeImages";
 import { useEditMode } from "@/contexts/EditModeContext";
 import EditableText from "./EditableText";
 import SignatureStroke from "./SignatureStroke";
@@ -210,6 +211,7 @@ export default function Hero({ scrollY }: Props) {
         {hasPortrait ? (
           <Image
             source={{ uri: b.portraitUrl }}
+            contentPosition={imagePosition(b.theme)}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
             recyclingKey={b.portraitUrl}

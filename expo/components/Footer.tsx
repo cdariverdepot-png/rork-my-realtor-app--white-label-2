@@ -13,7 +13,7 @@ import { bookConsultation } from "@/lib/contact";
 
 export default React.memo(function Footer() {
   const router = useRouter();
-  const { previewAdmin } = useAuth();
+  const { isClient, isAdmin, demoViewMode } = useAuth();
   const { brand: b, theme } = useBrand();
   const ambient = useAmbient();
   const realtor = b.realtor;
@@ -99,11 +99,8 @@ export default React.memo(function Footer() {
           </View>
         </PressableScale>
 
-        <PressableScale
-          onPress={async () => {
-            await previewAdmin();
-            router.push("/admin");
-          }}
+        {!demoViewMode && <PressableScale
+          onPress={() => router.push(isClient ? "/account" : isAdmin ? "/admin" : "/portal?entry=realtor")}
           hitSlop={8}
           haptic="selection"
           scaleTo={0.97}
@@ -115,11 +112,9 @@ export default React.memo(function Footer() {
         >
           <View style={styles.btnInner}>
             <LayoutDashboard size={14} color={theme.accent.light} strokeWidth={1.6} />
-            <Text style={[styles.btnTextGold, { color: theme.accent.light }]}>REALTOR LOGIN</Text>
+            <Text style={[styles.btnTextGold, { color: theme.accent.light }]}>{isClient ? "MY CLIENT DASHBOARD" : isAdmin ? "DASHBOARD" : "REALTOR LOGIN"}</Text>
           </View>
-        </PressableScale>
-
-        <Text style={[styles.caption, { color: theme.onBand.dim }]}>Demo access pre-filled</Text>
+        </PressableScale>}
       </View>
 
       {/* Website link — anchored at the very bottom, centered. */}

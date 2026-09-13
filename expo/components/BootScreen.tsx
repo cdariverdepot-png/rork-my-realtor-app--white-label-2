@@ -159,12 +159,12 @@ export default function BootScreen({ onFinish }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
   fill: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#000000",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
     zIndex: 9999,
   },
 
@@ -178,9 +178,9 @@ const styles = StyleSheet.create({
     height: size,
   }),
   sweep: (size: number) => ({
-    position: "absolute",
+    position: "absolute" as const,
     top: 0,
     bottom: 0,
     width: size * 0.28,
   }),
-});
+};

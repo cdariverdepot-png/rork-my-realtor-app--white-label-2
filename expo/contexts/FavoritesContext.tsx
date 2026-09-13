@@ -21,7 +21,7 @@ const DEFAULT_WATCHLISTS: Watchlist[] = [
 type SyncStatus = "idle" | "connecting" | "live" | "offline";
 
 export const [FavoritesProvider, useFavorites] = createContextHook(() => {
-  const { realtorId } = useAuth();
+  const { realtorId, demoViewMode } = useAuth();
   const scope = realtorId ? realtorId : "demo";
   const STORAGE_KEY = `${scope}:favorites.v1`;
   const REVISION_KEY = `${scope}:favorites.rev.v1`;
@@ -88,9 +88,10 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
   useEffect(() => { return () => { if (retryTimerRef.current) { clearTimeout(retryTimerRef.current); retryTimerRef.current = null; } }; }, []);
 
   const update = useCallback((next: Watchlist[]) => {
+    if (demoViewMode) return;
     const rev = Math.max(revRef.current, Date.now()); revRef.current = rev; setLists(next); void persist(next, rev);
     if (channelRef.current) { channelRef.current.send({ type: "broadcast", event: "set", payload: { lists: next, rev } }).catch((e) => console.log("[favorites] broadcast", e)); }
-  }, [persist]);
+  }, [persist, demoViewMode]);
 
   const createList = useCallback((name: string): Watchlist => { const list: Watchlist = { id: `wl_${Date.now()}`, name: name.trim() || "Untitled", listingIds: [], createdAt: Date.now() }; update([...lists, list]); return list; }, [lists, update]);
   const renameList = useCallback((id: string, name: string) => { update(lists.map((l) => (l.id === id ? { ...l, name } : l))); }, [lists, update]);

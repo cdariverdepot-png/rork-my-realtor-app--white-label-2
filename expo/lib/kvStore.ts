@@ -231,8 +231,9 @@ async function sanitizeInlineImages<T>(value: T): Promise<{ value: T; replaced: 
   return { value: sanitized, replaced, skipped };
 }
 
-export async function kvSet<T>(key: string, value: T, rev: number): Promise<void> {
+export async function kvSet<T>(key: string, value: T, rev: number, requireSuccess = false): Promise<void> {
   if (!supabase || tableMissing) {
+    if (requireSuccess) throw new Error("Shared storage is unavailable. Please retry when connected.");
     recordWrite({
       at: Date.now(),
       key,
@@ -273,6 +274,7 @@ export async function kvSet<T>(key: string, value: T, rev: number): Promise<void
       { onConflict: "key" }
     );
     if (error) {
+      if (requireSuccess) throw error;
       const errMsg = error.message ?? String(error);
       if (isMissingTableError(error)) {
         tableMissing = true;
@@ -298,6 +300,7 @@ export async function kvSet<T>(key: string, value: T, rev: number): Promise<void
     const detail = e instanceof Error ? e.message : String(e);
     console.log("[kv] set exception", key, e);
     recordWrite({ at: Date.now(), key, rev, sizeKb: 0, status: "error", detail: `Exception: ${detail}` });
+    if (requireSuccess) throw e;
   }
 }
 

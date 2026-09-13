@@ -67,7 +67,7 @@ const SLIDES: Slide[] = [
   {
     icon: <Palette size={36} color={brand.goldLight} strokeWidth={1.4} />,
     title: "Complete\nControl",
-    body: "The Brand Studio and admin dashboard put every detail in your hands — from hero images to client rosters.",
+    body: "The content editor and admin dashboard put every detail in your hands — from hero images to client rosters.",
     bg: require("@/assets/images/onboard-bg-control.jpg"),
   },
 ];

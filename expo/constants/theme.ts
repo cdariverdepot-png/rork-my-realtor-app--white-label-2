@@ -39,6 +39,8 @@ export type ThemeFont =
 export type ThemeSurface = "ivory" | "warmsand" | "alabaster" | "mist" | "bone";
 
 export type ThemeConfig = {
+  /** Presentation-only positions keyed by look; uploaded assets stay canonical. */
+  imagePositions?: Record<string, { x: number; y: number }>;
   accent: ThemeAccent;
   displayFont: ThemeFont;
   surface: ThemeSurface;

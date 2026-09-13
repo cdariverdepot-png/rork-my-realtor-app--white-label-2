@@ -27,7 +27,7 @@ import Reveal from "@/components/Reveal";
  * then we hand them straight into the in-app booking flow with their info pre-attached.
  *
  * Clients without the app installed see the App Store fallback inside the share message
- * itself (the realtor sets that URL in Brand Studio).
+ * itself (the realtor sets that URL in the content editor).
  */
 export default function Welcome() {
   const router = useRouter();

@@ -2,9 +2,10 @@ import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { isKvEnabled } from "@/lib/kvStore";
+import { isKvEnabled, kvSet } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNotifications } from "@/contexts/NotificationsContext";
 import {
   completion,
   essentialsMet,
@@ -58,6 +59,7 @@ function emptyProfile(clientId: string, email: string): ClientProfile {
  */
 export const [ClientProfileProvider, useClientProfiles] = createContextHook(() => {
   const { realtorId, currentClientId, session, isAdmin } = useAuth();
+  const { notifyClientJoined } = useNotifications();
   const scope = realtorId ? realtorId : "demo";
   const STORAGE_KEY = `${scope}:clientProfiles.v1`;
   const CHANNEL = `${scope}:clientProfiles`;
@@ -184,18 +186,30 @@ export const [ClientProfileProvider, useClientProfiles] = createContextHook(() =
 
   /** Marks the profile as finished and shared. Idempotent. */
   const completeProfile = useCallback(
-    (finalAnswers: ProfileAnswers) => {
-      if (!currentClientId) return;
+    async (finalAnswers: ProfileAnswers) => {
+      if (!currentClientId) throw new Error("Please sign in to finish your profile.");
       const email = session?.email ?? "";
-      writeProfile(currentClientId, email, (cur) => ({
+      const cur = profiles[currentClientId] ?? emptyProfile(currentClientId, email);
+      const answers = { ...cur.answers, ...finalAnswers };
+      if (!essentialsMet(answers)) throw new Error("Please complete the required profile fields.");
+      const next: ClientProfile = {
         ...cur,
         email: email || cur.email,
-        answers: { ...cur.answers, ...finalAnswers },
+        answers,
         completedAt: cur.completedAt ?? Date.now(),
         seenByRealtor: false,
-      }));
+        updatedAt: Date.now(),
+      };
+      const out = { ...profiles, [currentClientId]: next };
+      const nextRev = Math.max(revRef.current + 1, Date.now());
+      if (supabase) await kvSet(KV_KEY, out, nextRev, true);
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(out));
+      setProfiles(out);
+      bumpRev();
+      void channelRef.current?.send({ type: "broadcast", event: "set", payload: next });
+      if (!cur.completedAt) notifyClientJoined(currentClientId, session?.name || "A new client");
     },
-    [currentClientId, session, writeProfile]
+    [currentClientId, session, profiles, STORAGE_KEY, KV_KEY, bumpRev, notifyClientJoined]
   );
 
   /**

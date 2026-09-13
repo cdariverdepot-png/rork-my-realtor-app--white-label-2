@@ -78,6 +78,7 @@ import { useEngagement } from "@/contexts/EngagementContext";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useGoLive } from "@/contexts/GoLiveContext";
 import { realtor } from "@/constants/realtor";
+import { requiredStatus } from "@/constants/sections";
 import { assets as seedAssets, avatarPlaceholder } from "@/constants/assets";
 import { resolveTheme } from "@/constants/theme";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
@@ -199,20 +200,15 @@ export default function AdminDashboard() {
   const { digestCounts, engagement } = useEngagement();
   const { tourSeen, markSeen } = useOnboarding();
   const { brand: brandData, update: updateBrand } = useBrand();
+  const setupComplete = requiredStatus(brandData).complete;
   const {
-    clientCode, clientCodeEnabled, publishClientCode,
-    updatedAt: accessUpdatedAt, hydrated: accessHydrated,
+    clientCode, clientCodeEnabled,
   } = useAccess();
   const {
     tracked: seatsTracked, used: seatsUsed, limit: seatLimit,
     unlimited: seatsUnlimited, atLimit: seatsFull,
     attempts: turnedAway, acknowledgeAttempts,
   } = useSeats();
-
-  useEffect(() => {
-    if (!accessHydrated || !isAdmin) return;
-    if (accessUpdatedAt === 0) publishClientCode();
-  }, [accessHydrated, isAdmin, accessUpdatedAt, publishClientCode]);
 
   const pickPortrait = async () => {
     try {
@@ -528,7 +524,7 @@ export default function AdminDashboard() {
                 <View style={styles.heroPortraitRing} />
               </Pressable>
               <Text style={styles.heroGreeting} numberOfLines={2}>{greeting}</Text>
-              <Text style={styles.heroTagline}>Your branded app is live.</Text>
+              <Text style={styles.heroTagline}>{setupComplete ? "Your app is ready to preview and share." : "Complete setup to create your client-facing app."}</Text>
             </View>
 
             {/* Live preview of the client-facing app + go-live checklist */}
@@ -561,14 +557,31 @@ export default function AdminDashboard() {
                 end={{ x: 0, y: 0.7 }}
                 style={StyleSheet.absoluteFill}
               />
-              <Text style={styles.studioCtaText}>BRAND STUDIO</Text>
+              <Text style={styles.studioCtaText}>EDIT CONTENT</Text>
               <ArrowRight size={16} color="#F4EFE6" strokeWidth={2.4} />
               <View style={styles.studioCtaDot} />
             </Pressable>
 
+            <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
+              <Pressable
+                onPress={tap(() => router.push({ pathname: "/admin/studio", params: { section: "theme" } }))}
+                style={({ pressed }) => [styles.studioSecondary, pressed && { opacity: 0.8 }]}
+              >
+                <Paintbrush size={14} color={admin.goldLight} strokeWidth={1.7} />
+                <Text style={styles.studioSecondaryText}>THEMES</Text>
+              </Pressable>
+              <Pressable
+                onPress={tap(() => { enterViewAsClient(); router.replace("/"); })}
+                style={({ pressed }) => [styles.studioSecondary, pressed && { opacity: 0.8 }]}
+              >
+                <Eye size={14} color={admin.goldLight} strokeWidth={1.7} />
+                <Text style={styles.studioSecondaryText}>PREVIEW MY APP</Text>
+              </Pressable>
+            </View>
+
             <Text style={styles.studioHeadline}>Everything your clients see starts here.</Text>
             <Text style={styles.studioDescription}>
-              This is the creative headquarters where you shape every detail of your branded app —
+              This is your neutral content canvas where you shape every detail of your client-facing app —
               from your portrait and colors to the exact words your clients read.
             </Text>
           </View>
@@ -840,7 +853,7 @@ export default function AdminDashboard() {
               </Pressable>
             ) : null}
 
-            <View style={styles.inviteCard}>
+            {setupComplete && clientCodeEnabled && !!clientCode ? <View style={styles.inviteCard}>
               {/* Large QR */}
               <View style={styles.qrHero}>
                 <View style={styles.qrHeroFrame}>
@@ -903,7 +916,17 @@ export default function AdminDashboard() {
                   </Text>
                 </Pressable>
               </View>
-            </View>
+            </View> : (
+              <View style={[styles.inviteCard, { padding: 24 }]}>
+                <Lock size={22} color={admin.goldLight} strokeWidth={1.6} />
+                <Text style={[styles.inviteCodeLabel, { marginTop: 12 }]}>SETUP REQUIRED</Text>
+                <Text style={[styles.inviteSub, { marginTop: 8, marginBottom: 0 }]}>Complete and save your required setup fields before client access credentials become available.</Text>
+                <Pressable onPress={tap(() => router.push("/admin/build"))} style={[styles.inviteGoldBtn, { marginTop: 18 }]}>
+                  <Pencil size={14} color={admin.bg} strokeWidth={2} />
+                  <Text style={styles.inviteGoldBtnText}>CONTINUE SETUP</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
 
           {/* ═══════════════════════════════════════════════
@@ -1197,7 +1220,7 @@ function AppPreviewCard({
 
         {/* ── Setup progress, or the live-ready preview state ── */}
         <View style={styles.previewSide}>
-          <Text style={styles.previewEyebrow}>{isLive ? "LIVE" : "SETTING UP"}</Text>
+          <Text style={styles.previewEyebrow}>{isLive ? "BASE APP CREATED" : "SETTING UP"}</Text>
           <Text style={styles.previewTitle}>
             {isLive ? "Your app is ready." : percent === 0 ? "Let's build your app." : "Almost ready."}
           </Text>
@@ -1815,6 +1838,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#EBC776",
     shadowColor: "#EBC776", shadowOpacity: 0.9, shadowRadius: 6, shadowOffset: { width: 0, height: 0 },
   },
+  studioSecondary: {
+    flex: 1, minHeight: 42, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7,
+    borderRadius: 10, borderWidth: 1, borderColor: admin.hairlineGold, backgroundColor: "rgba(210,163,67,0.07)",
+  },
+  studioSecondaryText: { fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 9.5, letterSpacing: 1.1 },
 
   /* ── Live Activity Timeline ── */
   timelineSection: {

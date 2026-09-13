@@ -59,7 +59,8 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { AccessProvider } from "@/contexts/AccessContext";
 import { SeatsProvider } from "@/contexts/SeatsContext";
 import { ListingsProvider } from "@/contexts/ListingsContext";
-import { BrandProvider } from "@/contexts/BrandContext";
+import { BrandProvider, useBrand } from "@/contexts/BrandContext";
+import { requiredStatus } from "@/constants/sections";
 import { EditModeProvider } from "@/contexts/EditModeContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { MessagesProvider } from "@/contexts/MessagesContext";
@@ -70,7 +71,7 @@ import { DocumentsProvider } from "@/contexts/DocumentsContext";
 import { ClientsProvider } from "@/contexts/ClientsContext";
 import { NotificationsProvider } from "@/contexts/NotificationsContext";
 import { ClientFeedProvider } from "@/contexts/ClientFeedContext";
-import { ClientProfileProvider } from "@/contexts/ClientProfileContext";
+import { ClientProfileProvider, useClientProfiles } from "@/contexts/ClientProfileContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { EngagementProvider } from "@/contexts/EngagementContext";
 import { OnboardingProvider } from "@/contexts/OnboardingContext";
@@ -82,6 +83,7 @@ import SecurityHardener from "@/components/SecurityHardener";
 import { listings as seedListings } from "@/constants/realtor";
 import { queryClient, queryPersister } from "@/lib/queryPersist";
 import BootScreen from "@/components/BootScreen";
+import OnboardingGuard from "@/components/OnboardingGuard";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
 import { useOnboarding, type Audience } from "@/contexts/OnboardingContext";
 
@@ -96,6 +98,7 @@ function RootLayoutNav() {
   };
   return (
     <Stack
+      screenLayout={({ children }) => <OnboardingGuard>{children}</OnboardingGuard>}
       screenOptions={{
         headerBackTitle: "Back",
         contentStyle: { backgroundColor: dark.bg },
@@ -140,7 +143,10 @@ function RootLayoutInner() {
     isAdmin,
     isPreviewAdmin,
     demoViewMode,
+    viewAsClient,
   } = useAuth();
+  const { savedBrand, hydrated: setupHydrated } = useBrand();
+  const { myProfileShared, myEssentialsMet } = useClientProfiles();
   const [booting, setBooting] = useState(true);
 
   /**
@@ -162,7 +168,8 @@ function RootLayoutInner() {
     : "client";
 
   const tourSeen = audience === "realtor" ? realtorTourSeen : clientTourSeen;
-  const suppressed = isPreviewAdmin || demoViewMode;
+  const suppressed = isPreviewAdmin || demoViewMode || viewAsClient || !setupHydrated ||
+    (isAdmin ? !requiredStatus(savedBrand).complete : !myProfileShared || !myEssentialsMet);
 
   const showOnboarding =
     authHydrated &&

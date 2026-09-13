@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Animated,
   Easing,
   KeyboardAvoidingView,
@@ -86,6 +87,7 @@ export default function ClientProfileFlow() {
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [done, setDone] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [saving, setSaving] = useState(false);
 
   const fade = useRef(new Animated.Value(1)).current;
   const progress = useRef(new Animated.Value(0)).current;
@@ -103,10 +105,18 @@ export default function ClientProfileFlow() {
       base.preferredName = session.name.split(" ")[0] ?? "";
     }
     setAnswers(base);
+    if (!isEditing) {
+      const requiredSteps = visibleSteps(base).map(s => ({ ...s, fields: s.fields.filter(f => f.required) })).filter(s => s.fields.length > 0);
+      const resumeAt = requiredSteps.findIndex(s => missingRequired(s, base).length > 0);
+      setStepIndex(resumeAt < 0 ? Math.max(0, requiredSteps.length - 1) : resumeAt);
+    }
     setSeeded(true);
-  }, [seeded, profileHydrated, authHydrated, myAnswers, session]);
+  }, [seeded, profileHydrated, authHydrated, myAnswers, session, isEditing]);
 
-  const steps = useMemo(() => visibleSteps(answers), [answers]);
+  const steps = useMemo(() => {
+    const available = visibleSteps(answers);
+    return isEditing ? available : available.map(s => ({ ...s, fields: s.fields.filter(f => f.required) })).filter(s => s.fields.length > 0);
+  }, [answers, isEditing]);
   const step = steps[Math.min(stepIndex, steps.length - 1)];
   const total = steps.length;
   const pct = total === 0 ? 0 : (stepIndex + 1) / total;
@@ -135,7 +145,8 @@ export default function ClientProfileFlow() {
 
   const setValue = useCallback((id: string, value: string | string[]) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
-  }, []);
+    saveAnswers({ [id]: value });
+  }, [saveAnswers]);
 
   const transition = useCallback(
     (mutate: () => void) => {
@@ -167,8 +178,11 @@ export default function ClientProfileFlow() {
     if (Object.keys(patch).length > 0) saveAnswers(patch);
   }, [step, answers, saveAnswers]);
 
-  const finish = useCallback(() => {
-    completeProfile(answers);
+  const finish = useCallback(async () => {
+    if (saving) return;
+    setSaving(true);
+    try {
+    await completeProfile(answers);
     // Keep the account's display name in step with what they told us here.
     const full = str(answers, "fullName").trim();
     if (full && full !== session?.name) void updateClientProfile({ name: full });
@@ -176,7 +190,10 @@ export default function ClientProfileFlow() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
     transition(() => setDone(true));
-  }, [answers, completeProfile, session, updateClientProfile, transition]);
+    } catch (error) {
+      Alert.alert("Couldn’t finish setup", error instanceof Error ? error.message : "Please try again.");
+    } finally { setSaving(false); }
+  }, [answers, completeProfile, session, updateClientProfile, transition, saving]);
 
   const goNext = useCallback(() => {
     if (!step) return;
@@ -402,10 +419,11 @@ export default function ClientProfileFlow() {
           )}
           <Pressable
             onPress={goNext}
+            disabled={saving}
             style={({ pressed }) => [styles.cta, pressed && { opacity: 0.9, transform: [{ scale: 0.985 }] }]}
           >
             <Text style={styles.ctaText}>
-              {isLast ? (myProfileShared ? "SAVE CHANGES" : "SHARE WITH AGENT") : "CONTINUE"}
+              {saving ? "SAVING…" : isLast ? (myProfileShared ? "SAVE CHANGES" : "SAVE & CONTINUE") : "CONTINUE"}
             </Text>
             <ArrowRight size={15} color={dark.bg} strokeWidth={2.2} />
           </Pressable>

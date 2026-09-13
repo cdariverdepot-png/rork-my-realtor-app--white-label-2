@@ -1,6 +1,7 @@
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
+import { getRandomBytes } from "expo-crypto";
 import { Platform } from "react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -160,7 +161,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
         if (raw) {
           const parsed = JSON.parse(raw) as Session;
-          if (parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS) {
+          if (parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID || (parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS)) {
             await secureDel(STORAGE_KEY);
           } else {
             setSession(parsed);
@@ -295,7 +296,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           brand_name: "VANCE",
           monogram: "EV",
           client_code: clean,
-          client_code_enabled: true,
+              client_code_enabled: false,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         };
@@ -325,7 +326,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         return { ok: false, error: "Password must be at least 6 characters." };
 
       const pwHash = await hashPassword(email, password);
-      const clientCode = deriveClientCode(email);
+      // No invitation exists until required setup has been saved.
+      const clientCode = "";
 
       // Try Supabase insert first
       let realtorId = "";
@@ -341,7 +343,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
               monogram:
                 (name.split(" ")[0]?.charAt(0) ?? "") +
                 (name.split(" ").pop()?.charAt(0) ?? ""),
-              client_code: clientCode,
+              client_code: null,
+              client_code_enabled: false,
             })
             .select("id")
             .single();
@@ -357,11 +360,13 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
               };
             }
             console.log("[auth] realtor insert error", error.message);
+            return { ok: false, error: "Account creation could not be saved. Please try again shortly." };
           } else if (data) {
             realtorId = data.id;
           }
         } catch (e) {
           console.log("[auth] realtor insert exception", e);
+          return { ok: false, error: "Couldn’t connect to save your account. Please try again." };
         }
       }
 
@@ -381,7 +386,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           (name.split(" ")[0]?.charAt(0) ?? "") +
           (name.split(" ").pop()?.charAt(0) ?? ""),
         client_code: clientCode,
-        client_code_enabled: true,
+        client_code_enabled: false,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -501,32 +506,11 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     [realtorLogin]
   );
 
-  /** Preview the Eliza Vance demo — always uses the hardcoded demo realtor, never a cached real realtor. */
+  /** Demo presentation never creates or replaces an authenticated session. */
   const previewAdmin = useCallback(async (): Promise<void> => {
-    if (session?.role === "admin") return;
-    const demoRecord: RealtorRecord = {
-      id: DEMO_REALTOR_ID,
-      email: "eliza@vanceprivate.com",
-      name: "Eliza Vance",
-      password_hash: "",
-      brand_name: "VANCE",
-      monogram: "EV",
-      client_code: deriveClientCode("eliza@vanceprivate.com"),
-      client_code_enabled: true,
-      created_at: "",
-      updated_at: "",
-    };
-    const next: Session = {
-      email: demoRecord.email,
-      role: "admin",
-      realtorId: demoRecord.id,
-      name: demoRecord.name,
-      iat: Date.now(),
-      preview: true,
-    };
-    setSession(next);
-    await persistSession(next);
-  }, [persistSession, session]);
+    setDemoViewMode(true);
+    setViewAsClient(true);
+  }, []);
 
   const exitPreview = useCallback(async (): Promise<void> => {
     if (!session?.preview) return;
@@ -743,6 +727,23 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     await persistSession(null);
   }, [persistSession]);
 
+  /** Setup unlocks an invitation; it never sends one to a client. */
+  const unlockSharingCredentials = useCallback(async () => {
+    if (session?.role !== "admin" || demoViewMode) throw new Error("Realtor setup is required.");
+    const record = realtorCache.find(r => r.id === session.realtorId);
+    if (!record) throw new Error("Your account is still loading.");
+    if (record.client_code_enabled) return;
+    const clientCode = record.client_code || Array.from(getRandomBytes(6), byte => String(byte % 10)).join("");
+    if (supabase) {
+      const { error } = await supabase.from("realtors")
+        .update({ client_code: clientCode, client_code_enabled: true }).eq("id", record.id);
+      if (error) throw error;
+    }
+    const next = realtorCache.map(r => r.id === record.id ? { ...r, client_code: clientCode, client_code_enabled: true } : r);
+    await AsyncStorage.setItem(REALTOR_CACHE_KEY, JSON.stringify(next));
+    setRealtorCache(next);
+  }, [session, demoViewMode, realtorCache]);
+
   /** Get the current realtor record from cache. */
   const realtorRecord = session?.realtorId
     ? realtorCache.find((r) => r.id === session.realtorId) ?? null
@@ -780,11 +781,12 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     updateClientProfile,
     logout,
     lookupRealtorByCode,
+    unlockSharingCredentials,
   }), [
     session, hydrated, isAdmin, isClient, viewAsClient, demoViewMode,
     enterViewAsClient, exitViewAsClient, enterDemoView, exitDemoView,
     isAuthenticated, realtorIdVal, realtorRecord, currentClientId,
     login, realtorSignup, realtorLogin, previewAdmin, exitPreview,
-    clientSignup, clientLogin, updateClientProfile, logout, lookupRealtorByCode,
+    clientSignup, clientLogin, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
   ]);
 });
