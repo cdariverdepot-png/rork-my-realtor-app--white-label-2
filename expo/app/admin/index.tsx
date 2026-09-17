@@ -75,7 +75,6 @@ import { useClients } from "@/contexts/ClientsContext";
 import { useCalendarFeeds } from "@/contexts/CalendarFeedsContext";
 import { useClientFeed } from "@/contexts/ClientFeedContext";
 import { useEngagement } from "@/contexts/EngagementContext";
-import { useOnboarding } from "@/contexts/OnboardingContext";
 import { useGoLive } from "@/contexts/GoLiveContext";
 import { realtor } from "@/constants/realtor";
 import { requiredStatus } from "@/constants/sections";
@@ -198,7 +197,6 @@ export default function AdminDashboard() {
   const { feeds } = useCalendarFeeds();
   const { curatedClientCount } = useClientFeed();
   const { digestCounts, engagement } = useEngagement();
-  const { tourSeen, markSeen } = useOnboarding();
   const { brand: brandData, update: updateBrand } = useBrand();
   const setupComplete = requiredStatus(brandData).complete;
   const {
@@ -226,7 +224,6 @@ export default function AdminDashboard() {
     } catch (e) { console.log("[admin] portrait pick error", e); }
   };
 
-  const showOnboarding = !tourSeen;
   const hotCount = engagement.filter((e) => e.bucket === "hot").length;
   const unreadFromClient = totalUnreadForRealtor;
   const pendingAppts = appts.filter((a) => a.status === "requested").length;
@@ -481,7 +478,7 @@ export default function AdminDashboard() {
               <View style={styles.heroMarkStack}>
                 <View style={styles.heroEyebrowRow}>
                   <KeyRound size={9} color={admin.goldLight} strokeWidth={2} />
-                  <Text style={styles.heroEyebrow}>BACK OF HOUSE</Text>
+                  <Text style={styles.heroEyebrow}>YOUR DASHBOARD</Text>
                 </View>
                 <Text style={styles.heroBrandMark}>{brandName.replace(/_/g, " ")}</Text>
               </View>
@@ -505,8 +502,6 @@ export default function AdminDashboard() {
               </View>
             </View>
 
-            {showOnboarding && <ArrivalNote onDismiss={tap(markSeen)} />}
-
             {/* Portrait + Greeting */}
             <View style={styles.heroMain}>
               <Pressable
@@ -524,8 +519,17 @@ export default function AdminDashboard() {
                 <View style={styles.heroPortraitRing} />
               </Pressable>
               <Text style={styles.heroGreeting} numberOfLines={2}>{greeting}</Text>
-              <Text style={styles.heroTagline}>{setupComplete ? "Your app is ready to preview and share." : "Complete setup to create your client-facing app."}</Text>
+              <Text style={styles.heroTagline}>{setupComplete ? "Your app is ready. Preview it, add a listing, then invite a client." : "Complete setup to create your client-facing app."}</Text>
             </View>
+
+            {setupComplete && (
+              <View style={{ marginBottom: 18, gap: 5 }}>
+                <Text style={{ fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 10, letterSpacing: 2 }}>START HERE</Text>
+                <Text style={{ fontFamily: fonts.sans, color: admin.textMuted, fontSize: 13, lineHeight: 20 }}>
+                  1. Preview your app   2. Add a listing   3. Invite a client
+                </Text>
+              </View>
+            )}
 
             {/* Live preview of the client-facing app + go-live checklist */}
             <AppPreviewCard
@@ -557,7 +561,7 @@ export default function AdminDashboard() {
                 end={{ x: 0, y: 0.7 }}
                 style={StyleSheet.absoluteFill}
               />
-              <Text style={styles.studioCtaText}>EDIT CONTENT</Text>
+              <Text style={styles.studioCtaText}>EDIT YOUR APP</Text>
               <ArrowRight size={16} color="#F4EFE6" strokeWidth={2.4} />
               <View style={styles.studioCtaDot} />
             </Pressable>
@@ -592,7 +596,7 @@ export default function AdminDashboard() {
           <View style={styles.listingsSection}>
             <View style={styles.sectionHead}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.sectionEyebrow}>PORTFOLIO</Text>
+              <Text style={styles.sectionEyebrow}>LISTINGS</Text>
                 <View style={{ flexDirection: "row", alignItems: "baseline", gap: 10, marginTop: 6 }}>
                   <Text style={styles.sectionTitle}>Your listings</Text>
                   <Text style={styles.listingCountBadge}>{liveCount} LIVE</Text>
@@ -661,7 +665,7 @@ export default function AdminDashboard() {
               ═══════════════════════════════════════════════ */}
           <View style={styles.pulseSection}>
             <View style={styles.sectionHeadSimple}>
-              <Text style={styles.sectionEyebrow}>TODAY'S PULSE</Text>
+              <Text style={styles.sectionEyebrow}>ACTIVITY</Text>
               <Text style={styles.sectionTitle}>How it's performing</Text>
             </View>
             <View style={styles.pulseCard}>
@@ -704,7 +708,7 @@ export default function AdminDashboard() {
               ═══════════════════════════════════════════════ */}
           <View style={styles.toolsSection}>
             <View style={styles.sectionHeadSimple}>
-              <Text style={styles.sectionEyebrow}>DIRECT LINE</Text>
+              <Text style={styles.sectionEyebrow}>MESSAGES, CLIENTS & MORE</Text>
               <Text style={styles.sectionTitle}>Client tools</Text>
             </View>
 
@@ -1029,95 +1033,6 @@ function SeatMeter({
 }
 
 /**
- * One-time orientation plate shown the first time a realtor lands on the
- * dashboard after the intro walkthrough. Draws the line between the app their
- * clients see and the room they are standing in, then retires itself for good.
- */
-function ArrivalNote({ onDismiss }: { onDismiss: () => void }) {
-  const enter = useRef(new Animated.Value(0)).current;
-  const exit = useRef(new Animated.Value(1)).current;
-  const sweep = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.sequence([
-      Animated.delay(340),
-      Animated.timing(enter, {
-        toValue: 1,
-        duration: 620,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }),
-    ]).start();
-    Animated.loop(
-      Animated.sequence([
-        Animated.delay(1400),
-        Animated.timing(sweep, {
-          toValue: 1,
-          duration: 2200,
-          easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        }),
-        Animated.timing(sweep, { toValue: 0, duration: 0, useNativeDriver: true }),
-      ])
-    ).start();
-  }, [enter, sweep]);
-
-  const close = () => {
-    Animated.timing(exit, {
-      toValue: 0,
-      duration: 320,
-      easing: Easing.in(Easing.cubic),
-      useNativeDriver: true,
-    }).start(() => onDismiss());
-  };
-
-  const translateY = enter.interpolate({ inputRange: [0, 1], outputRange: [14, 0] });
-  const sweepX = sweep.interpolate({ inputRange: [0, 1], outputRange: [-120, 320] });
-
-  return (
-    <Animated.View
-      style={[
-        styles.arrival,
-        { opacity: Animated.multiply(enter, exit), transform: [{ translateY }] },
-      ]}
-    >
-      <LinearGradient
-        colors={["rgba(40,32,17,0.72)", "rgba(10,11,14,0.72)"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={StyleSheet.absoluteFill}
-      />
-      {/* A slow band of light travelling the top hairline — the room breathing. */}
-      <Animated.View style={[styles.arrivalSweep, { transform: [{ translateX: sweepX }] }]}>
-        <LinearGradient
-          colors={["transparent", "rgba(235,199,118,0.55)", "transparent"]}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-          style={StyleSheet.absoluteFill}
-        />
-      </Animated.View>
-
-      <View style={styles.arrivalBody}>
-        <Text style={styles.arrivalTitle}>You&rsquo;re behind the curtain.</Text>
-        <Text style={styles.arrivalCopy}>
-          Clients get the polished app. You get the room where it&rsquo;s made — every screen they
-          see is built and published from here.
-        </Text>
-
-        <View style={styles.arrivalHintRow}>
-          <Globe size={11} color={admin.textDim} strokeWidth={1.7} />
-          <Text style={styles.arrivalHint}>Swipe right anytime to see it as they do.</Text>
-        </View>
-      </View>
-
-      <Pressable onPress={close} style={({ pressed }) => [styles.arrivalBtn, pressed && { opacity: 0.75 }]} hitSlop={8}>
-        <Text style={styles.arrivalBtnText}>GOT IT</Text>
-      </Pressable>
-    </Animated.View>
-  );
-}
-
-/**
  * Live, scaled-down rendering of the realtor's client-facing app inside a phone
  * frame — real portrait, headline and accent colour — paired with go-live
  * progress. Doubles as the primary entry point to Brand Studio.
@@ -1135,7 +1050,7 @@ function AppPreviewCard({
   onOpenNext: (href: string) => void;
   onOpenPreview: () => void;
 }) {
-  const { percent, doneCount, totalCount, isLive, nextItem, remaining } = useGoLive();
+  const { percent, doneCount, totalCount, canPublish, nextItem, remaining } = useGoLive();
   const theme = resolveTheme(brandData.theme);
   const accent = theme.accent.base;
   const accentLight = theme.accent.light;
@@ -1152,10 +1067,9 @@ function AppPreviewCard({
   }, [percent, bar]);
   const barWidth = bar.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] });
 
-  /** The card always leads to the next thing worth doing — or, once every item
-   *  is satisfied, straight into the client-facing app. */
+  /** Preview is available as soon as required setup is complete. */
   const handlePress = () => {
-    if (isLive) onOpenPreview();
+    if (canPublish) onOpenPreview();
     else if (nextItem) onOpenNext(nextItem.href);
   };
 
@@ -1220,19 +1134,19 @@ function AppPreviewCard({
 
         {/* ── Setup progress, or the live-ready preview state ── */}
         <View style={styles.previewSide}>
-          <Text style={styles.previewEyebrow}>{isLive ? "BASE APP CREATED" : "SETTING UP"}</Text>
+          <Text style={styles.previewEyebrow}>{canPublish ? "READY TO PREVIEW" : "SETUP NEEDED"}</Text>
           <Text style={styles.previewTitle}>
-            {isLive ? "Your app is ready." : percent === 0 ? "Let's build your app." : "Almost ready."}
+            {canPublish ? "Your app is ready." : percent === 0 ? "Let's build your app." : "Finish your setup."}
           </Text>
 
-          {isLive ? (
+          {canPublish ? (
             <>
               <View style={styles.previewLiveRow}>
                 <View style={styles.previewLiveDot}>
                   <Check size={10} color={admin.green} strokeWidth={2.8} />
                 </View>
                 <Text style={styles.previewLiveText} numberOfLines={2}>
-                  All {totalCount} steps complete — this is what clients see.
+                  Your required setup is complete. Take a look at what clients will see.
                 </Text>
               </View>
               <View style={[styles.previewButton, { backgroundColor: hexToRgba(accent, 0.16), borderColor: hexToRgba(accent, 0.42) }]}>
@@ -1651,40 +1565,6 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0,0,0,0.8)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 6,
   },
 
-  /* ── First-arrival orientation plate ── */
-  arrival: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: admin.hairlineGoldSoft,
-    overflow: "hidden",
-    marginBottom: 26,
-    paddingHorizontal: 18,
-    paddingTop: 17,
-    paddingBottom: 15,
-  },
-  arrivalSweep: { position: "absolute", top: 0, left: 0, width: 120, height: 1 },
-  arrivalBody: { gap: 8 },
-  arrivalTitle: {
-    fontFamily: fonts.serif, color: admin.text, fontSize: 21, letterSpacing: -0.4, lineHeight: 26,
-  },
-  arrivalCopy: {
-    fontFamily: fonts.sans, color: admin.textMuted, fontSize: 13, lineHeight: 20,
-  },
-  arrivalHintRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 2 },
-  arrivalHint: { fontFamily: fonts.sans, color: admin.textDim, fontSize: 11.5, letterSpacing: 0.2 },
-  arrivalBtn: {
-    alignSelf: "flex-start",
-    marginTop: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-    borderRadius: 9,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.22)",
-    backgroundColor: "rgba(255,255,255,0.07)",
-  },
-  arrivalBtnText: {
-    fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 10, letterSpacing: 1.8,
-  },
   statusPill: {
     flexDirection: "row", alignItems: "center", gap: 7,
     paddingHorizontal: 9, paddingVertical: 4, borderRadius: 999,

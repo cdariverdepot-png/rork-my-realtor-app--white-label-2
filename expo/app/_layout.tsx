@@ -1,5 +1,5 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useState } from "react";
@@ -131,6 +131,7 @@ function RootLayoutNav() {
 }
 
 function RootLayoutInner() {
+  const pathname = usePathname();
   const {
     hydrated: onboardingHydrated,
     realtorTourSeen,
@@ -168,7 +169,7 @@ function RootLayoutInner() {
     : "client";
 
   const tourSeen = audience === "realtor" ? realtorTourSeen : clientTourSeen;
-  const suppressed = isPreviewAdmin || demoViewMode || viewAsClient || !setupHydrated ||
+  const suppressed = pathname === "/admin/ready" || isPreviewAdmin || demoViewMode || viewAsClient || !setupHydrated ||
     (isAdmin ? !requiredStatus(savedBrand).complete : !myProfileShared || !myEssentialsMet);
 
   const showOnboarding =
