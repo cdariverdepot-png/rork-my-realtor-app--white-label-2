@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { hashPassword, verifyPassword } from "@/lib/passwordHash";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { claimClientSeat } from "@/lib/seats";
+import { signInRealtorWithAuth, signUpRealtorWithAuth } from "@/lib/realtorAuth";
 
 export type Role = "admin" | "client" | null;
 
@@ -41,7 +42,8 @@ export type RealtorRecord = {
   id: string;
   email: string;
   name: string;
-  password_hash: string;
+  /** Legacy cache only; never fetched from the public profile table. */
+  password_hash?: string;
   brand_name: string;
   monogram: string;
   client_code: string;
@@ -161,7 +163,12 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
         if (raw) {
           const parsed = JSON.parse(raw) as Session;
-          if (parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID || (parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS)) {
+          const authUser = parsed?.role === "admin" && supabase
+            ? (await supabase.auth.getUser()).data.user : null;
+          if (parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID ||
+              (parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS) ||
+              (parsed?.role === "admin" && (!authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||
+                authUser.email?.toLowerCase() !== parsed.email.toLowerCase()))) {
             await secureDel(STORAGE_KEY);
           } else {
             setSession(parsed);
@@ -242,69 +249,41 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     }
   }, []);
 
-  /**
-   * Fetch a realtor record by client_code from Supabase.
-   * Falls back to local cache if Supabase is unavailable.
-   */
+  const openVerifiedRealtorSession = useCallback(async (email: string, realtorId: string) => {
+    if (!supabase) return { ok: false as const, error: "The account service is unavailable." };
+    const { data, error } = await supabase.from("realtors")
+      .select("id,email,name,brand_name,monogram,client_code,client_code_enabled,created_at,updated_at")
+      .eq("id", realtorId).single();
+    if (error || !data) return { ok: false as const, error: "Your realtor profile could not be loaded." };
+    const record = data as RealtorRecord;
+    setRealtorCache(prev => {
+      const next = [record, ...prev.filter(item => item.id !== record.id)];
+      void persistRealtorCache(next);
+      return next;
+    });
+    const next: Session = { email, role: "admin", realtorId, name: record.name, iat: Date.now() };
+    setSession(next);
+    await persistSession(next);
+    return { ok: true as const, realtorId };
+  }, [persistRealtorCache, persistSession]);
+
+  /** Resolve an enabled invitation without exposing the realtor account row. */
   const lookupRealtorByCode = useCallback(
     async (code: string): Promise<RealtorRecord | null> => {
       const clean = code.replace(/\s+/g, "").toUpperCase();
-      if (!clean) return null;
-
-      // Try Supabase first
-      if (supabase) {
-        try {
-          const { data, error } = await supabase
-            .from("realtors")
-            .select("*")
-            .eq("client_code", clean)
-            .maybeSingle();
-          if (!error && data) {
-            const record = data as RealtorRecord;
-            // Update cache
-            setRealtorCache((prev) => {
-              const exists = prev.some((r) => r.id === record.id);
-              const next = exists
-                ? prev.map((r) => (r.id === record.id ? record : r))
-                : [record, ...prev];
-              void persistRealtorCache(next);
-              return next;
-            });
-            return record;
-          }
-        } catch (e) {
-          console.log("[auth] supabase code lookup error", e);
-        }
-      }
-
-      // Fallback to local cache
-      const cached = realtorCache.find((r) => r.client_code === clean);
-      if (cached) return cached;
-
-      // Ultimate fallback: derive code locally and match against cached emails
-      for (const r of realtorCache) {
-        if (deriveClientCode(r.email) === clean) return r;
-      }
-
-      // Demo/seed fallback
-      if (clean === deriveClientCode("eliza@vanceprivate.com")) {
-        return {
-          id: DEMO_REALTOR_ID,
-          email: "eliza@vanceprivate.com",
-          name: "Eliza Vance",
-          password_hash: "",
-          brand_name: "VANCE",
-          monogram: "EV",
-          client_code: clean,
-              client_code_enabled: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-      }
-
-      return null;
+      if (!clean || !supabase) return null;
+      const { data, error } = await supabase.rpc("lookup_realtor_by_code", { p_code: clean });
+      if (error || !Array.isArray(data) || !data[0]) return null;
+      const row = data[0] as Pick<RealtorRecord, "id" | "name" | "brand_name" | "monogram" | "client_code" | "client_code_enabled">;
+      const record: RealtorRecord = { ...row, email: "", created_at: "", updated_at: "" };
+      setRealtorCache(prev => {
+        const next = [record, ...prev.filter(item => item.id !== record.id)];
+        void persistRealtorCache(next);
+        return next;
+      });
+      return record;
     },
-    [realtorCache, persistRealtorCache]
+    [persistRealtorCache]
   );
 
   /**
@@ -315,7 +294,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       name: string;
       email: string;
       password: string;
-    }): Promise<{ ok: boolean; error?: string; realtorId?: string }> => {
+    }): Promise<{ ok: boolean; error?: string; realtorId?: string; verificationRequired?: boolean }> => {
       const name = input.name.trim();
       const email = normEmail(input.email);
       const password = input.password;
@@ -325,86 +304,11 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       if (password.length < 6)
         return { ok: false, error: "Password must be at least 6 characters." };
 
-      const pwHash = await hashPassword(email, password);
-      // No invitation exists until required setup has been saved.
-      const clientCode = "";
-
-      // Try Supabase insert first
-      let realtorId = "";
-      if (supabase) {
-        try {
-          const { data, error } = await supabase
-            .from("realtors")
-            .insert({
-              email,
-              name,
-              password_hash: pwHash,
-              brand_name: name.split(" ").pop()?.toUpperCase() ?? "",
-              monogram:
-                (name.split(" ")[0]?.charAt(0) ?? "") +
-                (name.split(" ").pop()?.charAt(0) ?? ""),
-              client_code: null,
-              client_code_enabled: false,
-            })
-            .select("id")
-            .single();
-          if (error) {
-            if (
-              error.message?.includes("unique") ||
-              error.message?.includes("duplicate")
-            ) {
-              return {
-                ok: false,
-                error:
-                  "An account with this email already exists. Try signing in.",
-              };
-            }
-            console.log("[auth] realtor insert error", error.message);
-            return { ok: false, error: "Account creation could not be saved. Please try again shortly." };
-          } else if (data) {
-            realtorId = data.id;
-          }
-        } catch (e) {
-          console.log("[auth] realtor insert exception", e);
-          return { ok: false, error: "Couldn’t connect to save your account. Please try again." };
-        }
-      }
-
-      // Fallback: local-only realtor ID
-      if (!realtorId) {
-        realtorId = `local_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      }
-
-      // Cache the record locally
-      const record: RealtorRecord = {
-        id: realtorId,
-        email,
-        name,
-        password_hash: pwHash,
-        brand_name: name.split(" ").pop()?.toUpperCase() ?? "",
-        monogram:
-          (name.split(" ")[0]?.charAt(0) ?? "") +
-          (name.split(" ").pop()?.charAt(0) ?? ""),
-        client_code: clientCode,
-        client_code_enabled: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-      setRealtorCache((prev) => [record, ...prev]);
-      void persistRealtorCache([record, ...realtorCache]);
-
-      const next: Session = {
-        email,
-        role: "admin",
-        realtorId,
-        name,
-        iat: Date.now(),
-      };
-      setSession(next);
-      await persistSession(next);
-      return { ok: true, realtorId };
+      const verified = await signUpRealtorWithAuth({ name, email, password });
+      if (!verified.ok) return verified;
+      return openVerifiedRealtorSession(email, verified.realtorId);
     },
-    [realtorCache, persistRealtorCache, persistSession]
+    [openVerifiedRealtorSession]
   );
 
   /**
@@ -419,80 +323,11 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       if (!trimmed || !password)
         return { ok: false, error: "Enter your email and password." };
 
-      // Try Supabase first
-      if (supabase) {
-        try {
-          const { data, error } = await supabase
-            .from("realtors")
-            .select("*")
-            .eq("email", trimmed)
-            .maybeSingle();
-          if (!error && data) {
-            const record = data as RealtorRecord;
-            const verdict = await verifyPassword(trimmed, password, record.password_hash);
-            if (verdict.ok) {
-              // Transparently upgrade legacy-hashed accounts to SHA-256.
-              if (verdict.needsUpgrade && supabase) {
-                try {
-                  await supabase
-                    .from("realtors")
-                    .update({ password_hash: await hashPassword(trimmed, password) })
-                    .eq("id", record.id);
-                } catch (e) {
-                  console.log("[auth] realtor hash upgrade", e);
-                }
-              }
-              // Update cache
-              setRealtorCache((prev) => {
-                const exists = prev.some((r) => r.id === record.id);
-                const next = exists
-                  ? prev.map((r) => (r.id === record.id ? record : r))
-                  : [record, ...prev];
-                void persistRealtorCache(next);
-                return next;
-              });
-              const next: Session = {
-                email: trimmed,
-                role: "admin",
-                realtorId: record.id,
-                name: record.name,
-                iat: Date.now(),
-              };
-              setSession(next);
-              await persistSession(next);
-              return { ok: true, realtorId: record.id };
-            }
-            return { ok: false, error: "Incorrect password." };
-          }
-        } catch (e) {
-          console.log("[auth] supabase login error", e);
-        }
-      }
-
-      // Fallback to local cache
-      const cached = realtorCache.find(
-        (r) => normEmail(r.email) === trimmed
-      );
-      if (cached) {
-        const verdict = await verifyPassword(trimmed, password, cached.password_hash);
-        if (verdict.ok) {
-          const next: Session = {
-            email: trimmed,
-            role: "admin",
-            realtorId: cached.id,
-            name: cached.name,
-            iat: Date.now(),
-          };
-          setSession(next);
-          await persistSession(next);
-          return { ok: true, realtorId: cached.id };
-        }
-        return { ok: false, error: "Incorrect password." };
-      }
-
-      return { ok: false, error: "No realtor account found. Create one to continue." };
+      const verified = await signInRealtorWithAuth(trimmed, password);
+      if (!verified.ok) return verified;
+      return openVerifiedRealtorSession(trimmed, verified.realtorId);
     },
-    [realtorCache, persistRealtorCache, persistSession]
+    [openVerifiedRealtorSession]
   );
 
   /** Backwards-compatible login alias. */
@@ -723,9 +558,10 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
   );
 
   const logout = useCallback(async () => {
+    if (session?.role === "admin" && supabase) await supabase.auth.signOut();
     setSession(null);
     await persistSession(null);
-  }, [persistSession]);
+  }, [persistSession, session?.role]);
 
   /** Setup unlocks an invitation; it never sends one to a client. */
   const unlockSharingCredentials = useCallback(async () => {
@@ -790,3 +626,4 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     clientSignup, clientLogin, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
   ]);
 });
+

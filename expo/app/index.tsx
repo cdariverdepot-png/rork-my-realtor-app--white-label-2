@@ -19,6 +19,8 @@ import { useAppointments } from "@/contexts/AppointmentsContext";
 import { useClients } from "@/contexts/ClientsContext";
 import { useClientProfiles } from "@/contexts/ClientProfileContext";
 import Hero from "@/components/Hero";
+import ClientLayoutHero from "@/components/ClientLayoutHero";
+import BottomNav from "@/components/BottomNav";
 import CuratedListings from "@/components/CuratedListings";
 import PersonalNote from "@/components/PersonalNote";
 import Credentials from "@/components/Credentials";
@@ -249,7 +251,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const scrollRef = useRef<ScrollView>(null);
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const bottomPad = Math.max(insets.bottom, 10) + 20;
+  const bottomPad = Math.max(insets.bottom, 10) + 100;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -278,7 +280,19 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     [previewBrand, visibleListingCount]
   );
   const visible = useMemo(
-    () => visibleSections(sectionCtx),
+    () => {
+      const sections = visibleSections(sectionCtx);
+      const layouts: Record<string, ClientSectionId[]> = {
+        "private-collection": ["hero", "listings", "concierge", "social", "note", "beat", "credentials", "quickContact", "support", "footer"],
+        "coastal-personal": ["hero", "note", "listings", "quickContact", "concierge", "credentials", "social", "beat", "support", "footer"],
+        "modern-editorial": ["hero", "listings", "quickContact", "beat", "social", "note", "concierge", "credentials", "support", "footer"],
+        "advisor-journal": ["hero", "beat", "note", "listings", "credentials", "concierge", "social", "quickContact", "support", "footer"],
+        "portrait-statement": ["hero", "note", "listings", "social", "concierge", "beat", "credentials", "quickContact", "support", "footer"],
+        "warm-concierge": ["hero", "quickContact", "listings", "concierge", "note", "beat", "social", "credentials", "support", "footer"],
+      };
+      const order = layouts[previewBrand.layoutId ?? "private-collection"];
+      return order ? [...sections].sort((a, b) => order.indexOf(a) - order.indexOf(b)) : sections;
+    },
     [sectionCtx]
   );
   const delays = useMemo(() => revealDelays(visible), [visible]);
@@ -287,7 +301,9 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     (id: ClientSectionId) => {
       switch (id) {
         case "hero":
-          return <Hero key="hero" onPrimary={scrollToListings} scrollY={scrollY} />;
+          return demoViewMode || editing
+            ? <Hero key="hero" onPrimary={scrollToListings} scrollY={scrollY} />
+            : <ClientLayoutHero key="hero" brand={previewBrand} />;
         case "listings":
           return (
             <View
@@ -349,7 +365,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return null;
       }
     },
-    [delays, scrollY]
+    [delays, scrollY, demoViewMode, editing, previewBrand]
   );
 
   /**
@@ -398,6 +414,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         >
           {visible.map(renderSection)}
         </Animated.ScrollView>
+      {!demoViewMode && !editing && !previewingDraft && <BottomNav />}
       {demoViewMode ? (
         /* Eliza Vance demo showcase — static, view-only, no edit UI. */
         <View style={[styles.previewBar, { top: insets.top + 8 }]} pointerEvents="box-none">

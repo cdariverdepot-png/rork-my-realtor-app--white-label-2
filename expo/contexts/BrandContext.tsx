@@ -17,6 +17,7 @@ import {
   type ThemeConfig,
   type ThemeTokens,
 } from "@/constants/theme";
+import { DEFAULT_CLIENT_LAYOUT, type ClientLayoutId } from "@/constants/clientLayouts";
 
 export type RealtorProfile = {
   name: string;
@@ -115,6 +116,8 @@ export type QuickContactSection = { kicker: string; title: string; sub: string }
 export type ContentSectionState = "present" | "empty" | "hidden";
 
 export type Brand = {
+  /** Presentation layout; profile and content remain shared across layouts. */
+  layoutId?: ClientLayoutId;
   realtor: RealtorProfile;
   portraitUrl: string;
   /** Square mark used as the client app's icon and launch badge. */
@@ -315,6 +318,7 @@ const buildNeutralSeed = (record?: SeedRecord): Brand => {
     quickContact: { kicker: "DIRECT LINE", title: "Reach me directly.", sub: "No assistants. No call centers. {first} writes back personally." },
     credentials: emptyCredentials(),
     theme: { ...DEFAULT_THEME },
+    layoutId: DEFAULT_CLIENT_LAYOUT,
     copyright: brandName ? `${brandName} Private. By appointment only.` : "",
     updatedAt: Date.now(),
   };

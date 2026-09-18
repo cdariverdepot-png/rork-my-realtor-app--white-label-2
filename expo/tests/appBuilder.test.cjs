@@ -1,0 +1,34 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const ts = require('typescript');
+
+const file = path.resolve(__dirname, '../lib/appBuilder/sourceModel.ts');
+const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText;
+const moduleRef = { exports: {} };
+new Function('module', 'exports', source)(moduleRef, moduleRef.exports);
+const { resolveFacts } = moduleRef.exports;
+
+test('independent matching sources strengthen a draft fact', () => {
+  const facts = resolveFacts([
+    { field: 'realtor.name', value: 'Avery Reed', sourceId: 'site', confidence: 0.72 },
+    { field: 'realtor.name', value: '  Avery   Reed ', sourceId: 'brokers', confidence: 0.72 },
+  ]);
+  assert.equal(facts[0].value, 'Avery Reed');
+  assert.equal(facts[0].needsClarification, false);
+  assert.equal(facts[0].evidence.length, 2);
+});
+
+test('conflicts and unsupported high-risk facts remain questions', () => {
+  const facts = resolveFacts([
+    { field: 'realtor.phone', value: '555-0100', sourceId: 'site', confidence: 0.92 },
+    { field: 'realtor.phone', value: '555-0101', sourceId: 'profile', confidence: 0.88 },
+    { field: 'credentials.license.number', value: 'AB123', sourceId: 'site', confidence: 0.95 },
+  ]);
+  assert.equal(facts.find((item) => item.field === 'realtor.phone').needsClarification, true);
+  assert.deepEqual(facts.find((item) => item.field === 'realtor.phone').conflictingValues, ['555-0101']);
+  assert.equal(facts.find((item) => item.field === 'credentials.license.number').needsClarification, true);
+});

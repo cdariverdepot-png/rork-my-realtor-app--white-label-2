@@ -43,7 +43,7 @@ const SLIDES: Slide[] = [
   {
     icon: <Building2 size={36} color={brand.goldLight} strokeWidth={1.4} />,
     title: "Your Brand,\nYour App",
-    body: "Every realtor gets their own fully branded experience. Custom colors, logos, monograms — it all adapts to you.",
+    body: "Add your website, documents, and photos. We'll build a branded starting point that fits your style.",
     bg: require("@/assets/images/onboard-bg-brand.jpg"),
   },
   {
@@ -66,8 +66,8 @@ const SLIDES: Slide[] = [
   },
   {
     icon: <Palette size={36} color={brand.goldLight} strokeWidth={1.4} />,
-    title: "Complete\nControl",
-    body: "The content editor and admin dashboard put every detail in your hands — from hero images to client rosters.",
+    title: "Your App,\nReady to Use",
+    body: "We'll ask about anything we can't confirm. Finish setup to see your dashboard, then edit or switch layouts whenever you like.",
     bg: require("@/assets/images/onboard-bg-control.jpg"),
   },
 ];

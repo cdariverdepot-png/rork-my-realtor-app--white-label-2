@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Check } from "lucide-react-native";
@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import { requiredStatus } from "@/constants/sections";
 import { brand, fonts } from "@/constants/colors";
+import { loadBuild } from "@/lib/appBuilder/buildService";
 
 export default function Ready() {
   const router = useRouter();
@@ -13,8 +14,15 @@ export default function Ready() {
   const saved = useBrand();
   const opacity = useRef(new Animated.Value(0)).current;
   const complete = saved.hydrated && requiredStatus(saved.brand).complete;
+  const [listingLinks, setListingLinks] = useState<string[]>([]);
   useEffect(() => {
     Animated.timing(opacity, { toValue: 1, duration: 650, useNativeDriver: true }).start();
+    void loadBuild().then(build => {
+      if (!build) return;
+      const ids = new Set(build.draft.potentialListingSources ?? []);
+      setListingLinks(build.sources.filter(source => ids.has(source.id) &&
+        (source.kind === "url" || source.kind === "listing")).map(source => source.uri));
+    }).catch(() => {});
   }, [opacity]);
   const preview = () => {
     auth.enterViewAsClient();
@@ -33,6 +41,11 @@ export default function Ready() {
       <Pressable onPress={preview} style={{ borderWidth: 1, borderColor: brand.goldLight, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 28, minWidth: 220, alignItems: "center" }}>
         <Text style={{ color: brand.goldLight, fontFamily: fonts.sansSemi }}>Preview my app</Text>
       </Pressable>
+      {listingLinks.length > 0 && <Pressable
+        onPress={() => router.push({ pathname: "/admin/add", params: { sourceUrl: listingLinks[0] } })}
+        style={{ paddingVertical: 12, paddingHorizontal: 24, alignItems: "center" }}>
+        <Text style={{ color: brand.goldLight }}>Review a listing we found</Text>
+      </Pressable>}
     </Animated.View>
   </View>;
 }

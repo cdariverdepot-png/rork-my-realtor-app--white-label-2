@@ -67,6 +67,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { studioPlaceholders as ph } from "@/constants/studioPlaceholders";
+import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
 import { DESIGNATIONS, type DesignationDef } from "@/constants/designations";
 import {
   AGENT_TITLES,
@@ -1142,6 +1143,23 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
 
   return (
     <View>
+      <View style={{ marginBottom: 22 }}>
+        <Text style={{ color: brand.ivory, fontSize: 19, fontFamily: fonts.serif }}>Choose a client app layout</Text>
+        <Text style={{ color: brand.textOnDarkMuted, marginTop: 7, lineHeight: 20 }}>
+          The layout changes the opening page and section order. Your profile, listings, and messages stay in place.
+        </Text>
+        {CLIENT_LAYOUTS.map(layout => {
+          const selected = (draft.layoutId ?? CLIENT_LAYOUTS[0].id) === layout.id;
+          return <Pressable key={layout.id} accessibilityRole="button"
+            onPress={() => setBrand(current => ({ ...current, layoutId: layout.id,
+              theme: layout.defaultTheme, themeChosen: true }))}
+            style={{ borderColor: selected ? brand.goldLight : "#625E56", borderWidth: 1,
+              borderRadius: 12, padding: 14, marginTop: 9, backgroundColor: selected ? "#29271F" : "#1D1D1D" }}>
+            <Text style={{ color: brand.ivory, fontWeight: "700" }}>{layout.name}{selected ? " ✓" : ""}</Text>
+            <Text style={{ color: brand.textOnDarkMuted, marginTop: 4 }}>{layout.description}</Text>
+          </Pressable>;
+        })}
+      </View>
       {/* ── Live preview ── */}
       <View style={styles.tpFrame}>
         <ThemePreview

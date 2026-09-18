@@ -96,10 +96,12 @@ test('client invitation and saved completion cannot bypass required profile fiel
   assert.ok(visibleSteps(answers).some(s => missingRequired(s, answers).some(f => f.id === 'phone')));
 });
 test('theme changes preserve canonical content; content saves preserve saved image positioning', () => {
-  const saved = fixture(); saved.theme.imagePositions = { old: { x: 0, y: 100 } };
-  const draft = structuredClone(saved); draft.realtor.name = 'Draft name'; draft.theme.accent = 'gold';
+  const saved = fixture(); saved.theme.imagePositions = { old: { x: 0, y: 100 } }; saved.layoutId = 'private-collection';
+  const draft = structuredClone(saved); draft.realtor.name = 'Draft name'; draft.theme.accent = 'gold'; draft.layoutId = 'warm-concierge';
   assert.equal(editorSave(saved, draft, 'theme').realtor.name, 'Test Realtor');
+  assert.equal(editorSave(saved, draft, 'theme').layoutId, 'warm-concierge');
   assert.equal(editorSave(saved, draft, 'content').realtor.name, 'Draft name');
+  assert.equal(editorSave(saved, draft, 'content').layoutId, 'private-collection');
   assert.deepEqual(editorSave(saved, draft, 'content').theme, saved.theme);
 });
 test('all 11 retained looks use independent image positions without changing the image asset', () => {

@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import {
@@ -110,7 +110,8 @@ export default function AddListing() {
   const inputRef = useRef<TextInput>(null);
   const scrollRef = useRef<ScrollView>(null);
 
-  const [url, setUrl] = useState<string>("");
+  const { sourceUrl } = useLocalSearchParams<{ sourceUrl?: string }>();
+  const [url, setUrl] = useState<string>(sourceUrl ?? "");
   const [busy, setBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [scraped, setScraped] = useState<ScrapedListing | null>(null);

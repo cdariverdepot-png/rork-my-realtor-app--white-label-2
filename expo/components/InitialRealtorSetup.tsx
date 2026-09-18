@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
+import { randomUUID } from "expo-crypto";
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system/legacy";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
 import { toPortableImage } from "@/lib/portableImage";
+import { useAuth } from "@/contexts/AuthContext";
+import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
+import { analyzeBuild, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
+import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
+import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
+import { useClients } from "@/contexts/ClientsContext";
 
-export default function InitialRealtorSetup() {
+function ManualSetup() {
   const { brand, hydrated, saveBrand } = useBrand();
   const [draft, setDraft] = useState(brand);
   const [dirty, setDirty] = useState(false);
@@ -68,5 +78,228 @@ export default function InitialRealtorSetup() {
       <Text style={{ color: "white", fontSize: 17 }}>{saving ? "Saving…" : "Save & Continue"}</Text>
     </Pressable>
     <Pressable disabled={saving || !dirty} onPress={() => void save(false)} style={{ minHeight: 48, justifyContent: "center", alignItems: "center" }}><Text style={{ color: "#CBD0D6" }}>Save progress for later</Text></Pressable>
+  </ScrollView>;
+}
+
+export default function InitialRealtorSetup() {
+  const auth = useAuth();
+  const { importMany } = useClients();
+  const { brand, saveBrand } = useBrand();
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const [url, setUrl] = useState("");
+  const [sources, setSources] = useState<BuildSource[]>([]);
+  const [result, setResult] = useState<SavedBuild | null>(null);
+  const [draft, setDraft] = useState<Brand | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [manual, setManual] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [contactCount, setContactCount] = useState(0);
+  const [pendingContacts, setPendingContacts] = useState<{ contacts: ReturnType<typeof parseCsvContacts>; format: "csv" | "vcard" } | null>(null);
+  const [activity, setActivity] = useState("");
+  const localImages = useRef<Record<string, string>>({});
+  const facts = result ? resolveFacts(result.evidence) : [];
+  const questions = facts.filter(fact => fact.needsClarification);
+
+  useEffect(() => {
+    let alive = true;
+    void loadBuild().then(saved => {
+      if (!alive) return;
+      if (saved) {
+        setSources(saved.sources);
+        setResult(saved);
+        if (saved.evidence.length) setDraft(applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+      }
+    }).catch(e => { if (alive) setError(e instanceof Error ? e.message : "Could not load your app build."); })
+      .finally(() => { if (alive) setLoaded(true); });
+    return () => { alive = false; };
+  }, []);
+
+  const addSource = async (source: BuildSource) => {
+    if (!auth.realtorId) throw new Error("Sign in to save your sources.");
+    const next = [...sources, source];
+    await saveBuildSources(auth.realtorId, next);
+    setSources(next);
+    setResult(null);
+    setDraft(null);
+  };
+  const act = async (work: () => Promise<void>) => {
+    if (busy) return;
+    setBusy(true); setError("");
+    try { await work(); }
+    catch (e) { setError(e instanceof Error ? e.message : "Please try again."); }
+    finally { setBusy(false); setActivity(""); }
+  };
+  const addUrl = () => void act(async () => {
+    const parsed = new URL(url.trim());
+    if (parsed.protocol !== "https:") throw new Error("Use a public HTTPS link.");
+    await addSource({ id: randomUUID(), kind: "url", label: parsed.hostname,
+      uri: parsed.toString(), status: "queued" });
+    setUrl("");
+  });
+  const addFile = (kind: "document" | "image") => void act(async () => {
+    if (kind === "image") {
+      const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false });
+      if (picked.canceled) return;
+      const asset = picked.assets[0];
+      const source = await uploadBuildFile({ uri: asset.uri, name: asset.fileName || "realtor-image.jpg",
+        mimeType: asset.mimeType, size: asset.fileSize }, "image");
+      localImages.current[source.id] = asset.uri;
+      await addSource(source);
+    } else {
+      const picked = await DocumentPicker.getDocumentAsync({ type: ["application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/plain"], copyToCacheDirectory: true });
+      if (picked.canceled) return;
+      await addSource(await uploadBuildFile(picked.assets[0], "document"));
+    }
+  });
+  const analyze = () => void act(async () => {
+    if (!sources.some(source => source.kind !== "contacts")) throw new Error("Add a website, document, or image first.");
+    setActivity("Reading your sources and building a profile…");
+    const saved = await analyzeBuild();
+    setSources(saved.sources);
+    setResult(saved);
+    const next = applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft);
+    const portraitUri = saved.draft.portraitSourceId && localImages.current[saved.draft.portraitSourceId];
+    if (portraitUri) next.portraitUrl = await toPortableImage(portraitUri, 1600);
+    setDraft(next);
+    setActivity("");
+  });
+  const addContacts = () => void act(async () => {
+    const picked = await DocumentPicker.getDocumentAsync({ type: ["text/csv", "text/vcard", "text/x-vcard", "text/plain", "*/*"],
+      copyToCacheDirectory: true });
+    if (picked.canceled) return;
+    const asset = picked.assets[0];
+    const text = Platform.OS === "web" ? await (await fetch(asset.uri)).text()
+      : await FileSystem.readAsStringAsync(asset.uri, { encoding: "utf8" });
+    const format = sniffContactFile(text);
+    const contacts = format === "vcard" ? parseVCard(text) : parseCsvContacts(text);
+    if (!contacts.length) throw new Error("No contacts were found in that file.");
+    setPendingContacts({ contacts, format: format === "vcard" ? "vcard" : "csv" });
+  });
+  const confirmContacts = () => void act(async () => {
+    if (!pendingContacts) return;
+    const summary = importMany(pendingContacts.contacts, pendingContacts.format);
+    setContactCount(count => count + summary.added + summary.merged);
+    setPendingContacts(null);
+  });
+  const regenerate = (target: "heroMessage" | "aboutParagraph") => void act(async () => {
+    setActivity("Writing another version…");
+    const saved = await regenerateBuildCopy(target);
+    setResult(saved);
+    setDraft(current => current && (target === "heroMessage"
+      ? { ...current, realtor: { ...current.realtor, heroMessage: saved.draft.heroMessage || current.realtor.heroMessage } }
+      : { ...current, note: { ...current.note, body: [saved.draft.aboutParagraph || current.note.body[0] || ""] } }));
+    setActivity("");
+  });
+  const finish = () => void act(async () => {
+    if (!draft || !requiredStatus(draft).complete) {
+      throw new Error("Please complete the essential details before finishing.");
+    }
+    await saveBrand(draft);
+    await markBuildComplete();
+    router.replace("/admin/ready");
+  });
+  const field = (label: string, value: string, change: (value: string) => void) =>
+    <View style={{ marginTop: 12 }}><Text style={{ color: "#D7D8D3", marginBottom: 6 }}>{label}</Text>
+      <TextInput value={value} onChangeText={change} accessibilityLabel={label}
+        style={{ color: "white", borderColor: "#646C70", borderWidth: 1, borderRadius: 10, padding: 12 }} /></View>;
+  const setProfile = (key: keyof Brand["realtor"], value: string) =>
+    setDraft(current => current && ({ ...current, realtor: { ...current.realtor, [key]: value } }));
+  const setLicense = (key: "number" | "state" | "brokerage", value: string) =>
+    setDraft(current => current && ({ ...current, credentials: { ...current.credentials,
+      license: { ...current.credentials.license, [key]: value } } }));
+  const selectPortrait = () => void act(async () => {
+    const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false });
+    if (picked.canceled) return;
+    const uri = await toPortableImage(picked.assets[0].uri, 1600);
+    setDraft(current => current && ({ ...current, portraitUrl: uri }));
+  });
+  const button = (label: string, onPress: () => void, primary = false) =>
+    <Pressable accessibilityRole="button" onPress={onPress} disabled={busy}
+      style={{ padding: 14, borderRadius: 11, borderWidth: 1, borderColor: primary ? "#C2A276" : "#657079",
+        backgroundColor: primary ? "#C2A276" : "transparent", marginTop: 10 }}>
+      <Text style={{ color: primary ? "#172027" : "white", textAlign: "center", fontWeight: "600" }}>{label}</Text>
+    </Pressable>;
+
+  if (manual) return <ManualSetup />;
+  return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }}
+    contentContainerStyle={{ padding: 24, paddingTop: insets.top + 32, paddingBottom: insets.bottom + 36 }}
+    keyboardShouldPersistTaps="handled">
+    <Text style={{ color: "white", fontSize: 30, fontWeight: "600" }}>Build my app</Text>
+    <Text style={{ color: "#C8D0D0", marginTop: 12, lineHeight: 23 }}>
+      Add your website, bio, documents, and photos. We’ll use them together to create a draft app, then ask only about details we can’t confirm.
+    </Text>
+    {!loaded && <Text style={{ color: "#C8D0D0", marginTop: 20 }}>Loading your build…</Text>}
+    {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 15 }}>{error}</Text> : null}
+    {loaded && <>
+      {field("Website or profile URL", url, setUrl)}
+      {button("Add link", addUrl)}
+      {button("Upload PDF, Word, or text", () => addFile("document"))}
+      {button("Upload image", () => addFile("image"))}
+      {button("Import contacts (CSV or vCard)", addContacts)}
+      {pendingContacts && <View style={{ marginTop: 10 }}>
+        <Text style={{ color: "#C8D0D0" }}>{pendingContacts.contacts.length} contacts found. Add them to your private roster?</Text>
+        {button("Add contacts", confirmContacts, true)}
+        {button("Cancel", () => setPendingContacts(null))}
+      </View>}
+      {contactCount > 0 && <Text style={{ color: "#C8D0D0", marginTop: 8 }}>{contactCount} contacts added to your private roster.</Text>}
+      <Text style={{ color: "white", fontSize: 20, marginTop: 30 }}>Your sources</Text>
+      {sources.length ? sources.map(source => <Text key={source.id} style={{ color: source.status === "failed" ? "#FFBAA9" : "#C8D0D0", marginTop: 8 }}>
+        {source.status === "failed" ? "Couldn’t read" : "Added"} · {source.label}{source.error ? ` — ${source.error}` : ""}
+      </Text>) : <Text style={{ color: "#B8C0C4", marginTop: 8 }}>Add at least one link or file to begin.</Text>}
+      {button(busy ? "Working…" : "Build my draft app", analyze, true)}
+      {busy && activity ? <Text accessibilityLiveRegion="polite" style={{ color: "#C8D0D0", marginTop: 10 }}>{activity}</Text> : null}
+      {result && draft && <>
+        <Text style={{ color: "white", fontSize: 24, marginTop: 32 }}>We built your app</Text>
+        <Text style={{ color: "#C8D0D0", lineHeight: 22, marginTop: 8 }}>
+          {result.draft.layoutId ? "We chose" : "We started with"} {CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? "a starting layout"} for your style. You can switch layouts from Edit My App after setup.
+        </Text>
+        <View style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", minHeight: 185,
+          backgroundColor: draft.layoutId === "coastal-personal" ? "#F8F4EF" : "#29231F",
+          flexDirection: "row", alignItems: "center" }}>
+          <View style={{ flex: 1, padding: 20 }}>
+            <Text style={{ color: draft.layoutId === "coastal-personal" ? "#1D2526" : "#F7F1EA",
+              fontSize: 23, fontFamily: "PlayfairDisplay_500Medium" }} numberOfLines={3}>
+              {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.name}
+            </Text>
+            <Text style={{ color: "#B7956E", marginTop: 13 }}>{draft.realtor.name}</Text>
+          </View>
+          {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }}
+            style={{ width: "38%", height: 185 }} contentFit="cover" /> : null}
+        </View>
+        {button("Try another opening line", () => regenerate("heroMessage"))}
+        {button("Try another introduction", () => regenerate("aboutParagraph"))}
+        {questions.length ? <View style={{ marginTop: 18 }}>
+          <Text style={{ color: "white", fontSize: 18 }}>Please confirm</Text>
+          {questions.map(fact => <View key={fact.field}>
+            {field(fact.field.replace(/\./g, " · "), fact.field.startsWith("credentials.license.")
+              ? draft.credentials.license[fact.field.split(".")[2] as "number" | "state" | "brokerage"]
+              : fact.field === "portraitUrl" ? draft.portraitUrl
+              : draft.realtor[fact.field.split(".")[1] as keyof Brand["realtor"]] as string,
+              value => {
+                if (fact.field.startsWith("credentials.license.")) setLicense(fact.field.split(".")[2] as "number" | "state" | "brokerage", value);
+                else if (fact.field === "portraitUrl") setDraft(current => current && ({ ...current, portraitUrl: value }));
+                else setProfile(fact.field.split(".")[1] as keyof Brand["realtor"], value);
+              })}
+            {fact.conflictingValues.length ? <Text style={{ color: "#D6BA91" }}>Also found: {fact.conflictingValues.join(", ")}</Text> : null}
+          </View>)}
+        </View> : null}
+        {!requiredStatus(draft).complete && <View style={{ marginTop: 20 }}>
+          <Text style={{ color: "white", fontSize: 18 }}>A few essentials are missing</Text>
+          {!draft.realtor.name && field("Your name", draft.realtor.name, value => setProfile("name", value))}
+          {!draft.realtor.city && field("City or region", draft.realtor.city, value => setProfile("city", value))}
+          {!draft.realtor.phone && !draft.realtor.email && field("Phone", draft.realtor.phone, value => setProfile("phone", value))}
+          {!draft.realtor.heroMessage && !draft.realtor.tagline && field("Opening line", draft.realtor.heroMessage, value => setProfile("heroMessage", value))}
+          {!draft.credentials.license.brokerage && field("Brokerage", draft.credentials.license.brokerage, value => setLicense("brokerage", value))}
+          {!draft.credentials.license.number && field("License number", draft.credentials.license.number, value => setLicense("number", value))}
+          {!draft.credentials.license.state && field("License state", draft.credentials.license.state, value => setLicense("state", value))}
+          {!draft.portraitUrl && button("Choose your portrait", selectPortrait)}
+        </View>}
+        {button("Complete setup", finish, true)}
+      </>}
+      {button("Enter details myself", () => setManual(true))}
+    </>}
   </ScrollView>;
 }

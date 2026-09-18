@@ -170,7 +170,7 @@ function RootLayoutInner() {
 
   const tourSeen = audience === "realtor" ? realtorTourSeen : clientTourSeen;
   const suppressed = pathname === "/admin/ready" || isPreviewAdmin || demoViewMode || viewAsClient || !setupHydrated ||
-    (isAdmin ? !requiredStatus(savedBrand).complete : !myProfileShared || !myEssentialsMet);
+    (!isAdmin && (!myProfileShared || !myEssentialsMet));
 
   const showOnboarding =
     authHydrated &&

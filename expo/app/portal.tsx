@@ -167,7 +167,7 @@ export default function Portal() {
 
       if (stage === "realtor-setup") {
         const res = await realtorSignup({ name, email, password });
-        if (!res.ok) { setError(res.error ?? "Couldn't create your account."); triggerShake(); return; }
+        if (!res.ok) { setError(res.error ?? "Couldn't create your account."); if (!res.verificationRequired) triggerShake(); return; }
         success(); router.replace("/admin/build");
       } else if (stage === "realtor-signin") {
         const res = await realtorLogin(email, password);
@@ -218,8 +218,8 @@ export default function Portal() {
   const heroSub =
     stage === "entry" ? "Choose how you'd like to continue."
     : stage === "code" ? "Enter the 6-character code your realtor shared with you."
-    : stage === "realtor-setup" ? "You'll manage your listings, brand, and clients from here."
-    : stage === "realtor-signin" ? "Sign back into your dashboard."
+    : stage === "realtor-setup" ? "Confirm your email to create your private builder account. If you already used this app, use the same email to keep your profile and clients."
+    : stage === "realtor-signin" ? "Sign in with your verified account. If you used the earlier app, create an account with the same email first."
     : stage === "client-setup" ? `Create your private profile. ${resolvedRealtorName?.split(" ")[0] || "Your realtor"} will see you on the roster.`
     : stage === "client-full" ? `${resolvedRealtorName?.split(" ")[0] || "This agent"} isn't accepting new clients at the moment.`
     : "Sign in to your private profile.";

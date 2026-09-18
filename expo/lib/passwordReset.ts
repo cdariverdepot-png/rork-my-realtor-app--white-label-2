@@ -1,24 +1,6 @@
-import { hashPassword } from "@/lib/passwordHash";
 import { supabase } from "@/lib/supabase";
 
-/**
- * Password reset for realtor accounts.
- *
- * Passwords are stored as one-way SHA-256 hashes, so nobody — including us —
- * can recover the original. That is the correct design, but it means a
- * forgotten password is a permanent lockout unless there is a reset path. A
- * realtor locked out of their own brand, listings and client roster with no
- * way back is the kind of failure that ends the relationship.
- *
- * We prove the person controls the mailbox using Supabase Auth's one-time
- * email code, then write a new hash. Supabase Auth is used purely as an email
- * verifier here — the account model itself stays where it is, so nothing has
- * to be migrated for this to work.
- *
- * The server function refuses to write unless the caller holds a genuine,
- * non-anonymous session whose email matches the account being reset, so
- * possession of the public anon key is not enough to hijack an account.
- */
+/** Password reset for verified Supabase Auth realtor accounts. */
 
 export type ResetStep = "request" | "verify";
 
@@ -34,28 +16,10 @@ export async function requestResetCode(email: string): Promise<ResetOutcome> {
     return { ok: false, error: "You're offline. Reconnect and try again." };
   }
 
-  // Confirm an account exists before mailing anything. Supabase would happily
-  // create a brand new auth user for an unknown address, which would send a
-  // code that could never reset anything.
-  try {
-    const { data, error } = await supabase
-      .from("realtors")
-      .select("id")
-      .eq("email", e)
-      .maybeSingle();
-    if (error) console.log("[reset] lookup error", error.message);
-    if (!data) {
-      return { ok: false, error: "No account found for that email." };
-    }
-  } catch (err) {
-    console.log("[reset] lookup exception", err);
-    return { ok: false, error: "Couldn't reach the server. Try again." };
-  }
-
   try {
     const { error } = await supabase.auth.signInWithOtp({
       email: e,
-      options: { shouldCreateUser: true },
+      options: { shouldCreateUser: false },
     });
     if (error) {
       console.log("[reset] otp send error", error.message);
@@ -71,7 +35,7 @@ export async function requestResetCode(email: string): Promise<ResetOutcome> {
   }
 }
 
-/** Verify the code and write the new password hash. */
+/** Verify the code and set the password on the authenticated user. */
 export async function confirmReset(input: {
   email: string;
   code: string;
@@ -104,19 +68,9 @@ export async function confirmReset(input: {
   }
 
   try {
-    const hash = await hashPassword(e, input.newPassword);
-    const { data, error } = await supabase.rpc("reset_realtor_password", {
-      p_email: e,
-      p_hash: hash,
-    });
+    const { error } = await supabase.auth.updateUser({ password: input.newPassword });
     if (error) {
       console.log("[reset] write error", error.message);
-      return { ok: false, error: "Couldn't save the new password. Try again." };
-    }
-    const row = data as Record<string, unknown> | null;
-    if (row?.ok !== true) {
-      const reason = String(row?.reason ?? "");
-      if (reason === "no_account") return { ok: false, error: "No account found for that email." };
       return { ok: false, error: "Couldn't save the new password. Try again." };
     }
     return { ok: true };

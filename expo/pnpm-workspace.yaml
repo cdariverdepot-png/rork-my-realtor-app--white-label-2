@@ -1,3 +1,5 @@
+allowBuilds:
+  unrs-resolver: set this to true or false
 overrides:
   axios: 1.13.2
   '@ai-sdk/provider-utils': 3.0.19

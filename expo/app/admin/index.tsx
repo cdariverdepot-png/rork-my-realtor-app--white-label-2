@@ -519,12 +519,12 @@ export default function AdminDashboard() {
                 <View style={styles.heroPortraitRing} />
               </Pressable>
               <Text style={styles.heroGreeting} numberOfLines={2}>{greeting}</Text>
-              <Text style={styles.heroTagline}>{setupComplete ? "Your app is ready. Preview it, add a listing, then invite a client." : "Complete setup to create your client-facing app."}</Text>
+              <Text style={styles.heroTagline}>{setupComplete ? "Your app is ready. See what clients see, then choose your next step." : "Build your app from your website, documents, and photos."}</Text>
             </View>
 
             {setupComplete && (
               <View style={{ marginBottom: 18, gap: 5 }}>
-                <Text style={{ fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 10, letterSpacing: 2 }}>START HERE</Text>
+                <Text style={{ fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 10, letterSpacing: 2 }}>RUN MY BUSINESS</Text>
                 <Text style={{ fontFamily: fonts.sans, color: admin.textMuted, fontSize: 13, lineHeight: 20 }}>
                   1. Preview your app   2. Add a listing   3. Invite a client
                 </Text>
@@ -561,7 +561,7 @@ export default function AdminDashboard() {
                 end={{ x: 0, y: 0.7 }}
                 style={StyleSheet.absoluteFill}
               />
-              <Text style={styles.studioCtaText}>EDIT YOUR APP</Text>
+              <Text style={styles.studioCtaText}>EDIT MY APP</Text>
               <ArrowRight size={16} color="#F4EFE6" strokeWidth={2.4} />
               <View style={styles.studioCtaDot} />
             </Pressable>
@@ -583,10 +583,9 @@ export default function AdminDashboard() {
               </Pressable>
             </View>
 
-            <Text style={styles.studioHeadline}>Everything your clients see starts here.</Text>
+            <Text style={styles.studioHeadline}>Make changes whenever you need.</Text>
             <Text style={styles.studioDescription}>
-              This is your neutral content canvas where you shape every detail of your client-facing app —
-              from your portrait and colors to the exact words your clients read.
+              Switch layouts, update your profile, and refine the words your clients see.
             </Text>
           </View>
 
