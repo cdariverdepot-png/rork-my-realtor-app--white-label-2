@@ -3,6 +3,8 @@
 
 alter table public.realtors
   add column if not exists auth_user_id uuid unique references auth.users(id) on delete set null;
+alter table public.realtors
+  add column if not exists updated_at timestamptz not null default now();
 
 -- Realtor records are private. Clients resolve only an enabled invitation
 -- code through a narrowly scoped function below.
@@ -100,6 +102,7 @@ create table if not exists public.realtor_builds (
 );
 
 alter table public.realtor_builds enable row level security;
+grant select, insert, update on public.realtor_builds to authenticated;
 
 drop policy if exists "realtor builds own read" on public.realtor_builds;
 drop policy if exists "realtor builds own insert" on public.realtor_builds;

@@ -1,5 +1,5 @@
 -- Schedule refresh-listings to run every 24 hours.
--- Run this once in the Supabase SQL editor (project: mxrxxhjsceafmzhbpwtc).
+-- Run this once in the Supabase SQL editor (project: xdcqjaodcvnlawqcunrr).
 --
 -- Prerequisites:
 --   1. Deploy the Edge Function:
@@ -23,7 +23,7 @@ select
     '0 */24 * * *',         -- every 24 hours
     $$
     select net.http_post(
-      url := 'https://mxrxxhjsceafmzhbpwtc.supabase.co/functions/v1/refresh-listings',
+      url := 'https://xdcqjaodcvnlawqcunrr.supabase.co/functions/v1/refresh-listings',
       headers := jsonb_build_object(
         'Content-Type', 'application/json',
         'Authorization', 'Bearer ' || current_setting('app.settings.anon_key', true)

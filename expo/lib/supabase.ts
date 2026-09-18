@@ -21,9 +21,9 @@ import Constants from "expo-constants";
  * cache drops the EXPO_PUBLIC_* vars (which has happened repeatedly on
  * cold client bundles).
  */
-const FALLBACK_URL = "https://mxrxxhjsceafmzhbpwtc.supabase.co";
+const FALLBACK_URL = "https://xdcqjaodcvnlawqcunrr.supabase.co";
 const FALLBACK_ANON =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14cnh4aGpzY2VhZm16aGJwd3RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNDMwOTEsImV4cCI6MjA5NjcxOTA5MX0.pDyyEHgwARiqbIqWYYOs84H15BEipk5Iv6UlouxE2RI";
+  "sb_publishable_yAEO6l9LfHPccsDDPUR-uQ_5pRbv4Dt";
 
 /**
  * Supabase's JS SDK expects the bare project origin (https://xxx.supabase.co).
@@ -164,4 +164,3 @@ export async function ensureSupabaseSession(): Promise<Session | null> {
 if (supabase) {
   void ensureSupabaseSession();
 }
-
