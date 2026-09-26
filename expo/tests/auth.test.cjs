@@ -34,6 +34,12 @@ test('email code verifies exact code with normalized email', async () => {
   assert.equal((await auth.verifyAccountCode(' Person@Example.com ', '123456')).ok, true);
   assert.deepEqual(request, { email: 'person@example.com', token: '123456', type: 'email' });
 });
+test('signup confirmation verifies with signup otp type first', async () => {
+  const calls = [];
+  const auth = load('lib/emailSignIn', { auth: { verifyOtp: async args => { calls.push(args); return args.type === 'signup' ? {} : { error: { message: 'bad' } }; } } });
+  assert.equal((await auth.verifyAccountCode('person@example.com', '123456', true)).ok, true);
+  assert.equal(calls[0].type, 'signup');
+});
 test('delivery errors and exceptions do not expose internal messages', async () => {
   const auth = load('lib/emailSignIn', { auth: { signInWithOtp: async () => { throw new Error('database secret'); } } });
   const result = await auth.sendAccountCode('person@example.com');

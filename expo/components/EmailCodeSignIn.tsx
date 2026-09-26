@@ -25,7 +25,7 @@ export default function EmailCodeSignIn({ email, confirmation }: { email: string
     const current = generation.current;
     lock.current = true; setBusy(true); setMessage("");
     try {
-      const result = verify ? await verifyAccountCode(email, token) : await sendAccountCode(email, confirmation);
+      const result = verify ? await verifyAccountCode(email, token, confirmation) : await sendAccountCode(email, confirmation);
       if (current !== generation.current) return;
       if (!result.ok) { setMessage(result.error ?? "Please try again shortly."); return; }
       if (!verify) { setSent(true); setRemaining(60); setMessage("Check your email for a code. Enter it here to continue."); return; }

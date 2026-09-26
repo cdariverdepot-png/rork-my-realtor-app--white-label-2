@@ -15,11 +15,18 @@ export async function sendAccountCode(email: string, signupConfirmation = false)
   } catch { return { ok: false, error: "Couldn't send your code. Please check your connection and try again." }; }
 }
 
-export async function verifyAccountCode(email: string, token: string) {
+/** Confirm-signup emails use type "signup"; magic-link / email OTP uses type "email". Try the expected type first. */
+export async function verifyAccountCode(email: string, token: string, signupConfirmation = false) {
   if (!/^\d{6,8}$/.test(token.trim())) return { ok: false, error: "Enter the code from your latest email." };
   if (!supabase) return { ok: false, error: "Please reconnect and try again." };
+  const normalized = email.trim().toLowerCase();
+  const code = token.trim();
+  const types = signupConfirmation ? (["signup", "email"] as const) : (["email", "signup"] as const);
   try {
-    const { error } = await supabase.auth.verifyOtp({ email: email.trim().toLowerCase(), token: token.trim(), type: "email" });
-    return error ? { ok: false, error: "That code is invalid or expired. Check your latest email or request a new code." } : { ok: true };
+    for (const type of types) {
+      const { error } = await supabase.auth.verifyOtp({ email: normalized, token: code, type });
+      if (!error) return { ok: true };
+    }
+    return { ok: false, error: "That code is invalid or expired. Check your latest email or request a new code." };
   } catch { return { ok: false, error: "Couldn't confirm your code. Please try again." }; }
 }
