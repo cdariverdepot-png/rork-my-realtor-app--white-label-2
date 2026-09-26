@@ -21,6 +21,94 @@ const { editorSave } = load('lib/editorSave');
 const { imagePosition, imagePositionKey } = load('lib/themeImages');
 const { THEME_LOOKS } = load('constants/theme');
 const { preserveProfile } = load('lib/preserveProfile');
+
+test('signup email returns only to configured local or published destinations', () => {
+  const { signupEmailRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect');
+  assert.equal(signupEmailRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/');
+  assert.equal(signupEmailRedirect(PUBLISHED_AUTH_RETURN), PUBLISHED_AUTH_RETURN);
+  assert.equal(signupEmailRedirect(), PUBLISHED_AUTH_RETURN);
+  assert.equal(signupEmailRedirect('https://untrusted.example'), PUBLISHED_AUTH_RETURN);
+  assert.equal(signupEmailRedirect('http://127.0.0.1:4178'), PUBLISHED_AUTH_RETURN);
+});
+
+test('all seven reference themes switch presentation without replacing profile, photos or optional states', () => {
+  const { THEME_CAROUSEL_ORDER, themeCandidate } = load('constants/themeDesigns');
+  const saved = fixture();
+  saved.sectionStates = { note: 'hidden', beat: 'empty' };
+  saved.theme.imagePositions = { legacy: { x: 71, y: 33 } };
+  const before = JSON.stringify(saved);
+  assert.equal(new Set(THEME_CAROUSEL_ORDER).size, 7);
+  for (const id of THEME_CAROUSEL_ORDER) {
+    const next = themeCandidate(saved, id);
+    assert.equal(next.layoutId, id);
+    assert.equal(next.realtor, saved.realtor);
+    assert.equal(next.portraitUrl, saved.portraitUrl);
+    assert.equal(next.note, saved.note);
+    assert.equal(next.sectionStates, saved.sectionStates);
+    assert.equal(next.theme.imagePositions, saved.theme.imagePositions);
+    assert.equal(next.theme.presentationVersion, 2);
+  }
+  assert.equal(JSON.stringify(saved), before);
+});
+test('sample profiles are isolated, theme-specific and replaced wholesale by completed user information', () => {
+  const { themePreview, themeSample } = load('constants/themeSamples');
+  const { THEME_CAROUSEL_ORDER, themeCandidate } = load('constants/themeDesigns');
+  const saved = fixture();
+  const homes = [{ id: 'real-home', title: 'My real listing' }];
+  const before = JSON.stringify(saved);
+  const names = THEME_CAROUSEL_ORDER.map(id => themeSample(id).brand.realtor.name);
+  assert.equal(new Set(names).size, 7);
+  assert.equal(names.filter(name => name.includes('Eliza')).length, 1);
+  for (const id of THEME_CAROUSEL_ORDER) {
+    const sample = themePreview(saved, homes, id, true);
+    assert.equal(sample.sample, true);
+    assert.ok(sample.listings.every(home => home.id.startsWith('sample-')));
+    const actual = themePreview(saved, homes, id, false);
+    assert.equal(actual.sample, false);
+    assert.equal(actual.brand.realtor, saved.realtor);
+    assert.equal(actual.listings, homes);
+    assert.equal(themeCandidate(saved, id).portraitUrl, saved.portraitUrl);
+  }
+  assert.equal(JSON.stringify(saved), before);
+  const unfinished = { ...saved, portraitUrl: '' };
+  assert.equal(themePreview(unfinished, [], 'coastal-personal', false).sample, true);
+  assert.equal(themePreview(unfinished, [], 'coastal-personal', false, 'profile').brand.portraitUrl, '');
+  const a = themeSample('coastal-personal');
+  a.brand.realtor.name = 'Changed locally';
+  a.listings[0].title = 'Changed locally';
+  assert.equal(themeSample('coastal-personal').brand.realtor.name, 'Marissa Cole');
+  assert.notEqual(themeSample('coastal-personal').listings[0].title, 'Changed locally');
+});
+
+test('all seven bundled sample portraits exist and never override real profile images', () => {
+  const file = path.join(root, 'constants/themeSamplePortraits.ts');
+  const module = { exports: {} };
+  const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
+  const assets = [];
+  new Function('require', 'module', 'exports', source)(id => {
+    assert.match(id, /^\.\.\/assets\/theme-portraits\//);
+    assert.ok(fs.statSync(path.resolve(path.dirname(file), id)).size > 0);
+    assets.push(id);
+    return assets.length;
+  }, module, module.exports);
+  const { withSamplePortrait } = module.exports;
+  const { THEME_CAROUSEL_ORDER } = load('constants/themeDesigns');
+  assert.equal(new Set(assets).size, 7);
+  for (const layoutId of THEME_CAROUSEL_ORDER) {
+    const brand = { ...fixture(), layoutId };
+    assert.equal(withSamplePortrait({ brand, sample: false }).portraitSource, undefined);
+    assert.ok(withSamplePortrait({ brand, sample: true }).portraitSource);
+    assert.equal(withSamplePortrait({ brand, sample: true }).brand, brand);
+    assert.equal(brand.portraitUrl, 'test-portrait.jpg');
+  }
+});
+
+test('reference themes retain coordinated colors while legacy customization remains available', () => {
+  const { themeDesign, THEME_DESIGNS } = load('constants/themeDesigns');
+  assert.deepEqual(themeDesign('coastal-personal', { accent: 'burgundy', presentationVersion: 2 }), THEME_DESIGNS['coastal-personal']);
+  assert.notEqual(themeDesign('coastal-personal', { accent: 'burgundy' }).accent, THEME_DESIGNS['coastal-personal'].accent);
+});
+
 test('legacy profiles retain saved copy, themes, hidden sections and arrays while missing fields receive defaults', () => {
   const defaults = { realtor: { name: '', city: '', newField: 'default' }, credentials: { license: { number: '', state: '' } }, theme: { accent: 'pewter' }, note: { body: ['default'] } };
   const saved = { realtor: { name: 'Eliza Vance', city: 'User city' }, credentials: { license: { number: 'legacy-license' } }, theme: { accent: 'gold' }, note: { body: [] }, sectionStates: { note: 'hidden' }, customField: 'keep' };
@@ -106,11 +194,58 @@ test('theme changes preserve canonical content; content saves preserve saved ima
 });
 test('all 11 retained looks use independent image positions without changing the image asset', () => {
   assert.equal(THEME_LOOKS.length, 11);
-  const keys = new Set(THEME_LOOKS.map(imagePositionKey)); assert.equal(keys.size, 11);
+  const keys = new Set(THEME_LOOKS.map(theme => imagePositionKey(theme))); assert.equal(keys.size, 11);
   const theme = { ...fixture().theme, imagePositions: {} };
   const key = imagePositionKey(theme); theme.imagePositions[key] = { x: 0, y: 100 };
   assert.deepEqual(imagePosition(theme), { left: '0%', top: '100%' });
   assert.deepEqual(imagePosition({ ...theme, accent: 'gold' }), { left: '50%', top: '50%' });
   theme.imagePositions[key] = { x: -100, y: NaN };
   assert.deepEqual(imagePosition(theme), { left: '0%', top: '50%' });
+});
+
+test('layout registry preserves legacy default and only reorders visible content', () => {
+  const { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } = load('constants/clientLayouts');
+  const { THEME_SECTION_ORDER, orderThemeSections } = load('constants/themeStructure');
+  assert.equal(DEFAULT_CLIENT_LAYOUT, 'private-collection');
+  assert.ok(CLIENT_LAYOUTS.some(l => l.id === 'eliza-editorial'));
+  const visible = ['hero', 'listings', 'quickContact', 'footer'];
+  for (const layout of CLIENT_LAYOUTS) {
+    const order = THEME_SECTION_ORDER[layout.id];
+    assert.equal(new Set(order).size, order.length);
+    const result = orderThemeSections(visible, layout.id);
+    assert.deepEqual([...result].sort(), [...visible].sort());
+    assert.equal(result[0], 'hero');
+    assert.equal(result.at(-1), 'footer');
+    assert.ok(!result.includes('note'));
+  }
+  assert.deepEqual(visible, ['hero', 'listings', 'quickContact', 'footer']);
+});
+
+test('Eliza and coastal switches round-trip content including long names, empty photos and hidden sections', () => {
+  const { CLIENT_LAYOUTS } = load('constants/clientLayouts');
+  const saved = fixture();
+  saved.realtor.name = 'Alexandra Charlotte Montgomery-Wellington & Associates';
+  saved.portraitUrl = '';
+  saved.sectionStates = { note: 'hidden' };
+  saved.customData = { retained: true };
+  const before = JSON.stringify(saved);
+  let current = saved;
+  for (const id of ['eliza-editorial', 'coastal-personal', 'eliza-editorial']) {
+    const layout = CLIENT_LAYOUTS.find(item => item.id === id);
+    current = editorSave(current, { ...current, layoutId: id, theme: { ...layout.defaultTheme } }, 'theme');
+    assert.deepEqual(current.realtor, saved.realtor);
+    assert.equal(current.portraitUrl, '');
+    assert.deepEqual(current.sectionStates, saved.sectionStates);
+    assert.deepEqual(current.customData, saved.customData);
+  }
+  assert.equal(JSON.stringify(saved), before);
+});
+
+test('portrait framing is isolated by layout and retains legacy crop fallback', () => {
+  const theme = { ...fixture().theme, imagePositions: {} };
+  theme.imagePositions[imagePositionKey(theme)] = { x: 0, y: 100 };
+  assert.deepEqual(imagePosition(theme, 'eliza-editorial'), { left: '0%', top: '100%' });
+  theme.imagePositions[imagePositionKey(theme, 'eliza-editorial')] = { x: 75, y: 25 };
+  assert.deepEqual(imagePosition(theme, 'eliza-editorial'), { left: '75%', top: '25%' });
+  assert.deepEqual(imagePosition(theme, 'coastal-personal'), { left: '0%', top: '100%' });
 });

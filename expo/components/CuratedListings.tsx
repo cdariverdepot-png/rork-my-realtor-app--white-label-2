@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import {
   Dimensions,
+  useWindowDimensions,
   FlatList,
   Pressable,
   StyleSheet,
@@ -9,7 +10,6 @@ import {
   Platform,
 } from "react-native";
 import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { ArrowUpRight, Heart } from "lucide-react-native";
@@ -41,7 +41,10 @@ const ListingCard = React.memo(function ListingCard({
   onEditField: (id: string, patch: Partial<ManagedListing>) => void;
 }) {
   const router = useRouter();
-  const { theme } = useBrand();
+  const { theme, brand: profile } = useBrand();
+  const { width } = useWindowDimensions();
+  const coastal = profile.layoutId === "coastal-personal";
+  const coastalWidth = Math.min(340, Math.max(260, width * 0.68));
   const { isFavorited, toggleListing } = useFavorites();
   const liked = isFavorited(item.id);
   const handlePress = () => {
@@ -62,21 +65,18 @@ const ListingCard = React.memo(function ListingCard({
       style={[
         styles.card,
         { marginLeft: index === 0 ? 24 : 16, backgroundColor: theme.surface.panel },
+        coastal && { width: coastalWidth, height: undefined, minHeight: 330, borderRadius: 18, shadowOpacity: 0.06 },
       ]}
     >
       {/* Cinematic photo — full-bleed top */}
-      <View style={[styles.photoWrap, { backgroundColor: theme.band.base }]}>
+      <View style={[styles.photoWrap, { backgroundColor: theme.band.base }, coastal && { height: 215 }]}>
         <Image
           source={{ uri: bustedUri(item.images?.[0] ?? item.image, item.updatedAt) }}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           transition={300}
         />
-        <LinearGradient
-          colors={[theme.onBand.scrimSoft, "transparent", theme.onBand.scrimSoft]}
-          locations={[0, 0.45, 1]}
-          style={StyleSheet.absoluteFill}
-        />
+        <></>
         <View
           style={[
             styles.tag,
@@ -146,6 +146,8 @@ const ListingCard = React.memo(function ListingCard({
 
 export default React.memo(function CuratedListings() {
   const { brand: b, theme } = useBrand();
+  const { width } = useWindowDimensions();
+  const coastal = b.layoutId === "coastal-personal";
   const { editing, setListing, previewListings } = useEditMode();
   const visible = useMemo(() => previewListings.filter((l) => !l.hidden), [previewListings]);
   const Header = (
@@ -183,7 +185,7 @@ export default React.memo(function CuratedListings() {
     );
   }
   return (
-    <View style={styles.section}>
+    <View style={[styles.section, coastal && { marginHorizontal: 12, borderRadius: 28, backgroundColor: "#FFFDFA", paddingTop: 22, paddingBottom: 18 }]}>
       {Header}
       <FlatList
         horizontal
@@ -194,7 +196,7 @@ export default React.memo(function CuratedListings() {
           <ListingCard item={item} index={index} editing={editing} onEditField={setListing} />
         )}
         contentContainerStyle={{ paddingRight: 24, paddingBottom: 12 }}
-        snapToInterval={CARD_W + 16}
+        snapToInterval={(coastal ? Math.min(340, Math.max(260, width * 0.68)) : CARD_W) + 16}
         decelerationRate="fast"
       />
     </View>

@@ -6,6 +6,8 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import { useReducedMotion } from "@/hooks/useThemeMotion";
+
 type Props = {
   /** Stagger delay in ms */
   delay?: number;
@@ -28,9 +30,12 @@ export default function Reveal({
   children,
   style,
 }: Props) {
-  const v = useRef(new Animated.Value(0)).current;
+  const v = useRef(new Animated.Value(1)).current;
+  const reduced = useReducedMotion();
 
   useEffect(() => {
+    if (reduced) { v.setValue(1); return; }
+    v.setValue(0);
     const anim = Animated.timing(v, {
       toValue: 1,
       duration,
@@ -42,7 +47,7 @@ export default function Reveal({
     return () => {
       anim.stop();
     };
-  }, [v, delay, duration]);
+  }, [v, delay, duration, reduced]);
 
   return (
     <Animated.View

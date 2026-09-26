@@ -1,16 +1,18 @@
-import React from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Animated, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { Brand } from "@/contexts/BrandContext";
 import { DEFAULT_CLIENT_LAYOUT, type ClientLayoutId } from "@/constants/clientLayouts";
 
-const designs: Record<ClientLayoutId, {
+import { useThemeMotion } from "@/hooks/useThemeMotion";
+import { imagePosition } from "@/lib/themeImages";
+
+const designs: Partial<Record<ClientLayoutId, {
   background: string; foreground: string; accent: string; align: "left" | "center";
   image: "full" | "right" | "top" | "circle"; eyebrow: string;
-}> = {
+}>> = {
   "private-collection": { background: "#151312", foreground: "#F7F1EA", accent: "#C7A680", align: "left", image: "right", eyebrow: "PRIVATE REAL ESTATE" },
   "coastal-personal": { background: "#F8F4EF", foreground: "#1D2526", accent: "#A67F52", align: "left", image: "right", eyebrow: "A PERSONAL WELCOME" },
   "modern-editorial": { background: "#191818", foreground: "#FCF6F0", accent: "#D4856B", align: "left", image: "full", eyebrow: "FIND MORE THAN A HOME" },
@@ -19,11 +21,16 @@ const designs: Record<ClientLayoutId, {
   "warm-concierge": { background: "#302A23", foreground: "#FCF4EA", accent: "#D7A977", align: "left", image: "circle", eyebrow: "WELCOME HOME" },
 };
 
-export default function ClientLayoutHero({ brand }: { brand: Brand }) {
+export default function ClientLayoutHero({ brand, scrollY }: { brand: Brand; scrollY?: Animated.Value }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const layout = brand.layoutId ?? DEFAULT_CLIENT_LAYOUT;
-  const design = designs[layout];
+  const design = designs[layout] ?? designs[DEFAULT_CLIENT_LAYOUT]!;
+  const [heroHeight, setHeroHeight] = useState(740);
+  const motion = useThemeMotion(scrollY, heroHeight, false, 24);
+  // Overscan covers the bounded travel even in a small circular portrait.
+  const imageStyle = { top: -32, bottom: -32, transform: [{ translateY: motion.imgTranslate }, { scale: motion.imgScale }] };
+  const measure = (e: import("react-native").LayoutChangeEvent) => setHeroHeight(e.nativeEvent.layout.height);
   const realtor = brand.realtor;
   const firstName = realtor.name.split(/\s+/)[0] || "your realtor";
   const headline = realtor.heroMessage || realtor.tagline || `Welcome to ${realtor.name}`;
@@ -49,7 +56,7 @@ export default function ClientLayoutHero({ brand }: { brand: Brand }) {
     <Pressable onPress={contact} accessibilityRole="button" style={{ borderWidth: 1, borderColor: design.accent,
       padding: 11, borderRadius: 30 }}><Text style={{ color: design.foreground }}>Contact</Text></Pressable>
   </View>;
-  const message = <View style={{ alignItems: design.align === "center" ? "center" : "flex-start" }}>
+  const message = <Animated.View style={{ opacity: motion.contentOpacity, transform: [{ translateY: motion.contentTranslate }], alignItems: design.align === "center" ? "center" : "flex-start" }}>
     <Text style={{ color: design.accent, letterSpacing: 2.5, fontSize: 11, marginBottom: 13 }}>{design.eyebrow}</Text>
     <Text style={{ color: design.foreground, fontSize: layout === "portrait-statement" ? 47 : 42,
       lineHeight: layout === "portrait-statement" ? 51 : 47, fontFamily: "PlayfairDisplay_500Medium",
@@ -60,38 +67,35 @@ export default function ClientLayoutHero({ brand }: { brand: Brand }) {
     </Text>
     {action(layout === "advisor-journal" ? "Explore my approach" : "Find your home", () => router.push("/listings"))}
     {layout !== "coastal-personal" && action(`Message ${firstName}`, contact, true)}
-  </View>;
+  </Animated.View>;
 
-  if (design.image === "right") return <View style={{ minHeight: 690, backgroundColor: design.background,
-    paddingTop: insets.top + 25, overflow: "hidden" }}>
-    {portrait ? <Image source={{ uri: portrait }} style={{ position: "absolute", width: "67%", height: "92%", right: 0, top: 58 }} contentFit="cover" /> : null}
-    <LinearGradient colors={[design.background, design.background + "E8", "transparent"]}
-      start={{ x: 0.1, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-    <View style={{ paddingHorizontal: 26 }}>{masthead}</View>
+  if (design.image === "right") return <View onLayout={measure} style={{ overflow: "hidden", minHeight: 690, backgroundColor: design.background,
+    paddingTop: insets.top + 25 }}>
+    {portrait ? <View style={[{ position: "absolute", width: "67%", height: "92%", right: 0, top: 58 }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
+    <></>
+    <Animated.View style={{ paddingHorizontal: 26, opacity: motion.topBarOpacity }}>{masthead}</Animated.View>
     <View style={{ paddingHorizontal: 26, paddingTop: 75, paddingBottom: 95, width: "82%" }}>{message}</View>
   </View>;
 
-  if (design.image === "top") return <View style={{ backgroundColor: design.background, paddingTop: insets.top + 24 }}>
-    <View style={{ paddingHorizontal: 26 }}>{masthead}</View>
-    {portrait ? <Image source={{ uri: portrait }} style={{ marginTop: 28, height: 330, width: "100%" }} contentFit="cover" /> : null}
+  if (design.image === "top") return <View onLayout={measure} style={{ overflow: "hidden", backgroundColor: design.background, paddingTop: insets.top + 24 }}>
+    <Animated.View style={{ paddingHorizontal: 26, opacity: motion.topBarOpacity }}>{masthead}</Animated.View>
+    {portrait ? <View style={[{ marginTop: 28, height: 330, width: "100%" }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
     <View style={{ padding: 28, paddingTop: 36 }}>{message}</View>
   </View>;
 
-  if (design.image === "circle") return <View style={{ backgroundColor: design.background,
+  if (design.image === "circle") return <View onLayout={measure} style={{ overflow: "hidden", backgroundColor: design.background,
     paddingTop: insets.top + 25, paddingHorizontal: 26, paddingBottom: 60, minHeight: 740 }}>
     {masthead}
-    {portrait ? <Image source={{ uri: portrait }} style={{ width: 220, height: 220, borderRadius: 110,
-      alignSelf: "center", marginTop: 34, borderWidth: 2, borderColor: design.accent }} contentFit="cover" /> : null}
+    {portrait ? <View style={[{ width: 220, height: 220, borderRadius: 110,
+      alignSelf: "center", marginTop: 34, borderWidth: 2, borderColor: design.accent }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
     <View style={{ marginTop: 36 }}>{message}</View>
   </View>;
 
-  return <View style={{ minHeight: layout === "portrait-statement" ? 830 : 740,
+  return <View onLayout={measure} style={{ overflow: "hidden", minHeight: layout === "portrait-statement" ? 830 : 740,
     backgroundColor: design.background, justifyContent: "space-between", paddingTop: insets.top + 25 }}>
-    {portrait ? <Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" /> : null}
-    <LinearGradient colors={layout === "portrait-statement"
-      ? ["#151515A0", "#15151550", "#151515C8"]
-      : ["#141312B8", "#14131280", "#141312F5"]} style={StyleSheet.absoluteFill} />
-    <View style={{ paddingHorizontal: 26 }}>{masthead}</View>
+    {portrait ? <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
+    <></>
+    <Animated.View style={{ paddingHorizontal: 26, opacity: motion.topBarOpacity }}>{masthead}</Animated.View>
     <View style={{ padding: layout === "portrait-statement" ? 34 : 26, paddingBottom: 70 }}>{message}</View>
   </View>;
 }

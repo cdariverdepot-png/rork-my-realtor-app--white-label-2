@@ -19,6 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import NeutralContentCanvas from "@/components/NeutralContentCanvas";
 import ThemeImagePosition from "@/components/ThemeImagePosition";
+import ThemeCarousel from "@/components/ThemeCarousel";
 import { imagePosition } from "@/lib/themeImages";
 import { editorSave } from "@/lib/editorSave";
 import { useListings, type ManagedListing } from "@/contexts/ListingsContext";
@@ -185,16 +186,7 @@ function StudioBackdrop({ source }: { source: number }) {
       {/* Legibility is carried at the top and bottom, where the chrome and the
           save dock sit. The middle band stays open so the photograph keeps its
           full richness behind the form. */}
-      <LinearGradient
-        colors={[
-          "rgba(8,10,9,0.94)",
-          "rgba(8,10,9,0.72)",
-          "rgba(8,10,9,0.66)",
-          "rgba(8,10,9,0.93)",
-        ]}
-        locations={[0, 0.26, 0.72, 1]}
-        style={StyleSheet.absoluteFill}
-      />
+      <></>
     </View>
   );
 }
@@ -1073,6 +1065,7 @@ const LOOK_CARD_GAP = 10;
 const LOOKS_PER_PAGE = 3;
 
 function ThemeSection({ draft, setBrand }: SectionProps) {
+  const { all: listings } = useListings();
   const accentId: ThemeAccent = draft.theme?.accent ?? "gold";
   const fontId: ThemeFont = draft.theme?.displayFont ?? "playfair";
   const surfaceId: ThemeSurface = draft.theme?.surface ?? "ivory";
@@ -1143,23 +1136,11 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
 
   return (
     <View>
-      <View style={{ marginBottom: 22 }}>
-        <Text style={{ color: brand.ivory, fontSize: 19, fontFamily: fonts.serif }}>Choose a client app layout</Text>
-        <Text style={{ color: brand.textOnDarkMuted, marginTop: 7, lineHeight: 20 }}>
-          The layout changes the opening page and section order. Your profile, listings, and messages stay in place.
-        </Text>
-        {CLIENT_LAYOUTS.map(layout => {
-          const selected = (draft.layoutId ?? CLIENT_LAYOUTS[0].id) === layout.id;
-          return <Pressable key={layout.id} accessibilityRole="button"
-            onPress={() => setBrand(current => ({ ...current, layoutId: layout.id,
-              theme: layout.defaultTheme, themeChosen: true }))}
-            style={{ borderColor: selected ? brand.goldLight : "#625E56", borderWidth: 1,
-              borderRadius: 12, padding: 14, marginTop: 9, backgroundColor: selected ? "#29271F" : "#1D1D1D" }}>
-            <Text style={{ color: brand.ivory, fontWeight: "700" }}>{layout.name}{selected ? " ✓" : ""}</Text>
-            <Text style={{ color: brand.textOnDarkMuted, marginTop: 4 }}>{layout.description}</Text>
-          </Pressable>;
-        })}
-      </View>
+      <ThemeCarousel draft={draft} listings={listings} onChoose={next => setBrand(() => next)} />
+      {draft.theme.presentationVersion === 2 ? <>
+        <Text style={{ color: "#D4C9B8", padding: 16, lineHeight: 21 }}>These reference themes use their own coordinated typography, colors, and surfaces. Use Preview layout above to see the actual design. Portrait framing remains adjustable below; your original photo is preserved.</Text>
+        <ThemeImagePosition draft={draft} onChange={setBrand} />
+      </> : <>
       {/* ── Live preview ── */}
       <View style={styles.tpFrame}>
         <ThemePreview
@@ -1170,6 +1151,7 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
           realtor={draft.realtor}
           portraitUrl={draft.portraitUrl}
           themeConfig={draft.theme}
+          layoutId={draft.layoutId}
         />
       </View>
 
@@ -1283,10 +1265,7 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
                         contentFit="cover"
                         cachePolicy="memory-disk"
                       />
-                      <LinearGradient
-                        colors={["transparent", `${a.deep}CC`]}
-                        style={StyleSheet.absoluteFill}
-                      />
+                      <></>
                       {on && (
                         <View style={[styles.lookTick, { backgroundColor: a.base }]}>
                           <Check size={12} color="#FFFFFF" strokeWidth={3} />
@@ -1466,6 +1445,7 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
           </Text>
         </View>
       ) : null}
+      </>}
     </View>
   );
 }
@@ -1523,6 +1503,7 @@ function ThemePreview({
   realtor,
   portraitUrl,
   themeConfig,
+  layoutId,
 }: {
   target: PreviewTarget;
   accent: (typeof THEME_ACCENTS)[ThemeAccent];
@@ -1531,6 +1512,7 @@ function ThemePreview({
   realtor: Brand["realtor"];
   portraitUrl: string;
   themeConfig: ThemeConfig;
+  layoutId?: Brand["layoutId"];
 }) {
   const ink = "#211C12";
   const mark = copyOr(realtor.brandName || realtor.name, "Your name");
@@ -1626,21 +1608,13 @@ function ThemePreview({
       <View style={styles.tpBand}>
         <Image
           source={portraitUrl ? { uri: portraitUrl } : PREVIEW_PHOTO}
-          contentPosition={imagePosition(themeConfig)}
+          contentPosition={imagePosition(themeConfig, layoutId)}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           transition={300}
         />
-        <LinearGradient
-          colors={["rgba(8,9,9,0.66)", "rgba(8,9,9,0.06)"]}
-          locations={[0, 0.55]}
-          style={StyleSheet.absoluteFill}
-        />
-        <LinearGradient
-          colors={["transparent", "rgba(8,9,9,0.86)"]}
-          locations={[0.35, 1]}
-          style={StyleSheet.absoluteFill}
-        />
+        <></>
+        <></>
         <View style={styles.tpBandInner}>
           <View style={styles.tpNavRow}>
             <View style={styles.tpNavMarkCol}>

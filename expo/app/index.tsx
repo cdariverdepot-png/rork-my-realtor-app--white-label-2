@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Animated, Easing, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Animated, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,7 +19,17 @@ import { useAppointments } from "@/contexts/AppointmentsContext";
 import { useClients } from "@/contexts/ClientsContext";
 import { useClientProfiles } from "@/contexts/ClientProfileContext";
 import Hero from "@/components/Hero";
+import ThemeHero from "@/components/ThemeHero";
 import ClientLayoutHero from "@/components/ClientLayoutHero";
+import CoastalHero from "@/components/CoastalHero";
+import ThemeCollection from "@/components/ThemeCollection";
+import ThemeContentSection from "@/components/ThemeContentSection";
+import ThemeCarousel from "@/components/ThemeCarousel";
+import ReferenceHome from "@/components/themes/ReferenceHome";
+import { themeCandidate } from "@/constants/themeDesigns";
+import type { Brand } from "@/contexts/BrandContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { orderThemeSections } from "@/constants/themeStructure";
 import BottomNav from "@/components/BottomNav";
 import CuratedListings from "@/components/CuratedListings";
 import PersonalNote from "@/components/PersonalNote";
@@ -31,7 +41,6 @@ import Footer from "@/components/Footer";
 import ConciergeSection from "@/components/ConciergeSection";
 import SupportSection from "@/components/SupportSection";
 import Reveal from "@/components/Reveal";
-import GrainOverlay from "@/components/GrainOverlay";
 import SwipeToSwitch from "@/components/SwipeToSwitch";
 import SetupGate from "@/components/SetupGate";
 import {
@@ -187,6 +196,8 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
 
 function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const router = useRouter();
+  const { isFavorited, toggleListing } = useFavorites();
+  const [demoThemeDraft, setDemoThemeDraft] = useState<Brand | null>(null);
   const { viewAsClient, demoViewMode, exitViewAsClient, exitDemoView } = useAuth();
   const { editing, dirty, cancel, save, guardExit, previewBrand, previewListings } =
     useEditMode();
@@ -282,16 +293,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const visible = useMemo(
     () => {
       const sections = visibleSections(sectionCtx);
-      const layouts: Record<string, ClientSectionId[]> = {
-        "private-collection": ["hero", "listings", "concierge", "social", "note", "beat", "credentials", "quickContact", "support", "footer"],
-        "coastal-personal": ["hero", "note", "listings", "quickContact", "concierge", "credentials", "social", "beat", "support", "footer"],
-        "modern-editorial": ["hero", "listings", "quickContact", "beat", "social", "note", "concierge", "credentials", "support", "footer"],
-        "advisor-journal": ["hero", "beat", "note", "listings", "credentials", "concierge", "social", "quickContact", "support", "footer"],
-        "portrait-statement": ["hero", "note", "listings", "social", "concierge", "beat", "credentials", "quickContact", "support", "footer"],
-        "warm-concierge": ["hero", "quickContact", "listings", "concierge", "note", "beat", "social", "credentials", "support", "footer"],
-      };
-      const order = layouts[previewBrand.layoutId ?? "private-collection"];
-      return order ? [...sections].sort((a, b) => order.indexOf(a) - order.indexOf(b)) : sections;
+      return orderThemeSections(sections, previewBrand.layoutId);
     },
     [sectionCtx]
   );
@@ -299,11 +301,31 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
 
   const renderSection = useCallback(
     (id: ClientSectionId) => {
+      const designed = previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing;
+      if (designed && id !== "hero" && id !== "listings" && id !== "footer") {
+        return <Reveal key={id} delay={delays[id] ?? 200}>
+          <ThemeContentSection id={id} brand={previewBrand} onNavigate={path => router.push(path)}
+            onContact={channel => {
+              const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
+              const email = previewBrand.realtor.email.trim();
+              const url = channel === "email" ? email ? `mailto:${encodeURIComponent(email)}` : "" :
+                phone ? `${channel === "call" ? "tel" : "sms"}:${phone}` : "";
+              if (url) void Linking.openURL(url).catch(() => Alert.alert("Contact your realtor", channel === "email" ? email : previewBrand.realtor.phone));
+            }} />
+        </Reveal>;
+      }
       switch (id) {
         case "hero":
+          if (!designed) return demoViewMode || editing || previewBrand.layoutId === "eliza-editorial"
+            ? <Hero key="hero" onPrimary={scrollToListings} scrollY={scrollY} />
+            : previewBrand.layoutId === "coastal-personal"
+              ? <CoastalHero key="hero" brand={previewBrand} scrollY={scrollY} />
+              : <ClientLayoutHero key="hero" brand={previewBrand} scrollY={scrollY} />;
           return demoViewMode || editing
             ? <Hero key="hero" onPrimary={scrollToListings} scrollY={scrollY} />
-            : <ClientLayoutHero key="hero" brand={previewBrand} />;
+            : <ThemeHero key="hero" brand={previewBrand} scrollY={scrollY} topInset={insets.top + 24}
+                onBrowse={() => router.push("/listings")} onMessage={() => router.push("/message")}
+                onSaved={() => router.push("/favorites")} onSchedule={() => router.push("/calendar")} />;
         case "listings":
           return (
             <View
@@ -313,7 +335,9 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
               }}
             >
               <Reveal delay={delays.listings ?? 120}>
-                <CuratedListings />
+                {!designed ? <CuratedListings /> : <ThemeCollection brand={previewBrand} listings={previewListings}
+                  onOpen={id => router.push(`/listing/${id}`)} onBrowse={() => router.push("/listings")}
+                  isFavorite={isFavorited} onFavorite={id => toggleListing("favorites", id)} />}
               </Reveal>
             </View>
           );
@@ -365,7 +389,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return null;
       }
     },
-    [delays, scrollY, demoViewMode, editing, previewBrand]
+    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing]
   );
 
   /**
@@ -412,9 +436,30 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
             />
           }
         >
-          {visible.map(renderSection)}
+          {previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing ?
+            <ReferenceHome brand={previewBrand} listings={previewListings} scrollY={scrollY} topInset={insets.top + 24}
+              onNavigate={path => router.push(path)} onOpen={id => router.push(`/listing/${id}`)}
+              onFavorite={id => toggleListing("favorites", id)} isFavorite={isFavorited}
+              onCall={previewBrand.realtor.phone.trim() ? () => {
+                const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
+                if (phone) void Linking.openURL(`tel:${phone}`).catch(() => Alert.alert("Contact your realtor", previewBrand.realtor.phone));
+              } : undefined}
+              renderAdditional={renderSection} /> : visible.map(renderSection)}
         </Animated.ScrollView>
       {!demoViewMode && !editing && !previewingDraft && <BottomNav />}
+      {demoViewMode && <Pressable accessibilityRole="button" onPress={() => setDemoThemeDraft(themeCandidate(b, "eliza-editorial"))}
+        style={{ position: "absolute", bottom: insets.bottom + 18, alignSelf: "center", backgroundColor: "#D4B989", paddingHorizontal: 22, paddingVertical: 15, borderRadius: 26 }}>
+        <Text style={{ color: "#111713", fontWeight: "600" }}>Explore the seven themes</Text>
+      </Pressable>}
+      <Modal visible={demoViewMode && demoThemeDraft !== null} animationType="none" onRequestClose={() => setDemoThemeDraft(null)}>
+        <View style={{ flex: 1, backgroundColor: "#101211", paddingTop: insets.top + 16 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20 }}>
+            <Text style={{ flex: 1, color: "#E9DECB" }}>Read-only demo · no profile changes</Text>
+            <Pressable accessibilityRole="button" accessibilityLabel="Close theme showcase" onPress={() => setDemoThemeDraft(null)} style={{ padding: 14 }}><X color="#E9DECB" /></Pressable>
+          </View>
+          <ScrollView>{demoThemeDraft && <ThemeCarousel demo draft={demoThemeDraft} listings={previewListings} onChoose={setDemoThemeDraft} />}</ScrollView>
+        </View>
+      </Modal>
       {demoViewMode ? (
         /* Eliza Vance demo showcase — static, view-only, no edit UI. */
         <View style={[styles.previewBar, { top: insets.top + 8 }]} pointerEvents="box-none">
@@ -478,7 +523,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         </View>
       ) : null}
       <View pointerEvents="none" style={styles.grain}>
-        <GrainOverlay opacity={0.05} intensity={0.9} />
+
       </View>
       <Animated.View
         pointerEvents="none"

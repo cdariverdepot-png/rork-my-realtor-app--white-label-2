@@ -22,6 +22,7 @@ import { brand, dark, fonts } from "@/constants/colors";
 import { useBrand } from "@/contexts/BrandContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useMessages } from "@/contexts/MessagesContext";
+import ThemeNavigation from "./ThemeNavigation";
 
 /** Floating concierge tab bar — sticks low on the screen so returning
  *  clients can jump straight to a watchlist, message thread or showing. */
@@ -41,7 +42,7 @@ export default function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
-  const { theme } = useBrand();
+  const { theme, brand: currentBrand } = useBrand();
   const { totalFavorites } = useFavorites();
   const { messages } = useMessages();
   const unreadMsgs = messages.filter((m) => m.role === "realtor" && !m.read).length;
@@ -82,6 +83,10 @@ export default function BottomNav() {
       : pathname.startsWith("/account")
       ? "account"
       : "home";
+
+  if (currentBrand.theme.presentationVersion === 2) return <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, paddingBottom: insets.bottom, backgroundColor: "transparent" }}>
+    <ThemeNavigation brand={currentBrand} pathname={pathname} unread={unreadMsgs} saved={totalFavorites} onNavigate={path => handle(path === "/message" ? "/messages" : path)} />
+  </View>;
 
   return (
     <Animated.View

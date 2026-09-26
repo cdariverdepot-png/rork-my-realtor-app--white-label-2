@@ -8,7 +8,8 @@ export type ClientLayoutId =
   | "modern-editorial"
   | "advisor-journal"
   | "portrait-statement"
-  | "warm-concierge";
+  | "warm-concierge"
+  | "eliza-editorial";
 
 export type ClientLayout = {
   id: ClientLayoutId;
@@ -63,6 +64,13 @@ export const CLIENT_LAYOUTS: ClientLayout[] = [
     description: "Welcoming, conversational, and action led.",
     defaultTheme: { accent: "bronze", displayFont: "fraunces", surface: "warmsand" },
     signals: ["friendly", "local", "concierge", "welcoming", "family"],
+  },
+  {
+    id: "eliza-editorial",
+    name: "Eliza · Editorial",
+    description: "Full-height portrait, flowing editorial sections, parallax and fading type.",
+    defaultTheme: { accent: "gold", displayFont: "playfair", surface: "ivory" },
+    signals: ["editorial portrait", "cinematic", "eliza"],
   },
 ];
 

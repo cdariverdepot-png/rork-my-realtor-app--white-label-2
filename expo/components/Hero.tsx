@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   ActionSheetIOS,
   Alert,
   Animated,
-  Dimensions,
+  useWindowDimensions,
   Linking,
   Pressable,
   StyleSheet,
@@ -12,7 +12,6 @@ import {
   Platform,
 } from "react-native";
 import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { ArrowRight, LogOut, MessageCircle } from "lucide-react-native";
@@ -24,12 +23,7 @@ import { imagePosition } from "@/lib/themeImages";
 import { useEditMode } from "@/contexts/EditModeContext";
 import EditableText from "./EditableText";
 import SignatureStroke from "./SignatureStroke";
-
-const { height: H } = Dimensions.get("window");
-const HERO_H = Math.max(H * 0.92, 720);
-/** Without a portrait there is no photograph to fill the screen, so the hero
- *  collapses to a typographic lockup rather than a tall empty panel. */
-const HERO_H_TYPE = Math.max(H * 0.62, 480);
+import { useThemeMotion } from "@/hooks/useThemeMotion";
 
 const filled = (s: string | undefined): boolean => (s ?? "").trim().length > 0;
 
@@ -40,6 +34,9 @@ interface Props {
 
 export default function Hero({ scrollY }: Props) {
   const router = useRouter();
+  const { height: windowHeight } = useWindowDimensions();
+  const HERO_H = Math.max(windowHeight * 0.92, 720);
+  const HERO_H_TYPE = Math.max(windowHeight * 0.62, 480);
   const insets = useSafeAreaInsets();
   const { brand: b, theme } = useBrand();
   const { editing, setRealtor, previewBrand } = useEditMode();
@@ -80,34 +77,8 @@ export default function Hero({ scrollY }: Props) {
     .join(" · ");
   const primaryLabel = filled(realtor.primaryCta) ? realtor.primaryCta : "View the collection";
 
-  const fallback = useRef<Animated.Value | null>(null);
-  if (!fallback.current) fallback.current = new Animated.Value(0);
-  const sy = scrollY ?? fallback.current;
-  const imgTranslate = sy.interpolate({
-    inputRange: [-HERO_H, 0, HERO_H],
-    outputRange: [-HERO_H * 0.5, 0, HERO_H * 0.35],
-    extrapolate: "clamp",
-  });
-  const imgScale = sy.interpolate({
-    inputRange: [-HERO_H, 0, HERO_H],
-    outputRange: [1.25, 1, 1.06],
-    extrapolateRight: "clamp",
-  });
-  const topBarOpacity = sy.interpolate({
-    inputRange: [0, 160, 260],
-    outputRange: [1, 0.6, 0],
-    extrapolate: "clamp",
-  });
-  const contentTranslate = sy.interpolate({
-    inputRange: [0, HERO_H],
-    outputRange: [0, -60],
-    extrapolate: "clamp",
-  });
-  const contentOpacity = sy.interpolate({
-    inputRange: [0, HERO_H * 0.55, HERO_H * 0.85],
-    outputRange: [1, 0.85, 0],
-    extrapolate: "clamp",
-  });
+  const { imgTranslate, imgScale, topBarOpacity, contentTranslate, contentOpacity } =
+    useThemeMotion(scrollY, heroHeight, editing);
 
   const handleFindHome = () => {
     if (Platform.OS !== "web") Haptics.selectionAsync();
@@ -201,7 +172,7 @@ export default function Hero({ scrollY }: Props) {
   }, [realtor.phone, realtor.email, realtor.name, router]);
 
   return (
-    <View style={[styles.wrap, { height: heroHeight, backgroundColor: theme.band.deep }]}>
+    <View style={[styles.wrap, { minHeight: heroHeight, backgroundColor: theme.band.deep }]}>
       <Animated.View
         style={[
           StyleSheet.absoluteFill,
@@ -211,7 +182,7 @@ export default function Hero({ scrollY }: Props) {
         {hasPortrait ? (
           <Image
             source={{ uri: b.portraitUrl }}
-            contentPosition={imagePosition(b.theme)}
+            contentPosition={imagePosition(b.theme, b.layoutId)}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
             recyclingKey={b.portraitUrl}
@@ -222,12 +193,7 @@ export default function Hero({ scrollY }: Props) {
         )}
         {/* Bottom fade — depth + text readability only. Derived from the band so
             the fade never stays green under a non-gold palette. */}
-        <LinearGradient
-          colors={["transparent", theme.onBand.scrimSoft, theme.onBand.scrimStrong]}
-          locations={[0.48, 0.78, 1]}
-          style={StyleSheet.absoluteFill}
-          pointerEvents="none"
-        />
+        <></>
       </Animated.View>
 
       {/* Top brand bar */}
@@ -404,7 +370,7 @@ export default function Hero({ scrollY }: Props) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { width: "100%", backgroundColor: brand.forestDeep },
+  wrap: { width: "100%", backgroundColor: brand.forestDeep, overflow: "hidden", justifyContent: "space-between" },
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -445,10 +411,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(8,26,21,0.3)",
   },
   bottom: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
+    paddingTop: 100,
     paddingHorizontal: 24,
   },
   eyebrow: {

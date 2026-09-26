@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { signupEmailRedirect } from "@/lib/authRedirect";
 
 export type RealtorAuthResult =
   | { ok: true; realtorId: string }
@@ -15,14 +16,17 @@ export async function signUpRealtorWithAuth(input: {
   const { data, error } = await supabase.auth.signUp({
     email: input.email.trim().toLowerCase(),
     password: input.password,
-    options: { data: { realtor_name: input.name.trim() } },
+    options: {
+      data: { realtor_name: input.name.trim() },
+      emailRedirectTo: signupEmailRedirect(typeof window !== "undefined" ? window.location?.origin : undefined),
+    },
   });
   if (error) return { ok: false, error: error.message };
   if (!data.session) {
     return {
       ok: false,
       verificationRequired: true,
-      error: "Check your email to confirm your account, then sign in here.",
+      error: "Check your email to confirm your account, then return here and sign in. For this computer's local preview, open the email link on this same computer.",
     };
   }
   return ensureRealtorAuthRecord(input.name);

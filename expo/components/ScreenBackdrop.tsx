@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
 import { SCREEN_BG, type BackdropKey } from "@/constants/backdrops";
 
 /**
@@ -32,25 +31,7 @@ export default function ScreenBackdrop({
         cachePolicy="memory-disk"
         priority="high"
       />
-      <LinearGradient
-        colors={
-          deep
-            ? [
-                "rgba(8,10,9,0.95)",
-                "rgba(8,10,9,0.88)",
-                "rgba(8,10,9,0.86)",
-                "rgba(8,10,9,0.95)",
-              ]
-            : [
-                "rgba(8,10,9,0.94)",
-                "rgba(8,10,9,0.76)",
-                "rgba(8,10,9,0.72)",
-                "rgba(8,10,9,0.94)",
-              ]
-        }
-        locations={[0, 0.26, 0.72, 1]}
-        style={StyleSheet.absoluteFill}
-      />
+      <></>
     </View>
   );
 }

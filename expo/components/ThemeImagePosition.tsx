@@ -4,8 +4,8 @@ import type { Brand } from "@/contexts/BrandContext";
 import { imagePositionKey } from "@/lib/themeImages";
 
 export default function ThemeImagePosition({ draft, onChange }: { draft: Brand; onChange: (mutator: (b: Brand) => Brand) => void }) {
-  const key = imagePositionKey(draft.theme);
-  const point = draft.theme.imagePositions?.[key] ?? { x: 50, y: 50 };
+  const key = imagePositionKey(draft.theme, draft.layoutId);
+  const point = draft.theme.imagePositions?.[key] ?? draft.theme.imagePositions?.[imagePositionKey(draft.theme)] ?? { x: 50, y: 50 };
   return <View style={{ padding: 20, gap: 12 }}>
     <Text style={{ color: "white", fontSize: 18 }}>Image position for this look</Text>
     <Text style={{ color: "#ccc", lineHeight: 22 }}>Position your portrait in the preview above. Other looks and your original image stay unchanged.</Text>
