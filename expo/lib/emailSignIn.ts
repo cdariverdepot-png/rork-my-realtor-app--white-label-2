@@ -1,0 +1,25 @@
+import { supabase, ensureSupabaseSession } from "@/lib/supabase";
+import { signupEmailRedirect } from "@/lib/authRedirect";
+import { authErrorMessage } from "@/lib/authErrors";
+
+export async function sendAccountCode(email: string, signupConfirmation = false) {
+  const normalized = email.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) return { ok: false, error: "Enter your email address first." };
+  if (!supabase) return { ok: false, error: "Please reconnect and try again." };
+  try {
+    await ensureSupabaseSession();
+    const { error } = signupConfirmation
+      ? await supabase.auth.resend({ type: "signup", email: normalized, options: { emailRedirectTo: signupEmailRedirect() } })
+      : await supabase.auth.signInWithOtp({ email: normalized, options: { shouldCreateUser: false, emailRedirectTo: signupEmailRedirect() } });
+    return error ? { ok: false, error: authErrorMessage(error) } : { ok: true };
+  } catch { return { ok: false, error: "Couldn't send your code. Please check your connection and try again." }; }
+}
+
+export async function verifyAccountCode(email: string, token: string) {
+  if (!/^\d{6,8}$/.test(token.trim())) return { ok: false, error: "Enter the code from your latest email." };
+  if (!supabase) return { ok: false, error: "Please reconnect and try again." };
+  try {
+    const { error } = await supabase.auth.verifyOtp({ email: email.trim().toLowerCase(), token: token.trim(), type: "email" });
+    return error ? { ok: false, error: "That code is invalid or expired. Check your latest email or request a new code." } : { ok: true };
+  } catch { return { ok: false, error: "Couldn't confirm your code. Please try again." }; }
+}

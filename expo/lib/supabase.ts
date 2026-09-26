@@ -97,6 +97,7 @@ export const supabase: SupabaseClient | null = (() => {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: false,
+        flowType: "pkce",
       },
       realtime: { params: { eventsPerSecond: 5 } },
       global: {

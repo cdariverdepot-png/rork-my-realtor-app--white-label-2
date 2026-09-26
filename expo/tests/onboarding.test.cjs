@@ -22,9 +22,20 @@ const { imagePosition, imagePositionKey } = load('lib/themeImages');
 const { THEME_LOOKS } = load('constants/theme');
 const { preserveProfile } = load('lib/preserveProfile');
 
-test('signup email returns only to configured local or published destinations', () => {
+test('account errors never display backend diagnostics', () => {
+  const { authErrorMessage } = load('lib/authErrors');
+  for (const code of ['PGRST202', 'unknown', undefined]) {
+    const message = authErrorMessage({ code, message: 'public.ensure_realtor_auth_record(p_name) schema cache secret' });
+    assert.doesNotMatch(message, /public\.|p_name|schema|secret/);
+  }
+  assert.match(authErrorMessage({ code: 'invalid_credentials' }), /password/);
+  assert.match(authErrorMessage({ code: 'over_email_send_rate_limit' }), /wait/);
+  assert.doesNotThrow(() => authErrorMessage(null));
+});
+
+test('signup email always returns to the published destination, never loopback', () => {
   const { signupEmailRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect');
-  assert.equal(signupEmailRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/');
+  assert.equal(signupEmailRedirect('http://127.0.0.1:4179'), PUBLISHED_AUTH_RETURN);
   assert.equal(signupEmailRedirect(PUBLISHED_AUTH_RETURN), PUBLISHED_AUTH_RETURN);
   assert.equal(signupEmailRedirect(), PUBLISHED_AUTH_RETURN);
   assert.equal(signupEmailRedirect('https://untrusted.example'), PUBLISHED_AUTH_RETURN);
