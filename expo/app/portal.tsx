@@ -21,6 +21,8 @@ import { ArrowRight, ChevronLeft, Lock, Building2, User, Eye, DoorClosed } from 
 import { brand, dark, fonts } from "@/constants/colors";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
+import EmailCodeSignIn from "@/components/EmailCodeSignIn";
+import SocialSignIn from "@/components/SocialSignIn";
 
 type Stage =
   | "entry"
@@ -62,6 +64,7 @@ export default function Portal() {
   const [password, setPassword] = useState<string>("");
   const [busy, setBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmationEmail, setConfirmationEmail] = useState("");
   const [resolvedRealtorId, setResolvedRealtorId] = useState<string>("");
   const [resolvedRealtorName, setResolvedRealtorName] = useState<string>("");
   const [resolvedBrandName, setResolvedBrandName] = useState<string>("");
@@ -167,11 +170,11 @@ export default function Portal() {
 
       if (stage === "realtor-setup") {
         const res = await realtorSignup({ name, email, password });
-        if (!res.ok) { setError(res.error ?? "Couldn't create your account."); if (!res.verificationRequired) triggerShake(); return; }
+        if (!res.ok) { if (res.verificationRequired) setConfirmationEmail(email.trim().toLowerCase()); setError(res.error ?? "Couldn't create your account."); if (!res.verificationRequired) triggerShake(); return; }
         success(); router.replace("/admin/build");
       } else if (stage === "realtor-signin") {
         const res = await realtorLogin(email, password);
-        if (!res.ok) { setError(res.error ?? "Sign-in failed."); triggerShake(); return; }
+        if (!res.ok) { if (res.verificationRequired) setConfirmationEmail(email.trim().toLowerCase()); setError(res.error ?? "Sign-in failed."); triggerShake(); return; }
         success(); router.replace("/admin");
       } else if (stage === "client-setup") {
         if (!resolvedRealtorId) { setError("Please go back and enter your code first."); return; }
@@ -192,6 +195,8 @@ export default function Portal() {
         if (!res.ok) { setError(res.error ?? "Sign-in failed."); triggerShake(); return; }
         success(); router.replace("/");
       }
+    } catch {
+      setError("We couldn't complete sign-in. Please check your connection and try again.");
     } finally { setBusy(false); }
   };
 
@@ -219,7 +224,7 @@ export default function Portal() {
     stage === "entry" ? "Choose how you'd like to continue."
     : stage === "code" ? "Enter the 6-character code your realtor shared with you."
     : stage === "realtor-setup" ? "Confirm your email to create your private builder account. If you already used this app, use the same email to keep your profile and clients."
-    : stage === "realtor-signin" ? "Sign in with your verified account. If you used the earlier app, create an account with the same email first."
+    : stage === "realtor-signin" ? "Use your email and password, or receive a one-time sign-in code."
     : stage === "client-setup" ? `Create your private profile. ${resolvedRealtorName?.split(" ")[0] || "Your realtor"} will see you on the roster.`
     : stage === "client-full" ? `${resolvedRealtorName?.split(" ")[0] || "This agent"} isn't accepting new clients at the moment.`
     : "Sign in to your private profile.";
@@ -290,7 +295,7 @@ export default function Portal() {
                     onBack={() => { transitionTo("code"); setCode(""); setEmail(""); setPassword(""); setName(""); }}
                   />
                 ) : (
-                  <AccountForm
+                  <><AccountForm
                     stage={stage} name={name} email={email} password={password}
                     onChangeName={setName} onChangeEmail={setEmail} onChangePassword={setPassword}
                     onSubmit={submitAccount} error={error} busy={busy}
@@ -302,6 +307,9 @@ export default function Portal() {
                       else if (stage === "realtor-setup") transitionTo("realtor-signin");
                     }}
                   />
+                  {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
+                  {stage.startsWith("realtor") && <SocialSignIn />}
+                  </>
                 )}
               </Animated.View>
             </Animated.View>

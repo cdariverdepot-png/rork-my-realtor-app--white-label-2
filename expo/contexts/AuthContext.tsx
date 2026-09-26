@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { hashPassword, verifyPassword } from "@/lib/passwordHash";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { claimClientSeat } from "@/lib/seats";
-import { signInRealtorWithAuth, signUpRealtorWithAuth } from "@/lib/realtorAuth";
+import { ensureRealtorAuthRecord, signInRealtorWithAuth, signUpRealtorWithAuth } from "@/lib/realtorAuth";
 
 export type Role = "admin" | "client" | null;
 
@@ -267,6 +267,17 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     return { ok: true as const, realtorId };
   }, [persistRealtorCache, persistSession]);
 
+  const completeRealtorSignIn = useCallback(async () => {
+    const verified = await ensureRealtorAuthRecord();
+    if (!verified.ok) return verified;
+    const result = await supabase!.auth.getUser();
+    const user = result.data.user;
+    if (result.error || !user?.email || !user.email_confirmed_at) {
+      return { ok: false as const, error: "Please sign in again to continue." };
+    }
+    return openVerifiedRealtorSession(user.email, verified.realtorId);
+  }, [openVerifiedRealtorSession]);
+
   /** Resolve an enabled invitation without exposing the realtor account row. */
   const lookupRealtorByCode = useCallback(
     async (code: string): Promise<RealtorRecord | null> => {
@@ -318,7 +329,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     async (
       email: string,
       password: string
-    ): Promise<{ ok: boolean; error?: string; realtorId?: string }> => {
+    ): Promise<{ ok: boolean; error?: string; realtorId?: string; verificationRequired?: boolean }> => {
       const trimmed = normEmail(email);
       if (!trimmed || !password)
         return { ok: false, error: "Enter your email and password." };
@@ -610,6 +621,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     login,
     realtorSignup,
     realtorLogin,
+    completeRealtorSignIn,
     previewAdmin,
     exitPreview,
     clientSignup,
@@ -622,7 +634,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     session, hydrated, isAdmin, isClient, viewAsClient, demoViewMode,
     enterViewAsClient, exitViewAsClient, enterDemoView, exitDemoView,
     isAuthenticated, realtorIdVal, realtorRecord, currentClientId,
-    login, realtorSignup, realtorLogin, previewAdmin, exitPreview,
+    login, realtorSignup, realtorLogin, completeRealtorSignIn, previewAdmin, exitPreview,
     clientSignup, clientLogin, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
   ]);
 });
