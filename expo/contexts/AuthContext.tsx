@@ -1,5 +1,6 @@
 import createContextHook from "@nkzw/create-context-hook";
 import { cancelPendingPreviewExit } from "@/lib/navIntent";
+import { registerClientAccount, verifyClientAccount } from "@/lib/clientAccounts";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import { getRandomBytes } from "expo-crypto";
@@ -469,6 +470,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       } catch (e) {
         console.log("[auth] persist accounts error", e);
       }
+      // Server copy, so the client can sign in on another device.
+      void registerClientAccount({ realtorId: input.realtorId, email, pwHash: account.pw, clientId, name });
 
       // Save the client onto the realtor's roster under the CORRECT realtorId,
       // independent of any session-scoped context. This is what stops new
@@ -527,17 +530,31 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           if (Array.isArray(parsed)) realmAccounts = parsed;
         }
       } catch {}
-      const account = realmAccounts.find((a) => a.email === e);
-      if (!account)
-        return { ok: false, error: "No account found. Create one to get started." };
-      const verdict = await verifyPassword(e, password, account.pw);
-      if (!verdict.ok)
-        return { ok: false, error: "Incorrect password." };
+      let account = realmAccounts.find((a) => a.email === e);
+      let verdict = { ok: false, needsUpgrade: false };
+      if (account) {
+        verdict = await verifyPassword(e, password, account.pw);
+        if (!verdict.ok) return { ok: false, error: "Incorrect password." };
+        // Backfill the server copy for accounts created before it existed.
+        void registerClientAccount({ realtorId, email: e, pwHash: await hashPassword(e, password), clientId: account.clientId, name: account.name });
+      } else {
+        // Not on this device (new phone, reinstall): check the server copy.
+        const pwHash = await hashPassword(e, password);
+        const remote = await verifyClientAccount(realtorId, e, pwHash);
+        if (remote.status === "bad_password") return { ok: false, error: "Incorrect password." };
+        if (remote.status !== "ok")
+          return { ok: false, error: "No account found. Create one to get started." };
+        account = { email: e, pw: pwHash, clientId: remote.clientId, name: remote.name || e.split("@")[0], realtorId, createdAt: Date.now() };
+        realmAccounts = [account, ...realmAccounts];
+        try { await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts)); } catch {}
+        verdict = { ok: true, needsUpgrade: false };
+      }
+      const found = account as ClientAccount;
       const seat = await claimClientSeat({
         realtorId,
         email: e,
-        clientId: account.clientId,
-        name: account.name,
+        clientId: found.clientId,
+        name: found.name,
       });
       if (!seat.ok) {
         return {
@@ -551,7 +568,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         try {
           const modern = await hashPassword(e, password);
           realmAccounts = realmAccounts.map((a) =>
-            a.clientId === account.clientId ? { ...a, pw: modern } : a
+            a.clientId === found.clientId ? { ...a, pw: modern } : a
           );
           await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts));
         } catch (err) {
@@ -562,14 +579,14 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         email: e,
         role: "client",
         realtorId,
-        clientId: account.clientId,
-        name: account.name,
+        clientId: found.clientId,
+        name: found.name,
         iat: Date.now(),
       };
       setSession(next);
       setAccounts(realmAccounts);
       await persistSession(next);
-      return { ok: true, clientId: account.clientId };
+      return { ok: true, clientId: found.clientId };
     },
     [accounts, persistSession]
   );
