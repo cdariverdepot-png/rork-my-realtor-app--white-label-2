@@ -8,7 +8,7 @@ function load(name, client) {
   const source = ts.transpileModule(fs.readFileSync(path.join(__dirname, '..', name + '.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
   new Function('require', 'module', 'exports', source)(id => {
     if (id === 'react-native') return { Platform: { OS: 'web' } };
-    if (id === '@/lib/supabase') return { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {} };
+    if (id === '@/lib/supabase') return { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {}, withEmailAuth: fn => fn() };
     if (id.startsWith('@/')) return load(id.slice(2), client);
     return require(id);
   }, module, module.exports);
@@ -86,6 +86,7 @@ test('password reset emails a recovery link with redirect, not OTP create', asyn
         return {
           supabase: client,
           clearAnonymousSessionForEmailAuth: async () => { cleared = true; },
+          withEmailAuth: async fn => { cleared = true; return fn(); },
         };
       }
       if (id === '@/lib/authRedirect') {
@@ -123,7 +124,7 @@ test('setNewPassword updates user when recovery session exists', async () => {
   };
   new Function('require', 'module', 'exports', source)(
     (id) => {
-      if (id === '@/lib/supabase') return { supabase: client, clearAnonymousSessionForEmailAuth: async () => {} };
+      if (id === '@/lib/supabase') return { supabase: client, clearAnonymousSessionForEmailAuth: async () => {}, withEmailAuth: fn => fn() };
       if (id === '@/lib/authRedirect') return { signupEmailRedirect: () => 'https://x/auth/callback', passwordResetRedirect: () => 'https://x/auth/callback' , webOriginForRedirect: () => undefined };
       throw new Error('unexpected ' + id);
     },
@@ -150,7 +151,7 @@ test('setNewPassword fails safely without a recovery session', async () => {
   };
   new Function('require', 'module', 'exports', source)(
     (id) => {
-      if (id === '@/lib/supabase') return { supabase: client, clearAnonymousSessionForEmailAuth: async () => {} };
+      if (id === '@/lib/supabase') return { supabase: client, clearAnonymousSessionForEmailAuth: async () => {}, withEmailAuth: fn => fn() };
       if (id === '@/lib/authRedirect') return { signupEmailRedirect: () => 'https://x/auth/callback', passwordResetRedirect: () => 'https://x/auth/callback' , webOriginForRedirect: () => undefined };
       throw new Error('unexpected ' + id);
     },
@@ -244,4 +245,57 @@ test('Google + Microsoft default on; Apple defaults on for iOS', () => {
   assert.match(src, /socialFlag\(["']EXPO_PUBLIC_GOOGLE_SIGN_IN["'],\s*true\)/);
   assert.match(src, /socialFlag\(["']EXPO_PUBLIC_MICROSOFT_SIGN_IN["'],\s*true\)/);
   assert.match(src, /socialFlag\(["']EXPO_PUBLIC_APPLE_SIGN_IN["'],\s*Platform\.OS === ["']ios["']\)/);
+});
+
+test('signing up an existing email says so instead of waiting for an email that never comes', async () => {
+  const auth = load('lib/realtorAuth', { auth: { signUp: async () => ({ data: { user: { identities: [] }, session: null } }) } });
+  const result = await auth.signUpRealtorWithAuth({ name: 'A B', email: 'a@b.co', password: 'secret1' });
+  assert.equal(result.ok, false);
+  assert.notEqual(result.verificationRequired, true);
+  assert.match(result.error, /already exists/);
+});
+test('new signup still asks for email confirmation', async () => {
+  const auth = load('lib/realtorAuth', { auth: { signUp: async () => ({ data: { user: { identities: [{}] }, session: null } }) } });
+  const result = await auth.signUpRealtorWithAuth({ name: 'A B', email: 'a@b.co', password: 'secret1' });
+  assert.equal(result.verificationRequired, true);
+});
+test('email delivery failures get a clear message', () => {
+  const { authErrorMessage } = load('lib/authErrors');
+  assert.match(authErrorMessage({ message: 'Error sending confirmation email' }), /couldn't send the email/);
+  assert.match(authErrorMessage({ code: 'email_address_not_authorized' }), /couldn't send email/);
+});
+test('link opened in another browser is reported as other-device, not a broken account', async () => {
+  const client = { auth: { exchangeCodeForSession: async () => ({ data: { session: null }, error: { name: 'AuthPKCECodeVerifierMissingError', message: 'PKCE code verifier not found in storage.' } }) } };
+  const { completeAuthCallback } = load('lib/completeAuthCallback', client);
+  await assert.rejects(completeAuthCallback({ code: 'c' }), e => e.reason === 'other-device');
+});
+test('token_hash links verify on any device', async () => {
+  let args;
+  const client = { auth: {
+    verifyOtp: async a => { args = a; return { data: { session: {} } }; },
+    getUser: async () => ({ data: { user: { email_confirmed_at: '2026-09-27' } } }),
+  } };
+  const { completeAuthCallback } = load('lib/completeAuthCallback', client);
+  assert.equal(await completeAuthCallback({ tokenHash: 'th', type: 'recovery' }), 'recovery');
+  assert.deepEqual(args, { token_hash: 'th', type: 'recovery' });
+});
+test('social flags are read statically so the bundler can inline them', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.doesNotMatch(src, /process\.env\[/);
+  assert.match(src, /process\.env\.EXPO_PUBLIC_GOOGLE_SIGN_IN/);
+});
+test('social buttons sit above the email-code fallback on the portal', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.ok(src.indexOf('<SocialSignIn />') < src.indexOf('<EmailCodeSignIn'));
+});
+test('deep links other than invite codes are passed through, not sent home', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/+native-intent.tsx'), 'utf8');
+  const mod = { exports: {} };
+  new Function('module', 'exports', ts.transpileModule(src, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.React } }).outputText)(mod, mod.exports);
+  assert.equal(mod.exports.redirectSystemPath({ path: 'rork-app://auth/callback?code=x', initial: true }), 'rork-app://auth/callback?code=x');
+  assert.match(mod.exports.redirectSystemPath({ path: 'rork-app://code/ABC123', initial: true }), /invite=ABC123/);
+});
+test('app restart checks the stored session (offline-safe), not a network getUser', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
+  assert.match(src, /auth\.getSession\(\)\)\.data\.session\?\.user/);
 });

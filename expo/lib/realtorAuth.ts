@@ -1,4 +1,4 @@
-import { supabase, clearAnonymousSessionForEmailAuth } from "@/lib/supabase";
+import { supabase, withEmailAuth } from "@/lib/supabase";
 import { signupEmailRedirect, webOriginForRedirect } from "@/lib/authRedirect";
 import { authErrorMessage } from "@/lib/authErrors";
 
@@ -14,9 +14,10 @@ export async function signUpRealtorWithAuth(input: {
   password: string;
 }): Promise<RealtorAuthResult> {
   if (!supabase) return { ok: false, error: "Connect to the internet to create your account." };
+  const sb = supabase;
   try {
-  await clearAnonymousSessionForEmailAuth();
-  const { data, error } = await supabase.auth.signUp({
+  return await withEmailAuth(async (): Promise<RealtorAuthResult> => {
+  const { data, error } = await sb.auth.signUp({
     email: input.email.trim().toLowerCase(),
     password: input.password,
     options: {
@@ -25,6 +26,12 @@ export async function signUpRealtorWithAuth(input: {
     },
   });
   if (error) return { ok: false, error: authErrorMessage(error) };
+  // With email-enumeration protection on, signing up an address that already
+  // has an account returns a placeholder user with no identities and sends
+  // NO email. Tell the realtor to sign in instead of waiting for a message.
+  if (!data.session && data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    return { ok: false, error: "An account already exists for this email. Sign in, or use \"Forgot your password?\" to reset it." };
+  }
   if (!data.session) {
     return {
       ok: false,
@@ -33,18 +40,21 @@ export async function signUpRealtorWithAuth(input: {
     };
   }
   return await ensureRealtorAuthRecord(input.name);
+  });
   } catch { return { ok: false, error: "Couldn't create your account. Please check your connection and try again." }; }
 }
 
 /** Email verification is required for both new and migrated realtor records. */
 export async function signInRealtorWithAuth(email: string, password: string): Promise<RealtorAuthResult> {
   if (!supabase) return { ok: false, error: "Connect to the internet to sign in." };
+  const sb = supabase;
   try {
-  await clearAnonymousSessionForEmailAuth();
-  const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+  return await withEmailAuth(async (): Promise<RealtorAuthResult> => {
+  const { data, error } = await sb.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
   if (error) return { ok: false, error: authErrorMessage(error), verificationRequired: error.code === "email_not_confirmed" };
   if (!data.session) return { ok: false, error: "Sign-in did not create a session. Please try again." };
   return await ensureRealtorAuthRecord();
+  });
   } catch { return { ok: false, error: "Couldn't sign in. Please check your connection and try again." }; }
 }
 

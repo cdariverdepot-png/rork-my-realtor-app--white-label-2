@@ -128,8 +128,17 @@ export const isSupabaseLive = !!supabase;
  */
 let ensurePromise: Promise<Session | null> | null = null;
 
+/**
+ * While an email / password / callback sign-in is running, background sync
+ * must not start a guest session: a late anonymous sign-in would overwrite the
+ * realtor's real session in storage (they then see "confirm your email" or get
+ * logged out on the next launch). Callers wait here until the sign-in settles.
+ */
+let emailAuthLock: Promise<void> | null = null;
+
 export async function ensureSupabaseSession(): Promise<Session | null> {
   if (!supabase) return null;
+  while (emailAuthLock) await emailAuthLock;
   if (ensurePromise) return ensurePromise;
   const sb = supabase;
   ensurePromise = (async () => {
@@ -178,6 +187,37 @@ export async function clearAnonymousSessionForEmailAuth(): Promise<void> {
     console.log("[supabase] clearAnonymousSessionForEmailAuth", e);
   } finally {
     ensurePromise = null;
+  }
+}
+
+/**
+ * Run an account sign-in step (password, email code, recovery, callback
+ * exchange) with guest sessions paused. Drops any anonymous session first and
+ * holds background anonymous sign-in until `fn` finishes, so the real session
+ * is the one that stays stored.
+ */
+export async function withEmailAuth<T>(fn: () => Promise<T>): Promise<T> {
+  while (emailAuthLock) await emailAuthLock;
+  let release: () => void = () => {};
+  emailAuthLock = new Promise<void>((resolve) => { release = resolve; });
+  try {
+    await clearAnonymousSessionForEmailAuth();
+    return await fn();
+  } finally {
+    ensurePromise = null;
+    emailAuthLock = null;
+    release();
+  }
+}
+
+// A sign-out invalidates the cached session so the next sync call re-checks.
+if (supabase) {
+  try {
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") ensurePromise = null;
+    });
+  } catch (e) {
+    console.log("[supabase] onAuthStateChange", e);
   }
 }
 

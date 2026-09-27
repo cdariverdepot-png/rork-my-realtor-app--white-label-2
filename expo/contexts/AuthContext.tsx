@@ -163,8 +163,11 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
         if (raw) {
           const parsed = JSON.parse(raw) as Session;
+          // Read the stored Supabase session (works offline) instead of a
+          // network getUser(): a cold start without signal must not log the
+          // realtor out.
           const authUser = parsed?.role === "admin" && supabase
-            ? (await supabase.auth.getUser()).data.user : null;
+            ? (await supabase.auth.getSession()).data.session?.user ?? null : null;
           if (parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID ||
               (parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS) ||
               (parsed?.role === "admin" && (!authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||

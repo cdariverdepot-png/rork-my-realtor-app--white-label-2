@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
-import { completeAuthCallback } from "@/lib/completeAuthCallback";
+import { AuthCallbackError, completeAuthCallback } from "@/lib/completeAuthCallback";
 import {
   needsSetPassword,
   readAuthCallbackType,
@@ -20,7 +20,7 @@ function queryParams(): URLSearchParams {
 }
 
 export default function AuthCallback() {
-  const { code, type: typeParam } = useLocalSearchParams<{ code?: string; type?: string }>();
+  const { code, type: typeParam, token_hash: tokenHashParam } = useLocalSearchParams<{ code?: string; type?: string; token_hash?: string }>();
   const started = useRef(false);
   const router = useRouter();
   const { completeRealtorSignIn } = useAuth();
@@ -40,6 +40,7 @@ export default function AuthCallback() {
         type: fromUrl || fromRoute,
         error: hash.get("error") || query.get("error") || hash.get("error_description") || query.get("error_description"),
         accessToken: hash.get("access_token"), refreshToken: hash.get("refresh_token"),
+        tokenHash: typeof tokenHashParam === "string" ? tokenHashParam : query.get("token_hash"),
       });
       if (Platform.OS === "web") window.history.replaceState(null, "", window.location.pathname);
 
@@ -58,12 +59,19 @@ export default function AuthCallback() {
         return;
       }
       router.replace("/admin");
-    })().catch(() =>
+    })().catch((e: unknown) => {
+      if (Platform.OS === "web" && typeof window !== "undefined") window.history.replaceState(null, "", window.location.pathname);
+      if (e instanceof AuthCallbackError && e.reason === "other-device") {
+        setMessage(
+          "Your email is confirmed. This link was opened in a different browser or app than the one you signed up in, so sign in with your email and password to continue. If you were resetting your password, request the reset link again from this device."
+        );
+        return;
+      }
       setMessage(
-        "This link could not finish here (expired, already used, or password still required). Open My Realtor App and sign in with your email and password, or request a new reset link from the portal on this site."
-      )
-    );
-  }, [code, typeParam, completeRealtorSignIn, router]);
+        "This link has expired or was already used. Sign in with your email and password, or request a new link below."
+      );
+    });
+  }, [code, typeParam, tokenHashParam, completeRealtorSignIn, router]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#171717", padding: 30, justifyContent: "center", gap: 24 }}>

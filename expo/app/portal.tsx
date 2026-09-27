@@ -307,13 +307,13 @@ export default function Portal() {
                       else if (stage === "realtor-setup") transitionTo("realtor-signin");
                     }}
                   />
+                  {stage.startsWith("realtor") && <SocialSignIn />}
                   {stage.startsWith("realtor") && (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase() || stage === "realtor-setup") ? (
                     <Text style={{ color: "#f3ead9", textAlign: "center", marginTop: 18, lineHeight: 22 }}>
                       Check your email for the confirmation link. Open it on this device to finish sign-in.
                     </Text>
                   ) : null}
                   {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
-                  {stage.startsWith("realtor") && <SocialSignIn />}
                   </>
                 )}
               </Animated.View>

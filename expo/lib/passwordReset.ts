@@ -1,4 +1,4 @@
-import { supabase, clearAnonymousSessionForEmailAuth } from "@/lib/supabase";
+import { supabase, withEmailAuth } from "@/lib/supabase";
 import { passwordResetRedirect, webOriginForRedirect } from "@/lib/authRedirect";
 
 /** Password reset for verified Supabase Auth realtor accounts (link-based). */
@@ -22,11 +22,11 @@ export async function requestResetLink(email: string): Promise<ResetOutcome> {
     return { ok: false, error: "You're offline. Reconnect and try again." };
   }
 
+  const sb = supabase;
   try {
-    await clearAnonymousSessionForEmailAuth();
-    const { error } = await supabase.auth.resetPasswordForEmail(e, {
+    const { error } = await withEmailAuth(() => sb.auth.resetPasswordForEmail(e, {
       redirectTo: passwordResetRedirect(webOriginForRedirect()),
-    });
+    }));
     if (error) {
       console.log("[reset] link send error", error.message);
       if (/rate|limit|seconds/i.test(error.message)) {
@@ -102,20 +102,17 @@ export async function confirmReset(input: {
   }
   if (!supabase) return { ok: false, error: "You're offline. Reconnect and try again." };
 
+  const sb = supabase;
   try {
-    const { error: verifyErr } = await supabase.auth.verifyOtp({
-      email: e,
-      token: code,
-      type: "recovery",
+    const { verifyErr, fallbackErr } = await withEmailAuth(async () => {
+      const first = await sb.auth.verifyOtp({ email: e, token: code, type: "recovery" });
+      if (!first.error) return { verifyErr: null, fallbackErr: null };
+      // Some projects still deliver email OTP under type "email".
+      const fallback = await sb.auth.verifyOtp({ email: e, token: code, type: "email" });
+      return { verifyErr: first.error, fallbackErr: fallback.error };
     });
     if (verifyErr) {
-      // Some projects still deliver email OTP under type "email".
-      const fallback = await supabase.auth.verifyOtp({
-        email: e,
-        token: code,
-        type: "email",
-      });
-      if (fallback.error) {
+      if (fallbackErr) {
         console.log("[reset] verify error", verifyErr.message);
         if (/expired/i.test(verifyErr.message)) {
           return { ok: false, error: "That code has expired. Send a new one." };

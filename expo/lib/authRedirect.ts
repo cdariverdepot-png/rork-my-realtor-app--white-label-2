@@ -10,8 +10,14 @@ function normalizeOrigin(origin: string): string {
   return origin.replace(/\/$/, "");
 }
 
+/** Deployment base path (app.json experiments.baseUrl), derived from the published URL. */
+const BASE_PATH = new URL(PUBLISHED_AUTH_RETURN).pathname.replace(/\/auth\/callback\/?$/, "");
+
 function localCallback(origin: string): string {
-  return `${normalizeOrigin(origin)}/auth/callback`;
+  // Expo serves under experiments.baseUrl in dev too; keep it when the page is under it.
+  const underBase = !!BASE_PATH && typeof window !== "undefined" &&
+    typeof window.location?.pathname === "string" && window.location.pathname.startsWith(BASE_PATH);
+  return `${normalizeOrigin(origin)}${underBase ? BASE_PATH : ""}/auth/callback`;
 }
 
 /**
