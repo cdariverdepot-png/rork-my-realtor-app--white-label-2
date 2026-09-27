@@ -10,7 +10,7 @@ export default function NoraHero(p: HeroProps) {
     <Box x={342} y={23} s={s}><Circle Icon={Bell} s={s} color="#DDD9CE" onPress={p.onNotifications} size={30} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>
       <Box x={24} y={83} w={98} s={s}><Text style={{ color: "#C9714E", fontSize: 8 * s, letterSpacing: 1.5 * s }}>{p.brand.realtor.heroEyebrow}</Text></Box>
-      <Box x={24} y={108} w={98} s={s}><Headline copy={f.headline} s={s} size={37} width={98} height={88} color="#FFF8EC" accent="#C9714E" italicFrom={0.30} /></Box>
+      <Box x={24} y={112} w={98} s={s}><Headline copy={f.headline} s={s} size={37} width={98} height={84} color="#FFF8EC" accent="#C9714E" italicFrom={0.30} /></Box>
       <Box x={24} y={203} w={26} h={1} s={s} style={{ backgroundColor: "#B96746" }} />
       <Box x={24} y={218} w={146} s={s}><Intro p={p} s={s} lines={4} color="#E3DED1" /></Box>
       <Box x={222} y={270} w={142} h={27} s={s}><Action label="START YOUR SEARCH" Icon={Search} iconFirst s={s} color="#FFF5E8" bg="#B95838" radius={3} onPress={p.onBrowse} /></Box>

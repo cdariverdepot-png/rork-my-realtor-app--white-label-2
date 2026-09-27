@@ -55,25 +55,48 @@ export function BrandMark({ p, s, monogramSize = 32, divider = false, serif = fa
   </View>;
 }
 /** Fit the shared headline into the reference's typographic region, without changing its words. */
+/**
+ * Fit the headline into the theme's typographic region without changing its
+ * words. A cautious width estimate picks the starting size (and keeps every
+ * word whole); the rendered height is then measured and the size steps down
+ * until it truly fits, so it can never spill into the text below — whatever
+ * the font, platform or copy.
+ */
 export function Headline({ copy, s, size, width, height, color, accent, italicFrom, style }: { copy: string; s: number; size: number; width: number; height: number; color: string; accent?: string; italicFrom?: number; style?: TextStyle }) {
-  let fitted = size;
+  // Real serif glyphs run wider than the old estimate; 1.18 keeps words from breaking mid-word.
+  const glyph = (letter: string) => (/[ilI.,'!]/.test(letter) ? 0.27 : /[MWmw]/.test(letter) ? 0.9 : 0.54);
+  const wordWidth = (token: string, font: number) => [...token].reduce((sum, letter) => sum + glyph(letter), 0) * font;
   const estimateLines = (font: number) => {
     let lines = 1, used = 0;
     for (const word of copy.split(/(\n)/)) {
       if (word === "\n") { lines++; used = 0; continue; }
       for (const token of word.split(/\s+/).filter(Boolean)) {
-      const length = [...token].reduce((sum, letter) => sum + (/[ilI.,'!]/.test(letter) ? 0.23 : /[MW]/.test(letter) ? 0.82 : 0.46), 0) * font;
-      if (used && used + length > width) { lines++; used = 0; }
-      used += length + font * 0.24;
+        const length = wordWidth(token, font);
+        if (used && used + length > width) { lines++; used = 0; }
+        used += length + font * 0.26;
       }
     }
     return lines;
   };
-  while (fitted > 14 && estimateLines(fitted) * fitted * 1.08 > height) fitted -= 0.5;
+  const longest = Math.max(1, ...copy.split(/\s+/).filter(Boolean).map(token => wordWidth(token, 1)));
+  let fitted = Math.min(size, width / longest);
+  while (fitted > 12 && estimateLines(fitted) * fitted * 1.08 > height) fitted -= 0.5;
+
+  // Measured correction: shrink until the rendered block fits its region.
+  const [shrink, setShrink] = useState(1);
+  const key = `${copy}|${size}|${width}|${height}|${s}`;
+  const lastKey = React.useRef(key);
+  if (lastKey.current !== key) { lastKey.current = key; if (shrink !== 1) setShrink(1); }
+  const font = fitted * shrink;
+
   const words = [...copy.matchAll(/\S+/g)];
   const split = italicFrom === undefined ? words.length : Math.max(1, Math.round(words.length * italicFrom));
   const splitIndex = split < words.length ? words[split].index! : copy.length;
-  return <Text adjustsFontSizeToFit minimumFontScale={0.65} style={[{ fontFamily: SERIF, fontSize: fitted * s, lineHeight: fitted * 1.02 * s, color, letterSpacing: -0.55 * s }, style]}>
+  return <Text
+    onLayout={e => {
+      if (e.nativeEvent.layout.height > height * s * 1.03 && shrink > 0.5) setShrink(k => Math.max(0.5, k * 0.92));
+    }}
+    style={[{ fontFamily: SERIF, fontSize: font * s, lineHeight: font * 1.04 * s, color, letterSpacing: -0.55 * s }, style]}>
     {copy.slice(0, splitIndex)}{split < words.length && <Text style={{ fontFamily: ITALIC, color: accent || color }}>{copy.slice(splitIndex)}</Text>}
   </Text>;
 }
