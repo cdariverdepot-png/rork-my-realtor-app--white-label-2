@@ -3,7 +3,8 @@ import { ActivityIndicator, Alert, Animated, Easing, Linking, Modal, Platform, P
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ArrowRight, Building2, User, Eye, X, Pencil, Check, LayoutDashboard } from "lucide-react-native";
+import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from "lucide-react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
 import { useAuth } from "@/contexts/AuthContext";
@@ -41,7 +42,6 @@ import Footer from "@/components/Footer";
 import ConciergeSection from "@/components/ConciergeSection";
 import SupportSection from "@/components/SupportSection";
 import Reveal from "@/components/Reveal";
-import SwipeToSwitch from "@/components/SwipeToSwitch";
 import SetupGate from "@/components/SetupGate";
 import {
   visibleSections,
@@ -265,6 +265,27 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const bottomPad = Math.max(insets.bottom, 10) + 100;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
+  // Left-edge swipe back to the dashboard while previewing as a client.
+  const edgeX = useRef(new Animated.Value(0)).current;
+  const edgeBack = useMemo(() => Gesture.Pan()
+    .enabled(viewAsClient && !demoViewMode && !previewingDraft && !editing)
+    .hitSlop({ left: 0, width: 32 })
+    .activeOffsetX(12)
+    .failOffsetY([-24, 24])
+    .runOnJS(true)
+    .onUpdate(e => { edgeX.setValue(Math.max(0, e.translationX)); })
+    .onEnd(e => {
+      if (e.translationX > 90 || e.velocityX > 700) {
+        Animated.timing(edgeX, { toValue: 420, duration: 160, useNativeDriver: true }).start(() => {
+          edgeX.setValue(0);
+          exitTemplate();
+        });
+      } else {
+        Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start();
+      }
+    })
+    .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(); }),
+  [viewAsClient, demoViewMode, previewingDraft, editing, edgeX, exitTemplate]);
   useEffect(() => {
     Animated.timing(bannerAnim, {
       toValue: refreshing ? 1 : 0,
@@ -489,19 +510,22 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           </Pressable>
         </View>
       ) : viewAsClient ? (
-        /* Realtor's own template — editable preview with save bar. */
-        <View style={[styles.previewBar, { top: insets.top + 8 }]} pointerEvents="box-none">
+        /* Realtor's own app preview: a floating Back button and a quiet label. */
+        <>
           <Pressable
             onPress={exitTemplate}
-            style={({ pressed }) => [styles.previewPill, pressed && { opacity: 0.8 }]}
-            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel="Back to dashboard"
+            hitSlop={10}
+            style={({ pressed }) => [styles.previewBack, { top: insets.top + 10 }, pressed && { opacity: 0.75 }]}
           >
-            <Eye size={13} color={brand.goldLight} strokeWidth={1.7} />
-            <Text style={styles.previewText}>{editing ? "EDITING" : "VIEWING AS CLIENT"}</Text>
-            <View style={styles.previewDivider} />
-            <X size={13} color={brand.ivory} strokeWidth={2} />
+            <ChevronLeft size={18} color="#FFFFFF" strokeWidth={2.2} />
+            <Text style={styles.previewBackText}>Back</Text>
           </Pressable>
-        </View>
+          <View style={[styles.previewBar, { top: insets.top + 16 }]} pointerEvents="none">
+            <Text style={styles.previewLabel}>{editing ? "Editing" : "Viewing as client"}</Text>
+          </View>
+        </>
       ) : null}
 
       {editing ? (
@@ -541,15 +565,11 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   // can pull the preview aside and step straight back into editing.
   if (viewAsClient && !demoViewMode && !previewingDraft) {
     return (
-      <SwipeToSwitch
-        direction="left"
-        onTrigger={exitTemplate}
-        label="DASHBOARD"
-        Icon={LayoutDashboard}
-        enabled={!editing}
-      >
-        {body}
-      </SwipeToSwitch>
+      <GestureDetector gesture={edgeBack}>
+        <Animated.View style={{ flex: 1, transform: [{ translateX: edgeX }] }}>
+          {body}
+        </Animated.View>
+      </GestureDetector>
     );
   }
 
@@ -579,6 +599,18 @@ const styles = StyleSheet.create({
     shadowColor: "#000", shadowOpacity: 0.3, shadowRadius: 14, shadowOffset: { width: 0, height: 6 }, elevation: 8,
   },
   previewText: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 10.5, letterSpacing: 1.6 },
+  previewBack: {
+    position: "absolute", left: 14, zIndex: 20, flexDirection: "row", alignItems: "center", gap: 2,
+    paddingLeft: 8, paddingRight: 14, paddingVertical: 8, borderRadius: 999,
+    backgroundColor: "rgba(20,20,20,0.55)",
+    shadowColor: "#000", shadowOpacity: 0.2, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 5,
+  },
+  previewBackText: { fontFamily: fonts.sansSemi, color: "#FFFFFF", fontSize: 14 },
+  previewLabel: {
+    fontFamily: fonts.sansMedium, color: "rgba(30,30,30,0.75)", fontSize: 11,
+    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, overflow: "hidden",
+    backgroundColor: "rgba(255,255,255,0.72)",
+  },
   draftPill: { borderColor: "rgba(198,161,91,0.7)", backgroundColor: "rgba(30,22,6,0.95)" },
   draftBack: { fontFamily: fonts.sansSemi, color: brand.goldLight, fontSize: 10.5, letterSpacing: 1.6 },
   previewDivider: { width: 1, height: 13, backgroundColor: "rgba(244,239,230,0.22)" },

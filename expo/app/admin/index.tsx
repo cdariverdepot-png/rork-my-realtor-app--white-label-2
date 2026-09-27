@@ -27,7 +27,6 @@ import {
   Eye,
   EyeOff,
   LogOut,
-  Plus,
   MessageSquare,
   CalendarDays,
   FileText,
@@ -78,6 +77,7 @@ import { useEngagement } from "@/contexts/EngagementContext";
 import { useGoLive } from "@/contexts/GoLiveContext";
 import { realtor } from "@/constants/realtor";
 import { requiredStatus } from "@/constants/sections";
+import ThemeShowcase from "@/components/ThemeShowcase";
 import { assets as seedAssets, avatarPlaceholder } from "@/constants/assets";
 import { resolveTheme } from "@/constants/theme";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
@@ -240,16 +240,15 @@ export default function AdminDashboard() {
 
   const realtorName = brandData.realtor.name || realtorRecord?.name || realtor.name;
   const brandName = brandData.realtor.brandName || realtorRecord?.brand_name || "MY REALTOR";
-  const realtorFirst = realtorName.split(" ")[0] ?? realtorName;
 
   const greeting = useMemo(() => {
     const h = new Date().getHours();
-    const first = realtorFirst;
+    const first = realtorName;
     if (h >= 5 && h < 12) return `Good morning, ${first}.`;
     if (h >= 12 && h < 17) return `Good afternoon, ${first}.`;
     if (h >= 17 && h < 22) return `Good evening, ${first}.`;
     return `Good evening, ${first}.`;
-  }, [realtorFirst]);
+  }, [realtorName]);
 
   const buildShareMessage = (): string =>
     [
@@ -480,7 +479,6 @@ export default function AdminDashboard() {
                   <KeyRound size={9} color={admin.goldLight} strokeWidth={2} />
                   <Text style={styles.heroEyebrow}>YOUR DASHBOARD</Text>
                 </View>
-                <Text style={styles.heroBrandMark}>{brandName.replace(/_/g, " ")}</Text>
               </View>
               <View style={styles.heroChromeRight}>
                 <SyncBeacon status={syncStatus} onPress={tap(() => router.push("/admin/diagnostics"))} />
@@ -545,48 +543,32 @@ export default function AdminDashboard() {
               BRAND STUDIO — The Heart
               ═══════════════════════════════════════════════ */}
           <View style={styles.studioSection}>
-            <Pressable
-              onPress={tap(() => router.push("/admin/studio"))}
-              style={({ pressed }) => [styles.studioCtaBtn, pressed && { opacity: 0.9 }]}
-            >
-              <LinearGradient
-                colors={["rgba(58,46,26,0.92)", "rgba(12,11,9,0.94)"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={StyleSheet.absoluteFill}
-              />
-              <LinearGradient
-                colors={["rgba(255,255,255,0.10)", "transparent"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 0.7 }}
-                style={StyleSheet.absoluteFill}
-              />
-              <Text style={styles.studioCtaText}>EDIT MY APP</Text>
-              <ArrowRight size={16} color="#F4EFE6" strokeWidth={2.4} />
-              <View style={styles.studioCtaDot} />
-            </Pressable>
+            <Text style={[styles.studioHeadline, { marginTop: 0 }]}>Make changes whenever you need.</Text>
 
-            <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
-              <Pressable
-                onPress={tap(() => router.push({ pathname: "/admin/studio", params: { section: "theme" } }))}
-                style={({ pressed }) => [styles.studioSecondary, pressed && { opacity: 0.8 }]}
-              >
-                <Paintbrush size={14} color={admin.goldLight} strokeWidth={1.7} />
-                <Text style={styles.studioSecondaryText}>THEMES</Text>
-              </Pressable>
-              <Pressable
-                onPress={tap(() => { enterViewAsClient(); router.replace("/"); })}
-                style={({ pressed }) => [styles.studioSecondary, pressed && { opacity: 0.8 }]}
-              >
-                <Eye size={14} color={admin.goldLight} strokeWidth={1.7} />
-                <Text style={styles.studioSecondaryText}>PREVIEW MY APP</Text>
-              </Pressable>
-            </View>
+            <ThemeShowcase brand={brandData} listings={all} />
 
-            <Text style={styles.studioHeadline}>Make changes whenever you need.</Text>
-            <Text style={styles.studioDescription}>
+            <Text style={[styles.studioDescription, { textAlign: "center", marginTop: 14 }]}>
               Switch layouts, update your profile, and refine the words your clients see.
             </Text>
+
+            <View style={{ flexDirection: "row", gap: 10, marginTop: 18 }}>
+              <Pressable
+                onPress={tap(() => router.push({ pathname: "/admin/studio", params: { section: "theme" } }))}
+                style={({ pressed }) => [styles.studioSecondary, { minHeight: 50 }, pressed && { opacity: 0.8 }]}
+                accessibilityRole="button"
+              >
+                <Paintbrush size={15} color={admin.goldLight} strokeWidth={1.7} />
+                <Text style={styles.studioSecondaryText}>EDIT THEME</Text>
+              </Pressable>
+              <Pressable
+                onPress={tap(() => router.push("/admin/studio"))}
+                style={({ pressed }) => [styles.studioSecondary, { minHeight: 50 }, pressed && { opacity: 0.8 }]}
+                accessibilityRole="button"
+              >
+                <Pencil size={15} color={admin.goldLight} strokeWidth={1.7} />
+                <Text style={styles.studioSecondaryText}>EDIT CONTENT</Text>
+              </Pressable>
+            </View>
           </View>
 
           {/* ═══════════════════════════════════════════════
@@ -601,21 +583,19 @@ export default function AdminDashboard() {
                   <Text style={styles.listingCountBadge}>{liveCount} LIVE</Text>
                 </View>
               </View>
-              <Pressable
-                onPress={tap(() => router.push("/admin/add"))}
-                style={({ pressed }) => [styles.sectionAction, pressed && { opacity: 0.85 }]}
-              >
-                <Plus size={12} color={admin.bg} strokeWidth={2.4} />
-                <Text style={styles.sectionActionText}>ADD</Text>
-              </Pressable>
             </View>
 
             {all.length === 0 ? (
               <View style={{ paddingHorizontal: PAD }}>
-                <View style={styles.empty}>
+                <Pressable
+                  onPress={tap(() => router.push("/admin/add"))}
+                  accessibilityRole="button"
+                  accessibilityLabel="Import your first property"
+                  style={({ pressed }) => [styles.empty, pressed && { opacity: 0.8 }]}
+                >
                   <Text style={styles.emptyTitle}>No listings yet</Text>
-                  <Text style={styles.emptySub}>Tap Add to import your first home from any public listing link.</Text>
-                </View>
+                  <Text style={styles.emptySub}>Click here to import your first property from any public listing link.</Text>
+                </Pressable>
               </View>
             ) : (
               <View>
@@ -1580,11 +1560,11 @@ const styles = StyleSheet.create({
   },
   heroMain: { flexDirection: "column", alignItems: "center", gap: 12, marginBottom: 20 },
   heroPortraitWrap: {
-    width: 120, height: 120, borderRadius: 60, overflow: "hidden",
+    width: 168, height: 168, borderRadius: 84, overflow: "hidden",
     backgroundColor: admin.surfaceHi, position: "relative", marginBottom: 4,
     shadowColor: admin.gold, shadowOpacity: 0.3, shadowRadius: 20, shadowOffset: { width: 0, height: 4 }, elevation: 10,
   },
-  heroPortraitRing: { ...StyleSheet.absoluteFill, borderRadius: 60, borderWidth: 1.5, borderColor: admin.hairlineGold },
+  heroPortraitRing: { ...StyleSheet.absoluteFill, borderRadius: 84, borderWidth: 1.5, borderColor: admin.hairlineGold },
   heroPortraitFallback: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#07070A" },
   heroGreeting: {
     fontFamily: fonts.serif, color: admin.text, fontSize: 32, letterSpacing: -0.8,

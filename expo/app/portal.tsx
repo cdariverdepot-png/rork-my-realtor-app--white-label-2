@@ -416,7 +416,8 @@ function AccountForm({ stage, name, email, password, onChangeName, onChangeEmail
 
   return (
     <View style={{ width: "100%" }}>
-      {isSetup ? <Field label="NAME"><TextInput value={name} onChangeText={onChangeName} placeholder="Your full name" placeholderTextColor="rgba(244,239,230,0.3)" autoCapitalize="words" autoCorrect={false} style={styles.input} /></Field> : null}
+      {isSetup ? <Field label="NAME"><TextInput value={name} onChangeText={onChangeName} placeholder="Your full name" placeholderTextColor="rgba(244,239,230,0.3)" autoCapitalize="words" autoCorrect={false} style={styles.input} />
+        {stage === "realtor-setup" ? <Text style={styles.fieldHelp}>This is the name that will appear in your app and profile.</Text> : null}</Field> : null}
       <Field label="EMAIL"><TextInput value={email} onChangeText={onChangeEmail} placeholder="you@example.com" placeholderTextColor="rgba(244,239,230,0.3)" autoCapitalize="none" autoCorrect={false} keyboardType="email-address" style={styles.input} /></Field>
       <Field label="PASSWORD"><TextInput value={password} onChangeText={onChangePassword} placeholder={isSetup ? "At least 6 characters" : "••••••••"} placeholderTextColor="rgba(244,239,230,0.3)" secureTextEntry style={styles.input} /></Field>
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -498,6 +499,7 @@ const styles = StyleSheet.create({
   codeInputWrap: { flexDirection: "row", alignItems: "center", gap: 12, borderWidth: 1, borderColor: dark.borderGold, paddingHorizontal: 18, paddingVertical: 18, backgroundColor: dark.bgCard },
   codeInput: { flex: 1, fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 18, letterSpacing: 5, textAlign: "center", paddingVertical: 0 },
   field: { marginBottom: 18, width: "100%" },
+  fieldHelp: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.55)", fontSize: 12, marginTop: 8, lineHeight: 17 },
   fieldLabel: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 10, letterSpacing: 2.8, marginBottom: 8 },
   input: { fontFamily: fonts.sans, color: brand.ivory, fontSize: 16, paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: "rgba(244,239,230,0.22)" },
   error: { fontFamily: fonts.sansMedium, color: "#E8B7A6", fontSize: 11.5, letterSpacing: 0.6, marginTop: 14, textAlign: "center" },

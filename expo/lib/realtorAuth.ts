@@ -65,7 +65,11 @@ export async function ensureRealtorAuthRecord(name = ""): Promise<RealtorAuthRes
   if (userError || !userResult.user || !userResult.user.email_confirmed_at) {
     return { ok: false, verificationRequired: true, error: "Confirm your email before continuing." };
   }
-  const { data, error } = await supabase.rpc("ensure_realtor_auth_record", { p_name: name });
+  // The name typed at signup (saved as user metadata) is the display name —
+  // never something derived from the email address.
+  const signupName = typeof userResult.user.user_metadata?.realtor_name === "string"
+    ? userResult.user.user_metadata.realtor_name.trim() : "";
+  const { data, error } = await supabase.rpc("ensure_realtor_auth_record", { p_name: name.trim() || signupName });
   if (error || typeof data !== "string") {
     return { ok: false, error: error ? authErrorMessage(error) : "Couldn't load your realtor account. Please try again shortly." };
   }

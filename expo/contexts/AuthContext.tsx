@@ -258,7 +258,11 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       .select("id,email,name,brand_name,monogram,client_code,client_code_enabled,created_at,updated_at")
       .eq("id", realtorId).single();
     if (error || !data) return { ok: false as const, error: "Your realtor profile could not be loaded." };
-    const record = data as RealtorRecord;
+    // Older rows got a name derived from the email address. The name typed at
+    // signup is the source of truth for everything the realtor sees.
+    const signupName = (await supabase.auth.getSession()).data.session?.user?.user_metadata?.realtor_name;
+    const record = { ...(data as RealtorRecord),
+      ...(typeof signupName === "string" && signupName.trim() ? { name: signupName.trim() } : {}) };
     setRealtorCache(prev => {
       const next = [record, ...prev.filter(item => item.id !== record.id)];
       void persistRealtorCache(next);

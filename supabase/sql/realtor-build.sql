@@ -71,9 +71,12 @@ begin
     return v_realtor.id;
   end if;
 
-  v_name := nullif(trim(p_name), '');
+  -- The name typed at signup is the display name; never derive one from the
+  -- email address (e.g. littlelightsdigital@… must not become the name).
+  v_name := coalesce(nullif(trim(p_name), ''),
+    nullif(trim(v_auth_user.raw_user_meta_data->>'realtor_name'), ''));
   if v_name is null then
-    v_name := split_part(v_auth_user.email, '@', 1);
+    v_name := 'Realtor';
   end if;
   insert into public.realtors
     (email, name, password_hash, brand_name, monogram, client_code_enabled, auth_user_id)

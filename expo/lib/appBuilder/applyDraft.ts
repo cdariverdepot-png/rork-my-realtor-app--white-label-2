@@ -18,6 +18,8 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
   for (const fact of facts) {
     if (!fact.value) continue;
     const [group, field, nested] = fact.field.split(".");
+    // The signup name is the realtor's display name; a website never replaces it.
+    if (fact.field === "realtor.name" && next.realtor.name.trim()) continue;
     if (group === "realtor" && field in next.realtor) {
       (next.realtor as unknown as Record<string, unknown>)[field] = fact.value;
     } else if (group === "credentials" && field === "license" && nested in next.credentials.license) {

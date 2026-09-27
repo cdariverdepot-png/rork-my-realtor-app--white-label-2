@@ -299,3 +299,9 @@ test('app restart checks the stored session (offline-safe), not a network getUse
   const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
   assert.match(src, /auth\.getSession\(\)\)\.data\.session\?\.user/);
 });
+test('realtor record uses the signup name, never one derived from the email', async () => {
+  let args;
+  const auth = load('lib/realtorAuth', { auth: { getUser: async () => ({ data: { user: { email: 'littlelightsdigital@gmail.com', email_confirmed_at: '2026-09-27', user_metadata: { realtor_name: ' Jerrod ' } } } }) }, rpc: async (_fn, a) => { args = a; return { data: 'id-1' }; } });
+  assert.equal((await auth.ensureRealtorAuthRecord()).ok, true);
+  assert.deepEqual(args, { p_name: 'Jerrod' });
+});
