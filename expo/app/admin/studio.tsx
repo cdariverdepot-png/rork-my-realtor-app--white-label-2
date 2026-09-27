@@ -286,7 +286,7 @@ export default function StudioScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ section?: string }>();
   const insets = useSafeAreaInsets();
-  const { isAdmin, hydrated } = useAuth();
+  const { isAdmin, hydrated, enterViewAsClient } = useAuth();
   const { brand: live, saveBrand, syncStatus, setDraftPreview } = useBrand();
   const [saving, setSaving] = useState(false);
   const { all: liveListings, saveListings } = useListings();
@@ -383,7 +383,6 @@ export default function StudioScreen() {
   const save = async () => {
     if (saving) return;
     setSaving(true);
-    const firstCompletion = !requiredStatus(live).complete && required.complete;
     try {
       if (params.section !== "theme" && Object.keys(listingEdits).length) {
         await saveListings(liveListings.map(l => listingEdits[l.id] ? { ...l, ...listingEdits[l.id], updatedAt: Date.now() } : l));
@@ -410,7 +409,12 @@ export default function StudioScreen() {
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
-    if (required.complete) router.replace(firstCompletion ? "/admin/ready" : "/admin");
+    // Show the finished result: after saving, open the app as clients will see it
+    // (Back or a swipe from the left edge returns to the dashboard).
+    if (required.complete) {
+      enterViewAsClient();
+      router.replace("/");
+    }
   };
 
   /** Throw away the unpublished draft and snap back to what clients currently see. */
