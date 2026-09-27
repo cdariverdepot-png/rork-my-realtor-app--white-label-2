@@ -83,10 +83,28 @@ export async function uploadBuildFile(asset: { uri: string; name: string; mimeTy
   return { id, kind, label: asset.name, uri, mimeType, status: "queued" };
 }
 
+/** supabase-js hides the function's JSON body behind a generic "non-2xx" error. */
+async function functionError(error: unknown, data: unknown, fallback: string): Promise<Error> {
+  const direct = data && typeof data === "object" && "error" in data ? String((data as { error: unknown }).error) : "";
+  if (direct) return new Error(direct);
+  const ctx = error && typeof error === "object" && "context" in error ? (error as { context?: unknown }).context : null;
+  if (ctx && typeof (ctx as Response).clone === "function") {
+    const res = ctx as Response;
+    try {
+      const body = await res.clone().json() as { error?: string; message?: string };
+      if (body?.error || body?.message) return new Error(String(body.error ?? body.message));
+    } catch {}
+    if (res.status === 404) return new Error("The app builder service isn't deployed yet (analyze-realtor-build).");
+    if (res.status === 401) return new Error("Please sign in again to build your app.");
+    if (res.status) return new Error(`${fallback} (status ${res.status})`);
+  }
+  return new Error(error instanceof Error && error.message ? error.message : fallback);
+}
+
 export async function analyzeBuild(): Promise<SavedBuild> {
   await verifiedUser();
   const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", { body: {} });
-  if (error || data?.error) throw new Error(data?.error ?? error?.message ?? "Analysis could not finish.");
+  if (error || data?.error) throw await functionError(error, data, "Analysis could not finish.");
   const saved = await loadBuild();
   if (!saved) throw new Error("The build result could not be loaded.");
   return saved;
@@ -97,7 +115,7 @@ export async function regenerateBuildCopy(target: "heroMessage" | "welcomeNote" 
   const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
     body: { mode: "regenerate", target },
   });
-  if (error || data?.error) throw new Error(data?.error ?? error?.message ?? "Could not create another version.");
+  if (error || data?.error) throw await functionError(error, data, "Could not create another version.");
   const saved = await loadBuild();
   if (!saved) throw new Error("The new version could not be loaded.");
   return saved;
