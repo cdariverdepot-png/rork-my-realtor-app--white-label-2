@@ -8,9 +8,10 @@ export async function sendAccountCode(email: string, signupConfirmation = false)
   if (!supabase) return { ok: false, error: "Please reconnect and try again." };
   try {
     await clearAnonymousSessionForEmailAuth();
+    const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
     const { error } = signupConfirmation
-      ? await supabase.auth.resend({ type: "signup", email: normalized, options: { emailRedirectTo: signupEmailRedirect() } })
-      : await supabase.auth.signInWithOtp({ email: normalized, options: { shouldCreateUser: false, emailRedirectTo: signupEmailRedirect() } });
+      ? await supabase.auth.resend({ type: "signup", email: normalized, options: { emailRedirectTo: signupEmailRedirect(origin) } })
+      : await supabase.auth.signInWithOtp({ email: normalized, options: { shouldCreateUser: false, emailRedirectTo: signupEmailRedirect(origin) } });
     return error ? { ok: false, error: authErrorMessage(error) } : { ok: true };
   } catch { return { ok: false, error: "Couldn't send your code. Please check your connection and try again." }; }
 }

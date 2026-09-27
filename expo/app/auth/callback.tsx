@@ -10,40 +10,79 @@ function hashParams(): URLSearchParams {
   return new URLSearchParams(raw);
 }
 
+function queryParams(): URLSearchParams {
+  if (Platform.OS !== "web" || typeof window === "undefined") return new URLSearchParams();
+  return new URLSearchParams(window.location.search || "");
+}
+
+/** Establish a Supabase session from PKCE code, implicit hash tokens, or an existing web detect. */
+async function establishSession(code?: string) {
+  if (!supabase) throw new Error("invalid callback");
+
+  const fromParams = typeof code === "string" && code.length > 0 ? code : null;
+  const fromQuery = Platform.OS === "web" ? queryParams().get("code") : null;
+  const authCode = fromParams || fromQuery;
+
+  if (authCode) {
+    const result = await supabase.auth.exchangeCodeForSession(authCode);
+    if (result.error) throw result.error;
+    return;
+  }
+
+  if (Platform.OS === "web") {
+    const hash = hashParams();
+    const access_token = hash.get("access_token");
+    const refresh_token = hash.get("refresh_token");
+    if (access_token && refresh_token) {
+      const result = await supabase.auth.setSession({ access_token, refresh_token });
+      if (result.error) throw result.error;
+      return;
+    }
+    const err = hash.get("error_description") || queryParams().get("error_description");
+    if (err) throw new Error(err);
+  }
+
+  // detectSessionInUrl may already have persisted a session before this route mounts.
+  const existing = await supabase.auth.getSession();
+  if (existing.data.session) return;
+
+  throw new Error("invalid callback");
+}
+
 export default function AuthCallback() {
   const { code } = useLocalSearchParams<{ code?: string }>();
   const started = useRef(false);
   const router = useRouter();
   const { completeRealtorSignIn } = useAuth();
   const [message, setMessage] = useState("Completing sign-in…");
+
   useEffect(() => {
     if (started.current) return;
     started.current = true;
     void (async () => {
-      if (!supabase) throw new Error("invalid callback");
-      if (code && typeof code === "string") {
-        const result = await supabase.auth.exchangeCodeForSession(code);
-        if (result.error) throw result.error;
-      } else if (Platform.OS === "web") {
-        const hash = hashParams();
-        const access_token = hash.get("access_token");
-        const refresh_token = hash.get("refresh_token");
-        if (access_token && refresh_token) {
-          const result = await supabase.auth.setSession({ access_token, refresh_token });
-          if (result.error) throw result.error;
-        } else {
-          throw new Error("invalid callback");
-        }
-      } else {
-        throw new Error("invalid callback");
-      }
+      await establishSession(typeof code === "string" ? code : undefined);
       const opened = await completeRealtorSignIn();
-      if (!opened.ok) { setMessage(opened.error ?? "Couldn't open your account."); return; }
+      if (!opened.ok) {
+        setMessage(
+          opened.error ??
+            "Your email is confirmed, but we couldn't open your realtor account yet. Return to sign-in and use your email and password."
+        );
+        return;
+      }
       router.replace("/admin");
-    })().catch(() => setMessage("This sign-in link is no longer usable here. Return to sign-in and try again, or use an email code."));
+    })().catch(() =>
+      setMessage(
+        "This confirmation link could not finish sign-in here (wrong origin, expired link, or password still required). Return to Expo on the same address you signed up from, then sign in with your email and password — or request a new email code on the portal."
+      )
+    );
   }, [code, completeRealtorSignIn, router]);
-  return <View style={{ flex: 1, backgroundColor: "#171717", padding: 30, justifyContent: "center", gap: 24 }}>
-    <Text style={{ color: "white", fontSize: 20 }}>{message}</Text>
-    <Pressable accessibilityRole="button" onPress={() => router.replace("/portal?entry=realtor")}><Text style={{ color: "#e0bc72" }}>Return to sign-in</Text></Pressable>
-  </View>;
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#171717", padding: 30, justifyContent: "center", gap: 24 }}>
+      <Text style={{ color: "white", fontSize: 20 }}>{message}</Text>
+      <Pressable accessibilityRole="button" onPress={() => router.replace("/portal?entry=realtor")}>
+        <Text style={{ color: "#e0bc72" }}>Return to sign-in</Text>
+      </Pressable>
+    </View>
+  );
 }

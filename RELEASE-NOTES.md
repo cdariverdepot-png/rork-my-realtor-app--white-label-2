@@ -11,7 +11,7 @@ Includes seven distinct theme layouts, isolated sample personas and supplied por
 
 ## Auth (signup / login) — preview notes
 
-Realtor accounts use Supabase email + password on `/portal`. Confirmation email links always return to the published web URL (never loopback), because the message may be opened on another device. After confirmation, return to Expo and sign in with the same email and password, or use the in-app email code controls on the portal.
+Realtor accounts use Supabase email + password on `/portal`. Confirmation `emailRedirectTo` uses the current origin when Expo web is on `localhost` / `127.0.0.1` (so the confirm link returns to the same origin and can finish PKCE / session). Otherwise it uses the published GitHub Pages `/auth/callback/`. Dashboard **Invite user** always redirects to Supabase Site URL (Pages) and will not leave Expo localhost signed in — prefer password signup for Expo preview tests. After confirmation on another origin, return to Expo and sign in with the same email and password, or use the in-app email code controls on the portal.
 
 Client accounts remain device-local (invite code + AsyncStorage). They are not shared across devices or Expo Go reinstalls.
 
@@ -38,7 +38,7 @@ This branch adds:
 ## External setup / remaining acceptance checks
 
 - Supabase Site URL should match a host that actually serves the app (not a 404).
-- Redirect allowlist must include that Site URL. Older notes also listed `http://127.0.0.1:4179/`; this branch no longer sends confirmation mail to loopback.
+- Redirect allowlist must include Site URL, `{base}/auth/callback/`, and for Expo preview: `http://localhost:8081/**` and `http://127.0.0.1:8081/**` (or the exact ports you use).
 - Branded sender and email templates still require Supabase email/SMTP setup (domain `myrealtorapp.com` or your chosen provider). No SMTP credentials are included in this release.
 - Test fresh signup, confirmation, sign-in, save/reload, and switching all seven themes on an Expo device. Real email delivery and authenticated persistence are not certified by the automated tests.
 - The supplied portraits are placeholders. Inspect text contrast on bright photos now that overlays are intentionally removed.

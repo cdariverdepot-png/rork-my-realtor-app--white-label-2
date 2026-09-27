@@ -6,7 +6,7 @@ const ts = require('typescript');
 function load(name, client) {
   const module = { exports: {} };
   const source = ts.transpileModule(fs.readFileSync(path.join(__dirname, '..', name + '.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
-  new Function('require', 'module', 'exports', source)(id => id === '@/lib/supabase' ? { supabase: client, ensureSupabaseSession: async () => null } : load(id.replace('@/', ''), client), module, module.exports);
+  new Function('require', 'module', 'exports', source)(id => id === '@/lib/supabase' ? { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {} } : load(id.replace('@/', ''), client), module, module.exports);
   return module.exports;
 }
 test('email sign-in never silently creates another account', async () => {
