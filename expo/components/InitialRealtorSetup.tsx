@@ -116,13 +116,20 @@ export default function InitialRealtorSetup() {
     return () => { alive = false; };
   }, []);
 
-  const addSource = async (source: BuildSource) => {
+  const addSource = async (source: BuildSource): Promise<BuildSource[]> => {
     if (!auth.realtorId) throw new Error("Sign in to save your sources.");
     const next = [...sources, source];
     await saveBuildSources(auth.realtorId, next);
     setSources(next);
     setResult(null);
     setDraft(null);
+    return next;
+  };
+  /** A link typed in the box counts even if "Add link" wasn't tapped. */
+  const urlSource = (raw: string): BuildSource => {
+    const parsed = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
+    if (parsed.protocol !== "https:") throw new Error("Use a public HTTPS link.");
+    return { id: randomUUID(), kind: "url", label: parsed.hostname, uri: parsed.toString(), status: "queued" };
   };
   const act = async (work: () => Promise<void>) => {
     if (busy) return;
@@ -132,10 +139,8 @@ export default function InitialRealtorSetup() {
     finally { setBusy(false); setActivity(""); }
   };
   const addUrl = () => void act(async () => {
-    const parsed = new URL(url.trim());
-    if (parsed.protocol !== "https:") throw new Error("Use a public HTTPS link.");
-    await addSource({ id: randomUUID(), kind: "url", label: parsed.hostname,
-      uri: parsed.toString(), status: "queued" });
+    if (!url.trim()) throw new Error("Enter a website or profile link first.");
+    await addSource(urlSource(url.trim()));
     setUrl("");
   });
   const addFile = (kind: "document" | "image") => void act(async () => {
@@ -155,7 +160,13 @@ export default function InitialRealtorSetup() {
     }
   });
   const analyze = () => void act(async () => {
-    if (!sources.some(source => source.kind !== "contacts")) throw new Error("Add a website, document, or image first.");
+    let current = sources;
+    const typed = url.trim();
+    if (typed && !sources.some(source => source.kind === "url" && source.uri.replace(/\/$/, "") === urlSource(typed).uri.replace(/\/$/, ""))) {
+      current = await addSource(urlSource(typed));
+      setUrl("");
+    }
+    if (!current.some(source => source.kind !== "contacts")) throw new Error("Add a website, document, or image first.");
     setActivity("Reading your sources and building a profile…");
     const saved = await analyzeBuild();
     setSources(saved.sources);
