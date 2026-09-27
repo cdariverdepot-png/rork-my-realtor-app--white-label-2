@@ -48,10 +48,24 @@ const envAnon = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 const extra = (Constants.expoConfig?.extra ?? {}) as Record<string, unknown>;
 const extraUrl = typeof extra.SUPABASE_URL === "string" && extra.SUPABASE_URL.length > 0 ? extra.SUPABASE_URL : undefined;
 const extraAnon = typeof extra.SUPABASE_ANON_KEY === "string" && extra.SUPABASE_ANON_KEY.length > 0 ? extra.SUPABASE_ANON_KEY : undefined;
-const url: string = sanitizeSupabaseUrl((envUrl && envUrl.length > 0 ? envUrl : extraUrl) || FALLBACK_URL);
-const anon: string = (envAnon && envAnon.length > 0 ? envAnon : extraAnon) || FALLBACK_ANON;
-const urlSource: "env" | "extra" | "fallback" = envUrl && envUrl.length > 0 ? "env" : extraUrl ? "extra" : "fallback";
-const anonSource: "env" | "extra" | "fallback" = envAnon && envAnon.length > 0 ? "env" : extraAnon ? "extra" : "fallback";
+/**
+ * The production project owns the realtor accounts, SMTP (Resend) and the
+ * auth redirect allowlist. A stray EXPO_PUBLIC_SUPABASE_* value pointing at a
+ * different project (e.g. one left in Rork's env) sends signups to a project
+ * with the Supabase mailer and a localhost Site URL — so any configured value
+ * for another project is ignored, together with its key.
+ */
+const configuredUrl = (envUrl && envUrl.length > 0 ? envUrl : extraUrl) || "";
+const configuredAnon = (envAnon && envAnon.length > 0 ? envAnon : extraAnon) || "";
+const configuredMatches = !!configuredUrl &&
+  sanitizeSupabaseUrl(configuredUrl).toLowerCase() === FALLBACK_URL.toLowerCase();
+if (configuredUrl && !configuredMatches) {
+  console.log("[supabase] ignoring configured project; using production project", sanitizeSupabaseUrl(configuredUrl).slice(0, 40));
+}
+const url: string = FALLBACK_URL;
+const anon: string = (configuredMatches && configuredAnon) || FALLBACK_ANON;
+const urlSource: "env" | "extra" | "fallback" = configuredMatches ? (envUrl ? "env" : "extra") : "fallback";
+const anonSource: "env" | "extra" | "fallback" = configuredMatches && configuredAnon ? (envAnon ? "env" : "extra") : "fallback";
 
 /** Snapshot of what the bundle actually saw at module init — surfaced in the
  * client SYNC CHECK alert so we can diagnose missing/empty credentials without
