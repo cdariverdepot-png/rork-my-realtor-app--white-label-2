@@ -304,3 +304,15 @@ test('real profiles keep each theme\'s own design copy instead of one generic se
   assert.equal(coastal.realtor.monogram, 'JS');
   assert.equal(coastal.realtor.heroMessage, seedish.realtor.heroMessage);
 });
+test('every hero text slot is bounded so custom names and copy cannot spill into other text', () => {
+  const dir = path.join(root, 'components/themes');
+  for (const file of fs.readdirSync(dir).filter(name => /Hero\.tsx$/.test(name))) {
+    const src = fs.readFileSync(path.join(dir, file), 'utf8');
+    for (const match of src.matchAll(/<Text\b[^>]*>/g)) {
+      const tag = match[0];
+      // Fixed UI labels (e.g. the search placeholder) and nested italic spans are exempt.
+      if (/Search homes, locations/.test(src.slice(match.index, match.index + 200))) continue;
+      assert.match(tag, /numberOfLines=/, `${file}: unbounded text ${tag.slice(0, 80)}`);
+    }
+  }
+});

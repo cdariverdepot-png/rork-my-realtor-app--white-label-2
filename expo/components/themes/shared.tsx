@@ -41,6 +41,10 @@ export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: 
     {!vertical && !frame.d.light && <></>}
   </View>;
 }
+/** Font size that keeps a one-line label (e.g. a name) inside `width`, never above `max`. */
+export function fitSize(text: string, max: number, width: number, perChar = 0.5) {
+  return Math.max(9, Math.min(max, width / Math.max(1, text.trim().length * perChar)));
+}
 export function Box({ x, y, w, h, s, children, style }: { x: number; y: number; w?: number; h?: number; s: number; children?: React.ReactNode; style?: ViewStyle }) {
   return <View style={[{ position: "absolute", left: x * s, top: y * s, width: w === undefined ? undefined : w * s, height: h === undefined ? undefined : h * s }, style]}>{children}</View>;
 }

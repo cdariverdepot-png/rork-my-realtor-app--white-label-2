@@ -9,7 +9,7 @@ export default function MinaHero(p: HeroProps) {
     <Box x={24} y={40} w={280} s={s}><BrandMark p={p} s={s} color="#FFF8EC" accent="#B49A66" monogramSize={42} /></Box>
     <Box x={343} y={44} s={s}><Circle s={s} color="#B49A66" onPress={p.onMessage} size={30} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>
-      <Box x={24} y={107} w={110} s={s}><Text style={{ color: "#B99F6B", fontSize: 8 * s, letterSpacing: 1.7 * s }}>{p.brand.realtor.heroEyebrow}</Text></Box>
+      <Box x={24} y={107} w={110} s={s}><Text numberOfLines={2} style={{ color: "#B99F6B", fontSize: 8 * s, letterSpacing: 1.7 * s }}>{p.brand.realtor.heroEyebrow}</Text></Box>
       <Box x={24} y={134} w={106} s={s}><Headline copy={f.headline} s={s} size={42} width={106} height={76} color="#F9F6ED" /></Box>
       <Box x={24} y={214} w={14} h={1} s={s} style={{ backgroundColor: "#B49A66" }} />
       <Box x={24} y={224} w={150} s={s}><Intro p={p} s={s} lines={4} color="#C9C4B3" /></Box>
