@@ -5,7 +5,7 @@ import { Action, Backdrop, Box, BrandMark, Circle, Headline, Intro, useFrame, ty
 export default function NoraHero(p: HeroProps) {
   const f = useFrame(p, 360), { s } = f;
   return <View style={{ height: f.height, overflow: "hidden", backgroundColor: "#121310" }}>
-    <Backdrop p={p} frame={f} colors={["#090D09F5", "#090D09A0", "#090D0900"]} left={185} background="#121310" />
+    <Backdrop p={p} frame={f} colors={["#090D09F5", "#090D09A0", "#090D0900"]} />
     <Box x={23} y={25} w={275} s={s}><BrandMark p={p} s={s} color="#F9F1E8" accent="#B96746" monogramSize={38} divider /></Box>
     <Box x={342} y={23} s={s}><Circle Icon={Bell} s={s} color="#DDD9CE" onPress={p.onNotifications} size={30} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>

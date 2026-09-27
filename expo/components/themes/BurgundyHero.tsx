@@ -5,7 +5,7 @@ import { Action, Backdrop, Box, BrandMark, Circle, Headline, Intro, useFrame, ty
 export default function BurgundyHero(p: HeroProps) {
   const f = useFrame(p, 370), { s } = f;
   return <View style={{ height: f.height, overflow: "hidden", backgroundColor: "#0A0D0D" }}>
-    <Backdrop p={p} frame={f} colors={["#080B0CF9", "#080B0CBB", "#080B0C00"]} left={180} background="#0A0D0D" />
+    <Backdrop p={p} frame={f} colors={["#080B0CF9", "#080B0CBB", "#080B0C00"]} />
     <Box x={22} y={18} w={282} s={s}><BrandMark p={p} s={s} color="#FFF6E7" accent="#C7A16C" monogramSize={32} serif divider /></Box>
     <Box x={341} y={25} s={s}><Circle s={s} color="#C7A16C" Icon={Phone} onPress={p.onCall} size={31} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions, type TextStyle, type ViewStyle } from "react-native";
 import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
 import { ArrowRight, MessageCircle, X, type LucideIcon } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import { themeDesign } from "@/constants/themeDesigns";
@@ -30,28 +29,16 @@ export function useFrame(p: HeroProps, referenceHeight: number) {
     headline: p.brand.realtor.heroMessage.trim() || p.brand.realtor.tagline.trim() || p.brand.realtor.name,
     first: p.brand.realtor.name.trim().split(/\s+/)[0] || "your realtor" };
 }
-/**
- * The portrait behind a hero. `left` confines it to the right-hand part of the
- * hero (beside the text column rather than under it) and `until` confines it to
- * the top (above text that runs across the lower half); either way the photo's
- * edge fades softly into the theme background so the face is never under copy.
- */
-export function Backdrop({ p, frame, colors, left = 0, until, background }: {
-  p: HeroProps; frame: ReturnType<typeof useFrame>; colors: readonly [string, string, ...string[]]; left?: number; vertical?: boolean;
-  until?: number; background?: string;
-}) {
-  const s = frame.s;
-  const bg = (background ?? colors[0]).slice(0, 7);
+export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: HeroProps; frame: ReturnType<typeof useFrame>; colors: readonly [string, string, ...string[]]; left?: number; vertical?: boolean }) {
   return <View style={StyleSheet.absoluteFill} pointerEvents="none">
-    {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View style={{ position: "absolute", left: left * s, right: 0, top: -28 * s,
-      ...(until !== undefined ? { height: (until + 28) * s } : { bottom: -28 * s }),
+    {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View style={{ position: "absolute", left: left * frame.s, right: 0, top: -28 * frame.s, bottom: -28 * frame.s,
       transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
       <View style={[StyleSheet.absoluteFill, zoomStyle(p)]}>
         <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
       </View>
-      {left > 0 && <LinearGradient colors={[bg, `${bg}00`]} start={{ x: 0, y: 0 }} end={{ x: 0.42, y: 0 }} style={StyleSheet.absoluteFill} />}
-      {until !== undefined && <LinearGradient colors={[`${bg}00`, bg]} start={{ x: 0, y: 0.62 }} end={{ x: 0, y: 1 }} style={StyleSheet.absoluteFill} />}
     </Animated.View>}
+    <></>
+    {!vertical && !frame.d.light && <></>}
   </View>;
 }
 export function Box({ x, y, w, h, s, children, style }: { x: number; y: number; w?: number; h?: number; s: number; children?: React.ReactNode; style?: ViewStyle }) {

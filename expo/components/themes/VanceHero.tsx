@@ -4,7 +4,7 @@ import { Action, Backdrop, Box, BrandMark, Circle, Headline, Intro, useFrame, ty
 export default function VanceHero(p: HeroProps) {
   const f = useFrame(p, 440), { s } = f;
   return <View style={{ height: f.height, overflow: "hidden", backgroundColor: "#070909" }}>
-    <Backdrop p={p} frame={f} colors={["#050707FC", "#050707AE", "#05070718"]} left={195} background="#070909" />
+    <Backdrop p={p} frame={f} colors={["#050707FC", "#050707AE", "#05070718"]} />
     <Box x={20} y={15} w={244} s={s}><BrandMark p={p} s={s} color="#EEEFEA" accent="#B59B6B" monogramSize={28} /></Box>
     <Box x={341} y={11} s={s}><Circle s={s} color="#B8B6A9" onPress={p.onMessage} size={30} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>

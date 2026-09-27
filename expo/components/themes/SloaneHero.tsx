@@ -5,7 +5,7 @@ import { Action, Backdrop, Box, BrandMark, Circle, Headline, Intro, useFrame, ty
 export default function SloaneHero(p: HeroProps) {
   const f = useFrame(p, 441), { s } = f;
   return <View style={{ height: f.height, overflow: "hidden", backgroundColor: "#24211A" }}>
-    <Backdrop p={p} frame={f} colors={["#211D17DF", "#211D1766", "#211D1700"]} left={190} background="#24211A" />
+    <Backdrop p={p} frame={f} colors={["#211D17DF", "#211D1766", "#211D1700"]} />
     <Box x={20} y={29} w={245} s={s}><BrandMark p={p} s={s} color="#FFF9EB" accent="#DDB379" monogramSize={40} divider serif /></Box>
     <Box x={273} y={22} w={99} h={23} s={s}><Action label="CONTACT" s={s} Icon={MessageCircle} iconFirst onPress={p.onMessage} bg="#3B3427CC" color="#F4E7D2" radius={20} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>

@@ -7,7 +7,7 @@ import { Action, Backdrop, Box, BrandMark, Headline, Intro, ITALIC, useFrame, ty
 export default function MarissaHero(p: HeroProps) {
   const f = useFrame(p, 422), { s, d } = f;
   return <View style={{ height: f.height, backgroundColor: "#F7F3EC", overflow: "hidden" }}>
-    <Backdrop p={p} frame={f} colors={["#F7F3ECFF", "#F7F3ECA8", "#F7F3EC00"]} left={185} background="#F7F3EC" />
+    <Backdrop p={p} frame={f} colors={["#F7F3ECFF", "#F7F3ECA8", "#F7F3EC00"]} />
     <Box x={20} y={20} w={246} s={s}><BrandMark p={p} s={s} color="#18232A" accent="#A88954" monogramSize={28} /></Box>
     <Box x={286} y={18} w={86} h={33} s={s}><Action s={s} label="Concierge" Icon={Phone} iconFirst onPress={p.onMessage} color="#6B5636" bg="#FFFCF3BB" border="#C6B99C66" radius={24} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>
