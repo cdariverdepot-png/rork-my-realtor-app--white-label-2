@@ -6,7 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import { randomUUID } from "expo-crypto";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { PROFILE_FIELDS, RECOMMENDED_FIELDS, REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
@@ -19,8 +19,6 @@ import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
 import { useClients } from "@/contexts/ClientsContext";
 import PressableScale from "@/components/PressableScale";
-import WebsiteUrlField from "@/components/WebsiteUrlField";
-import { normalizeUrl } from "@/lib/websiteUrl";
 
 function ManualSetup() {
   const { brand, hydrated, saveBrand } = useBrand();
@@ -107,9 +105,6 @@ export default function InitialRealtorSetup() {
   const { importMany } = useClients();
   const { brand, saveBrand } = useBrand();
   const router = useRouter();
-  /** Set when Edit Content's "Update From URL" sent the realtor here: refresh an existing app. */
-  const updateUrl = normalizeUrl(useLocalSearchParams<{ update?: string }>().update ?? "");
-  const updateStarted = useRef(false);
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const [url, setUrl] = useState("");
@@ -125,6 +120,7 @@ export default function InitialRealtorSetup() {
   const [activity, setActivity] = useState("");
   /** The website in the main field, once saved as a source. */
   const [primaryId, setPrimaryId] = useState<string | null>(null);
+  const [urlFocused, setUrlFocused] = useState(false);
   const [extraUrl, setExtraUrl] = useState("");
   const [showExtraUrl, setShowExtraUrl] = useState(false);
   const [building, setBuilding] = useState(false);
@@ -173,12 +169,10 @@ export default function InitialRealtorSetup() {
     let alive = true;
     void loadBuild().then(saved => {
       if (!alive) return;
-      if (updateUrl) setUrl(updateUrl);
       if (saved) {
         setSources(saved.sources);
         const primary = saved.sources.find(source => source.kind === "url");
         if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
-        if (updateUrl) { setUrl(updateUrl); return; }
         setResult(saved);
         if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
       }
@@ -206,9 +200,20 @@ export default function InitialRealtorSetup() {
     return next;
   };
   const addSource = (source: BuildSource) => saveSources([...sources, source]);
+  /** https:// is assumed when left off; a hostname needs a dot to count. */
+  const normalizeUrl = (raw: string): string | null => {
+    const value = raw.trim();
+    if (!value) return null;
+    try {
+      const parsed = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+      if (parsed.protocol !== "https:" || !/\.[a-z]{2,}$/i.test(parsed.hostname)) return null;
+      return parsed.toString();
+    } catch { return null; }
+  };
   const urlSource = (uri: string): BuildSource =>
     ({ id: randomUUID(), kind: "url", label: new URL(uri).hostname, uri, status: "queued" });
   const websiteUri = normalizeUrl(url);
+  const websiteState: "empty" | "valid" | "invalid" = !url.trim() ? "empty" : websiteUri ? "valid" : "invalid";
   const primarySource = sources.find(source => source.id === primaryId) ?? null;
   const extraLinks = sources.filter(source => source.kind === "url" && source.id !== primaryId);
   const documents = sources.filter(source => source.kind === "document");
@@ -254,7 +259,7 @@ export default function InitialRealtorSetup() {
       const saved = await analyzeBuild();
       setSources(saved.sources);
       setResult(saved);
-      const next = applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft, { keepTheme: !!updateUrl });
+      const next = applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft);
       const portraitUri = saved.draft.portraitSourceId && localImages.current[saved.draft.portraitSourceId];
       if (portraitUri) next.portraitUrl = await toPortableImage(portraitUri, 1600);
       startReview(saved, next);
@@ -262,12 +267,6 @@ export default function InitialRealtorSetup() {
       setBuilding(false);
     }
   });
-  // Update From URL: once the saved build has loaded, go straight into analysis.
-  useEffect(() => {
-    if (!loaded || !updateUrl || updateStarted.current || url !== updateUrl) return;
-    updateStarted.current = true;
-    analyze();
-  }, [loaded, url]);
   const addContacts = () => void act("sources", async () => {
     const picked = await DocumentPicker.getDocumentAsync({ type: ["text/csv", "text/vcard", "text/x-vcard", "text/plain", "*/*"],
       copyToCacheDirectory: true });
@@ -316,9 +315,7 @@ export default function InitialRealtorSetup() {
     if (missing.length) throw new Error(`Please add: ${missing.map(item => item.label.toLowerCase()).join(", ")}.`);
     await saveBrand(draft);
     await markBuildComplete();
-    // An update returns to Edit Content, which picks up the saved changes.
-    if (updateUrl && router.canGoBack()) router.back();
-    else router.replace("/admin/ready");
+    router.replace("/admin/ready");
   });
   const setProfile = (key: keyof Brand["realtor"], value: string) =>
     setDraft(current => current && ({ ...current, realtor: { ...current.realtor, [key]: value } }));
@@ -402,9 +399,28 @@ export default function InitialRealtorSetup() {
 
     {loaded && phase === "collect" && <>
       {/* Step 1 — the website is the starting point. */}
-      <WebsiteUrlField eyebrow="STEP 1" title="Your website or profile link" value={url} onChangeText={setUrl}
-        failure={primarySource?.status === "failed" && primarySource.uri === websiteUri
-          ? `We couldn’t read this site${primarySource.error ? ` — ${primarySource.error}` : ""}` : null} />
+      <View style={{ marginTop: 30, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276",
+        backgroundColor: "rgba(194,162,118,0.08)" }}>
+        <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>STEP 1</Text>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "600", marginTop: 4 }}>Your website or profile link</Text>
+        <View style={{ marginTop: 14, flexDirection: "row", alignItems: "center", borderRadius: 12, borderWidth: 1.5,
+          borderColor: websiteState === "valid" ? "#3FB37F" : websiteState === "invalid" && !urlFocused ? "#FF9C85" : "#7B858C",
+          backgroundColor: "#0C1014", paddingHorizontal: 14 }}>
+          <TextInput value={url} onChangeText={setUrl} onFocus={() => setUrlFocused(true)} onBlur={() => setUrlFocused(false)}
+            placeholder="yourwebsite.com" placeholderTextColor="#6F7A80" accessibilityLabel="Website or profile URL"
+            autoCapitalize="none" autoCorrect={false} keyboardType="url" returnKeyType="done"
+            style={{ flex: 1, color: "white", fontSize: 18, paddingVertical: 16 }} />
+          {websiteState === "valid" ? <View accessibilityLabel="Website looks good" style={{ width: 28, height: 28, borderRadius: 14,
+            backgroundColor: "#3FB37F", alignItems: "center", justifyContent: "center" }}>
+            <Check size={17} color="white" strokeWidth={3} />
+          </View> : null}
+        </View>
+        {websiteState === "invalid" && !urlFocused
+          ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 8 }}>That doesn’t look like a web address. Try something like yourname.com</Text>
+          : primarySource?.status === "failed" && primarySource.uri === websiteUri
+            ? <Text style={{ color: "#FFBAA9", marginTop: 8 }}>We couldn’t read this site{primarySource.error ? ` — ${primarySource.error}` : ""}</Text>
+            : websiteState === "valid" ? <Text style={{ color: "#8FD9B4", marginTop: 8 }}>Looks good</Text> : null}
+      </View>
 
       {/* Optional supporting information — each item stays with its own control. */}
       <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 30 }}>Optional — add more information</Text>

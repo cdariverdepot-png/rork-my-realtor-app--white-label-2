@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Animated,
   Easing,
@@ -18,10 +19,11 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import NeutralContentCanvas from "@/components/NeutralContentCanvas";
-import WebsiteUrlField from "@/components/WebsiteUrlField";
 import PressableScale from "@/components/PressableScale";
-import { normalizeUrl } from "@/lib/websiteUrl";
-import { loadBuild } from "@/lib/appBuilder/buildService";
+import { randomUUID } from "expo-crypto";
+import { analyzeBuild, loadBuild, saveBuildSources } from "@/lib/appBuilder/buildService";
+import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
+import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import ThemeCarousel from "@/components/ThemeCarousel";
 import { imagePosition } from "@/lib/themeImages";
 import { editorSave } from "@/lib/editorSave";
@@ -545,7 +547,7 @@ export default function StudioScreen() {
           contentContainerStyle={{ paddingBottom: insets.bottom + 140 }}
           showsVerticalScrollIndicator={false}
         >
-          {params.section !== "theme" && <UpdateUrlSection dirty={dirty} />}
+          {params.section !== "theme" && <UpdateUrlSection setBrand={setBrand} />}
           {params.section === "theme" ? <ThemeSection draft={draft} setBrand={setBrand} /> :
             <NeutralContentCanvas draft={draft} onChange={setBrand}
               listings={liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
@@ -2966,40 +2968,100 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Edit Content's "Update URL": the Build Your App website field, pre-filled with
- * the saved website. The button hands off to the existing build/review flow in
- * update mode — nothing in the app changes until that review is finished.
+ * Edit Content's "Update URL": the Build Your App website field recreated here,
+ * pre-filled with the saved website. It runs the existing import (replace the
+ * primary website source → analyzeBuild → applyBuildDraft) into the editor
+ * draft, so the refreshed information is reviewed here and published with Save.
  */
-function UpdateUrlSection({ dirty }: { dirty: boolean }) {
-  const router = useRouter();
+function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Brand) => void }) {
+  const { realtorId } = useAuth();
   const [url, setUrl] = useState("");
-  const [message, setMessage] = useState("");
+  const [urlFocused, setUrlFocused] = useState(false);
+  const [sources, setSources] = useState<BuildSource[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
   useEffect(() => {
     let alive = true;
     void loadBuild().then(saved => {
-      const primary = saved?.sources.find(source => source.kind === "url");
-      if (alive && primary) setUrl(current => current || primary.uri);
+      if (!alive || !saved) return;
+      setSources(saved.sources);
+      const primary = saved.sources.find(source => source.kind === "url");
+      if (primary) setUrl(current => current || primary.uri);
     }).catch(() => {});
     return () => { alive = false; };
   }, []);
-  const update = () => {
-    const uri = normalizeUrl(url);
-    if (!uri) { setMessage("Enter your website address first."); return; }
-    if (dirty) { setMessage("Save your edits first, then update from your URL."); return; }
-    setMessage("");
-    router.push({ pathname: "/admin/build", params: { update: uri } } as never);
+  /** https:// is assumed when left off; a hostname needs a dot to count. */
+  const normalizeUrl = (raw: string): string | null => {
+    const value = raw.trim();
+    if (!value) return null;
+    try {
+      const parsed = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+      if (parsed.protocol !== "https:" || !/\.[a-z]{2,}$/i.test(parsed.hostname)) return null;
+      return parsed.toString();
+    } catch { return null; }
   };
+  const websiteUri = normalizeUrl(url);
+  const websiteState: "empty" | "valid" | "invalid" = !url.trim() ? "empty" : websiteUri ? "valid" : "invalid";
+  const primarySource = sources.find(source => source.kind === "url") ?? null;
+
+  const update = async () => {
+    if (busy) return;
+    setBusy(true); setError("");
+    try {
+      if (!websiteUri) throw new Error("Check your website address, then try again.");
+      if (!realtorId) throw new Error("Sign in to save your sources.");
+      // Same rule as Build Your App: the website in the field replaces the older primary one.
+      if (primarySource?.uri !== websiteUri) {
+        const fresh: BuildSource = { id: randomUUID(), kind: "url", label: new URL(websiteUri).hostname, uri: websiteUri, status: "queued" };
+        const next = [fresh, ...sources.filter(source => source.id !== primarySource?.id)];
+        await saveBuildSources(realtorId, next);
+        setSources(next);
+      }
+      const saved = await analyzeBuild();
+      setSources(saved.sources);
+      const facts = resolveFacts(saved.evidence);
+      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft), layoutId: d.layoutId, theme: d.theme }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <View style={{ paddingHorizontal: 20 }}>
-      <WebsiteUrlField eyebrow="UPDATE URL" value={url} onChangeText={value => { setUrl(value); setMessage(""); }}
-        note="Updating your URL will replace information previously generated from your website. Some information may need to be reviewed or re-entered afterward.">
-        {message ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{message}</Text> : null}
-        <PressableScale accessibilityRole="button" onPress={update} haptic="medium" style={{ marginTop: 16 }}>
-          <View style={{ minHeight: 52, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center" }}>
-            <Text style={{ color: "#172027", fontSize: 16, fontWeight: "700" }}>Update From URL</Text>
+      <View style={{ marginTop: 30, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276",
+        backgroundColor: "rgba(194,162,118,0.08)" }}>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "600" }}>Update URL</Text>
+        <Text style={{ color: "#C8D0D0", lineHeight: 21, marginTop: 6 }}>
+          Updating the URL will replace information previously generated from the previous URL. You may need to review or re-enter some fields afterward.
+        </Text>
+        <View style={{ marginTop: 14, flexDirection: "row", alignItems: "center", borderRadius: 12, borderWidth: 1.5,
+          borderColor: websiteState === "valid" ? "#3FB37F" : websiteState === "invalid" && !urlFocused ? "#FF9C85" : "#7B858C",
+          backgroundColor: "#0C1014", paddingHorizontal: 14 }}>
+          <TextInput value={url} onChangeText={setUrl} onFocus={() => setUrlFocused(true)} onBlur={() => setUrlFocused(false)}
+            placeholder="yourwebsite.com" placeholderTextColor="#6F7A80" accessibilityLabel="Website or profile URL"
+            autoCapitalize="none" autoCorrect={false} keyboardType="url" returnKeyType="done"
+            style={{ flex: 1, color: "white", fontSize: 18, paddingVertical: 16 }} />
+          {websiteState === "valid" ? <View accessibilityLabel="Website looks good" style={{ width: 28, height: 28, borderRadius: 14,
+            backgroundColor: "#3FB37F", alignItems: "center", justifyContent: "center" }}>
+            <Check size={17} color="white" strokeWidth={3} />
+          </View> : null}
+        </View>
+        {websiteState === "invalid" && !urlFocused
+          ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 8 }}>That doesn’t look like a web address. Try something like yourname.com</Text>
+          : primarySource?.status === "failed" && primarySource.uri === websiteUri
+            ? <Text style={{ color: "#FFBAA9", marginTop: 8 }}>We couldn’t read this site{primarySource.error ? ` — ${primarySource.error}` : ""}</Text>
+            : websiteState === "valid" ? <Text style={{ color: "#8FD9B4", marginTop: 8 }}>Looks good</Text> : null}
+        {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{error}</Text> : null}
+        <PressableScale accessibilityRole="button" onPress={() => void update()} disabled={busy} haptic="medium" style={{ marginTop: 16 }}>
+          <View style={{ minHeight: 52, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
+            {busy ? <ActivityIndicator color="#172027" />
+              : <Text style={{ color: "#172027", fontSize: 16, fontWeight: "700" }}>Update From URL</Text>}
           </View>
         </PressableScale>
-      </WebsiteUrlField>
+        {busy ? <Text style={{ color: "#C8D0D0", marginTop: 10, textAlign: "center" }}>Reading your website and building your profile…</Text> : null}
+      </View>
     </View>
   );
 }
