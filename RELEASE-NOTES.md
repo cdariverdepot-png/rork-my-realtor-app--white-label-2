@@ -15,6 +15,12 @@ Realtor accounts use Supabase email + password on `/portal`. Confirmation `email
 
 Client accounts remain device-local (invite code + AsyncStorage). They are not shared across devices or Expo Go reinstalls.
 
+## Password recovery (link → set password)
+
+Forgot-password now emails a **recovery link** via `resetPasswordForEmail` (same localhost-vs-Pages redirect rules as signup). `/auth/callback` detects `type=recovery` / `type=invite` (and Supabase `PASSWORD_RECOVERY`) and routes to `/reset-password?mode=set` **without** calling `completeRealtorSignIn` first. That screen sets the password with `updateUser`, then opens the realtor session → `/admin` (or portal sign-in on soft failure).
+
+See `AUTH-SMOKE.md` for allowlist URLs, OAuth dashboard steps, and numbered manual tests.
+
 This branch adds:
 
 - Email confirmation / sign-in codes (`EmailCodeSignIn`, `emailSignIn.ts`)

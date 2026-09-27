@@ -122,7 +122,8 @@ test('setNewPassword updates user when recovery session exists', async () => {
     module,
     module.exports
   );
-  const { setNewPassword } = module.exports;
+  const { setNewPassword, setNewPasswordWhileAuthenticated } = module.exports;
+  assert.equal(typeof setNewPasswordWhileAuthenticated, 'function');
   assert.equal((await setNewPassword('secret1')).ok, true);
   assert.deepEqual(updated, { password: 'secret1' });
   assert.equal((await setNewPassword('short')).ok, false);
@@ -176,8 +177,15 @@ test('callback screen sends recovery to set-password before completeRealtorSignI
 test('reset-password screen is link-based with set mode', () => {
   const src = require('node:fs').readFileSync(require('node:path').join(__dirname, '..', 'app/reset-password.tsx'), 'utf8');
   assert.match(src, /requestResetLink/);
-  assert.match(src, /setNewPassword/);
+  assert.match(src, /setNewPasswordWhileAuthenticated/);
   assert.match(src, /mode === ['"]set['"]/);
   assert.match(src, /email you a link/);
   assert.doesNotMatch(src, /six-digit code/);
+});
+
+test('passwordResetRedirect mirrors signup localhost vs Pages rules', () => {
+  const { passwordResetRedirect, signupEmailRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect', {});
+  assert.equal(passwordResetRedirect('http://localhost:8081'), signupEmailRedirect('http://localhost:8081'));
+  assert.equal(passwordResetRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/auth/callback');
+  assert.equal(passwordResetRedirect(), PUBLISHED_AUTH_RETURN);
 });
