@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Linking, Platform, ScrollView, Share, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Platform, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import * as WebBrowser from "expo-web-browser";
@@ -13,6 +13,8 @@ import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 import { buildIcs, googleCalendarUrl, icsDataUrl } from "@/lib/buildIcs";
 import { useBrand } from "@/contexts/BrandContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { isForClient } from "@/lib/audience";
 
 function fmtFull(t: number): { day: string; weekday: string; month: string; time: string } {
   const d = new Date(t);
@@ -39,7 +41,17 @@ export default function CalendarScreen() {
   const { brand: b } = useBrand();
   const realtor = b.realtor;
   const firstName = realtor.name.split(" ")[0] ?? realtor.name;
-  const { items, upsert } = useAppointments();
+  const { items: allItems, upsert } = useAppointments();
+  const { isClient, isAdmin, currentClientId } = useAuth();
+  // Clients see their own and general appointments — never other clients' or
+  // the realtor's imported personal calendar.
+  const items = useMemo(() => !isClient ? allItems
+    : allItems.filter((a) => a.source !== "imported" && isForClient(a.recipientIds, currentClientId)), [allItems, isClient, currentClientId]);
+  const previewOnly = () => {
+    if (!isAdmin || isClient) return false;
+    Alert.alert("Preview only", "In your clients' app this updates the appointment for you.");
+    return true;
+  };
 
   const { upcoming, past } = useMemo(() => {
     const now = Date.now();
@@ -51,11 +63,13 @@ export default function CalendarScreen() {
   }, [items]);
 
   const confirm = (a: Appointment) => {
+    if (previewOnly()) return;
     upsert({ ...a, status: "confirmed" });
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const askReschedule = (a: Appointment) => {
+    if (previewOnly()) return;
     upsert({ ...a, status: "rescheduled" });
   };
 

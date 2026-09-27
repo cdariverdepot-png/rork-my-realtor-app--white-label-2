@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { brand, fonts } from "@/constants/colors";
 import { useBrand } from "@/contexts/BrandContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { leavePreviewToDashboard } from "@/lib/navIntent";
 import { useAmbient } from "@/lib/timeOfDay";
 import { CalendarCheck, Globe, LayoutDashboard } from "lucide-react-native";
 import PressableScale from "./PressableScale";
@@ -13,7 +14,7 @@ import { bookConsultation } from "@/lib/contact";
 
 export default React.memo(function Footer() {
   const router = useRouter();
-  const { isClient, isAdmin, demoViewMode } = useAuth();
+  const { isClient, isAdmin, demoViewMode, viewAsClient, exitViewAsClient } = useAuth();
   const { brand: b, theme } = useBrand();
   const ambient = useAmbient();
   const realtor = b.realtor;
@@ -100,7 +101,10 @@ export default React.memo(function Footer() {
         </PressableScale>
 
         {!demoViewMode && <PressableScale
-          onPress={() => router.push(isClient ? "/account" : isAdmin ? "/admin" : "/portal?entry=realtor")}
+          onPress={() => isAdmin && viewAsClient
+            // Leaving the client preview: same clean exit as its Back button.
+            ? leavePreviewToDashboard(path => router.replace(path), exitViewAsClient)
+            : router.push(isClient ? "/account" : isAdmin ? "/admin" : "/portal?entry=realtor")}
           hitSlop={8}
           haptic="selection"
           scaleTo={0.97}

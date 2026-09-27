@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   ActivityIndicator,
   Alert,
@@ -292,7 +293,7 @@ export default function CalendarImportScreen() {
         <Pressable
           hitSlop={12}
           onPress={() => {
-            if (step === "list") router.back();
+            if (step === "list") backOr(router);
             else if (step === "review") finishReview();
             else if (step === "url") setStep("method");
             else if (step === "method") setStep("source");

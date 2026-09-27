@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Animated, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
-import { useRouter } from "expo-router";
+import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from "lucide-react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
-import { navIntent } from "@/lib/navIntent";
+import { leavePreviewToDashboard } from "@/lib/navIntent";
 import { useAuth } from "@/contexts/AuthContext";
 import { setConsultInfo } from "@/lib/contact";
 import { useListings } from "@/contexts/ListingsContext";
@@ -60,22 +60,24 @@ export default function Home() {
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
 
-  // Redirect admins to dashboard — unless they're previewing the client side
-  useEffect(() => {
+  // Redirect admins to dashboard — unless they're previewing the client side.
+  // Only while this screen is focused: a copy sitting under other screens (or
+  // leaving mid-transition) must not fire a second redirect.
+  useFocusEffect(useCallback(() => {
     if (!hydrated) return;
     if (isAuthenticated && isAdmin && !viewAsClient) {
       router.replace("/admin");
     }
-  }, [hydrated, isAuthenticated, isAdmin, viewAsClient, router]);
+  }, [hydrated, isAuthenticated, isAdmin, viewAsClient, router]));
 
   // A valid invite creates the relationship, but never grants the app before
   // the required client profile has been saved. The profile context is scoped
   // to the authenticated realtor/client pair and preserves partial answers.
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     if (hydrated && profilesHydrated && isClient && !demoViewMode && !myProfileShared) {
       router.replace("/client-profile");
     }
-  }, [hydrated, profilesHydrated, isClient, demoViewMode, myProfileShared, router]);
+  }, [hydrated, profilesHydrated, isClient, demoViewMode, myProfileShared, router]));
 
   // Preview admin bypass — show pure Eliza Vance demo client experience
   const handleExploreDemo = useCallback(async () => {
@@ -199,30 +201,31 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const router = useRouter();
   const { isFavorited, toggleListing } = useFavorites();
   const [demoThemeDraft, setDemoThemeDraft] = useState<Brand | null>(null);
-  const { viewAsClient, demoViewMode, exitViewAsClient, exitDemoView } = useAuth();
+  const { viewAsClient, demoViewMode, exitViewAsClient, exitDemoView, isAdmin, isPreviewAdmin } = useAuth();
   const { editing, dirty, cancel, save, guardExit, previewBrand, previewListings } =
     useEditMode();
 
-  // Exiting the realtor's own template preview — go back to admin.
-  const exitTemplate = useCallback(() => {
-    guardExit(() => {
-      // Navigate first, animated as a "back", and only drop the preview flag once
-      // the dashboard is in place. Clearing it first re-rendered this screen
-      // mid-exit (snapping it back into view) and fired a second redirect.
-      navIntent.replaceAsBack = true;
-      router.replace("/admin");
-      setTimeout(() => {
-        exitViewAsClient();
-        navIntent.replaceAsBack = false;
-      }, 400);
-    });
-  }, [guardExit, exitViewAsClient, router]);
-
-  // Exiting the Eliza Vance demo showcase.
-  const exitDemo = useCallback(async () => {
-    await exitDemoView();
-    router.replace("/");
-  }, [exitDemoView, router]);
+  // Leaving a preview (the realtor's own app or the demo) for the dashboard.
+  // The page slides aside first (the swipe has already done this), then the
+  // dashboard comes in from the left; the leaving page stays aside until then.
+  const edgeX = useRef(new Animated.Value(0)).current;
+  const leavePreview = useCallback((slide: boolean) => {
+    const go = () => {
+      if (demoViewMode && !(isAdmin && !isPreviewAdmin)) {
+        // Logged-out demo visitors return to the landing screen, as before.
+        edgeX.setValue(0);
+        void exitDemoView().then(() => router.replace("/"));
+        return;
+      }
+      guardExit(() => leavePreviewToDashboard(path => router.replace(path),
+        demoViewMode ? () => void exitDemoView() : exitViewAsClient));
+      setTimeout(() => edgeX.setValue(0), 700);
+    };
+    if (slide) Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true }).start(go);
+    else go();
+  }, [demoViewMode, isAdmin, isPreviewAdmin, guardExit, exitViewAsClient, exitDemoView, router, edgeX]);
+  const exitTemplate = useCallback(() => leavePreview(true), [leavePreview]);
+  const exitDemo = exitTemplate;
   const { refresh: refreshListings } = useListings();
   const { refresh: refreshBrand } = useBrand();
   const { refresh: refreshFeed } = useClientFeed();
@@ -290,8 +293,14 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     </View>
   </>;
 
+  // Android back while previewing leaves the preview instead of closing the app.
+  useFocusEffect(useCallback(() => {
+    if (!viewAsClient || previewingDraft) return;
+    const sub = BackHandler.addEventListener("hardwareBackPress", () => { exitTemplate(); return true; });
+    return () => sub.remove();
+  }, [viewAsClient, previewingDraft, exitTemplate]));
+
   // Left-edge swipe back to the dashboard while previewing as a client.
-  const edgeX = useRef(new Animated.Value(0)).current;
   const edgeBack = useMemo(() => Gesture.Pan()
     .enabled(viewAsClient && !previewingDraft && !editing)
     .hitSlop({ left: 0, width: 32 })
@@ -301,18 +310,14 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     .onUpdate(e => { edgeX.setValue(Math.max(0, e.translationX)); })
     .onEnd(e => {
       if (e.translationX > 90 || e.velocityX > 700) {
-        Animated.timing(edgeX, { toValue: 420, duration: 160, useNativeDriver: true }).start(() => {
-          if (demoViewMode) { edgeX.setValue(0); void exitDemo(); return; }
-          // Stay pulled aside while the dashboard comes in; reset once it has.
-          exitTemplate();
-          setTimeout(() => edgeX.setValue(0), 700);
-        });
+        Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true })
+          .start(() => leavePreview(false));
       } else {
         Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start();
       }
     })
     .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(); }),
-  [viewAsClient, demoViewMode, previewingDraft, editing, edgeX, exitTemplate, exitDemo]);
+  [viewAsClient, previewingDraft, editing, edgeX, leavePreview]);
   useEffect(() => {
     Animated.timing(bannerAnim, {
       toValue: refreshing ? 1 : 0,

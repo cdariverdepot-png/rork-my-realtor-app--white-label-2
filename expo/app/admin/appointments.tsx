@@ -321,7 +321,9 @@ export default function AdminAppointments() {
                   <Text style={styles.rowTitle}>{a.listingTitle}</Text>
                   <Text style={styles.rowMeta}>
                     {dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })} · by{" "}
-                    {a.createdBy}
+                    {a.createdBy === "client"
+                      ? clients.find(c => a.recipientIds?.includes(c.id))?.name ?? "client"
+                      : a.createdBy}
                   </Text>
                 </View>
                 {a.status === "requested" && (

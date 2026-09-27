@@ -1,4 +1,5 @@
 import createContextHook from "@nkzw/create-context-hook";
+import { cancelPendingPreviewExit } from "@/lib/navIntent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import { getRandomBytes } from "expo-crypto";
@@ -373,6 +374,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
   /** Realtor previews their own client-facing app (template). Transient — never persisted. */
   const enterViewAsClient = useCallback((): void => {
+    cancelPendingPreviewExit();
     setDemoViewMode(false);
     setViewAsClient(true);
   }, []);
@@ -383,6 +385,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
   /** Enter the Eliza Vance demo showcase — forces the demo brand and hides all edit UI. */
   const enterDemoView = useCallback((): void => {
+    cancelPendingPreviewExit();
     setDemoViewMode(true);
     setViewAsClient(true);
   }, []);
@@ -418,7 +421,16 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         return { ok: false, error: "Enter a valid email address." };
       if (password.length < 6)
         return { ok: false, error: "Password must be at least 6 characters." };
-      if (accounts.some((a) => a.email === email)) {
+      // Accounts live under the realtor they belong to. Nobody is signed in yet
+      // during signup, so read (and below, write) that realtor's list directly.
+      const accKey = `${ACCOUNTS_KEY_PREFIX}${input.realtorId}`;
+      let realmAccounts: ClientAccount[] = [];
+      try {
+        const raw = await AsyncStorage.getItem(accKey);
+        const parsed = raw ? JSON.parse(raw) as ClientAccount[] : [];
+        if (Array.isArray(parsed)) realmAccounts = parsed;
+      } catch {}
+      if (realmAccounts.some((a) => a.email === email)) {
         return {
           ok: false,
           error: "An account already exists for this email. Try signing in.",
@@ -450,9 +462,13 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         realtorId: input.realtorId,
         createdAt: Date.now(),
       };
-      const nextAccounts = [account, ...accounts];
+      const nextAccounts = [account, ...realmAccounts];
       setAccounts(nextAccounts);
-      void persistAccounts(nextAccounts);
+      try {
+        await AsyncStorage.setItem(accKey, JSON.stringify(nextAccounts));
+      } catch (e) {
+        console.log("[auth] persist accounts error", e);
+      }
 
       // Save the client onto the realtor's roster under the CORRECT realtorId,
       // independent of any session-scoped context. This is what stops new
@@ -482,7 +498,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       await persistSession(next);
       return { ok: true, clientId };
     },
-    [accounts, persistAccounts, persistSession]
+    [persistSession]
   );
 
   /**
@@ -577,6 +593,9 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
   const logout = useCallback(async () => {
     if (session?.role === "admin" && supabase) await supabase.auth.signOut();
+    // Preview flags are per signed-in session; never carry them to the next person.
+    setViewAsClient(false);
+    setDemoViewMode(false);
     setSession(null);
     await persistSession(null);
   }, [persistSession, session?.role]);

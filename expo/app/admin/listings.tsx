@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   ActivityIndicator,
   Alert,
@@ -148,7 +149,7 @@ export default function AdminListings() {
 
       {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
-        <Pressable onPress={tap(() => router.back())} hitSlop={10} style={styles.iconBtn}>
+        <Pressable onPress={tap(() => backOr(router))} hitSlop={10} style={styles.iconBtn}>
           <ChevronLeft size={18} color={admin.goldLight} strokeWidth={1.7} />
         </Pressable>
         <View style={styles.headerTitleWrap}>

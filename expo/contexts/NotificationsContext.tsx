@@ -1,4 +1,5 @@
 import createContextHook from "@nkzw/create-context-hook";
+import { isForClient } from "@/lib/audience";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
@@ -27,7 +28,9 @@ const SEED: NotifItem[] = [
 ];
 
 export const [NotificationsProvider, useNotifications] = createContextHook(() => {
-  const { realtorId, session, isAdmin, demoViewMode } = useAuth();
+  const { realtorId, session, isAdmin, demoViewMode, currentClientId } = useAuth();
+  /** What this viewer may see: realtor-only items for realtors; targeted items only for their clients. */
+  const visibleTo = useCallback((n: NotifItem) => (n.audience !== "realtor" || isAdmin) && isForClient(n.recipientIds, currentClientId), [isAdmin, currentClientId]);
   const scope = realtorId ? realtorId : "demo";
   const STORAGE_KEY = `${scope}:notifs.v1`;
   const CHANNEL = `${scope}:notifs`;
@@ -78,12 +81,12 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
     ch.on("broadcast", { event: "push" }, (payload) => {
       const n = payload.payload as NotifItem; if (!n?.id) return;
       setItems((prev) => { if (prev.some((p) => p.id === n.id)) return prev; const next = [n, ...prev]; void persist(next); return next; });
-      if (n.audience !== "realtor" || isAdmin) { void presentLocal(n); surface(n); }
+      if (visibleTo(n)) { void presentLocal(n); surface(n); }
       bumpRev();
     });
     ch.subscribe(); channelRef.current = ch;
     return () => { ch.unsubscribe(); channelRef.current = null; };
-  }, [hydrated, persist, presentLocal, surface, bumpRev, CHANNEL, isAdmin]);
+  }, [hydrated, persist, presentLocal, surface, bumpRev, CHANNEL, visibleTo]);
 
   const applyRemote = useCallback((row: { value: NotifItem[]; rev: number }, meta?: { initial?: boolean; forced?: boolean }) => {
     if (!Array.isArray(row?.value)) return;
@@ -153,8 +156,9 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
   }, [persist, surface, bumpRev, realtorId, demoViewMode]);
 
   const markAllRead = useCallback(() => {
-    setItems((prev) => { const next = prev.map((n) => ({ ...n, read: true })); void persist(next); return next; }); bumpRev();
-  }, [persist, bumpRev]);
+    // Only what this viewer can see — never items meant for the realtor or other clients.
+    setItems((prev) => { const next = prev.map((n) => (visibleTo(n) ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
+  }, [persist, bumpRev, visibleTo]);
   const markRead = useCallback((id: string) => {
     setItems((prev) => { const next = prev.map((n) => (n.id === id ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
   }, [persist, bumpRev]);
@@ -174,7 +178,7 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
       data: { clientId, route: "/admin/clients" } });
   }, [realtorId, demoViewMode, persist, bumpRev]);
 
-  const visibleItems = items.filter(n => n.audience !== "realtor" || isAdmin);
+  const visibleItems = items.filter(visibleTo);
   const unreadCount = visibleItems.filter((n) => !n.read).length;
 
   return { items: visibleItems, hydrated, permission, unreadCount, foreground, dismissForeground, requestPermission, broadcastFromRealtor, notifyClientJoined, markAllRead, markRead, refresh, pushToken: pushTokenRef.current };

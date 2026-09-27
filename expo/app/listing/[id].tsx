@@ -43,7 +43,8 @@ export default function ListingDetail() {
   const { all, hydrated } = useListings();
   const { isFavorited, toggleListing } = useFavorites();
   const { recordView } = useEngagement();
-  const item = all.find((l) => l.id === id) ?? all[0];
+  // Never fall back to a different home: a stale link must not show (or book) the wrong listing.
+  const item = all.find((l) => l.id === id);
 
   useEffect(() => {
     if (item?.id) recordView(item.id);
@@ -53,7 +54,14 @@ export default function ListingDetail() {
     return <ListingDetailSkeleton />;
   }
   if (!item) {
-    return <View style={[styles.root, { alignItems: "center", justifyContent: "center" }]} />;
+    return (
+      <View style={[styles.root, { alignItems: "center", justifyContent: "center", padding: 32 }]}>
+        <Text style={{ fontFamily: fonts.serif, color: brand.ink, fontSize: 20, textAlign: "center" }}>This home is no longer available.</Text>
+        <PressableScale onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))} haptic="selection" style={{ marginTop: 18 }}>
+          <Text style={{ fontFamily: fonts.sansSemi, color: brand.ink, fontSize: 14, letterSpacing: 1.4 }}>GO BACK</Text>
+        </PressableScale>
+      </View>
+    );
   }
 
   return (

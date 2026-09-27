@@ -51,6 +51,10 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
       else if (path !== "/") redirectTo = "/";
     } else if (!publicRoute && auth.isAdmin &&
       realtorSetupState(brand.savedBrand, auth.realtorRecord?.client_code_enabled === true) === "setup-incomplete" &&
+      // Only before setup has ever been finished. Afterwards a gap saved from Edit
+      // Content is fixed there (Studio says what's still needed) — it must not
+      // throw a live realtor back into Build Your App.
+      auth.realtorRecord?.client_code_enabled !== true &&
       path !== "/admin/build") {
       redirectTo = "/admin/build";
     } else if (!publicRoute && auth.isClient &&

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react";
+import { backOr } from "@/lib/navIntent";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -63,7 +64,7 @@ export default function AdminMessages() {
     <View style={styles.root}>
       <ScreenBackdrop screen="adminMessages" intensity="deep" />
       <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
-        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.back}>
+        <Pressable hitSlop={12} onPress={() => backOr(router)} style={styles.back}>
           <ChevronLeft size={20} color={dark.text} strokeWidth={1.6} />
         </Pressable>
         <View style={{ flex: 1 }}>

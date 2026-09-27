@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,6 +16,7 @@ import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
 import { useBrand } from "@/contexts/BrandContext";
 import { useListings } from "@/contexts/ListingsContext";
 import { useAppointments } from "@/contexts/AppointmentsContext";
+import { useAuth } from "@/contexts/AuthContext";
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
@@ -51,6 +53,7 @@ export default function BookShowing() {
   const invited = params.invite === "1";
   const { visible } = useListings();
   const { upsert } = useAppointments();
+  const { isAdmin, isClient, currentClientId } = useAuth();
   const listings = visible.length ? visible : [];
   const days = useMemo(() => nextDays(10), []);
 
@@ -62,6 +65,11 @@ export default function BookShowing() {
   const [done, setDone] = useState<boolean>(false);
 
   const confirm = () => {
+    // A realtor previewing their app must not create a real request in their own calendar.
+    if (isAdmin && !isClient) {
+      Alert.alert("Preview only", "In your clients' app this sends you a viewing request with their name.");
+      return;
+    }
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     const dt = new Date(day);
     const [hh, mm] = time.split(":").map(Number);
@@ -75,6 +83,8 @@ export default function BookShowing() {
       durationMin: 45,
       status: "requested",
       createdBy: "client",
+      // Who asked — so the realtor can see and confirm with the right client.
+      recipientIds: currentClientId ? [currentClientId] : undefined,
       updatedAt: Date.now(),
     });
     setDone(true);

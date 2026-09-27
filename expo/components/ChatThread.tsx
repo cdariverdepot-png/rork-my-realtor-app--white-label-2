@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -58,7 +59,7 @@ export default function ChatThread({
 }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { messages, otherTyping, send, setTyping, markRead } = useMessages();
+  const { messages, otherTyping, send, setTyping, markRead, hasThread } = useMessages();
   const { all: allListings } = useListings();
   const { items: docs } = useDocuments();
   const { replies, custom, add, remove, update } = useQuickReplies();
@@ -86,6 +87,12 @@ export default function ChatThread({
 
   const onSubmit = () => {
     if (!text.trim() && !pending) return;
+    // No conversation to send into (e.g. the realtor's client preview): say so
+    // instead of clearing the text as if it had been sent.
+    if (!hasThread) {
+      Alert.alert("Preview only", "In your clients' app this sends straight to your Messages inbox.");
+      return;
+    }
     if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     send(role, text.trim() || (pending?.kind === "listing" ? "Sharing this listing." : "Sharing a document."), {
       listingId: pending?.kind === "listing" ? pending.id : undefined,

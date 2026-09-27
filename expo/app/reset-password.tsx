@@ -129,7 +129,9 @@ export default function ResetPassword() {
 
   const back = () => {
     if (stage === "sent") setStage("request");
-    else router.back();
+    // Opened from the email link there may be no history to go back to.
+    else if (router.canGoBack()) router.back();
+    else router.replace("/portal?entry=realtor");
   };
 
   return (

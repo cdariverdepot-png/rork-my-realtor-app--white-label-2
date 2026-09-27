@@ -33,6 +33,7 @@ import {
   type Transaction,
 } from "@/contexts/DocumentsContext";
 import ModalChrome from "@/components/ModalChrome";
+import { useAuth } from "@/contexts/AuthContext";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
@@ -122,7 +123,16 @@ function StatusTimeline({ d }: { d: DocItem }) {
 }
 
 export default function DocumentsScreen() {
-  const { items, transactions, markViewed } = useDocuments();
+  const { items: allItems, transactions, markViewed } = useDocuments();
+  const { isClient, currentClientId: me } = useAuth();
+  // A client sees documents for everyone plus those addressed to them (directly
+  // or through their transaction) — never another client's paperwork.
+  const items = useMemo(() => !me ? allItems : allItems.filter((d) => {
+    const tx = d.transactionId ? transactions.find((t) => t.id === d.transactionId) : undefined;
+    if (d.recipientIds?.length) return d.recipientIds.includes(me) || !!tx?.clientIds?.includes(me);
+    if (tx?.clientIds?.length) return tx.clientIds.includes(me);
+    return true;
+  }), [allItems, transactions, me]);
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   const toggleFolder = (id: string) => {
@@ -132,7 +142,8 @@ export default function DocumentsScreen() {
 
   const open = async (d: DocItem) => {
     if (Platform.OS !== "web") Haptics.selectionAsync();
-    if (d.kind === "portal") markViewed(d.id);
+    // Only a real client opening it counts as "viewed" — not the realtor's preview.
+    if (d.kind === "portal" && isClient) markViewed(d.id);
     try {
       if (d.uri.startsWith("http")) {
         await WebBrowser.openBrowserAsync(d.uri);

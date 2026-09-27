@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   ActivityIndicator,
   Alert,
+  BackHandler,
   Animated,
   Easing,
   KeyboardAvoidingView,
@@ -17,7 +19,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import NeutralContentCanvas from "@/components/NeutralContentCanvas";
 import PressableScale from "@/components/PressableScale";
 import { checkSite, useSiteCheck } from "@/lib/siteCheck";
@@ -382,13 +384,17 @@ export default function StudioScreen() {
     return () => setDraftPreview(null);
   }, [setDraftPreview]);
 
+  /** Bumped on every edit, so a save only clears edits it actually included. */
+  const editGen = useRef(0);
   const setBrand = (mutator: (d: Brand) => Brand) => {
+    editGen.current += 1;
     setDraft((d) => mutator(d));
     setDirty(true);
   };
 
   const save = async () => {
     if (saving) return;
+    const savedGen = editGen.current;
     setSaving(true);
     try {
       if (params.section !== "theme" && Object.keys(listingEdits).length) {
@@ -401,9 +407,13 @@ export default function StudioScreen() {
       return;
     }
     setSaving(false);
-    setDraftPreview(null);
-    setDirty(false);
-    setListingEdits({});
+    // Edits made while the save was in flight stay in the draft, still unsaved.
+    const clean = editGen.current === savedGen;
+    if (clean) {
+      setDraftPreview(null);
+      setDirty(false);
+      setListingEdits({});
+    }
     // Work is never held hostage — edits always save. What changes below the
     // floor is the promise: this is stored, but it is not yet a finished app.
     flashConfirm(
@@ -418,7 +428,7 @@ export default function StudioScreen() {
     }
     // Show the finished result: after saving, open the app as clients will see it
     // (Back or a swipe from the left edge returns to the dashboard).
-    if (required.complete) {
+    if (required.complete && clean) {
       enterViewAsClient();
       router.replace("/");
     }
@@ -447,7 +457,7 @@ export default function StudioScreen() {
   const leave = () => {
     if (!dirty) {
       setDraftPreview(null);
-      router.back();
+      backOr(router);
       return;
     }
     if (Platform.OS === "web") {
@@ -457,7 +467,7 @@ export default function StudioScreen() {
       } else {
         setDraftPreview(null);
       }
-      router.back();
+      backOr(router);
       return;
     }
     Alert.alert("Unsaved changes", "Save your edits before leaving?", [
@@ -467,7 +477,7 @@ export default function StudioScreen() {
         style: "destructive",
         onPress: () => {
           setDraftPreview(null);
-          router.back();
+          backOr(router);
         },
       },
       {
@@ -479,6 +489,16 @@ export default function StudioScreen() {
     ]);
   };
 
+  // The iOS back swipe and Android back button must go through the same
+  // unsaved-edits prompt as the Back arrow instead of silently dropping edits.
+  const leaveRef = useRef(leave);
+  leaveRef.current = leave;
+  useFocusEffect(useCallback(() => {
+    if (!dirty) return;
+    const sub = BackHandler.addEventListener("hardwareBackPress", () => { leaveRef.current(); return true; });
+    return () => sub.remove();
+  }, [dirty]));
+
   const headTitle = useMemo(() => SECTIONS.find((s) => s.id === active)?.label ?? "", [active]);
 
   if (!hydrated || !isAdmin) {
@@ -487,6 +507,7 @@ export default function StudioScreen() {
 
   return (
     <View style={styles.root}>
+      <Stack.Screen options={{ gestureEnabled: !dirty }} />
 
       <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
         <Pressable hitSlop={12} onPress={leave} style={styles.iconBtn}>
@@ -552,7 +573,7 @@ export default function StudioScreen() {
           {params.section === "theme" ? <ThemeSection draft={draft} setBrand={setBrand} /> :
             <NeutralContentCanvas draft={draft} onChange={setBrand}
               listings={liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
-              onListingChange={(id, patch) => { setListingEdits(edits => ({ ...edits, [id]: { ...edits[id], ...patch } })); setDirty(true); }} details={{
+              onListingChange={(id, patch) => { editGen.current += 1; setListingEdits(edits => ({ ...edits, [id]: { ...edits[id], ...patch } })); setDirty(true); }} details={{
               hero: <><ProfileSection draft={draft} setBrand={setBrand} /><HeroSection draft={draft} setBrand={setBrand} /></>,
               note: <NoteSection draft={draft} setBrand={setBrand} />,
               credentials: <CredentialsSection draft={draft} setBrand={setBrand} />,
@@ -2979,12 +3000,16 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
   const [url, setUrl] = useState("");
   const [urlFocused, setUrlFocused] = useState(false);
   const [sources, setSources] = useState<BuildSource[]>([]);
+  /** Saved sources must be loaded first, or an update would overwrite them with just the URL. */
+  const [sourcesLoaded, setSourcesLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   useEffect(() => {
     let alive = true;
     void loadBuild().then(saved => {
-      if (!alive || !saved) return;
+      if (!alive) return;
+      setSourcesLoaded(true);
+      if (!saved) return;
       setSources(saved.sources);
       const primary = saved.sources.find(source => source.kind === "url");
       if (primary) setUrl(current => current || primary.uri);
@@ -3015,10 +3040,17 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
       if (!websiteUri) throw new Error("Check your website address, then try again.");
       if (await checkSite(websiteUri) === "missing") throw new Error("We couldn’t find that website. Check the address and try again.");
       if (!realtorId) throw new Error("Sign in to save your sources.");
+      let current = sources;
+      if (!sourcesLoaded) {
+        current = (await loadBuild())?.sources ?? [];
+        setSources(current);
+        setSourcesLoaded(true);
+      }
+      const primary = current.find(source => source.kind === "url") ?? null;
       // Same rule as Build Your App: the website in the field replaces the older primary one.
-      if (primarySource?.uri !== websiteUri) {
+      if (primary?.uri !== websiteUri) {
         const fresh: BuildSource = { id: randomUUID(), kind: "url", label: new URL(websiteUri).hostname, uri: websiteUri, status: "queued" };
-        const next = [fresh, ...sources.filter(source => source.id !== primarySource?.id)];
+        const next = [fresh, ...current.filter(source => source.id !== primary?.id)];
         await saveBuildSources(realtorId, next);
         setSources(next);
       }

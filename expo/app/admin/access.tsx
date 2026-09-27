@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   Alert,
   Platform,
@@ -65,7 +66,7 @@ export default function AccessSettings() {
   return (
     <View style={styles.root}>
       <View style={[styles.topBar, { paddingTop: insets.top + 12 }]}>
-        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.iconBtn}>
+        <Pressable hitSlop={12} onPress={() => backOr(router)} style={styles.iconBtn}>
           <ArrowLeft size={18} color={brand.ivory} strokeWidth={1.5} />
         </Pressable>
         <Text style={styles.topTitle}>ACCESS</Text>

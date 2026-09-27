@@ -11,12 +11,15 @@ type Change = (mutator: (brand: Brand) => Brand) => void;
 const labels: Record<ClientSectionId, string> = { hero: "Your introduction", listings: "Properties", note: "Personal note", credentials: "Credentials", beat: "Market update", quickContact: "Contact", concierge: "Concierge", social: "Client stories & recent sales", support: "Consultations", footer: "Footer" };
 
 /** Editor-only placeholders never enter the canonical content model. */
-function Copy({ label, value, onChange, large = false }: { label: string; value: string; onChange: (value: string) => void; large?: boolean }) {
+/** `fallback` is what the app shows when the field is empty (e.g. the tagline); it is never written back. */
+function Copy({ label, value, onChange, large = false, fallback = "" }: { label: string; value: string; onChange: (value: string) => void; large?: boolean; fallback?: string }) {
   const [editing, setEditing] = useState(false);
+  const shown = value.trim() ? value : fallback;
   return editing ? <TextInput autoFocus multiline accessibilityLabel={label} value={value} onChangeText={onChange}
+    placeholder={fallback || undefined} placeholderTextColor="#999"
     onBlur={() => setEditing(false)} style={{ color: "#222", fontSize: large ? 28 : 16, lineHeight: large ? 35 : 25, padding: 10, borderWidth: 1, borderColor: "#777", borderRadius: 6, minHeight: 48 }} /> :
     <Pressable accessibilityRole="button" accessibilityLabel={`Edit ${label}`} onPress={() => setEditing(true)} style={{ minHeight: 44, justifyContent: "center" }}>
-      <Text style={{ color: value.trim() ? "#222" : "#777", fontSize: large ? 28 : 16, lineHeight: large ? 35 : 25 }}>{value.trim() ? value : `Tap to add ${label.toLowerCase()}`}</Text>
+      <Text style={{ color: shown.trim() ? "#222" : "#777", fontSize: large ? 28 : 16, lineHeight: large ? 35 : 25 }}>{shown.trim() ? shown : `Tap to add ${label.toLowerCase()}`}</Text>
     </Pressable>;
 }
 
@@ -28,7 +31,7 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
   const context = { brand: draft, visibleListingCount: all.filter(l => !l.hidden).length };
   const hidden = CLIENT_SECTIONS.filter(s => !s.structural && sectionState(draft, s.id, s.isReady(context)) === "hidden");
   const identity = (key: keyof Brand["realtor"], value: string) => onChange(b => ({ ...b, realtor: { ...b.realtor, [key]: value } }));
-  const copy = (label: string, value: string, change: (text: string) => void, large = false) => <Copy label={label} value={value} onChange={change} large={large} />;
+  const copy = (label: string, value: string, change: (text: string) => void, large = false, fallback = "") => <Copy label={label} value={value} onChange={change} large={large} fallback={fallback} />;
   const portrait = async () => {
     if (uploading) return;
     setUploading(true);
@@ -49,7 +52,7 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
           {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }} contentFit="contain" style={{ height: 260, backgroundColor: "#eee", borderRadius: 8 }} /> : <View style={{ height: 180, backgroundColor: "#eee", justifyContent: "center", alignItems: "center" }}><Text>Tap to add your portrait</Text></View>}
           <Text style={{ color: "#666", paddingVertical: 10 }}>{uploading ? "Loading image…" : "Tap image to replace · original proportions"}</Text>
         </Pressable>
-        {copy("Opening line", draft.realtor.heroMessage || draft.realtor.tagline, v => identity("heroMessage", v), true)}
+        {copy("Opening line", draft.realtor.heroMessage, v => identity("heroMessage", v), true, draft.realtor.tagline)}
         {copy("Full name", draft.realtor.name, v => identity("name", v))}
         {copy("Professional title", draft.realtor.title, v => identity("title", v))}
         {copy("City or region", draft.realtor.city, v => identity("city", v))}

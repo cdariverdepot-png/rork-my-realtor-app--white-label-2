@@ -272,7 +272,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
   const saveListings = useCallback(async (next: ManagedListing[]) => {
     if (demoViewMode) throw new Error("The demo is read-only.");
     const rev = Math.max(revRef.current + 1, Date.now());
-    if (supabase) await kvSet(KV_KEY, next, rev, true);
+    if (supabase) await kvSet(KV_KEY, { items: next }, rev, true);
     await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(next)], [REVISION_KEY, String(rev)]]);
     revRef.current = rev;
     setItems(next);

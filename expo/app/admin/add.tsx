@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -239,7 +240,7 @@ export default function AddListing() {
         >
           {/* Header */}
           <View style={styles.header}>
-            <Pressable hitSlop={12} onPress={() => router.back()} style={styles.backBtn}>
+            <Pressable hitSlop={12} onPress={() => backOr(router)} style={styles.backBtn}>
               <ArrowLeft size={18} color={dark.gold} strokeWidth={1.7} />
             </Pressable>
             <View style={{ flex: 1 }}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   ActivityIndicator,
   Alert,
@@ -206,7 +207,7 @@ export default function ClientsImport() {
   return (
     <View style={styles.root}>
       <View style={styles.topBar}>
-        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.iconBtn}>
+        <Pressable hitSlop={12} onPress={() => backOr(router)} style={styles.iconBtn}>
           <ArrowLeft size={18} color={brand.ivory} strokeWidth={1.5} />
         </Pressable>
         <Text style={styles.topTitle}>IMPORT CONTACTS</Text>

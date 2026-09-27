@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from "react";
+import { backOr } from "@/lib/navIntent";
 import { Linking, Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -94,7 +95,7 @@ export default function AdminClientProfile() {
             ctaLabel="NUDGE THEM"
             onCtaPress={() => {
               if (contact?.email) Linking.openURL(`mailto:${contact.email}`);
-              else router.back();
+              else backOr(router);
             }}
           />
         </View>

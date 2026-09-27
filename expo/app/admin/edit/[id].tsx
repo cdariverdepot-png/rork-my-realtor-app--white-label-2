@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { backOr } from "@/lib/navIntent";
 import {
   ActivityIndicator,
   Alert,
@@ -47,16 +48,20 @@ export default function EditListing() {
 
   const [draft, setDraft] = useState<ManagedListing | null>(original ?? null);
 
+  // Seed the draft once per listing. Re-seeding on every listings change (a sync
+  // echo, a refresh) wiped whatever was being typed.
+  const seededFor = useRef<string | null>(original ? id ?? null : null);
   useEffect(() => {
-    if (!original) return;
+    if (!original || seededFor.current === id) return;
+    seededFor.current = id ?? null;
     setDraft(original);
-  }, [original]);
+  }, [original, id]);
 
   if (!draft) {
     return (
       <View style={[styles.root, { alignItems: "center", justifyContent: "center" }]}>
         <Text style={{ fontFamily: fonts.serif, color: brand.textOnDarkMuted }}>Listing not found.</Text>
-        <Pressable onPress={() => router.back()} style={{ marginTop: 12 }}>
+        <Pressable onPress={() => backOr(router)} style={{ marginTop: 12 }}>
           <Text style={{ fontFamily: fonts.sansSemi, color: brand.gold, letterSpacing: 1.5 }}>
             GO BACK
           </Text>
@@ -74,7 +79,7 @@ export default function EditListing() {
     const cover = draft.images[0] ?? draft.image;
     upsert({ ...draft, image: cover });
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    router.back();
+    backOr(router);
   };
 
   const moveImage = (idx: number, dir: -1 | 1) => {
@@ -151,7 +156,7 @@ export default function EditListing() {
   const confirmDelete = () => {
     const proceed = () => {
       remove(draft.id);
-      router.back();
+      backOr(router);
     };
     if (Platform.OS === "web") {
       if (typeof window !== "undefined" && window.confirm("Delete this listing?")) proceed();
@@ -166,7 +171,7 @@ export default function EditListing() {
   return (
     <View style={styles.root}>
       <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
-        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.iconBtn}>
+        <Pressable hitSlop={12} onPress={() => backOr(router)} style={styles.iconBtn}>
           <ArrowLeft size={18} color={brand.ivory} strokeWidth={1.5} />
         </Pressable>
         <Text style={styles.topTitle}>EDIT</Text>
