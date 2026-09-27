@@ -26,3 +26,8 @@ export function signupEmailRedirect(origin?: string): string {
   }
   return PUBLISHED_AUTH_RETURN;
 }
+
+/** Same allowlist rules as signup — password recovery / invite links land on /auth/callback. */
+export function passwordResetRedirect(origin?: string): string {
+  return signupEmailRedirect(origin);
+}

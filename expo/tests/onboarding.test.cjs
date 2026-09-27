@@ -34,13 +34,15 @@ test('account errors never display backend diagnostics', () => {
 });
 
 test('signup email returns to localhost for Expo preview, otherwise published Pages', () => {
-  const { signupEmailRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect');
+  const { signupEmailRedirect, passwordResetRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect');
   assert.equal(signupEmailRedirect('http://localhost:8081'), 'http://localhost:8081/auth/callback');
   assert.equal(signupEmailRedirect('http://127.0.0.1:8081'), 'http://127.0.0.1:8081/auth/callback');
   assert.equal(signupEmailRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/auth/callback');
   assert.equal(signupEmailRedirect(PUBLISHED_AUTH_RETURN), PUBLISHED_AUTH_RETURN);
   assert.equal(signupEmailRedirect(), PUBLISHED_AUTH_RETURN);
   assert.equal(signupEmailRedirect('https://untrusted.example'), PUBLISHED_AUTH_RETURN);
+  assert.equal(passwordResetRedirect('http://localhost:8081'), 'http://localhost:8081/auth/callback');
+  assert.equal(passwordResetRedirect(), PUBLISHED_AUTH_RETURN);
 });
 
 test('all seven reference themes switch presentation without replacing profile, photos or optional states', () => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
@@ -11,36 +11,57 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { ArrowLeft, ArrowRight, Check, MailCheck } from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
-import { confirmReset, requestResetCode } from "@/lib/passwordReset";
+import { requestResetLink, setNewPasswordWhileAuthenticated } from "@/lib/passwordReset";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 
 /**
- * Realtor password reset.
+ * Realtor password reset / set-password.
  *
- * Passwords are stored as one-way hashes, which is correct but means a
- * forgotten one is a permanent lockout from your own brand, listings and
- * client roster. This is the way back: prove you control the mailbox, then set
- * a new password.
+ * Primary path: email a recovery **link** → /auth/callback (type=recovery) →
+ * this screen with mode=set → updateUser password → completeRealtorSignIn.
  *
- * Two stages on one screen so the email address stays visible while the code
- * is typed — people routinely mistype it and then wonder why nothing arrived.
+ * Also accepts an existing recovery session on mount (link already established).
  */
+type Stage = "request" | "sent" | "set" | "done";
+
 export default function ResetPassword() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const { completeRealtorSignIn } = useAuth();
 
-  const [stage, setStage] = useState<"request" | "verify" | "done">("request");
+  const linkSetMode = mode === "set";
+  const [stage, setStage] = useState<Stage>(linkSetMode ? "set" : "request");
   const [email, setEmail] = useState<string>("");
-  const [code, setCode] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirm, setConfirm] = useState<string>("");
   const [busy, setBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const sessionChecked = useRef(false);
 
   const shake = useRef(new Animated.Value(0)).current;
+
+  // If a recovery session already exists (callback routed here, or hash consumed),
+  // skip email entry and show set-password UI.
+  useEffect(() => {
+    if (sessionChecked.current) return;
+    sessionChecked.current = true;
+    if (linkSetMode) {
+      setStage("set");
+      return;
+    }
+    void (async () => {
+      if (!supabase) return;
+      const { data } = await supabase.auth.getSession();
+      if (data.session) setStage("set");
+    })();
+  }, [linkSetMode]);
 
   const fail = useCallback(
     (message: string) => {
@@ -57,35 +78,46 @@ export default function ResetPassword() {
     [shake]
   );
 
-  const sendCode = useCallback(async () => {
+  const sendLink = useCallback(async () => {
     if (busy) return;
     setBusy(true);
     setError(null);
-    const res = await requestResetCode(email);
+    const res = await requestResetLink(email);
     setBusy(false);
     if (!res.ok) {
       fail(res.error ?? "Something went wrong.");
       return;
     }
     if (Platform.OS !== "web") Haptics.selectionAsync();
-    setStage("verify");
+    setStage("sent");
   }, [busy, email, fail]);
 
-  const finish = useCallback(async () => {
+  const savePassword = useCallback(async () => {
     if (busy) return;
     setBusy(true);
     setError(null);
-    const res = await confirmReset({ email, code, newPassword: password });
-    setBusy(false);
+    if (password !== confirm) {
+      setBusy(false);
+      fail("Passwords don't match.");
+      return;
+    }
+    const res = await setNewPasswordWhileAuthenticated(password);
     if (!res.ok) {
+      setBusy(false);
       fail(res.error ?? "Something went wrong.");
       return;
     }
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
+    const opened = await completeRealtorSignIn();
+    setBusy(false);
+    if (opened.ok) {
+      router.replace("/admin");
+      return;
+    }
     setStage("done");
-  }, [busy, code, email, fail, password]);
+  }, [busy, confirm, completeRealtorSignIn, fail, password, router]);
 
   const shakeStyle = {
     transform: [
@@ -95,15 +127,15 @@ export default function ResetPassword() {
     ],
   };
 
+  const back = () => {
+    if (stage === "sent") setStage("request");
+    else router.back();
+  };
+
   return (
     <View style={styles.root}>
       <View style={[styles.topBar, { paddingTop: insets.top + 12 }]}>
-        <Pressable
-          onPress={() => (stage === "verify" ? setStage("request") : router.back())}
-          hitSlop={14}
-          style={styles.iconBtn}
-          accessibilityLabel="Back"
-        >
+        <Pressable onPress={back} hitSlop={14} style={styles.iconBtn} accessibilityLabel="Back">
           <ArrowLeft size={17} color={brand.ivory} strokeWidth={1.6} />
         </Pressable>
       </View>
@@ -124,12 +156,40 @@ export default function ResetPassword() {
               <View style={styles.doneIcon}>
                 <Check size={22} color={brand.goldLight} strokeWidth={2} />
               </View>
-              <Text style={styles.title}>Password changed.</Text>
+              <Text style={styles.title}>Password saved.</Text>
               <Text style={styles.sub}>
-                You can sign in with your new password now.
+                Sign in with your email and new password to open your realtor account.
               </Text>
               <Pressable
-                onPress={() => router.replace("/portal")}
+                onPress={() => router.replace("/portal?entry=realtor")}
+                style={({ pressed }) => [styles.cta, pressed && { opacity: 0.85 }]}
+              >
+                <Text style={styles.ctaText}>BACK TO SIGN IN</Text>
+                <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
+              </Pressable>
+            </View>
+          ) : stage === "sent" ? (
+            <View>
+              <View style={styles.sentBadge}>
+                <MailCheck size={13} color={brand.goldLight} strokeWidth={1.6} />
+                <Text style={styles.sentText}>LINK SENT</Text>
+              </View>
+              <Text style={styles.eyebrow}>ACCOUNT RECOVERY</Text>
+              <Text style={styles.title}>Check your email.</Text>
+              <Text style={styles.sub}>
+                We sent a reset link to {email}. Open it on this same device/browser so we can finish
+                setting your password here. The link expires in about an hour.
+              </Text>
+              <Pressable
+                onPress={sendLink}
+                disabled={busy}
+                hitSlop={10}
+                style={styles.resend}
+              >
+                <Text style={styles.resendText}>Didn&apos;t arrive? Send another</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => router.replace("/portal?entry=realtor")}
                 style={({ pressed }) => [styles.cta, pressed && { opacity: 0.85 }]}
               >
                 <Text style={styles.ctaText}>BACK TO SIGN IN</Text>
@@ -140,12 +200,12 @@ export default function ResetPassword() {
             <Animated.View style={shakeStyle}>
               <Text style={styles.eyebrow}>ACCOUNT RECOVERY</Text>
               <Text style={styles.title}>
-                {stage === "request" ? "Forgot your password?" : "Check your email."}
+                {stage === "set" ? "Choose a new password." : "Forgot your password?"}
               </Text>
               <Text style={styles.sub}>
-                {stage === "request"
-                  ? "We'll email you a six-digit code to confirm it's you, then you can set a new password."
-                  : `We sent a six-digit code to ${email}. It expires in about an hour.`}
+                {stage === "set"
+                  ? "You're signed in from the email link. Set a new password to finish, then we'll open your account."
+                  : "We'll email you a link. Open it here to set a new password — no code to type."}
               </Text>
 
               {stage === "request" ? (
@@ -160,30 +220,12 @@ export default function ResetPassword() {
                     autoCorrect={false}
                     keyboardType="email-address"
                     returnKeyType="send"
-                    onSubmitEditing={sendCode}
+                    onSubmitEditing={sendLink}
                     style={styles.input}
                   />
                 </View>
               ) : (
                 <View>
-                  <View style={styles.sentBadge}>
-                    <MailCheck size={13} color={brand.goldLight} strokeWidth={1.6} />
-                    <Text style={styles.sentText}>CODE SENT</Text>
-                  </View>
-                  <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>6-DIGIT CODE</Text>
-                    <TextInput
-                      value={code}
-                      onChangeText={(v) => setCode(v.replace(/\D/g, "").slice(0, 6))}
-                      placeholder="000000"
-                      placeholderTextColor="rgba(244,239,230,0.3)"
-                      keyboardType="number-pad"
-                      autoComplete="one-time-code"
-                      textContentType="oneTimeCode"
-                      maxLength={6}
-                      style={[styles.input, styles.codeInput]}
-                    />
-                  </View>
                   <View style={styles.field}>
                     <Text style={styles.fieldLabel}>NEW PASSWORD</Text>
                     <TextInput
@@ -192,8 +234,20 @@ export default function ResetPassword() {
                       placeholder="At least 6 characters"
                       placeholderTextColor="rgba(244,239,230,0.3)"
                       secureTextEntry
+                      returnKeyType="next"
+                      style={styles.input}
+                    />
+                  </View>
+                  <View style={styles.field}>
+                    <Text style={styles.fieldLabel}>CONFIRM PASSWORD</Text>
+                    <TextInput
+                      value={confirm}
+                      onChangeText={setConfirm}
+                      placeholder="Type it again"
+                      placeholderTextColor="rgba(244,239,230,0.3)"
+                      secureTextEntry
                       returnKeyType="done"
-                      onSubmitEditing={finish}
+                      onSubmitEditing={savePassword}
                       style={styles.input}
                     />
                   </View>
@@ -203,7 +257,7 @@ export default function ResetPassword() {
               {error ? <Text style={styles.error}>{error}</Text> : null}
 
               <Pressable
-                onPress={stage === "request" ? sendCode : finish}
+                onPress={stage === "request" ? sendLink : savePassword}
                 disabled={busy}
                 style={({ pressed }) => [
                   styles.cta,
@@ -212,16 +266,14 @@ export default function ResetPassword() {
                 ]}
               >
                 <Text style={styles.ctaText}>
-                  {busy ? "WORKING…" : stage === "request" ? "SEND CODE" : "SET NEW PASSWORD"}
+                  {busy
+                    ? "WORKING…"
+                    : stage === "request"
+                      ? "EMAIL ME A LINK"
+                      : "SAVE PASSWORD"}
                 </Text>
                 <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
               </Pressable>
-
-              {stage === "verify" ? (
-                <Pressable onPress={sendCode} disabled={busy} hitSlop={10} style={styles.resend}>
-                  <Text style={styles.resendText}>Didn&apos;t arrive? Send another</Text>
-                </Pressable>
-              ) : null}
             </Animated.View>
           )}
         </ScrollView>
@@ -314,7 +366,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(244,239,230,0.2)",
     backgroundColor: "rgba(255,255,255,0.03)",
   },
-  codeInput: { fontSize: 22, letterSpacing: 10, textAlign: "center" },
   error: {
     fontFamily: fonts.sans,
     color: "#E06E5A",

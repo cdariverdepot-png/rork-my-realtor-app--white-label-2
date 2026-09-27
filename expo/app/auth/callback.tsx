@@ -3,6 +3,11 @@ import { Platform, Pressable, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  classifyAuthCallbackType,
+  needsSetPassword,
+  readAuthCallbackType,
+} from "@/lib/authCallback";
 
 function hashParams(): URLSearchParams {
   if (Platform.OS !== "web" || typeof window === "undefined") return new URLSearchParams();
@@ -50,7 +55,7 @@ async function establishSession(code?: string) {
 }
 
 export default function AuthCallback() {
-  const { code } = useLocalSearchParams<{ code?: string }>();
+  const { code, type: typeParam } = useLocalSearchParams<{ code?: string; type?: string }>();
   const started = useRef(false);
   const router = useRouter();
   const { completeRealtorSignIn } = useAuth();
@@ -60,7 +65,29 @@ export default function AuthCallback() {
     if (started.current) return;
     started.current = true;
     void (async () => {
-      await establishSession(typeof code === "string" ? code : undefined);
+      // Capture type before establishSession / URL cleanup consumes the hash.
+      const fromUrl = readAuthCallbackType(hashParams(), queryParams());
+      const fromRoute = typeof typeParam === "string" ? typeParam.toLowerCase() : null;
+      const kind = classifyAuthCallbackType(fromUrl || fromRoute);
+      let recoveryEvent = false;
+
+      const authListener =
+        supabase?.auth.onAuthStateChange((event) => {
+          if (event === "PASSWORD_RECOVERY") recoveryEvent = true;
+        }) ?? null;
+
+      try {
+        await establishSession(typeof code === "string" ? code : undefined);
+      } finally {
+        authListener?.data.subscription.unsubscribe();
+      }
+
+      if (needsSetPassword(kind) || recoveryEvent) {
+        setMessage("Open the set-password screen to finish…");
+        router.replace("/reset-password?mode=set&from=link");
+        return;
+      }
+
       const opened = await completeRealtorSignIn();
       if (!opened.ok) {
         setMessage(
@@ -72,16 +99,19 @@ export default function AuthCallback() {
       router.replace("/admin");
     })().catch(() =>
       setMessage(
-        "This confirmation link could not finish sign-in here (wrong origin, expired link, or password still required). Return to Expo on the same address you signed up from, then sign in with your email and password — or request a new email code on the portal."
+        "This confirmation link could not finish sign-in here (wrong origin, expired link, or password still required). Return to Expo on the same address you signed up from, then sign in with your email and password — or request a new reset link on the portal."
       )
     );
-  }, [code, completeRealtorSignIn, router]);
+  }, [code, typeParam, completeRealtorSignIn, router]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#171717", padding: 30, justifyContent: "center", gap: 24 }}>
       <Text style={{ color: "white", fontSize: 20 }}>{message}</Text>
       <Pressable accessibilityRole="button" onPress={() => router.replace("/portal?entry=realtor")}>
         <Text style={{ color: "#e0bc72" }}>Return to sign-in</Text>
+      </Pressable>
+      <Pressable accessibilityRole="button" onPress={() => router.replace("/reset-password")}>
+        <Text style={{ color: "#e0bc72" }}>Forgot password? Request a new link</Text>
       </Pressable>
     </View>
   );
