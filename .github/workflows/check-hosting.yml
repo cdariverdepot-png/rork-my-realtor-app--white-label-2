@@ -9,16 +9,13 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
-      - name: Inspect public hosting responses
+      - name: Verify production routes
         run: |
-          for base in https://cdariverdepot-my-realtor.expo.app https://cdariverdepot-my-realtor--mdtdoie63e.expo.app; do
-            for route in / /welcome /welcome.html /auth/callback /auth/callback.html; do
-              echo "Checking $base$route"
-              curl --silent --show-error --max-time 20 --dump-header headers.txt "$base$route" -o body.txt
-              cat headers.txt
-              head -c 1500 body.txt
-              echo ""
-            done
+          for route in / /welcome /auth/callback; do
+            url="https://cdariverdepot-my-realtor.expo.app$route"
+            curl --fail --silent --show-error --location --max-time 20 --retry 20 --retry-all-errors --retry-delay 10 "$url" -o page.html
+            grep -q '<!DOCTYPE html>' page.html
+            echo "Verified $url"
           done

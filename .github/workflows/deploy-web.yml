@@ -139,7 +139,7 @@ jobs:
       - name: Check production routes
         if: env.DEPLOY == 'true'
         run: |
-          for route in /welcome /auth/callback; do
-            curl --fail --show-error --silent --location --retry 5 --retry-all-errors --retry-delay 10 "$EXPO_PUBLIC_APP_URL$route" -o /dev/null
+          for route in / /welcome /auth/callback; do
+            curl --fail --show-error --silent --location --max-time 20 --retry 20 --retry-all-errors --retry-delay 10 "$EXPO_PUBLIC_APP_URL$route" -o /dev/null
           done
           printf 'Production URL: %s\n\nSupabase redirect to allow: %s/auth/callback\n' "$EXPO_PUBLIC_APP_URL" "$EXPO_PUBLIC_APP_URL" >> "$GITHUB_STEP_SUMMARY"
