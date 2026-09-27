@@ -71,7 +71,7 @@ export function resolveFacts(evidence: SourceEvidence[]): ResolvedFact[] {
       evidence: winner,
       confidence,
       conflictingValues: ranked.slice(1).map((group) => group[0].value.trim()),
-      needsClarification: ranked.length > 1 || confidence < 0.8 || (highRisk && distinctSources < 2),
+      needsClarification: ranked.length > 1 || confidence < 0.6 || (highRisk && distinctSources < 2),
     };
   });
 }

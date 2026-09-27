@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Check, FileText, ImageIcon, Link2, Users } from "lucide-react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
@@ -9,7 +9,7 @@ import * as FileSystem from "expo-file-system/legacy";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
-import { REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
+import { PROFILE_FIELDS, RECOMMENDED_FIELDS, REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
 import { toPortableImage } from "@/lib/portableImage";
 import { useAuth } from "@/contexts/AuthContext";
 import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
@@ -61,9 +61,9 @@ function ManualSetup() {
   if (!hydrated) return null;
   return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 32, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
     <Text style={{ color: "white", fontSize: 30 }}>Let’s create your app.</Text>
-    <Text style={{ color: "#CBD0D6", marginTop: 12, lineHeight: 23 }}>Complete these six sections. Your sharing credentials become available after setup; you choose when to share them.</Text>
-    {REQUIRED_FIELDS.map((item, index) => <View key={item.id} style={{ marginTop: 24, padding: 18, borderRadius: 14, backgroundColor: "#20262D" }}>
-      <Text style={{ color: "white", fontSize: 19 }}>{index + 1}. {item.label}{item.met(draft) ? " ✓" : ""}</Text>
+    <Text style={{ color: "#CBD0D6", marginTop: 12, lineHeight: 23 }}>Fill in the essentials below. Your portrait and license details are optional and can be added any time. Your sharing credentials become available after setup; you choose when to share them.</Text>
+    {PROFILE_FIELDS.map((item, index) => <View key={item.id} style={{ marginTop: 24, padding: 18, borderRadius: 14, backgroundColor: "#20262D" }}>
+      <Text style={{ color: "white", fontSize: 19 }}>{index + 1}. {item.label}{RECOMMENDED_FIELDS.includes(item) ? <Text style={{ color: "#9AA4AA", fontSize: 15 }}> (optional)</Text> : null}{item.met(draft) ? " ✓" : ""}</Text>
       {item.id === "name" && field("Full name", draft.realtor.name, v => identity("name", v))}
       {item.id === "portrait" && <Pressable onPress={pick} accessibilityRole="button" style={{ paddingVertical: 16 }}>
         {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }} style={{ height: 180, borderRadius: 8 }} contentFit="contain" /> : null}
@@ -82,18 +82,36 @@ function ManualSetup() {
   </ScrollView>;
 }
 
+type Phase = "collect" | "building" | "review";
+type ErrorPlace = "sources" | "review" | "hero" | "intro";
+type AskId = "name" | "city" | "contact" | "heroLine";
+type ConfirmField = "realtor.name" | "realtor.title" | "realtor.city" | "realtor.phone" | "realtor.email" | "realtor.brandName";
+
+const CONFIRM_LABELS: Record<ConfirmField, string> = {
+  "realtor.name": "Your name",
+  "realtor.title": "Title",
+  "realtor.city": "City or region",
+  "realtor.phone": "Phone",
+  "realtor.email": "Email",
+  "realtor.brandName": "Business or team name",
+};
+const ASK_FOR_FIELD: Partial<Record<ConfirmField, AskId>> = {
+  "realtor.name": "name", "realtor.city": "city", "realtor.phone": "contact", "realtor.email": "contact",
+};
+
 export default function InitialRealtorSetup() {
   const auth = useAuth();
   const { importMany } = useClients();
   const { brand, saveBrand } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const scrollRef = useRef<ScrollView>(null);
   const [url, setUrl] = useState("");
   const [sources, setSources] = useState<BuildSource[]>([]);
   const [result, setResult] = useState<SavedBuild | null>(null);
   const [draft, setDraft] = useState<Brand | null>(null);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{ place: ErrorPlace; message: string } | null>(null);
   const [manual, setManual] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [contactCount, setContactCount] = useState(0);
@@ -104,9 +122,38 @@ export default function InitialRealtorSetup() {
   const [urlFocused, setUrlFocused] = useState(false);
   const [extraUrl, setExtraUrl] = useState("");
   const [showExtraUrl, setShowExtraUrl] = useState(false);
+  const [building, setBuilding] = useState(false);
+  const [editingSources, setEditingSources] = useState(false);
+  const [regenerating, setRegenerating] = useState<"heroMessage" | "aboutParagraph" | null>(null);
+  const [showLicense, setShowLicense] = useState(false);
+  /**
+   * Which inputs the review asks for, fixed when the draft is created. Rendering
+   * from live values made a field vanish after its first keystroke (it stopped
+   * being "missing") and shifted the inputs after it, dropping focus.
+   */
+  const [askFor, setAskFor] = useState<AskId[]>([]);
+  const [confirmList, setConfirmList] = useState<{ field: ConfirmField; also: string[] }[]>([]);
   const localImages = useRef<Record<string, string>>({});
-  const facts = result ? resolveFacts(result.evidence) : [];
-  const questions = facts.filter(fact => fact.needsClarification);
+
+  const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
+
+  // Moving to the next stage brings it into view — no hunting for new content.
+  useEffect(() => {
+    if (phase !== "collect") scrollRef.current?.scrollTo({ y: 0, animated: true });
+  }, [phase]);
+
+  /** Start the review from a draft and freeze what we'll ask about. */
+  const startReview = (saved: SavedBuild, next: Brand) => {
+    const facts = resolveFacts(saved.evidence);
+    const confirms = facts
+      .filter(fact => fact.needsClarification && fact.value && fact.field in CONFIRM_LABELS)
+      .map(fact => ({ field: fact.field as ConfirmField, also: fact.conflictingValues }));
+    const confirmed = new Set(confirms.map(item => ASK_FOR_FIELD[item.field]).filter(Boolean));
+    setConfirmList(confirms);
+    setAskFor(REQUIRED_FIELDS.filter(item => !item.met(next) && !confirmed.has(item.id as AskId)).map(item => item.id as AskId));
+    setShowLicense(false);
+    setDraft(next);
+  };
 
   useEffect(() => {
     let alive = true;
@@ -117,12 +164,22 @@ export default function InitialRealtorSetup() {
         const primary = saved.sources.find(source => source.kind === "url");
         if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
         setResult(saved);
-        if (saved.evidence.length) setDraft(applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+        if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
       }
-    }).catch(e => { if (alive) setError(e instanceof Error ? e.message : "Could not load your app build."); })
+    }).catch(e => { if (alive) setError({ place: "sources", message: e instanceof Error ? e.message : "Could not load your app build." }); })
       .finally(() => { if (alive) setLoaded(true); });
     return () => { alive = false; };
   }, []);
+
+  const act = async (place: ErrorPlace, work: () => Promise<void>) => {
+    if (busy) return;
+    setBusy(true); setError(null);
+    try { await work(); }
+    catch (e) { setError({ place, message: e instanceof Error ? e.message : "Please try again." }); }
+    finally { setBusy(false); setActivity(""); }
+  };
+  const errorFor = (place: ErrorPlace) => error?.place === place
+    ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{error.message}</Text> : null;
 
   const saveSources = async (next: BuildSource[]): Promise<BuildSource[]> => {
     if (!auth.realtorId) throw new Error("Sign in to save your sources.");
@@ -152,21 +209,14 @@ export default function InitialRealtorSetup() {
   const documents = sources.filter(source => source.kind === "document");
   const images = sources.filter(source => source.kind === "image");
 
-  const act = async (work: () => Promise<void>) => {
-    if (busy) return;
-    setBusy(true); setError("");
-    try { await work(); }
-    catch (e) { setError(e instanceof Error ? e.message : "Please try again."); }
-    finally { setBusy(false); setActivity(""); }
-  };
-  const addUrl = () => void act(async () => {
+  const addUrl = () => void act("sources", async () => {
     const uri = normalizeUrl(extraUrl);
     if (!uri) throw new Error("That link doesn't look right. Check it and try again.");
     await addSource(urlSource(uri));
     setExtraUrl("");
     setShowExtraUrl(false);
   });
-  const addFile = (kind: "document" | "image") => void act(async () => {
+  const addFile = (kind: "document" | "image") => void act("sources", async () => {
     if (kind === "image") {
       const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false });
       if (picked.canceled) return;
@@ -182,7 +232,7 @@ export default function InitialRealtorSetup() {
       await addSource(await uploadBuildFile(picked.assets[0], "document"));
     }
   });
-  const analyze = () => void act(async () => {
+  const analyze = () => void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
     // Lock in the website from the main field, replacing an older one if it changed.
@@ -192,17 +242,22 @@ export default function InitialRealtorSetup() {
       setPrimaryId(fresh.id);
     }
     if (!current.some(source => source.kind !== "contacts")) throw new Error("Enter your website to get started, or add a document or image.");
-    setActivity("Reading your sources and building a profile…");
-    const saved = await analyzeBuild();
-    setSources(saved.sources);
-    setResult(saved);
-    const next = applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft);
-    const portraitUri = saved.draft.portraitSourceId && localImages.current[saved.draft.portraitSourceId];
-    if (portraitUri) next.portraitUrl = await toPortableImage(portraitUri, 1600);
-    setDraft(next);
-    setActivity("");
+    setEditingSources(false);
+    setBuilding(true);
+    try {
+      setActivity("Reading your website and building your profile…");
+      const saved = await analyzeBuild();
+      setSources(saved.sources);
+      setResult(saved);
+      const next = applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft);
+      const portraitUri = saved.draft.portraitSourceId && localImages.current[saved.draft.portraitSourceId];
+      if (portraitUri) next.portraitUrl = await toPortableImage(portraitUri, 1600);
+      startReview(saved, next);
+    } finally {
+      setBuilding(false);
+    }
   });
-  const addContacts = () => void act(async () => {
+  const addContacts = () => void act("sources", async () => {
     const picked = await DocumentPicker.getDocumentAsync({ type: ["text/csv", "text/vcard", "text/x-vcard", "text/plain", "*/*"],
       copyToCacheDirectory: true });
     if (picked.canceled) return;
@@ -214,51 +269,70 @@ export default function InitialRealtorSetup() {
     if (!contacts.length) throw new Error("No contacts were found in that file.");
     setPendingContacts({ contacts, format: format === "vcard" ? "vcard" : "csv" });
   });
-  const confirmContacts = () => void act(async () => {
+  const confirmContacts = () => void act("sources", async () => {
     if (!pendingContacts) return;
     const summary = importMany(pendingContacts.contacts, pendingContacts.format);
     setContactCount(count => count + summary.added + summary.merged);
     setPendingContacts(null);
   });
-  const regenerate = (target: "heroMessage" | "aboutParagraph") => void act(async () => {
-    setActivity("Writing another version…");
-    const saved = await regenerateBuildCopy(target);
-    setResult(saved);
-    setDraft(current => current && (target === "heroMessage"
-      ? { ...current, realtor: { ...current.realtor, heroMessage: saved.draft.heroMessage || current.realtor.heroMessage } }
-      : { ...current, note: { ...current.note, body: [saved.draft.aboutParagraph || current.note.body[0] || ""] } }));
-    setActivity("");
-  });
-  const finish = () => void act(async () => {
-    if (!draft || !requiredStatus(draft).complete) {
-      throw new Error("Please complete the essential details before finishing.");
-    }
+  /** New wording for one piece of copy; everything else in the draft is kept. */
+  const regenerate = (target: "heroMessage" | "aboutParagraph") => {
+    if (busy || regenerating) return;
+    const place: ErrorPlace = target === "heroMessage" ? "hero" : "intro";
+    setRegenerating(target);
+    setError(null);
+    void (async () => {
+      try {
+        const saved = await regenerateBuildCopy(target);
+        const value = (saved.draft[target] ?? "").trim();
+        if (!value) throw new Error("No new version came back. Please try again.");
+        setResult(saved);
+        setDraft(current => current && (target === "heroMessage"
+          ? { ...current, realtor: { ...current.realtor, heroMessage: value } }
+          : { ...current, note: { ...current.note, body: [value] } }));
+      } catch (e) {
+        setError({ place, message: e instanceof Error ? e.message : "Couldn't write a new version. Please try again." });
+      } finally {
+        setRegenerating(null);
+      }
+    })();
+  };
+  const missingLabels = draft ? requiredStatus(draft).missing.map(item => item.label) : [];
+  const finish = () => void act("review", async () => {
+    if (!draft) throw new Error("Build your app first.");
+    // Same rule set the rest of the app uses — REQUIRED_FIELDS is the only source of truth.
+    const missing = requiredStatus(draft).missing;
+    if (missing.length) throw new Error(`Please add: ${missing.map(item => item.label.toLowerCase()).join(", ")}.`);
     await saveBrand(draft);
     await markBuildComplete();
     router.replace("/admin/ready");
   });
-  const field = (label: string, value: string, change: (value: string) => void) =>
-    <View style={{ marginTop: 12 }}><Text style={{ color: "#D7D8D3", marginBottom: 6 }}>{label}</Text>
-      <TextInput value={value} onChangeText={change} accessibilityLabel={label}
-        style={{ color: "white", borderColor: "#646C70", borderWidth: 1, borderRadius: 10, padding: 12 }} /></View>;
   const setProfile = (key: keyof Brand["realtor"], value: string) =>
     setDraft(current => current && ({ ...current, realtor: { ...current.realtor, [key]: value } }));
   const setLicense = (key: "number" | "state" | "brokerage", value: string) =>
     setDraft(current => current && ({ ...current, credentials: { ...current.credentials,
       license: { ...current.credentials.license, [key]: value } } }));
-  const selectPortrait = () => void act(async () => {
+  const selectPortrait = () => void act("review", async () => {
     const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false });
     if (picked.canceled) return;
     const uri = await toPortableImage(picked.assets[0].uri, 1600);
     setDraft(current => current && ({ ...current, portraitUrl: uri }));
   });
-  const button = (label: string, onPress: () => void, primary = false) =>
-    <Pressable accessibilityRole="button" onPress={onPress} disabled={busy}
+
+  // ── Building blocks ──
+  const input = (key: string, label: string, value: string, change: (value: string) => void, keyboardType: "default" | "email-address" | "phone-pad" = "default") =>
+    <View key={key} style={{ marginTop: 12 }}>
+      <Text style={{ color: "#D7D8D3", marginBottom: 6 }}>{label}</Text>
+      <TextInput value={value} onChangeText={change} accessibilityLabel={label} keyboardType={keyboardType}
+        autoCapitalize={keyboardType === "default" ? "words" : "none"} autoCorrect={false}
+        style={{ color: "white", borderColor: "#646C70", borderWidth: 1, borderRadius: 10, padding: 12, fontSize: 16 }} />
+    </View>;
+  const button = (label: string, onPress: () => void, primary = false, disabled = busy) =>
+    <Pressable accessibilityRole="button" onPress={onPress} disabled={disabled}
       style={{ padding: 14, borderRadius: 11, borderWidth: 1, borderColor: primary ? "#C2A276" : "#657079",
-        backgroundColor: primary ? "#C2A276" : "transparent", marginTop: 10 }}>
+        backgroundColor: primary ? "#C2A276" : "transparent", marginTop: 10, opacity: disabled ? 0.55 : 1 }}>
       <Text style={{ color: primary ? "#172027" : "white", textAlign: "center", fontWeight: "600" }}>{label}</Text>
     </Pressable>;
-
   /** Secondary, clearly optional control; whatever it added is listed right inside it. */
   const optional = (Icon: typeof Link2, label: string, onPress: () => void, added: React.ReactNode) =>
     <View key={label} style={{ borderRadius: 12, borderWidth: 1, borderColor: "#3A444B", paddingHorizontal: 14, paddingVertical: 12 }}>
@@ -274,17 +348,45 @@ export default function InitialRealtorSetup() {
       {source.status === "failed" ? "✕ Couldn’t read" : "✓"} {source.kind === "url" ? source.uri.replace(/^https:\/\//, "").replace(/\/$/, "") : source.label}
       {source.status === "failed" && source.error ? ` — ${source.error}` : ""}
     </Text>;
+  const readValue = (field: ConfirmField) => draft ? String(draft.realtor[field.split(".")[1] as keyof Brand["realtor"]] ?? "") : "";
 
   if (manual) return <ManualSetup />;
-  return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }}
+
+  const sourceSummary = [
+    primarySource ? primarySource.uri.replace(/^https:\/\//, "").replace(/\/$/, "") : websiteUri ? websiteUri.replace(/^https:\/\//, "").replace(/\/$/, "") : "",
+    extraLinks.length ? `${extraLinks.length} more link${extraLinks.length > 1 ? "s" : ""}` : "",
+    documents.length ? `${documents.length} document${documents.length > 1 ? "s" : ""}` : "",
+    images.length ? `${images.length} image${images.length > 1 ? "s" : ""}` : "",
+  ].filter(Boolean).join(" · ");
+
+  return <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}
     contentContainerStyle={{ padding: 24, paddingTop: insets.top + 32, paddingBottom: insets.bottom + 36 }}
     keyboardShouldPersistTaps="handled">
     <Text style={{ color: "white", fontSize: 32, fontWeight: "600" }}>Build Your App</Text>
-    <Text style={{ color: "#C8D0D0", marginTop: 10, fontSize: 16, lineHeight: 24 }}>
+    {phase === "collect" && <Text style={{ color: "#C8D0D0", marginTop: 10, fontSize: 16, lineHeight: 24 }}>
       Start with your website. We’ll use it to gather most of the information needed to build your app.
-    </Text>
+    </Text>}
     {!loaded && <Text style={{ color: "#C8D0D0", marginTop: 20 }}>Loading…</Text>}
-    {loaded && <>
+
+    {/* After submitting, the inputs collapse to a one-line summary. */}
+    {loaded && phase !== "collect" && <View style={{ marginTop: 18, padding: 14, borderRadius: 12, backgroundColor: "#1A2127",
+      flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: "#3FB37F", alignItems: "center", justifyContent: "center" }}>
+        <Check size={15} color="white" strokeWidth={3} />
+      </View>
+      <Text style={{ color: "#C8D0D0", flex: 1 }} numberOfLines={2}>{sourceSummary || "Your information"}</Text>
+      {phase === "review" && <Pressable accessibilityRole="button" onPress={() => setEditingSources(true)} hitSlop={8}>
+        <Text style={{ color: "#C2A276", fontWeight: "600" }}>Change</Text>
+      </Pressable>}
+    </View>}
+
+    {loaded && phase === "building" && <View style={{ marginTop: 28, padding: 24, borderRadius: 16, backgroundColor: "#1A2127", alignItems: "center" }}>
+      <ActivityIndicator color="#C2A276" size="large" />
+      <Text style={{ color: "white", fontSize: 18, fontWeight: "600", marginTop: 16, textAlign: "center" }}>Building your app…</Text>
+      <Text style={{ color: "#9AA4AA", marginTop: 6, textAlign: "center" }}>{activity || "Reading your website and building your profile…"} This usually takes under a minute.</Text>
+    </View>}
+
+    {loaded && phase === "collect" && <>
       {/* Step 1 — the website is the starting point. */}
       <View style={{ marginTop: 30, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276",
         backgroundColor: "rgba(194,162,118,0.08)" }}>
@@ -350,67 +452,126 @@ export default function InitialRealtorSetup() {
           </>)}
       </View>
 
-      {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 20 }}>{error}</Text> : null}
+      {errorFor("sources")}
       <Pressable accessibilityRole="button" onPress={analyze} disabled={busy}
         style={({ pressed }) => ({ marginTop: 26, minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276",
           alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : pressed ? 0.85 : 1 })}>
-        <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>{busy && activity ? "Building…" : "Let’s Build My App!"}</Text>
+        <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>Let’s Build My App!</Text>
       </Pressable>
-      {busy && activity ? <Text accessibilityLiveRegion="polite" style={{ color: "#C8D0D0", marginTop: 10 }}>{activity}</Text> : null}
-      {result && draft && <>
-        <Text style={{ color: "white", fontSize: 24, marginTop: 32 }}>We built your app</Text>
-        <Text style={{ color: "#C8D0D0", lineHeight: 22, marginTop: 8 }}>
-          {result.draft.layoutId ? "We chose" : "We started with"} {CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? "a starting layout"} for your style. You can switch layouts from Edit My App after setup.
-        </Text>
-        <View style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", minHeight: 185,
-          backgroundColor: draft.layoutId === "coastal-personal" ? "#F8F4EF" : "#29231F",
-          flexDirection: "row", alignItems: "center" }}>
-          <View style={{ flex: 1, padding: 20 }}>
-            <Text style={{ color: draft.layoutId === "coastal-personal" ? "#1D2526" : "#F7F1EA",
-              fontSize: 23, fontFamily: "PlayfairDisplay_500Medium" }} numberOfLines={3}>
-              {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.name}
-            </Text>
-            <Text style={{ color: "#B7956E", marginTop: 13 }}>{draft.realtor.name}</Text>
-          </View>
-          {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }}
-            style={{ width: "38%", height: 185 }} contentFit="cover" /> : null}
-        </View>
-        {button("Try another opening line", () => regenerate("heroMessage"))}
-        {button("Try another introduction", () => regenerate("aboutParagraph"))}
-        {questions.length ? <View style={{ marginTop: 18 }}>
-          <Text style={{ color: "white", fontSize: 18 }}>Please confirm</Text>
-          {questions.map(fact => <View key={fact.field}>
-            {field(fact.field.replace(/\./g, " · "), fact.field.startsWith("credentials.license.")
-              ? draft.credentials.license[fact.field.split(".")[2] as "number" | "state" | "brokerage"]
-              : fact.field === "portraitUrl" ? draft.portraitUrl
-              : draft.realtor[fact.field.split(".")[1] as keyof Brand["realtor"]] as string,
-              value => {
-                if (fact.field.startsWith("credentials.license.")) setLicense(fact.field.split(".")[2] as "number" | "state" | "brokerage", value);
-                else if (fact.field === "portraitUrl") setDraft(current => current && ({ ...current, portraitUrl: value }));
-                else setProfile(fact.field.split(".")[1] as keyof Brand["realtor"], value);
-              })}
-            {fact.conflictingValues.length ? <Text style={{ color: "#D6BA91" }}>Also found: {fact.conflictingValues.join(", ")}</Text> : null}
-          </View>)}
-        </View> : null}
-        {!requiredStatus(draft).complete && <View style={{ marginTop: 20 }}>
-          <Text style={{ color: "white", fontSize: 18 }}>A few essentials are missing</Text>
-          {!draft.realtor.name && field("Your name", draft.realtor.name, value => setProfile("name", value))}
-          {!draft.realtor.city && field("City or region", draft.realtor.city, value => setProfile("city", value))}
-          {!draft.realtor.phone && !draft.realtor.email && field("Phone", draft.realtor.phone, value => setProfile("phone", value))}
-          {!draft.realtor.heroMessage && !draft.realtor.tagline && field("Opening line", draft.realtor.heroMessage, value => setProfile("heroMessage", value))}
-          {!draft.credentials.license.brokerage && field("Brokerage", draft.credentials.license.brokerage, value => setLicense("brokerage", value))}
-          {!draft.credentials.license.number && field("License number", draft.credentials.license.number, value => setLicense("number", value))}
-          {!draft.credentials.license.state && field("License state", draft.credentials.license.state, value => setLicense("state", value))}
-          {!draft.portraitUrl && button("Choose your portrait", selectPortrait)}
-        </View>}
-        {button("Complete setup", finish, true)}
-      </>}
+      {editingSources && result && draft && button("Back to my app", () => setEditingSources(false))}
+
       {/* Separate alternative path. */}
       <View style={{ marginTop: 40, paddingTop: 24, borderTopWidth: 1, borderTopColor: "#2A3238" }}>
         <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>Prefer to enter everything yourself?</Text>
         <Text style={{ color: "#9AA4AA", marginTop: 4 }}>Skip the website import and add your information manually.</Text>
         {button("Enter Details Manually", () => setManual(true))}
       </View>
+    </>}
+
+    {loaded && phase === "review" && result && draft && <>
+      <Text style={{ color: "white", fontSize: 24, fontWeight: "600", marginTop: 28 }}>Here’s your app</Text>
+      <Text style={{ color: "#C8D0D0", lineHeight: 22, marginTop: 8 }}>
+        We used {CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? "a starting layout"} for your style — you can switch later from Edit My App.
+      </Text>
+
+      {/* Live preview of the copy the realtor can regenerate. */}
+      <View style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", minHeight: 185,
+        backgroundColor: draft.layoutId === "coastal-personal" ? "#F8F4EF" : "#29231F",
+        flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flex: 1, padding: 20 }}>
+          <Text style={{ color: draft.layoutId === "coastal-personal" ? "#1D2526" : "#F7F1EA",
+            fontSize: 23, fontFamily: "PlayfairDisplay_500Medium", opacity: regenerating === "heroMessage" ? 0.4 : 1 }} numberOfLines={4}>
+            {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.name}
+          </Text>
+          <Text style={{ color: "#B7956E", marginTop: 13 }}>{draft.realtor.name}{draft.realtor.city ? ` · ${draft.realtor.city}` : ""}</Text>
+        </View>
+        {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }}
+          style={{ width: "38%", height: 185 }} contentFit="cover" /> : null}
+      </View>
+      {button(regenerating === "heroMessage" ? "Writing a new opening line…" : "Try another opening line",
+        () => regenerate("heroMessage"), false, busy || !!regenerating)}
+      {errorFor("hero")}
+
+      <View style={{ marginTop: 18, padding: 16, borderRadius: 14, backgroundColor: "#1A2127" }}>
+        <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.4 }}>YOUR INTRODUCTION</Text>
+        <Text style={{ color: "#E6E9EA", marginTop: 8, lineHeight: 22, opacity: regenerating === "aboutParagraph" ? 0.4 : 1 }}>
+          {draft.note.body[0] || "Your introduction will appear here."}
+        </Text>
+      </View>
+      {button(regenerating === "aboutParagraph" ? "Writing a new introduction…" : "Try another introduction",
+        () => regenerate("aboutParagraph"), false, busy || !!regenerating)}
+      {errorFor("intro")}
+
+      {/* Portrait — recommended and prominent, never blocking. */}
+      <View style={{ marginTop: 26, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: draft.portraitUrl ? "#2E3A40" : "#C2A276",
+        flexDirection: "row", alignItems: "center", gap: 14 }}>
+        {draft.portraitUrl
+          ? <Image source={{ uri: draft.portraitUrl }} style={{ width: 64, height: 64, borderRadius: 32 }} contentFit="cover" />
+          : <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "#2A3238", alignItems: "center", justifyContent: "center" }}>
+            <ImageIcon size={24} color="#C2A276" /></View>}
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>{draft.portraitUrl ? "Your portrait" : "Add your portrait"}</Text>
+          <Text style={{ color: "#9AA4AA", marginTop: 2 }}>{draft.portraitUrl ? "Shown on your app’s first screen." : "Recommended — your app opens on your photo."}</Text>
+          <Pressable accessibilityRole="button" onPress={selectPortrait} disabled={busy} hitSlop={6} style={{ marginTop: 8 }}>
+            <Text style={{ color: "#C2A276", fontWeight: "600" }}>{draft.portraitUrl ? "Choose a different photo" : "Choose a photo"}</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Values we found but aren't sure about — prefilled, just confirm. */}
+      {confirmList.length > 0 && <View style={{ marginTop: 26 }}>
+        <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>Please confirm</Text>
+        <Text style={{ color: "#9AA4AA", marginTop: 4 }}>We found these — fix anything that’s wrong.</Text>
+        {confirmList.map(item => <View key={`confirm-${item.field}`}>
+          {input(`confirm-input-${item.field}`, CONFIRM_LABELS[item.field], readValue(item.field),
+            value => setProfile(item.field.split(".")[1] as keyof Brand["realtor"], value),
+            item.field === "realtor.email" ? "email-address" : item.field === "realtor.phone" ? "phone-pad" : "default")}
+          {item.also.length ? <Text style={{ color: "#D6BA91", marginTop: 4 }}>Also found: {item.also.join(", ")}</Text> : null}
+        </View>)}
+      </View>}
+
+      {/* Only essentials we couldn't find. The list is fixed when the draft is
+          made, so an input never disappears while you type in it. */}
+      {askFor.length > 0 && <View style={{ marginTop: 26 }}>
+        <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>Just a few more details</Text>
+        <Text style={{ color: "#9AA4AA", marginTop: 4 }}>We couldn’t find these on your website.</Text>
+        {askFor.includes("name") && input("ask-name", "Your name", draft.realtor.name, value => setProfile("name", value))}
+        {askFor.includes("city") && input("ask-city", "City or region (e.g. Coeur d’Alene, ID)", draft.realtor.city, value => setProfile("city", value))}
+        {askFor.includes("contact") && input("ask-phone", "Phone", draft.realtor.phone, value => setProfile("phone", value), "phone-pad")}
+        {askFor.includes("contact") && input("ask-email", "Email", draft.realtor.email, value => setProfile("email", value), "email-address")}
+        {askFor.includes("contact") && <Text key="ask-contact-hint" style={{ color: "#9AA4AA", marginTop: 6 }}>One of phone or email is enough.</Text>}
+        {askFor.includes("heroLine") && input("ask-hero", "Opening line", draft.realtor.heroMessage, value => setProfile("heroMessage", value))}
+      </View>}
+
+      {/* Optional professional details — never block setup. */}
+      <View style={{ marginTop: 26, borderRadius: 12, borderWidth: 1, borderColor: "#3A444B", padding: 14 }}>
+        <Pressable accessibilityRole="button" onPress={() => setShowLicense(open => !open)} hitSlop={6}>
+          <Text style={{ color: "#E6E9EA", fontSize: 15 }}>
+            {showLicense ? "▾" : "▸"} Brokerage & license <Text style={{ color: "#9AA4AA" }}>(optional)</Text>
+          </Text>
+          {!showLicense && (draft.credentials.license.brokerage || draft.credentials.license.number) ? <Text style={{ color: "#8FD9B4", marginTop: 4 }}>
+            ✓ {[draft.credentials.license.brokerage, draft.credentials.license.number, draft.credentials.license.state].filter(Boolean).join(" · ")}
+          </Text> : null}
+        </Pressable>
+        {showLicense && <>
+          {input("lic-brokerage", "Brokerage", draft.credentials.license.brokerage, value => setLicense("brokerage", value))}
+          {input("lic-number", "License number", draft.credentials.license.number, value => setLicense("number", value))}
+          {input("lic-state", "License state", draft.credentials.license.state, value => setLicense("state", value))}
+          <Text style={{ color: "#9AA4AA", marginTop: 8 }}>Many states require these on advertising — you can add them any time.</Text>
+        </>}
+      </View>
+
+      {errorFor("review")}
+      {missingLabels.length > 0 && error?.place !== "review"
+        ? <Text style={{ color: "#D6BA91", marginTop: 16 }}>Still needed: {missingLabels.join(", ")}</Text> : null}
+      <Pressable accessibilityRole="button" onPress={finish} disabled={busy || !!regenerating}
+        style={({ pressed }) => ({ marginTop: 16, minHeight: 58, borderRadius: 14,
+          backgroundColor: missingLabels.length ? "#3D444C" : "#C2A276", alignItems: "center", justifyContent: "center",
+          opacity: busy ? 0.6 : pressed ? 0.85 : 1 })}>
+        <Text style={{ color: missingLabels.length ? "#C8D0D0" : "#172027", fontSize: 17, fontWeight: "700" }}>
+          {busy ? "Saving…" : "Complete Setup"}
+        </Text>
+      </Pressable>
     </>}
   </ScrollView>;
 }

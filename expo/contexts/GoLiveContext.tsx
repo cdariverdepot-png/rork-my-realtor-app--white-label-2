@@ -9,7 +9,7 @@ import { useClients } from "@/contexts/ClientsContext";
 import { useCalendarFeeds } from "@/contexts/CalendarFeedsContext";
 import { useDocuments } from "@/contexts/DocumentsContext";
 import { DEFAULT_THEME } from "@/constants/theme";
-import { requiredStatus, type RequiredFieldId } from "@/constants/sections";
+import { RECOMMENDED_FIELDS, requiredStatus, type RequiredFieldId } from "@/constants/sections";
 
 /**
  * GoLiveContext — the realtor's onboarding checklist.
@@ -180,8 +180,20 @@ export const [GoLiveProvider, useGoLive] = createContextHook(() => {
       ];
     });
 
+    // Recommended profile fields stay on the checklist but never gate going live.
+    const recommendedDefs: Omit<GoLiveItem, "completedAt">[] = RECOMMENDED_FIELDS.map((f) => ({
+      id: FIELD_TO_ITEM[f.id],
+      label: f.label,
+      cta: REQUIRED_CTA[f.id],
+      hint: f.why,
+      done: f.met(brand),
+      href: f.href,
+      required: false,
+    }));
+
     const defs: Omit<GoLiveItem, "completedAt">[] = [
       ...requiredDefs,
+      ...recommendedDefs,
       {
         id: "brandColors",
         label: "Theme",

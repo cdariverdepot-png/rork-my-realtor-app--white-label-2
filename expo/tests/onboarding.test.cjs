@@ -158,8 +158,12 @@ const fixture = () => ({
   credentials: { designations: [], education: [], awards: [], memberships: [], languages: [], license: { brokerage: 'Test Brokerage', number: 'AB 12-34 / X', state: 'Test region' } },
   theme: { accent: 'pewter', displayFont: 'grotesk', surface: 'alabaster' }
 });
-test('existing six required fields remain the source of truth; flexible license formats pass', () => {
-  assert.deepEqual(REQUIRED_FIELDS.map(f => f.id), ['name','portrait','city','contact','heroLine','license']);
+test('four required fields are the source of truth; portrait and license never block', () => {
+  assert.deepEqual(REQUIRED_FIELDS.map(f => f.id), ['name','city','contact','heroLine']);
+  const optional = fixture();
+  optional.portraitUrl = '';
+  optional.credentials.license = { brokerage: '', number: '', state: '' };
+  assert.equal(requiredStatus(optional).complete, true);
   assert.equal(requiredStatus(fixture()).complete, true);
   for (const field of REQUIRED_FIELDS) {
     const b = fixture();

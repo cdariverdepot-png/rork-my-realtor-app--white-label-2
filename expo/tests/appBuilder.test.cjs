@@ -32,3 +32,8 @@ test('conflicts and unsupported high-risk facts remain questions', () => {
   assert.deepEqual(facts.find((item) => item.field === 'realtor.phone').conflictingValues, ['555-0101']);
   assert.equal(facts.find((item) => item.field === 'credentials.license.number').needsClarification, true);
 });
+
+test('a single clearly-stated website fact is used without asking again', () => {
+  const facts = resolveFacts([{ field: 'realtor.city', value: "Coeur d'Alene, ID", sourceId: 'site', confidence: 0.7 }]);
+  assert.equal(facts[0].needsClarification, false);
+});

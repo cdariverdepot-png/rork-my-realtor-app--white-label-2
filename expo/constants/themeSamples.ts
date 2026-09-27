@@ -44,6 +44,8 @@ export function themeSample(id: ClientLayoutId): { brand: Brand; listings: Manag
 
 /** Whole-context switch: never fill gaps in a real profile with sample claims. */
 export function themePreview(draft: Brand, listings: ManagedListing[], id: ClientLayoutId, demo: boolean, mode: "auto" | "sample" | "profile" = "auto") {
-  const sample = mode === "sample" || (mode === "auto" && (demo || !requiredStatus(draft).complete));
+  // Showroom samples until the profile can fill a theme — including a portrait,
+  // which is recommended (not required) but every theme opens on it.
+  const sample = mode === "sample" || (mode === "auto" && (demo || !requiredStatus(draft).complete || !(draft.portraitUrl ?? "").trim()));
   return { ...(sample ? themeSample(id) : { brand: themeCandidate(draft, id), listings }), sample };
 }

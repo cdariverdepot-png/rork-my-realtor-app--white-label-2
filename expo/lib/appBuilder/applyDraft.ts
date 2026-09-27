@@ -13,8 +13,10 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
     quickContact: { ...base.quickContact },
     credentials: { ...base.credentials, license: { ...base.credentials.license } },
   };
+  // Prefill every value we found, including ones the realtor is asked to
+  // confirm: confirming a filled field beats retyping a blank one.
   for (const fact of facts) {
-    if (!fact.value || fact.needsClarification) continue;
+    if (!fact.value) continue;
     const [group, field, nested] = fact.field.split(".");
     if (group === "realtor" && field in next.realtor) {
       (next.realtor as unknown as Record<string, unknown>)[field] = fact.value;

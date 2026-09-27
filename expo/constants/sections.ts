@@ -44,7 +44,9 @@ export type RequiredField = {
 const filled = (s: string | undefined): boolean => (s ?? "").trim().length > 0;
 
 /**
- * The bare minimum for a functioning, compliant client app.
+ * The bare minimum for a functioning client app — the single source of truth
+ * for what blocks setup. Portrait and brokerage/licence are recommended, not
+ * required (see RECOMMENDED_FIELDS).
  *
  * Kept deliberately short. Every extra required field is a realtor who never
  * finishes setup, so anything that can be optional is optional — and anything
@@ -57,13 +59,6 @@ export const REQUIRED_FIELDS: RequiredField[] = [
     label: "Your name",
     why: "Signs your note, your listings and every message.",
     met: (b) => filled(b.realtor.name),
-    href: "/admin/studio",
-  },
-  {
-    id: "portrait",
-    label: "Your portrait",
-    why: "The app opens on your face — without it the first screen is a dark panel.",
-    met: (b) => filled(b.portraitUrl),
     href: "/admin/studio",
   },
   {
@@ -87,10 +82,24 @@ export const REQUIRED_FIELDS: RequiredField[] = [
     met: (b) => filled(b.realtor.heroMessage) || filled(b.realtor.tagline),
     href: "/admin/studio",
   },
+];
+
+/**
+ * Strongly recommended, surfaced prominently, but never blocking: the base app
+ * works without them, and a realtor can add them any time from Studio.
+ */
+export const RECOMMENDED_FIELDS: RequiredField[] = [
+  {
+    id: "portrait",
+    label: "Your portrait",
+    why: "The app opens on your face — without it the first screen is a dark panel.",
+    met: (b) => filled(b.portraitUrl),
+    href: "/admin/studio",
+  },
   {
     id: "license",
     label: "Brokerage & licence",
-    why: "Most states require your brokerage and licence number on advertising.",
+    why: "Most states require your brokerage and licence number on advertising — add them before you promote the app.",
     met: (b) =>
       filled(b.credentials.license.brokerage) &&
       filled(b.credentials.license.number) &&
@@ -98,6 +107,9 @@ export const REQUIRED_FIELDS: RequiredField[] = [
     href: "/admin/studio",
   },
 ];
+
+/** Every profile field Studio and the checklist know about, in display order. */
+export const PROFILE_FIELDS: RequiredField[] = [...REQUIRED_FIELDS.slice(0, 1), RECOMMENDED_FIELDS[0], ...REQUIRED_FIELDS.slice(1), RECOMMENDED_FIELDS[1]];
 
 export type RequiredStatus = {
   met: RequiredField[];
