@@ -4,7 +4,8 @@ import type { ResolvedFact } from "./sourceModel";
 import { CLIENT_LAYOUTS, isClientLayoutId } from "@/constants/clientLayouts";
 
 /** The generated content becomes a local draft. Saving is a separate action. */
-export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildDraft): Brand {
+export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildDraft,
+  options: { keepTheme?: boolean } = {}): Brand {
   const next: Brand = {
     ...base,
     realtor: { ...base.realtor },
@@ -37,7 +38,8 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
   }
   if (copy.conciergeLine?.trim()) next.concierge.title = copy.conciergeLine.trim();
   if (copy.contactLine?.trim()) next.quickContact.sub = copy.contactLine.trim();
-  if (isClientLayoutId(copy.layoutId)) {
+  // Updating an existing app from a new URL never changes the chosen theme.
+  if (!options.keepTheme && isClientLayoutId(copy.layoutId)) {
     next.layoutId = copy.layoutId;
     next.theme = CLIENT_LAYOUTS.find(layout => layout.id === copy.layoutId)!.defaultTheme;
   }

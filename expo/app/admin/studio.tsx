@@ -18,6 +18,10 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import NeutralContentCanvas from "@/components/NeutralContentCanvas";
+import WebsiteUrlField from "@/components/WebsiteUrlField";
+import PressableScale from "@/components/PressableScale";
+import { normalizeUrl } from "@/lib/websiteUrl";
+import { loadBuild } from "@/lib/appBuilder/buildService";
 import ThemeCarousel from "@/components/ThemeCarousel";
 import { imagePosition } from "@/lib/themeImages";
 import { editorSave } from "@/lib/editorSave";
@@ -541,6 +545,7 @@ export default function StudioScreen() {
           contentContainerStyle={{ paddingBottom: insets.bottom + 140 }}
           showsVerticalScrollIndicator={false}
         >
+          {params.section !== "theme" && <UpdateUrlSection dirty={dirty} />}
           {params.section === "theme" ? <ThemeSection draft={draft} setBrand={setBrand} /> :
             <NeutralContentCanvas draft={draft} onChange={setBrand}
               listings={liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
@@ -2959,3 +2964,42 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
 });
+
+/**
+ * Edit Content's "Update URL": the Build Your App website field, pre-filled with
+ * the saved website. The button hands off to the existing build/review flow in
+ * update mode — nothing in the app changes until that review is finished.
+ */
+function UpdateUrlSection({ dirty }: { dirty: boolean }) {
+  const router = useRouter();
+  const [url, setUrl] = useState("");
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    let alive = true;
+    void loadBuild().then(saved => {
+      const primary = saved?.sources.find(source => source.kind === "url");
+      if (alive && primary) setUrl(current => current || primary.uri);
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+  const update = () => {
+    const uri = normalizeUrl(url);
+    if (!uri) { setMessage("Enter your website address first."); return; }
+    if (dirty) { setMessage("Save your edits first, then update from your URL."); return; }
+    setMessage("");
+    router.push({ pathname: "/admin/build", params: { update: uri } } as never);
+  };
+  return (
+    <View style={{ paddingHorizontal: 20 }}>
+      <WebsiteUrlField eyebrow="UPDATE URL" value={url} onChangeText={value => { setUrl(value); setMessage(""); }}
+        note="Updating your URL will replace information previously generated from your website. Some information may need to be reviewed or re-entered afterward.">
+        {message ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{message}</Text> : null}
+        <PressableScale accessibilityRole="button" onPress={update} haptic="medium" style={{ marginTop: 16 }}>
+          <View style={{ minHeight: 52, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center" }}>
+            <Text style={{ color: "#172027", fontSize: 16, fontWeight: "700" }}>Update From URL</Text>
+          </View>
+        </PressableScale>
+      </WebsiteUrlField>
+    </View>
+  );
+}
