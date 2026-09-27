@@ -85,6 +85,7 @@ import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { useAccess } from "@/contexts/AccessContext";
 import { useSeats } from "@/contexts/SeatsContext";
 import SwipeToSwitch from "@/components/SwipeToSwitch";
+import type { GestureType } from "react-native-gesture-handler";
 
 /** Unique editorial textures behind each tool tile. */
 const TOOL_IMAGES = {
@@ -199,6 +200,8 @@ export default function AdminDashboard() {
   const { curatedClientCount } = useClientFeed();
   const { digestCounts, engagement } = useEngagement();
   const { brand: brandData, update: updateBrand } = useBrand();
+  // The theme carousel swipes horizontally; the dashboard's own swipe waits for it.
+  const [showcaseSwipe, setShowcaseSwipe] = useState<GestureType | undefined>(undefined);
   const setupComplete = requiredStatus(brandData).complete;
   const {
     clientCode, clientCodeEnabled,
@@ -455,6 +458,7 @@ export default function AdminDashboard() {
 
       <SwipeToSwitch
         direction="right"
+        waitFor={showcaseSwipe}
         onTrigger={() => {
           enterViewAsClient();
           router.replace("/");
@@ -546,7 +550,7 @@ export default function AdminDashboard() {
           <View style={styles.studioSection}>
             <Text style={[styles.studioHeadline, { marginTop: 0, textAlign: "center" }]}>Make changes whenever you need.</Text>
 
-            <ThemeShowcase brand={brandData} listings={all} />
+            <ThemeShowcase brand={brandData} onSwipeGesture={setShowcaseSwipe} />
 
             <Text style={[styles.studioDescription, { textAlign: "center", marginTop: 14 }]}>
               Switch layouts, update your profile, and refine the words your clients see.

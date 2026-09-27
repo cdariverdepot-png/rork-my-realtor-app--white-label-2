@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { Gesture, GestureDetector, type GestureType } from "react-native-gesture-handler";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
@@ -24,6 +24,8 @@ type Props = {
   label: string;
   Icon: IconType;
   enabled?: boolean;
+  /** A nested scroller (e.g. a horizontal carousel) that should win over this swipe. */
+  waitFor?: GestureType;
   children: React.ReactNode;
 };
 
@@ -46,6 +48,7 @@ export default function SwipeToSwitch({
   label,
   Icon,
   enabled = true,
+  waitFor,
   children,
 }: Props) {
   const sign = direction === "left" ? -1 : 1;
@@ -91,7 +94,7 @@ export default function SwipeToSwitch({
   }, [settle]);
 
   const gesture = useMemo(() => {
-    return (
+    const pan =
       Gesture.Pan()
         .enabled(enabled)
         // Once open the sheet must be pushable back, so listen both ways.
@@ -120,9 +123,9 @@ export default function SwipeToSwitch({
         })
         .onEnd(settleFromTravel)
         // A gesture cancelled by the scroll view still has to land somewhere.
-        .onFinalize(settleFromTravel)
-    );
-  }, [direction, enabled, open, sign, dragX, settleFromTravel]);
+        .onFinalize(settleFromTravel);
+    return waitFor ? pan.requireExternalGestureToFail(waitFor) : pan;
+  }, [direction, enabled, open, sign, dragX, settleFromTravel, waitFor]);
 
   /** 0 → 1 as the panel opens. */
   const progress = dragX.interpolate({
