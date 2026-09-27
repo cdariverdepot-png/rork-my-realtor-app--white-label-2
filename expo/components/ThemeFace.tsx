@@ -8,8 +8,9 @@ import { THEME_REFERENCES } from "@/constants/themeReferences";
 import ReferenceHome from "./themes/ReferenceHome";
 import ThemeNavigation from "./ThemeNavigation";
 
-/** Height of a theme card at a given width, from its reference proportions. */
-export const themeCardHeight = (id: ClientLayoutId, width: number) => (width / 390) * (390 / THEME_REFERENCES[id].aspect);
+/** Every card uses the same phone-shaped frame (390 × 844), so the carousel is uniform. */
+export const THEME_CARD_ASPECT = 844 / 390;
+export const themeCardHeight = (_id: ClientLayoutId, width: number) => width * THEME_CARD_ASPECT;
 
 /** One miniature theme preview. Memoised: carousels move these, never rebuild them. */
 export default memo(function ThemeFace({ id, brand, listings, portraitSource, width, radius = 18 }: {
@@ -17,8 +18,9 @@ export default memo(function ThemeFace({ id, brand, listings, portraitSource, wi
 }) {
   const scale = width / 390;
   const referenceHeight = 390 / THEME_REFERENCES[id].aspect;
+  // Designs shorter than the frame sit on their own background; taller ones are cropped at the frame.
   return <View accessibilityLabel={themeDesign(id).name}
-    style={{ width, height: referenceHeight * scale, borderRadius: radius, overflow: "hidden",
+    style={{ width, height: width * THEME_CARD_ASPECT, borderRadius: radius, overflow: "hidden",
       borderWidth: 1, borderColor: "#686158", backgroundColor: themeDesign(id).background }}>
     <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants"
       style={{ width: 390, height: referenceHeight, transform: [{ scale }], transformOrigin: "top left" }}>
