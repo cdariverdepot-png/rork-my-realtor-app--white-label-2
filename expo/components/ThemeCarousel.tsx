@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Animated, Modal, PanResponder, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Animated, Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { ChevronLeft, ChevronRight, Move, X } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
@@ -16,17 +17,18 @@ import { withSamplePortrait } from "@/constants/themeSamplePortraits";
 
 const tick = () => { if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {}); };
 
-function SlidingCard({ children, x, left, width, height, depth }: {
-  children: React.ReactNode; x: number; left: number; width: number; height: number; depth: number;
+function SlidingCard({ children, x, left, width, height, depth, instant = false }: {
+  children: React.ReactNode; x: number; left: number; width: number; height: number; depth: number; instant?: boolean;
 }) {
   const value = useRef(new Animated.Value(x)).current;
   const reduced = useReducedMotion();
   useEffect(() => {
-    if (reduced) { value.setValue(x); return; }
+    // While dragging, the strip already follows the finger — cards snap to their slots so nothing lags.
+    if (reduced || instant) { value.setValue(x); return; }
     const animation = Animated.spring(value, { toValue: x, damping: 24, stiffness: 180, mass: 1, useNativeDriver: true });
     animation.start();
     return () => animation.stop();
-  }, [value, x, reduced]);
+  }, [value, x, reduced, instant]);
   return <Animated.View style={{ position: "absolute", left, top: depth * 12, width, height,
     zIndex: 10 - depth, transform: [{ translateX: value }] }}>{children}</Animated.View>;
 }
@@ -45,10 +47,6 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false 
   const scrollY = useRef(new Animated.Value(0)).current;
   const count = THEME_CAROUSEL_ORDER.length;
   const step = (delta: number) => { tick(); setIndex(current => (current + delta + count) % count); };
-  const gesture = useRef(PanResponder.create({
-    onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dx) > 18 && Math.abs(g.dx) > Math.abs(g.dy) * 1.5,
-    onPanResponderRelease: (_, g) => { if (Math.abs(g.dx) > 35) { tick(); setIndex(current => (current + (g.dx < 0 ? 1 : -1) + count) % count); } },
-  })).current;
   const selectedId = THEME_CAROUSEL_ORDER[index];
   const candidate = themeCandidate(draft, selectedId);
   const preview = withSamplePortrait(themePreview(draft, listings, selectedId, demo, contentMode));
@@ -57,6 +55,32 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false 
   const cardWidth = 390 * scale;
   const cardHeight = 844 * scale;
   const gap = containerWidth > 650 ? Math.min(95, containerWidth / 10) : 46;
+  // Hold and drag: the fan follows the finger; every card-spacing travelled
+  // brings the next theme to the front (with a tick), so one long drag browses
+  // several. Release glides into the nearest slot; a quick flick adds one more.
+  const dragX = useRef(new Animated.Value(0)).current;
+  const consumed = useRef(0);
+  const [dragging, setDragging] = useState(false);
+  const swipe = useMemo(() => Gesture.Pan()
+    .activeOffsetX([-8, 8])
+    .failOffsetY([-12, 12])
+    .runOnJS(true)
+    .onStart(() => { consumed.current = 0; setDragging(true); })
+    .onUpdate(e => {
+      let dx = e.translationX - consumed.current;
+      while (dx <= -gap / 2) { step(1); consumed.current -= gap; dx += gap; }
+      while (dx >= gap / 2) { step(-1); consumed.current += gap; dx -= gap; }
+      dragX.setValue(dx);
+    })
+    .onEnd(e => {
+      const dx = e.translationX - consumed.current;
+      if (e.velocityX < -600 && dx < 0) { step(1); dragX.setValue(dx + gap); }
+      else if (e.velocityX > 600 && dx > 0) { step(-1); dragX.setValue(dx - gap); }
+    })
+    .onFinalize(() => {
+      setDragging(false);
+      Animated.spring(dragX, { toValue: 0, damping: 22, stiffness: 200, mass: 1, useNativeDriver: true }).start();
+    }), [gap, dragX]);
   const comparisonWidth = Math.min(390, Math.max(160, (windowWidth - 44) / 2));
   const reference = THEME_REFERENCES[selectedId];
   const canPosition = !demo && !preview.sample && !!draft.portraitUrl?.trim();
@@ -69,7 +93,9 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false 
       <Pressable accessibilityRole="button" accessibilityState={{ selected: preview.sample }} onPress={() => setContentMode("sample")} style={{ padding: 12, borderWidth: 1, borderColor: preview.sample ? "#D4B989" : "#686158", borderRadius: 8 }}><Text style={{ color: "#F5EFE5" }}>Sample profiles</Text></Pressable>
       {!demo && <Pressable accessibilityRole="button" accessibilityState={{ selected: !preview.sample }} onPress={() => setContentMode("profile")} style={{ padding: 12, borderWidth: 1, borderColor: !preview.sample ? "#D4B989" : "#686158", borderRadius: 8 }}><Text style={{ color: "#F5EFE5" }}>My information</Text></Pressable>}
     </View>
-    <View {...gesture.panHandlers} style={{ height: cardHeight + 42, overflow: "hidden" }}>
+    <GestureDetector gesture={swipe}>
+    <View style={{ height: cardHeight + 42, overflow: "hidden" }} collapsable={false}>
+      <Animated.View style={{ flex: 1, transform: [{ translateX: dragX }] }}>
       {[-3, -2, -1, 0, 1, 2, 3].map(offset => {
         const id = THEME_CAROUSEL_ORDER[(index + offset + count) % count];
         const cardPreview = withSamplePortrait(themePreview(draft, listings, id, demo, contentMode));
@@ -77,7 +103,7 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false 
         const referenceHeight = 390 / THEME_REFERENCES[id].aspect;
         const phoneHeight = referenceHeight * scale;
         const depthScale = 1 - Math.abs(offset) * 0.09;
-        return <SlidingCard key={id} x={offset * gap} left={(containerWidth - cardWidth) / 2} width={cardWidth} height={phoneHeight} depth={Math.abs(offset)}>
+        return <SlidingCard key={id} x={offset * gap} left={(containerWidth - cardWidth) / 2} width={cardWidth} height={phoneHeight} depth={Math.abs(offset)} instant={dragging}>
           <Pressable onPress={() => {
             if (offset !== 0) { tick(); setIndex(THEME_CAROUSEL_ORDER.indexOf(id)); return; }
             tick();
@@ -96,7 +122,9 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false 
           {id !== "eliza-editorial" && <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" aria-hidden={true} style={{ position: "absolute", bottom: 0, width: 390, transform: [{ scale }], transformOrigin: "bottom left" }}><ThemeNavigation brand={shown} /></View>}
         </Pressable></SlidingCard>;
       })}
+      </Animated.View>
     </View>
+    </GestureDetector>
     {/* Selection controls sit directly under the preview they affect. */}
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, marginTop: 6 }}>
       <Pressable onPress={() => step(-1)} accessibilityRole="button" accessibilityLabel="Previous theme" hitSlop={8}
