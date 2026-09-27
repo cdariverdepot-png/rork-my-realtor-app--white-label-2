@@ -1,7 +1,7 @@
 import createContextHook from "@nkzw/create-context-hook";
 import { isForClient } from "@/lib/audience";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -47,6 +47,30 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => { setItems(SEED); setRev(0); revRef.current = 0; setHydrated(false); }, [realtorId]);
+
+  // A client's "read" marks are their own, kept on their device — the shared
+  // list's `read` flag belongs to the realtor, so one client can't clear
+  // everyone else's badges.
+  const READ_KEY = currentClientId ? `${scope}:${currentClientId}:notifs.read.v1` : null;
+  const [readIds, setReadIds] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    setReadIds(new Set());
+    if (!READ_KEY) return;
+    let mounted = true;
+    void AsyncStorage.getItem(READ_KEY).then((raw) => {
+      const ids = raw ? JSON.parse(raw) as string[] : [];
+      if (mounted && Array.isArray(ids)) setReadIds(new Set(ids));
+    }).catch(() => {});
+    return () => { mounted = false; };
+  }, [READ_KEY]);
+  const markReadLocal = useCallback((ids: string[]) => {
+    if (!READ_KEY) return;
+    setReadIds((prev) => {
+      const next = new Set(prev); ids.forEach((id) => next.add(id));
+      void AsyncStorage.setItem(READ_KEY, JSON.stringify([...next].slice(-500))).catch(() => {});
+      return next;
+    });
+  }, [READ_KEY]);
 
   const surface = useCallback((n: NotifItem) => { setForeground(n); if (dismissTimer.current) clearTimeout(dismissTimer.current); dismissTimer.current = setTimeout(() => setForeground(null), 6500); }, []);
   const dismissForeground = useCallback(() => { if (dismissTimer.current) clearTimeout(dismissTimer.current); setForeground(null); }, []);
@@ -156,12 +180,14 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
   }, [persist, surface, bumpRev, realtorId, demoViewMode]);
 
   const markAllRead = useCallback(() => {
+    if (READ_KEY) { markReadLocal(items.filter(visibleTo).map((n) => n.id)); return; }
     // Only what this viewer can see — never items meant for the realtor or other clients.
     setItems((prev) => { const next = prev.map((n) => (visibleTo(n) ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
-  }, [persist, bumpRev, visibleTo]);
+  }, [persist, bumpRev, visibleTo, READ_KEY, markReadLocal, items]);
   const markRead = useCallback((id: string) => {
+    if (READ_KEY) { markReadLocal([id]); return; }
     setItems((prev) => { const next = prev.map((n) => (n.id === id ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
-  }, [persist, bumpRev]);
+  }, [persist, bumpRev, READ_KEY, markReadLocal]);
 
   const notifyClientJoined = useCallback((clientId: string, name: string) => {
     if (!realtorId || demoViewMode) return;
@@ -178,7 +204,10 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
       data: { clientId, route: "/admin/clients" } });
   }, [realtorId, demoViewMode, persist, bumpRev]);
 
-  const visibleItems = items.filter(visibleTo);
+  const visibleItems = useMemo(() => {
+    const mine = items.filter(visibleTo);
+    return READ_KEY ? mine.map((n) => ({ ...n, read: readIds.has(n.id) })) : mine;
+  }, [items, visibleTo, READ_KEY, readIds]);
   const unreadCount = visibleItems.filter((n) => !n.read).length;
 
   return { items: visibleItems, hydrated, permission, unreadCount, foreground, dismissForeground, requestPermission, broadcastFromRealtor, notifyClientJoined, markAllRead, markRead, refresh, pushToken: pushTokenRef.current };

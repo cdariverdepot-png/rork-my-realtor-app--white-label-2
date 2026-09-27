@@ -21,8 +21,10 @@ const DEFAULT_WATCHLISTS: Watchlist[] = [
 type SyncStatus = "idle" | "connecting" | "live" | "offline";
 
 export const [FavoritesProvider, useFavorites] = createContextHook(() => {
-  const { realtorId, demoViewMode } = useAuth();
-  const scope = realtorId ? realtorId : "demo";
+  const { realtorId, demoViewMode, currentClientId } = useAuth();
+  // Each client keeps their own favorites. The realtor's preview gets its own
+  // scope so trying the heart there never touches a real client's lists.
+  const scope = !realtorId ? "demo" : currentClientId ? `${realtorId}:${currentClientId}` : `${realtorId}:preview`;
   const STORAGE_KEY = `${scope}:favorites.v1`;
   const REVISION_KEY = `${scope}:favorites.rev.v1`;
   const CHANNEL = `${scope}:favorites`;
@@ -38,7 +40,7 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => { listsRef.current = lists; }, [lists]);
-  useEffect(() => { setLists(DEFAULT_WATCHLISTS); revRef.current = 0; setHydrated(false); }, [realtorId]);
+  useEffect(() => { setLists(DEFAULT_WATCHLISTS); revRef.current = 0; setHydrated(false); }, [scope]);
 
   useEffect(() => {
     let mounted = true;
