@@ -3029,7 +3029,7 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
   };
 
   return (
-    <View style={{ paddingHorizontal: 20 }}>
+    <View style={{ paddingHorizontal: 20, paddingBottom: 28 }}>
       <View style={{ marginTop: 30, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276",
         backgroundColor: "rgba(194,162,118,0.08)" }}>
         <Text style={{ color: "white", fontSize: 20, fontWeight: "600" }}>Update URL</Text>
