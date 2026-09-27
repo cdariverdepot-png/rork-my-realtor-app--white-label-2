@@ -5,7 +5,7 @@ import { Action, Backdrop, Box, BrandMark, Circle, Headline, Intro, useFrame, ty
 export default function MinaHero(p: HeroProps) {
   const f = useFrame(p, 341), { s } = f;
   return <View style={{ height: f.height, overflow: "hidden", backgroundColor: "#101710" }}>
-    <Backdrop p={p} frame={f} colors={["#0D160FFC", "#0D160FB0", "#0D160F66"]} />
+    <Backdrop p={p} frame={f} colors={["#0D160FFC", "#0D160FB0", "#0D160F66"]} left={210} background="#101710" />
     <Box x={24} y={40} w={280} s={s}><BrandMark p={p} s={s} color="#FFF8EC" accent="#B49A66" monogramSize={42} /></Box>
     <Box x={343} y={44} s={s}><Circle s={s} color="#B49A66" onPress={p.onMessage} size={30} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>

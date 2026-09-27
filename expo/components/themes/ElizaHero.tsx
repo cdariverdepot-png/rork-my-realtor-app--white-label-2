@@ -4,7 +4,7 @@ import { Action, Backdrop, Box, BrandMark, Circle, Headline, useFrame, type Hero
 export default function ElizaHero(p: HeroProps) {
   const f = useFrame(p, 764), { s } = f;
   return <View style={{ height: f.height, overflow: "hidden", backgroundColor: "#152017" }}>
-    <Backdrop p={p} frame={f} colors={["#0B160F10", "#0B160F05", "#0B160F25", "#EFE4D49A"]} vertical />
+    <Backdrop p={p} frame={f} colors={["#0B160F10", "#0B160F05", "#0B160F25", "#EFE4D49A"]} vertical until={318} background="#152017" />
     <Box x={22} y={19} w={270} s={s}><BrandMark p={p} s={s} color="#FFF9F0" accent="#BB9A59" monogramSize={31} /></Box>
     <Box x={334} y={11} s={s}><Circle s={s} color="#D4C6A7" onPress={p.onMessage} size={35} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>
