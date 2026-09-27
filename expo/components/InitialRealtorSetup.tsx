@@ -18,6 +18,7 @@ import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
 import { useClients } from "@/contexts/ClientsContext";
+import PressableScale from "@/components/PressableScale";
 
 function ManualSetup() {
   const { brand, hydrated, saveBrand } = useBrand();
@@ -328,11 +329,12 @@ export default function InitialRealtorSetup() {
         style={{ color: "white", borderColor: "#646C70", borderWidth: 1, borderRadius: 10, padding: 12, fontSize: 16 }} />
     </View>;
   const button = (label: string, onPress: () => void, primary = false, disabled = busy) =>
-    <Pressable accessibilityRole="button" onPress={onPress} disabled={disabled}
-      style={{ padding: 14, borderRadius: 11, borderWidth: 1, borderColor: primary ? "#C2A276" : "#657079",
-        backgroundColor: primary ? "#C2A276" : "transparent", marginTop: 10, opacity: disabled ? 0.55 : 1 }}>
-      <Text style={{ color: primary ? "#172027" : "white", textAlign: "center", fontWeight: "600" }}>{label}</Text>
-    </Pressable>;
+    <PressableScale accessibilityRole="button" onPress={onPress} disabled={disabled} haptic={disabled ? "none" : "selection"} style={{ marginTop: 10 }}>
+      <View style={{ padding: 14, borderRadius: 11, borderWidth: 1, borderColor: primary ? "#C2A276" : "#657079",
+        backgroundColor: primary ? "#C2A276" : "#171D22", opacity: disabled ? 0.55 : 1 }}>
+        <Text style={{ color: primary ? "#172027" : "white", textAlign: "center", fontWeight: "600" }}>{label}</Text>
+      </View>
+    </PressableScale>;
   /** Secondary, clearly optional control; whatever it added is listed right inside it. */
   const optional = (Icon: typeof Link2, label: string, onPress: () => void, added: React.ReactNode) =>
     <View key={label} style={{ borderRadius: 12, borderWidth: 1, borderColor: "#3A444B", paddingHorizontal: 14, paddingVertical: 12 }}>
@@ -453,11 +455,11 @@ export default function InitialRealtorSetup() {
       </View>
 
       {errorFor("sources")}
-      <Pressable accessibilityRole="button" onPress={analyze} disabled={busy}
-        style={({ pressed }) => ({ marginTop: 26, minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276",
-          alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : pressed ? 0.85 : 1 })}>
-        <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>Let’s Build My App!</Text>
-      </Pressable>
+      <PressableScale accessibilityRole="button" onPress={analyze} disabled={busy} haptic="medium" style={{ marginTop: 26 }}>
+        <View style={{ minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
+          <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>Let’s Build My App!</Text>
+        </View>
+      </PressableScale>
       {editingSources && result && draft && button("Back to my app", () => setEditingSources(false))}
 
       {/* Separate alternative path. */}
@@ -564,14 +566,14 @@ export default function InitialRealtorSetup() {
       {errorFor("review")}
       {missingLabels.length > 0 && error?.place !== "review"
         ? <Text style={{ color: "#D6BA91", marginTop: 16 }}>Still needed: {missingLabels.join(", ")}</Text> : null}
-      <Pressable accessibilityRole="button" onPress={finish} disabled={busy || !!regenerating}
-        style={({ pressed }) => ({ marginTop: 16, minHeight: 58, borderRadius: 14,
-          backgroundColor: missingLabels.length ? "#3D444C" : "#C2A276", alignItems: "center", justifyContent: "center",
-          opacity: busy ? 0.6 : pressed ? 0.85 : 1 })}>
-        <Text style={{ color: missingLabels.length ? "#C8D0D0" : "#172027", fontSize: 17, fontWeight: "700" }}>
-          {busy ? "Saving…" : "Complete Setup"}
-        </Text>
-      </Pressable>
+      <PressableScale accessibilityRole="button" onPress={finish} disabled={busy || !!regenerating} haptic="medium" style={{ marginTop: 16 }}>
+        <View style={{ minHeight: 58, borderRadius: 14, backgroundColor: missingLabels.length ? "#3D444C" : "#C2A276",
+          alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
+          <Text style={{ color: missingLabels.length ? "#C8D0D0" : "#172027", fontSize: 17, fontWeight: "700" }}>
+            {busy ? "Saving…" : "Complete Setup"}
+          </Text>
+        </View>
+      </PressableScale>
     </>}
   </ScrollView>;
 }

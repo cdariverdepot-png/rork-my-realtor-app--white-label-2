@@ -7,6 +7,7 @@ import type { ManagedListing } from "@/contexts/ListingsContext";
 import { visibleSections, type ClientSectionId } from "@/constants/sections";
 import { orderThemeSections } from "@/constants/themeStructure";
 import { themeDesign } from "@/constants/themeDesigns";
+import { withThemeSlots } from "@/constants/themeSlots";
 import ThemeHero from "../ThemeHero";
 import ThemeContentSection from "../ThemeContentSection";
 import { SERIF, type HeroProps } from "./shared";
@@ -20,7 +21,8 @@ type CardKind = "coastal" | "journal" | "discovery" | "burgundy" | "nora" | "min
 export default function ReferenceHome(p: ReferenceHomeProps) {
   const window = useWindowDimensions();
   const width = p.width ?? window.width, s = width / 390;
-  const b = p.brand, r = b.realtor, d = themeDesign(b.layoutId, b.theme);
+  // The theme owns the layout; the profile only fills its slots.
+  const b = withThemeSlots(p.brand), r = b.realtor, d = themeDesign(b.layoutId, b.theme);
   const items = p.listings.filter(item => !item.hidden);
   const visible = visibleSections({ brand: b, visibleListingCount: items.length });
   const has = (id: ClientSectionId) => visible.includes(id);

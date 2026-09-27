@@ -18,7 +18,6 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import NeutralContentCanvas from "@/components/NeutralContentCanvas";
-import ThemeImagePosition from "@/components/ThemeImagePosition";
 import ThemeCarousel from "@/components/ThemeCarousel";
 import { imagePosition } from "@/lib/themeImages";
 import { editorSave } from "@/lib/editorSave";
@@ -1138,8 +1137,7 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
     <View>
       <ThemeCarousel draft={draft} listings={listings} onChoose={next => setBrand(() => next)} />
       {draft.theme.presentationVersion === 2 ? <>
-        <Text style={{ color: "#D4C9B8", padding: 16, lineHeight: 21 }}>These reference themes use their own coordinated typography, colors, and surfaces. Use Preview layout above to see the actual design. Portrait framing remains adjustable below; your original photo is preserved.</Text>
-        <ThemeImagePosition draft={draft} onChange={setBrand} />
+        <Text style={{ color: "#D4C9B8", padding: 16, lineHeight: 21 }}>Each theme keeps its own design — your information fills it in. Tap the centre preview to drag and pinch your portrait into place; your original photo is preserved.</Text>
       </> : <>
       {/* ── Live preview ── */}
       <View style={styles.tpFrame}>
@@ -1155,7 +1153,6 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
         />
       </View>
 
-      {target === "hero" && <ThemeImagePosition draft={draft} onChange={setBrand} />}
       {/* ── What the frame is showing — glass segmented, sits with the preview ── */}
       <View style={styles.tpTargetRow}>
         {PREVIEW_TARGETS.map((t) => {

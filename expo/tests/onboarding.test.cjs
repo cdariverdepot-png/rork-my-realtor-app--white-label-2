@@ -281,3 +281,26 @@ test('portrait framing is isolated by layout and retains legacy crop fallback', 
   assert.deepEqual(imagePosition(theme, 'eliza-editorial'), { left: '75%', top: '25%' });
   assert.deepEqual(imagePosition(theme, 'coastal-personal'), { left: '0%', top: '100%' });
 });
+test('sample profiles pass through theme slots unchanged', () => {
+  const { themeSample } = load('constants/themeSamples');
+  const { THEME_CAROUSEL_ORDER } = load('constants/themeDesigns');
+  const { withThemeSlots } = load('constants/themeSlots');
+  for (const id of THEME_CAROUSEL_ORDER) {
+    const brand = themeSample(id).brand;
+    assert.deepEqual(withThemeSlots(brand), brand, id);
+  }
+});
+test('real profiles keep each theme\'s own design copy instead of one generic seed', () => {
+  const { withThemeSlots } = load('constants/themeSlots');
+  const { themeCandidate } = load('constants/themeDesigns');
+  const seedish = { ...fixture(), realtor: { ...fixture().realtor, name: 'Jerrod Smith', monogram: '', brandName: '', brandSub: '', heroEyebrow: '', title: '', primaryCta: '', secondaryCta: '' },
+    curated: { eyebrow: 'Curated for you', title: 'Homes I picked\nfor you.' }, concierge: { eyebrow: 'Your private concierge', title: "Everything I'm\nholding for you." },
+    quickContact: { kicker: 'DIRECT LINE', title: 'Reach me directly.', sub: 'No assistants. No call centers. {first} writes back personally.' } };
+  const coastal = withThemeSlots(themeCandidate(seedish, 'coastal-personal'));
+  const burgundy = withThemeSlots(themeCandidate(seedish, 'private-collection'));
+  assert.equal(coastal.curated.title, 'Curated Collection');
+  assert.equal(burgundy.curated.title, 'Exclusive Listings');
+  assert.equal(coastal.realtor.name, 'Jerrod Smith');
+  assert.equal(coastal.realtor.monogram, 'JS');
+  assert.equal(coastal.realtor.heroMessage, seedish.realtor.heroMessage);
+});

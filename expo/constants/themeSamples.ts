@@ -42,10 +42,41 @@ export function themeSample(id: ClientLayoutId): { brand: Brand; listings: Manag
   })) };
 }
 
+/**
+ * The theme's own design copy — eyebrows, section titles, button labels. These
+ * are part of the layout, not claims about a person, so a real profile that
+ * leaves them blank shows the theme's wording instead of losing the element.
+ */
+export function themeSlotCopy(id: ClientLayoutId) {
+  const v = samples[id];
+  const sample = themeSample(id).brand;
+  return {
+    heroEyebrow: v.eyebrow,
+    // "EST. 2011" is a claim; only neutral subtitles carry over.
+    brandSub: /\d/.test(v.sub) ? "REAL ESTATE" : v.sub,
+    title: sample.realtor.title,
+    primaryCta: sample.realtor.primaryCta,
+    secondaryCta: sample.realtor.secondaryCta,
+    collection: v.collection,
+    curatedEyebrow: id === "private-collection" ? "HANDPICKED FOR YOU" : "",
+    conciergeEyebrow: sample.concierge.eyebrow,
+    conciergeTitle: sample.concierge.title,
+    quickContact: sample.quickContact,
+  };
+}
+
+/** Illustrative homes so an editor preview keeps its listing layout before any exist. Preview only. */
+export function themeSampleListings(id: ClientLayoutId): ManagedListing[] {
+  return themeSample(id).listings;
+}
+
 /** Whole-context switch: never fill gaps in a real profile with sample claims. */
 export function themePreview(draft: Brand, listings: ManagedListing[], id: ClientLayoutId, demo: boolean, mode: "auto" | "sample" | "profile" = "auto") {
   // Showroom samples until the profile can fill a theme — including a portrait,
   // which is recommended (not required) but every theme opens on it.
   const sample = mode === "sample" || (mode === "auto" && (demo || !requiredStatus(draft).complete || !(draft.portraitUrl ?? "").trim()));
-  return { ...(sample ? themeSample(id) : { brand: themeCandidate(draft, id), listings }), sample };
+  // "My information" swaps content, never layout: before the realtor has any
+  // listings, the preview keeps the theme's listing row with illustrative homes.
+  const ownListings = listings.filter(item => !item.hidden);
+  return { ...(sample ? themeSample(id) : { brand: themeCandidate(draft, id), listings: ownListings.length ? listings : themeSampleListings(id) }), sample };
 }

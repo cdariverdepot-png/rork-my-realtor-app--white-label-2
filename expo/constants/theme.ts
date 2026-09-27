@@ -42,7 +42,8 @@ export type ThemeConfig = {
   /** Opt-in renderer version. Existing profiles retain their saved presentation. */
   presentationVersion?: 2;
   /** Presentation-only positions keyed by look; uploaded assets stay canonical. */
-  imagePositions?: Record<string, { x: number; y: number }>;
+  /** Portrait framing per look: focal point (0–100 %) and zoom (1 = fill). */
+  imagePositions?: Record<string, { x: number; y: number; zoom?: number }>;
   accent: ThemeAccent;
   displayFont: ThemeFont;
   surface: ThemeSurface;

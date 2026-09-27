@@ -5,7 +5,14 @@ import { ArrowRight, MessageCircle, X, type LucideIcon } from "lucide-react-nati
 import type { Brand } from "@/contexts/BrandContext";
 import { themeDesign } from "@/constants/themeDesigns";
 import { useThemeMotion } from "@/hooks/useThemeMotion";
-import { imagePosition } from "@/lib/themeImages";
+import { imageFrame, imagePosition } from "@/lib/themeImages";
+
+/** Zoom around the chosen focal point; at zoom ≥ 1 the frame always stays filled. Sample portraits are never reframed. */
+function zoomStyle(p: { portraitSource?: number; brand: Brand }): ViewStyle {
+  if (p.portraitSource !== undefined) return {};
+  const f = imageFrame(p.brand.theme, p.brand.layoutId);
+  return f.zoom > 1 ? { transform: [{ scale: f.zoom }], transformOrigin: `${f.x}% ${f.y}%` } : {};
+}
 
 export type HeroProps = { brand: Brand; portraitSource?: number; width?: number; scrollY?: Animated.Value; preview?: boolean; topInset?: number;
   onBrowse?: () => void; onMessage?: () => void; onSaved?: () => void; onSchedule?: () => void; onCall?: () => void; onNotifications?: () => void };
@@ -26,7 +33,9 @@ export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: 
   return <View style={StyleSheet.absoluteFill} pointerEvents="none">
     {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View style={{ position: "absolute", left: left * frame.s, right: 0, top: -28 * frame.s, bottom: -28 * frame.s,
       transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
-      <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
+      <View style={[StyleSheet.absoluteFill, zoomStyle(p)]}>
+        <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
+      </View>
     </Animated.View>}
     <></>
     {!vertical && !frame.d.light && <></>}

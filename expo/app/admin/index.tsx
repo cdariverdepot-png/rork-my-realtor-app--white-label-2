@@ -78,6 +78,7 @@ import { useGoLive } from "@/contexts/GoLiveContext";
 import { realtor } from "@/constants/realtor";
 import { requiredStatus } from "@/constants/sections";
 import ThemeShowcase from "@/components/ThemeShowcase";
+import PressableScale from "@/components/PressableScale";
 import { assets as seedAssets, avatarPlaceholder } from "@/constants/assets";
 import { resolveTheme } from "@/constants/theme";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
@@ -543,7 +544,7 @@ export default function AdminDashboard() {
               BRAND STUDIO — The Heart
               ═══════════════════════════════════════════════ */}
           <View style={styles.studioSection}>
-            <Text style={[styles.studioHeadline, { marginTop: 0 }]}>Make changes whenever you need.</Text>
+            <Text style={[styles.studioHeadline, { marginTop: 0, textAlign: "center" }]}>Make changes whenever you need.</Text>
 
             <ThemeShowcase brand={brandData} listings={all} />
 
@@ -552,22 +553,28 @@ export default function AdminDashboard() {
             </Text>
 
             <View style={{ flexDirection: "row", gap: 10, marginTop: 18 }}>
-              <Pressable
-                onPress={tap(() => router.push({ pathname: "/admin/studio", params: { section: "theme" } }))}
-                style={({ pressed }) => [styles.studioSecondary, { minHeight: 50 }, pressed && { opacity: 0.8 }]}
+              <PressableScale
+                onPress={() => router.push({ pathname: "/admin/studio", params: { section: "theme" } })}
+                style={{ flex: 1 }}
+                haptic="light"
                 accessibilityRole="button"
               >
-                <Paintbrush size={15} color={admin.goldLight} strokeWidth={1.7} />
-                <Text style={styles.studioSecondaryText}>EDIT THEME</Text>
-              </Pressable>
-              <Pressable
-                onPress={tap(() => router.push("/admin/studio"))}
-                style={({ pressed }) => [styles.studioSecondary, { minHeight: 50 }, pressed && { opacity: 0.8 }]}
+                <View style={styles.studioAction}>
+                  <Paintbrush size={16} color={admin.goldLight} strokeWidth={1.8} />
+                  <Text style={styles.studioActionText}>EDIT THEME</Text>
+                </View>
+              </PressableScale>
+              <PressableScale
+                onPress={() => router.push("/admin/studio")}
+                style={{ flex: 1 }}
+                haptic="light"
                 accessibilityRole="button"
               >
-                <Pencil size={15} color={admin.goldLight} strokeWidth={1.7} />
-                <Text style={styles.studioSecondaryText}>EDIT CONTENT</Text>
-              </Pressable>
+                <View style={styles.studioAction}>
+                  <Pencil size={16} color={admin.goldLight} strokeWidth={1.8} />
+                  <Text style={styles.studioActionText}>EDIT CONTENT</Text>
+                </View>
+              </PressableScale>
             </View>
           </View>
 
@@ -587,15 +594,17 @@ export default function AdminDashboard() {
 
             {all.length === 0 ? (
               <View style={{ paddingHorizontal: PAD }}>
-                <Pressable
-                  onPress={tap(() => router.push("/admin/add"))}
+                <PressableScale
+                  onPress={() => router.push("/admin/add")}
                   accessibilityRole="button"
                   accessibilityLabel="Import your first property"
-                  style={({ pressed }) => [styles.empty, pressed && { opacity: 0.8 }]}
+                  scaleTo={0.98}
                 >
-                  <Text style={styles.emptyTitle}>No listings yet</Text>
-                  <Text style={styles.emptySub}>Click here to import your first property from any public listing link.</Text>
-                </Pressable>
+                  <View style={styles.empty}>
+                    <Text style={styles.emptyTitle}>No listings yet</Text>
+                    <Text style={styles.emptySub}>Click here to import your first property from any public listing link.</Text>
+                  </View>
+                </PressableScale>
               </View>
             ) : (
               <View>
@@ -1697,6 +1706,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#EBC776",
     shadowColor: "#EBC776", shadowOpacity: 0.9, shadowRadius: 6, shadowOffset: { width: 0, height: 0 },
   },
+  // Solid, raised surface so the two actions read as buttons against the shaded panel.
+  studioAction: {
+    minHeight: 52, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8,
+    borderRadius: 12, borderWidth: 1.5, borderColor: "rgba(224,188,114,0.75)", backgroundColor: "#2A2317",
+    shadowColor: "#000", shadowOpacity: 0.35, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 6,
+  },
+  studioActionText: { fontFamily: fonts.sansSemi, color: "#F6EEDF", fontSize: 12, letterSpacing: 1.6 },
   studioSecondary: {
     flex: 1, minHeight: 42, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7,
     borderRadius: 10, borderWidth: 1, borderColor: admin.hairlineGold, backgroundColor: "rgba(210,163,67,0.07)",
