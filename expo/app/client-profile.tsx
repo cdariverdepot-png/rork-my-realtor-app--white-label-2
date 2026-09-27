@@ -70,7 +70,7 @@ export default function ClientProfileFlow() {
   const params = useLocalSearchParams<{ edit?: string }>();
   const isEditing = params.edit === "1";
 
-  const { session, isClient, hydrated: authHydrated, updateClientProfile } = useAuth();
+  const { session, isClient, hydrated: authHydrated, updateClientProfile, logout } = useAuth();
   const { brand: b } = useBrand();
   const { all: allListings } = useListings();
   const {
@@ -226,23 +226,33 @@ export default function ClientProfileFlow() {
     transition(() => setStepIndex((i) => i + 1));
   }, [persistStep, stepIndex, total, finish, transition]);
 
+  /**
+   * Until the profile is shared the app can't open, so "back" would only bounce
+   * straight back here. Leaving instead saves progress and signs out to the
+   * portal (e.g. a client who used the wrong invite code).
+   */
+  const exitProfile = useCallback(() => {
+    if (myProfileShared || !isClient) { router.back(); return; }
+    void logout().then(() => router.replace("/portal"));
+  }, [myProfileShared, isClient, logout, router]);
+
   const goBack = useCallback(() => {
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
     setShowErrors(false);
     if (stepIndex === 0) {
-      router.back();
+      exitProfile();
       return;
     }
     persistStep();
     transition(() => setStepIndex((i) => Math.max(0, i - 1)));
-  }, [stepIndex, router, persistStep, transition]);
+  }, [stepIndex, exitProfile, persistStep, transition]);
 
   /** Leaving early is allowed and saves — the alternative is losing the lot. */
   const leave = useCallback(() => {
     persistStep();
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
-    router.back();
-  }, [persistStep, router]);
+    exitProfile();
+  }, [persistStep, exitProfile]);
 
   const pickPhoto = useCallback(async () => {
     try {
