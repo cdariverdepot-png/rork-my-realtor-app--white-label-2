@@ -1,0 +1,140 @@
+name: Build and deploy Expo web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'expo/**'
+      - '.github/workflows/deploy-web.yml'
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to production after a successful build'
+        type: boolean
+        default: true
+      project_id:
+        description: 'Expo project UUID (or set repository variable EXPO_PROJECT_ID)'
+        type: string
+        required: false
+      subdomain:
+        description: 'Expo hosting subdomain (must match the project if already deployed)'
+        type: string
+        default: cdariverdepot-my-realtor
+
+permissions:
+  contents: read
+
+concurrency:
+  group: expo-web-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: expo
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      DEPLOY: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
+      EXPO_PROJECT_ID: ${{ inputs.project_id || vars.EXPO_PROJECT_ID }}
+      HOSTING_SUBDOMAIN: ${{ inputs.subdomain || vars.EXPO_HOSTING_SUBDOMAIN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: expo/pnpm-lock.yaml
+
+      - name: Check deployment credentials
+        if: env.DEPLOY == 'true'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          test -n "$EXPO_TOKEN" || { echo "::error::Add EXPO_TOKEN in repository Actions secrets."; exit 1; }
+          test -n "$EXPO_PROJECT_ID" || { echo "::error::Enter the Expo project ID when running this workflow."; exit 1; }
+          test -n "$HOSTING_SUBDOMAIN" || { echo "::error::Enter the Expo hosting subdomain."; exit 1; }
+
+      - name: Configure production URL and project
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const config = JSON.parse(fs.readFileSync('app.json', 'utf8'));
+          const id = process.env.EXPO_PROJECT_ID;
+          const domain = process.env.HOSTING_SUBDOMAIN;
+          if (id) {
+            if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+              throw new Error('EXPO_PROJECT_ID must be an Expo project UUID.');
+            }
+            const current = config.expo.extra?.eas?.projectId;
+            if (current && current !== id) throw new Error('Project ID differs from app.json.');
+            config.expo.extra = { ...config.expo.extra, eas: { ...config.expo.extra?.eas, projectId: id } };
+            fs.writeFileSync('app.json', JSON.stringify(config, null, 2) + '\n');
+          }
+          if (domain) {
+            if (!/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(domain) || domain.includes('--')) {
+              throw new Error('Use a plain Expo subdomain, without https:// or .expo.app.');
+            }
+            const url = 'https://' + domain + '.expo.app';
+            fs.writeFileSync('.env.production', 'EXPO_PUBLIC_APP_URL=' + url + '\n');
+            fs.appendFileSync(process.env.GITHUB_ENV, 'EXPO_PUBLIC_APP_URL=' + url + '\n');
+          }
+          NODE
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run app tests
+        run: pnpm test
+
+      - name: Export web app
+        run: pnpm exec expo export --platform web --clear
+
+      - name: Check public routes exist
+        run: |
+          test -f dist/welcome.html || test -f dist/welcome/index.html
+          test -f dist/auth/callback.html || test -f dist/auth/callback/index.html
+
+      - name: Save web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: expo-web-${{ github.run_id }}
+          path: expo/dist
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Save deployment configuration
+        if: env.DEPLOY == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: expo-production-config
+          path: |
+            expo/app.json
+            expo/.env.production
+          include-hidden-files: true
+          retention-days: 7
+
+      - name: Set up Expo deployment
+        if: env.DEPLOY == 'true'
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Deploy production
+        if: env.DEPLOY == 'true'
+        run: eas deploy --prod --non-interactive --dev-domain "$HOSTING_SUBDOMAIN"
+
+      - name: Check production routes
+        if: env.DEPLOY == 'true'
+        run: |
+          for route in /welcome /auth/callback; do
+            curl --fail --show-error --silent --location --retry 5 --retry-all-errors --retry-delay 10 "$EXPO_PUBLIC_APP_URL$route" -o /dev/null
+          done
+          printf 'Production URL: %s\n\nSupabase redirect to allow: %s/auth/callback\n' "$EXPO_PUBLIC_APP_URL" "$EXPO_PUBLIC_APP_URL" >> "$GITHUB_STEP_SUMMARY"
