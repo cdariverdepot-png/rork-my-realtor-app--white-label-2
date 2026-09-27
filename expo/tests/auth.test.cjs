@@ -305,3 +305,41 @@ test('realtor record uses the signup name, never one derived from the email', as
   assert.equal((await auth.ensureRealtorAuthRecord()).ok, true);
   assert.deepEqual(args, { p_name: 'Jerrod' });
 });
+
+test('static export skips Supabase initialization; browsers and native apps still initialize', async () => {
+  const vm = require('node:vm');
+  const source = ts.transpileModule(
+    fs.readFileSync(path.join(__dirname, '..', 'lib/supabase.ts'), 'utf8'),
+    { compilerOptions: { module: ts.ModuleKind.CommonJS } }
+  ).outputText;
+  for (const scenario of [
+    { os: 'web', browser: false, expected: 0 },
+    { os: 'web', browser: true, expected: 1 },
+    { os: 'ios', browser: false, expected: 1 },
+    { os: 'android', browser: false, expected: 1 },
+  ]) {
+    let initialized = 0;
+    const session = { user: { id: 'test-user' } };
+    const client = { auth: {
+      getSession: async () => ({ data: { session } }),
+      onAuthStateChange: () => {},
+      signInAnonymously: () => { throw new Error('must not create a guest'); },
+    } };
+    const context = {
+      exports: {}, process: { env: {} }, console: { log: () => {} },
+      ...(scenario.browser ? { window: {} } : {}),
+      require: id => {
+        if (id === 'react-native-url-polyfill/auto') return {};
+        if (id === 'react-native') return { Platform: { OS: scenario.os } };
+        if (id === '@react-native-async-storage/async-storage') return { default: {} };
+        if (id === 'expo-constants') return { default: { expoConfig: {} } };
+        if (id === '@supabase/supabase-js') return { createClient: () => { initialized++; return client; } };
+        throw new Error('Unexpected import: ' + id);
+      },
+    };
+    vm.runInNewContext(source, context);
+    assert.equal(initialized, scenario.expected, JSON.stringify(scenario));
+    assert.equal(context.exports.supabase, scenario.expected ? client : null);
+    assert.equal(await context.exports.ensureSupabaseSession(), scenario.expected ? session : null);
+  }
+});

@@ -105,6 +105,9 @@ function safeFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Respon
 }
 
 export const supabase: SupabaseClient | null = (() => {
+  // Static export runs in Node: there is no browser storage or user session.
+  // Create the client only on the device, including the hydrated web app.
+  if (Platform.OS === "web" && typeof window === "undefined") return null;
   try {
     return createClient(url, anon, {
       auth: {
