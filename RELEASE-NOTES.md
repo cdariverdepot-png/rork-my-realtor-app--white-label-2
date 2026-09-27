@@ -7,7 +7,7 @@ Includes seven distinct theme layouts, isolated sample personas and supplied por
 - Published web origin: `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/`
 - Supabase **Site URL**: `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/`
 - Redirect allowlist: Site URL, `{base}/auth/callback`, `{base}/portal`, `http://127.0.0.1:4179/`, `rork-app://auth/callback`
-- Google / Microsoft social buttons stay off until `EXPO_PUBLIC_GOOGLE_SIGN_IN=true` / `EXPO_PUBLIC_MICROSOFT_SIGN_IN=true` **and** matching OAuth client IDs are configured in the Supabase Auth providers dashboard (do not invent client secrets in this repo).
+- Google / Microsoft portal buttons are **on by default** in the shipped build (opt out with `EXPO_PUBLIC_*=false`). Taps still need Google/Azure client IDs + secrets in the Supabase Auth providers dashboard — this repo does not store those secrets.
 
 ## Auth (signup / login) — preview notes
 

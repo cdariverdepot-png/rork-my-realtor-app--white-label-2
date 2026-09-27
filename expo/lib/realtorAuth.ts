@@ -1,5 +1,5 @@
 import { supabase, clearAnonymousSessionForEmailAuth } from "@/lib/supabase";
-import { signupEmailRedirect } from "@/lib/authRedirect";
+import { signupEmailRedirect, webOriginForRedirect } from "@/lib/authRedirect";
 import { authErrorMessage } from "@/lib/authErrors";
 
 export type RealtorAuthResult =
@@ -21,7 +21,7 @@ export async function signUpRealtorWithAuth(input: {
     password: input.password,
     options: {
       data: { realtor_name: input.name.trim() },
-      emailRedirectTo: signupEmailRedirect(typeof window !== "undefined" ? window.location?.origin : undefined),
+      emailRedirectTo: signupEmailRedirect(webOriginForRedirect()),
     },
   });
   if (error) return { ok: false, error: authErrorMessage(error) };

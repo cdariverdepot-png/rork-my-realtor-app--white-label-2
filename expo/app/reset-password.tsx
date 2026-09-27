@@ -158,7 +158,8 @@ export default function ResetPassword() {
               </View>
               <Text style={styles.title}>Password saved.</Text>
               <Text style={styles.sub}>
-                Sign in with your email and new password to open your realtor account.
+                Open My Realtor App (or continue on the web portal) and sign in with your email and
+                new password.
               </Text>
               <Pressable
                 onPress={() => router.replace("/portal?entry=realtor")}
@@ -177,8 +178,9 @@ export default function ResetPassword() {
               <Text style={styles.eyebrow}>ACCOUNT RECOVERY</Text>
               <Text style={styles.title}>Check your email.</Text>
               <Text style={styles.sub}>
-                We sent a reset link to {email}. Open it on this same device/browser so we can finish
-                setting your password here. The link expires in about an hour.
+                We sent a reset link to {email}. Open it on your phone or any browser — you will set a
+                new password on our secure site, then sign in to the app with that password. The link
+                expires in about an hour.
               </Text>
               <Pressable
                 onPress={sendLink}

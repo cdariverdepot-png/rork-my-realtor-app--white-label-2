@@ -6,7 +6,12 @@ const ts = require('typescript');
 function load(name, client) {
   const module = { exports: {} };
   const source = ts.transpileModule(fs.readFileSync(path.join(__dirname, '..', name + '.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
-  new Function('require', 'module', 'exports', source)(id => id === '@/lib/supabase' ? { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {} } : load(id.replace('@/', ''), client), module, module.exports);
+  new Function('require', 'module', 'exports', source)(id => {
+    if (id === 'react-native') return { Platform: { OS: 'web' } };
+    if (id === '@/lib/supabase') return { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {} };
+    if (id.startsWith('@/')) return load(id.slice(2), client);
+    return require(id);
+  }, module, module.exports);
   return module.exports;
 }
 test('email sign-in never silently creates another account', async () => {
@@ -76,6 +81,7 @@ test('password reset emails a recovery link with redirect, not OTP create', asyn
   };
   new Function('require', 'module', 'exports', source)(
     (id) => {
+      if (id === 'react-native') return { Platform: { OS: 'web' } };
       if (id === '@/lib/supabase') {
         return {
           supabase: client,
@@ -86,6 +92,7 @@ test('password reset emails a recovery link with redirect, not OTP create', asyn
         return {
           signupEmailRedirect: (origin) => (origin ? `${origin}/auth/callback` : 'https://published/auth/callback/'),
           passwordResetRedirect: (origin) => (origin ? `${origin}/auth/callback` : 'https://published/auth/callback/'),
+          webOriginForRedirect: () => undefined,
         };
       }
       throw new Error('unexpected ' + id);
@@ -116,7 +123,7 @@ test('setNewPassword updates user when recovery session exists', async () => {
   new Function('require', 'module', 'exports', source)(
     (id) => {
       if (id === '@/lib/supabase') return { supabase: client, clearAnonymousSessionForEmailAuth: async () => {} };
-      if (id === '@/lib/authRedirect') return { signupEmailRedirect: () => 'https://x/auth/callback', passwordResetRedirect: () => 'https://x/auth/callback' };
+      if (id === '@/lib/authRedirect') return { signupEmailRedirect: () => 'https://x/auth/callback', passwordResetRedirect: () => 'https://x/auth/callback' , webOriginForRedirect: () => undefined };
       throw new Error('unexpected ' + id);
     },
     module,
@@ -143,7 +150,7 @@ test('setNewPassword fails safely without a recovery session', async () => {
   new Function('require', 'module', 'exports', source)(
     (id) => {
       if (id === '@/lib/supabase') return { supabase: client, clearAnonymousSessionForEmailAuth: async () => {} };
-      if (id === '@/lib/authRedirect') return { signupEmailRedirect: () => 'https://x/auth/callback', passwordResetRedirect: () => 'https://x/auth/callback' };
+      if (id === '@/lib/authRedirect') return { signupEmailRedirect: () => 'https://x/auth/callback', passwordResetRedirect: () => 'https://x/auth/callback' , webOriginForRedirect: () => undefined };
       throw new Error('unexpected ' + id);
     },
     module,
@@ -188,4 +195,11 @@ test('passwordResetRedirect mirrors signup localhost vs Pages rules', () => {
   assert.equal(passwordResetRedirect('http://localhost:8081'), signupEmailRedirect('http://localhost:8081'));
   assert.equal(passwordResetRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/auth/callback');
   assert.equal(passwordResetRedirect(), PUBLISHED_AUTH_RETURN);
+});
+
+test('Google + Microsoft default on; Apple defaults on for iOS', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.match(src, /socialFlag\(["']EXPO_PUBLIC_GOOGLE_SIGN_IN["'],\s*true\)/);
+  assert.match(src, /socialFlag\(["']EXPO_PUBLIC_MICROSOFT_SIGN_IN["'],\s*true\)/);
+  assert.match(src, /socialFlag\(["']EXPO_PUBLIC_APPLE_SIGN_IN["'],\s*Platform\.OS === ["']ios["']\)/);
 });

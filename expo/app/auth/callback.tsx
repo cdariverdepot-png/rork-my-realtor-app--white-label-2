@@ -92,14 +92,14 @@ export default function AuthCallback() {
       if (!opened.ok) {
         setMessage(
           opened.error ??
-            "Your email is confirmed, but we couldn't open your realtor account yet. Return to sign-in and use your email and password."
+            "Your email is confirmed. Open the My Realtor App on your phone and sign in with your email and password to continue."
         );
         return;
       }
       router.replace("/admin");
     })().catch(() =>
       setMessage(
-        "This confirmation link could not finish sign-in here (wrong origin, expired link, or password still required). Return to Expo on the same address you signed up from, then sign in with your email and password — or request a new reset link on the portal."
+        "This link could not finish here (expired, already used, or password still required). Open My Realtor App and sign in with your email and password, or request a new reset link from the portal on this site."
       )
     );
   }, [code, typeParam, completeRealtorSignIn, router]);

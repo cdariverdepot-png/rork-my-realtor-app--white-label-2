@@ -1,5 +1,5 @@
 import { supabase, clearAnonymousSessionForEmailAuth } from "@/lib/supabase";
-import { passwordResetRedirect } from "@/lib/authRedirect";
+import { passwordResetRedirect, webOriginForRedirect } from "@/lib/authRedirect";
 
 /** Password reset for verified Supabase Auth realtor accounts (link-based). */
 
@@ -7,9 +7,6 @@ export type ResetStep = "request" | "sent" | "set";
 
 export type ResetOutcome = { ok: boolean; error?: string };
 
-function originForRedirect(): string | undefined {
-  return typeof window !== "undefined" ? window.location?.origin : undefined;
-}
 
 /**
  * Email a recovery **link** (not a six-digit code). Opens /auth/callback with
@@ -28,7 +25,7 @@ export async function requestResetLink(email: string): Promise<ResetOutcome> {
   try {
     await clearAnonymousSessionForEmailAuth();
     const { error } = await supabase.auth.resetPasswordForEmail(e, {
-      redirectTo: passwordResetRedirect(originForRedirect()),
+      redirectTo: passwordResetRedirect(webOriginForRedirect()),
     });
     if (error) {
       console.log("[reset] link send error", error.message);

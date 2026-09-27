@@ -6,12 +6,17 @@ const ts = require('typescript');
 const root = path.resolve(__dirname, '..');
 const cache = new Map();
 // Load the production pure-data rules, without starting native UI or backend clients.
+const rnPlatform = { OS: 'web' };
 function load(name) {
   const file = path.join(root, name + '.ts');
   if (cache.has(file)) return cache.get(file).exports;
   const module = { exports: {} }; cache.set(file, module);
   const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
-  new Function('require', 'module', 'exports', source)(id => id.startsWith('@/') ? load(id.slice(2)) : require(id), module, module.exports);
+  new Function('require', 'module', 'exports', source)(id => {
+    if (id === 'react-native') return { Platform: rnPlatform };
+    if (id.startsWith('@/')) return load(id.slice(2));
+    return require(id);
+  }, module, module.exports);
   return module.exports;
 }
 const { requiredStatus, visibleSections, sectionState, REQUIRED_FIELDS } = load('constants/sections');
@@ -33,8 +38,8 @@ test('account errors never display backend diagnostics', () => {
   assert.doesNotThrow(() => authErrorMessage(null));
 });
 
-test('signup email returns to localhost for Expo preview, otherwise published Pages', () => {
-  const { signupEmailRedirect, passwordResetRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect');
+test('signup email returns to localhost for Expo web preview, otherwise published Pages', () => {
+  const { signupEmailRedirect, passwordResetRedirect, PUBLISHED_AUTH_RETURN, webOriginForRedirect } = load('lib/authRedirect');
   assert.equal(signupEmailRedirect('http://localhost:8081'), 'http://localhost:8081/auth/callback');
   assert.equal(signupEmailRedirect('http://127.0.0.1:8081'), 'http://127.0.0.1:8081/auth/callback');
   assert.equal(signupEmailRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/auth/callback');
@@ -43,6 +48,15 @@ test('signup email returns to localhost for Expo preview, otherwise published Pa
   assert.equal(signupEmailRedirect('https://untrusted.example'), PUBLISHED_AUTH_RETURN);
   assert.equal(passwordResetRedirect('http://localhost:8081'), 'http://localhost:8081/auth/callback');
   assert.equal(passwordResetRedirect(), PUBLISHED_AUTH_RETURN);
+  // Native never uses localhost — always published HTTPS callback.
+  rnPlatform.OS = 'ios';
+  cache.clear();
+  const native = load('lib/authRedirect');
+  assert.equal(native.signupEmailRedirect('http://localhost:8081'), native.PUBLISHED_AUTH_RETURN);
+  assert.equal(native.passwordResetRedirect('http://127.0.0.1:4179'), native.PUBLISHED_AUTH_RETURN);
+  assert.equal(native.webOriginForRedirect(), undefined);
+  rnPlatform.OS = 'web';
+  cache.clear();
 });
 
 test('all seven reference themes switch presentation without replacing profile, photos or optional states', () => {

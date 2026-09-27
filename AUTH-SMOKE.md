@@ -1,71 +1,59 @@
-# Auth smoke checklist (Expo + Supabase)
+# Production auth — any realtor, any device
 
-Code in this release finishes recovery → set-password → realtor session in-app.
-Dashboard allowlist / OAuth / SMTP are still required outside the repo.
+Email confirmation and password reset land on the **published HTTPS app**:
+
+`https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/auth/callback/`
+
+Native apps and real users always get that callback. Localhost redirect is **web local-dev only**.
+
+Google and Microsoft buttons are **visible by default** in the shipped portal. Taps still need Supabase → Authentication → Providers (Google / Azure) client IDs and secrets configured in the dashboard — this repo does not store those secrets. Set `EXPO_PUBLIC_GOOGLE_SIGN_IN=false` / `EXPO_PUBLIC_MICROSOFT_SIGN_IN=false` only if you need to hide a button. Apple shows on iOS by default (and when `EXPO_PUBLIC_APPLE_SIGN_IN=true`).
+
+## Production user flow
+
+### 1) Email signup
+
+1. In the app or on the portal, create a realtor account with email + password.
+2. Open the branded confirmation **link** from email (phone or browser is fine).
+3. You land on the published `/auth/callback/` page; the app confirms the email.
+4. If a realtor account opens, you go to `/admin` on web. Otherwise: open the native app and **sign in with the same email + password**.
+
+### 2) Password reset
+
+1. On portal / forgot-password, enter email → **Email me a link**.
+2. Open the recovery link on any phone or browser.
+3. Published `/auth/callback/` detects recovery → `/reset-password?mode=set`.
+4. Choose a new password → **Save password**.
+5. Prefer `/admin` on web when the realtor row opens; otherwise open the app and sign in with email + **new** password.
+
+### 3) Day-to-day sign-in
+
+1. Open My Realtor App (or web portal).
+2. Email + password → realtor home / `/admin`.
+
+### 4) Google / Microsoft / Apple (standard portal pack)
+
+1. Google + Microsoft buttons show on portal login/signup without a local `.env`. Apple shows on iOS.
+2. Until provider client IDs and secrets exist in Supabase Auth → Providers, tapping a social button shows a clear error — email path still works.
+3. After dashboard secrets are added, OAuth completes via the same published `/auth/callback/` (or `rork-app://auth/callback` on standalone native).
 
 ## Supabase redirect allowlist (Auth → URL configuration)
 
-Add **every** origin you actually open Expo web on:
+Required for production:
 
-- Site URL (example published): `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/`
-- Callback: `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/auth/callback`
-- Callback with trailing slash (Pages): `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/auth/callback/`
-- Expo web loopback (adjust port to match Metro):  
-  - `http://localhost:8081/**`  
-  - `http://127.0.0.1:8081/**`  
-  - Exact: `http://localhost:8081/auth/callback` and `http://127.0.0.1:8081/auth/callback`
-- Native scheme: `rork-app://auth/callback`
+- Site URL: `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/`
+- `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/auth/callback`
+- `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/auth/callback/`
+- Native scheme (standalone builds): `rork-app://auth/callback`
 
-Password reset and signup confirm both redirect to `{origin}/auth/callback` when you are on localhost / 127.0.0.1; otherwise the published Pages callback.
+Also required outside this repo: working SMTP / branded email templates so confirm and reset mail arrive; Google + Azure provider client IDs/secrets for social taps.
 
-**Do not** use Dashboard → Invite user to test Expo localhost (Invite always uses Site URL).
+## Appendix — local web development only
 
-## OAuth (Google / Microsoft) — buttons vs secrets
+When `window.location.origin` is literally `http://localhost:PORT` or `http://127.0.0.1:PORT` **on web**, email redirects return to that origin’s `/auth/callback` so PKCE stays on the same machine.
 
-Local preview `expo/.env` (see `.env.example`):
+Allowlist for local preview (adjust port):
 
-```
-EXPO_PUBLIC_GOOGLE_SIGN_IN=true
-EXPO_PUBLIC_MICROSOFT_SIGN_IN=true
-```
+- `http://localhost:8081/**` and `http://127.0.0.1:8081/**`
+- Exact: `http://localhost:8081/auth/callback`, `http://127.0.0.1:8081/auth/callback`
 
-That only **shows** the portal buttons. Sign-in still needs:
-
-1. Supabase → Authentication → Providers → Google: Client ID + secret from Google Cloud (authorized redirect = Supabase callback URL shown in the provider panel).
-2. Same for Azure / Microsoft.
-3. Restart Metro after creating/changing `.env`.
-
-Without provider secrets, tapping a button should show a clear error (not a crash).
-
-## Manual smoke steps (Charlotte)
-
-### A) Password reset link (the bug that dropped to login with no set-password UI)
-
-1. On Expo web (`http://localhost:PORT` or `127.0.0.1`), open `/portal`, choose realtor, **Forgot your password?**
-2. Enter the account email → **Email me a link**.
-3. Open the email **on the same browser/origin**.
-4. You should land on `/auth/callback`, then `/reset-password?mode=set` with **New password** + **Confirm** (no code field).
-5. **Save password** → expect `/admin` (or portal sign-in if realtor row could not open yet).
-6. Sign out, sign in with email + **new** password → `/admin`.
-
-### B) Signup confirm (localhost redirect)
-
-1. `/portal` → create realtor with email + password.
-2. Open confirm link on the **same** Expo origin.
-3. Callback should run `completeRealtorSignIn` → `/admin` (not set-password).
-
-### C) Normal login
-
-1. `/portal` → email + password → `/admin`.
-
-### D) Social buttons
-
-1. With `.env` flags set and Metro restarted, Google + Microsoft appear under realtor forms.
-2. Until Supabase providers are configured, expect a friendly error — not a blank screen.
-
-## Still blocked on dashboard (sibling / human)
-
-- Redirect allowlist entries above
-- Google + Azure provider client IDs/secrets
-- Working SMTP / email templates so reset + confirm mail actually arrive
-- Published Pages host must serve the app (not 404) if you test non-localhost redirects
+Do **not** use Dashboard → Invite user to test localhost (Invite always uses Site URL). Native and Expo Go never use localhost for email returns — production path is HTTPS Pages + password sign-in in the app.
