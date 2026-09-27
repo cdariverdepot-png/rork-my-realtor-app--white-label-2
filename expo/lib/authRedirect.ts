@@ -13,6 +13,17 @@ function normalizeOrigin(origin: string): string {
 /** Deployment base path (app.json experiments.baseUrl), derived from the published URL. */
 const BASE_PATH = new URL(PUBLISHED_AUTH_RETURN).pathname.replace(/\/auth\/callback\/?$/, "");
 
+/**
+ * The production web host (EAS Hosting), from EXPO_PUBLIC_APP_URL. Web sign-in
+ * started there must return to the same origin (PKCE verifier lives there).
+ * Must also be in the Supabase redirect allowlist.
+ */
+const HOSTED_ORIGIN = (() => {
+  try { return process.env.EXPO_PUBLIC_APP_URL ? new URL(process.env.EXPO_PUBLIC_APP_URL).origin : ""; }
+  catch { return ""; }
+})();
+const isHostedOrigin = (origin: string): boolean => !!HOSTED_ORIGIN && normalizeOrigin(origin) === HOSTED_ORIGIN;
+
 function localCallback(origin: string): string {
   // Expo serves under experiments.baseUrl in dev too; keep it when the page is under it.
   const underBase = !!BASE_PATH && typeof window !== "undefined" &&
@@ -37,6 +48,7 @@ export function signupEmailRedirect(origin?: string): string {
   if (origin && LOCAL_ORIGIN_RE.test(normalizeOrigin(origin))) {
     return localCallback(origin);
   }
+  if (origin && isHostedOrigin(origin)) return `${HOSTED_ORIGIN}/auth/callback`;
   return PUBLISHED_AUTH_RETURN;
 }
 
@@ -50,6 +62,7 @@ export function socialCallbackRedirect(origin: string): string {
   const published = new URL(PUBLISHED_AUTH_RETURN);
   if (normalizeOrigin(origin) === published.origin) return PUBLISHED_AUTH_RETURN;
   if (LOCAL_ORIGIN_RE.test(normalizeOrigin(origin))) return localCallback(origin);
+  if (isHostedOrigin(origin)) return `${HOSTED_ORIGIN}/auth/callback`;
   throw new Error("Unconfigured authentication origin");
 }
 /**
