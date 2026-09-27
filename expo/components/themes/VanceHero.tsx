@@ -8,10 +8,10 @@ export default function VanceHero(p: HeroProps) {
     <Box x={20} y={15} w={244} s={s}><BrandMark p={p} s={s} color="#EEEFEA" accent="#B59B6B" monogramSize={28} /></Box>
     <Box x={341} y={11} s={s}><Circle s={s} color="#B8B6A9" onPress={p.onMessage} size={30} /></Box>
     <Animated.View style={[{ position: "absolute", top: f.extraTop, left: 0, right: 0 }, f.fade]}>
-      <Box x={23} y={119} w={182} s={s}><Text style={{ color: "#BAA479", fontSize: 7 * s, letterSpacing: 1.8 * s }}>{p.brand.realtor.heroEyebrow}</Text></Box>
-      <Box x={23} y={140} w={170} s={s}><Headline copy={f.headline} s={s} size={34} width={170} height={135} color="#F8F5EC" accent="#BEA575" italicFrom={0.48} /></Box>
-      <Box x={23} y={294} w={166} s={s}><Intro p={p} s={s} lines={5} color="#C1C0B9" /></Box>
-      <Box x={22} y={385} w={150} h={25} s={s}><Action label="GET TO KNOW ME" onPress={p.onMessage} color="#BAA479" s={s} iconFirst /></Box>
+      <Box x={23} y={280} w={250} s={s}><Text style={{ color: "#BAA479", fontSize: 7 * s, letterSpacing: 1.8 * s }}>{p.brand.realtor.heroEyebrow}</Text></Box>
+      <Box x={23} y={296} w={250} s={s}><Headline copy={f.headline} s={s} size={28} width={250} height={58} color="#F8F5EC" accent="#BEA575" italicFrom={0.48} /></Box>
+      <Box x={23} y={362} w={300} s={s}><Intro p={p} s={s} lines={3} color="#C1C0B9" /></Box>
+      <Box x={22} y={410} w={150} h={25} s={s}><Action label="GET TO KNOW ME" onPress={p.onMessage} color="#BAA479" s={s} iconFirst /></Box>
     </Animated.View>
   </View>;
 }
