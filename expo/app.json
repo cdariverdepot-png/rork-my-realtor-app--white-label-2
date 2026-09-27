@@ -76,7 +76,8 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "baseUrl": "/rork-my-realtor-app--white-label-2"
     }
   }
 }

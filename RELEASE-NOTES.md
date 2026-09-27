@@ -2,6 +2,13 @@
 
 Includes seven distinct theme layouts, isolated sample personas and supplied portraits, shared parallax and text fading, original-image comparison, labeled theme selection, and canonical profile preservation. Photo darkening gradients and grain have been removed from theme/demo rendering and image previews.
 
+## GitHub Pages auth return (live)
+
+- Published web origin: `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/`
+- Supabase **Site URL**: `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/`
+- Redirect allowlist: Site URL, `{base}/auth/callback`, `{base}/portal`, `http://127.0.0.1:4179/`, `rork-app://auth/callback`
+- Google / Microsoft social buttons stay off until `EXPO_PUBLIC_GOOGLE_SIGN_IN=true` / `EXPO_PUBLIC_MICROSOFT_SIGN_IN=true` **and** matching OAuth client IDs are configured in the Supabase Auth providers dashboard (do not invent client secrets in this repo).
+
 ## Auth (signup / login) — preview notes
 
 Realtor accounts use Supabase email + password on `/portal`. Confirmation email links always return to the published web URL (never loopback), because the message may be opened on another device. After confirmation, return to Expo and sign in with the same email and password, or use the in-app email code controls on the portal.
@@ -17,7 +24,7 @@ This branch adds:
 
 ### Known blockers for a live preview
 
-1. Published return URL `https://my-realtor-app-white-label-2.rork.app` currently returns HTTP 404. Confirmation links that land there cannot complete in the browser until that host is republished or Supabase Site URL / redirect allowlist points at a working Expo web origin.
+1. Published return URL `https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/` currently returns HTTP 404. Confirmation links that land there cannot complete in the browser until that host is republished or Supabase Site URL / redirect allowlist points at a working Expo web origin.
 2. Email confirmation is still required in the live Supabase project (`mailer_autoconfirm` off). Without working SMTP / branded mail, or with Confirm email temporarily disabled for a preview-only project, signup will stall after account creation.
 3. Anonymous sign-in is used by the app for KV sync (`ensureSupabaseSession`), but the live project may have Anonymous users disabled — enable it or KV sync stays unauthenticated.
 4. Automatic native deep-link sign-in after email confirm is still not implemented.

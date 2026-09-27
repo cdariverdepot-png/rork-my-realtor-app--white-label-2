@@ -223,8 +223,8 @@ export default function Portal() {
   const heroSub =
     stage === "entry" ? "Choose how you'd like to continue."
     : stage === "code" ? "Enter the 6-character code your realtor shared with you."
-    : stage === "realtor-setup" ? "Confirm your email to create your private builder account. If you already used this app, use the same email to keep your profile and clients."
-    : stage === "realtor-signin" ? "Use your email and password, or receive a one-time sign-in code."
+    : stage === "realtor-setup" ? "Create your private builder account, then check your email for the confirmation link. If you already used this app, use the same email to keep your profile and clients."
+    : stage === "realtor-signin" ? "Use your email and password. Prefer the confirmation link from email when signing up; an email code is available as a fallback."
     : stage === "client-setup" ? `Create your private profile. ${resolvedRealtorName?.split(" ")[0] || "Your realtor"} will see you on the roster.`
     : stage === "client-full" ? `${resolvedRealtorName?.split(" ")[0] || "This agent"} isn't accepting new clients at the moment.`
     : "Sign in to your private profile.";
@@ -307,6 +307,11 @@ export default function Portal() {
                       else if (stage === "realtor-setup") transitionTo("realtor-signin");
                     }}
                   />
+                  {stage.startsWith("realtor") && (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase() || stage === "realtor-setup") ? (
+                    <Text style={{ color: "#f3ead9", textAlign: "center", marginTop: 18, lineHeight: 22 }}>
+                      Check your email for the confirmation link. Open it on this device to finish sign-in.
+                    </Text>
+                  ) : null}
                   {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
                   {stage.startsWith("realtor") && <SocialSignIn />}
                   </>

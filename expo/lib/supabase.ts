@@ -2,6 +2,7 @@ import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient, type Session, type SupabaseClient } from "@supabase/supabase-js";
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 /**
  * Supabase client used for realtime sync between realtor (admin) and clients.
@@ -96,7 +97,7 @@ export const supabase: SupabaseClient | null = (() => {
         storage: AsyncStorage as unknown as Storage,
         autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: false,
+        detectSessionInUrl: Platform.OS === "web",
         flowType: "pkce",
       },
       realtime: { params: { eventsPerSecond: 5 } },

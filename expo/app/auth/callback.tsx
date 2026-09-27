@@ -1,8 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+
+function hashParams(): URLSearchParams {
+  if (Platform.OS !== "web" || typeof window === "undefined") return new URLSearchParams();
+  const raw = window.location.hash?.startsWith("#") ? window.location.hash.slice(1) : window.location.hash || "";
+  return new URLSearchParams(raw);
+}
 
 export default function AuthCallback() {
   const { code } = useLocalSearchParams<{ code?: string }>();
@@ -14,9 +20,23 @@ export default function AuthCallback() {
     if (started.current) return;
     started.current = true;
     void (async () => {
-      if (!supabase || !code || typeof code !== "string") throw new Error("invalid callback");
-      const result = await supabase.auth.exchangeCodeForSession(code);
-      if (result.error) throw result.error;
+      if (!supabase) throw new Error("invalid callback");
+      if (code && typeof code === "string") {
+        const result = await supabase.auth.exchangeCodeForSession(code);
+        if (result.error) throw result.error;
+      } else if (Platform.OS === "web") {
+        const hash = hashParams();
+        const access_token = hash.get("access_token");
+        const refresh_token = hash.get("refresh_token");
+        if (access_token && refresh_token) {
+          const result = await supabase.auth.setSession({ access_token, refresh_token });
+          if (result.error) throw result.error;
+        } else {
+          throw new Error("invalid callback");
+        }
+      } else {
+        throw new Error("invalid callback");
+      }
       const opened = await completeRealtorSignIn();
       if (!opened.ok) { setMessage(opened.error ?? "Couldn't open your account."); return; }
       router.replace("/admin");
