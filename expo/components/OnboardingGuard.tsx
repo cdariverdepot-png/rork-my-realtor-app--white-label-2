@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Redirect, usePathname } from "expo-router";
 import { ActivityIndicator, View } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
@@ -16,9 +16,19 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
   useEffect(() => {
     if (returningFromDemo) void auth.exitDemoView();
   }, [returningFromDemo, auth.exitDemoView]);
-  if (!auth.hydrated || (auth.isAuthenticated && (!brand.hydrated || !profile.hydrated))) {
+  const dataReady = auth.hydrated && (!auth.isAuthenticated || (brand.hydrated && profile.hydrated));
+  // Show the spinner only until this screen has rendered once. Swapping an
+  // already-mounted screen for a spinner (e.g. while data reloads right after
+  // sign-in) unmounts nested stacks; they remount at their first page, get
+  // redirected again, and the app flickers through pages in a loop.
+  const shownOnce = useRef(false);
+  if (dataReady) shownOnce.current = true;
+  if (!dataReady && !shownOnce.current) {
     return <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#0A0B0E" }}><ActivityIndicator /></View>;
   }
+  // While data is reloading, keep the current page as-is: setup checks would
+  // read the previous account's half-loaded data and redirect wrongly.
+  if (!dataReady) return <>{children}</>;
   if (auth.demoViewMode) {
     // Demo cannot expose authenticated administration through back navigation.
     if (returningFromDemo) return null;
