@@ -74,6 +74,11 @@
     "experiments": {
       "typedRoutes": true
     },
-    "owner": "jtaylor537"
+    "owner": "jtaylor537",
+    "extra": {
+      "eas": {
+        "projectId": "b715c6fd-84ee-4f15-86c4-eba1467262c4"
+      }
+    }
   }
 }

@@ -1,0 +1,24 @@
+name: Check Expo hosting
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/check-hosting.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspect public hosting responses
+        run: |
+          for base in https://cdariverdepot-my-realtor.expo.app https://cdariverdepot-my-realtor--mdtdoie63e.expo.app; do
+            for route in / /welcome /welcome.html /auth/callback /auth/callback.html; do
+              echo "Checking $base$route"
+              curl --silent --show-error --max-time 20 --dump-header headers.txt "$base$route" -o body.txt
+              cat headers.txt
+              head -c 1500 body.txt
+              echo ""
+            done
+          done
