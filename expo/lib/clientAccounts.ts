@@ -1,6 +1,10 @@
 import { supabase } from "@/lib/supabase";
 
 /**
+ * Credentials: `pwHash` is always the app's one-way SHA-256 derivative
+ * (lib/passwordHash.ts) — the password itself is never sent. The server
+ * stores only a bcrypt hash of it.
+ *
  * Server copy of client accounts (supabase/sql/client-accounts.sql), so a
  * client can sign in on a new phone. Local accounts stay the first stop; if
  * the SQL hasn't been run or Supabase is unreachable these quietly report
@@ -23,7 +27,7 @@ export async function registerClientAccount(input: {
 
 export type VerifyResult =
   | { status: "ok"; clientId: string; name: string }
-  | { status: "not_found" | "bad_password" | "unavailable" };
+  | { status: "not_found" | "bad_password" | "locked" | "unavailable" };
 
 export async function verifyClientAccount(realtorId: string, email: string, pwHash: string): Promise<VerifyResult> {
   if (!supabase) return { status: "unavailable" };
@@ -37,6 +41,7 @@ export async function verifyClientAccount(realtorId: string, email: string, pwHa
       return { status: "ok", clientId: row.client_id, name: typeof row.name === "string" ? row.name : "" };
     }
     if (row.reason === "bad_password") return { status: "bad_password" };
+    if (row.reason === "locked") return { status: "locked" };
     if (row.reason === "not_found") return { status: "not_found" };
     return { status: "unavailable" };
   } catch {

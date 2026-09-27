@@ -19,6 +19,7 @@ import { useBrand } from "@/contexts/BrandContext";
 import { useClients } from "@/contexts/ClientsContext";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { isRealtorRef } from "@/lib/leadBooking";
+import { useRefRealtor } from "@/lib/useRefRealtor";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 
@@ -35,7 +36,9 @@ export default function Welcome() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ ref?: string; from?: string; listingId?: string }>();
-  const { brand: b } = useBrand();
+  const { brand: ownBrand } = useBrand();
+  // Booking-link visitors see the linked realtor, not the app's demo brand.
+  const { brand: b } = useRefRealtor(params.ref, ownBrand);
   const { importMany } = useClients();
 
   const [name, setName] = useState<string>("");

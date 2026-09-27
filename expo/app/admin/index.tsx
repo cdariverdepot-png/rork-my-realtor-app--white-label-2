@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { bookingLink } from "@/lib/bookingLink";
 import {
   ActivityIndicator,
   Alert,
@@ -63,6 +64,8 @@ import {
   Crown,
   ShieldCheck,
   ScrollText,
+  Link2,
+  QrCode,
 } from "lucide-react-native";
 import { brand, fonts } from "@/constants/colors";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
@@ -172,7 +175,7 @@ function useCountUp(target: number, duration = 1200, enabled = true): number {
 export default function AdminDashboard() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, enterDemoView } = useAuth();
+  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, enterDemoView, realtorId } = useAuth();
   const { all, remove, toggleHidden, syncStatus, refreshFromSource } = useListings();
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
 
@@ -281,6 +284,23 @@ export default function AdminDashboard() {
       }
       await Share.share({ message, title: "Your private invitation" });
     } catch (e) { console.log("[admin] share client code", e); }
+  };
+
+  // Public booking link (/welcome?ref=<realtor id>): anyone can request a viewing.
+  const bookingUrl = realtorId ? bookingLink(realtorId) : "";
+  const [showBookingQr, setShowBookingQr] = useState(false);
+  const copyBookingLink = async () => {
+    await Clipboard.setStringAsync(bookingUrl);
+    if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Alert.alert("Copied", "Booking link copied.");
+  };
+  const shareBookingLink = async () => {
+    if (Platform.OS !== "web") Haptics.selectionAsync();
+    const message = `Book a private viewing with ${realtorName}:\n${bookingUrl}`;
+    try {
+      if (Platform.OS === "web") { await copyBookingLink(); return; }
+      await Share.share({ message, url: bookingUrl, title: "Book a private viewing" });
+    } catch (e) { console.log("[admin] share booking link", e); }
   };
 
   const confirmDelete = (l: ManagedListing) => {
@@ -912,6 +932,38 @@ export default function AdminDashboard() {
                   </Text>
                 </Pressable>
               </View>
+
+              {/* Public booking link — for anyone, no access code needed. */}
+              {bookingUrl ? <View style={styles.inviteCodeRow}>
+                <View style={styles.inviteCodeLabelRow}>
+                  <Link2 size={11} color={admin.goldLight} strokeWidth={1.8} />
+                  <Text style={styles.inviteCodeLabel}>BOOKING LINK</Text>
+                </View>
+                <Text style={styles.bookingLinkText} selectable numberOfLines={1}>{bookingUrl}</Text>
+                {showBookingQr ? <View style={[styles.qrHeroFrame, { marginTop: 14 }]}>
+                  <Image
+                    source={{ uri: `https://quickchart.io/qr?text=${encodeURIComponent(bookingUrl)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M` }}
+                    style={styles.qrHeroImage}
+                    contentFit="contain"
+                    transition={200}
+                    accessibilityLabel="Booking link QR code"
+                  />
+                </View> : null}
+              </View> : null}
+              {bookingUrl ? <View style={styles.inviteActions}>
+                <Pressable onPress={tap(copyBookingLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6}>
+                  <Copy size={14} color={admin.text} strokeWidth={1.6} />
+                  <Text style={styles.inviteGhostBtnText}>Copy</Text>
+                </Pressable>
+                <Pressable onPress={tap(() => setShowBookingQr(v => !v))} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6}>
+                  <QrCode size={14} color={admin.text} strokeWidth={1.6} />
+                  <Text style={styles.inviteGhostBtnText}>{showBookingQr ? "Hide QR" : "QR"}</Text>
+                </Pressable>
+                <Pressable onPress={tap(shareBookingLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6}>
+                  <Send size={14} color={admin.text} strokeWidth={1.6} />
+                  <Text style={styles.inviteGhostBtnText}>Share</Text>
+                </Pressable>
+              </View> : null}
             </View> : (
               <View style={[styles.inviteCard, { padding: 24 }]}>
                 <Lock size={22} color={admin.goldLight} strokeWidth={1.6} />
@@ -2041,6 +2093,7 @@ const styles = StyleSheet.create({
   inviteCode: {
     fontFamily: fonts.serif, color: admin.text, fontSize: 28, letterSpacing: 8,
   },
+  bookingLinkText: { fontFamily: fonts.sans, color: admin.textMuted, fontSize: 12, maxWidth: "100%" },
   inviteActions: {
     flexDirection: "row", paddingHorizontal: 20, paddingBottom: 20, gap: 10,
     borderTopWidth: 1, borderTopColor: admin.hairline, paddingTop: 16,

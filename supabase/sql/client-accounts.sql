@@ -4,14 +4,26 @@
 --  Paste this ENTIRE file into:
 --     Supabase Dashboard → SQL Editor → New query → (paste) → Run
 --
---  Idempotent: safe to run more than once. Run it AFTER setup.sql.
+--  Idempotent: safe to run more than once (also safe if an earlier version of
+--  this file was already run). Run it AFTER setup.sql and seats.sql.
 --
---  Client accounts used to exist only on the phone that created them. This
---  keeps a server copy (email + the same SHA-256 password hash the app
---  already stores), so a client can sign in on a new phone or after a
---  reinstall. The table is locked: no one can read it directly — only the two
---  functions below can register an account or check a password.
+--  WHAT IS STORED
+--  --------------
+--  The app never sends a client's password. It sends a one-way SHA-256
+--  derivative of it (email + password + app pepper). The server then stores
+--  only a bcrypt hash (salted, slow) of THAT value. So the table holds no
+--  password and no value that can be replayed to sign in.
+--
+--  ISOLATION
+--  ---------
+--  RLS is on with no policies, and table privileges are revoked: nobody can
+--  select/insert/update this table directly with the app's keys. The only way
+--  in is the two SECURITY DEFINER functions below, which return a client's
+--  own id/name only when the password matches. Repeated wrong passwords lock
+--  the account for 15 minutes.
 -- =====================================================================
+
+create extension if not exists pgcrypto with schema extensions;
 
 create table if not exists public.client_accounts (
   realtor_id  uuid        not null,
@@ -22,11 +34,16 @@ create table if not exists public.client_accounts (
   created_at  timestamptz not null default now(),
   primary key (realtor_id, email)
 );
+alter table public.client_accounts add column if not exists failed_attempts int not null default 0;
+alter table public.client_accounts add column if not exists locked_until timestamptz;
 
 alter table public.client_accounts enable row level security;
--- No policies on purpose: direct reads/writes are refused for everyone.
+-- No policies on purpose, and no direct table privileges for app roles.
+revoke all on table public.client_accounts from public, anon, authenticated;
 
--- Register a new client account. An existing account is never overwritten.
+
+-- Register a new client account. Only for someone who holds a seat with this
+-- realtor (the app claims it just before), and never overwrites an account.
 create or replace function public.register_client_account(
   p_realtor_id uuid,
   p_email      text,
@@ -37,23 +54,31 @@ create or replace function public.register_client_account(
 returns jsonb
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_email text := lower(trim(coalesce(p_email, '')));
 begin
-  if p_realtor_id is null or v_email = '' or coalesce(p_pw_hash, '') = '' or coalesce(p_client_id, '') = '' then
+  if p_realtor_id is null or v_email = '' or coalesce(p_client_id, '') = ''
+     or coalesce(p_pw_hash, '') !~ '^[0-9a-f]{64}$' then
     return jsonb_build_object('ok', false, 'reason', 'invalid');
   end if;
-  insert into public.client_accounts (realtor_id, email, pw_hash, client_id, name)
-  values (p_realtor_id, v_email, p_pw_hash, p_client_id, coalesce(p_name, ''))
-  on conflict (realtor_id, email) do nothing;
-  if found then
-    return jsonb_build_object('ok', true, 'created', true);
+  if not exists (select 1 from public.realtors where id = p_realtor_id) then
+    return jsonb_build_object('ok', false, 'reason', 'invalid');
   end if;
-  return jsonb_build_object('ok', true, 'created', false);
+  if to_regclass('public.client_connections') is not null and not exists (
+    select 1 from public.client_connections
+     where realtor_id = p_realtor_id and client_key = v_email and status = 'active'
+  ) then
+    return jsonb_build_object('ok', false, 'reason', 'no_seat');
+  end if;
+  insert into public.client_accounts (realtor_id, email, pw_hash, client_id, name)
+  values (p_realtor_id, v_email, crypt(p_pw_hash, gen_salt('bf', 10)), p_client_id, coalesce(p_name, ''))
+  on conflict (realtor_id, email) do nothing;
+  return jsonb_build_object('ok', true, 'created', found);
 end;
 $$;
+
 
 -- Check a client's password. Returns their client id and name on a match.
 create or replace function public.verify_client_account(
@@ -64,19 +89,44 @@ create or replace function public.verify_client_account(
 returns jsonb
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
-  v_row public.client_accounts%rowtype;
+  v_row   public.client_accounts%rowtype;
+  v_email text := lower(trim(coalesce(p_email, '')));
+  v_match boolean;
 begin
   select * into v_row from public.client_accounts
-   where realtor_id = p_realtor_id and email = lower(trim(coalesce(p_email, '')));
+   where realtor_id = p_realtor_id and email = v_email
+   for update;
   if not found then
     return jsonb_build_object('ok', false, 'reason', 'not_found');
   end if;
-  if v_row.pw_hash <> coalesce(p_pw_hash, '') then
+  if v_row.locked_until is not null and v_row.locked_until > now() then
+    return jsonb_build_object('ok', false, 'reason', 'locked');
+  end if;
+
+  if v_row.pw_hash like '$2%' then
+    v_match := crypt(coalesce(p_pw_hash, ''), v_row.pw_hash) = v_row.pw_hash;
+  else
+    -- Row written by the first version of this file (unsalted): compare once,
+    -- then upgrade it to bcrypt below.
+    v_match := v_row.pw_hash = coalesce(p_pw_hash, '');
+  end if;
+
+  if not v_match then
+    update public.client_accounts
+       set failed_attempts = failed_attempts + 1,
+           locked_until = case when failed_attempts + 1 >= 10 then now() + interval '15 minutes' else locked_until end
+     where realtor_id = p_realtor_id and email = v_email;
     return jsonb_build_object('ok', false, 'reason', 'bad_password');
   end if;
+
+  update public.client_accounts
+     set failed_attempts = 0,
+         locked_until = null,
+         pw_hash = case when pw_hash like '$2%' then pw_hash else crypt(p_pw_hash, gen_salt('bf', 10)) end
+   where realtor_id = p_realtor_id and email = v_email;
   return jsonb_build_object('ok', true, 'client_id', v_row.client_id, 'name', v_row.name);
 end;
 $$;

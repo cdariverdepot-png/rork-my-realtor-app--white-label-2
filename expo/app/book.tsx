@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Alert,
   ScrollView,
@@ -18,6 +18,7 @@ import { useListings } from "@/contexts/ListingsContext";
 import { useAppointments } from "@/contexts/AppointmentsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { appendLeadAppointment, isRealtorRef } from "@/lib/leadBooking";
+import { useRefRealtor } from "@/lib/useRefRealtor";
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
@@ -47,20 +48,27 @@ function nextDays(n: number): { key: string; weekday: string; day: string; month
 export default function BookShowing() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { brand: b } = useBrand();
-  const realtor = b.realtor;
-  const firstName = realtor.name.split(" ")[0] ?? realtor.name;
+  const { brand: ownBrand } = useBrand();
   const params = useLocalSearchParams<{ listingId?: string; invite?: string; ref?: string; leadId?: string; leadName?: string; leadContact?: string }>();
   const invited = params.invite === "1";
   const { visible } = useListings();
+  // Booking-link visitors: the linked realtor's name and listings, not the demo's.
+  const { brand: b, listings: refListings } = useRefRealtor(params.ref, ownBrand);
+  const realtor = b.realtor;
+  const firstName = realtor.name.split(" ")[0] ?? realtor.name;
   const { upsert } = useAppointments();
   const { isAdmin, isClient, currentClientId } = useAuth();
-  const listings = visible.length ? visible : [];
+  const listings = refListings ?? (visible.length ? visible : []);
   const days = useMemo(() => nextDays(10), []);
 
   const [listingId, setListingId] = useState<string>(
     params.listingId ?? listings[0]?.id ?? ""
   );
+  // Keep the selection on a real listing (a link may arrive with none, or
+  // before the linked realtor's listings have loaded).
+  useEffect(() => {
+    if (listings.length && !listings.some((l) => l.id === listingId)) setListingId(listings[0].id);
+  }, [listings, listingId]);
   const [day, setDay] = useState<string>(days[0].key);
   const [time, setTime] = useState<string>(TIMES[2]);
   const [done, setDone] = useState<boolean>(false);
@@ -90,8 +98,10 @@ export default function BookShowing() {
         note: [params.leadName, params.leadContact].filter(Boolean).join(" · ") || undefined,
         updatedAt: Date.now(),
       }).catch((e) => console.log("[book] lead appointment", e));
+      // A visitor has no calendar of their own here, so return to the start
+      // screen after the confirmation instead of opening one.
       setDone(true);
-      setTimeout(() => router.replace("/calendar"), 1600);
+      setTimeout(() => router.replace("/"), 2200);
       return;
     }
     upsert({

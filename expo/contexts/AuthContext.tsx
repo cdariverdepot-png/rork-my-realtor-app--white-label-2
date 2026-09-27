@@ -535,13 +535,12 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       if (account) {
         verdict = await verifyPassword(e, password, account.pw);
         if (!verdict.ok) return { ok: false, error: "Incorrect password." };
-        // Backfill the server copy for accounts created before it existed.
-        void registerClientAccount({ realtorId, email: e, pwHash: await hashPassword(e, password), clientId: account.clientId, name: account.name });
       } else {
         // Not on this device (new phone, reinstall): check the server copy.
         const pwHash = await hashPassword(e, password);
         const remote = await verifyClientAccount(realtorId, e, pwHash);
         if (remote.status === "bad_password") return { ok: false, error: "Incorrect password." };
+        if (remote.status === "locked") return { ok: false, error: "Too many attempts. Please wait 15 minutes and try again." };
         if (remote.status !== "ok")
           return { ok: false, error: "No account found. Create one to get started." };
         account = { email: e, pw: pwHash, clientId: remote.clientId, name: remote.name || e.split("@")[0], realtorId, createdAt: Date.now() };
@@ -563,6 +562,10 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           error: "This agent isn't accepting new clients right now.",
         };
       }
+      // Backfill the server copy (after the seat claim, which it requires) so
+      // accounts created before it existed work on other devices too.
+      void hashPassword(e, password).then((pwHash) =>
+        registerClientAccount({ realtorId, email: e, pwHash, clientId: found.clientId, name: found.name }));
       // Upgrade any legacy-hashed local account to SHA-256 on successful login.
       if (verdict.needsUpgrade) {
         try {
