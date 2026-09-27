@@ -7,6 +7,7 @@ import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
+import { navIntent } from "@/lib/navIntent";
 import { useAuth } from "@/contexts/AuthContext";
 import { setConsultInfo } from "@/lib/contact";
 import { useListings } from "@/contexts/ListingsContext";
@@ -205,8 +206,15 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   // Exiting the realtor's own template preview — go back to admin.
   const exitTemplate = useCallback(() => {
     guardExit(() => {
-      exitViewAsClient();
+      // Navigate first, animated as a "back", and only drop the preview flag once
+      // the dashboard is in place. Clearing it first re-rendered this screen
+      // mid-exit (snapping it back into view) and fired a second redirect.
+      navIntent.replaceAsBack = true;
       router.replace("/admin");
+      setTimeout(() => {
+        exitViewAsClient();
+        navIntent.replaceAsBack = false;
+      }, 400);
     });
   }, [guardExit, exitViewAsClient, router]);
 
@@ -294,8 +302,10 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     .onEnd(e => {
       if (e.translationX > 90 || e.velocityX > 700) {
         Animated.timing(edgeX, { toValue: 420, duration: 160, useNativeDriver: true }).start(() => {
-          edgeX.setValue(0);
-          if (demoViewMode) void exitDemo(); else exitTemplate();
+          if (demoViewMode) { edgeX.setValue(0); void exitDemo(); return; }
+          // Stay pulled aside while the dashboard comes in; reset once it has.
+          exitTemplate();
+          setTimeout(() => edgeX.setValue(0), 700);
         });
       } else {
         Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start();

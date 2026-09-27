@@ -1,5 +1,6 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Stack, usePathname } from "expo-router";
+import { navIntent } from "@/lib/navIntent";
 import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useState } from "react";
@@ -125,7 +126,7 @@ function RootLayoutNav() {
       <Stack.Screen name="legal" options={modal} />
       <Stack.Screen name="reset-password" options={{ headerShown: false, animation: "slide_from_right" }} />
       <Stack.Screen name="portal" options={{ headerShown: false, animation: "fade", animationDuration: 360 }} />
-      <Stack.Screen name="admin" options={{ headerShown: false }} />
+      <Stack.Screen name="admin" options={() => ({ headerShown: false, animationTypeForReplace: navIntent.replaceAsBack ? "pop" : "push" })} />
     </Stack>
   );
 }
