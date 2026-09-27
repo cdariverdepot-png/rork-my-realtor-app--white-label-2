@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Check, FileText, ImageIcon, Link2, Users } from "lucide-react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { randomUUID } from "expo-crypto";
@@ -98,6 +99,11 @@ export default function InitialRealtorSetup() {
   const [contactCount, setContactCount] = useState(0);
   const [pendingContacts, setPendingContacts] = useState<{ contacts: ReturnType<typeof parseCsvContacts>; format: "csv" | "vcard" } | null>(null);
   const [activity, setActivity] = useState("");
+  /** The website in the main field, once saved as a source. */
+  const [primaryId, setPrimaryId] = useState<string | null>(null);
+  const [urlFocused, setUrlFocused] = useState(false);
+  const [extraUrl, setExtraUrl] = useState("");
+  const [showExtraUrl, setShowExtraUrl] = useState(false);
   const localImages = useRef<Record<string, string>>({});
   const facts = result ? resolveFacts(result.evidence) : [];
   const questions = facts.filter(fact => fact.needsClarification);
@@ -108,6 +114,8 @@ export default function InitialRealtorSetup() {
       if (!alive) return;
       if (saved) {
         setSources(saved.sources);
+        const primary = saved.sources.find(source => source.kind === "url");
+        if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
         setResult(saved);
         if (saved.evidence.length) setDraft(applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
       }
@@ -116,21 +124,34 @@ export default function InitialRealtorSetup() {
     return () => { alive = false; };
   }, []);
 
-  const addSource = async (source: BuildSource): Promise<BuildSource[]> => {
+  const saveSources = async (next: BuildSource[]): Promise<BuildSource[]> => {
     if (!auth.realtorId) throw new Error("Sign in to save your sources.");
-    const next = [...sources, source];
     await saveBuildSources(auth.realtorId, next);
     setSources(next);
     setResult(null);
     setDraft(null);
     return next;
   };
-  /** A link typed in the box counts even if "Add link" wasn't tapped. */
-  const urlSource = (raw: string): BuildSource => {
-    const parsed = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
-    if (parsed.protocol !== "https:") throw new Error("Use a public HTTPS link.");
-    return { id: randomUUID(), kind: "url", label: parsed.hostname, uri: parsed.toString(), status: "queued" };
+  const addSource = (source: BuildSource) => saveSources([...sources, source]);
+  /** https:// is assumed when left off; a hostname needs a dot to count. */
+  const normalizeUrl = (raw: string): string | null => {
+    const value = raw.trim();
+    if (!value) return null;
+    try {
+      const parsed = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+      if (parsed.protocol !== "https:" || !/\.[a-z]{2,}$/i.test(parsed.hostname)) return null;
+      return parsed.toString();
+    } catch { return null; }
   };
+  const urlSource = (uri: string): BuildSource =>
+    ({ id: randomUUID(), kind: "url", label: new URL(uri).hostname, uri, status: "queued" });
+  const websiteUri = normalizeUrl(url);
+  const websiteState: "empty" | "valid" | "invalid" = !url.trim() ? "empty" : websiteUri ? "valid" : "invalid";
+  const primarySource = sources.find(source => source.id === primaryId) ?? null;
+  const extraLinks = sources.filter(source => source.kind === "url" && source.id !== primaryId);
+  const documents = sources.filter(source => source.kind === "document");
+  const images = sources.filter(source => source.kind === "image");
+
   const act = async (work: () => Promise<void>) => {
     if (busy) return;
     setBusy(true); setError("");
@@ -139,9 +160,11 @@ export default function InitialRealtorSetup() {
     finally { setBusy(false); setActivity(""); }
   };
   const addUrl = () => void act(async () => {
-    if (!url.trim()) throw new Error("Enter a website or profile link first.");
-    await addSource(urlSource(url.trim()));
-    setUrl("");
+    const uri = normalizeUrl(extraUrl);
+    if (!uri) throw new Error("That link doesn't look right. Check it and try again.");
+    await addSource(urlSource(uri));
+    setExtraUrl("");
+    setShowExtraUrl(false);
   });
   const addFile = (kind: "document" | "image") => void act(async () => {
     if (kind === "image") {
@@ -161,12 +184,14 @@ export default function InitialRealtorSetup() {
   });
   const analyze = () => void act(async () => {
     let current = sources;
-    const typed = url.trim();
-    if (typed && !sources.some(source => source.kind === "url" && source.uri.replace(/\/$/, "") === urlSource(typed).uri.replace(/\/$/, ""))) {
-      current = await addSource(urlSource(typed));
-      setUrl("");
+    if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
+    // Lock in the website from the main field, replacing an older one if it changed.
+    if (websiteUri && primarySource?.uri !== websiteUri) {
+      const fresh = urlSource(websiteUri);
+      current = await saveSources([fresh, ...sources.filter(source => source.id !== primaryId)]);
+      setPrimaryId(fresh.id);
     }
-    if (!current.some(source => source.kind !== "contacts")) throw new Error("Add a website, document, or image first.");
+    if (!current.some(source => source.kind !== "contacts")) throw new Error("Enter your website to get started, or add a document or image.");
     setActivity("Reading your sources and building a profile…");
     const saved = await analyzeBuild();
     setSources(saved.sources);
@@ -234,33 +259,103 @@ export default function InitialRealtorSetup() {
       <Text style={{ color: primary ? "#172027" : "white", textAlign: "center", fontWeight: "600" }}>{label}</Text>
     </Pressable>;
 
+  /** Secondary, clearly optional control; whatever it added is listed right inside it. */
+  const optional = (Icon: typeof Link2, label: string, onPress: () => void, added: React.ReactNode) =>
+    <View key={label} style={{ borderRadius: 12, borderWidth: 1, borderColor: "#3A444B", paddingHorizontal: 14, paddingVertical: 12 }}>
+      <Pressable accessibilityRole="button" onPress={onPress} disabled={busy} hitSlop={6}
+        style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+        <Icon size={18} color="#C2A276" strokeWidth={1.8} />
+        <Text style={{ color: "#E6E9EA", fontSize: 15 }}>{label}</Text>
+      </Pressable>
+      {added}
+    </View>;
+  const sourceLine = (source: BuildSource) =>
+    <Text key={source.id} style={{ color: source.status === "failed" ? "#FFBAA9" : "#8FD9B4", marginTop: 6 }} numberOfLines={2}>
+      {source.status === "failed" ? "✕ Couldn’t read" : "✓"} {source.kind === "url" ? source.uri.replace(/^https:\/\//, "").replace(/\/$/, "") : source.label}
+      {source.status === "failed" && source.error ? ` — ${source.error}` : ""}
+    </Text>;
+
   if (manual) return <ManualSetup />;
   return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }}
     contentContainerStyle={{ padding: 24, paddingTop: insets.top + 32, paddingBottom: insets.bottom + 36 }}
     keyboardShouldPersistTaps="handled">
-    <Text style={{ color: "white", fontSize: 30, fontWeight: "600" }}>Build my app</Text>
-    <Text style={{ color: "#C8D0D0", marginTop: 12, lineHeight: 23 }}>
-      Add your website, bio, documents, and photos. We’ll use them together to create a draft app, then ask only about details we can’t confirm.
+    <Text style={{ color: "white", fontSize: 32, fontWeight: "600" }}>Build Your App</Text>
+    <Text style={{ color: "#C8D0D0", marginTop: 10, fontSize: 16, lineHeight: 24 }}>
+      Start with your website. We’ll use it to gather most of the information needed to build your app.
     </Text>
-    {!loaded && <Text style={{ color: "#C8D0D0", marginTop: 20 }}>Loading your build…</Text>}
-    {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 15 }}>{error}</Text> : null}
+    {!loaded && <Text style={{ color: "#C8D0D0", marginTop: 20 }}>Loading…</Text>}
     {loaded && <>
-      {field("Website or profile URL", url, setUrl)}
-      {button("Add link", addUrl)}
-      {button("Upload PDF, Word, or text", () => addFile("document"))}
-      {button("Upload image", () => addFile("image"))}
-      {button("Import contacts (CSV or vCard)", addContacts)}
-      {pendingContacts && <View style={{ marginTop: 10 }}>
-        <Text style={{ color: "#C8D0D0" }}>{pendingContacts.contacts.length} contacts found. Add them to your private roster?</Text>
-        {button("Add contacts", confirmContacts, true)}
-        {button("Cancel", () => setPendingContacts(null))}
-      </View>}
-      {contactCount > 0 && <Text style={{ color: "#C8D0D0", marginTop: 8 }}>{contactCount} contacts added to your private roster.</Text>}
-      <Text style={{ color: "white", fontSize: 20, marginTop: 30 }}>Your sources</Text>
-      {sources.length ? sources.map(source => <Text key={source.id} style={{ color: source.status === "failed" ? "#FFBAA9" : "#C8D0D0", marginTop: 8 }}>
-        {source.status === "failed" ? "Couldn’t read" : "Added"} · {source.label}{source.error ? ` — ${source.error}` : ""}
-      </Text>) : <Text style={{ color: "#B8C0C4", marginTop: 8 }}>Add at least one link or file to begin.</Text>}
-      {button(busy ? "Working…" : "Build my draft app", analyze, true)}
+      {/* Step 1 — the website is the starting point. */}
+      <View style={{ marginTop: 30, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276",
+        backgroundColor: "rgba(194,162,118,0.08)" }}>
+        <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>STEP 1</Text>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "600", marginTop: 4 }}>Your website or profile link</Text>
+        <View style={{ marginTop: 14, flexDirection: "row", alignItems: "center", borderRadius: 12, borderWidth: 1.5,
+          borderColor: websiteState === "valid" ? "#3FB37F" : websiteState === "invalid" && !urlFocused ? "#FF9C85" : "#7B858C",
+          backgroundColor: "#0C1014", paddingHorizontal: 14 }}>
+          <TextInput value={url} onChangeText={setUrl} onFocus={() => setUrlFocused(true)} onBlur={() => setUrlFocused(false)}
+            placeholder="yourwebsite.com" placeholderTextColor="#6F7A80" accessibilityLabel="Website or profile URL"
+            autoCapitalize="none" autoCorrect={false} keyboardType="url" returnKeyType="done"
+            style={{ flex: 1, color: "white", fontSize: 18, paddingVertical: 16 }} />
+          {websiteState === "valid" ? <View accessibilityLabel="Website looks good" style={{ width: 28, height: 28, borderRadius: 14,
+            backgroundColor: "#3FB37F", alignItems: "center", justifyContent: "center" }}>
+            <Check size={17} color="white" strokeWidth={3} />
+          </View> : null}
+        </View>
+        {websiteState === "invalid" && !urlFocused
+          ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 8 }}>That doesn’t look like a web address. Try something like yourname.com</Text>
+          : primarySource?.status === "failed" && primarySource.uri === websiteUri
+            ? <Text style={{ color: "#FFBAA9", marginTop: 8 }}>We couldn’t read this site{primarySource.error ? ` — ${primarySource.error}` : ""}</Text>
+            : websiteState === "valid" ? <Text style={{ color: "#8FD9B4", marginTop: 8 }}>Looks good</Text> : null}
+      </View>
+
+      {/* Optional supporting information — each item stays with its own control. */}
+      <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 30 }}>Optional — add more information</Text>
+      <Text style={{ color: "#9AA4AA", marginTop: 4 }}>Anything else that describes you or your business.</Text>
+      <View style={{ marginTop: 12, gap: 10 }}>
+        {optional(Link2, extraLinks.length ? "Add another link" : "Add link", () => setShowExtraUrl(true),
+          <>
+            {extraLinks.map(source => sourceLine(source))}
+            {showExtraUrl && <View style={{ flexDirection: "row", gap: 8, marginTop: 8 }}>
+              <TextInput value={extraUrl} onChangeText={setExtraUrl} placeholder="another-link.com" placeholderTextColor="#6F7A80"
+                autoCapitalize="none" autoCorrect={false} keyboardType="url" autoFocus accessibilityLabel="Another link"
+                onSubmitEditing={addUrl}
+                style={{ flex: 1, color: "white", borderWidth: 1, borderColor: "#657079", borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10 }} />
+              <Pressable accessibilityRole="button" onPress={addUrl} disabled={busy}
+                style={{ paddingHorizontal: 16, justifyContent: "center", borderRadius: 10, backgroundColor: "#C2A276" }}>
+                <Text style={{ color: "#172027", fontWeight: "600" }}>Add</Text>
+              </Pressable>
+            </View>}
+          </>)}
+        {optional(FileText, documents.length ? "Add another document" : "Upload PDF, Word, or text", () => addFile("document"),
+          <>{documents.map(source => sourceLine(source))}</>)}
+        {optional(ImageIcon, images.length ? "Add another image" : "Upload image", () => addFile("image"),
+          <>{images.map(source => sourceLine(source))}</>)}
+        {optional(Users, contactCount ? "Import more contacts" : "Import contacts — CSV or vCard", addContacts,
+          <>
+            {contactCount > 0 && <Text style={{ color: "#8FD9B4", marginTop: 6 }}>✓ {contactCount} contacts added to your private roster</Text>}
+            {pendingContacts && <View style={{ marginTop: 8 }}>
+              <Text style={{ color: "#C8D0D0" }}>{pendingContacts.contacts.length} contacts found. Add them to your private roster?</Text>
+              <View style={{ flexDirection: "row", gap: 8, marginTop: 8 }}>
+                <Pressable accessibilityRole="button" onPress={confirmContacts} disabled={busy}
+                  style={{ flex: 1, padding: 10, borderRadius: 10, backgroundColor: "#C2A276" }}>
+                  <Text style={{ color: "#172027", textAlign: "center", fontWeight: "600" }}>Add contacts</Text>
+                </Pressable>
+                <Pressable accessibilityRole="button" onPress={() => setPendingContacts(null)}
+                  style={{ flex: 1, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: "#657079" }}>
+                  <Text style={{ color: "white", textAlign: "center" }}>Cancel</Text>
+                </Pressable>
+              </View>
+            </View>}
+          </>)}
+      </View>
+
+      {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 20 }}>{error}</Text> : null}
+      <Pressable accessibilityRole="button" onPress={analyze} disabled={busy}
+        style={({ pressed }) => ({ marginTop: 26, minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276",
+          alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : pressed ? 0.85 : 1 })}>
+        <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>{busy && activity ? "Building…" : "Let’s Build My App!"}</Text>
+      </Pressable>
       {busy && activity ? <Text accessibilityLiveRegion="polite" style={{ color: "#C8D0D0", marginTop: 10 }}>{activity}</Text> : null}
       {result && draft && <>
         <Text style={{ color: "white", fontSize: 24, marginTop: 32 }}>We built your app</Text>
@@ -310,7 +405,12 @@ export default function InitialRealtorSetup() {
         </View>}
         {button("Complete setup", finish, true)}
       </>}
-      {button("Enter details myself", () => setManual(true))}
+      {/* Separate alternative path. */}
+      <View style={{ marginTop: 40, paddingTop: 24, borderTopWidth: 1, borderTopColor: "#2A3238" }}>
+        <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>Prefer to enter everything yourself?</Text>
+        <Text style={{ color: "#9AA4AA", marginTop: 4 }}>Skip the website import and add your information manually.</Text>
+        {button("Enter Details Manually", () => setManual(true))}
+      </View>
     </>}
   </ScrollView>;
 }
