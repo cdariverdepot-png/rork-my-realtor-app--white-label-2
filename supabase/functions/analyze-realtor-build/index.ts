@@ -291,13 +291,24 @@ Deno.serve(async (request) => {
         ], text: { format: { type: "json_object" } } }),
       signal: AbortSignal.timeout(60_000),
     });
-  } catch {
+  } catch (e) {
+    console.error("[build] OpenAI request failed to connect", e instanceof Error ? e.message : String(e));
     return reply({ error: "Analysis could not connect. Your sources are still saved." }, 502);
   }
-  if (!ai.ok) return reply({ error: "Analysis failed. Your sources are still saved." }, 502);
+  if (!ai.ok) {
+    // Log OpenAI's reason (bad key, no credit, unknown model…) so it shows in function logs.
+    const body = await ai.text().catch(() => "");
+    console.error(`[build] OpenAI returned ${ai.status}`, body.slice(0, 800));
+    const reason = ai.status === 401 ? " (AI key rejected)" : ai.status === 429 ? " (AI quota or rate limit)" :
+      ai.status === 404 ? " (AI model unavailable)" : "";
+    return reply({ error: `Analysis failed${reason}. Your sources are still saved.` }, 502);
+  }
   let result;
   try { result = validate(JSON.parse(responseText(await ai.json())), readyIds, imageIds); }
-  catch { return reply({ error: "Analysis was incomplete. Your sources are still saved." }, 502); }
+  catch (e) {
+    console.error("[build] could not parse model output", e instanceof Error ? e.message : String(e));
+    return reply({ error: "Analysis was incomplete. Your sources are still saved." }, 502);
+  }
   const { error: saveError } = await admin.from("realtor_builds")
     .update({ sources: processed, evidence: result.evidence, draft: result.draft,
       selected_layout: result.draft.layoutId, status: "needs-input", updated_at: new Date().toISOString() })
