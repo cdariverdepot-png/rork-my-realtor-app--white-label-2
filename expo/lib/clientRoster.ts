@@ -66,9 +66,10 @@ export async function appendClientToRoster(
   }
 
   const emailLc = client.email.trim().toLowerCase();
-  const idx = list.findIndex(
+  // Merge by email — but contacts without one (a phone-only lead) are distinct people.
+  const idx = emailLc ? list.findIndex(
     (c) => (c.email ?? "").trim().toLowerCase() === emailLc
-  );
+  ) : -1;
   let next: RosterClient[];
   if (idx >= 0) {
     // Preserve the existing id/createdAt; refresh name/contact.

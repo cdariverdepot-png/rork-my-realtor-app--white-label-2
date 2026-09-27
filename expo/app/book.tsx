@@ -17,6 +17,7 @@ import { useBrand } from "@/contexts/BrandContext";
 import { useListings } from "@/contexts/ListingsContext";
 import { useAppointments } from "@/contexts/AppointmentsContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { appendLeadAppointment, isRealtorRef } from "@/lib/leadBooking";
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
@@ -49,7 +50,7 @@ export default function BookShowing() {
   const { brand: b } = useBrand();
   const realtor = b.realtor;
   const firstName = realtor.name.split(" ")[0] ?? realtor.name;
-  const params = useLocalSearchParams<{ listingId?: string; invite?: string }>();
+  const params = useLocalSearchParams<{ listingId?: string; invite?: string; ref?: string; leadId?: string; leadName?: string; leadContact?: string }>();
   const invited = params.invite === "1";
   const { visible } = useListings();
   const { upsert } = useAppointments();
@@ -75,6 +76,24 @@ export default function BookShowing() {
     const [hh, mm] = time.split(":").map(Number);
     dt.setHours(hh, mm, 0, 0);
     const listing = listings.find((l) => l.id === listingId);
+    // Visitor from a realtor's public booking link: the request goes to that realtor.
+    if (!isClient && !isAdmin && isRealtorRef(params.ref)) {
+      void appendLeadAppointment(params.ref, {
+        id: `a_${Date.now()}`,
+        listingId,
+        listingTitle: listing?.title ?? "Private viewing",
+        startsAt: dt.getTime(),
+        durationMin: 45,
+        status: "requested",
+        createdBy: "client",
+        recipientIds: params.leadId ? [params.leadId] : undefined,
+        note: [params.leadName, params.leadContact].filter(Boolean).join(" · ") || undefined,
+        updatedAt: Date.now(),
+      }).catch((e) => console.log("[book] lead appointment", e));
+      setDone(true);
+      setTimeout(() => router.replace("/calendar"), 1600);
+      return;
+    }
     upsert({
       id: `a_${Date.now()}`,
       listingId,

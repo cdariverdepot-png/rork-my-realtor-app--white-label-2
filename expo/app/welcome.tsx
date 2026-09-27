@@ -17,6 +17,8 @@ import { brand, fonts } from "@/constants/colors";
 import { avatarPlaceholder } from "@/constants/assets";
 import { useBrand } from "@/contexts/BrandContext";
 import { useClients } from "@/contexts/ClientsContext";
+import { appendClientToRoster } from "@/lib/clientRoster";
+import { isRealtorRef } from "@/lib/leadBooking";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 
@@ -48,6 +50,20 @@ export default function Welcome() {
     if (!valid || loading) return;
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setLoading(true);
+    // A link that names its realtor files the lead on that realtor's roster.
+    if (isRealtorRef(params.ref)) {
+      const leadId = `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      void appendClientToRoster(params.ref, {
+        id: leadId, name: name.trim(), email: email.trim(), phone: phone.trim() || undefined,
+        tag: `Booking · ${realtorFirst}`, source: "booking", createdAt: Date.now(),
+      }).catch((e) => console.log("[welcome] roster", e));
+      router.replace({
+        pathname: "/book",
+        params: { listingId: params.listingId ?? "", invite: "1", ref: params.ref, leadId,
+          leadName: name.trim(), leadContact: phone.trim() || email.trim() },
+      });
+      return;
+    }
     try {
       importMany(
         [
