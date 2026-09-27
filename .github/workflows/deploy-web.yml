@@ -38,9 +38,9 @@ jobs:
     env:
       CI: '1'
       EXPO_NO_TELEMETRY: '1'
-      DEPLOY: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
+      DEPLOY: ${{ (github.event_name == 'workflow_dispatch' && inputs.deploy) || github.event.head_commit.message == 'Deploy Expo production for jtaylor537' }}
       EXPO_PROJECT_ID: ${{ inputs.project_id || vars.EXPO_PROJECT_ID }}
-      HOSTING_SUBDOMAIN: ${{ inputs.subdomain || vars.EXPO_HOSTING_SUBDOMAIN }}
+      HOSTING_SUBDOMAIN: ${{ inputs.subdomain || vars.EXPO_HOSTING_SUBDOMAIN || 'cdariverdepot-my-realtor' }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -58,7 +58,6 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
           test -n "$EXPO_TOKEN" || { echo "::error::Add EXPO_TOKEN in repository Actions secrets."; exit 1; }
-          test -n "$EXPO_PROJECT_ID" || { echo "::error::Enter the Expo project ID when running this workflow."; exit 1; }
           test -n "$HOSTING_SUBDOMAIN" || { echo "::error::Enter the Expo hosting subdomain."; exit 1; }
 
       - name: Configure production URL and project
@@ -90,6 +89,19 @@ jobs:
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Set up Expo deployment
+        if: env.DEPLOY == 'true'
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Link Expo project
+        if: env.DEPLOY == 'true'
+        run: |
+          eas init --account jtaylor537 --force --non-interactive
+          node -e "const c = require('./app.json').expo; console.log('EXPO_PROJECT_ID=' + c.extra.eas.projectId); console.log('EXPO_OWNER=' + c.owner);"
+
       - name: Run app tests
         run: pnpm test
 
@@ -119,13 +131,6 @@ jobs:
             expo/.env.production
           include-hidden-files: true
           retention-days: 7
-
-      - name: Set up Expo deployment
-        if: env.DEPLOY == 'true'
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Deploy production
         if: env.DEPLOY == 'true'
