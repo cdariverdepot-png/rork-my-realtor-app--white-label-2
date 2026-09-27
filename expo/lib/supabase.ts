@@ -160,6 +160,22 @@ export async function ensureSupabaseSession(): Promise<Session | null> {
   return ensurePromise;
 }
 
+/** Drop an anonymous session before email/password auth so signUp/signIn are not layered on anon. */
+export async function clearAnonymousSessionForEmailAuth(): Promise<void> {
+  if (!supabase) return;
+  try {
+    const { data } = await supabase.auth.getSession();
+    if (data?.session?.user?.is_anonymous) {
+      console.log("[supabase] clearing anonymous session before email auth");
+      await supabase.auth.signOut({ scope: "local" });
+    }
+  } catch (e) {
+    console.log("[supabase] clearAnonymousSessionForEmailAuth", e);
+  } finally {
+    ensurePromise = null;
+  }
+}
+
 // Kick off on module load so the session is ready by the time any context
 // fires its first kvGet/kvSet. Failures are logged and swallowed — sync
 // then falls back to whatever the open RLS policies allow.

@@ -1,4 +1,4 @@
-import { supabase, ensureSupabaseSession } from "@/lib/supabase";
+import { supabase, clearAnonymousSessionForEmailAuth } from "@/lib/supabase";
 import { signupEmailRedirect } from "@/lib/authRedirect";
 import { authErrorMessage } from "@/lib/authErrors";
 
@@ -15,7 +15,7 @@ export async function signUpRealtorWithAuth(input: {
 }): Promise<RealtorAuthResult> {
   if (!supabase) return { ok: false, error: "Connect to the internet to create your account." };
   try {
-  await ensureSupabaseSession();
+  await clearAnonymousSessionForEmailAuth();
   const { data, error } = await supabase.auth.signUp({
     email: input.email.trim().toLowerCase(),
     password: input.password,
@@ -40,7 +40,7 @@ export async function signUpRealtorWithAuth(input: {
 export async function signInRealtorWithAuth(email: string, password: string): Promise<RealtorAuthResult> {
   if (!supabase) return { ok: false, error: "Connect to the internet to sign in." };
   try {
-  await ensureSupabaseSession();
+  await clearAnonymousSessionForEmailAuth();
   const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
   if (error) return { ok: false, error: authErrorMessage(error), verificationRequired: error.code === "email_not_confirmed" };
   if (!data.session) return { ok: false, error: "Sign-in did not create a session. Please try again." };
