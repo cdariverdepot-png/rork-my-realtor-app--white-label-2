@@ -180,10 +180,26 @@ export const [MessagesProvider, useMessages] = createContextHook(() => {
       if (!force && row.rev <= revRef.current) return;
       revRef.current = Math.max(revRef.current, row.rev);
       setRev(revRef.current);
-      setMessages(row.value);
-      void persist(row.value);
+      // Merge by id instead of replacing: if both sides sent at nearly the same
+      // moment (or one sent while offline), neither message is lost. A message
+      // read on either side stays read.
+      setMessages((local) => {
+        const byId = new Map<string, ChatMessage>();
+        for (const m of local) byId.set(m.id, m);
+        let localOnly = byId.size;
+        for (const m of row.value) {
+          const mine = byId.get(m.id);
+          if (mine) localOnly -= 1;
+          byId.set(m.id, mine ? { ...m, read: m.read || mine.read } : m);
+        }
+        const merged = [...byId.values()].sort((x, y) => x.createdAt - y.createdAt);
+        void persist(merged);
+        // Push back anything the server copy was missing.
+        if (localOnly > 0) setTimeout(bumpRev, 0);
+        return merged;
+      });
     },
-    [persist]
+    [persist, bumpRev]
   );
   const { refresh } = useKvSync<ChatMessage[]>({
     key: KV_KEY,
