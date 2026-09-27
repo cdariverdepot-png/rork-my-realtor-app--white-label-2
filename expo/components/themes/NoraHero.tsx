@@ -13,8 +13,8 @@ export default function NoraHero(p: HeroProps) {
       <Box x={24} y={108} w={98} s={s}><Headline copy={f.headline} s={s} size={37} width={98} height={88} color="#FFF8EC" accent="#C9714E" italicFrom={0.30} /></Box>
       <Box x={24} y={203} w={26} h={1} s={s} style={{ backgroundColor: "#B96746" }} />
       <Box x={24} y={218} w={146} s={s}><Intro p={p} s={s} lines={4} color="#E3DED1" /></Box>
-      <Box x={24} y={276} w={142} h={27} s={s}><Action label="START YOUR SEARCH" Icon={Search} iconFirst s={s} color="#FFF5E8" bg="#B95838" radius={3} onPress={p.onBrowse} /></Box>
-      <Box x={24} y={309} w={142} h={27} s={s}><Action label={`MESSAGE ${f.first.toUpperCase()}`} Icon={MessageCircle} iconFirst s={s} color="#F4E9DD" border="#944A2D" radius={3} onPress={p.onMessage} /></Box>
+      <Box x={222} y={270} w={142} h={27} s={s}><Action label="START YOUR SEARCH" Icon={Search} iconFirst s={s} color="#FFF5E8" bg="#B95838" radius={3} onPress={p.onBrowse} /></Box>
+      <Box x={222} y={303} w={142} h={27} s={s}><Action label={`MESSAGE ${f.first.toUpperCase()}`} Icon={MessageCircle} iconFirst s={s} color="#F4E9DD" border="#944A2D" radius={3} onPress={p.onMessage} /></Box>
     </Animated.View>
   </View>;
 }

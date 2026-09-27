@@ -12,8 +12,8 @@ export default function BurgundyHero(p: HeroProps) {
       <Box x={24} y={178} w={215} s={s}><Headline copy={f.headline} s={s} size={26} width={215} height={58} color="#FFF9F0" accent="#C7A16C" italicFrom={0.40} /></Box>
       <Box x={24} y={242} w={30} h={1} s={s} style={{ backgroundColor: "#C7A16C" }} />
       <Box x={24} y={250} w={330} s={s}><Intro p={p} s={s} lines={2} color="#F7F1E6" serif /></Box>
-      <Box x={24} y={285} w={159} h={33} s={s}><Action label="START YOUR SEARCH" Icon={Search} iconFirst s={s} color="#FFF6E8" bg="#550E20" border="#8D4655" radius={7} onPress={p.onBrowse} /></Box>
-      <Box x={24} y={323} w={159} h={32} s={s}><Action label={`MESSAGE ${f.first.toUpperCase()}`} Icon={MessageCircle} iconFirst s={s} color="#D8B67C" border="#C7A16C" radius={7} onPress={p.onMessage} /></Box>
+      <Box x={24} y={292} w={166} h={33} s={s}><Action label="START YOUR SEARCH" Icon={Search} iconFirst s={s} color="#FFF6E8" bg="#550E20" border="#8D4655" radius={7} onPress={p.onBrowse} /></Box>
+      <Box x={200} y={292} w={166} h={33} s={s}><Action label={`MESSAGE ${f.first.toUpperCase()}`} Icon={MessageCircle} iconFirst s={s} color="#D8B67C" border="#C7A16C" radius={7} onPress={p.onMessage} /></Box>
     </Animated.View>
   </View>;
 }
