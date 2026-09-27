@@ -58,11 +58,15 @@ export async function setNewPasswordWhileAuthenticated(newPassword: string): Pro
 
   try {
     const { data: sessionData } = await supabase.auth.getSession();
-    if (!sessionData.session) {
+    if (!sessionData.session || sessionData.session.user?.is_anonymous) {
       return {
         ok: false,
         error: "This reset link expired or wasn't opened here. Request a new one.",
       };
+    }
+    const verified = await supabase.auth.getUser();
+    if (verified.error || !verified.data.user?.email_confirmed_at || verified.data.user.is_anonymous) {
+      return { ok: false, error: "Please open a new password reset email before continuing." };
     }
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) {

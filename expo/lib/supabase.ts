@@ -97,7 +97,9 @@ export const supabase: SupabaseClient | null = (() => {
         storage: AsyncStorage as unknown as Storage,
         autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: Platform.OS === "web",
+        // The callback route owns exchange and recovery routing. Auto-detection
+        // here races it and can consume the one-time PKCE code twice.
+        detectSessionInUrl: false,
         flowType: "pkce",
       },
       realtime: { params: { eventsPerSecond: 5 } },
@@ -164,6 +166,9 @@ export async function ensureSupabaseSession(): Promise<Session | null> {
 export async function clearAnonymousSessionForEmailAuth(): Promise<void> {
   if (!supabase) return;
   try {
+    // Let startup finish before replacing its guest session with a real account.
+    // Otherwise a late anonymous sign-in can race password/OTP authentication.
+    if (ensurePromise) await ensurePromise;
     const { data } = await supabase.auth.getSession();
     if (data?.session?.user?.is_anonymous) {
       console.log("[supabase] clearing anonymous session before email auth");

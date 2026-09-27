@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import { completeAuthCallback } from "@/lib/completeAuthCallback";
 import {
-  classifyAuthCallbackType,
   needsSetPassword,
   readAuthCallbackType,
 } from "@/lib/authCallback";
@@ -18,40 +17,6 @@ function hashParams(): URLSearchParams {
 function queryParams(): URLSearchParams {
   if (Platform.OS !== "web" || typeof window === "undefined") return new URLSearchParams();
   return new URLSearchParams(window.location.search || "");
-}
-
-/** Establish a Supabase session from PKCE code, implicit hash tokens, or an existing web detect. */
-async function establishSession(code?: string) {
-  if (!supabase) throw new Error("invalid callback");
-
-  const fromParams = typeof code === "string" && code.length > 0 ? code : null;
-  const fromQuery = Platform.OS === "web" ? queryParams().get("code") : null;
-  const authCode = fromParams || fromQuery;
-
-  if (authCode) {
-    const result = await supabase.auth.exchangeCodeForSession(authCode);
-    if (result.error) throw result.error;
-    return;
-  }
-
-  if (Platform.OS === "web") {
-    const hash = hashParams();
-    const access_token = hash.get("access_token");
-    const refresh_token = hash.get("refresh_token");
-    if (access_token && refresh_token) {
-      const result = await supabase.auth.setSession({ access_token, refresh_token });
-      if (result.error) throw result.error;
-      return;
-    }
-    const err = hash.get("error_description") || queryParams().get("error_description");
-    if (err) throw new Error(err);
-  }
-
-  // detectSessionInUrl may already have persisted a session before this route mounts.
-  const existing = await supabase.auth.getSession();
-  if (existing.data.session) return;
-
-  throw new Error("invalid callback");
 }
 
 export default function AuthCallback() {
@@ -68,21 +33,17 @@ export default function AuthCallback() {
       // Capture type before establishSession / URL cleanup consumes the hash.
       const fromUrl = readAuthCallbackType(hashParams(), queryParams());
       const fromRoute = typeof typeParam === "string" ? typeParam.toLowerCase() : null;
-      const kind = classifyAuthCallbackType(fromUrl || fromRoute);
-      let recoveryEvent = false;
+      const hash = hashParams();
+      const query = queryParams();
+      const kind = await completeAuthCallback({
+        code: typeof code === "string" ? code : query.get("code") ?? undefined,
+        type: fromUrl || fromRoute,
+        error: hash.get("error") || query.get("error") || hash.get("error_description") || query.get("error_description"),
+        accessToken: hash.get("access_token"), refreshToken: hash.get("refresh_token"),
+      });
+      if (Platform.OS === "web") window.history.replaceState(null, "", window.location.pathname);
 
-      const authListener =
-        supabase?.auth.onAuthStateChange((event) => {
-          if (event === "PASSWORD_RECOVERY") recoveryEvent = true;
-        }) ?? null;
-
-      try {
-        await establishSession(typeof code === "string" ? code : undefined);
-      } finally {
-        authListener?.data.subscription.unsubscribe();
-      }
-
-      if (needsSetPassword(kind) || recoveryEvent) {
+      if (needsSetPassword(kind)) {
         setMessage("Open the set-password screen to finish…");
         router.replace("/reset-password?mode=set&from=link");
         return;

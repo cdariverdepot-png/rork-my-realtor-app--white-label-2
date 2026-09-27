@@ -116,7 +116,8 @@ test('setNewPassword updates user when recovery session exists', async () => {
   const source = ts.transpileModule(fs.readFileSync(path.join(__dirname, '..', 'lib/passwordReset.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
   const client = {
     auth: {
-      getSession: async () => ({ data: { session: { access_token: 'x' } } }),
+      getSession: async () => ({ data: { session: { access_token: 'x', user: { is_anonymous: false } } } }),
+      getUser: async () => ({ data: { user: { is_anonymous: false, email_confirmed_at: '2026-09-26' } } }),
       updateUser: async (args) => { updated = args; return {}; },
     },
   };
@@ -197,6 +198,47 @@ test('passwordResetRedirect mirrors signup localhost vs Pages rules', () => {
   assert.equal(passwordResetRedirect(), PUBLISHED_AUTH_RETURN);
 });
 
+test('PKCE recovery uses SDK redirect type without relying on event timing', async () => {
+  const client = { auth: {
+    exchangeCodeForSession: async () => ({ data: { session: {}, redirectType: 'recovery' } }),
+    getUser: async () => ({ data: { user: { email_confirmed_at: '2026-09-26' } } }),
+  } };
+  const { completeAuthCallback } = load('lib/completeAuthCallback', client);
+  assert.equal(await completeAuthCallback({ code: 'single-use-code' }), 'recovery');
+});
+
+test('empty callback cannot reuse an unrelated logged-in session', async () => {
+  const { completeAuthCallback } = load('lib/completeAuthCallback', { auth: {} });
+  await assert.rejects(completeAuthCallback({}), /Missing/);
+});
+
+test('callback errors are rejected before exchanging credentials', async () => {
+  const { completeAuthCallback } = load('lib/completeAuthCallback', { auth: {} });
+  await assert.rejects(completeAuthCallback({ code: 'code', error: 'expired' }), /Invalid/);
+});
+
+test('guest session cannot finish an email callback', async () => {
+  const client = { auth: {
+    exchangeCodeForSession: async () => ({ data: { session: {} } }),
+    getUser: async () => ({ data: { user: { is_anonymous: true } } }),
+  } };
+  const { completeAuthCallback } = load('lib/completeAuthCallback', client);
+  await assert.rejects(completeAuthCallback({ code: 'code' }), /Verified/);
+});
+
+test('guest session cannot set an account password', async () => {
+  const { setNewPassword } = load('lib/passwordReset', { auth: {
+    getSession: async () => ({ data: { session: { user: { is_anonymous: true } } } }),
+  } });
+  assert.equal((await setNewPassword('not-a-real-password')).ok, false);
+});
+
+test('social callback preserves published subdirectory and rejects unknown deployments', () => {
+  const { socialCallbackRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect');
+  assert.equal(socialCallbackRedirect('https://cdariverdepot-png.github.io'), PUBLISHED_AUTH_RETURN);
+  assert.equal(socialCallbackRedirect('http://localhost:8081'), 'http://localhost:8081/auth/callback');
+  assert.throws(() => socialCallbackRedirect('https://unconfigured.example'));
+});
 test('Google + Microsoft default on; Apple defaults on for iOS', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
   assert.match(src, /socialFlag\(["']EXPO_PUBLIC_GOOGLE_SIGN_IN["'],\s*true\)/);

@@ -3,7 +3,7 @@ import Constants from "expo-constants";
 import * as WebBrowser from "expo-web-browser";
 import { supabase, ensureSupabaseSession } from "@/lib/supabase";
 import { authErrorMessage } from "@/lib/authErrors";
-import { signupEmailRedirect, webOriginForRedirect } from "@/lib/authRedirect";
+import { socialCallbackRedirect } from "@/lib/authRedirect";
 
 /** Google + Microsoft are on in the shipped product. Set EXPO_PUBLIC_*_SIGN_IN=false to hide. Apple stays opt-in. */
 function socialFlag(name: string, defaultOn: boolean): boolean {
@@ -28,9 +28,8 @@ export async function startSocialSignIn(provider: "google" | "apple" | "azure") 
   if (Platform.OS !== "web" && Constants.appOwnership === "expo") return { ok: false, error: "Use email sign-in in Expo Go. Social sign-in requires the installed app build." };
   try {
     await ensureSupabaseSession();
-    // Web: same allowlist rules as email (localhost only for local preview; else published Pages).
-    // Native standalone: custom scheme. Buttons are visible; provider secrets live in Supabase dashboard.
-    const redirectTo = Platform.OS === "web" ? signupEmailRedirect(webOriginForRedirect()) : "rork-app://auth/callback";
+    // PKCE verifier is stored on this origin; never send a local flow to a different site.
+    const redirectTo = Platform.OS === "web" ? socialCallbackRedirect(window.location.origin) : "rork-app://auth/callback";
     const { data, error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo, skipBrowserRedirect: true, ...(provider === "azure" ? { scopes: "email" } : {}) } });
     if (error || !data?.url) {
       const msg =

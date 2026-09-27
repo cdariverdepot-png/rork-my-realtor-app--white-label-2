@@ -59,7 +59,7 @@ export default function ResetPassword() {
     void (async () => {
       if (!supabase) return;
       const { data } = await supabase.auth.getSession();
-      if (data.session) setStage("set");
+      if (data.session?.user && !data.session.user.is_anonymous && data.session.user.email_confirmed_at) setStage("set");
     })();
   }, [linkSetMode]);
 

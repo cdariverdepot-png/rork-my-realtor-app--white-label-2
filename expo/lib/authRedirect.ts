@@ -39,6 +39,13 @@ export function passwordResetRedirect(origin?: string): string {
   return signupEmailRedirect(origin);
 }
 
+/** OAuth must return to the same origin AND deployment base path as its verifier. */
+export function socialCallbackRedirect(origin: string): string {
+  const published = new URL(PUBLISHED_AUTH_RETURN);
+  if (normalizeOrigin(origin) === published.origin) return PUBLISHED_AUTH_RETURN;
+  if (LOCAL_ORIGIN_RE.test(normalizeOrigin(origin))) return localCallback(origin);
+  throw new Error("Unconfigured authentication origin");
+}
 /**
  * Pass into signupEmailRedirect / passwordResetRedirect only from web.
  * Native never implies localhost — returns undefined so helpers use PUBLISHED_AUTH_RETURN.
