@@ -153,7 +153,7 @@ test('legacy profiles retain saved copy, themes, hidden sections and arrays whil
   assert.equal(JSON.stringify(saved), snapshot);
 });
 const fixture = () => ({
-  realtor: { name: 'Test Realtor', city: 'Test City', phone: '555-0100', email: '', heroMessage: 'Your next home', tagline: '' },
+  realtor: { name: 'Test Realtor', city: 'Test City', phone: '555-0100', email: 'agent@example.com', heroMessage: 'Your next home', tagline: '' },
   portraitUrl: 'test-portrait.jpg', note: { body: [] }, beat: { bullets: [] }, testimonials: [], recentlyClosed: [],
   credentials: { designations: [], education: [], awards: [], memberships: [], languages: [], license: { brokerage: 'Test Brokerage', number: 'AB 12-34 / X', state: 'Test region' } },
   theme: { accent: 'pewter', displayFont: 'grotesk', surface: 'alabaster' }
@@ -315,4 +315,17 @@ test('every hero text slot is bounded so custom names and copy cannot spill into
       assert.match(tag, /numberOfLines=/, `${file}: unbounded text ${tag.slice(0, 80)}`);
     }
   }
+});
+
+test('business phone AND email are both required for clients to call, text and email', () => {
+  const noEmail = fixture(); noEmail.realtor.email = '';
+  const noPhone = fixture(); noPhone.realtor.phone = '';
+  assert.equal(requiredStatus(noEmail).complete, false);
+  assert.equal(requiredStatus(noPhone).complete, false);
+  assert.equal(requiredStatus(fixture()).complete, true);
+});
+test('the message screen sends into the real realtor-client thread, not a fake confirmation', () => {
+  const src = fs.readFileSync(path.join(root, 'app/message.tsx'), 'utf8');
+  assert.match(src, /useMessages\(\)/);
+  assert.match(src, /sendChat\("client"/);
 });

@@ -526,9 +526,9 @@ export default function AdminDashboard() {
             </View>
 
             {setupComplete && (
-              <View style={{ marginBottom: 18, gap: 5 }}>
-                <Text style={{ fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 10, letterSpacing: 2 }}>RUN MY BUSINESS</Text>
-                <Text style={{ fontFamily: fonts.sans, color: admin.textMuted, fontSize: 13, lineHeight: 20 }}>
+              <View style={{ marginBottom: 18, gap: 5, alignItems: "center" }}>
+                <Text style={{ fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 10, letterSpacing: 2, textAlign: "center" }}>RUN MY BUSINESS</Text>
+                <Text style={{ fontFamily: fonts.sans, color: admin.textMuted, fontSize: 13, lineHeight: 20, textAlign: "center" }}>
                   1. Preview your app   2. Add a listing   3. Invite a client
                 </Text>
               </View>

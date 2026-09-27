@@ -8,10 +8,11 @@ export interface ConsultInfo {
   firstName: string;
 }
 
+// No fallback number or inbox: a client's call must only ever reach their realtor.
 const DEFAULT_INFO: ConsultInfo = {
-  phoneDisplay: "(208) 210-8717",
-  phoneTel: "+12082108717",
-  email: "contact@myrealtorapp.com",
+  phoneDisplay: "",
+  phoneTel: "",
+  email: "",
   firstName: "your realtor",
 };
 

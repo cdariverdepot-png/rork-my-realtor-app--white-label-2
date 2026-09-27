@@ -65,7 +65,7 @@ const REQUIRED_CTA: Record<RequiredFieldId, string> = {
   name: "Set your display name",
   portrait: "Add your portrait",
   city: "Set your city or region",
-  contact: "Add a phone or email",
+  contact: "Add your business phone & email",
   heroLine: "Write your opening line",
   license: "Add your brokerage & licence",
 };

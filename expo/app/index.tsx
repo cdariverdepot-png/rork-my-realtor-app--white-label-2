@@ -265,10 +265,27 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const bottomPad = Math.max(insets.bottom, 10) + 100;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
+  /** Floating Back (left) + quiet "Viewing as client" label — shared by every client preview, including the demo. */
+  const previewHeader = (onBack: () => void, label: string) => <>
+    <Pressable
+      onPress={onBack}
+      accessibilityRole="button"
+      accessibilityLabel="Back"
+      hitSlop={10}
+      style={({ pressed }) => [styles.previewBack, { top: insets.top + 10 }, pressed && { opacity: 0.75 }]}
+    >
+      <ChevronLeft size={18} color="#FFFFFF" strokeWidth={2.2} />
+      <Text style={styles.previewBackText}>Back</Text>
+    </Pressable>
+    <View style={[styles.previewBar, { top: insets.top + 16 }]} pointerEvents="none">
+      <Text style={styles.previewLabel}>{label}</Text>
+    </View>
+  </>;
+
   // Left-edge swipe back to the dashboard while previewing as a client.
   const edgeX = useRef(new Animated.Value(0)).current;
   const edgeBack = useMemo(() => Gesture.Pan()
-    .enabled(viewAsClient && !demoViewMode && !previewingDraft && !editing)
+    .enabled(viewAsClient && !previewingDraft && !editing)
     .hitSlop({ left: 0, width: 32 })
     .activeOffsetX(12)
     .failOffsetY([-24, 24])
@@ -278,14 +295,14 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
       if (e.translationX > 90 || e.velocityX > 700) {
         Animated.timing(edgeX, { toValue: 420, duration: 160, useNativeDriver: true }).start(() => {
           edgeX.setValue(0);
-          exitTemplate();
+          if (demoViewMode) void exitDemo(); else exitTemplate();
         });
       } else {
         Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start();
       }
     })
     .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(); }),
-  [viewAsClient, demoViewMode, previewingDraft, editing, edgeX, exitTemplate]);
+  [viewAsClient, demoViewMode, previewingDraft, editing, edgeX, exitTemplate, exitDemo]);
   useEffect(() => {
     Animated.timing(bannerAnim, {
       toValue: refreshing ? 1 : 0,
@@ -482,19 +499,8 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         </View>
       </Modal>
       {demoViewMode ? (
-        /* Eliza Vance demo showcase — static, view-only, no edit UI. */
-        <View style={[styles.previewBar, { top: insets.top + 8 }]} pointerEvents="box-none">
-          <Pressable
-            onPress={exitDemo}
-            style={({ pressed }) => [styles.previewPill, pressed && { opacity: 0.8 }]}
-            hitSlop={8}
-          >
-            <Eye size={13} color={brand.goldLight} strokeWidth={1.7} />
-            <Text style={styles.previewText}>ELIZA VANCE · DEMO</Text>
-            <View style={styles.previewDivider} />
-            <X size={13} color={brand.ivory} strokeWidth={2} />
-          </Pressable>
-        </View>
+        /* Eliza Vance demo: the same preview header as every client preview. */
+        previewHeader(exitDemo, "Viewing as client")
       ) : previewingDraft ? (
         /* Unpublished Studio draft — visible only to the realtor, never to clients. */
         <View style={[styles.previewBar, { top: insets.top + 8 }]} pointerEvents="box-none">
@@ -511,21 +517,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         </View>
       ) : viewAsClient ? (
         /* Realtor's own app preview: a floating Back button and a quiet label. */
-        <>
-          <Pressable
-            onPress={exitTemplate}
-            accessibilityRole="button"
-            accessibilityLabel="Back to dashboard"
-            hitSlop={10}
-            style={({ pressed }) => [styles.previewBack, { top: insets.top + 10 }, pressed && { opacity: 0.75 }]}
-          >
-            <ChevronLeft size={18} color="#FFFFFF" strokeWidth={2.2} />
-            <Text style={styles.previewBackText}>Back</Text>
-          </Pressable>
-          <View style={[styles.previewBar, { top: insets.top + 16 }]} pointerEvents="none">
-            <Text style={styles.previewLabel}>{editing ? "Editing" : "Viewing as client"}</Text>
-          </View>
-        </>
+        previewHeader(exitTemplate, editing ? "Editing" : "Viewing as client")
       ) : null}
 
       {editing ? (
@@ -563,7 +555,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
 
   // Realtor previewing their own template: mirror the dashboard gesture so they
   // can pull the preview aside and step straight back into editing.
-  if (viewAsClient && !demoViewMode && !previewingDraft) {
+  if (viewAsClient && !previewingDraft) {
     return (
       <GestureDetector gesture={edgeBack}>
         <Animated.View style={{ flex: 1, transform: [{ translateX: edgeX }] }}>

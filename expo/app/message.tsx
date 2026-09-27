@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -18,6 +19,9 @@ import { brand, dark, fonts } from "@/constants/colors";
 import { avatarPlaceholder } from "@/constants/assets";
 import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
 import { useBrand } from "@/contexts/BrandContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useMessages } from "@/contexts/MessagesContext";
+import { themeDesign } from "@/constants/themeDesigns";
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
@@ -43,8 +47,21 @@ export default function Message() {
   const [intent, setIntent] = useState<string | null>(null);
   const [sent, setSent] = useState<boolean>(false);
 
+  const { isClient } = useAuth();
+  const { send: sendChat } = useMessages();
+  // Primary action follows the realtor's selected theme.
+  const action = themeDesign(b.layoutId, b.theme).accent;
+
+  /** Delivers into the private realtor ↔ client thread (the realtor's Messages inbox). */
   const send = () => {
-    if (!text.trim() && !intent) return;
+    const body = [intent, text.trim()].filter(Boolean).join("\n\n");
+    if (!body) return;
+    if (!isClient) {
+      // Realtor previews and the demo have no client thread — never pretend a message went out.
+      Alert.alert("Preview only", `In your clients' app this sends straight to your Messages inbox, with their name, email and phone.`);
+      return;
+    }
+    sendChat("client", body);
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setSent(true);
     setTimeout(() => router.back(), 1400);
@@ -138,11 +155,11 @@ export default function Message() {
           onPress={send}
           haptic={!text.trim() && !intent ? "none" : "medium"}
           scaleTo={0.97}
-          style={[styles.send, !text.trim() && !intent && { opacity: 0.45 }]}
+          style={[styles.send, { backgroundColor: action }, !text.trim() && !intent && { opacity: 0.45 }]}
           disabled={!text.trim() && !intent}
         >
-          <Send size={16} color={brand.nightDeep} strokeWidth={2} />
-          <Text style={styles.sendText}>Send to {firstName}</Text>
+          <Text style={styles.sendText} numberOfLines={1}>Send to {firstName}</Text>
+          <Send size={18} color={brand.nightDeep} strokeWidth={2} />
         </PressableScale>
       </View>
     </KeyboardAvoidingView>
@@ -230,15 +247,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
-    paddingVertical: 17,
+    minHeight: 56,
+    paddingHorizontal: 22,
     borderRadius: 14,
     backgroundColor: ACCENT,
   },
   sendText: {
     fontFamily: fonts.sansSemi,
     color: brand.nightDeep,
-    fontSize: 13,
-    letterSpacing: 2,
+    fontSize: 16,
+    letterSpacing: 0.3,
+    flexShrink: 1,
   },
   sentRoot: {
     flex: 1,

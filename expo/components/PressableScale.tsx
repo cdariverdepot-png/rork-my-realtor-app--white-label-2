@@ -3,11 +3,17 @@ import {
   Animated,
   Platform,
   Pressable,
+  StyleSheet,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
 import * as Haptics from "expo-haptics";
+
+/** Placement-only keys that stay on the outer touch target. */
+const OUTER_KEYS = new Set(["flex", "flexGrow", "flexShrink", "flexBasis", "alignSelf", "position", "top", "left", "right", "bottom", "zIndex", "opacity", "display"]);
+/** Size keys both layers need so the visible button fills its slot. */
+const SHARED_KEYS = new Set(["width", "height", "minWidth", "minHeight", "maxWidth", "maxHeight", "aspectRatio"]);
 
 type Props = Omit<PressableProps, "style"> & {
   style?: StyleProp<ViewStyle>;
@@ -48,10 +54,24 @@ export default function PressableScale({
     else Haptics.selectionAsync();
   };
 
+  // The button's own look (row layout, padding, fill, radius, border) belongs on
+  // the animated inner view that holds the icon and label; only placement
+  // (margins, flex sizing, position, opacity) stays on the outer touch target.
+  // Previously everything sat on the outer layer, so icons and labels stacked
+  // and drifted off-centre inside it.
+  const flat = (StyleSheet.flatten(style) ?? {}) as ViewStyle & Record<string, unknown>;
+  const outer: Record<string, unknown> = {};
+  const inner: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(flat)) {
+    if (OUTER_KEYS.has(key) || key.startsWith("margin")) outer[key] = value;
+    else inner[key] = value;
+    if (SHARED_KEYS.has(key)) outer[key] = value;
+  }
+
   return (
     <Pressable
       {...rest}
-      style={style}
+      style={outer as ViewStyle}
       onPressIn={(e) => {
         spring(scaleTo);
         fire();
@@ -62,7 +82,7 @@ export default function PressableScale({
         onPressOut?.(e);
       }}
     >
-      <Animated.View style={{ transform: [{ scale }], flexGrow: 1 }}>
+      <Animated.View style={[{ flexGrow: 1 }, inner as ViewStyle, { transform: [{ scale }] }]}>
         {children}
       </Animated.View>
     </Pressable>

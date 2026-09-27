@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
 import { SCREEN_ACCENT } from "@/constants/backdrops";
 import { useBrand } from "@/contexts/BrandContext";
+import { themeDesign } from "@/constants/themeDesigns";
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
@@ -55,10 +56,10 @@ export default function Note() {
           onPress={reply}
           haptic="medium"
           scaleTo={0.97}
-          style={styles.reply}
+          style={[styles.reply, { backgroundColor: themeDesign(b.layoutId, b.theme).accent }]}
         >
-          <Text style={styles.replyText}>Reply to {realtor.name.split(" ")[0]}</Text>
-          <ArrowRight size={16} color={brand.nightDeep} strokeWidth={2} />
+          <Text style={styles.replyText} numberOfLines={1}>Reply to {realtor.name.split(" ")[0]}</Text>
+          <ArrowRight size={18} color={brand.nightDeep} strokeWidth={2} />
         </PressableScale>
       </View>
     </View>
@@ -125,14 +126,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
-    paddingVertical: 17,
+    minHeight: 56,
+    paddingHorizontal: 22,
     borderRadius: 14,
     backgroundColor: ACCENT,
   },
   replyText: {
     fontFamily: fonts.sansSemi,
     color: brand.nightDeep,
-    fontSize: 13,
-    letterSpacing: 2,
+    fontSize: 16,
+    letterSpacing: 0.3,
+    flexShrink: 1,
   },
 });

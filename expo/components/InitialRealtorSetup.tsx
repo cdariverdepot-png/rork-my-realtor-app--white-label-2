@@ -71,7 +71,7 @@ function ManualSetup() {
         <Text style={{ color: "#9ECFFF", marginTop: 12 }}>Choose portrait</Text>
       </Pressable>}
       {item.id === "city" && field("City or region", draft.realtor.city, v => identity("city", v))}
-      {item.id === "contact" && <>{field("Phone", draft.realtor.phone, v => identity("phone", v))}{field("Email", draft.realtor.email, v => identity("email", v))}<Text style={{ color: "#CBD0D6", marginTop: 8 }}>Provide at least one contact method.</Text></>}
+      {item.id === "contact" && <><Text style={{ color: "#CBD0D6", marginTop: 8 }}>Your business contact details — this is how clients reach you from the app.</Text>{field("Phone number — where would you like clients to call or text you?", draft.realtor.phone, v => identity("phone", v))}{field("Email address — where would you like clients to email you?", draft.realtor.email, v => identity("email", v))}</>}
       {item.id === "heroLine" && field("Opening line", draft.realtor.heroMessage || draft.realtor.tagline, v => identity("heroMessage", v))}
       {item.id === "license" && <>{field("Brokerage", draft.credentials.license.brokerage, v => license("brokerage", v))}{field("License number", draft.credentials.license.number, v => license("number", v))}{field("License state or jurisdiction", draft.credentials.license.state, v => license("state", v))}</>}
     </View>)}
@@ -85,7 +85,7 @@ function ManualSetup() {
 
 type Phase = "collect" | "building" | "review";
 type ErrorPlace = "sources" | "review" | "hero" | "intro";
-type AskId = "name" | "city" | "contact" | "heroLine";
+type AskId = "name" | "city" | "phone" | "email" | "heroLine";
 type ConfirmField = "realtor.name" | "realtor.title" | "realtor.city" | "realtor.phone" | "realtor.email" | "realtor.brandName";
 
 const CONFIRM_LABELS: Record<ConfirmField, string> = {
@@ -97,7 +97,7 @@ const CONFIRM_LABELS: Record<ConfirmField, string> = {
   "realtor.brandName": "Business or team name",
 };
 const ASK_FOR_FIELD: Partial<Record<ConfirmField, AskId>> = {
-  "realtor.name": "name", "realtor.city": "city", "realtor.phone": "contact", "realtor.email": "contact",
+  "realtor.name": "name", "realtor.city": "city", "realtor.phone": "phone", "realtor.email": "email",
 };
 
 export default function InitialRealtorSetup() {
@@ -151,7 +151,16 @@ export default function InitialRealtorSetup() {
       .map(fact => ({ field: fact.field as ConfirmField, also: fact.conflictingValues }));
     const confirmed = new Set(confirms.map(item => ASK_FOR_FIELD[item.field]).filter(Boolean));
     setConfirmList(confirms);
-    setAskFor(REQUIRED_FIELDS.filter(item => !item.met(next) && !confirmed.has(item.id as AskId)).map(item => item.id as AskId));
+    // Phone and email are asked for separately: finding one must never hide the other.
+    const ask: AskId[] = [];
+    for (const item of REQUIRED_FIELDS) {
+      if (item.met(next)) continue;
+      if (item.id === "contact") {
+        if (!next.realtor.phone.trim() && !confirmed.has("phone")) ask.push("phone");
+        if (!next.realtor.email.trim() && !confirmed.has("email")) ask.push("email");
+      } else if (!confirmed.has(item.id as AskId)) ask.push(item.id as AskId);
+    }
+    setAskFor(ask);
     setShowLicense(false);
     setDraft(next);
   };
@@ -539,9 +548,9 @@ export default function InitialRealtorSetup() {
         <Text style={{ color: "#9AA4AA", marginTop: 4 }}>We couldn’t find these on your website.</Text>
         {askFor.includes("name") && input("ask-name", "Your name", draft.realtor.name, value => setProfile("name", value))}
         {askFor.includes("city") && input("ask-city", "City or region (e.g. Coeur d’Alene, ID)", draft.realtor.city, value => setProfile("city", value))}
-        {askFor.includes("contact") && input("ask-phone", "Phone", draft.realtor.phone, value => setProfile("phone", value), "phone-pad")}
-        {askFor.includes("contact") && input("ask-email", "Email", draft.realtor.email, value => setProfile("email", value), "email-address")}
-        {askFor.includes("contact") && <Text key="ask-contact-hint" style={{ color: "#9AA4AA", marginTop: 6 }}>One of phone or email is enough.</Text>}
+        {(askFor.includes("phone") || askFor.includes("email")) && <Text key="ask-contact-hint" style={{ color: "#9AA4AA", marginTop: 12 }}>Your business contact details — this is how clients reach you from the app.</Text>}
+        {askFor.includes("phone") && input("ask-phone", "Phone number — where would you like clients to call or text you?", draft.realtor.phone, value => setProfile("phone", value), "phone-pad")}
+        {askFor.includes("email") && input("ask-email", "Email address — where would you like clients to email you?", draft.realtor.email, value => setProfile("email", value), "email-address")}
         {askFor.includes("heroLine") && input("ask-hero", "Opening line", draft.realtor.heroMessage, value => setProfile("heroMessage", value))}
       </View>}
 

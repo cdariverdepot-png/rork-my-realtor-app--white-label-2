@@ -70,9 +70,9 @@ export const REQUIRED_FIELDS: RequiredField[] = [
   },
   {
     id: "contact",
-    label: "Phone or email",
-    why: "Every call, message and booking button needs somewhere to go.",
-    met: (b) => filled(b.realtor.phone) || filled(b.realtor.email),
+    label: "Business phone & email",
+    why: "Clients call, text and email you from the app — both need to reach you.",
+    met: (b) => filled(b.realtor.phone) && filled(b.realtor.email),
     href: "/admin/studio",
   },
   {
