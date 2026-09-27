@@ -16,13 +16,20 @@ import { clientSetupState, realtorSetupState } from "@/lib/onboardingState";
  * screen. Instead the children always stay mounted and the redirect is issued
  * imperatively, with a cover on top so the wrong page never flashes.
  */
+/** Shared across every screen's guard: has the demo showcase been on screen yet? */
+let demoShown = false;
+
 export default function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const router = useRouter();
   const auth = useAuth();
   const brand = useBrand();
   const profile = useClientProfiles();
-  const returningFromDemo = auth.demoViewMode && path.startsWith("/admin");
+  // "Returning from the demo" only once the demo has actually been shown — tapping
+  // View Demo on the dashboard starts on an /admin path and must not end the demo.
+  if (!auth.demoViewMode) demoShown = false;
+  else if (path === "/") demoShown = true;
+  const returningFromDemo = auth.demoViewMode && demoShown && path.startsWith("/admin");
   useEffect(() => {
     if (returningFromDemo) void auth.exitDemoView();
   }, [returningFromDemo, auth.exitDemoView]);

@@ -939,7 +939,7 @@ export default function AdminDashboard() {
               <Text style={[styles.supportText, styles.supportTextGold]}>Plans</Text>
             </Pressable>
             <View style={styles.supportDivider} />
-            <Pressable onPress={tap(() => { enterDemoView(); router.push("/"); })} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
+            <Pressable onPress={tap(() => { enterDemoView(); router.replace("/"); })} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
               <Sparkles size={13} color={admin.goldLight} strokeWidth={1.6} />
               <Text style={[styles.supportText, styles.supportTextGold]}>View Demo</Text>
             </Pressable>
