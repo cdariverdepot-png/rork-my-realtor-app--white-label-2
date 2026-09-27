@@ -7,10 +7,11 @@ import { themeSample } from "@/constants/themeSamples";
 import { withSamplePortrait } from "@/constants/themeSamplePortraits";
 import FanCarousel from "./FanCarousel";
 import ThemeFace, { themeCardHeight } from "./ThemeFace";
+import ThemePreviewModal from "./ThemePreviewModal";
 
 /**
  * Dashboard theme browser: the default sample templates in the editor's fanned
- * carousel style, smaller. Hold and drag, flick, or tap a side card. Browsing
+ * carousel style, smaller. Hold and drag, flick, or tap a side card; tap the front card to preview it. Browsing
  * only — nothing is changed. `onSwipeGesture` lets the dashboard's own swipe yield.
  */
 export default function ThemeShowcase({ brand, onSwipeGesture }: { brand: Brand; onSwipeGesture?: (gesture: GestureType) => void }) {
@@ -19,6 +20,9 @@ export default function ThemeShowcase({ brand, onSwipeGesture }: { brand: Brand;
   const order = THEME_CAROUSEL_ORDER as readonly string[];
   const [initial] = useState(() => Math.max(0, brand.layoutId ? order.indexOf(brand.layoutId) : 0));
   const [index, setIndex] = useState(initial);
+  const [previewing, setPreviewing] = useState(false);
+  const shownId = THEME_CAROUSEL_ORDER[index];
+  const shown = useMemo(() => withSamplePortrait({ ...themeSample(shownId), sample: true }), [shownId]);
 
   const cardWidth = width ? Math.min(140, width * 0.32) : 110;
   const cards = useMemo(() => THEME_CAROUSEL_ORDER.map(id => {
@@ -29,10 +33,13 @@ export default function ThemeShowcase({ brand, onSwipeGesture }: { brand: Brand;
 
   return <View onLayout={e => setWidth(e.nativeEvent.layout.width)} style={{ marginTop: 16 }}>
     {width > 0 && <FanCarousel count={count} initialIndex={initial} cards={cards} cardWidth={cardWidth} cardHeights={heights}
-      gap={cardWidth * 0.55} rise={8} radius={12} onIndexChange={setIndex} onGesture={onSwipeGesture} />}
+      gap={cardWidth * 0.55} rise={8} radius={12} onIndexChange={setIndex} onGesture={onSwipeGesture}
+      onFrontPress={() => setPreviewing(true)} />}
     <Text style={{ color: "#F5EFE5", textAlign: "center", marginTop: 4, fontSize: 13 }}>
       {themeDesign(THEME_CAROUSEL_ORDER[index]).name}
       <Text style={{ color: "#9A948A" }}>{`  ·  ${index + 1} of ${count}${THEME_CAROUSEL_ORDER[index] === brand.layoutId && brand.themeChosen ? "  ·  Your theme" : ""}`}</Text>
     </Text>
+    <ThemePreviewModal visible={previewing} title={themeDesign(shownId).name} subtitle="Sample profile · illustrative photos"
+      brand={shown.brand} listings={shown.listings} portraitSource={shown.portraitSource} onClose={() => setPreviewing(false)} />
   </View>;
 }

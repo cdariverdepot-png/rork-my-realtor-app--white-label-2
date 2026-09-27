@@ -8,6 +8,7 @@ import { THEME_CAROUSEL_ORDER, themeCandidate, themeDesign } from "@/constants/t
 import ReferenceHome from "./themes/ReferenceHome";
 import ThemeNavigation from "./ThemeNavigation";
 import FanCarousel from "./FanCarousel";
+import ThemePreviewModal from "./ThemePreviewModal";
 import ThemeFace, { themeCardHeight } from "./ThemeFace";
 import PortraitPositioner from "./PortraitPositioner";
 import { Image } from "expo-image";
@@ -103,22 +104,9 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false 
         </ScrollView></ScrollView>
       </View>
     </Modal>
-    <Modal visible={expanded} animationType="none" onRequestClose={() => setExpanded(false)}>
-      <View style={{ flex: 1, backgroundColor: "#111713" }}>
-        <View style={{ paddingTop: 48, paddingHorizontal: 18, paddingBottom: 14, flexDirection: "row", alignItems: "center", gap: 12 }}>
-          <Text style={{ color: "#F5EFE5", flex: 1 }}>{d.name} · {preview.sample ? "Sample profile · illustrative photos" : "Your information · unsaved preview"}</Text>
-          <Pressable onPress={() => setExpanded(false)} accessibilityRole="button" accessibilityLabel="Close theme preview" style={{ padding: 12 }}><X color="#F5EFE5" /></Pressable>
-        </View>
-        <Animated.ScrollView onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })} scrollEventThrottle={16}>
-          <View style={{ maxWidth: 390, width: "100%", alignSelf: "center" }}>
-            <ReferenceHome brand={preview.brand} portraitSource={preview.portraitSource} listings={preview.listings} width={Math.min(windowWidth, 390)} scrollY={scrollY} />
-          </View>
-          <Text style={{ color: "#C5BDAF", padding: 24, textAlign: "center", lineHeight: 21 }}>
-            {demo ? "Read-only demo preview. Client actions are disabled; no profile changes are saved." : "Read-only layout preview. Client actions are disabled; nothing here is saved until you choose the theme and save your draft."}
-          </Text>
-        </Animated.ScrollView>
-        <View style={{ width: "100%", maxWidth: 390, alignSelf: "center" }}><ThemeNavigation brand={preview.brand} /></View>
-      </View>
-    </Modal>
+    <ThemePreviewModal visible={expanded} title={d.name}
+      subtitle={preview.sample ? "Sample profile · illustrative photos" : "Your information · unsaved preview"}
+      note={demo ? "Read-only demo preview. Client actions are disabled; no profile changes are saved." : "Read-only layout preview. Client actions are disabled; nothing here is saved until you choose the theme and save your draft."}
+      brand={preview.brand} listings={preview.listings} portraitSource={preview.portraitSource} onClose={() => setExpanded(false)} />
   </View>;
 }
