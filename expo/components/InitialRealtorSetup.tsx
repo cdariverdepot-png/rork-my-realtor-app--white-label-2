@@ -19,6 +19,7 @@ import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
 import { useClients } from "@/contexts/ClientsContext";
 import PressableScale from "@/components/PressableScale";
+import { checkSite, useSiteCheck } from "@/lib/siteCheck";
 
 function ManualSetup() {
   const { brand, hydrated, saveBrand } = useBrand();
@@ -213,7 +214,10 @@ export default function InitialRealtorSetup() {
   const urlSource = (uri: string): BuildSource =>
     ({ id: randomUUID(), kind: "url", label: new URL(uri).hostname, uri, status: "queued" });
   const websiteUri = normalizeUrl(url);
-  const websiteState: "empty" | "valid" | "invalid" = !url.trim() ? "empty" : websiteUri ? "valid" : "invalid";
+  // A well-formed address still has to exist: the checkmark waits for the domain lookup.
+  const siteCheck = useSiteCheck(websiteUri);
+  const websiteState: "empty" | "valid" | "invalid" | "checking" | "missing" = !url.trim() ? "empty" : !websiteUri ? "invalid"
+    : siteCheck === "missing" ? "missing" : siteCheck === "found" || siteCheck === "unknown" ? "valid" : "checking";
   const primarySource = sources.find(source => source.id === primaryId) ?? null;
   const extraLinks = sources.filter(source => source.kind === "url" && source.id !== primaryId);
   const documents = sources.filter(source => source.kind === "document");
@@ -245,6 +249,7 @@ export default function InitialRealtorSetup() {
   const analyze = () => void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
+    if (websiteUri && await checkSite(websiteUri) === "missing") throw new Error("We couldn’t find that website. Check the address and try again.");
     // Lock in the website from the main field, replacing an older one if it changed.
     if (websiteUri && primarySource?.uri !== websiteUri) {
       const fresh = urlSource(websiteUri);
@@ -404,7 +409,7 @@ export default function InitialRealtorSetup() {
         <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>STEP 1</Text>
         <Text style={{ color: "white", fontSize: 20, fontWeight: "600", marginTop: 4 }}>Your website or profile link</Text>
         <View style={{ marginTop: 14, flexDirection: "row", alignItems: "center", borderRadius: 12, borderWidth: 1.5,
-          borderColor: websiteState === "valid" ? "#3FB37F" : websiteState === "invalid" && !urlFocused ? "#FF9C85" : "#7B858C",
+          borderColor: websiteState === "valid" ? "#3FB37F" : websiteState === "missing" || (websiteState === "invalid" && !urlFocused) ? "#FF9C85" : "#7B858C",
           backgroundColor: "#0C1014", paddingHorizontal: 14 }}>
           <TextInput value={url} onChangeText={setUrl} onFocus={() => setUrlFocused(true)} onBlur={() => setUrlFocused(false)}
             placeholder="yourwebsite.com" placeholderTextColor="#6F7A80" accessibilityLabel="Website or profile URL"
@@ -417,6 +422,9 @@ export default function InitialRealtorSetup() {
         </View>
         {websiteState === "invalid" && !urlFocused
           ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 8 }}>That doesn’t look like a web address. Try something like yourname.com</Text>
+          : websiteState === "missing"
+            ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 8 }}>We couldn’t find that website. Check the address and try again.</Text>
+          : websiteState === "checking" ? <Text style={{ color: "#9AA4AA", marginTop: 8 }}>Checking…</Text>
           : primarySource?.status === "failed" && primarySource.uri === websiteUri
             ? <Text style={{ color: "#FFBAA9", marginTop: 8 }}>We couldn’t read this site{primarySource.error ? ` — ${primarySource.error}` : ""}</Text>
             : websiteState === "valid" ? <Text style={{ color: "#8FD9B4", marginTop: 8 }}>Looks good</Text> : null}
