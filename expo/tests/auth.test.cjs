@@ -394,3 +394,28 @@ test('static export skips Supabase initialization; browsers and native apps stil
     assert.equal(await context.exports.ensureSupabaseSession(), scenario.expected ? session : null);
   }
 });
+
+test('Google social sign-in uses ID token path, not Supabase OAuth authorize', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.match(src, /signInWithIdToken/);
+  assert.match(src, /ResponseType\.IdToken/);
+  assert.match(src, /EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID/);
+  assert.match(src, /startGoogleIdTokenSignIn/);
+  // Google must not go through supabase.auth.signInWithOAuth
+  const googleFn = src.slice(src.indexOf('async function startGoogleIdTokenSignIn'), src.indexOf('async function startSupabaseOAuth'));
+  assert.doesNotMatch(googleFn, /signInWithOAuth/);
+  assert.match(src, /accounts\.google\.com\/o\/oauth2\/v2\/auth/);
+  assert.match(src, /GOOGLE_DISCOVERY/);
+  // Microsoft / Apple keep OAuth
+  assert.match(src, /startSupabaseOAuth/);
+  assert.match(src, /provider === ["']google["']\s*\)\s*return await startGoogleIdTokenSignIn/);
+});
+
+test('Google ID-token redirect stays on app origin, never supabase.co', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.match(src, /googleIdTokenRedirectUri/);
+  assert.match(src, /socialCallbackRedirect/);
+  assert.doesNotMatch(src, /supabase\.co\/auth\/v1\/callback/);
+  // Documented production fallback callback on expo.app
+  assert.match(src, /cdariverdepot-my-realtor\.expo\.app\/auth\/callback/);
+});

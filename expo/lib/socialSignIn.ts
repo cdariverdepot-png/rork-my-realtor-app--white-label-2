@@ -1,9 +1,13 @@
 import { Platform } from "react-native";
 import Constants from "expo-constants";
 import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
+import * as Crypto from "expo-crypto";
 import { supabase, clearAnonymousSessionForEmailAuth, withEmailAuth } from "@/lib/supabase";
 import { authErrorMessage } from "@/lib/authErrors";
 import { socialCallbackRedirect } from "@/lib/authRedirect";
+
+WebBrowser.maybeCompleteAuthSession();
 
 /** Google + Microsoft are on in the shipped product. Set EXPO_PUBLIC_*_SIGN_IN=false to hide. Apple stays opt-in. */
 // Metro only inlines literal `process.env.EXPO_PUBLIC_*` reads, so each flag is
@@ -12,6 +16,23 @@ const SOCIAL_ENV: Record<string, string | undefined> = {
   EXPO_PUBLIC_GOOGLE_SIGN_IN: process.env.EXPO_PUBLIC_GOOGLE_SIGN_IN,
   EXPO_PUBLIC_APPLE_SIGN_IN: process.env.EXPO_PUBLIC_APPLE_SIGN_IN,
   EXPO_PUBLIC_MICROSOFT_SIGN_IN: process.env.EXPO_PUBLIC_MICROSOFT_SIGN_IN,
+  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  EXPO_PUBLIC_APP_URL: process.env.EXPO_PUBLIC_APP_URL,
+};
+
+/**
+ * Public Google OAuth Web client ID (safe to ship). Used for AuthSession /
+ * GIS ID-token sign-in so Google consent shows this app's origin, not supabase.co.
+ * Fallback matches the client already configured in Supabase Auth → Google.
+ */
+const GOOGLE_WEB_CLIENT_ID =
+  SOCIAL_ENV.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ||
+  "2187154705-o27aseatgl4m9ok3jlp6pd53ik55vc7k.apps.googleusercontent.com";
+
+const GOOGLE_DISCOVERY: AuthSession.DiscoveryDocument = {
+  authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
+  tokenEndpoint: "https://oauth2.googleapis.com/token",
+  revocationEndpoint: "https://oauth2.googleapis.com/revoke",
 };
 
 function socialFlag(name: string, defaultOn: boolean): boolean {
@@ -31,48 +52,168 @@ export const SOCIAL_PROVIDERS = [
   },
   { id: "azure" as const, label: "Microsoft", enabled: socialFlag("EXPO_PUBLIC_MICROSOFT_SIGN_IN", true) },
 ];
-export async function startSocialSignIn(provider: "google" | "apple" | "azure") {
-  if (!SOCIAL_PROVIDERS.find(p => p.id === provider)?.enabled || !supabase) return { ok: false, error: "This sign-in option isn't available yet. Please use email." };
-  if (Platform.OS !== "web" && Constants.appOwnership === "expo") return { ok: false, error: "Use email sign-in in Expo Go. Social sign-in requires the installed app build." };
+
+export type SocialSignInResult =
+  | { ok: true; redirecting?: boolean }
+  | { ok: false; error: string };
+
+async function makeOidcNonce(): Promise<{ raw: string; hashed: string }> {
+  const bytes = await Crypto.getRandomBytesAsync(32);
+  const raw = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+  const hashed = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, raw, {
+    encoding: Crypto.CryptoEncoding.HEX,
+  });
+  return { raw, hashed };
+}
+
+/**
+ * Redirect URI registered on the Google Cloud Web client.
+ * Must be the app origin (expo.app / localhost), never *.supabase.co — that is
+ * what made Google's consent screen present supabase.co as the application.
+ *
+ * Native uses the production HTTPS callback because Google Web clients only
+ * allow http(s) redirect URIs (not custom schemes).
+ */
+function googleIdTokenRedirectUri(): string {
+  if (Platform.OS === "web") {
+    if (typeof window === "undefined" || !window.location?.origin) {
+      throw new Error("Unconfigured authentication origin");
+    }
+    return socialCallbackRedirect(window.location.origin);
+  }
   try {
-    // Start OAuth from a clean slate so a guest session can't outlive it.
+    const appUrl = SOCIAL_ENV.EXPO_PUBLIC_APP_URL;
+    if (appUrl) return `${new URL(appUrl).origin}/auth/callback`;
+  } catch {
+    /* fall through */
+  }
+  return "https://cdariverdepot-my-realtor.expo.app/auth/callback";
+}
+
+function parseIdTokenFromAuthUrl(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    const fromQuery = parsed.searchParams.get("id_token");
+    if (fromQuery) return fromQuery;
+    const hash = parsed.hash.startsWith("#") ? parsed.hash.slice(1) : parsed.hash;
+    if (!hash) return null;
+    return new URLSearchParams(hash).get("id_token");
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Google via AuthSession → ID token → supabase.auth.signInWithIdToken.
+ * Authorize URL is accounts.google.com with redirect_uri on the app origin,
+ * so consent never routes through xdcqjaodcvnlawqcunrr.supabase.co.
+ */
+async function startGoogleIdTokenSignIn(): Promise<SocialSignInResult> {
+  if (!GOOGLE_WEB_CLIENT_ID) {
+    return {
+      ok: false,
+      error:
+        "That sign-in provider isn't connected yet. Use email and password, or ask your admin to add Google in Supabase Auth.",
+    };
+  }
+  const redirectUri = googleIdTokenRedirectUri();
+  const { raw: nonce, hashed: hashedNonce } = await makeOidcNonce();
+  const request = new AuthSession.AuthRequest({
+    clientId: GOOGLE_WEB_CLIENT_ID,
+    redirectUri,
+    scopes: ["openid", "email", "profile"],
+    responseType: AuthSession.ResponseType.IdToken,
+    usePKCE: false,
+    extraParams: {
+      nonce: hashedNonce,
+      prompt: "select_account",
+    },
+  });
+  const result = await request.promptAsync(GOOGLE_DISCOVERY, { showInRecents: true });
+  if (result.type === "dismiss" || result.type === "cancel") {
+    return { ok: false, error: "Sign-in was cancelled. You can try again or use email." };
+  }
+  if (result.type !== "success") {
+    return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+  }
+  const idToken =
+    result.params.id_token ||
+    (typeof result.url === "string" ? parseIdTokenFromAuthUrl(result.url) : null);
+  if (!idToken) {
+    return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+  }
+  const sb = supabase;
+  if (!sb) return { ok: false, error: "This sign-in option isn't available yet. Please use email." };
+  const signed = await withEmailAuth(() =>
+    sb.auth.signInWithIdToken({ provider: "google", token: idToken, nonce })
+  );
+  return signed.error ? { ok: false, error: authErrorMessage(signed.error) } : { ok: true };
+}
+
+/** Microsoft / Apple stay on Supabase OAuth (redirect still goes through supabase.co authorize). */
+async function startSupabaseOAuth(provider: "apple" | "azure"): Promise<SocialSignInResult> {
+  const redirectTo = Platform.OS === "web" ? socialCallbackRedirect(window.location.origin) : "rork-app://auth/callback";
+  const { data, error } = await supabase!.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+      ...(provider === "azure" ? { scopes: "email" } : {}),
+    },
+  });
+  if (error || !data?.url) {
+    const msg =
+      (error && typeof error === "object" && "message" in error
+        ? String((error as { message?: string }).message)
+        : "") || "";
+    if (
+      !data?.url ||
+      /provider is not enabled|unsupported provider|validation_failed|not configured/i.test(msg)
+    ) {
+      return {
+        ok: false,
+        error:
+          "That sign-in provider isn't connected yet. Use email and password, or ask your admin to add Google, Microsoft, or Apple in Supabase Auth.",
+      };
+    }
+    return { ok: false, error: authErrorMessage(error) };
+  }
+  if (Platform.OS === "web") {
+    window.location.assign(data.url);
+    return { ok: true, redirecting: true };
+  }
+  const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+  if (result.type !== "success") return { ok: false, error: "Sign-in was cancelled. You can try again or use email." };
+  const callback = new URL(result.url);
+  if (`${callback.protocol}//${callback.host}${callback.pathname}` !== redirectTo) {
+    return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+  }
+  const code = callback.searchParams.get("code");
+  if (!code) return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+  const sb = supabase!;
+  const exchanged = await withEmailAuth(() => sb.auth.exchangeCodeForSession(code));
+  return exchanged.error ? { ok: false, error: authErrorMessage(exchanged.error) } : { ok: true };
+}
+
+export async function startSocialSignIn(provider: "google" | "apple" | "azure"): Promise<SocialSignInResult> {
+  if (!SOCIAL_PROVIDERS.find(p => p.id === provider)?.enabled || !supabase) {
+    return { ok: false, error: "This sign-in option isn't available yet. Please use email." };
+  }
+  if (Platform.OS !== "web" && Constants.appOwnership === "expo") {
+    return { ok: false, error: "Use email sign-in in Expo Go. Social sign-in requires the installed app build." };
+  }
+  try {
+    // Start from a clean slate so a guest session can't outlive social sign-in.
     await clearAnonymousSessionForEmailAuth();
-    // PKCE verifier is stored on this origin; never send a local flow to a different site.
-    const redirectTo = Platform.OS === "web" ? socialCallbackRedirect(window.location.origin) : "rork-app://auth/callback";
-    const { data, error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo, skipBrowserRedirect: true, ...(provider === "azure" ? { scopes: "email" } : {}) } });
-    if (error || !data?.url) {
-      const msg =
-        (error && typeof error === "object" && "message" in error
-          ? String((error as { message?: string }).message)
-          : "") || "";
-      if (
-        !data?.url ||
-        /provider is not enabled|unsupported provider|validation_failed|not configured/i.test(msg)
-      ) {
-        return {
-          ok: false,
-          error:
-            "That sign-in provider isn't connected yet. Use email and password, or ask your admin to add Google, Microsoft, or Apple in Supabase Auth.",
-        };
-      }
-      return { ok: false, error: authErrorMessage(error) };
-    }
-    if (Platform.OS === "web") {
-      window.location.assign(data.url);
-      return { ok: true, redirecting: true };
-    }
-    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-    if (result.type !== "success") return { ok: false, error: "Sign-in was cancelled. You can try again or use email." };
-    const callback = new URL(result.url);
-    if (`${callback.protocol}//${callback.host}${callback.pathname}` !== redirectTo) return { ok: false, error: "Couldn't complete sign-in. Please try again." };
-    const code = callback.searchParams.get("code");
-    if (!code) return { ok: false, error: "Couldn't complete sign-in. Please try again." };
-    const sb = supabase;
-    const exchanged = await withEmailAuth(() => sb.auth.exchangeCodeForSession(code));
-    return exchanged.error ? { ok: false, error: authErrorMessage(exchanged.error) } : { ok: true };
+    if (provider === "google") return await startGoogleIdTokenSignIn();
+    return await startSupabaseOAuth(provider);
   } catch (e) {
     if (e instanceof Error && /Unconfigured authentication origin/.test(e.message)) {
-      return { ok: false, error: "Google, Apple and Microsoft sign-in work in the installed app and on the published site. Use email and password here." };
+      return {
+        ok: false,
+        error:
+          "Google, Apple and Microsoft sign-in work in the installed app and on the published site. Use email and password here.",
+      };
     }
     return { ok: false, error: "Couldn't connect to the sign-in provider. Please try again." };
   }

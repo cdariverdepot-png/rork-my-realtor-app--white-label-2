@@ -52,8 +52,29 @@ Google and Microsoft buttons are **visible by default** in the shipped portal. T
 ### 5) Google / Microsoft / Apple
 
 1. Buttons show on portal without a local `.env`. Apple shows on iOS.
-2. Until provider secrets exist in Supabase, social taps show a clear error — email path still works.
-3. OAuth completes via Expo `/auth/callback` on web, or `rork-app://auth/callback` on standalone native.
+2. **Google** uses AuthSession → Google ID token → `supabase.auth.signInWithIdToken` so consent uses the Expo app origin (`cdariverdepot-my-realtor.expo.app` / localhost), **not** `*.supabase.co`.
+3. **Microsoft / Apple** still use Supabase `signInWithOAuth` (authorize host remains supabase.co until a similar ID-token path exists).
+4. Until Google Web client ID + Supabase Google provider secrets exist, social taps show a clear error — email path still works.
+5. Google redirect URIs must include the Expo `/auth/callback` (and localhost for web dev) on the **Google Cloud Web client**, in addition to the Supabase callback URI.
+
+### Google Cloud Console (required for Google ID-token)
+
+On the existing Web application OAuth client (the same Client ID configured in Supabase Auth → Google):
+
+**Authorized JavaScript origins**
+- `https://cdariverdepot-my-realtor.expo.app`
+- `http://localhost:8081`
+
+**Authorized redirect URIs** (keep the Supabase callback too for Microsoft / legacy)
+- `https://cdariverdepot-my-realtor.expo.app/auth/callback`
+- `http://localhost:8081/auth/callback`
+- `https://xdcqjaodcvnlawqcunrr.supabase.co/auth/v1/callback` (existing — do not remove)
+
+**OAuth consent screen**
+- App name: My Realtor App (or Little Lights Digital if that brand is preferred)
+- Authorized domain / homepage as appropriate so consent no longer implies supabase.co
+
+Ship `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` (public) in `.env.production` so the web bundle embeds the Web client ID.
 
 ## Supabase dashboard (required outside this repo)
 
