@@ -460,3 +460,25 @@ test('login and logout land on welcome /, not sticky portal client code', () => 
   }
   assert.match(fs.readFileSync(path.join(__dirname, '..', 'app/login.tsx'), 'utf8'), /router\.replace\(["']\/["']\)/);
 });
+
+test('guest access code defaults to DEMO and matches case-insensitively', () => {
+  const access = load('constants/access', null);
+  assert.equal(access.GUEST_ACCESS_CODE, 'DEMO');
+  assert.equal(access.isGuestAccessCode('demo'), true);
+  assert.equal(access.isGuestAccessCode(' DEMO '), true);
+  assert.equal(access.isGuestAccessCode('NVNF6E'), false);
+});
+test('portal guest path uses enterGuestClient and shows demo hint', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.match(src, /isGuestAccessCode/);
+  assert.match(src, /enterGuestClient/);
+  assert.match(src, /Demo code:/);
+  assert.match(src, /GUEST_ACCESS_CODE/);
+});
+test('AuthContext exposes enterGuestClient that clears prior session', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
+  assert.match(src, /enterGuestClient/);
+  assert.match(src, /signInAnonymously/);
+  assert.match(src, /guest\+\$\{uuid\}@guest\.myrealtor\.app/);
+  assert.match(src, /DEMO_REALTOR_ID/);
+});

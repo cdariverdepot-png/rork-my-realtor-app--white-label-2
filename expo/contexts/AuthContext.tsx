@@ -188,15 +188,18 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
         if (raw) {
           const parsed = JSON.parse(raw) as Session;
-          const isPreviewOrDemo = !!(parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID);
+          // Only the AUTH_BYPASS admin preview flag — not every DEMO_REALTOR_ID
+          // session. Guest client accounts intentionally use the demo realtor
+          // and must survive refresh when bypass is off.
+          const isPreviewSession = !!parsed?.preview;
           // Read the stored Supabase session (works offline) instead of a
           // network getUser(): a cold start without signal must not log the
-          // realtor out. Skip for temporary AUTH_BYPASS preview/demo sessions.
-          const authUser = parsed?.role === "admin" && !isPreviewOrDemo && supabase
+          // realtor out. Skip for temporary AUTH_BYPASS preview sessions.
+          const authUser = parsed?.role === "admin" && !isPreviewSession && supabase
             ? (await supabase.auth.getSession()).data.session?.user ?? null : null;
           const expired = !!(parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS);
-          const dropPreview = isPreviewOrDemo && !AUTH_BYPASS_ENABLED;
-          const adminAuthInvalid = parsed?.role === "admin" && !isPreviewOrDemo && (
+          const dropPreview = isPreviewSession && !AUTH_BYPASS_ENABLED;
+          const adminAuthInvalid = parsed?.role === "admin" && !isPreviewSession && (
             !authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||
             authUser.email?.toLowerCase() !== parsed.email.toLowerCase()
           );
@@ -206,7 +209,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
             setSession(parsed);
             // Keep bypass preview usable: seed realtorCache so OnboardingGuard
             // does not treat setup as forever incomplete.
-            if (AUTH_BYPASS_ENABLED && isPreviewOrDemo) {
+            if (AUTH_BYPASS_ENABLED && isPreviewSession) {
               setRealtorCache((prev) => {
                 const existing = prev.find((r) => r.id === DEMO_REALTOR_ID);
                 if (existing?.client_code_enabled) return prev;
@@ -677,6 +680,145 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     [accounts, persistAccounts, persistSession, session]
   );
 
+  /**
+   * Guest / demo access code — skip email signup and mint a FRESH personal
+   * (client) account every time. Clears any prior session first so re-entry
+   * never reuses the previous guest.
+   *
+   * Prefers Supabase anonymous auth when enabled; otherwise signs up a unique
+   * synthetic email. Either way a local client session is created under the
+   * Eliza Vance demo realtor so the showcase brand loads. Seat metering is
+   * skipped — guests must not consume a realtor's free seats.
+   */
+  const enterGuestClient = useCallback(
+    async (): Promise<{ ok: boolean; error?: string; clientId?: string }> => {
+      try {
+        // Drop previous app session so each entry is a new personal account.
+        setViewAsClient(false);
+        setDemoViewMode(false);
+        setSession(null);
+        await persistSession(null);
+        try {
+          await AsyncStorage.removeItem("onboarding.pendingInvite.v1");
+        } catch {}
+
+        if (supabase) {
+          try {
+            await supabase.auth.signOut({ scope: "local" });
+          } catch (e) {
+            console.log("[auth] guest clear session", e);
+          }
+        }
+
+        const bytes = getRandomBytes(16);
+        const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+        const uuid = `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+        const email = `guest+${uuid}@guest.myrealtor.app`;
+        const name = `Guest ${hex.slice(0, 6).toUpperCase()}`;
+        const clientId = `guest_${uuid}`;
+        const pwBytes = getRandomBytes(24);
+        const password = Array.from(pwBytes, (b) => b.toString(16).padStart(2, "0")).join("");
+
+        // Prefer a brand-new anonymous Supabase user when the project allows it.
+        let supabaseOk = false;
+        if (supabase) {
+          try {
+            const { data: anonData, error: anonErr } = await supabase.auth.signInAnonymously();
+            if (!anonErr && anonData?.session?.user) {
+              supabaseOk = true;
+              console.log("[auth] guest anon ok", anonData.session.user.id);
+            } else if (anonErr) {
+              console.log("[auth] guest anon unavailable", anonErr.message);
+            }
+          } catch (e) {
+            console.log("[auth] guest anon exception", e);
+          }
+          // Fallback: unique email signup (needs auto-confirm or stays unconfirmed —
+          // local client session still proceeds either way).
+          if (!supabaseOk) {
+            try {
+              const { data: upData, error: upErr } = await supabase.auth.signUp({
+                email,
+                password,
+                options: { data: { guest: true, full_name: name } },
+              });
+              if (!upErr && upData?.user) {
+                supabaseOk = true;
+                console.log("[auth] guest signup ok", upData.user.id);
+              } else if (upErr) {
+                console.log("[auth] guest signup skipped", upErr.message);
+              }
+            } catch (e) {
+              console.log("[auth] guest signup exception", e);
+            }
+          }
+        }
+
+        // Seed the Eliza Vance demo realtor into cache so brand/scope resolve.
+        const now = new Date().toISOString();
+        const demoRecord: RealtorRecord = {
+          id: DEMO_REALTOR_ID,
+          email: "eliza@vanceprivate.com",
+          name: "Eliza Vance",
+          brand_name: "VANCE",
+          monogram: "EV",
+          client_code: "NVNF6E",
+          client_code_enabled: true,
+          created_at: now,
+          updated_at: now,
+        };
+        setRealtorCache((prev) => {
+          const next = [demoRecord, ...prev.filter((r) => r.id !== DEMO_REALTOR_ID)];
+          void persistRealtorCache(next);
+          return next;
+        });
+
+        const account: ClientAccount = {
+          email,
+          pw: await hashPassword(email, password),
+          clientId,
+          name,
+          realtorId: DEMO_REALTOR_ID,
+          createdAt: Date.now(),
+        };
+        const accKey = `${ACCOUNTS_KEY_PREFIX}${DEMO_REALTOR_ID}`;
+        let realmAccounts: ClientAccount[] = [];
+        try {
+          const raw = await AsyncStorage.getItem(accKey);
+          const parsed = raw ? (JSON.parse(raw) as ClientAccount[]) : [];
+          if (Array.isArray(parsed)) realmAccounts = parsed;
+        } catch {}
+        const nextAccounts = [account, ...realmAccounts.filter((a) => a.clientId !== clientId)];
+        setAccounts(nextAccounts);
+        try {
+          await AsyncStorage.setItem(accKey, JSON.stringify(nextAccounts));
+        } catch (e) {
+          console.log("[auth] guest persist accounts", e);
+        }
+
+        const next: Session = {
+          email,
+          role: "client",
+          realtorId: DEMO_REALTOR_ID,
+          clientId,
+          name,
+          iat: Date.now(),
+        };
+        setSession(next);
+        await persistSession(next);
+        void supabaseOk;
+        return { ok: true, clientId };
+      } catch (e) {
+        console.log("[auth] enterGuestClient", e);
+        return {
+          ok: false,
+          error: "Couldn't start a guest session. Please try again.",
+        };
+      }
+    },
+    [persistRealtorCache, persistSession]
+  );
+
   const logout = useCallback(async () => {
     if (session?.role === "admin" && supabase) await supabase.auth.signOut();
     // Preview flags are per signed-in session; never carry them to the next person.
@@ -740,6 +882,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     exitPreview,
     clientSignup,
     clientLogin,
+    enterGuestClient,
     updateClientProfile,
     logout,
     lookupRealtorByCode,
@@ -749,7 +892,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     enterViewAsClient, exitViewAsClient, enterDemoView, exitDemoView,
     isAuthenticated, realtorIdVal, realtorRecord, currentClientId,
     login, realtorSignup, realtorLogin, completeRealtorSignIn, previewAdmin, enterAuthBypass, exitPreview,
-    clientSignup, clientLogin, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
+    clientSignup, clientLogin, enterGuestClient, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
   ]);
 });
 

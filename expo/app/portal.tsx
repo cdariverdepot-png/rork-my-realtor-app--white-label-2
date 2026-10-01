@@ -23,6 +23,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import EmailCodeSignIn from "@/components/EmailCodeSignIn";
 import SocialSignIn from "@/components/SocialSignIn";
+import { GUEST_ACCESS_CODE, isGuestAccessCode } from "@/constants/access";
 
 type Stage =
   | "entry"
@@ -53,6 +54,7 @@ export default function Portal() {
     realtorLogin,
     clientSignup,
     clientLogin,
+    enterGuestClient,
     lookupRealtorByCode,
   } = useAuth();
 
@@ -161,12 +163,24 @@ export default function Portal() {
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
   };
 
-  // Submit code — look up the realtor
+  // Submit code — guest demo mint, or look up the realtor
   const submitCode = async () => {
     if (busy) return;
     setBusy(true);
     setError(null);
     try {
+      if (isGuestAccessCode(code)) {
+        if (Platform.OS !== "web") Haptics.selectionAsync();
+        const res = await enterGuestClient();
+        if (!res.ok) {
+          setError(res.error ?? "Couldn't start a guest session. Please try again.");
+          triggerShake();
+          return;
+        }
+        if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        router.replace("/");
+        return;
+      }
       const record = await lookupRealtorByCode(code);
       if (!record || record.client_code_enabled !== true) {
         setError(record ? "This app is still being set up by your realtor." : "That code isn't recognized. Check and try again.");
@@ -180,6 +194,9 @@ export default function Portal() {
       setResolvedMonogram(record.monogram || (record.name.split(" ")[0]?.charAt(0) ?? "") + (record.name.split(" ").pop()?.charAt(0) ?? ""));
       transitionTo("client-setup");
       setEmail(""); setPassword(""); setName("");
+    } catch {
+      setError("We couldn't check that code. Please try again.");
+      triggerShake();
     } finally { setBusy(false); }
   };
 
@@ -458,8 +475,13 @@ function CodeForm({ code, onChange, onSubmit, error, busy }: { code: string; onC
     <View style={{ width: "100%" }}>
       <View style={styles.codeInputWrap}>
         <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
-        <TextInput value={code} onChangeText={(v) => onChange(v.toUpperCase())} placeholder="CLIENT CODE" placeholderTextColor="rgba(244,239,230,0.28)" autoCapitalize="characters" autoCorrect={false} autoComplete="off" autoFocus={Platform.OS !== "web"} returnKeyType="go" onSubmitEditing={onSubmit} style={styles.codeInput} maxLength={8} />
+        <TextInput value={code} onChangeText={(v) => onChange(v.toUpperCase())} placeholder="CLIENT CODE" placeholderTextColor="rgba(244,239,230,0.28)" autoCapitalize="characters" autoCorrect={false} autoComplete="off" autoFocus={Platform.OS !== "web"} returnKeyType="go" onSubmitEditing={onSubmit} style={styles.codeInput} maxLength={12} />
       </View>
+      {GUEST_ACCESS_CODE ? (
+        <Text style={{ color: "rgba(244,239,230,0.45)", fontSize: 12, textAlign: "center", marginTop: 14, letterSpacing: 0.4 }}>
+          Demo code: {GUEST_ACCESS_CODE}
+        </Text>
+      ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Pressable onPress={onSubmit} disabled={busy || !code.trim()} style={({ pressed }) => [styles.cta, (busy || !code.trim()) && { opacity: 0.4 }, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}>
         <Text style={styles.ctaText}>CONTINUE</Text>

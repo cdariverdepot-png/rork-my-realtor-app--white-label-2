@@ -20,6 +20,16 @@ Localhost redirect is **web local-dev only**.
 
 Google and Microsoft buttons are **visible by default** in the shipped portal. Taps still need Supabase → Authentication → Providers (Google / Azure) client IDs and secrets configured in the dashboard — this repo does not store those secrets. Set `EXPO_PUBLIC_GOOGLE_SIGN_IN=false` / `EXPO_PUBLIC_MICROSOFT_SIGN_IN=false` only if you need to hide a button. Apple shows on iOS by default (and when `EXPO_PUBLIC_APPLE_SIGN_IN=true`).
 
+## Guest / demo client access code
+
+Default code: **`DEMO`** (env `EXPO_PUBLIC_GUEST_ACCESS_CODE`).
+
+On Client Login → enter code, type `DEMO` and continue. The app clears any prior session, mints a **new** personal (client) account each time (unique `guest+{uuid}@…` identity), and opens the client home under the Eliza Vance showcase. Real realtor codes and email/social signup are unchanged.
+
+If Supabase **Anonymous Sign-Ins** is enabled (Dashboard → Authentication → Providers), each guest also gets a fresh anonymous Auth user. If it is off, the app still creates the local client session (unique email signup is attempted as a fallback; email confirmation is not required for guest entry).
+
+Management API cannot toggle anonymous auth on project `xdcqjaodcvnlawqcunrr` with the current token — flip it in the dashboard if you want Supabase-backed guest identities.
+
 ## Production user flow
 
 ### 1) Email signup (web on Expo host)

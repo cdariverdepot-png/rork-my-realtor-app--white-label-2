@@ -57,3 +57,23 @@ export function generateClientCode(): string {
   }
   return out;
 }
+
+/**
+ * Default demo/guest client access code (EXPO_PUBLIC_GUEST_ACCESS_CODE).
+ * Entering this on the client code screen skips email signup and creates a
+ * fresh personal (client) account every time — not a reused user.
+ * Falls back to "DEMO" when the env var is unset so production deploys that
+ * rewrite .env.production still keep the feature.
+ */
+export const GUEST_ACCESS_CODE = (
+  (typeof process !== "undefined" && process.env?.EXPO_PUBLIC_GUEST_ACCESS_CODE) ||
+  "DEMO"
+)
+  .trim()
+  .toUpperCase() || "DEMO";
+
+/** True when `code` matches the configured guest/demo access code. */
+export function isGuestAccessCode(code: string): boolean {
+  const clean = (code ?? "").replace(/\s+/g, "").toUpperCase();
+  return !!GUEST_ACCESS_CODE && clean === GUEST_ACCESS_CODE;
+}
