@@ -1,3 +1,4 @@
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { backOr } from "@/lib/navIntent";
 import {
@@ -248,7 +249,7 @@ function ListingRow({
           <View style={styles.cardTopRow}>
             <View style={[styles.statusBadge, { borderColor: meta.color }]}>
               <View style={[styles.statusDot, { backgroundColor: meta.color }]} />
-              <Text style={[styles.statusText, { color: meta.color }]}>{meta.label}</Text>
+              <Text style={[styles.statusText, { color: meta.color }]}>{listingStatusLabel(item).toUpperCase()}</Text>
             </View>
           </View>
           <Text style={styles.cardTitle} numberOfLines={1}>
@@ -265,7 +266,7 @@ function ListingRow({
             </Text>
           </View>
           <Text style={styles.cardSync} numberOfLines={1}>
-            {item.sourceUrl ? formatRefreshed(item.lastRefreshedAt) : "No source URL"}
+            {item.sourceArchived ? "Archived after repeated source checks" : item.syncState === "unavailable" ? "Couldn’t verify source — retrying automatically" : item.syncState === "status-unconfirmed" ? "Details checked · status not provided by source" : item.sourceUrl ? formatRefreshed(item.lastRefreshedAt) : "No source URL"}
           </Text>
         </View>
         <View style={styles.reorderCol}>

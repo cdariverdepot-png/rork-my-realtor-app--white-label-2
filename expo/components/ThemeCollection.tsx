@@ -1,3 +1,4 @@
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React from "react";
 import { Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
@@ -13,7 +14,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const window = useWindowDimensions();
   const width = previewWidth ?? window.width;
   const d = themeDesign(brand.layoutId, brand.theme);
-  const items = listings.filter(item => !item.hidden);
+  const items = listings.filter(item => !item.hidden && !item.sourceArchived);
   if (sectionState(brand, "listings", items.length > 0) !== "present") return null;
   const c = d.composition;
   const coastal = c === "coastal";
@@ -35,8 +36,8 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
     <Maximize size={11} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.sqft}</Text>
   </View>;
   const image = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityLabel={item.title} />;
-  const badge = (item: ManagedListing) => item.tag?.trim() ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,
-    borderRadius: discovery ? 16 : 3, backgroundColor: burgundy ? "#5E1526" : discovery ? "#C7A06B" : "#111713DD", color: discovery ? "#191713" : "#F9F2E8", fontSize: 7, letterSpacing: 0.8 }}>{item.tag.toUpperCase()}</Text> : null;
+  const badge = (item: ManagedListing) => listingStatusLabel(item) ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,
+    borderRadius: discovery ? 16 : 3, backgroundColor: burgundy ? "#5E1526" : discovery ? "#C7A06B" : "#111713DD", color: discovery ? "#191713" : "#F9F2E8", fontSize: 7, letterSpacing: 0.8 }}>{listingStatusLabel(item).toUpperCase()}</Text> : null;
   const card = (item: ManagedListing, compact = false) => {
     const overlay = coastal || discovery || compact || editorial;
     const height = coastal ? 155 : discovery ? 236 : compact ? 195 : editorial ? 310 : undefined;
@@ -44,7 +45,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
       borderWidth: 1, borderColor: d.accent + "33", backgroundColor: coastal ? "#FFFDF8" : "#151714" }}>
       <Pressable disabled={!onOpen} onPress={() => onOpen?.(item.id)} accessibilityRole="button" accessibilityLabel={item.title}>
         <View style={{ height: height ?? (minimal ? 155 : burgundy ? 180 : 132) }}>
-          {image(item)}{!coastal && badge(item)}
+          {image(item)}{badge(item)}
           {overlay && <><></>
             <View style={{ position: "absolute", bottom: 10, left: 9, right: 9 }}>
               <Text style={{ fontFamily: coastal ? "Inter_400Regular" : serif, fontSize: coastal ? 10 : compact ? 16 : 18, color: "#FFF8EF" }}>{coastal ? item.neighborhood || item.title : item.title}</Text>

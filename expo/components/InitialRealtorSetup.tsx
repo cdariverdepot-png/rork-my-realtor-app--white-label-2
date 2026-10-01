@@ -1,7 +1,7 @@
 import { useSetupDraft } from "@/hooks/useSetupDraft";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
-import { ArrowLeft, Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
+import { Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
 import { Image } from "expo-image";
 import PortraitImage from "./PortraitImage";
 import * as ImagePicker from "expo-image-picker";
@@ -11,7 +11,7 @@ import * as FileSystem from "expo-file-system/legacy";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
-import { PROFILE_FIELDS, RECOMMENDED_FIELDS, REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
+import { REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
 import { toPortableImage } from "@/lib/portableImage";
 import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,8 +19,9 @@ import { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts
 import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import { themeSampleListings } from "@/constants/themeSamples";
 import ThemeFace from "@/components/ThemeFace";
-import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, discoverListingsBuild, importListingFilesBuild, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
-import { LISTING_IMPORT_GUIDANCE, LISTING_FILE_PICKER_TYPES } from "@/lib/appBuilder/listingImportGuidance";
+import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import ListingSourceImporter from "./ListingSourceImporter";
+import { connectListingSource } from "@/lib/listingSourceService";
 import { mergeDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -29,87 +30,6 @@ import { useClients } from "@/contexts/ClientsContext";
 import { useListings } from "@/contexts/ListingsContext";
 import PressableScale from "@/components/PressableScale";
 import { checkSite, useSiteCheck } from "@/lib/siteCheck";
-
-function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: () => Promise<void> }) {
-  const { brand, hydrated, saveBrand } = useBrand();
-  const [draft, setDraft] = useState(brand);
-  const [dirty, setDirty] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const { realtorId } = useAuth();
-  const progressDraft = useSetupDraft(
-    `myrealtor.manual-draft.v1:${realtorId}`, draft,
-    saved => { setDraft(saved); setDirty(true); }, hydrated && !!realtorId);
-  const router = useRouter();
-  const insets = useSafeAreaInsets();
-  useEffect(() => { if (!dirty) setDraft(brand); }, [brand, dirty]);
-  const change = (mut: (b: Brand) => Brand) => { setDirty(true); setDraft(mut); };
-  const identity = (key: keyof Brand["realtor"], value: string) =>
-    change(b => ({ ...b, realtor: { ...b.realtor, [key]: value } }));
-  const license = (key: "number" | "state" | "brokerage", value: string) =>
-    change(b => ({ ...b, credentials: { ...b.credentials, license: { ...b.credentials.license, [key]: value } } }));
-  const field = (label: string, value: string, onChangeText: (value: string) => void) =>
-    <View key={label} style={{ gap: 8, marginTop: 12 }}>
-      <Text style={{ color: "#CBD0D6" }}>{label}</Text>
-      <TextInput accessibilityLabel={label} value={value} onChangeText={onChangeText} autoCorrect={false}
-        style={{ minHeight: 48, borderWidth: 1, borderColor: "#555C64", borderRadius: 8, padding: 12, color: "white" }} />
-    </View>;
-  const { editPortrait, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
-  const pick = async () => {
-    try {
-      const uri = await editPortrait(draft.portraitUrl);
-      if (!uri) return;
-      change(b => ({ ...b, portraitUrl: uri }));
-    } catch { Alert.alert("Couldn’t load image", "Please try another image."); }
-  };
-  const complete = requiredStatus(draft).complete;
-  const save = async (continueToApp: boolean) => {
-    if (saving || (continueToApp && !complete)) return;
-    setSaving(true);
-    try {
-      if (continueToApp) await saveBrand(draft);
-      else await progressDraft.flush();
-      if (continueToApp) setDirty(false);
-      if (continueToApp) {
-        await progressDraft.clear(); await onComplete(); router.replace("/admin/ready");
-      } else Alert.alert("Progress saved", "Your setup will be here when you return.");
-    } catch { Alert.alert("Couldn’t save", "Your edits are still here. Please try again."); }
-    finally { setSaving(false); }
-  };
-  if (!hydrated || !progressDraft.ready) return null;
-  return <View style={{ flex: 1 }}>
-  {cropper}
-  <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
-    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => void progressDraft.flush().then(onBack).catch(() => Alert.alert("Couldn’t save", "Please retry before leaving."))} hitSlop={12}
-        style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
-        <ArrowLeft size={18} color="white" strokeWidth={1.8} />
-      </Pressable>
-      <Text style={{ color: "#9AA4AA", fontSize: 12, letterSpacing: 1.4 }}>MANUAL SETUP</Text>
-      <View style={{ width: 40 }} />
-    </View>
-    {progressDraft.error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9" }}>{progressDraft.error}</Text> : null}
-    <Text style={{ color: "white", fontSize: 30 }}>Let’s create your app.</Text>
-    <Text style={{ color: "#CBD0D6", marginTop: 12, lineHeight: 23 }}>Fill in the essentials below. Your portrait and license details are optional and can be added any time. Your sharing credentials become available after setup; you choose when to share them.</Text>
-    {PROFILE_FIELDS.map((item, index) => <View key={item.id} style={{ marginTop: 24, padding: 18, borderRadius: 14, backgroundColor: "#20262D" }}>
-      <Text style={{ color: "white", fontSize: 19 }}>{index + 1}. {item.label}{RECOMMENDED_FIELDS.includes(item) ? <Text style={{ color: "#9AA4AA", fontSize: 15 }}> (optional)</Text> : null}{item.met(draft) ? " ✓" : ""}</Text>
-      {item.id === "name" && field("Full name", draft.realtor.name, v => identity("name", v))}
-      {item.id === "portrait" && <Pressable onPress={pick} accessibilityRole="button" style={{ paddingVertical: 16 }}>
-        {draft.portraitUrl ? <PortraitImage uri={draft.portraitUrl} style={{ height: 180, borderRadius: 8 }} contentFit="contain" /> : null}
-        <Text style={{ color: "#9ECFFF", marginTop: 12 }}>Choose portrait</Text>
-      </Pressable>}
-      {item.id === "city" && field("City or region", draft.realtor.city, v => identity("city", v))}
-      {item.id === "contact" && <><Text style={{ color: "#CBD0D6", marginTop: 8 }}>Your business contact details — this is how clients reach you from the app.</Text>{field("Phone number — where would you like clients to call or text you?", draft.realtor.phone, v => identity("phone", v))}{field("Email address — where would you like clients to email you?", draft.realtor.email, v => identity("email", v))}</>}
-      {item.id === "heroLine" && field("Opening line", draft.realtor.heroMessage || draft.realtor.tagline, v => identity("heroMessage", v))}
-      {item.id === "license" && <>{field("Brokerage", draft.credentials.license.brokerage, v => license("brokerage", v))}{field("License number", draft.credentials.license.number, v => license("number", v))}{field("License state or jurisdiction", draft.credentials.license.state, v => license("state", v))}</>}
-    </View>)}
-    <Pressable accessibilityRole="button" disabled={!complete || saving} onPress={() => void save(true)}
-      style={{ marginTop: 24, minHeight: 54, justifyContent: "center", alignItems: "center", borderRadius: 12, backgroundColor: complete ? "#287D4D" : "#3D444C", opacity: saving ? 0.6 : 1 }}>
-      <Text style={{ color: "white", fontSize: 17 }}>{saving ? "Saving…" : "Save & Continue"}</Text>
-    </Pressable>
-    <Pressable disabled={saving || !dirty} onPress={() => void save(false)} style={{ minHeight: 48, justifyContent: "center", alignItems: "center" }}><Text style={{ color: "#CBD0D6" }}>Save progress for later</Text></Pressable>
-  </ScrollView>
-  </View>;
-}
 
 type Phase = "collect" | "building" | "review";
 type ErrorPlace = "sources" | "review" | "hero" | "intro" | "listings";
@@ -145,7 +65,6 @@ export default function InitialRealtorSetup() {
   const [draft, setDraft] = useState<Brand | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<{ place: ErrorPlace; message: string } | null>(null);
-  const [manual, setManual] = useState(false);
   const [loaded, setLoaded] = useState(false);
   /** null = still checking; false = need portal sign-in (never invent signup here); true = unlocked. */
   const [builderReady, setBuilderReady] = useState<boolean | null>(null);
@@ -162,10 +81,7 @@ export default function InitialRealtorSetup() {
   const [regenerating, setRegenerating] = useState<"heroMessage" | "aboutParagraph" | null>(null);
   const [showLicense, setShowLicense] = useState(false);
   const [importedListingCount, setImportedListingCount] = useState(0);
-  const [listingsUrl, setListingsUrl] = useState("");
-  const [listingsPromptDismissed, setListingsPromptDismissed] = useState(false);
-  const [listingImportChoice, setListingImportChoice] = useState<"link" | "file">("link");
-  const [listingFilesToRetry, setListingFilesToRetry] = useState<string[]>([]);
+  const [hasConnectedSource, setHasConnectedSource] = useState(false);
   /**
    * Which inputs the review asks for, fixed when the draft is created. Rendering
    * from live values made a field vanish after its first keystroke (it stopped
@@ -222,7 +138,6 @@ export default function InitialRealtorSetup() {
     listingsSnapshot.current = merged;
     updateListings(merged);
     setImportedListingCount(found.length);
-    setListingsPromptDismissed(true);
     return found.length;
   };
 
@@ -280,11 +195,10 @@ export default function InitialRealtorSetup() {
 
   const progressDraft = useSetupDraft(
     "myrealtor.build-draft.v1:" + auth.realtorId,
-    { url, draft, result, askFor, confirmList, editingSources, listingImportChoice, listingFilesToRetry },
+    { url, draft, result, askFor, confirmList, editingSources },
     saved => {
       setUrl(saved.url); setDraft(saved.draft); setResult(saved.result);
       setAskFor(saved.askFor); setConfirmList(saved.confirmList); setEditingSources(saved.editingSources);
-      setListingImportChoice(saved.listingImportChoice ?? "link"); setListingFilesToRetry(saved.listingFilesToRetry ?? []);
     }, loaded && !!auth.realtorId);
 
   const leaveBuild = async () => {
@@ -458,59 +372,6 @@ export default function InitialRealtorSetup() {
     })();
   };
 
-  /** Secondary path when the website crawl found no homes — paste a listings page URL. */
-  const importListingsFromUrl = () => void act("listings", async () => {
-    if (!auth.realtorId) throw new Error("Sign in to import listings.");
-    const uri = normalizeUrl(listingsUrl);
-    if (!uri) throw new Error("That doesn’t look like a web address yet. Try the page that shows your homes for sale.");
-    const listingSource: BuildSource = {
-      id: randomUUID(), kind: "listing", label: new URL(uri).hostname, uri, status: "queued",
-    };
-    const nextSources = await appendBuildSources(auth.realtorId, [listingSource]);
-    setSources(nextSources);
-    setActivity("Looking for your listings…");
-    const saved = await discoverListingsBuild(uri);
-    setResult(prev => {
-      const base = prev ?? saved;
-      return {
-        ...base,
-        sources: nextSources,
-        draft: { ...base.draft, ...saved.draft },
-      };
-    });
-    const count = applyDiscoveredListings(saved);
-    if (count) setListingsUrl("");
-    if (!count) {
-      throw new Error("We still couldn’t find listings on that page. Try a link that opens your property list without signing in.");
-    }
-  });
-
-  const importListingFiles = () => void act("listings", async () => {
-    if (!auth.realtorId) throw new Error("Sign in to import listings.");
-    let sourceIds = listingFilesToRetry;
-    if (!sourceIds.length) {
-      const picked = await DocumentPicker.getDocumentAsync({ type: LISTING_FILE_PICKER_TYPES, multiple: true, copyToCacheDirectory: true });
-      if (picked.canceled) return;
-      if (picked.assets.length > 5) throw new Error("Choose up to five listing files at a time.");
-      if (picked.assets.reduce((sum, asset) => sum + (asset.size ?? 0), 0) > 52_428_800) throw new Error("Choose files under 50 MB combined.");
-      const uploaded: BuildSource[] = [];
-      for (const asset of picked.assets) {
-        setActivity(`Uploading ${asset.name}…`);
-        // Save each successful upload immediately, so a later upload failure cannot lose it.
-        const source = await uploadBuildFile(asset, "listing-file");
-        uploaded.push(source);
-        setSources(await appendBuildSources(auth.realtorId, [source]));
-        setListingFilesToRetry(uploaded.map(file => file.id));
-      }
-      sourceIds = uploaded.map(file => file.id);
-    }
-    setActivity("Reading your listing files…");
-    const saved = await importListingFilesBuild(sourceIds);
-    setResult(prev => ({ ...saved, draft: { ...(prev?.draft ?? {}), ...saved.draft } }));
-    applyDiscoveredListings(saved);
-    setListingFilesToRetry([]);
-  });
-
   const missingLabels = draft ? requiredStatus(draft).missing.map(item => item.label) : [];
   const finish = () => void act("review", async () => {
     if (!draft) throw new Error("Build your app first.");
@@ -521,6 +382,15 @@ export default function InitialRealtorSetup() {
     const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
       ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
     const publish = themeCandidate(draft, layoutId);
+    if (!isGuestAccess && importedListingCount > 0 && !hasConnectedSource) {
+      const listingSources = result?.sources.filter(source => source.kind === "listing" || source.kind === "url") ?? [];
+      const candidate = listingSources.findLast(source => source.kind === "listing") ?? listingSources[0];
+      if (candidate) {
+        setActivity("Connecting your listings for automatic updates…");
+        await connectListingSource(candidate.uri);
+        setHasConnectedSource(true);
+      }
+    }
     await saveBrand(publish);
     await markBuildComplete();
     await progressDraft.clear();
@@ -570,7 +440,6 @@ export default function InitialRealtorSetup() {
   const readValue = (field: ConfirmField) => draft ? String(draft.realtor[field.split(".")[1] as keyof Brand["realtor"]] ?? "") : "";
 
   if (loaded && !progressDraft.ready) return <View style={{ flex: 1, backgroundColor: "#101419", justifyContent: "center" }}><ActivityIndicator color="white" /></View>;
-  if (manual) return <ManualSetup onBack={() => setManual(false)} onComplete={progressDraft.clear} />;
 
   const sourceSummary = [
     primarySource ? primarySource.uri.replace(/^https:\/\//, "").replace(/\/$/, "") : websiteUri ? websiteUri.replace(/^https:\/\//, "").replace(/\/$/, "") : "",
@@ -723,12 +592,6 @@ export default function InitialRealtorSetup() {
       </PressableScale>
       {editingSources && result && draft && button("Back to my app", () => setEditingSources(false))}
 
-      {/* Separate alternative path. */}
-      <View style={{ marginTop: 40, paddingTop: 24, borderTopWidth: 1, borderTopColor: "#2A3238" }}>
-        <Text style={{ color: "#9AA4AA", fontSize: 14, fontWeight: "600" }}>Or enter details manually</Text>
-        <Text style={{ color: "#7A848A", marginTop: 4, fontSize: 13 }}>Most realtors start with a website link above. Manual entry is available if you prefer.</Text>
-        {button("Enter Details Manually", () => setManual(true))}
-      </View>
     </>}
 
     {loaded && phase === "review" && result && draft && <>
@@ -789,81 +652,9 @@ export default function InitialRealtorSetup() {
       {errorFor("intro")}
 
       {/* Listings imported via multi-hop crawl — or a soft ask for a better URL. */}
-      {importedListingCount > 0 ? (
-        <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#2E8B57", backgroundColor: "rgba(46,139,87,0.12)" }}>
-          <Text style={{ color: "#8FD9B4", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
-          <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
-            We imported {importedListingCount} listing{importedListingCount === 1 ? "" : "s"}
-          </Text>
-          <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
-            They’ll show in your app. You can edit or hide any of them from your dashboard after setup.
-          </Text>
-          {result.draft?.listingImportWarnings?.map((warning, index) => <Text key={index} style={{ color: "#C8D0D0", marginTop: 8 }}>{warning}</Text>)}
-        </View>
-      ) : !listingsPromptDismissed ? (
-        <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#C2A276", backgroundColor: "rgba(194,162,118,0.10)" }}>
-          <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
-          <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
-            {result.draft?.listingDiscovery?.outcome === "unreadable" ? "We found a listings link, but couldn’t read the properties yet" : "We couldn’t find your listings yet"}
-          </Text>
-          <View accessibilityLabel="Assistant response" style={{ marginTop: 12, padding: 14, borderRadius: 14, borderTopLeftRadius: 3, backgroundColor: "#1B242B" }}>
-            <Text style={{ color: "#C8D0D0", lineHeight: 22 }}>{LISTING_IMPORT_GUIDANCE.intro}</Text>
-          </View>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
-            <Pressable accessibilityRole="button" accessibilityState={{ selected: listingImportChoice === "link" }} disabled={busy} onPress={() => setListingImportChoice("link")}
-              style={{ padding: 12, borderRadius: 10, borderWidth: 1, borderColor: listingImportChoice === "link" ? "#C2A276" : "#657079" }}>
-              <Text style={{ color: "white" }}>Use a public link</Text>
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityState={{ selected: listingImportChoice === "file" }} disabled={busy} onPress={() => setListingImportChoice("file")}
-              style={{ padding: 12, borderRadius: 10, borderWidth: 1, borderColor: listingImportChoice === "file" ? "#C2A276" : "#657079" }}>
-              <Text style={{ color: "white" }}>Import a listing file</Text>
-            </Pressable>
-          </View>
-          <View accessibilityLabel="Assistant response with examples" style={{ marginTop: 12, padding: 14, borderRadius: 14, borderTopLeftRadius: 3, backgroundColor: "#1B242B" }}>
-            <Text style={{ color: "#C8D0D0", lineHeight: 22 }}>{LISTING_IMPORT_GUIDANCE[listingImportChoice]}</Text>
-          </View>
-          {listingImportChoice === "link" ? <>
-          <View style={{ marginTop: 12, flexDirection: "row", alignItems: "center", borderRadius: 10, borderWidth: 1,
-            borderColor: "#657079", backgroundColor: "#0C1014", paddingHorizontal: 12 }}>
-            <TextInput value={listingsUrl} onChangeText={setListingsUrl}
-              placeholder="Link to your property listings" placeholderTextColor="#6F7A80"
-              accessibilityLabel="Link to your property listings"
-              autoCapitalize="none" autoCorrect={false} keyboardType="url" returnKeyType="go"
-              onSubmitEditing={importListingsFromUrl}
-              style={{ flex: 1, color: "white", fontSize: 16, paddingVertical: 12 }} />
-          </View>
-          <View style={{ flexDirection: "row", gap: 10, marginTop: 12 }}>
-            <Pressable accessibilityRole="button" onPress={importListingsFromUrl} disabled={busy || !listingsUrl.trim()}
-              style={{ flex: 1, minHeight: 46, borderRadius: 10, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center",
-                opacity: busy || !listingsUrl.trim() ? 0.55 : 1 }}>
-              <Text style={{ color: "#172027", fontWeight: "700" }}>{busy ? "Looking…" : "Import listings"}</Text>
-            </Pressable>
-            <Pressable accessibilityRole="button" onPress={() => setListingsPromptDismissed(true)} disabled={busy}
-              style={{ minHeight: 46, paddingHorizontal: 14, borderRadius: 10, borderWidth: 1, borderColor: "#657079", alignItems: "center", justifyContent: "center" }}>
-              <Text style={{ color: "#C8D0D0" }}>Not now</Text>
-            </Pressable>
-          </View>
-          </> : <View style={{ marginTop: 12 }}>
-            {isGuestAccess ? <>
-              <View accessibilityLabel="Assistant response" style={{ padding: 14, borderRadius: 14, backgroundColor: "#1B242B" }}>
-                <Text style={{ color: "#C8D0D0", lineHeight: 22 }}>File uploads need a signed-in realtor account. Your public links still work in this preview.</Text>
-              </View>
-              {button("Sign in to upload", goPortalAuth, true)}
-            </> : <>
-              {button(busy ? "Reading files…" : listingFilesToRetry.length ? "Retry saved files" : "Choose listing files", importListingFiles, true)}
-              {listingFilesToRetry.length > 0 && <>
-                <Text style={{ color: "#C8D0D0", marginTop: 8 }}>{listingFilesToRetry.length} file{listingFilesToRetry.length === 1 ? " is" : "s are"} saved. Retry without uploading again, or choose different files.</Text>
-                {button("Choose different files", () => setListingFilesToRetry([]))}
-              </>}
-              {button("Not now", () => setListingsPromptDismissed(true))}
-            </>}
-          </View>}
-          {errorFor("listings")}
-          <View accessibilityLabel="Assistant response" style={{ marginTop: 16 }}>
-            <Text style={{ color: "#9AA4AA", fontSize: 13 }}>{LISTING_IMPORT_GUIDANCE.manual}</Text>
-          </View>
-        </View>
-      ) : null}
+      <View style={{ marginTop: 26, padding: 18, borderRadius: 14, backgroundColor: "#171D22" }}>
+        <ListingSourceImporter initialUrl={url} onImported={count => { setImportedListingCount(count); setHasConnectedSource(true); }} />
+      </View>
 
       {/* Portrait — recommended and prominent, never blocking. */}
       <View style={{ marginTop: 26, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: draft.portraitUrl ? "#2E3A40" : "#C2A276",

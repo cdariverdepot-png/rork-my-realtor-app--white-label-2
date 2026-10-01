@@ -1,29 +1,23 @@
-# Website listing import
+# Universal listing sources
 
-Setup starts from the realtor's website and follows property links across domains, including unknown broker/search providers. Own, office and featured inventory outrank general market searches. General market navigation pages are not imported as the realtor's inventory.
+Onboarding and Add listings use one URL field: **Bring in your listings** / **Paste the page where your listings live. We’ll figure out the rest.** Provider selectors, listing-file choices and manual listing creation are removed from this flow. Existing profile/contact uploads and backend file parsing remain available to existing callers.
 
-Supported discovery includes property anchors and accessible labels, buttons exposing a destination, embedded/lazy-loaded frames, GET search forms with hidden agent filters, HTTP-to-HTTPS links, HTTP redirects, HTML refresh redirects, JSON-LD, JSON hydration, and public inventory fragments exposed by the page. Flexmls collections additionally load their public photo-card fragment while preserving the portal, category and filters. Linked next pages and Flexmls fragment pagination stay within the same collection.
+The existing discovery crawler follows observed links, embeds, filtered search forms, redirects, hydration and public listing fragments across domains. It detects the provider internally. For an individual property, it connects an observed public agent inventory only when that inventory contains the original property. Otherwise it asks for a public profile or listings page. It never asks for MLS credentials or bypasses login, CAPTCHA, robots restrictions or blocked access.
 
-If normal navigation reaches a dead end, the existing OpenAI build model may select observed links with ambiguous labels. It receives candidate ids and can only choose URLs already found on the page. It cannot invent listing facts or destinations. AI errors do not fail the profile import.
+Each verified realtor stores persistent sources in their scoped listing-sources.v1 row. Inventory remains in the existing scoped listings.v2 collection. The worker reconciles new homes, details, prices, photos and explicit statuses while preserving personal notes and visibility. Source metadata is separate from collection/editor writes. Writes reread current data and use revision checks.
 
-Discovery is bounded to five link levels, twenty public-page requests, one hundred properties and a 45-second navigation budget (an in-progress page fetch can finish after the budget). Up to twelve evidenced properties can also have their details enriched with descriptions and higher-resolution cover photos within that same request/time budget. Every fetched page and redirect still goes through the existing public HTTPS/DNS checks. At most two AI navigation calls are allowed, each with an eight-second timeout.
+Public source inventories are due every two hours. Legacy individual listing URLs are due every two hours for active/pending/contingent/unconfirmed homes and daily for sold/off-market homes. Failures back off and retain the last reliable values. Only two complete snapshots at least two hours apart archive a disappeared listing. Partial, blocked, paginated-incomplete or unreadable pages never archive inventory. Reappearing homes are restored. Sold status requires an explicit property-specific label.
 
-The importer records visited pages, failed requests, inventory destinations and whether the result is found, partial, unreadable or not found. A zero-property result preserves profile information and offers a public property-list link or a listing file, with examples inside assistant-style messages. Manual property entry remains available from the dashboard after setup. An unsuccessful retry retains the pasted URL.
+Deterministic structured-data extraction runs first. Where necessary, the existing OpenAI service can select observed destinations and normalize up to two public inventory pages. Values must have observed evidence; missing fields stay blank. Related homes and general market results are excluded. No stock listing photos are invented.
 
-## Listing files
+## Deployment and activation
 
-Signed-in realtor accounts can import up to five files (20 MB each, 50 MB combined). Supported formats are CSV, PDF, DOCX, TXT, JPG, PNG and WebP. Examples explain public MLS reports saved as PDF, Excel or Google Sheets exports saved as CSV, and clear listing screenshots. CSV is parsed directly; the existing OpenAI report reader extracts the other formats. Uploaded files remain private to their owner.
+Deploy the updated analyze-realtor-build bundle and refresh-listings function. refresh-listings is deployed with --no-verify-jwt because it verifies account ownership or a private scheduler token itself. Set LISTING_SYNC_TOKEN as an Edge secret. Add matching Vault secrets listing_sync_token and listing_sync_project_url, then run supabase/sql/refresh_listings_cron.sql. Its five-minute dispatcher selects due sources and legacy URL collections; it does not scrape every five minutes. Check cron.job and net._http_response using the verification queries in that SQL file.
 
-Imports preserve profile information, merge existing properties and use stable report identities for repeat uploads. The reader excludes private remarks, access codes and contact details. Failed imports retain saved files for retry. Report imports are snapshots, and embedded photos are not extracted; users may need to add photos afterward. Provider account connections are not implemented.
+The production project currently has no listing-sync job enabled. This change has not been deployed or activated in production. Never expose the scheduler token in the app.
 
-## Validation
+## Validation and limits
 
-- Live check on October 1, 2026: starting only at `https://cindycarlsonrealty.com/` follows Featured Listings, then the office's active Flexmls collection, then its public card fragment. Exactly nine distinct properties import with prices, photos and available specifications; repeat import remains nine.
-- Automated coverage includes unknown external domains, button destinations, lazy embeds, filtered GET forms, redirects, hydration, pagination, loop/fetch failure handling, exclusion of market-search inventory and agency pages, and rejecting AI-invented destinations.
-- Listing discovery and listing-file tests are included in the normal app test command.
+175 automated tests pass, including the real handler with mocked database/network, account scope, source discovery, status evidence, recurring inventory reconciliation, failure recovery, concurrent editor changes, archive/restore and AI evidence validation. App and Edge TypeScript checks pass. Expo web export succeeds with existing server-render warnings. The dispatcher selection query was checked read-only against the current production schema.
 
-## Limits
-
-This is not a full browser renderer. Sites exposing neither readable HTML/hydration nor a supported public inventory fragment, and sites requiring sign-in, CAPTCHA or browser-only interaction, can still return no properties. The UI reports that limitation and offers a public URL or a listing file. The live test verifies public-page discovery and merging; it does not exercise authenticated production onboarding or an actual OpenAI routing call. File tests cover CSV parsing, stable merging, ownership checks, failure recovery and the deployment handler with mocked storage/OpenAI; actual PDF extraction and production uploads still need staging validation.
-
-The existing main-branch workflows deploy the app and Edge Function when this change is merged. The single-file deployment bundle is kept in sync with the function and discovery source.
+An earlier live discovery check from Cindy Carlson’s website reached the external public Flexmls office collection and found nine homes. The new source worker, scheduler and AI normalization still require staging/live deployment validation. Provider detection does not guarantee every provider permits or exposes public scraping: sites requiring sign-in, browser-only interaction or restricted access receive an actionable request for a public listings/profile link.

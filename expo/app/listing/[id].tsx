@@ -1,3 +1,4 @@
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React, { useEffect } from "react";
 import {
   Dimensions,
@@ -102,7 +103,7 @@ export default function ListingDetail() {
               </PressableScale>
               <View style={styles.tag}>
                 <View style={styles.tagDot} />
-                <Text style={styles.tagText}>{item.tag.toUpperCase()}</Text>
+                <Text style={styles.tagText}>{listingStatusLabel(item).toUpperCase()}</Text>
               </View>
             </View>
           </View>
@@ -150,7 +151,7 @@ export default function ListingDetail() {
           <Detail label="Bedrooms" value={String(item.beds)} />
           <Detail label="Bathrooms" value={String(item.baths)} />
           <Detail label="Interior" value={item.sqft} />
-          <Detail label="Status" value={item.tag} />
+          <Detail label="Status" value={listingStatusLabel(item)} />
           <Detail label="Showings" value="Private · by appointment" last />
         </View>
         </Reveal>
@@ -167,7 +168,7 @@ export default function ListingDetail() {
           <MessageSquare size={16} color={brand.ivory} strokeWidth={1.5} />
           <Text style={styles.dockSecondaryText}>Ask {firstName}</Text>
         </PressableScale>
-        <PressableScale
+        {!item.sourceArchived && item.status !== "sold" && item.status !== "off_market" && <PressableScale
           onPress={() => router.replace({ pathname: "/book", params: { listingId: item.id } })}
           haptic="medium"
           scaleTo={0.96}
@@ -175,7 +176,7 @@ export default function ListingDetail() {
         >
           <CalendarDays size={16} color={brand.forestDeep} strokeWidth={2} />
           <Text style={styles.dockPrimaryText}>Book private showing</Text>
-        </PressableScale>
+        </PressableScale>}
       </View>
     </View>
   );

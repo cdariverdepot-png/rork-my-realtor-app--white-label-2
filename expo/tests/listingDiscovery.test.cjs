@@ -221,15 +221,11 @@ test('multi-hop discover follows CTA then extracts cards', async () => {
   assert.ok(listings.some((l) => /Oak/i.test(l.title)));
 });
 
-test('setup soft-prompt and multi-hop wiring exist in app builder UI', () => {
+test('setup uses the universal source importer without method selection or manual creation', () => {
   const src = fs.readFileSync(path.resolve(__dirname, '../components/InitialRealtorSetup.tsx'), 'utf8');
-  assert.match(src, /discoverListingsBuild/);
-  assert.match(src, /mergeDiscoveredListings/);
-  assert.match(src, /We couldn’t find your listings yet/);
-  assert.match(src, /Link to your property listings/);
-  assert.match(src, /Import listings/);
-  assert.match(src, /Or enter details manually/);
-  assert.match(src, /appendBuildSources/);
+  assert.match(src, /ListingSourceImporter/);
+  assert.match(src, /connectListingSource/);
+  assert.doesNotMatch(src, /listingImportChoice|ManualSetup|Choose listing files|Or enter details manually/);
 });
 
 test('single-file deployment bundle loads without duplicate helper declarations', () => {

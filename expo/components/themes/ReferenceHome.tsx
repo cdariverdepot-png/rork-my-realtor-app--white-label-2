@@ -1,3 +1,4 @@
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React from "react";
 import { Animated, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
@@ -24,7 +25,7 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
   const width = p.width ?? window.width, s = width / 390;
   // The theme owns the layout; the profile only fills its slots.
   const b = withThemeSlots(p.brand), r = b.realtor, d = themeDesign(b.layoutId, b.theme);
-  const items = p.listings.filter(item => !item.hidden);
+  const items = p.listings.filter(item => !item.hidden && !item.sourceArchived);
   const visible = visibleSections({ brand: b, visibleListingCount: items.length });
   const has = (id: ClientSectionId) => visible.includes(id);
   const nav = (route: ReferenceRoute) => p.onNavigate ? () => p.onNavigate?.(route) : undefined;
@@ -49,7 +50,7 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
       <Pressable disabled={!p.onOpen} onPress={() => p.onOpen?.(item.id)} accessibilityRole="button" accessibilityLabel={item.title} style={{ flex: 1 }}>
         <View style={{ height: photoHeight * s }}>{photo(item)}</View>
         {overlay && <></>}
-        {kind !== "coastal" && !!item.tag && <Text numberOfLines={1} style={{ position: "absolute", top: 7 * s, left: 7 * s, maxWidth: "70%", backgroundColor: kind === "burgundy" ? "#641326" : kind === "discovery" ? "#DAB27A" : "#111713E8", color: kind === "discovery" ? "#121610" : "#F3EBDC", fontSize: 6 * s, padding: 4 * s, borderRadius: kind === "discovery" ? 12 * s : 2 * s, letterSpacing: 0.6 * s }}>{item.tag.toUpperCase()}</Text>}
+        {!!listingStatusLabel(item) && <Text numberOfLines={1} style={{ position: "absolute", top: 7 * s, left: 7 * s, maxWidth: "70%", backgroundColor: kind === "burgundy" ? "#641326" : kind === "discovery" ? "#DAB27A" : "#111713E8", color: kind === "discovery" ? "#121610" : "#F3EBDC", fontSize: 6 * s, padding: 4 * s, borderRadius: kind === "discovery" ? 12 * s : 2 * s, letterSpacing: 0.6 * s }}>{listingStatusLabel(item).toUpperCase()}</Text>}
         <View style={{ position: overlay ? "absolute" : "relative", bottom: overlay ? 9 * s : undefined, left: overlay ? 8 * s : undefined, right: overlay ? 8 * s : undefined, padding: overlay ? 0 : 8 * s }}>
           {kind === "coastal" ? <>{text(item.neighborhood || item.title, 9, "#FFFAEF")}{text(item.price, 10, "#FFFAEF")}</> : kind === "burgundy" ? <>{text(item.price, 19, "#FFF8ED", true)}{text(item.neighborhood || item.title, 9, "#D8B480")}{meta(item, 7)}</> : <>
             {kind === "journal" && <Text numberOfLines={1} style={{ color: d.accent, fontSize: 6 * s, letterSpacing: 1 * s, marginBottom: 5 * s }}>{item.neighborhood?.toUpperCase()}</Text>}

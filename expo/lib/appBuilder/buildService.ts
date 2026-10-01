@@ -17,6 +17,9 @@ export type DiscoveredListing = {
   image: string;
   images: string[];
   sourceUrl: string;
+  status?: "active" | "pending" | "contingent" | "sold" | "off_market";
+  listingNumber?: string;
+  propertyType?: string;
   importKey?: string;
 };
 

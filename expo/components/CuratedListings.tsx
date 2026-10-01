@@ -1,3 +1,4 @@
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React, { useMemo } from "react";
 import {
   Dimensions,
@@ -85,7 +86,7 @@ const ListingCard = React.memo(function ListingCard({
         >
           <View style={[styles.tagDot, { backgroundColor: theme.accent.light }]} />
           <Text style={[styles.tagText, { color: theme.onBand.text }]}>
-            {item.tag.toUpperCase()}
+            {listingStatusLabel(item).toUpperCase()}
           </Text>
         </View>
         <Pressable
@@ -149,7 +150,7 @@ export default React.memo(function CuratedListings() {
   const { width } = useWindowDimensions();
   const coastal = b.layoutId === "coastal-personal";
   const { editing, setListing, previewListings } = useEditMode();
-  const visible = useMemo(() => previewListings.filter((l) => !l.hidden), [previewListings]);
+  const visible = useMemo(() => previewListings.filter((l) => !l.hidden && !l.sourceArchived), [previewListings]);
   const Header = (
     <SectionLabel
       eyebrow={b.curated.eyebrow || "Curated for you"}

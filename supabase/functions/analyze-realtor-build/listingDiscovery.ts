@@ -17,6 +17,9 @@ export type DiscoveredListing = {
   image: string;
   images: string[];
   sourceUrl: string;
+  status?: "active" | "pending" | "contingent" | "sold" | "off_market";
+  listingNumber?: string;
+  propertyType?: string;
   importKey?: string;
 };
 
@@ -29,9 +32,10 @@ export type ListingDiscoveryMeta = {
   failed?: string[];
   inventoryUrls?: string[];
   outcome?: "found" | "unreadable" | "not-found" | "partial";
+  expectedCount?: number;
 };
 
-type FetchHtml = (uri: string, options?: { fragment?: boolean }) => Promise<{ html: string; finalUrl: URL }>;
+export type FetchHtml = (uri: string, options?: { fragment?: boolean }) => Promise<{ html: string; finalUrl: URL }>;
 export type NavigationCandidate = { url: string; label: string };
 export type SelectInventoryLinks = (page: string, candidates: NavigationCandidate[]) => Promise<string[]>;
 
@@ -346,6 +350,8 @@ function listingFromLd(obj: Record<string, unknown>, base: URL): DiscoveredListi
     image: images[0] ?? "",
     images: images.slice(0, 12),
     sourceUrl,
+    listingNumber: [obj.listingId, obj.listingNumber, obj.mlsNumber, typeof obj.identifier === "object" ? (obj.identifier as Record<string, unknown> | null)?.value : obj.identifier].filter(v => typeof v === "string" || typeof v === "number").map(String).find(Boolean)?.slice(0, 100) ?? "",
+    propertyType: [obj.propertyType, obj.additionalType].filter(v => typeof v === "string").map(String).find(Boolean)?.slice(0, 100) ?? "",
   };
 }
 
@@ -464,7 +470,7 @@ export function listingFromMeta(html: string, base: URL): DiscoveredListing | nu
   };
 }
 
-export function extractListingsFromPage(html: string, base: URL): DiscoveredListing[] {
+function extractPropertyRecords(html: string, base: URL): DiscoveredListing[] {
   const structuredCards = listingsFromStructuredCards(html, base);
   if (structuredCards.length) return structuredCards;
   const hydrated = listingsFromHydration(html, base);
@@ -480,6 +486,77 @@ export function extractListingsFromPage(html: string, base: URL): DiscoveredList
   if (merged.length) return merged.slice(0, 24);
   const single = listingFromMeta(html, base);
   return single ? [single] : [];
+}
+
+/** Normalize explicit MLS status values, never prose such as 'sold by our team'. */
+export function normalizeListingStatus(value: unknown): DiscoveredListing["status"] {
+  if (typeof value !== "string") return undefined;
+  const label = value.trim().replace(/^https?:\/\/schema\.org\//i, "").toLowerCase().replace(/[_-]/g, " ").replace(/\s+/g, " ");
+  if (/^(sold|closed|just sold)$/.test(label)) return "sold";
+  if (/^(pending|pending continue to show|pending taking backups|under contract)$/.test(label)) return "pending";
+  if (/^(contingent|active contingent|active under contract|active with contingency|active kick out)$/.test(label)) return "contingent";
+  if (/^(off market|withdrawn|cancelled|canceled|expired|temporarily off market)$/.test(label)) return "off_market";
+  if (/^(active|for sale|new|back on market)$/.test(label)) return "active";
+  return undefined;
+}
+
+const propertyIdentity = (value: unknown) => typeof value === "string" ? value.toLowerCase().replace(/[^a-z0-9]/g, "") : "";
+
+/** Only use status attached to the matching property; recommendations and navigation are excluded. */
+export function statusForProperty(html: string, item: Pick<DiscoveredListing, "title" | "sourceUrl">, base: URL): DiscoveredListing["status"] {
+  const expected = propertyIdentity(item.title);
+  if (!expected) return undefined;
+  let matched: DiscoveredListing["status"];
+  const statusFrom = (obj: Record<string, unknown>): DiscoveredListing["status"] => {
+    for (const key of ["StandardStatus", "MlsStatus", "ListingStatus", "PropertyStatus", "Status", "standardStatus", "listingStatus", "propertyStatus", "status"]) {
+      const status = normalizeListingStatus(obj[key]);
+      if (status) return status;
+    }
+    const offers = obj.offers;
+    if (offers && !Array.isArray(offers) && typeof offers === "object") return statusFrom(offers as Record<string, unknown>);
+    return undefined;
+  };
+  const matches = (obj: Record<string, unknown>) => {
+    const address = obj.address && typeof obj.address === "object" ? (obj.address as Record<string, unknown>).streetAddress : obj.address;
+    return [obj.StreetAddress, obj.streetAddress, obj.UnparsedAddress, obj.addressLine1, address, obj.name, obj.title]
+      .some(value => propertyIdentity(value) === expected);
+  };
+  const nodes = jsonLdBlocks(html);
+  for (const m of html.matchAll(/<script\b[^>]*type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { nodes.push(JSON.parse(m[1])); } catch { /* malformed hydration */ }
+  }
+  walkLd(nodes, obj => { if (!matched && matches(obj)) matched = statusFrom(obj); });
+  if (matched) return matched;
+  for (const m of html.matchAll(/<[^>]+\bdata-listing=["'][^>]+>/gi)) {
+    try { const obj = JSON.parse(attr(m[0], "data-listing")); if (matches(obj)) { const status = statusFrom(obj); if (status) return status; } } catch { /* malformed card */ }
+  }
+  // Visible labels are accepted only on an identified property detail page.
+  const headings = [...html.matchAll(/<(?:h1|title)\b[^>]*>([\s\S]*?)<\/(?:h1|title)>/gi)].map(m => stripTags(m[1]));
+  for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) if (attr(tag, "property") === "og:title") headings.push(attr(tag, "content"));
+  const identified = headings.some(title => propertyIdentity(title) === expected ||
+    title.split(/\s[|–—]\s/).some(part => propertyIdentity(part) === expected));
+  if (identified) {
+    for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
+      if (/^(?:listing:status|property:status|listingstatus|standardstatus)$/i.test(attr(tag, "property") || attr(tag, "name"))) {
+        const status = normalizeListingStatus(attr(tag, "content")); if (status) return status;
+      }
+    }
+    let main = html.replace(/<(?:script|style|nav|footer)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer)>/gi, "");
+    // Do not consume status badges belonging to recommended properties farther down the page.
+    main = main.split(/<(?:h2|h3)\b|(?:related|similar|recommended|recently sold)\s+(?:homes|properties|listings)/i)[0];
+    for (const m of main.matchAll(/<(?:span|div|p|strong)\b[^>]*(?:class|id)=["'][^"']*(?:listing-status|property-status|standard-status)[^"']*["'][^>]*>([^<]*)<\//gi)) {
+      const status = normalizeListingStatus(stripTags(m[1]).replace(/^status\s*:\s*/i, "")); if (status) return status;
+    }
+    const label = stripTags(main).match(/\b(?:listing status|property status|standard status|MLS status)\s*:\s*(active under contract|active contingent|off[- ]market|for sale|active|pending|contingent|sold|closed|withdrawn|expired|cancelled)\b/i);
+    const status = normalizeListingStatus(label?.[1]); if (status) return status;
+  }
+  return undefined;
+}
+
+export function extractListingsFromPage(html: string, base: URL): DiscoveredListing[] {
+  return extractPropertyRecords(html, base).map(item => ({ ...item, status: statusForProperty(html, item, base) ??
+    // Flexmls's explicitly filtered collection establishes active membership.
+    (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/(?:office|agent)_listing_categories\/Active\/listings/.test(base.pathname) ? "active" : undefined) }));
 }
 
 /** Public server-rendered cards with per-property payloads (including Flexmls). */
@@ -503,7 +580,8 @@ export function listingsFromStructuredCards(html: string, base: URL): Discovered
     const specs = specsFrom({ bedrooms: data.BedsTotal, bathrooms: data.BathsTotal }, stripTags(block));
     found.push({ title, price, description: "", ...specs, sqft: sqft.trim() || specs.sqft,
       neighborhood: [data.City, data.StateOrProvince].filter(Boolean).join(", ") || field("line-two"),
-      image, images: image && !looksLikeChrome(image) ? [image] : [], sourceUrl });
+      image, images: image && !looksLikeChrome(image) ? [image] : [], sourceUrl,
+      listingNumber: String(data.ListingId ?? data.MLSNumber ?? data.ListingNumber ?? ""), propertyType: String(data.PropertyType ?? "") });
   });
   return found;
 }
@@ -585,7 +663,7 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
   const description = detail?.description || meta("og:description") || meta("description");
   const cover = absolutize(meta("og:image"), base);
   const images = [...new Set([...(detail?.images ?? []), ...(cover && !looksLikeChrome(cover) ? [cover] : []), ...item.images])].slice(0, 12);
-  return { ...item, description: description.slice(0, 1200) || item.description,
+  return { ...item, status: statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 1200) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }
@@ -597,7 +675,8 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
 export async function discoverListings(
   seedUris: string[],
   fetchHtml: FetchHtml,
-  options?: { maxDepth?: number; maxPages?: number; maxListings?: number; maxDurationMs?: number; maxDetailPages?: number; selectLinks?: SelectInventoryLinks },
+  options?: { maxDepth?: number; maxPages?: number; maxListings?: number; maxDurationMs?: number; maxDetailPages?: number; selectLinks?: SelectInventoryLinks;
+    normalizePage?: (html: string, base: URL) => Promise<DiscoveredListing[]> },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
   const maxDepth = options?.maxDepth ?? 5;
   const maxPages = options?.maxPages ?? 20;
@@ -611,6 +690,9 @@ export async function discoverListings(
   const inventoryUrls = new Set<string>();
   const deadline = Date.now() + (options?.maxDurationMs ?? 45000);
   let aiRoutes = 0;
+  let aiNormalizations = 0;
+  let expectedCount = 0;
+  let unresolvedPagination = false;
   let hops = 0;
   let maxDepthReached = 0;
 
@@ -655,7 +737,17 @@ export async function discoverListings(
 
     // A general market search is a navigation step, not evidence of the agent's inventory.
     const broad = next.broad && !/office_listing_categories|agent_listing_categories/.test(finalUrl.pathname);
-    const found = broad ? [] : extractListingsFromPage(html, finalUrl);
+    if (!broad) {
+      const count = html.match(/data-(?:search-results-search-count|listings-count|results-count)=["'](\d+)["']/i)?.[1];
+      if (count) expectedCount = Math.max(expectedCount, Number(count));
+      if (/data-has-next-page=["']true["']|\b(?:load more properties|load more listings|infinite-scroll)\b/i.test(html)) unresolvedPagination = true;
+    }
+    let found = broad ? [] : extractListingsFromPage(html, finalUrl);
+    if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
+      (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
+      aiNormalizations++;
+      try { found = await options.normalizePage(html, finalUrl); } catch { /* deterministic navigation continues */ }
+    }
     if (found.length && next.fragment && next.parent) {
       // Once the shell's inventory loads, discard its toolbar/search alternatives.
       for (let i = queue.length - 1; i >= 0; i--) {
@@ -739,7 +831,8 @@ export async function discoverListings(
   return {
     listings: listings.slice(0, maxListings),
     meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
-      failed, inventoryUrls: [...inventoryUrls], outcome: listings.length ?
-        (queue.length || failed.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
+      failed, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome: listings.length ?
+        (queue.length || failed.length || unresolvedPagination || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
   };
 }
+

@@ -406,7 +406,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   // Knowing the visible list up front is what lets the entrance cascade stay
   // even no matter how much of their profile the realtor has filled in.
   const visibleListingCount = useMemo(
-    () => previewListings.filter((l) => !l.hidden).length,
+    () => previewListings.filter((l) => !l.hidden && !l.sourceArchived).length,
     [previewListings]
   );
   const sectionCtx: SectionContext = useMemo(
