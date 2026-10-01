@@ -22,9 +22,9 @@ Google and Microsoft buttons are **visible by default** in the shipped portal. T
 
 ## Guest / demo client access code
 
-Default code: **`DEMO`** (env `EXPO_PUBLIC_GUEST_ACCESS_CODE`).
+Configured via env `EXPO_PUBLIC_GUEST_ACCESS_CODE` (fallback `DEMO` when unset). **The code is never shown on screen** — there is no "Demo code: …" hint on welcome, realtor login, or client code entry.
 
-On Client Login → enter code, type `DEMO` and continue. The app clears any prior session, mints a **new** personal (client) account each time (unique `guest+{uuid}@…` identity), and opens the client home under the Eliza Vance showcase. Real realtor codes and email/social signup are unchanged.
+On welcome / realtor login → **Continue with access code** (same button style as Google / Microsoft) → type the code and continue. The app clears any prior session, mints a **new** personal (client) account each time (unique `guest+{uuid}@…` identity, blank profile name), resets the client walkthrough flag, runs the **5-page walkthrough**, then lands on **profile build** ("How should we reach you?"). Real realtor codes and email/social signup share the same new-client gates.
 
 If Supabase **Anonymous Sign-Ins** is enabled (Dashboard → Authentication → Providers), each guest also gets a fresh anonymous Auth user. If it is off, the app still creates the local client session (unique email signup is attempted as a fallback; email confirmation is not required for guest entry).
 

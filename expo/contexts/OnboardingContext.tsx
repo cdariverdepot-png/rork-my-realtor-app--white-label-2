@@ -91,6 +91,19 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
     [patch]
   );
 
+  /**
+   * Fresh client sessions (guest access code, new email signup) must re-run the
+   * 5-page walkthrough even if a prior client on this device already finished it.
+   */
+  const prepareNewClientTour = useCallback(() => {
+    setState((prev) => {
+      if (!prev.clientTourSeen) return prev;
+      const next: OnboardingState = { ...prev, clientTourSeen: false };
+      void persist(next);
+      return next;
+    });
+  }, [persist]);
+
   const reopen = useCallback(() => patch("tourSeen", false), [patch]);
 
   const reset = useCallback(() => {
@@ -107,6 +120,7 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
       markSeen,
       markTourSeen,
       replayTour,
+      prepareNewClientTour,
       reopen,
       reset,
     }),
@@ -118,6 +132,7 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
       markSeen,
       markTourSeen,
       replayTour,
+      prepareNewClientTour,
       reopen,
       reset,
     ]

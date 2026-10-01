@@ -17,14 +17,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
-import { ArrowRight, ChevronLeft, Lock, Building2, User, Eye, DoorClosed } from "lucide-react-native";
+import { ArrowRight, ChevronLeft, Lock, Building2, Eye, DoorClosed } from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import EmailCodeSignIn from "@/components/EmailCodeSignIn";
 import SocialSignIn from "@/components/SocialSignIn";
+import AccessCodeContinue from "@/components/AccessCodeContinue";
 import PressableScale from "@/components/PressableScale";
-import { GUEST_ACCESS_CODE, isGuestAccessCode } from "@/constants/access";
+import { isGuestAccessCode } from "@/constants/access";
+import { useOnboarding } from "@/contexts/OnboardingContext";
 
 type Stage =
   | "entry"
@@ -58,6 +60,7 @@ export default function Portal() {
     enterGuestClient,
     lookupRealtorByCode,
   } = useAuth();
+  const { prepareNewClientTour } = useOnboarding();
 
   const { entry: entryRaw, invite, confirmed: confirmedParam } = useLocalSearchParams<{ entry?: string | string[]; invite?: string; confirmed?: string }>();
   // Expo Router may hand back string[]; only an explicit single "client" opens the code stage.
@@ -178,7 +181,9 @@ export default function Portal() {
           triggerShake();
           return;
         }
+        prepareNewClientTour();
         if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        // Land on home so the 5-page walkthrough runs, then profile build.
         router.replace("/");
         return;
       }
@@ -248,10 +253,10 @@ export default function Portal() {
         // clientSignup writes the client onto the realtor's roster keyed to the
         // resolved realtorId, so there's no session-scope race to worry about.
         //
-        // Straight into intake, mirroring how a new realtor lands in /admin/build.
-        // Asking now — while they're still in setup mode and motivated — gets a
-        // far better answer rate than a prompt buried in an account screen later.
-        success(); router.replace("/client-profile");
+        // Same path as guest access-code signup: 5-page walkthrough first, then
+        // profile build ("How should we reach you?").
+        prepareNewClientTour();
+        success(); router.replace("/");
       } else if (stage === "client-signin") {
         if (!resolvedRealtorId) { setError("Please go back and enter your code first."); return; }
         const res = await clientLogin(email, password, resolvedRealtorId);
@@ -401,6 +406,17 @@ export default function Portal() {
                     }}
                   />
                   {stage.startsWith("realtor") && <SocialSignIn />}
+                  {stage.startsWith("realtor") ? (
+                    <View style={{ marginTop: 12 }}>
+                      <AccessCodeContinue
+                        code={code}
+                        onChangeCode={setCode}
+                        onSubmit={() => { void submitCode(); }}
+                        busy={busy}
+                        error={error}
+                      />
+                    </View>
+                  ) : null}
                   {stage.startsWith("realtor") && emailAlreadyConfirmed ? (
                     <Text style={{ color: "#f3ead9", textAlign: "center", marginTop: 18, lineHeight: 22 }}>
                       Your email is confirmed. Sign in with your password, or request an email code below.
@@ -411,15 +427,6 @@ export default function Portal() {
                     </Text>
                   ) : null}
                   {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={emailAlreadyConfirmed || stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
-                  {stage.startsWith("realtor") ? (
-                    <GuestAccessCard
-                      code={code}
-                      onChangeCode={setCode}
-                      onSubmit={submitCode}
-                      busy={busy}
-                      error={error}
-                    />
-                  ) : null}
                   </>
                 )}
               </Animated.View>
@@ -486,50 +493,16 @@ function EntryForm({
       </PressableScale>
       <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", letterSpacing: 1.2, marginTop: 6 }}>Or continue with</Text>
       <SocialSignIn />
-
-      {/* Access code visible on the welcome gateway — no hunting for Client Login */}
-      <View style={styles.entryCodeCard}>
-        <Text style={styles.entryCodeEyebrow}>HAVE AN ACCESS CODE?</Text>
-        <Text style={styles.roleBtnTitle}>Client Login</Text>
-        <Text style={styles.roleBtnSub}>Enter the code your realtor shared — or try the demo.</Text>
-        <View style={[styles.codeInputWrap, { marginTop: 14 }]}>
-          <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
-          <TextInput
-            value={code}
-            onChangeText={(v) => onChangeCode(v.toUpperCase())}
-            placeholder="ENTER ACCESS CODE"
-            placeholderTextColor="rgba(244,239,230,0.28)"
-            autoCapitalize="characters"
-            autoCorrect={false}
-            autoComplete="off"
-            returnKeyType="go"
-            onSubmitEditing={onSubmitCode}
-            style={styles.codeInput}
-            maxLength={12}
-            accessibilityLabel="Client access code"
-          />
-        </View>
-        {GUEST_ACCESS_CODE ? (
-          <Text style={{ color: "rgba(244,239,230,0.45)", fontSize: 12, textAlign: "center", marginTop: 12, letterSpacing: 0.4 }}>
-            Demo code: {GUEST_ACCESS_CODE}
-          </Text>
-        ) : null}
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        <PressableScale
-          onPress={onSubmitCode}
-          disabled={busy || !code.trim()}
-          haptic="medium"
-          scaleTo={0.97}
-          hitSlop={12}
-          style={[styles.cta, (busy || !code.trim()) && { opacity: 0.4 }]}
-        >
-          <Text style={styles.ctaText}>CONTINUE</Text>
-          <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
-        </PressableScale>
-        <PressableScale onPress={onClient} haptic="selection" scaleTo={0.98} hitSlop={10} style={{ paddingVertical: 12, alignItems: "center", minHeight: 44, justifyContent: "center" }}>
-          <Text style={{ fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 12, letterSpacing: 1 }}>Open full client sign-in</Text>
-        </PressableScale>
-      </View>
+      <AccessCodeContinue
+        code={code}
+        onChangeCode={onChangeCode}
+        onSubmit={onSubmitCode}
+        busy={busy}
+        error={error}
+      />
+      <PressableScale onPress={onClient} haptic="selection" scaleTo={0.98} hitSlop={10} style={{ paddingVertical: 12, alignItems: "center", minHeight: 44, justifyContent: "center" }}>
+        <Text style={{ fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 12, letterSpacing: 1 }}>Open full client sign-in</Text>
+      </PressableScale>
 
       <PressableScale onPress={onExploreDemo} disabled={busy} haptic="selection" scaleTo={0.97} hitSlop={14} style={styles.demoBtn}>
         <Eye size={14} color="rgba(244,239,230,0.45)" strokeWidth={1.4} />
@@ -540,72 +513,14 @@ function EntryForm({
 }
 
 
-/** Visible on realtor login too — DEMO is entered here without hunting Client Login. */
-function GuestAccessCard({
-  code, onChangeCode, onSubmit, busy, error,
-}: {
-  code: string;
-  onChangeCode: (v: string) => void;
-  onSubmit: () => void;
-  busy: boolean;
-  error: string | null;
-}) {
-  return (
-    <View style={styles.entryCodeCard}>
-      <Text style={styles.entryCodeEyebrow}>HAVE A CLIENT CODE?</Text>
-      <Text style={styles.roleBtnTitle}>Access code</Text>
-      <Text style={styles.roleBtnSub}>Clients enter their realtor code here. Try DEMO to preview as a guest client.</Text>
-      <View style={[styles.codeInputWrap, { marginTop: 14 }]}>
-        <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
-        <TextInput
-          value={code}
-          onChangeText={(v) => onChangeCode(v.toUpperCase())}
-          placeholder="ENTER ACCESS CODE"
-          placeholderTextColor="rgba(244,239,230,0.28)"
-          autoCapitalize="characters"
-          autoCorrect={false}
-          autoComplete="off"
-          returnKeyType="go"
-          onSubmitEditing={onSubmit}
-          style={styles.codeInput}
-          maxLength={12}
-          accessibilityLabel="Client access code"
-        />
-      </View>
-      {GUEST_ACCESS_CODE ? (
-        <Text style={{ color: "rgba(244,239,230,0.45)", fontSize: 12, textAlign: "center", marginTop: 12, letterSpacing: 0.4 }}>
-          Demo code: {GUEST_ACCESS_CODE}
-        </Text>
-      ) : null}
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <PressableScale
-        onPress={onSubmit}
-        disabled={busy || !code.trim()}
-        haptic="medium"
-        scaleTo={0.97}
-        hitSlop={12}
-        style={[styles.cta, (busy || !code.trim()) && { opacity: 0.4 }]}
-      >
-        <Text style={styles.ctaText}>CONTINUE WITH CODE</Text>
-        <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
-      </PressableScale>
-    </View>
-  );
-}
-
 // ── Code form ────────────────────────────────────────────────────────
 function CodeForm({ code, onChange, onSubmit, error, busy }: { code: string; onChange: (v: string) => void; onSubmit: () => void; error: string | null; busy: boolean }) {
   return (
     <View style={{ width: "100%" }}>
       <View style={styles.codeInputWrap}>
         <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
-        <TextInput value={code} onChangeText={(v) => onChange(v.toUpperCase())} placeholder="CLIENT CODE" placeholderTextColor="rgba(244,239,230,0.28)" autoCapitalize="characters" autoCorrect={false} autoComplete="off" autoFocus={Platform.OS !== "web"} returnKeyType="go" onSubmitEditing={onSubmit} style={styles.codeInput} maxLength={12} />
+        <TextInput value={code} onChangeText={(v) => onChange(v.toUpperCase())} placeholder="CLIENT CODE" placeholderTextColor="rgba(244,239,230,0.28)" autoCapitalize="characters" autoCorrect={false} autoComplete="off" autoFocus={Platform.OS !== "web"} returnKeyType="go" onSubmitEditing={onSubmit} style={styles.codeInput} maxLength={12} accessibilityLabel="Access code" />
       </View>
-      {GUEST_ACCESS_CODE ? (
-        <Text style={{ color: "rgba(244,239,230,0.45)", fontSize: 12, textAlign: "center", marginTop: 14, letterSpacing: 0.4 }}>
-          Demo code: {GUEST_ACCESS_CODE}
-        </Text>
-      ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <PressableScale onPress={onSubmit} disabled={busy || !code.trim()} haptic="medium" scaleTo={0.97} hitSlop={12} style={[styles.cta, (busy || !code.trim()) && { opacity: 0.4 }]}>
         <Text style={styles.ctaText}>CONTINUE</Text>

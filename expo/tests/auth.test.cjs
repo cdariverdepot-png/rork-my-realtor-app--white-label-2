@@ -329,15 +329,19 @@ test('portal entry gateway shows SocialSignIn with Or continue with', () => {
   const entryBlock = src.slice(entryIdx, src.indexOf('function CodeForm'));
   assert.match(entryBlock, /Or continue with/);
   assert.match(entryBlock, /<SocialSignIn \/>/);
+  assert.match(entryBlock, /AccessCodeContinue/);
+  assert.doesNotMatch(entryBlock, /Demo code:/);
 });
 test('welcome landing shows SocialSignIn under Realtor Login', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/index.tsx'), 'utf8');
   assert.match(src, /import SocialSignIn from ["']@\/components\/SocialSignIn["']/);
+  assert.match(src, /import AccessCodeContinue from ["']@\/components\/AccessCodeContinue["']/);
   const realtorIdx = src.indexOf('Realtor Login');
   const socialIdx = src.indexOf('<SocialSignIn />');
-  const clientIdx = src.indexOf('Client Login');
-  assert.ok(realtorIdx > 0 && socialIdx > realtorIdx && socialIdx < clientIdx);
+  const accessIdx = src.indexOf('<AccessCodeContinue');
+  assert.ok(realtorIdx > 0 && socialIdx > realtorIdx && accessIdx > socialIdx);
   assert.match(src, /Or continue with/);
+  assert.doesNotMatch(src, /Demo code:/);
 });
 test('deep links other than invite codes are passed through, not sent home', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/+native-intent.tsx'), 'utf8');
@@ -491,27 +495,34 @@ test('guest access code defaults to DEMO and matches case-insensitively', () => 
   assert.equal(access.isGuestAccessCode(' DEMO '), true);
   assert.equal(access.isGuestAccessCode('NVNF6E'), false);
 });
-test('portal guest path uses enterGuestClient and shows demo hint', () => {
+test('portal guest path uses enterGuestClient without revealing the code', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
   assert.match(src, /isGuestAccessCode/);
   assert.match(src, /enterGuestClient/);
-  assert.match(src, /Demo code:/);
-  assert.match(src, /GUEST_ACCESS_CODE/);
+  assert.match(src, /prepareNewClientTour/);
+  assert.match(src, /AccessCodeContinue/);
+  assert.doesNotMatch(src, /Demo code:/);
+  assert.doesNotMatch(src, /GUEST_ACCESS_CODE/);
 });
 
-test('portal realtor login surfaces GuestAccessCard with DEMO hint', () => {
+test('portal realtor login surfaces AccessCodeContinue with Google/Microsoft', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
-  assert.match(src, /function GuestAccessCard/);
-  assert.match(src, /HAVE A CLIENT CODE\?/);
-  assert.match(src, /stage\.startsWith\(["']realtor["']\)[\s\S]*GuestAccessCard/);
-  assert.match(src, /Demo code:/);
+  assert.match(src, /AccessCodeContinue/);
+  const socialIdx = src.indexOf('<SocialSignIn />');
+  const accessIdx = src.indexOf('<AccessCodeContinue');
+  const emailIdx = src.indexOf('<EmailCodeSignIn');
+  assert.ok(socialIdx > 0 && accessIdx > socialIdx && emailIdx > accessIdx);
+  assert.doesNotMatch(src, /Demo code:/);
+  assert.doesNotMatch(src, /function GuestAccessCard/);
 });
-test('welcome landing shows access-code field and DEMO hint', () => {
+test('welcome landing shows AccessCodeContinue without DEMO hint', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/index.tsx'), 'utf8');
-  assert.match(src, /HAVE AN ACCESS CODE\?/);
-  assert.match(src, /Demo code:/);
+  assert.match(src, /AccessCodeContinue/);
   assert.match(src, /enterGuestClient/);
   assert.match(src, /isGuestAccessCode/);
+  assert.match(src, /prepareNewClientTour/);
+  assert.doesNotMatch(src, /Demo code:/);
+  assert.doesNotMatch(src, /HAVE AN ACCESS CODE\?/);
 });
 test('AuthContext exposes enterGuestClient that clears prior session', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
@@ -519,4 +530,6 @@ test('AuthContext exposes enterGuestClient that clears prior session', () => {
   assert.match(src, /signInAnonymously/);
   assert.match(src, /guest\+\$\{uuid\}@guest\.myrealtor\.app/);
   assert.match(src, /DEMO_REALTOR_ID/);
+  assert.match(src, /clientTourSeen: false/);
+  assert.match(src, /const name = "";/);
 });

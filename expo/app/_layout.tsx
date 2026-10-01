@@ -1,5 +1,5 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { Stack, usePathname } from "expo-router";
+import { Stack, usePathname, useRouter } from "expo-router";
 import { navIntent } from "@/lib/navIntent";
 import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
@@ -134,6 +134,7 @@ function RootLayoutNav() {
 
 function RootLayoutInner() {
   const pathname = usePathname();
+  const router = useRouter();
   const {
     hydrated: onboardingHydrated,
     realtorTourSeen,
@@ -159,8 +160,9 @@ function RootLayoutInner() {
    *
    *   boot logo  ->  lock screen  ->  sign in  ->  your five steps
    *
-   * Nobody sees a pitch written for the other side of the app, and a client
-   * who was handed a code never sits through the realtor sales tour.
+   * For new clients (email signup, realtor code, or guest access code) the
+   * order is walkthrough first, then profile build — never skip straight into
+   * a pre-filled profile mid-flow.
    *
    * Suppressed for the demo showcase and for admins previewing the client
    * side — neither is a real first run.
@@ -174,8 +176,9 @@ function RootLayoutInner() {
   const tourSeen = audience === "realtor" ? realtorTourSeen : clientTourSeen;
   // AUTH_BYPASS preview sessions still get the realtor walkthrough; classic
   // Explore Demo / view-as-client previews stay suppressed.
-  const suppressed = pathname === "/admin/ready" || (isPreviewAdmin && !authBypassEnabled) || demoViewMode || viewAsClient || !setupHydrated ||
-    (!isAdmin && (!myProfileShared || !myEssentialsMet));
+  // Client profile incompleteness must NOT suppress the tour — new clients
+  // see the 5-page walkthrough first, then land on profile build.
+  const suppressed = pathname === "/admin/ready" || (isPreviewAdmin && !authBypassEnabled) || demoViewMode || viewAsClient || !setupHydrated;
 
   const showOnboarding =
     authHydrated &&
@@ -186,7 +189,11 @@ function RootLayoutInner() {
 
   const handleOnboardingFinish = useCallback(() => {
     if (audience) markTourSeen(audience);
-  }, [audience, markTourSeen]);
+    // After the client walkthrough, incomplete profiles go to intake.
+    if (audience === "client" && (!myProfileShared || !myEssentialsMet)) {
+      router.replace("/client-profile");
+    }
+  }, [audience, markTourSeen, myProfileShared, myEssentialsMet, router]);
 
   return (
     <>

@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import { useClientProfiles } from "@/contexts/ClientProfileContext";
+import { useOnboarding } from "@/contexts/OnboardingContext";
 import { clientSetupState, realtorSetupState } from "@/lib/onboardingState";
 
 /**
@@ -25,6 +26,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
   const auth = useAuth();
   const brand = useBrand();
   const profile = useClientProfiles();
+  const { hydrated: onboardingHydrated, clientTourSeen } = useOnboarding();
   // "Returning from the demo" only once the demo has actually been shown — tapping
   // View Demo on the dashboard starts on an /admin path and must not end the demo.
   if (!auth.demoViewMode) demoShown = false;
@@ -34,7 +36,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
     if (returningFromDemo) void auth.exitDemoView();
   }, [returningFromDemo, auth.exitDemoView]);
 
-  const dataReady = auth.hydrated && (!auth.isAuthenticated || (brand.hydrated && profile.hydrated));
+  const dataReady = auth.hydrated && onboardingHydrated && (!auth.isAuthenticated || (brand.hydrated && profile.hydrated));
   // Show the spinner only until this screen has rendered once; afterwards a
   // data reload (e.g. right after sign-in) keeps the current page mounted.
   const shownOnce = useRef(false);
@@ -58,6 +60,8 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
       path !== "/admin/build") {
       redirectTo = "/admin/build";
     } else if (!publicRoute && auth.isClient &&
+      // Walkthrough first: do not force profile until the 5-page tour is done.
+      clientTourSeen &&
       clientSetupState(true, profile.myProfileShared, profile.myEssentialsMet) !== "experience-accessible" &&
       path !== "/client-profile") {
       redirectTo = "/client-profile";

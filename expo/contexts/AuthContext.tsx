@@ -683,7 +683,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
   /**
    * Guest / demo access code — skip email signup and mint a FRESH personal
    * (client) account every time. Clears any prior session first so re-entry
-   * never reuses the previous guest.
+   * never reuses the previous guest. Behaves like a new signup: walkthrough
+   * flags are cleared and profile fields stay blank until the client builds them.
    *
    * Prefers Supabase anonymous auth when enabled; otherwise signs up a unique
    * synthetic email. Either way a local client session is created under the
@@ -701,6 +702,17 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         try {
           await AsyncStorage.removeItem("onboarding.pendingInvite.v1");
         } catch {}
+        // Force a fresh 5-page client walkthrough even if a prior guest on this
+        // device already marked clientTourSeen. In-memory state is reset by the
+        // caller via prepareNewClientTour(); this keeps storage in sync.
+        try {
+          const raw = await AsyncStorage.getItem("vance.onboarding.v3");
+          const parsed = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+          await AsyncStorage.setItem(
+            "vance.onboarding.v3",
+            JSON.stringify({ ...parsed, clientTourSeen: false })
+          );
+        } catch {}
 
         if (supabase) {
           try {
@@ -714,7 +726,9 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
         const uuid = `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
         const email = `guest+${uuid}@guest.myrealtor.app`;
-        const name = `Guest ${hex.slice(0, 6).toUpperCase()}`;
+        // Blank display name so profile build ("How should we reach you?") is not
+        // pre-filled as if the guest already onboarded. Identity stays unique via email/id.
+        const name = "";
         const clientId = `guest_${uuid}`;
         const pwBytes = getRandomBytes(24);
         const password = Array.from(pwBytes, (b) => b.toString(16).padStart(2, "0")).join("");

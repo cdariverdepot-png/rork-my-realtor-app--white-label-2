@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft, Lock } from "lucide-react-native";
+import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from "lucide-react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
@@ -45,9 +45,11 @@ import SupportSection from "@/components/SupportSection";
 import Reveal from "@/components/Reveal";
 import SetupGate from "@/components/SetupGate";
 import SocialSignIn from "@/components/SocialSignIn";
+import AccessCodeContinue from "@/components/AccessCodeContinue";
 import PressableScale from "@/components/PressableScale";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GUEST_ACCESS_CODE, isGuestAccessCode } from "@/constants/access";
+import { isGuestAccessCode } from "@/constants/access";
+import { useOnboarding } from "@/contexts/OnboardingContext";
 import {
   visibleSections,
   requiredStatus,
@@ -63,6 +65,7 @@ export default function Home() {
   const { hydrated, isAuthenticated, isAdmin, isClient, previewAdmin, enterAuthBypass, authBypassEnabled, viewAsClient, demoViewMode, enterDemoView } = useAuth();
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
+  const { hydrated: onboardingHydrated, clientTourSeen } = useOnboarding();
 
   // Temporary AUTH_BYPASS: never show the Welcome gateway; enter admin preview
   // and hard-redirect to /admin/. Do NOT gate the replace on effect cleanup —
@@ -96,10 +99,11 @@ export default function Home() {
   // the required client profile has been saved. The profile context is scoped
   // to the authenticated realtor/client pair and preserves partial answers.
   useFocusEffect(useCallback(() => {
-    if (hydrated && profilesHydrated && isClient && !demoViewMode && !myProfileShared) {
+    // Profile build comes after the 5-page walkthrough for new clients.
+    if (hydrated && onboardingHydrated && profilesHydrated && isClient && !demoViewMode && clientTourSeen && !myProfileShared) {
       router.replace("/client-profile");
     }
-  }, [hydrated, profilesHydrated, isClient, demoViewMode, myProfileShared, router]));
+  }, [hydrated, onboardingHydrated, profilesHydrated, isClient, demoViewMode, clientTourSeen, myProfileShared, router]));
 
   // Preview admin bypass — show pure Eliza Vance demo client experience
   const handleExploreDemo = useCallback(async () => {
@@ -134,6 +138,7 @@ export default function Home() {
 function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise<void>; insets: { top: number; bottom: number } }) {
   const router = useRouter();
   const { enterGuestClient, lookupRealtorByCode } = useAuth();
+  const { prepareNewClientTour } = useOnboarding();
   const entrance = useRef(new Animated.Value(0)).current;
   const [accessCode, setAccessCode] = useState<string>("");
   const [codeBusy, setCodeBusy] = useState<boolean>(false);
@@ -159,6 +164,7 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
           setCodeError(res.error ?? "Couldn't start a guest session. Please try again.");
           return;
         }
+        prepareNewClientTour();
         if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         router.replace("/");
         return;
@@ -233,45 +239,13 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
 
             <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", letterSpacing: 1.2, marginTop: 4 }}>Or continue with</Text>
             <SocialSignIn />
-
-            {/* Prominent access-code entry — DEMO is entered here, no hunting */}
-            <View style={styles.accessSection}>
-              <Text style={styles.accessEyebrow}>HAVE AN ACCESS CODE?</Text>
-              <Text style={styles.accessTitle}>Client Login</Text>
-              <Text style={styles.accessSub}>Enter the code your realtor shared — or try the demo.</Text>
-              <View style={styles.accessInputWrap}>
-                <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
-                <TextInput
-                  value={accessCode}
-                  onChangeText={(v) => { setAccessCode(v.toUpperCase()); setCodeError(null); }}
-                  placeholder="ENTER ACCESS CODE"
-                  placeholderTextColor="rgba(244,239,230,0.28)"
-                  autoCapitalize="characters"
-                  autoCorrect={false}
-                  autoComplete="off"
-                  returnKeyType="go"
-                  onSubmitEditing={submitAccessCode}
-                  style={styles.accessInput}
-                  maxLength={12}
-                  accessibilityLabel="Client access code"
-                />
-              </View>
-              {GUEST_ACCESS_CODE ? (
-                <Text style={styles.accessHint}>Demo code: {GUEST_ACCESS_CODE}</Text>
-              ) : null}
-              {codeError ? <Text style={styles.accessError}>{codeError}</Text> : null}
-              <PressableScale
-                onPress={submitAccessCode}
-                disabled={codeBusy || !accessCode.trim()}
-                haptic="medium"
-                scaleTo={0.97}
-                hitSlop={12}
-                style={[styles.accessCta, (codeBusy || !accessCode.trim()) && { opacity: 0.45 }]}
-              >
-                <Text style={styles.accessCtaText}>{codeBusy ? "WORKING…" : "CONTINUE"}</Text>
-                <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
-              </PressableScale>
-            </View>
+            <AccessCodeContinue
+              code={accessCode}
+              onChangeCode={(v) => { setAccessCode(v); setCodeError(null); }}
+              onSubmit={() => { void submitAccessCode(); }}
+              busy={codeBusy}
+              error={codeError}
+            />
           </View>
 
           <PressableScale
