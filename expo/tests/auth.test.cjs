@@ -488,21 +488,36 @@ test('login and logout land on welcome /, not sticky portal client code', () => 
   assert.match(fs.readFileSync(path.join(__dirname, '..', 'app/login.tsx'), 'utf8'), /router\.replace\(["']\/["']\)/);
 });
 
-test('guest access code defaults to DEMO and matches case-insensitively', () => {
+test('guest role codes: REALTOR admin, CLIENT/DEMO client; never collide with invite codes', () => {
   const access = load('constants/access', null);
+  assert.equal(access.REALTOR_ACCESS_CODE, 'REALTOR');
+  assert.equal(access.CLIENT_ACCESS_CODE, 'CLIENT');
   assert.equal(access.GUEST_ACCESS_CODE, 'DEMO');
-  assert.equal(access.isGuestAccessCode('demo'), true);
+  assert.equal(access.isRealtorAccessCode('realtor'), true);
+  assert.equal(access.isRealtorAccessCode(' REALTOR '), true);
+  assert.equal(access.isRealtorAccessCode('CLIENT'), false);
+  assert.equal(access.isClientAccessCode('client'), true);
+  assert.equal(access.isClientAccessCode('DEMO'), true);
+  assert.equal(access.isClientAccessCode('demo'), true);
   assert.equal(access.isGuestAccessCode(' DEMO '), true);
-  assert.equal(access.isGuestAccessCode('NVNF6E'), false);
+  assert.equal(access.isClientAccessCode('REALTOR'), false);
+  assert.equal(access.isClientAccessCode('NVNF6E'), false);
+  assert.equal(access.isRealtorAccessCode('NVNF6E'), false);
 });
-test('portal guest path uses enterGuestClient without revealing the code', () => {
+test('portal guest path uses dual role mint without revealing the codes', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
-  assert.match(src, /isGuestAccessCode/);
+  assert.match(src, /isRealtorAccessCode/);
+  assert.match(src, /isClientAccessCode/);
+  assert.match(src, /enterGuestRealtor/);
   assert.match(src, /enterGuestClient/);
+  assert.match(src, /prepareNewRealtorTour/);
   assert.match(src, /prepareNewClientTour/);
   assert.match(src, /AccessCodeContinue/);
   assert.doesNotMatch(src, /Demo code:/);
   assert.doesNotMatch(src, /GUEST_ACCESS_CODE/);
+  assert.doesNotMatch(src, /REALTOR_ACCESS_CODE/);
+  assert.doesNotMatch(src, /["']REALTOR["']/);
+  assert.doesNotMatch(src, /["']CLIENT["']/);
 });
 
 test('portal realtor login surfaces AccessCodeContinue with Google/Microsoft', () => {
@@ -518,11 +533,16 @@ test('portal realtor login surfaces AccessCodeContinue with Google/Microsoft', (
 test('welcome landing shows AccessCodeContinue without DEMO hint', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/index.tsx'), 'utf8');
   assert.match(src, /AccessCodeContinue/);
+  assert.match(src, /enterGuestRealtor/);
   assert.match(src, /enterGuestClient/);
-  assert.match(src, /isGuestAccessCode/);
+  assert.match(src, /isRealtorAccessCode/);
+  assert.match(src, /isClientAccessCode/);
+  assert.match(src, /prepareNewRealtorTour/);
   assert.match(src, /prepareNewClientTour/);
   assert.doesNotMatch(src, /Demo code:/);
   assert.doesNotMatch(src, /HAVE AN ACCESS CODE\?/);
+  assert.doesNotMatch(src, /["']REALTOR["']/);
+  assert.doesNotMatch(src, /["']CLIENT["']/);
 });
 test('AuthContext exposes enterGuestClient that clears prior session', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
@@ -532,6 +552,21 @@ test('AuthContext exposes enterGuestClient that clears prior session', () => {
   assert.match(src, /DEMO_REALTOR_ID/);
   assert.match(src, /clientTourSeen: false/);
   assert.match(src, /const name = "";/);
+});
+test('AuthContext exposes enterGuestRealtor that mints admin without DEMO_REALTOR_ID', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
+  assert.match(src, /enterGuestRealtor/);
+  assert.match(src, /realtorTourSeen: false/);
+  assert.match(src, /role: "admin"/);
+  assert.match(src, /client_code_enabled: false/);
+  assert.match(src, /guest\+realtor\+\$\{uuid\}@guest\.myrealtor\.app/);
+  // Must not pin guest realtor onto the Eliza showcase id.
+  const start = src.indexOf('const enterGuestRealtor = useCallback');
+  assert.ok(start >= 0, 'enterGuestRealtor callback body');
+  const end = src.indexOf('const logout = useCallback', start);
+  const fn = src.slice(start, end > start ? end : start + 2500);
+  assert.doesNotMatch(fn, /DEMO_REALTOR_ID/);
+  assert.match(fn, /role: "admin"/);
 });
 
 test('walkthrough Next advances from page 0 via scrollToOffset + live width', () => {
@@ -569,6 +604,20 @@ test('client tour finish gates home flash until /client-profile', () => {
   // markTourSeen("client") happens in the pathname effect, not before replace.
   assert.match(src, /if \(pathname !== "\/client-profile"\) return;/);
   assert.match(src, /markTourSeen\("client"\)/);
+});
+
+test('realtor tour finish gates until /admin/build for incomplete setup', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/_layout.tsx'), 'utf8');
+  assert.match(src, /pendingRealtorBuildAfterTour/);
+  assert.match(src, /router\.replace\("\/admin\/build"\)/);
+  const finish = src.match(/const handleOnboardingFinish = useCallback\(\(\) => \{[\s\S]*?\}, \[/);
+  assert.ok(finish);
+  assert.match(finish[0], /audience === "realtor"/);
+  assert.match(finish[0], /router\.replace\("\/admin\/build"\)/);
+  assert.match(src, /if \(pathname !== "\/admin\/build"\) return;/);
+  assert.match(src, /markTourSeen\("realtor"\)/);
+  const guard = fs.readFileSync(path.join(__dirname, '..', 'components/OnboardingGuard.tsx'), 'utf8');
+  assert.match(guard, /realtorTourSeen &&/);
 });
 
 test('client profile intake never shows Eliza/Vance demo chrome for DEMO realtor', () => {

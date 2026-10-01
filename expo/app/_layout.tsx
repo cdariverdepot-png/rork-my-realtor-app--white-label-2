@@ -87,6 +87,7 @@ import { queryClient, queryPersister } from "@/lib/queryPersist";
 import BootScreen from "@/components/BootScreen";
 import OnboardingGuard from "@/components/OnboardingGuard";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
+import { realtorSetupState } from "@/lib/onboardingState";
 import { useOnboarding, type Audience } from "@/contexts/OnboardingContext";
 
 SplashScreen.preventAutoHideAsync();
@@ -149,6 +150,7 @@ function RootLayoutInner() {
     authBypassEnabled,
     demoViewMode,
     viewAsClient,
+    realtorRecord,
   } = useAuth();
   const { savedBrand, hydrated: setupHydrated } = useBrand();
   const { myProfileShared, myEssentialsMet } = useClientProfiles();
@@ -157,6 +159,7 @@ function RootLayoutInner() {
   // prevents a one-frame Eliza Vance home flash when the carousel unmounts.
   const [profileGateCover, setProfileGateCover] = useState(false);
   const pendingClientProfileAfterTour = useRef(false);
+  const pendingRealtorBuildAfterTour = useRef(false);
 
   /**
    * The walkthrough is audience-specific, so it can only run once we know who
@@ -201,8 +204,19 @@ function RootLayoutInner() {
       router.replace("/client-profile");
       return;
     }
+    // Guest/new realtors with incomplete setup: same gate pattern → /admin/build.
+    if (
+      audience === "realtor" &&
+      realtorRecord?.client_code_enabled !== true &&
+      realtorSetupState(savedBrand, realtorRecord?.client_code_enabled === true) === "setup-incomplete"
+    ) {
+      pendingRealtorBuildAfterTour.current = true;
+      setProfileGateCover(true);
+      router.replace("/admin/build");
+      return;
+    }
     if (audience) markTourSeen(audience);
-  }, [audience, markTourSeen, myProfileShared, myEssentialsMet, router]);
+  }, [audience, markTourSeen, myProfileShared, myEssentialsMet, realtorRecord, savedBrand, router]);
 
   useEffect(() => {
     if (!pendingClientProfileAfterTour.current) return;
@@ -210,6 +224,14 @@ function RootLayoutInner() {
     pendingClientProfileAfterTour.current = false;
     markTourSeen("client");
     // Drop the gate on the next frame so /client-profile paints under it first.
+    requestAnimationFrame(() => setProfileGateCover(false));
+  }, [pathname, markTourSeen]);
+
+  useEffect(() => {
+    if (!pendingRealtorBuildAfterTour.current) return;
+    if (pathname !== "/admin/build") return;
+    pendingRealtorBuildAfterTour.current = false;
+    markTourSeen("realtor");
     requestAnimationFrame(() => setProfileGateCover(false));
   }, [pathname, markTourSeen]);
 

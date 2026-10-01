@@ -104,6 +104,19 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
     });
   }, [persist]);
 
+  /**
+   * Fresh realtor guest sessions (REALTOR access code) must re-run the 5-page
+   * walkthrough even if a prior realtor on this device already finished it.
+   */
+  const prepareNewRealtorTour = useCallback(() => {
+    setState((prev) => {
+      if (!prev.realtorTourSeen) return prev;
+      const next: OnboardingState = { ...prev, realtorTourSeen: false };
+      void persist(next);
+      return next;
+    });
+  }, [persist]);
+
   const reopen = useCallback(() => patch("tourSeen", false), [patch]);
 
   const reset = useCallback(() => {
@@ -121,6 +134,7 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
       markTourSeen,
       replayTour,
       prepareNewClientTour,
+      prepareNewRealtorTour,
       reopen,
       reset,
     }),
@@ -133,6 +147,7 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
       markTourSeen,
       replayTour,
       prepareNewClientTour,
+      prepareNewRealtorTour,
       reopen,
       reset,
     ]

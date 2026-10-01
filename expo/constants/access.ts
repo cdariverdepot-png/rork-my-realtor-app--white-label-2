@@ -1,19 +1,31 @@
 /**
- * Client access codes for My Realtor App — multi-tenant white-label.
+ * Access codes for My Realtor App — multi-tenant white-label.
  *
  * Each realtor gets a deterministic 6-character client code derived from
  * their email. Clients enter this code to access that realtor's tailored
  * version of the app. The code is stored in the Supabase `realtors` table
  * and cached locally for offline use.
  *
- * There is no longer a universal "realtor access code" — realtors sign up
- * and sign in with email + password directly through the portal.
+ * Guest role codes (never shown in the UI) mint a fresh local session:
+ * - REALTOR → admin walkthrough → realtor profile/build (/admin/build)
+ * - CLIENT / DEMO → client walkthrough → client profile build
+ * Realtors still sign up / sign in with email through the portal.
  */
 
 export const CLIENT_CODE_LENGTH = 6;
 
 /** Alphabet used for all client codes — excludes ambiguous chars (0/O/1/I). */
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+function envCode(key: string, fallback: string): string {
+  const raw =
+    (typeof process !== "undefined" && process.env?.[key]) || fallback;
+  return String(raw).trim().toUpperCase() || fallback;
+}
+
+function cleanCode(code: string): string {
+  return (code ?? "").replace(/\s+/g, "").toUpperCase();
+}
 
 /** Visual format helper. */
 export function formatCode(code: string): string {
@@ -59,22 +71,54 @@ export function generateClientCode(): string {
 }
 
 /**
- * Guest/demo client access code (EXPO_PUBLIC_GUEST_ACCESS_CODE).
- * Entering this via "Continue with access code" skips email signup and creates
- * a fresh personal (client) account every time — not a reused user.
- * Never display this value in the UI; it stays secret while still working when typed.
- * Falls back to "DEMO" when the env var is unset so production deploys that
- * rewrite .env.production still keep the feature.
+ * Guest realtor access code (EXPO_PUBLIC_REALTOR_ACCESS_CODE).
+ * Mints a fresh admin session → same 5-page walkthrough → /admin/build.
+ * Never display this value in the UI.
  */
-export const GUEST_ACCESS_CODE = (
-  (typeof process !== "undefined" && process.env?.EXPO_PUBLIC_GUEST_ACCESS_CODE) ||
-  "DEMO"
-)
-  .trim()
-  .toUpperCase() || "DEMO";
+export const REALTOR_ACCESS_CODE = envCode(
+  "EXPO_PUBLIC_REALTOR_ACCESS_CODE",
+  "REALTOR"
+);
 
-/** True when `code` matches the configured guest/demo access code. */
+/**
+ * Primary guest client access code (EXPO_PUBLIC_CLIENT_ACCESS_CODE).
+ * Mints a fresh client session → walkthrough → client profile build.
+ * Never display this value in the UI.
+ */
+export const CLIENT_ACCESS_CODE = envCode(
+  "EXPO_PUBLIC_CLIENT_ACCESS_CODE",
+  "CLIENT"
+);
+
+/**
+ * Legacy guest/demo client access code (EXPO_PUBLIC_GUEST_ACCESS_CODE).
+ * Kept as an alias of CLIENT so existing DEMO entries still work.
+ * Never display this value in the UI.
+ */
+export const GUEST_ACCESS_CODE = envCode(
+  "EXPO_PUBLIC_GUEST_ACCESS_CODE",
+  "DEMO"
+);
+
+/** True when `code` mints a guest realtor (admin) session. */
+export function isRealtorAccessCode(code: string): boolean {
+  const clean = cleanCode(code);
+  return !!REALTOR_ACCESS_CODE && clean === REALTOR_ACCESS_CODE;
+}
+
+/**
+ * True when `code` mints a guest client session (CLIENT or legacy DEMO).
+ * Prefer isClientAccessCode; isGuestAccessCode remains as a synonym.
+ */
+export function isClientAccessCode(code: string): boolean {
+  const clean = cleanCode(code);
+  if (!clean) return false;
+  if (CLIENT_ACCESS_CODE && clean === CLIENT_ACCESS_CODE) return true;
+  if (GUEST_ACCESS_CODE && clean === GUEST_ACCESS_CODE) return true;
+  return false;
+}
+
+/** @deprecated Prefer isClientAccessCode — same guest-client matching. */
 export function isGuestAccessCode(code: string): boolean {
-  const clean = (code ?? "").replace(/\s+/g, "").toUpperCase();
-  return !!GUEST_ACCESS_CODE && clean === GUEST_ACCESS_CODE;
+  return isClientAccessCode(code);
 }

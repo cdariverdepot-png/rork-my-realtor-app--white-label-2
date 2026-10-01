@@ -26,7 +26,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
   const auth = useAuth();
   const brand = useBrand();
   const profile = useClientProfiles();
-  const { hydrated: onboardingHydrated, clientTourSeen } = useOnboarding();
+  const { hydrated: onboardingHydrated, clientTourSeen, realtorTourSeen } = useOnboarding();
   // "Returning from the demo" only once the demo has actually been shown — tapping
   // View Demo on the dashboard starts on an /admin path and must not end the demo.
   if (!auth.demoViewMode) demoShown = false;
@@ -52,6 +52,8 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
       // Demo feature links must never open authenticated forms or tools.
       else if (path !== "/") redirectTo = "/";
     } else if (!publicRoute && auth.isAdmin &&
+      // Walkthrough first (same as clients): do not force build until the tour ends.
+      realtorTourSeen &&
       realtorSetupState(brand.savedBrand, auth.realtorRecord?.client_code_enabled === true) === "setup-incomplete" &&
       // Only before setup has ever been finished. Afterwards a gap saved from Edit
       // Content is fixed there (Studio says what's still needed) — it must not

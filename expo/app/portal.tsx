@@ -25,7 +25,7 @@ import EmailCodeSignIn from "@/components/EmailCodeSignIn";
 import SocialSignIn from "@/components/SocialSignIn";
 import AccessCodeContinue from "@/components/AccessCodeContinue";
 import PressableScale from "@/components/PressableScale";
-import { isGuestAccessCode } from "@/constants/access";
+import { isClientAccessCode, isRealtorAccessCode } from "@/constants/access";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 
 type Stage =
@@ -56,9 +56,10 @@ export default function Portal() {
     clientSignup,
     clientLogin,
     enterGuestClient,
+    enterGuestRealtor,
     lookupRealtorByCode,
   } = useAuth();
-  const { prepareNewClientTour } = useOnboarding();
+  const { prepareNewClientTour, prepareNewRealtorTour } = useOnboarding();
 
   const { entry: entryRaw, invite, confirmed: confirmedParam } = useLocalSearchParams<{ entry?: string | string[]; invite?: string; confirmed?: string }>();
   // Expo Router may hand back string[]; only an explicit single "client" opens the code stage.
@@ -165,13 +166,27 @@ export default function Portal() {
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
   };
 
-  // Submit code — guest demo mint, or look up the realtor
+  // Submit code — guest realtor/client mint, or look up a real realtor invite
   const submitCode = async () => {
     if (busy) return;
     setBusy(true);
     setError(null);
     try {
-      if (isGuestAccessCode(code)) {
+      if (isRealtorAccessCode(code)) {
+        if (Platform.OS !== "web") Haptics.selectionAsync();
+        const res = await enterGuestRealtor();
+        if (!res.ok) {
+          setError(res.error ?? "Couldn't start a guest realtor session. Please try again.");
+          triggerShake();
+          return;
+        }
+        prepareNewRealtorTour();
+        if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        // Admin home → walkthrough overlay → finish routes to /admin/build.
+        router.replace("/admin/");
+        return;
+      }
+      if (isClientAccessCode(code)) {
         if (Platform.OS !== "web") Haptics.selectionAsync();
         const res = await enterGuestClient();
         if (!res.ok) {

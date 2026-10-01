@@ -48,7 +48,7 @@ import SocialSignIn from "@/components/SocialSignIn";
 import AccessCodeContinue from "@/components/AccessCodeContinue";
 import PressableScale from "@/components/PressableScale";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { isGuestAccessCode } from "@/constants/access";
+import { isClientAccessCode, isRealtorAccessCode } from "@/constants/access";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import {
   visibleSections,
@@ -128,8 +128,8 @@ export default function Home() {
 
 function LandingScreen({ insets }: { insets: { top: number; bottom: number } }) {
   const router = useRouter();
-  const { enterGuestClient, lookupRealtorByCode } = useAuth();
-  const { prepareNewClientTour } = useOnboarding();
+  const { enterGuestClient, enterGuestRealtor, lookupRealtorByCode } = useAuth();
+  const { prepareNewClientTour, prepareNewRealtorTour } = useOnboarding();
   const entrance = useRef(new Animated.Value(0)).current;
   const [accessCode, setAccessCode] = useState<string>("");
   const [codeBusy, setCodeBusy] = useState<boolean>(false);
@@ -148,7 +148,19 @@ function LandingScreen({ insets }: { insets: { top: number; bottom: number } }) 
     setCodeBusy(true);
     setCodeError(null);
     try {
-      if (isGuestAccessCode(trimmed)) {
+      if (isRealtorAccessCode(trimmed)) {
+        if (Platform.OS !== "web") Haptics.selectionAsync();
+        const res = await enterGuestRealtor();
+        if (!res.ok) {
+          setCodeError(res.error ?? "Couldn't start a guest realtor session. Please try again.");
+          return;
+        }
+        prepareNewRealtorTour();
+        if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        router.replace("/admin/");
+        return;
+      }
+      if (isClientAccessCode(trimmed)) {
         if (Platform.OS !== "web") Haptics.selectionAsync();
         const res = await enterGuestClient();
         if (!res.ok) {

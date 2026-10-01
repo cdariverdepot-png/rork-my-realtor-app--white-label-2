@@ -4,8 +4,8 @@
  * and before export.
  *
  * - AUTH_BYPASS defaults OFF so real login/verification/password-reset work.
- * - GUEST_ACCESS_CODE defaults to DEMO so the client portal guest entry works
- *   even when the workflow wiped other env lines.
+ * - Guest role codes: REALTOR (admin build), CLIENT + DEMO (client profile).
+ *   Never shown in UI; kept in .env.production after deploy-web rewrites.
  */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -15,6 +15,8 @@ const envPath = path.join(__dirname, "..", ".env.production");
 /** @type {Record<string, string>} */
 const ENSURE = {
   EXPO_PUBLIC_AUTH_BYPASS: "false",
+  EXPO_PUBLIC_REALTOR_ACCESS_CODE: "REALTOR",
+  EXPO_PUBLIC_CLIENT_ACCESS_CODE: "CLIENT",
   EXPO_PUBLIC_GUEST_ACCESS_CODE: "DEMO",
 };
 

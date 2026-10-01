@@ -833,6 +833,88 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     [persistRealtorCache, persistSession]
   );
 
+
+  /**
+   * Guest REALTOR access code — mint a FRESH admin session every time (unique
+   * realtor id, blank identity). Clears prior session + realtorTourSeen so the
+   * same 5-page walkthrough runs, then OnboardingGuard / finish route to
+   * /admin/build (not the client profile). Never uses DEMO_REALTOR_ID so the
+   * neutral brand seed stays incomplete and writable.
+   */
+  const enterGuestRealtor = useCallback(
+    async (): Promise<{ ok: boolean; error?: string; realtorId?: string }> => {
+      try {
+        setViewAsClient(false);
+        setDemoViewMode(false);
+        setSession(null);
+        await persistSession(null);
+        try {
+          await AsyncStorage.removeItem("onboarding.pendingInvite.v1");
+        } catch {}
+        // Force a fresh realtor walkthrough; caller also calls prepareNewRealtorTour().
+        try {
+          const raw = await AsyncStorage.getItem("vance.onboarding.v3");
+          const parsed = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+          await AsyncStorage.setItem(
+            "vance.onboarding.v3",
+            JSON.stringify({ ...parsed, realtorTourSeen: false })
+          );
+        } catch {}
+
+        if (supabase) {
+          try {
+            await supabase.auth.signOut({ scope: "local" });
+          } catch (e) {
+            console.log("[auth] guest realtor clear session", e);
+          }
+        }
+
+        const bytes = getRandomBytes(16);
+        const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+        const uuid = `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+        const realtorId = uuid;
+        const email = `guest+realtor+${uuid}@guest.myrealtor.app`;
+        // Blank name so /admin/build ("Let's create your app") is incomplete.
+        const name = "";
+        const now = new Date().toISOString();
+        const record: RealtorRecord = {
+          id: realtorId,
+          email,
+          name,
+          brand_name: "",
+          monogram: "",
+          client_code: deriveClientCode(email),
+          client_code_enabled: false,
+          created_at: now,
+          updated_at: now,
+        };
+        setRealtorCache((prev) => {
+          const next = [record, ...prev.filter((r) => r.id !== realtorId)];
+          void persistRealtorCache(next);
+          return next;
+        });
+
+        const next: Session = {
+          email,
+          role: "admin",
+          realtorId,
+          name,
+          iat: Date.now(),
+        };
+        setSession(next);
+        await persistSession(next);
+        return { ok: true, realtorId };
+      } catch (e) {
+        console.log("[auth] enterGuestRealtor", e);
+        return {
+          ok: false,
+          error: "Couldn't start a guest realtor session. Please try again.",
+        };
+      }
+    },
+    [persistRealtorCache, persistSession]
+  );
+
   const logout = useCallback(async () => {
     if (session?.role === "admin" && supabase) await supabase.auth.signOut();
     // Preview flags are per signed-in session; never carry them to the next person.
@@ -897,6 +979,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     clientSignup,
     clientLogin,
     enterGuestClient,
+    enterGuestRealtor,
     updateClientProfile,
     logout,
     lookupRealtorByCode,
@@ -906,7 +989,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     enterViewAsClient, exitViewAsClient, enterDemoView, exitDemoView,
     isAuthenticated, realtorIdVal, realtorRecord, currentClientId,
     login, realtorSignup, realtorLogin, completeRealtorSignIn, previewAdmin, enterAuthBypass, exitPreview,
-    clientSignup, clientLogin, enterGuestClient, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
+    clientSignup, clientLogin, enterGuestClient, enterGuestRealtor, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
   ]);
 });
 
