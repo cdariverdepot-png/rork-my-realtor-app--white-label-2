@@ -410,6 +410,8 @@ function EntryForm({ onRealtor, onClient, onExploreDemo, onSkipLogin, busy, erro
         </View>
         <ArrowRight size={16} color={brand.ivory} strokeWidth={1.8} />
       </Pressable>
+      <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", letterSpacing: 1.2, marginTop: 6 }}>Or continue with</Text>
+      <SocialSignIn />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Pressable onPress={onExploreDemo} disabled={busy} style={({ pressed }) => [styles.demoBtn, pressed && { opacity: 0.6 }]}>
         <Eye size={14} color="rgba(244,239,230,0.45)" strokeWidth={1.4} />

@@ -322,6 +322,23 @@ test('social buttons sit above the email-code fallback on the portal', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
   assert.ok(src.indexOf('<SocialSignIn />') < src.indexOf('<EmailCodeSignIn'));
 });
+test('portal entry gateway shows SocialSignIn with Or continue with', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  const entryIdx = src.indexOf('function EntryForm');
+  assert.ok(entryIdx > 0);
+  const entryBlock = src.slice(entryIdx, src.indexOf('function CodeForm'));
+  assert.match(entryBlock, /Or continue with/);
+  assert.match(entryBlock, /<SocialSignIn \/>/);
+});
+test('welcome landing shows SocialSignIn under Realtor Login', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/index.tsx'), 'utf8');
+  assert.match(src, /import SocialSignIn from ["']@\/components\/SocialSignIn["']/);
+  const realtorIdx = src.indexOf('Realtor Login');
+  const socialIdx = src.indexOf('<SocialSignIn />');
+  const clientIdx = src.indexOf('Client Login');
+  assert.ok(realtorIdx > 0 && socialIdx > realtorIdx && socialIdx < clientIdx);
+  assert.match(src, /Or continue with/);
+});
 test('deep links other than invite codes are passed through, not sent home', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/+native-intent.tsx'), 'utf8');
   const mod = { exports: {} };

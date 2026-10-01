@@ -44,6 +44,7 @@ import ConciergeSection from "@/components/ConciergeSection";
 import SupportSection from "@/components/SupportSection";
 import Reveal from "@/components/Reveal";
 import SetupGate from "@/components/SetupGate";
+import SocialSignIn from "@/components/SocialSignIn";
 import {
   visibleSections,
   requiredStatus,
@@ -183,6 +184,9 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
               </View>
               <ArrowRight size={16} color={brand.goldLight} strokeWidth={1.8} />
             </Pressable>
+
+            <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", letterSpacing: 1.2, marginTop: 4 }}>Or continue with</Text>
+            <SocialSignIn />
 
             <Pressable
               onPress={() => {
