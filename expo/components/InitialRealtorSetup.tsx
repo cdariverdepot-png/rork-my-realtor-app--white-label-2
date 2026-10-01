@@ -157,7 +157,9 @@ export default function InitialRealtorSetup() {
   const localImages = useRef<Record<string, string>>({});
 
   const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
-  const needsBuilderAuth = builderReady === false;
+  const isGuestAccess = !!auth.isGuestAccess;
+  // Never gate guest REALTOR access-code sessions; edge gate only for non-guest without cloud auth.
+  const needsBuilderAuth = !isGuestAccess && builderReady === false;
 
   // Moving to the next stage brings it into view — no hunting for new content.
   useEffect(() => {
@@ -196,12 +198,26 @@ export default function InitialRealtorSetup() {
     if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
   }, [brand]);
 
-  // Guest REALTOR (and any unverified session) must see email fields — never loadBuild
-  // first, which only threw an orphan red "confirm email" with nowhere to type.
+  // Product model: real users are signed in before /admin/build. Guest REALTOR
+  // access codes are test-only and use the local builder — never show email/account
+  // panels for those sessions. Gate only the edge case: realtor, not guest, no auth.
   useEffect(() => {
     let alive = true;
     void (async () => {
       try {
+        if (isGuestAccess) {
+          // Access-code guest realtor → local/preview builder, no account panel.
+          if (!alive) return;
+          setBuilderReady(true);
+          try { await loadSavedBuild(); }
+          catch (e) {
+            if (!alive) return;
+            const message = e instanceof Error ? e.message : "Could not load your app build.";
+            // Local path should not bounce guests into the email gate.
+            if (message !== BUILDER_AUTH_MESSAGE) setError({ place: "sources", message });
+          }
+          return;
+        }
         const ready = await hasVerifiedBuilderAuth();
         if (!alive) return;
         setBuilderReady(ready);
@@ -219,7 +235,7 @@ export default function InitialRealtorSetup() {
       }
     })();
     return () => { alive = false; };
-  }, [loadSavedBuild]);
+  }, [loadSavedBuild, isGuestAccess]);
 
   const leaveBuild = useCallback(async () => {
     // Incomplete setup is forced onto this screen — escape by signing out to the portal.
@@ -274,7 +290,7 @@ export default function InitialRealtorSetup() {
     catch (e) {
       const message = e instanceof Error ? e.message : "Please try again.";
       // Auth gate: show fields, never an orphan red prompt with nowhere to type.
-      if (message === BUILDER_AUTH_MESSAGE || message.includes("Sign in to save")) {
+      if (!isGuestAccess && (message === BUILDER_AUTH_MESSAGE || message.includes("Sign in to save"))) {
         setBuilderReady(false);
         setAuthMessage(BUILDER_AUTH_MESSAGE);
         setError(null);
@@ -346,7 +362,7 @@ export default function InitialRealtorSetup() {
     }
   });
   const analyze = () => {
-    if (builderReady === false) { focusAuthPanel(); return; }
+    if (!isGuestAccess && builderReady === false) { focusAuthPanel(); return; }
     void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
@@ -495,7 +511,7 @@ export default function InitialRealtorSetup() {
       <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>ACCOUNT REQUIRED</Text>
       <Text style={{ color: "white", fontSize: 18, fontWeight: "600", marginTop: 6 }}>Confirm your realtor email</Text>
       <Text style={{ color: "#C8D0D0", marginTop: 8, lineHeight: 22 }}>
-        Sign in or create your builder account to save your website import and build your app. Guest access codes bring you here for a tour — your email unlocks the builder.
+        Sign in or create your builder account to save your website import and build your app.
       </Text>
       {authMode === "signup" && authField("Your name", authName, setAuthName, { autoCap: "words" })}
       {authField("Realtor email", authEmail, setAuthEmail, { keyboard: "email-address", autoCap: "none" })}

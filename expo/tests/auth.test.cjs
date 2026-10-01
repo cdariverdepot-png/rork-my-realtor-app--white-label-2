@@ -607,22 +607,39 @@ test('client tour finish gates home flash until /client-profile', () => {
 });
 
 
-test('build onboarding shows email fields when builder auth gate is active', () => {
+test('build onboarding skips account gate for guest REALTOR; edge gate only otherwise', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'components/InitialRealtorSetup.tsx'), 'utf8');
   assert.match(src, /hasVerifiedBuilderAuth/);
   assert.match(src, /BUILDER_AUTH_MESSAGE/);
+  assert.match(src, /isGuestAccess/);
+  // Guest access-code sessions never show ACCOUNT REQUIRED / email panels.
+  assert.match(src, /!isGuestAccess && builderReady === false/);
+  assert.match(src, /needsBuilderAuth/);
+  assert.match(src, /builderAuthPanel/);
+  assert.match(src, /Let's Build My App!|Let’s Build My App!/);
+  // Edge-case panel still exists for non-guest realtor without cloud auth.
+  assert.match(src, /ACCOUNT REQUIRED/);
   assert.match(src, /Confirm your realtor email/);
   assert.match(src, /Realtor email/);
-  assert.match(src, /Create account & continue/);
-  assert.match(src, /Sign in & continue/);
-  assert.match(src, /EmailCodeSignIn/);
   assert.match(src, /leaveBuild/);
   assert.match(src, /accessibilityLabel="Back"/);
   assert.match(src, /accessibilityLabel="Close"/);
   // Must not surface the auth message as an orphan sources error without inputs.
   assert.match(src, /if \(error\.message === BUILDER_AUTH_MESSAGE\) return null/);
-  assert.match(src, /needsBuilderAuth/);
-  assert.match(src, /builderAuthPanel/);
+  // Guest must not be forced into the email gate from act/analyze failures.
+  assert.match(src, /!isGuestAccess && \(message === BUILDER_AUTH_MESSAGE/);
+});
+
+test('guest REALTOR session mints guestAccess and local builder flag', () => {
+  const authSrc = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
+  assert.match(authSrc, /guestAccess: true/);
+  assert.match(authSrc, /setGuestBuilderAccess/);
+  assert.match(authSrc, /isGuestAccessSession/);
+  assert.match(authSrc, /isGuestAccess:/);
+  const start = authSrc.indexOf('const enterGuestRealtor = useCallback');
+  assert.ok(start >= 0);
+  const body = authSrc.slice(start, start + 2500);
+  assert.match(body, /guestAccess: true/);
 });
 
 test('walkthrough carousel exposes Back navigation after the first slide', () => {

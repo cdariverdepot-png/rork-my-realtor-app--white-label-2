@@ -11,6 +11,7 @@ import { hashPassword, verifyPassword } from "@/lib/passwordHash";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { claimClientSeat } from "@/lib/seats";
 import { ensureRealtorAuthRecord, signInRealtorWithAuth, signUpRealtorWithAuth } from "@/lib/realtorAuth";
+import { setGuestBuilderAccess } from "@/lib/appBuilder/buildService";
 
 export type Role = "admin" | "client" | null;
 
@@ -27,6 +28,8 @@ type Session = {
   iat?: number;
   /** True for the footer "Dashboard" preview bypass. */
   preview?: boolean;
+  /** True for REALTOR/CLIENT access-code test sessions (local only, no cloud auth). */
+  guestAccess?: boolean;
 } | null;
 
 /** A registered client account. */
@@ -199,14 +202,23 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
             ? (await supabase.auth.getSession()).data.session?.user ?? null : null;
           const expired = !!(parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS);
           const dropPreview = isPreviewSession && !AUTH_BYPASS_ENABLED;
-          const adminAuthInvalid = parsed?.role === "admin" && !isPreviewSession && (
+          // Guest REALTOR access-code sessions are local-only (no Supabase user).
+          const isGuestAccessSession = !!(parsed as { guestAccess?: boolean } | null)?.guestAccess
+            || !!(parsed?.email && parsed.email.toLowerCase().endsWith("@guest.myrealtor.app"));
+          const adminAuthInvalid = parsed?.role === "admin" && !isPreviewSession && !isGuestAccessSession && (
             !authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||
             authUser.email?.toLowerCase() !== parsed.email.toLowerCase()
           );
           if (expired || dropPreview || adminAuthInvalid) {
             await secureDel(STORAGE_KEY);
+            await setGuestBuilderAccess(null);
           } else {
             setSession(parsed);
+            if (isGuestAccessSession && parsed?.role === "admin" && parsed.realtorId) {
+              await setGuestBuilderAccess(parsed.realtorId);
+            } else {
+              await setGuestBuilderAccess(null);
+            }
             // Keep bypass preview usable: seed realtorCache so OnboardingGuard
             // does not treat setup as forever incomplete.
             if (AUTH_BYPASS_ENABLED && isPreviewSession) {
@@ -271,6 +283,12 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     try {
       if (next) await secureSet(STORAGE_KEY, JSON.stringify(next));
       else await secureDel(STORAGE_KEY);
+      // Local builder path for REALTOR access-code guests (no verified Supabase user).
+      if (next?.guestAccess && next.role === "admin" && next.realtorId) {
+        await setGuestBuilderAccess(next.realtorId);
+      } else {
+        await setGuestBuilderAccess(null);
+      }
     } catch (e) {
       console.log("[auth] persist session error", e);
     }
@@ -817,6 +835,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           clientId,
           name,
           iat: Date.now(),
+          guestAccess: true,
         };
         setSession(next);
         await persistSession(next);
@@ -900,6 +919,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           realtorId,
           name,
           iat: Date.now(),
+          guestAccess: true,
         };
         setSession(next);
         await persistSession(next);
@@ -965,6 +985,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     exitDemoView,
     isAuthenticated,
     isPreviewAdmin: !!session?.preview,
+    isGuestAccess: !!session?.guestAccess || (!!session?.email && session.email.toLowerCase().endsWith("@guest.myrealtor.app")),
     authBypassEnabled: AUTH_BYPASS_ENABLED,
     realtorId: realtorIdVal,
     realtorRecord,

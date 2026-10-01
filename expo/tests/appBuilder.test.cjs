@@ -38,13 +38,20 @@ test('a single clearly-stated website fact is used without asking again', () => 
   assert.equal(facts[0].needsClarification, false);
 });
 
-test('builder auth gate exports a stable message and hasVerifiedBuilderAuth helper', () => {
+test('builder auth gate exports helpers and a local guest builder path', () => {
   const src = fs.readFileSync(path.resolve(__dirname, '../lib/appBuilder/buildService.ts'), 'utf8');
   assert.match(src, /export const BUILDER_AUTH_MESSAGE/);
   assert.match(src, /Confirm your realtor email and sign in to use the app builder/);
   assert.match(src, /export async function hasVerifiedBuilderAuth/);
+  assert.match(src, /export async function hasGuestBuilderAccess/);
+  assert.match(src, /export async function setGuestBuilderAccess/);
+  assert.match(src, /GUEST_BUILDER_ACCESS_KEY/);
   assert.match(src, /isGuestPlaceholderEmail/);
   assert.match(src, /@guest\.myrealtor\.app/);
-  // verifiedUser must throw the shared constant — UI keys off the same string.
+  // Guest REALTOR access codes use local AsyncStorage — not cloud verify.
+  assert.match(src, /kind === "local"/);
+  assert.match(src, /analyzeLocal/);
+  assert.match(src, /myrealtor\.builder\.local\.v1/);
+  // Edge case (non-guest, no auth) still throws the shared constant.
   assert.match(src, /throw new Error\(BUILDER_AUTH_MESSAGE\)/);
 });
