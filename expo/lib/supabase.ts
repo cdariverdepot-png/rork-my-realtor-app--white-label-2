@@ -132,6 +132,15 @@ export const supabase: SupabaseClient | null = (() => {
 
 export const isSupabaseLive = !!supabase;
 
+/** Recovery verifies email without replacing a realtor or guest app session. */
+export function createClientRecoverySession(): SupabaseClient {
+  return createClient(url, anon, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false,
+      flowType: "implicit", storageKey: "myrealtor.client-recovery" },
+    global: { fetch: safeFetch },
+  });
+}
+
 /**
  * Ensure the Supabase client has an authenticated session. If RLS policies
  * on `public.app_kv` (or Storage) are gated to the `authenticated` role,

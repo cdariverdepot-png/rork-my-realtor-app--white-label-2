@@ -8,6 +8,7 @@ import {
   readAuthCallbackType,
 } from "@/lib/authCallback";
 import { completeGoogleIdTokenCallback } from "@/lib/socialSignIn";
+import ClientRecovery from "@/app/client-recovery";
 
 function hashParams(): URLSearchParams {
   if (Platform.OS !== "web" || typeof window === "undefined") return new URLSearchParams();
@@ -21,6 +22,11 @@ function queryParams(): URLSearchParams {
 }
 
 export default function AuthCallback() {
+  const { client_recovery } = useLocalSearchParams<{ client_recovery?: string }>();
+  return client_recovery === "1" ? <ClientRecovery /> : <RealtorAuthCallback />;
+}
+
+function RealtorAuthCallback() {
   const { code, type: typeParam, token_hash: tokenHashParam } = useLocalSearchParams<{ code?: string; type?: string; token_hash?: string }>();
   const started = useRef(false);
   const router = useRouter();
@@ -38,7 +44,7 @@ export default function AuthCallback() {
       const google = await completeGoogleIdTokenCallback();
       if (google) {
         if (Platform.OS === "web") window.history.replaceState(null, "", window.location.pathname);
-        if (google.redirecting) {
+        if (google.ok && google.redirecting) {
           // Popup child handed the URL to the opener; nothing else to do here.
           setMessage("You can close this window and return to the app.");
           return;

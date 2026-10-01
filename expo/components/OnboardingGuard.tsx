@@ -45,7 +45,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
   let redirectTo: string | null = null;
   let cover = false;
   if (dataReady) {
-    const publicRoute = ["/portal", "/login", "/reset-password", "/legal"].includes(path);
+    const publicRoute = ["/portal", "/login", "/reset-password", "/client-recovery", "/auth/callback", "/welcome", "/book", "/legal"].includes(path);
     if (auth.demoViewMode) {
       // Demo cannot expose authenticated administration through back navigation.
       if (returningFromDemo) cover = true;
@@ -64,6 +64,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
     } else if (!publicRoute && auth.isClient &&
       // Walkthrough first: do not force profile until the 5-page tour is done.
       clientTourSeen &&
+      !profile.myProfileShared &&
       clientSetupState(true, profile.myProfileShared, profile.myEssentialsMet) !== "experience-accessible" &&
       path !== "/client-profile") {
       redirectTo = "/client-profile";

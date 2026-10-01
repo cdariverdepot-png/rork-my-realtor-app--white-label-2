@@ -13,9 +13,11 @@ export const isRealtorRef = (ref: string | undefined): ref is string =>
 
 export async function appendLeadAppointment(realtorId: string, appt: Appointment): Promise<void> {
   const key = `${realtorId}:appointments.v1`;
+  if (!isRealtorRef(realtorId)) throw new Error("This booking link is invalid.");
+  if (!isKvEnabled()) throw new Error("Please reconnect before sending your request.");
   let list: Appointment[] = [];
   if (isKvEnabled()) {
-    const row = await kvGet<Appointment[]>(key);
+    const row = await kvGet<Appointment[]>(key, true);
     if (row?.value && Array.isArray(row.value)) list = row.value;
   }
   const next = [appt, ...list.filter((a) => a.id !== appt.id)];

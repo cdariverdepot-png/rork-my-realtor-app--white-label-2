@@ -35,9 +35,11 @@ function rosterKey(realtorId: string): string {
  */
 export async function appendClientToRoster(
   realtorId: string,
-  client: RosterClient
-): Promise<void> {
-  if (!realtorId) return;
+  client: RosterClient,
+  requireSuccess = false
+): Promise<string> {
+  if (!realtorId) throw new Error("A realtor is required.");
+  if (requireSuccess && !isKvEnabled()) throw new Error("Please reconnect before continuing.");
   const key = rosterKey(realtorId);
 
   let list: RosterClient[] = [];
@@ -45,15 +47,16 @@ export async function appendClientToRoster(
   // Prefer the durable shared copy so we merge onto the realtor's real roster.
   try {
     if (isKvEnabled()) {
-      const row = await kvGet<RosterClient[]>(key);
+      const row = await kvGet<RosterClient[]>(key, requireSuccess);
       if (row?.value && Array.isArray(row.value)) list = row.value;
     }
   } catch (e) {
+    if (requireSuccess) throw e;
     console.log("[roster] kv read", e);
   }
 
   // Fall back to whatever is on this device.
-  if (list.length === 0) {
+  if (!isKvEnabled() && list.length === 0) {
     try {
       const raw = await AsyncStorage.getItem(key);
       if (raw) {
@@ -92,8 +95,10 @@ export async function appendClientToRoster(
     console.log("[roster] local write", e);
   }
   try {
-    if (isKvEnabled()) await kvSet(key, next, rev);
+    if (isKvEnabled()) await kvSet(key, next, rev, requireSuccess);
   } catch (e) {
+    if (requireSuccess) throw e;
     console.log("[roster] kv write", e);
   }
+  return idx >= 0 ? list[idx].id : client.id;
 }

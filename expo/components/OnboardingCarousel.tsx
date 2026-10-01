@@ -97,13 +97,13 @@ const CLIENT_SLIDES: Slide[] = [
   {
     icon: <CalendarDays size={36} color={brand.goldLight} strokeWidth={1.4} />,
     title: "Book A\nShowing",
-    body: "Request a viewing, message your realtor, and sign paperwork without leaving the app. No phone tag, no lost email threads.",
+    body: "Request a viewing, message your realtor, and open paperwork in their secure signing portal.",
     bg: require("@/assets/images/onboard-bg-connected.jpg"),
   },
   {
     icon: <MessageSquareHeart size={36} color={brand.goldLight} strokeWidth={1.4} />,
     title: "Nothing\nSlips",
-    body: "Documents, appointments, and updates all live in one place — with a notification the moment something needs you.",
+    body: "Documents, appointments, and updates live in one place. Next, add your contact preference and moving plans to open your app.",
     bg: require("@/assets/images/onboard-bg-control.jpg"),
   },
 ];

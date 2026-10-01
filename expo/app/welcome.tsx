@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,12 +16,13 @@ import { ArrowRight, CalendarDays, ShieldCheck, Sparkles } from "lucide-react-na
 import { brand, fonts } from "@/constants/colors";
 import { avatarPlaceholder } from "@/constants/assets";
 import { useBrand } from "@/contexts/BrandContext";
-import { useClients } from "@/contexts/ClientsContext";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { isRealtorRef } from "@/lib/leadBooking";
 import { useRefRealtor } from "@/lib/useRefRealtor";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
+import BookingStatus from "@/components/BookingStatus";
+import { randomUUID } from "expo-crypto";
 
 /**
  * /welcome — the landing flow for anyone who taps a realtor's public booking link.
@@ -38,58 +39,42 @@ export default function Welcome() {
   const params = useLocalSearchParams<{ ref?: string; from?: string; listingId?: string }>();
   const { brand: ownBrand } = useBrand();
   // Booking-link visitors see the linked realtor, not the app's demo brand.
-  const { brand: b } = useRefRealtor(params.ref, ownBrand);
-  const { importMany } = useClients();
+  const { brand: b, listings, loading: resolving, error: linkError, retry } = useRefRealtor(params.ref, ownBrand);
 
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState("");
+  const submitting = useRef(false);
+  const leadIdRef = useRef(randomUUID());
 
   const realtorFirst = useMemo(() => b.realtor.name.split(" ")[0] ?? b.realtor.name, [b.realtor.name]);
-  const valid = name.trim().length >= 2 && (phone.trim().length >= 6 || email.includes("@"));
+  const valid = name.trim().length >= 2 && (phone.trim().length >= 6 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()));
 
-  const onContinue = () => {
-    if (!valid || loading) return;
-    if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    setLoading(true);
-    // A link that names its realtor files the lead on that realtor's roster.
-    if (isRealtorRef(params.ref)) {
-      const leadId = `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      void appendClientToRoster(params.ref, {
-        id: leadId, name: name.trim(), email: email.trim(), phone: phone.trim() || undefined,
-        tag: `Booking · ${realtorFirst}`, source: "booking", createdAt: Date.now(),
-      }).catch((e) => console.log("[welcome] roster", e));
-      router.replace({
-        pathname: "/book",
-        params: { listingId: params.listingId ?? "", invite: "1", ref: params.ref, leadId,
-          leadName: name.trim(), leadContact: phone.trim() || email.trim() },
-      });
-      return;
-    }
+  const onContinue = async () => {
+    if (!valid || submitting.current || !isRealtorRef(params.ref) || resolving || linkError) return;
+    submitting.current = true;
+    setLoading(true); setError("");
     try {
-      importMany(
-        [
-          {
-            name: name.trim(),
-            email: email.trim(),
-            phone: phone.trim() || undefined,
-            tag: `Booking · ${realtorFirst}`,
-          },
-        ],
-        "manual",
-      );
-    } catch (e) {
-      console.log("[welcome] import contact", e);
-    }
-    router.replace({
-      pathname: "/book",
-      params: {
-        listingId: params.listingId ?? "",
-        invite: "1",
-      },
-    });
+      const leadId = await appendClientToRoster(params.ref, {
+        id: leadIdRef.current, name: name.trim(), email: email.trim(), phone: phone.trim() || undefined,
+        tag: "Booking", source: "booking", createdAt: Date.now(),
+      }, true);
+      router.replace({ pathname: "/book", params: {
+        listingId: params.listingId ?? "", invite: "1", ref: params.ref, leadId,
+        leadName: name.trim(), leadContact: phone.trim() || email.trim(),
+      } });
+    } catch {
+      setError("We couldn't save your details. Check your connection and try again.");
+    } finally { submitting.current = false; setLoading(false); }
   };
+
+  if (!isRealtorRef(params.ref) || resolving || linkError || listings?.length === 0) {
+    return <BookingStatus loading={resolving} retry={retry} message={linkError ||
+      (!isRealtorRef(params.ref) ? "This booking link is invalid. Ask your realtor for a new link."
+      : "No homes are available to book yet. Please contact your realtor.")} />;
+  }
 
   return (
     <View style={styles.root}>
@@ -111,7 +96,7 @@ export default function Welcome() {
           <Text style={styles.eyebrow}>{b.realtor.brandName} · PRIVATE INVITATION</Text>
           <Text style={styles.heroTitle}>You're invited to book{"\n"}with {realtorFirst}.</Text>
           <Text style={styles.heroSub}>
-            A private viewing — no broker, no buyer's agent unless you bring one. Tell {realtorFirst} who you are and we'll hold your spot in seconds.
+            A private viewing — no broker, no buyer's agent unless you bring one. Tell {realtorFirst} who you are, then request a preferred viewing time.
           </Text>
         </View>
       </View>
@@ -132,8 +117,8 @@ export default function Welcome() {
           <Reveal delay={60}>
             <View style={styles.trustRow}>
               <Trust Icon={ShieldCheck} text="Direct line — no call centers" />
-              <Trust Icon={Sparkles} text="Saved to your private feed" />
-              <Trust Icon={CalendarDays} text="Confirmed within the hour" />
+              <Trust Icon={Sparkles} text="Sent to your realtor" />
+              <Trust Icon={CalendarDays} text="Request a preferred time" />
             </View>
           </Reveal>
 
@@ -150,22 +135,22 @@ export default function Welcome() {
                 returnKeyType="next"
               />
 
-              <Text style={styles.formLabel}>PHONE</Text>
+              <Text style={styles.formLabel}>PHONE <Text style={styles.optional}>· phone or email required</Text></Text>
               <TextInput
                 value={phone}
                 onChangeText={setPhone}
-                placeholder="So we can text the confirmation"
+                placeholder="Phone number"
                 placeholderTextColor="rgba(45,52,53,0.35)"
                 style={styles.input}
                 keyboardType="phone-pad"
                 returnKeyType="next"
               />
 
-              <Text style={styles.formLabel}>EMAIL <Text style={styles.optional}>· optional</Text></Text>
+              <Text style={styles.formLabel}>EMAIL <Text style={styles.optional}>· phone or email required</Text></Text>
               <TextInput
                 value={email}
                 onChangeText={setEmail}
-                placeholder="For listing follow-ups"
+                placeholder="Email address"
                 placeholderTextColor="rgba(45,52,53,0.35)"
                 style={styles.input}
                 keyboardType="email-address"
@@ -182,6 +167,7 @@ export default function Welcome() {
         </ScrollView>
       </KeyboardAvoidingView>
 
+      {error ? <Text accessibilityRole="alert" style={{ color: "#A12A20", padding: 16, marginBottom: 110 }}>{error}</Text> : null}
       <View style={[styles.dock, { paddingBottom: insets.bottom + 14 }]}>
         <PressableScale
           onPress={onContinue}
