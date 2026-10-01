@@ -7,9 +7,10 @@
  * and cached locally for offline use.
  *
  * Guest role codes (never shown in the UI) mint a fresh local session:
- * - REALTOR → admin walkthrough → realtor profile/build (/admin/build)
+ * - REALTOR → admin walkthrough → /admin/build (email capture / sign-in on that
+ *   page unlocks the cloud app builder — never an orphan "confirm email" prompt)
  * - CLIENT / DEMO → client walkthrough → client profile build
- * Realtors still sign up / sign in with email through the portal.
+ * Realtors can also sign up / sign in with email through the portal.
  */
 
 export const CLIENT_CODE_LENGTH = 6;

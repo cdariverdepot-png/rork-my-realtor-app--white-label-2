@@ -26,11 +26,34 @@ export type SavedBuild = {
   status: "collecting" | "processing" | "needs-input" | "ready" | "complete";
 };
 
+/** Shown when the cloud builder needs a confirmed realtor account — UI must
+ * offer email/sign-in fields alongside this copy, never an orphan prompt. */
+export const BUILDER_AUTH_MESSAGE =
+  "Confirm your realtor email and sign in to use the app builder.";
+
+function isGuestPlaceholderEmail(email: string | null | undefined): boolean {
+  return (email ?? "").trim().toLowerCase().endsWith("@guest.myrealtor.app");
+}
+
+/** True when Supabase has a confirmed, non-anonymous realtor session usable by the builder. */
+export async function hasVerifiedBuilderAuth(): Promise<boolean> {
+  if (!supabase) return false;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user || data.user.is_anonymous || !data.user.email_confirmed_at) return false;
+    if (isGuestPlaceholderEmail(data.user.email)) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function verifiedUser() {
   if (!supabase) throw new Error("Connect to your account to build your app.");
   const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user || data.user.is_anonymous || !data.user.email_confirmed_at) {
-    throw new Error("Confirm your realtor email and sign in to use the app builder.");
+  if (error || !data.user || data.user.is_anonymous || !data.user.email_confirmed_at
+      || isGuestPlaceholderEmail(data.user.email)) {
+    throw new Error(BUILDER_AUTH_MESSAGE);
   }
   return data.user;
 }

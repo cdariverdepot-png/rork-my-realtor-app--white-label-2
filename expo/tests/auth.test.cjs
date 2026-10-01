@@ -606,6 +606,33 @@ test('client tour finish gates home flash until /client-profile', () => {
   assert.match(src, /markTourSeen\("client"\)/);
 });
 
+
+test('build onboarding shows email fields when builder auth gate is active', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'components/InitialRealtorSetup.tsx'), 'utf8');
+  assert.match(src, /hasVerifiedBuilderAuth/);
+  assert.match(src, /BUILDER_AUTH_MESSAGE/);
+  assert.match(src, /Confirm your realtor email/);
+  assert.match(src, /Realtor email/);
+  assert.match(src, /Create account & continue/);
+  assert.match(src, /Sign in & continue/);
+  assert.match(src, /EmailCodeSignIn/);
+  assert.match(src, /leaveBuild/);
+  assert.match(src, /accessibilityLabel="Back"/);
+  assert.match(src, /accessibilityLabel="Close"/);
+  // Must not surface the auth message as an orphan sources error without inputs.
+  assert.match(src, /if \(error\.message === BUILDER_AUTH_MESSAGE\) return null/);
+  assert.match(src, /needsBuilderAuth/);
+  assert.match(src, /builderAuthPanel/);
+});
+
+test('walkthrough carousel exposes Back navigation after the first slide', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'components/OnboardingCarousel.tsx'), 'utf8');
+  assert.match(src, /goBack/);
+  assert.match(src, /accessibilityLabel="Back to previous walkthrough step"/);
+  assert.match(src, /ArrowLeft/);
+  assert.match(src, /topNavRow/);
+});
+
 test('realtor tour finish gates until /admin/build for incomplete setup', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/_layout.tsx'), 'utf8');
   assert.match(src, /pendingRealtorBuildAfterTour/);

@@ -37,3 +37,14 @@ test('a single clearly-stated website fact is used without asking again', () => 
   const facts = resolveFacts([{ field: 'realtor.city', value: "Coeur d'Alene, ID", sourceId: 'site', confidence: 0.7 }]);
   assert.equal(facts[0].needsClarification, false);
 });
+
+test('builder auth gate exports a stable message and hasVerifiedBuilderAuth helper', () => {
+  const src = fs.readFileSync(path.resolve(__dirname, '../lib/appBuilder/buildService.ts'), 'utf8');
+  assert.match(src, /export const BUILDER_AUTH_MESSAGE/);
+  assert.match(src, /Confirm your realtor email and sign in to use the app builder/);
+  assert.match(src, /export async function hasVerifiedBuilderAuth/);
+  assert.match(src, /isGuestPlaceholderEmail/);
+  assert.match(src, /@guest\.myrealtor\.app/);
+  // verifiedUser must throw the shared constant — UI keys off the same string.
+  assert.match(src, /throw new Error\(BUILDER_AUTH_MESSAGE\)/);
+});

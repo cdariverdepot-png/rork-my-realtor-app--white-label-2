@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
-import { Check, FileText, ImageIcon, Link2, Users } from "lucide-react-native";
+import { ArrowLeft, Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { randomUUID } from "expo-crypto";
@@ -13,7 +13,8 @@ import { PROFILE_FIELDS, RECOMMENDED_FIELDS, REQUIRED_FIELDS, requiredStatus } f
 import { toPortableImage } from "@/lib/portableImage";
 import { useAuth } from "@/contexts/AuthContext";
 import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
-import { analyzeBuild, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import { analyzeBuild, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import EmailCodeSignIn from "@/components/EmailCodeSignIn";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
@@ -21,7 +22,7 @@ import { useClients } from "@/contexts/ClientsContext";
 import PressableScale from "@/components/PressableScale";
 import { checkSite, useSiteCheck } from "@/lib/siteCheck";
 
-function ManualSetup() {
+function ManualSetup({ onBack }: { onBack: () => void }) {
   const { brand, hydrated, saveBrand } = useBrand();
   const [draft, setDraft] = useState(brand);
   const [dirty, setDirty] = useState(false);
@@ -61,7 +62,15 @@ function ManualSetup() {
     finally { setSaving(false); }
   };
   if (!hydrated) return null;
-  return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 32, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
+  return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
+    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={onBack} hitSlop={12}
+        style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
+        <ArrowLeft size={18} color="white" strokeWidth={1.8} />
+      </Pressable>
+      <Text style={{ color: "#9AA4AA", fontSize: 12, letterSpacing: 1.4 }}>MANUAL SETUP</Text>
+      <View style={{ width: 40 }} />
+    </View>
     <Text style={{ color: "white", fontSize: 30 }}>Let’s create your app.</Text>
     <Text style={{ color: "#CBD0D6", marginTop: 12, lineHeight: 23 }}>Fill in the essentials below. Your portrait and license details are optional and can be added any time. Your sharing credentials become available after setup; you choose when to share them.</Text>
     {PROFILE_FIELDS.map((item, index) => <View key={item.id} style={{ marginTop: 24, padding: 18, borderRadius: 14, backgroundColor: "#20262D" }}>
@@ -108,6 +117,7 @@ export default function InitialRealtorSetup() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
+  const authPanelY = useRef(0);
   const [url, setUrl] = useState("");
   const [sources, setSources] = useState<BuildSource[]>([]);
   const [result, setResult] = useState<SavedBuild | null>(null);
@@ -116,6 +126,15 @@ export default function InitialRealtorSetup() {
   const [error, setError] = useState<{ place: ErrorPlace; message: string } | null>(null);
   const [manual, setManual] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  /** null = still checking; false = need email/sign-in on this page; true = builder unlocked. */
+  const [builderReady, setBuilderReady] = useState<boolean | null>(null);
+  const [authMode, setAuthMode] = useState<"signup" | "signin">("signup");
+  const [authName, setAuthName] = useState("");
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+  const [authMessage, setAuthMessage] = useState("");
+  const [verificationPending, setVerificationPending] = useState(false);
   const [contactCount, setContactCount] = useState(0);
   const [pendingContacts, setPendingContacts] = useState<{ contacts: ReturnType<typeof parseCsvContacts>; format: "csv" | "vcard" } | null>(null);
   const [activity, setActivity] = useState("");
@@ -138,6 +157,7 @@ export default function InitialRealtorSetup() {
   const localImages = useRef<Record<string, string>>({});
 
   const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
+  const needsBuilderAuth = builderReady === false;
 
   // Moving to the next stage brings it into view — no hunting for new content.
   useEffect(() => {
@@ -166,31 +186,110 @@ export default function InitialRealtorSetup() {
     setDraft(next);
   };
 
+  const loadSavedBuild = useCallback(async () => {
+    const saved = await loadBuild();
+    if (!saved) return;
+    setSources(saved.sources);
+    const primary = saved.sources.find(source => source.kind === "url");
+    if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
+    setResult(saved);
+    if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+  }, [brand]);
+
+  // Guest REALTOR (and any unverified session) must see email fields — never loadBuild
+  // first, which only threw an orphan red "confirm email" with nowhere to type.
   useEffect(() => {
     let alive = true;
-    void loadBuild().then(saved => {
-      if (!alive) return;
-      if (saved) {
-        setSources(saved.sources);
-        const primary = saved.sources.find(source => source.kind === "url");
-        if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
-        setResult(saved);
-        if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+    void (async () => {
+      try {
+        const ready = await hasVerifiedBuilderAuth();
+        if (!alive) return;
+        setBuilderReady(ready);
+        if (ready) {
+          try { await loadSavedBuild(); }
+          catch (e) {
+            if (!alive) return;
+            const message = e instanceof Error ? e.message : "Could not load your app build.";
+            if (message === BUILDER_AUTH_MESSAGE) setBuilderReady(false);
+            else setError({ place: "sources", message });
+          }
+        }
+      } finally {
+        if (alive) setLoaded(true);
       }
-    }).catch(e => { if (alive) setError({ place: "sources", message: e instanceof Error ? e.message : "Could not load your app build." }); })
-      .finally(() => { if (alive) setLoaded(true); });
+    })();
     return () => { alive = false; };
-  }, []);
+  }, [loadSavedBuild]);
+
+  const leaveBuild = useCallback(async () => {
+    // Incomplete setup is forced onto this screen — escape by signing out to the portal.
+    if (auth.realtorRecord?.client_code_enabled !== true) {
+      await auth.logout();
+      router.replace("/portal");
+      return;
+    }
+    if (router.canGoBack()) router.back();
+    else router.replace("/admin");
+  }, [auth, router]);
+
+  const focusAuthPanel = () => {
+    setError(null);
+    setAuthMessage(BUILDER_AUTH_MESSAGE);
+    scrollRef.current?.scrollTo({ y: Math.max(0, authPanelY.current - 24), animated: true });
+  };
+
+  const submitBuilderAuth = () => void (async () => {
+    if (authBusy) return;
+    setAuthBusy(true);
+    setAuthMessage("");
+    try {
+      const result = authMode === "signup"
+        ? await auth.realtorSignup({ name: authName, email: authEmail, password: authPassword })
+        : await auth.realtorLogin(authEmail, authPassword);
+      if (!result.ok) {
+        if (result.verificationRequired) {
+          setVerificationPending(true);
+          setAuthMessage(result.error ?? "Check your email to confirm your account, then sign in here.");
+          return;
+        }
+        setAuthMessage(result.error ?? "Couldn’t complete sign-in. Please try again.");
+        return;
+      }
+      setVerificationPending(false);
+      setBuilderReady(true);
+      setAuthMessage("You’re signed in. Continue building your app below.");
+      setError(null);
+      try { await loadSavedBuild(); } catch {}
+    } catch {
+      setAuthMessage("Couldn’t complete sign-in. Please try again.");
+    } finally {
+      setAuthBusy(false);
+    }
+  })();
 
   const act = async (place: ErrorPlace, work: () => Promise<void>) => {
     if (busy) return;
     setBusy(true); setError(null);
     try { await work(); }
-    catch (e) { setError({ place, message: e instanceof Error ? e.message : "Please try again." }); }
+    catch (e) {
+      const message = e instanceof Error ? e.message : "Please try again.";
+      // Auth gate: show fields, never an orphan red prompt with nowhere to type.
+      if (message === BUILDER_AUTH_MESSAGE || message.includes("Sign in to save")) {
+        setBuilderReady(false);
+        setAuthMessage(BUILDER_AUTH_MESSAGE);
+        setError(null);
+        focusAuthPanel();
+      } else {
+        setError({ place, message });
+      }
+    }
     finally { setBusy(false); setActivity(""); }
   };
-  const errorFor = (place: ErrorPlace) => error?.place === place
-    ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{error.message}</Text> : null;
+  const errorFor = (place: ErrorPlace) => {
+    if (!error || error.place !== place) return null;
+    if (error.message === BUILDER_AUTH_MESSAGE) return null;
+    return <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{error.message}</Text>;
+  };
 
   const saveSources = async (next: BuildSource[]): Promise<BuildSource[]> => {
     if (!auth.realtorId) throw new Error("Sign in to save your sources.");
@@ -246,7 +345,9 @@ export default function InitialRealtorSetup() {
       await addSource(await uploadBuildFile(picked.assets[0], "document"));
     }
   });
-  const analyze = () => void act("sources", async () => {
+  const analyze = () => {
+    if (builderReady === false) { focusAuthPanel(); return; }
+    void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
     if (websiteUri && await checkSite(websiteUri) === "missing") throw new Error("We couldn’t find that website. Check the address and try again.");
@@ -272,6 +373,7 @@ export default function InitialRealtorSetup() {
       setBuilding(false);
     }
   });
+  };
   const addContacts = () => void act("sources", async () => {
     const picked = await DocumentPicker.getDocumentAsync({ type: ["text/csv", "text/vcard", "text/x-vcard", "text/plain", "*/*"],
       copyToCacheDirectory: true });
@@ -366,7 +468,7 @@ export default function InitialRealtorSetup() {
     </Text>;
   const readValue = (field: ConfirmField) => draft ? String(draft.realtor[field.split(".")[1] as keyof Brand["realtor"]] ?? "") : "";
 
-  if (manual) return <ManualSetup />;
+  if (manual) return <ManualSetup onBack={() => setManual(false)} />;
 
   const sourceSummary = [
     primarySource ? primarySource.uri.replace(/^https:\/\//, "").replace(/\/$/, "") : websiteUri ? websiteUri.replace(/^https:\/\//, "").replace(/\/$/, "") : "",
@@ -375,12 +477,73 @@ export default function InitialRealtorSetup() {
     images.length ? `${images.length} image${images.length > 1 ? "s" : ""}` : "",
   ].filter(Boolean).join(" · ");
 
+  const authField = (label: string, value: string, onChange: (v: string) => void, opts?: { keyboard?: "default" | "email-address"; secure?: boolean; autoCap?: "none" | "words" }) =>
+    <View style={{ marginTop: 12 }}>
+      <Text style={{ color: "#D7D8D3", marginBottom: 6 }}>{label}</Text>
+      <TextInput value={value} onChangeText={onChange} accessibilityLabel={label}
+        keyboardType={opts?.keyboard ?? "default"} secureTextEntry={!!opts?.secure}
+        autoCapitalize={opts?.autoCap ?? (opts?.keyboard === "email-address" ? "none" : "words")}
+        autoCorrect={false} autoComplete={opts?.secure ? "password" : opts?.keyboard === "email-address" ? "email" : "name"}
+        style={{ color: "white", borderColor: "#646C70", borderWidth: 1, borderRadius: 10, padding: 12, fontSize: 16, minHeight: 48 }} />
+    </View>;
+
+  const builderAuthPanel = needsBuilderAuth ? (
+    <View
+      onLayout={e => { authPanelY.current = e.nativeEvent.layout.y; }}
+      style={{ marginTop: 24, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276", backgroundColor: "rgba(194,162,118,0.10)" }}
+    >
+      <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>ACCOUNT REQUIRED</Text>
+      <Text style={{ color: "white", fontSize: 18, fontWeight: "600", marginTop: 6 }}>Confirm your realtor email</Text>
+      <Text style={{ color: "#C8D0D0", marginTop: 8, lineHeight: 22 }}>
+        Sign in or create your builder account to save your website import and build your app. Guest access codes bring you here for a tour — your email unlocks the builder.
+      </Text>
+      {authMode === "signup" && authField("Your name", authName, setAuthName, { autoCap: "words" })}
+      {authField("Realtor email", authEmail, setAuthEmail, { keyboard: "email-address", autoCap: "none" })}
+      {authField("Password", authPassword, setAuthPassword, { secure: true, autoCap: "none" })}
+      <PressableScale accessibilityRole="button" onPress={submitBuilderAuth} disabled={authBusy} haptic="medium" style={{ marginTop: 16 }}>
+        <View style={{ minHeight: 52, borderRadius: 12, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center", opacity: authBusy ? 0.6 : 1 }}>
+          <Text style={{ color: "#172027", fontSize: 16, fontWeight: "700" }}>
+            {authBusy ? "Please wait…" : authMode === "signup" ? "Create account & continue" : "Sign in & continue"}
+          </Text>
+        </View>
+      </PressableScale>
+      <Pressable accessibilityRole="button" onPress={() => { setAuthMode(m => m === "signup" ? "signin" : "signup"); setAuthMessage(""); }}
+        hitSlop={8} style={{ marginTop: 14, minHeight: 44, justifyContent: "center" }}>
+        <Text style={{ color: "#C2A276", textAlign: "center", fontWeight: "600" }}>
+          {authMode === "signup" ? "Already have an account? Sign in" : "Need an account? Create one"}
+        </Text>
+      </Pressable>
+      {(verificationPending || authMode === "signin") && !!authEmail.trim() && (
+        <EmailCodeSignIn email={authEmail.trim()} confirmation={verificationPending || authMode === "signup"} />
+      )}
+      {!!authMessage && (
+        <Text accessibilityRole="alert" accessibilityLiveRegion="polite"
+          style={{ color: verificationPending || builderReady ? "#D6BA91" : "#FFBAA9", marginTop: 12, lineHeight: 20 }}>
+          {authMessage}
+        </Text>
+      )}
+    </View>
+  ) : null;
+
   return <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}
-    contentContainerStyle={{ padding: 24, paddingTop: insets.top + 32, paddingBottom: insets.bottom + 36 }}
+    contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 36 }}
     keyboardShouldPersistTaps="handled">
+    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => void leaveBuild()} hitSlop={12}
+        style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
+        <ArrowLeft size={18} color="white" strokeWidth={1.8} />
+      </Pressable>
+      <Text style={{ color: "#9AA4AA", fontSize: 12, letterSpacing: 1.4 }}>APP BUILDER</Text>
+      <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => void leaveBuild()} hitSlop={12}
+        style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
+        <X size={18} color="white" strokeWidth={1.8} />
+      </Pressable>
+    </View>
     <Text style={{ color: "white", fontSize: 32, fontWeight: "600" }}>Build Your App</Text>
     {phase === "collect" && <Text style={{ color: "#C8D0D0", marginTop: 10, fontSize: 16, lineHeight: 24 }}>
-      Start with your website. We’ll use it to gather most of the information needed to build your app.
+      {needsBuilderAuth
+        ? "Enter your website below, then confirm your realtor email so we can save and build your app."
+        : "Start with your website. We’ll use it to gather most of the information needed to build your app."}
     </Text>}
     {!loaded && <Text style={{ color: "#C8D0D0", marginTop: 20 }}>Loading…</Text>}
 
@@ -471,10 +634,14 @@ export default function InitialRealtorSetup() {
           </>)}
       </View>
 
+      {builderAuthPanel}
       {errorFor("sources")}
-      <PressableScale accessibilityRole="button" onPress={analyze} disabled={busy} haptic="medium" style={{ marginTop: 26 }}>
-        <View style={{ minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
-          <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>Let’s Build My App!</Text>
+      <PressableScale accessibilityRole="button" onPress={analyze} disabled={busy || builderReady === null} haptic="medium" style={{ marginTop: 26 }}>
+        <View style={{ minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center",
+          opacity: (busy || builderReady === null) ? 0.6 : 1 }}>
+          <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>
+            {needsBuilderAuth ? "Sign in above, then build" : "Let’s Build My App!"}
+          </Text>
         </View>
       </PressableScale>
       {editingSources && result && draft && button("Back to my app", () => setEditingSources(false))}

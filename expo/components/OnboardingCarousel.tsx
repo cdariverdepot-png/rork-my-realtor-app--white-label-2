@@ -15,6 +15,7 @@ import {
 import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
 import {
+  ArrowLeft,
   ArrowRight,
   Building2,
   CalendarDays,
@@ -219,6 +220,14 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
     scrollToPage(next, true);
   }, [slides.length, finish, syncIndex, scrollToPage]);
 
+  const goBack = useCallback(() => {
+    const prev = indexRef.current - 1;
+    if (prev < 0) return;
+    if (Platform.OS !== "web") Haptics.selectionAsync();
+    syncIndex(prev);
+    scrollToPage(prev, true);
+  }, [syncIndex, scrollToPage]);
+
   const getItemLayout = useCallback(
     (_: ArrayLike<Slide> | null | undefined, index: number) => ({
       length: pageWidthSafe,
@@ -285,15 +294,29 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
           />
         ))}
 
-        <Pressable
-          onPress={finish}
-          hitSlop={12}
-          style={styles.skipBtn}
-          accessibilityRole="button"
-          accessibilityLabel="Skip walkthrough"
-        >
-          <Text style={styles.skipText}>Skip</Text>
-        </Pressable>
+        <View style={styles.topNavRow} pointerEvents="box-none">
+          {currentIndex > 0 ? (
+            <Pressable
+              onPress={goBack}
+              hitSlop={12}
+              style={styles.backBtn}
+              accessibilityRole="button"
+              accessibilityLabel="Back to previous walkthrough step"
+            >
+              <ArrowLeft size={16} color={brand.ivory} strokeWidth={2} />
+              <Text style={styles.skipText}>Back</Text>
+            </Pressable>
+          ) : <View style={{ width: 72 }} />}
+          <Pressable
+            onPress={finish}
+            hitSlop={12}
+            style={styles.skipBtn}
+            accessibilityRole="button"
+            accessibilityLabel="Skip walkthrough"
+          >
+            <Text style={styles.skipText}>Skip</Text>
+          </Pressable>
+        </View>
 
         <View style={styles.slideArea} pointerEvents="box-none">
           <Animated.FlatList
@@ -367,11 +390,27 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  skipBtn: {
+  topNavRow: {
     position: "absolute",
     top: 60,
-    right: 24,
+    left: 16,
+    right: 16,
     zIndex: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  backBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(244,239,230,0.18)",
+  },
+  skipBtn: {
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
