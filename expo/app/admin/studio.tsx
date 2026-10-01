@@ -35,6 +35,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
 import { toPortableImage } from "@/lib/portableImage";
+import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import {
   ArrowLeft,
   Check,
@@ -2141,17 +2142,26 @@ function PortraitField({
   hint?: string;
   square?: boolean;
 }) {
+  const { pickPortable, cropper } = usePortraitPicker({
+    maxWidth: square ? 800 : 1400,
+    cropOutputSize: square ? 800 : 1400,
+  });
   const pick = async () => {
     try {
-      const res = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: square,
-        aspect: square ? [1, 1] : undefined,
-        quality: 0.92,
-      });
-      if (res.canceled || !res.assets[0]) return;
-      const portable = await toPortableImage(res.assets[0].uri, square ? 800 : 1400);
-      onChange(portable);
+      if (square) {
+        const portable = await pickPortable();
+        if (!portable) return;
+        onChange(portable);
+      } else {
+        const res = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: false,
+          quality: 0.92,
+        });
+        if (res.canceled || !res.assets[0]) return;
+        const portable = await toPortableImage(res.assets[0].uri, 1400);
+        onChange(portable);
+      }
       if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
     } catch (e) {
       console.log("[studio] pick error", e);
@@ -2160,6 +2170,7 @@ function PortraitField({
 
   return (
     <View style={styles.imageField}>
+      {square ? cropper : null}
       <Text style={styles.label}>{label}</Text>
       {hint ? <Text style={styles.fieldHint}>{hint}</Text> : null}
       <View style={styles.uploadRow}>

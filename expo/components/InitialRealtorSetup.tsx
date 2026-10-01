@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { PROFILE_FIELDS, RECOMMENDED_FIELDS, REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
 import { toPortableImage } from "@/lib/portableImage";
+import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import { useAuth } from "@/contexts/AuthContext";
 import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
 import { analyzeBuild, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
@@ -45,11 +46,11 @@ function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: (
       <TextInput accessibilityLabel={label} value={value} onChangeText={onChangeText} autoCorrect={false}
         style={{ minHeight: 48, borderWidth: 1, borderColor: "#555C64", borderRadius: 8, padding: 12, color: "white" }} />
     </View>;
+  const { pickPortable, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
   const pick = async () => {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false, quality: 0.92 });
-      if (result.canceled) return;
-      const uri = await toPortableImage(result.assets[0].uri, 1600);
+      const uri = await pickPortable();
+      if (!uri) return;
       change(b => ({ ...b, portraitUrl: uri }));
     } catch { Alert.alert("Couldn’t load image", "Please try another image."); }
   };
@@ -68,7 +69,9 @@ function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: (
     finally { setSaving(false); }
   };
   if (!hydrated || !progressDraft.ready) return null;
-  return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
+  return <View style={{ flex: 1 }}>
+  {cropper}
+  <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
       <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => void progressDraft.flush().then(onBack).catch(() => Alert.alert("Couldn’t save", "Please retry before leaving."))} hitSlop={12}
         style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
@@ -97,7 +100,8 @@ function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: (
       <Text style={{ color: "white", fontSize: 17 }}>{saving ? "Saving…" : "Save & Continue"}</Text>
     </Pressable>
     <Pressable disabled={saving || !dirty} onPress={() => void save(false)} style={{ minHeight: 48, justifyContent: "center", alignItems: "center" }}><Text style={{ color: "#CBD0D6" }}>Save progress for later</Text></Pressable>
-  </ScrollView>;
+  </ScrollView>
+  </View>;
 }
 
 type Phase = "collect" | "building" | "review";
@@ -123,6 +127,7 @@ export default function InitialRealtorSetup() {
   const { brand, saveBrand } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { pickPortable, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
   const scrollRef = useRef<ScrollView>(null);
   const authPanelY = useRef(0);
   const [url, setUrl] = useState("");
@@ -429,9 +434,8 @@ export default function InitialRealtorSetup() {
     setDraft(current => current && ({ ...current, credentials: { ...current.credentials,
       license: { ...current.credentials.license, [key]: value } } }));
   const selectPortrait = () => void act("review", async () => {
-    const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false });
-    if (picked.canceled) return;
-    const uri = await toPortableImage(picked.assets[0].uri, 1600);
+    const uri = await pickPortable();
+    if (!uri) return;
     setDraft(current => current && ({ ...current, portraitUrl: uri }));
   });
 
@@ -496,7 +500,9 @@ export default function InitialRealtorSetup() {
     </View>
   ) : null;
 
-  return <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}
+  return <View style={{ flex: 1 }}>
+  {cropper}
+  <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}
     contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 36 }}
     keyboardShouldPersistTaps="handled">
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
@@ -740,5 +746,6 @@ export default function InitialRealtorSetup() {
         </View>
       </PressableScale>
     </>}
-  </ScrollView>;
+  </ScrollView>
+  </View>;
 }

@@ -6,6 +6,7 @@ import type { Brand } from "@/contexts/BrandContext";
 import { CLIENT_SECTIONS, sectionState, type ClientSectionId } from "@/constants/sections";
 import { useListings, type ManagedListing } from "@/contexts/ListingsContext";
 import { toPortableImage } from "@/lib/portableImage";
+import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 
 type Change = (mutator: (brand: Brand) => Brand) => void;
 const labels: Record<ClientSectionId, string> = { hero: "Your introduction", listings: "Properties", note: "Personal note", credentials: "Credentials", beat: "Market update", quickContact: "Contact", concierge: "Concierge", social: "Client stories & recent sales", support: "Consultations", footer: "Footer" };
@@ -32,15 +33,13 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
   const hidden = CLIENT_SECTIONS.filter(s => !s.structural && sectionState(draft, s.id, s.isReady(context)) === "hidden");
   const identity = (key: keyof Brand["realtor"], value: string) => onChange(b => ({ ...b, realtor: { ...b.realtor, [key]: value } }));
   const copy = (label: string, value: string, change: (text: string) => void, large = false, fallback = "") => <Copy label={label} value={value} onChange={change} large={large} fallback={fallback} />;
+  const { pickPortable, cropper, busy: pickingPortrait } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
   const portrait = async () => {
-    if (uploading) return;
+    if (uploading || pickingPortrait) return;
     setUploading(true);
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: false, quality: 1 });
-      if (!result.canceled) {
-        const uri = await toPortableImage(result.assets[0].uri, 1600);
-        onChange(b => ({ ...b, portraitUrl: uri }));
-      }
+      const uri = await pickPortable();
+      if (uri) onChange(b => ({ ...b, portraitUrl: uri }));
     } catch { Alert.alert("Couldn’t load image", "Please try another image."); }
     finally { setUploading(false); }
   };
@@ -50,7 +49,7 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
         {copy("Brand name", draft.realtor.brandName, v => identity("brandName", v))}
         <Pressable accessibilityRole="button" accessibilityLabel="Edit portrait" disabled={uploading} onPress={() => void portrait()}>
           {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }} contentFit="contain" style={{ height: 260, backgroundColor: "#eee", borderRadius: 8 }} /> : <View style={{ height: 180, backgroundColor: "#eee", justifyContent: "center", alignItems: "center" }}><Text>Tap to add your portrait</Text></View>}
-          <Text style={{ color: "#666", paddingVertical: 10 }}>{uploading ? "Loading image…" : "Tap image to replace · original proportions"}</Text>
+          <Text style={{ color: "#666", paddingVertical: 10 }}>{uploading ? "Loading image…" : "Tap image to replace · crop after choosing"}</Text>
         </Pressable>
         {copy("Opening line", draft.realtor.heroMessage, v => identity("heroMessage", v), true, draft.realtor.tagline)}
         {copy("Full name", draft.realtor.name, v => identity("name", v))}
@@ -115,7 +114,9 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
       </>;
     }
   };
-  return <View style={{ backgroundColor: "#f5f5f5", padding: 16, gap: 16 }}>
+  return <>
+  {cropper}
+  <View style={{ backgroundColor: "#f5f5f5", padding: 16, gap: 16 }}>
     <Text style={{ color: "#555", lineHeight: 23 }}>Tap text or images to edit. Empty placeholders are visible only here. Save returns to your dashboard.</Text>
     {CLIENT_SECTIONS.filter(s => !hidden.includes(s)).map(s => <View key={s.id} style={{ padding: 20, backgroundColor: "white", borderRadius: 10, gap: 12 }}>
       <Text style={{ color: "#666", fontSize: 12 }}>{labels[s.id]}{!s.structural ? ` · ${s.isReady(context) ? "Content present" : "Empty"}` : ""}</Text>
@@ -127,5 +128,6 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
     {hidden.length > 0 && <Pressable accessibilityRole="button" onPress={() => onChange(b => { const sectionStates = { ...b.sectionStates }; hidden.forEach(s => delete sectionStates[s.id]); return { ...b, sectionStates }; })} style={{ minHeight: 48, justifyContent: "center" }}><Text style={{ color: "#344b68" }}>Restore Hidden Sections ({hidden.length})</Text></Pressable>}
     <Pressable accessibilityRole="button" onPress={() => setExpanded(expanded === "additional" ? null : "additional")} style={{ minHeight: 48, justifyContent: "center" }}><Text style={{ color: "#344b68" }}>Edit neighborhood and market pages</Text></Pressable>
     {expanded === "additional" && <View style={{ backgroundColor: "#101419" }}>{details.additional}</View>}
-  </View>;
+  </View>
+  </>;
 }

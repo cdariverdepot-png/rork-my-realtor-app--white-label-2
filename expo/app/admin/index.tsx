@@ -16,9 +16,8 @@ import {
   Dimensions,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
-import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
-import { toPortableImage } from "@/lib/portableImage";
+import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -214,17 +213,13 @@ export default function AdminDashboard() {
     attempts: turnedAway, acknowledgeAttempts,
   } = useSeats();
 
+  const { pickPortable, cropper: portraitCropper } = usePortraitPicker({ maxWidth: 800, cropOutputSize: 800 });
+
   const pickPortrait = async () => {
     try {
       if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
-      const res = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.92,
-      });
-      if (res.canceled || !res.assets[0]) return;
-      const portable = await toPortableImage(res.assets[0].uri, 800);
+      const portable = await pickPortable();
+      if (!portable) return;
       updateBrand((d) => ({ ...d, portraitUrl: portable }));
       if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     } catch (e) { console.log("[admin] portrait pick error", e); }
@@ -477,6 +472,7 @@ export default function AdminDashboard() {
 
   return (
     <View style={styles.root}>
+      {portraitCropper}
       {/* Persistent photographic backdrop — fixed, with a slow parallax drift. */}
       <Animated.View pointerEvents="none" style={[styles.backdrop, { transform: [{ translateY: bgTranslate }] }]}>
         <Image source={DASHBOARD_BG} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition="center" allowDownscaling={false} cachePolicy="memory-disk" priority="high" />
