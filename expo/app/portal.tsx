@@ -23,6 +23,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import EmailCodeSignIn from "@/components/EmailCodeSignIn";
 import SocialSignIn from "@/components/SocialSignIn";
+import PressableScale from "@/components/PressableScale";
 import { GUEST_ACCESS_CODE, isGuestAccessCode } from "@/constants/access";
 
 type Stage =
@@ -339,7 +340,15 @@ export default function Portal() {
       </View>
 
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.kbd}>
-        <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 60 }]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={[styles.scroll, { paddingBottom: Math.max(insets.bottom, 20) + 48 }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          bounces
+          alwaysBounceVertical
+          overScrollMode="always"
+          style={Platform.OS === "web" ? ({ overscrollBehaviorY: "contain" } as object) : undefined}
+        >
           <Animated.View style={[styles.center, { opacity: heroOpacity, transform: [{ translateY: heroTranslate }] }]}>
             <View style={styles.monogramWrap}>
               <View style={styles.monogramRing} />
@@ -367,6 +376,9 @@ export default function Portal() {
                     onSkipLogin={authBypassEnabled ? handleSkipLogin : undefined}
                     busy={busy}
                     error={error}
+                    code={code}
+                    onChangeCode={setCode}
+                    onSubmitCode={submitCode}
                   />
                 ) : stage === "code" ? (
                   <CodeForm code={code} onChange={setCode} onSubmit={submitCode} error={error} busy={busy} />
@@ -399,72 +411,184 @@ export default function Portal() {
                     </Text>
                   ) : null}
                   {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={emailAlreadyConfirmed || stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
+                  {stage.startsWith("realtor") ? (
+                    <GuestAccessCard
+                      code={code}
+                      onChangeCode={setCode}
+                      onSubmit={submitCode}
+                      busy={busy}
+                      error={error}
+                    />
+                  ) : null}
                   </>
                 )}
               </Animated.View>
             </Animated.View>
           </Animated.View>
+
+          <View style={[styles.footerInflow, { paddingBottom: Math.max(insets.bottom, 16) + 24 }]}>
+            <Text style={styles.footerText}>MY REALTOR APP · PRIVATE</Text>
+            <View style={styles.footerLegal}>
+              <Pressable onPress={() => router.push({ pathname: "/legal", params: { doc: "privacy" } })} hitSlop={10}>
+                <Text style={styles.footerLink}>Privacy</Text>
+              </Pressable>
+              <Text style={styles.footerLink}>·</Text>
+              <Pressable onPress={() => router.push({ pathname: "/legal", params: { doc: "terms" } })} hitSlop={10}>
+                <Text style={styles.footerLink}>Terms</Text>
+              </Pressable>
+            </View>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
-
-      <View style={[styles.footer, { paddingBottom: insets.bottom + 28 }]}>
-        <Text style={styles.footerText}>MY REALTOR APP · PRIVATE</Text>
-        <View style={styles.footerLegal}>
-          <Pressable onPress={() => router.push({ pathname: "/legal", params: { doc: "privacy" } })} hitSlop={8}>
-            <Text style={styles.footerLink}>Privacy</Text>
-          </Pressable>
-          <Text style={styles.footerLink}>·</Text>
-          <Pressable onPress={() => router.push({ pathname: "/legal", params: { doc: "terms" } })} hitSlop={8}>
-            <Text style={styles.footerLink}>Terms</Text>
-          </Pressable>
-        </View>
-      </View>
     </View>
   );
 }
 
 // ── Entry form: choose realtor or client ─────────────────────────────
-function EntryForm({ onRealtor, onClient, onExploreDemo, onSkipLogin, busy, error }: { onRealtor: () => void; onClient: () => void; onExploreDemo: () => void; onSkipLogin?: () => void; busy: boolean; error: string | null }) {
+function EntryForm({
+  onRealtor, onClient, onExploreDemo, onSkipLogin, busy, error,
+  code, onChangeCode, onSubmitCode,
+}: {
+  onRealtor: () => void;
+  onClient: () => void;
+  onExploreDemo: () => void;
+  onSkipLogin?: () => void;
+  busy: boolean;
+  error: string | null;
+  code: string;
+  onChangeCode: (v: string) => void;
+  onSubmitCode: () => void;
+}) {
   return (
     <View style={{ width: "100%", gap: 14 }}>
       {onSkipLogin ? (
         <View style={{ gap: 8, marginBottom: 4 }}>
-          <Pressable onPress={onSkipLogin} disabled={busy} style={({ pressed }) => [styles.roleBtn, styles.roleBtnRealtor, busy && { opacity: 0.5 }, pressed && { opacity: 0.85 }]}>
+          <PressableScale onPress={onSkipLogin} disabled={busy} haptic="selection" scaleTo={0.97} hitSlop={12} style={[styles.roleBtn, styles.roleBtnRealtor, busy && { opacity: 0.5 }]}>
             <DoorClosed size={20} color={brand.goldLight} strokeWidth={1.6} />
             <View style={{ flex: 1 }}>
               <Text style={styles.roleBtnTitle}>Continue without login</Text>
               <Text style={styles.roleBtnSub}>Skip login · preview (temporary)</Text>
             </View>
             <ArrowRight size={16} color={brand.goldLight} strokeWidth={1.8} />
-          </Pressable>
+          </PressableScale>
           <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", lineHeight: 18 }}>
             Temporary preview mode — turn off EXPO_PUBLIC_AUTH_BYPASS when ready for real sign-in.
           </Text>
         </View>
       ) : null}
-      <Pressable onPress={onRealtor} style={({ pressed }) => [styles.roleBtn, styles.roleBtnRealtor, pressed && { opacity: 0.85 }]}>
+      <PressableScale onPress={onRealtor} haptic="selection" scaleTo={0.97} hitSlop={12} style={[styles.roleBtn, styles.roleBtnRealtor]}>
         <Building2 size={20} color={brand.goldLight} strokeWidth={1.6} />
         <View style={{ flex: 1 }}>
           <Text style={styles.roleBtnTitle}>Realtor Login</Text>
           <Text style={styles.roleBtnSub}>Create your branded app experience</Text>
         </View>
         <ArrowRight size={16} color={brand.goldLight} strokeWidth={1.8} />
-      </Pressable>
-      <Pressable onPress={onClient} style={({ pressed }) => [styles.roleBtn, styles.roleBtnClient, pressed && { opacity: 0.85 }]}>
-        <User size={20} color={brand.ivory} strokeWidth={1.6} />
-        <View style={{ flex: 1 }}>
-          <Text style={styles.roleBtnTitle}>Client Login</Text>
-          <Text style={styles.roleBtnSub}>Connect to your realtor with a code</Text>
-        </View>
-        <ArrowRight size={16} color={brand.ivory} strokeWidth={1.8} />
-      </Pressable>
+      </PressableScale>
       <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", letterSpacing: 1.2, marginTop: 6 }}>Or continue with</Text>
       <SocialSignIn />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Pressable onPress={onExploreDemo} disabled={busy} style={({ pressed }) => [styles.demoBtn, pressed && { opacity: 0.6 }]}>
+
+      {/* Access code visible on the welcome gateway — no hunting for Client Login */}
+      <View style={styles.entryCodeCard}>
+        <Text style={styles.entryCodeEyebrow}>HAVE AN ACCESS CODE?</Text>
+        <Text style={styles.roleBtnTitle}>Client Login</Text>
+        <Text style={styles.roleBtnSub}>Enter the code your realtor shared — or try the demo.</Text>
+        <View style={[styles.codeInputWrap, { marginTop: 14 }]}>
+          <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
+          <TextInput
+            value={code}
+            onChangeText={(v) => onChangeCode(v.toUpperCase())}
+            placeholder="ENTER ACCESS CODE"
+            placeholderTextColor="rgba(244,239,230,0.28)"
+            autoCapitalize="characters"
+            autoCorrect={false}
+            autoComplete="off"
+            returnKeyType="go"
+            onSubmitEditing={onSubmitCode}
+            style={styles.codeInput}
+            maxLength={12}
+            accessibilityLabel="Client access code"
+          />
+        </View>
+        {GUEST_ACCESS_CODE ? (
+          <Text style={{ color: "rgba(244,239,230,0.45)", fontSize: 12, textAlign: "center", marginTop: 12, letterSpacing: 0.4 }}>
+            Demo code: {GUEST_ACCESS_CODE}
+          </Text>
+        ) : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <PressableScale
+          onPress={onSubmitCode}
+          disabled={busy || !code.trim()}
+          haptic="medium"
+          scaleTo={0.97}
+          hitSlop={12}
+          style={[styles.cta, (busy || !code.trim()) && { opacity: 0.4 }]}
+        >
+          <Text style={styles.ctaText}>CONTINUE</Text>
+          <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
+        </PressableScale>
+        <PressableScale onPress={onClient} haptic="selection" scaleTo={0.98} hitSlop={10} style={{ paddingVertical: 12, alignItems: "center", minHeight: 44, justifyContent: "center" }}>
+          <Text style={{ fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 12, letterSpacing: 1 }}>Open full client sign-in</Text>
+        </PressableScale>
+      </View>
+
+      <PressableScale onPress={onExploreDemo} disabled={busy} haptic="selection" scaleTo={0.97} hitSlop={14} style={styles.demoBtn}>
         <Eye size={14} color="rgba(244,239,230,0.45)" strokeWidth={1.4} />
         <Text style={styles.demoText}>Explore Demo</Text>
-      </Pressable>
+      </PressableScale>
+    </View>
+  );
+}
+
+
+/** Visible on realtor login too — DEMO is entered here without hunting Client Login. */
+function GuestAccessCard({
+  code, onChangeCode, onSubmit, busy, error,
+}: {
+  code: string;
+  onChangeCode: (v: string) => void;
+  onSubmit: () => void;
+  busy: boolean;
+  error: string | null;
+}) {
+  return (
+    <View style={styles.entryCodeCard}>
+      <Text style={styles.entryCodeEyebrow}>HAVE A CLIENT CODE?</Text>
+      <Text style={styles.roleBtnTitle}>Access code</Text>
+      <Text style={styles.roleBtnSub}>Clients enter their realtor code here. Try DEMO to preview as a guest client.</Text>
+      <View style={[styles.codeInputWrap, { marginTop: 14 }]}>
+        <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
+        <TextInput
+          value={code}
+          onChangeText={(v) => onChangeCode(v.toUpperCase())}
+          placeholder="ENTER ACCESS CODE"
+          placeholderTextColor="rgba(244,239,230,0.28)"
+          autoCapitalize="characters"
+          autoCorrect={false}
+          autoComplete="off"
+          returnKeyType="go"
+          onSubmitEditing={onSubmit}
+          style={styles.codeInput}
+          maxLength={12}
+          accessibilityLabel="Client access code"
+        />
+      </View>
+      {GUEST_ACCESS_CODE ? (
+        <Text style={{ color: "rgba(244,239,230,0.45)", fontSize: 12, textAlign: "center", marginTop: 12, letterSpacing: 0.4 }}>
+          Demo code: {GUEST_ACCESS_CODE}
+        </Text>
+      ) : null}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <PressableScale
+        onPress={onSubmit}
+        disabled={busy || !code.trim()}
+        haptic="medium"
+        scaleTo={0.97}
+        hitSlop={12}
+        style={[styles.cta, (busy || !code.trim()) && { opacity: 0.4 }]}
+      >
+        <Text style={styles.ctaText}>CONTINUE WITH CODE</Text>
+        <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
+      </PressableScale>
     </View>
   );
 }
@@ -483,10 +607,10 @@ function CodeForm({ code, onChange, onSubmit, error, busy }: { code: string; onC
         </Text>
       ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Pressable onPress={onSubmit} disabled={busy || !code.trim()} style={({ pressed }) => [styles.cta, (busy || !code.trim()) && { opacity: 0.4 }, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}>
+      <PressableScale onPress={onSubmit} disabled={busy || !code.trim()} haptic="medium" scaleTo={0.97} hitSlop={12} style={[styles.cta, (busy || !code.trim()) && { opacity: 0.4 }]}>
         <Text style={styles.ctaText}>CONTINUE</Text>
         <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
-      </Pressable>
+      </PressableScale>
     </View>
   );
 }
@@ -505,10 +629,10 @@ function AtCapacity({ realtorName, onBack }: { realtorName: string; onBack: () =
           them directly and they&apos;ll let you know.
         </Text>
       </View>
-      <Pressable onPress={onBack} style={({ pressed }) => [styles.cta, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}>
+      <PressableScale onPress={onBack} haptic="medium" scaleTo={0.97} hitSlop={12} style={styles.cta}>
         <Text style={styles.ctaText}>TRY A DIFFERENT CODE</Text>
         <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
-      </Pressable>
+      </PressableScale>
     </View>
   );
 }
@@ -528,24 +652,24 @@ function AccountForm({ stage, name, email, password, onChangeName, onChangeEmail
       <Field label="EMAIL"><TextInput value={email} onChangeText={onChangeEmail} placeholder="you@example.com" placeholderTextColor="rgba(244,239,230,0.3)" autoCapitalize="none" autoCorrect={false} keyboardType="email-address" style={styles.input} /></Field>
       <Field label="PASSWORD"><TextInput value={password} onChangeText={onChangePassword} placeholder={isSetup ? "At least 6 characters" : "••••••••"} placeholderTextColor="rgba(244,239,230,0.3)" secureTextEntry style={styles.input} /></Field>
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Pressable onPress={onSubmit} disabled={busy} style={({ pressed }) => [styles.cta, busy && { opacity: 0.5 }, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}>
+      <PressableScale onPress={onSubmit} disabled={busy} haptic="medium" scaleTo={0.97} hitSlop={12} style={[styles.cta, busy && { opacity: 0.5 }]}>
         <Text style={styles.ctaText}>{cta}</Text>
         <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
-      </Pressable>
+      </PressableScale>
       {isClient || stage === "realtor-signin" || stage === "realtor-setup" ? (
-        <Pressable onPress={onToggleMode} hitSlop={10} style={styles.switchRow}>
+        <PressableScale onPress={onToggleMode} haptic="selection" scaleTo={0.98} hitSlop={12} style={styles.switchRow}>
           <Text style={styles.switchHint}>{toggleHint}</Text>
           <Text style={styles.switchLink}>{toggleLink}</Text>
-        </Pressable>
+        </PressableScale>
       ) : null}
 
       {/* Recovery is offered to realtors only. A locked-out realtor loses their
           entire studio; a locked-out client can be re-invited by their agent in
           seconds, and email delivery is the slower, more failure-prone path. */}
       {stage === "realtor-signin" ? (
-        <Pressable onPress={onForgot} hitSlop={10} style={styles.forgotRow}>
+        <PressableScale onPress={onForgot} haptic="selection" scaleTo={0.98} hitSlop={12} style={styles.forgotRow}>
           <Text style={styles.forgotText}>Forgot your password?</Text>
-        </Pressable>
+        </PressableScale>
       ) : null}
     </View>
   );
@@ -557,14 +681,14 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 // ── Styles ───────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: dark.bg },
+  root: { flex: 1, backgroundColor: dark.bg, minHeight: Platform.OS === "web" ? ("100dvh" as any) : undefined },
   bgImage: { ...StyleSheet.absoluteFill },
   topBar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 22, paddingBottom: 8 },
   iconBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: "rgba(244,239,230,0.18)", alignItems: "center", justifyContent: "center" },
   brandWord: { fontFamily: fonts.serif, color: brand.ivory, fontSize: 18, letterSpacing: 6 },
   brandSub: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 9, letterSpacing: 3.2, marginTop: 3 },
   kbd: { flex: 1 },
-  scroll: { flexGrow: 1, justifyContent: "center", paddingHorizontal: 28, paddingTop: 24 },
+  scroll: { flexGrow: 1, justifyContent: "flex-start", paddingHorizontal: 28, paddingTop: 20 },
   center: { alignItems: "center", width: "100%" },
   monogramWrap: { width: 92, height: 92, alignItems: "center", justifyContent: "center", marginBottom: 32 },
   monogramRing: { ...StyleSheet.absoluteFill, borderRadius: 46, borderWidth: 1, borderColor: "rgba(210,163,67,0.45)" },
@@ -572,7 +696,12 @@ const styles = StyleSheet.create({
   eyebrow: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 10, letterSpacing: 4, textAlign: "center", marginBottom: 18 },
   title: { fontFamily: fonts.serif, color: brand.ivory, fontSize: 32, lineHeight: 38, letterSpacing: -0.5, textAlign: "center", marginBottom: 14 },
   sub: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.62)", fontSize: 13, lineHeight: 20, textAlign: "center", marginBottom: 36, paddingHorizontal: 12 },
-  roleBtn: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, borderWidth: 1, borderRadius: 12 },
+  entryCodeCard: {
+    width: "100%", marginTop: 4, padding: 18, borderRadius: 14, gap: 4,
+    borderWidth: 1, borderColor: "rgba(244,239,230,0.18)", backgroundColor: "rgba(244,239,230,0.05)",
+  },
+  entryCodeEyebrow: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 10, letterSpacing: 2.8, marginBottom: 6, textAlign: "center" },
+  roleBtn: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, minHeight: 56, borderWidth: 1, borderRadius: 12 },
   roleBtnRealtor: { borderColor: "rgba(210,163,67,0.4)", backgroundColor: "rgba(210,163,67,0.08)" },
   roleBtnClient: { borderColor: "rgba(244,239,230,0.15)", backgroundColor: "rgba(244,239,230,0.04)" },
   roleBtnTitle: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 15, letterSpacing: 0.3, marginBottom: 2 },
@@ -610,14 +739,14 @@ const styles = StyleSheet.create({
   fieldLabel: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 10, letterSpacing: 2.8, marginBottom: 8 },
   input: { fontFamily: fonts.sans, color: brand.ivory, fontSize: 16, paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: "rgba(244,239,230,0.22)" },
   error: { fontFamily: fonts.sansMedium, color: "#E8B7A6", fontSize: 11.5, letterSpacing: 0.6, marginTop: 14, textAlign: "center" },
-  cta: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, backgroundColor: brand.ivory, paddingVertical: 17, marginTop: 26 },
+  cta: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, backgroundColor: brand.ivory, paddingVertical: 17, marginTop: 26, minHeight: 52, borderRadius: 10 },
   ctaText: { fontFamily: fonts.sansSemi, color: brand.forestDeep, fontSize: 12, letterSpacing: 3 },
-  demoBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 12, marginTop: 4 },
+  demoBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 16, marginTop: 4, minHeight: 48 },
   demoText: { fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 13, letterSpacing: 1.2 },
   switchRow: { flexDirection: "row", justifyContent: "center", gap: 8, marginTop: 22 },
   switchHint: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.55)", fontSize: 12 },
   switchLink: { fontFamily: fonts.sansSemi, color: brand.goldLight, fontSize: 12, letterSpacing: 1.2 },
-  footer: { position: "absolute", left: 0, right: 0, bottom: 0, alignItems: "center", justifyContent: "center", paddingTop: 10, paddingHorizontal: 28 },
+  footerInflow: { alignItems: "center", justifyContent: "center", paddingTop: 36, marginTop: 28, width: "100%", borderTopWidth: 1, borderTopColor: "rgba(244,239,230,0.08)" },
   forgotRow: { alignItems: "center", marginTop: 18, paddingTop: 14, paddingBottom: 14, minHeight: 48 },
   forgotText: {
     fontFamily: fonts.sansMedium,

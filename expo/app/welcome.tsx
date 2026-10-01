@@ -122,8 +122,12 @@ export default function Welcome() {
         style={{ flex: 1 }}
       >
         <ScrollView
-          contentContainerStyle={{ paddingBottom: insets.bottom + 140 }}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 160 }}
           keyboardShouldPersistTaps="handled"
+          bounces
+          alwaysBounceVertical
+          overScrollMode="always"
+          style={Platform.OS === "web" ? ({ overscrollBehaviorY: "contain" } as object) : undefined}
         >
           <Reveal delay={60}>
             <View style={styles.trustRow}>
@@ -183,7 +187,8 @@ export default function Welcome() {
           onPress={onContinue}
           haptic="medium"
           scaleTo={0.97}
-          style={[styles.cta, !valid && { opacity: 0.5 }]}
+          hitSlop={12}
+          style={[styles.cta, { minHeight: 52 }, !valid && { opacity: 0.5 }]}
           disabled={!valid || loading}
         >
           <Text style={styles.ctaText}>Continue to booking</Text>

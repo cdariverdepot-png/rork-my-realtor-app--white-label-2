@@ -38,14 +38,23 @@ export default function PressableScale({
   ...rest
 }: Props) {
   const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
-  const spring = (to: number) =>
-    Animated.spring(scale, {
-      toValue: to,
-      useNativeDriver: true,
-      friction: 7,
-      tension: 220,
-    }).start();
+  const spring = (pressed: boolean) => {
+    Animated.parallel([
+      Animated.spring(scale, {
+        toValue: pressed ? scaleTo : 1,
+        useNativeDriver: true,
+        friction: 7,
+        tension: 220,
+      }),
+      Animated.timing(opacity, {
+        toValue: pressed ? 0.82 : 1,
+        duration: pressed ? 60 : 140,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
 
   const fire = () => {
     if (Platform.OS === "web" || haptic === "none") return;
@@ -72,17 +81,18 @@ export default function PressableScale({
     <Pressable
       {...rest}
       style={outer as ViewStyle}
+      hitSlop={rest.hitSlop ?? 10}
       onPressIn={(e) => {
-        spring(scaleTo);
+        spring(true);
         fire();
         onPressIn?.(e);
       }}
       onPressOut={(e) => {
-        spring(1);
+        spring(false);
         onPressOut?.(e);
       }}
     >
-      <Animated.View style={[{ flexGrow: 1 }, inner as ViewStyle, { transform: [{ scale }] }]}>
+      <Animated.View style={[{ flexGrow: 1 }, inner as ViewStyle, { opacity, transform: [{ scale }] }]}>
         {children}
       </Animated.View>
     </Pressable>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import {
   Animated,
   Easing,
+  Platform,
   StyleSheet,
   useWindowDimensions,
 } from "react-native";
@@ -162,6 +163,19 @@ export default function BootScreen({ onFinish }: Props) {
 const styles = {
   fill: {
     ...StyleSheet.absoluteFill,
+    ...(Platform.OS === "web"
+      ? {
+          position: "fixed" as const,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%" as const,
+          // 100dvh tracks Safari chrome; minHeight fallback for older browsers
+          height: "100dvh" as unknown as number,
+          minHeight: "100dvh" as unknown as number,
+        }
+      : {}),
     backgroundColor: "#000000",
     alignItems: "center" as const,
     justifyContent: "center" as const,

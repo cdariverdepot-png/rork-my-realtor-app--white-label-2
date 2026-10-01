@@ -5,7 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   PlayfairDisplay_500Medium,
@@ -190,7 +190,12 @@ function RootLayoutInner() {
 
   return (
     <>
-      <GestureHandlerRootView style={{ flex: 1, backgroundColor: dark.bg }}>
+      <GestureHandlerRootView style={[
+        { flex: 1, backgroundColor: dark.bg },
+        Platform.OS === "web"
+          ? ({ minHeight: "100dvh", height: "100%", width: "100%" } as object)
+          : null,
+      ]}>
         <StatusBar style="light" />
         {authBypassEnabled && isAuthenticated && isPreviewAdmin ? (
           <View style={{ backgroundColor: "#5c4a1f", paddingVertical: 6, paddingHorizontal: 12 }}>

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from "lucide-react-native";
+import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft, Lock } from "lucide-react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
@@ -45,6 +45,9 @@ import SupportSection from "@/components/SupportSection";
 import Reveal from "@/components/Reveal";
 import SetupGate from "@/components/SetupGate";
 import SocialSignIn from "@/components/SocialSignIn";
+import PressableScale from "@/components/PressableScale";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GUEST_ACCESS_CODE, isGuestAccessCode } from "@/constants/access";
 import {
   visibleSections,
   requiredStatus,
@@ -130,7 +133,11 @@ export default function Home() {
 
 function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise<void>; insets: { top: number; bottom: number } }) {
   const router = useRouter();
+  const { enterGuestClient, lookupRealtorByCode } = useAuth();
   const entrance = useRef(new Animated.Value(0)).current;
+  const [accessCode, setAccessCode] = useState<string>("");
+  const [codeBusy, setCodeBusy] = useState<boolean>(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
 
   useEffect(() => {
     Animated.timing(entrance, { toValue: 1, duration: 900, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
@@ -139,9 +146,43 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
   const heroOpacity = entrance.interpolate({ inputRange: [0, 1], outputRange: [0, 1] });
   const heroTranslate = entrance.interpolate({ inputRange: [0, 1], outputRange: [20, 0] });
 
+  const submitAccessCode = async () => {
+    const trimmed = accessCode.trim();
+    if (!trimmed || codeBusy) return;
+    setCodeBusy(true);
+    setCodeError(null);
+    try {
+      if (isGuestAccessCode(trimmed)) {
+        if (Platform.OS !== "web") Haptics.selectionAsync();
+        const res = await enterGuestClient();
+        if (!res.ok) {
+          setCodeError(res.error ?? "Couldn't start a guest session. Please try again.");
+          return;
+        }
+        if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        router.replace("/");
+        return;
+      }
+      const record = await lookupRealtorByCode(trimmed);
+      if (!record || record.client_code_enabled !== true) {
+        setCodeError(record ? "This app is still being set up by your realtor." : "That code isn't recognized. Check and try again.");
+        return;
+      }
+      if (Platform.OS !== "web") Haptics.selectionAsync();
+      await AsyncStorage.setItem("onboarding.pendingInvite.v1", JSON.stringify({ code: trimmed.toUpperCase() }));
+      router.push({ pathname: "/portal", params: { entry: "client", invite: trimmed.toUpperCase() } });
+    } catch {
+      setCodeError("We couldn't check that code. Please try again.");
+    } finally {
+      setCodeBusy(false);
+    }
+  };
+
+  // Footer sits in-flow so it never covers CTAs; extra pad gives scroll "give" on web.
+  const bottomPad = Math.max(insets.bottom, 12) + 72;
+
   return (
     <View style={styles.landingRoot}>
-      {/* A softly lit front door at dusk — arriving home, right where you sign in. */}
       <Image
         source={require("@/assets/images/login-bg-door.jpg")}
         style={styles.landingBg}
@@ -154,12 +195,15 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
       />
 
       <ScrollView
-        contentContainerStyle={[styles.landingScroll, { paddingTop: insets.top + 60, paddingBottom: insets.bottom + 40 }]}
+        contentContainerStyle={[styles.landingScroll, { paddingTop: insets.top + 48, paddingBottom: bottomPad }]}
         showsVerticalScrollIndicator={false}
-        bounces={false}
+        bounces
+        alwaysBounceVertical
+        overScrollMode="always"
+        keyboardShouldPersistTaps="handled"
+        style={Platform.OS === "web" ? ({ overscrollBehaviorY: "contain" } as object) : undefined}
       >
         <Animated.View style={[styles.landingCenter, { opacity: heroOpacity, transform: [{ translateY: heroTranslate }] }]}>
-          {/* Monogram */}
           <View style={styles.landingMonoWrap}>
             <View style={styles.landingMonoRing} />
             <Text style={styles.landingMono}>MR</Text>
@@ -168,14 +212,16 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
           <Text style={styles.landingBrand}>MY REALTOR APP</Text>
           <Text style={styles.landingTagline}>Your brand. Your clients. One app.</Text>
 
-          {/* Primary CTAs */}
           <View style={styles.landingActions}>
-            <Pressable
+            <PressableScale
               onPress={() => {
                 if (Platform.OS !== "web") Haptics.selectionAsync();
                 router.push({ pathname: "/portal", params: { entry: "realtor" } });
               }}
-              style={({ pressed }) => [styles.landingBtn, styles.landingBtnRealtor, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}
+              haptic="selection"
+              scaleTo={0.97}
+              hitSlop={12}
+              style={[styles.landingBtn, styles.landingBtnRealtor]}
             >
               <Building2 size={20} color={brand.goldLight} strokeWidth={1.6} />
               <View style={{ flex: 1 }}>
@@ -183,42 +229,67 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
                 <Text style={styles.landingBtnSub}>Create your branded app experience</Text>
               </View>
               <ArrowRight size={16} color={brand.goldLight} strokeWidth={1.8} />
-            </Pressable>
+            </PressableScale>
 
             <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", letterSpacing: 1.2, marginTop: 4 }}>Or continue with</Text>
             <SocialSignIn />
 
-            <Pressable
-              onPress={() => {
-                if (Platform.OS !== "web") Haptics.selectionAsync();
-                router.push({ pathname: "/portal", params: { entry: "client" } });
-              }}
-              style={({ pressed }) => [styles.landingBtn, styles.landingBtnClient, pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }]}
-            >
-              <User size={20} color={brand.ivory} strokeWidth={1.6} />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.landingBtnTitle}>Client Login</Text>
-                <Text style={styles.landingBtnSub}>Connect to your realtor with a code</Text>
+            {/* Prominent access-code entry — DEMO is entered here, no hunting */}
+            <View style={styles.accessSection}>
+              <Text style={styles.accessEyebrow}>HAVE AN ACCESS CODE?</Text>
+              <Text style={styles.accessTitle}>Client Login</Text>
+              <Text style={styles.accessSub}>Enter the code your realtor shared — or try the demo.</Text>
+              <View style={styles.accessInputWrap}>
+                <Lock size={14} color={brand.goldLight} strokeWidth={1.6} />
+                <TextInput
+                  value={accessCode}
+                  onChangeText={(v) => { setAccessCode(v.toUpperCase()); setCodeError(null); }}
+                  placeholder="ENTER ACCESS CODE"
+                  placeholderTextColor="rgba(244,239,230,0.28)"
+                  autoCapitalize="characters"
+                  autoCorrect={false}
+                  autoComplete="off"
+                  returnKeyType="go"
+                  onSubmitEditing={submitAccessCode}
+                  style={styles.accessInput}
+                  maxLength={12}
+                  accessibilityLabel="Client access code"
+                />
               </View>
-              <ArrowRight size={16} color={brand.ivory} strokeWidth={1.8} />
-            </Pressable>
+              {GUEST_ACCESS_CODE ? (
+                <Text style={styles.accessHint}>Demo code: {GUEST_ACCESS_CODE}</Text>
+              ) : null}
+              {codeError ? <Text style={styles.accessError}>{codeError}</Text> : null}
+              <PressableScale
+                onPress={submitAccessCode}
+                disabled={codeBusy || !accessCode.trim()}
+                haptic="medium"
+                scaleTo={0.97}
+                hitSlop={12}
+                style={[styles.accessCta, (codeBusy || !accessCode.trim()) && { opacity: 0.45 }]}
+              >
+                <Text style={styles.accessCtaText}>{codeBusy ? "WORKING…" : "CONTINUE"}</Text>
+                <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
+              </PressableScale>
+            </View>
           </View>
 
-          {/* Demo soft option */}
-          <Pressable
+          <PressableScale
             onPress={onExploreDemo}
-            style={({ pressed }) => [styles.demoBtn, pressed && { opacity: 0.6 }]}
+            haptic="selection"
+            scaleTo={0.97}
+            hitSlop={14}
+            style={styles.demoBtn}
           >
             <Eye size={14} color="rgba(244,239,230,0.45)" strokeWidth={1.4} />
             <Text style={styles.demoText}>Explore Demo</Text>
-          </Pressable>
+          </PressableScale>
+
+          <View style={[styles.landingFooterInflow, { paddingBottom: Math.max(insets.bottom, 8) }]}>
+            <Text style={styles.landingFooterText}>MY REALTOR APP · PRIVATE</Text>
+          </View>
         </Animated.View>
       </ScrollView>
-
-      {/* Footer lockup */}
-      <View style={[styles.landingFooter, { paddingBottom: insets.bottom + 24 }]}>
-        <Text style={styles.landingFooterText}>MY REALTOR APP · PRIVATE</Text>
-      </View>
     </View>
   );
 }
@@ -301,7 +372,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const scrollRef = useRef<ScrollView>(null);
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const bottomPad = Math.max(insets.bottom, 10) + 100;
+  const bottomPad = Math.max(insets.bottom, 10) + 128;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
   /** Floating Back (left) + quiet "Viewing as client" label — shared by every client preview, including the demo. */
@@ -673,7 +744,7 @@ const styles = StyleSheet.create({
   saveText: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 12, letterSpacing: 2 },
 
   // ── Landing screen ──
-  landingRoot: { flex: 1, backgroundColor: dark.bg },
+  landingRoot: { flex: 1, backgroundColor: dark.bg, minHeight: Platform.OS === "web" ? ("100dvh" as any) : undefined },
   landingBg: { ...StyleSheet.absoluteFill },
   landingScroll: { flexGrow: 1, justifyContent: "center", paddingHorizontal: 28 },
   landingCenter: { alignItems: "center", width: "100%" },
@@ -683,13 +754,32 @@ const styles = StyleSheet.create({
   landingBrand: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 13, letterSpacing: 5, marginBottom: 14, textAlign: "center", textShadowColor: "rgba(0,0,0,0.65)", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 12 },
   landingTagline: { fontFamily: fonts.serif, color: "rgba(244,239,230,0.9)", fontSize: 16, lineHeight: 24, textAlign: "center", marginBottom: 44, letterSpacing: 0.3, textShadowColor: "rgba(0,0,0,0.65)", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 10 },
   landingActions: { width: "100%", gap: 14, marginBottom: 20 },
-  landingBtn: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, borderWidth: 1, borderRadius: 12 },
+  landingBtn: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, minHeight: 56, borderWidth: 1, borderRadius: 12 },
   landingBtnRealtor: { borderColor: "rgba(210,163,67,0.4)", backgroundColor: "rgba(210,163,67,0.08)" },
   landingBtnClient: { borderColor: "rgba(244,239,230,0.15)", backgroundColor: "rgba(244,239,230,0.04)" },
   landingBtnTitle: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 15, letterSpacing: 0.3, marginBottom: 2 },
   landingBtnSub: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.5)", fontSize: 11.5 },
-  demoBtn: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 14, paddingHorizontal: 20 },
+  accessSection: {
+    width: "100%", marginTop: 8, padding: 18, borderRadius: 14,
+    borderWidth: 1, borderColor: "rgba(244,239,230,0.18)", backgroundColor: "rgba(244,239,230,0.05)",
+  },
+  accessEyebrow: { fontFamily: fonts.sansMedium, color: brand.goldLight, fontSize: 10, letterSpacing: 2.8, marginBottom: 8, textAlign: "center" },
+  accessTitle: { fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 16, letterSpacing: 0.3, textAlign: "center", marginBottom: 4 },
+  accessSub: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.55)", fontSize: 12, lineHeight: 18, textAlign: "center", marginBottom: 16 },
+  accessInputWrap: {
+    flexDirection: "row", alignItems: "center", gap: 12, borderWidth: 1, borderColor: "rgba(210,163,67,0.45)",
+    paddingHorizontal: 16, paddingVertical: 14, backgroundColor: "rgba(8,26,21,0.55)", borderRadius: 10, minHeight: 52,
+  },
+  accessInput: { flex: 1, fontFamily: fonts.sansSemi, color: brand.ivory, fontSize: 17, letterSpacing: 4, textAlign: "center", paddingVertical: 0 },
+  accessHint: { color: "rgba(244,239,230,0.5)", fontSize: 12, textAlign: "center", marginTop: 12, letterSpacing: 0.4 },
+  accessError: { fontFamily: fonts.sansMedium, color: "#E8B7A6", fontSize: 11.5, letterSpacing: 0.6, marginTop: 12, textAlign: "center" },
+  accessCta: {
+    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10,
+    backgroundColor: brand.ivory, paddingVertical: 16, marginTop: 16, borderRadius: 10, minHeight: 52,
+  },
+  accessCtaText: { fontFamily: fonts.sansSemi, color: brand.forestDeep, fontSize: 12, letterSpacing: 3 },
+  demoBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 16, paddingHorizontal: 20, minHeight: 48 },
   demoText: { fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 13, letterSpacing: 1.2 },
-  landingFooter: { position: "absolute", left: 0, right: 0, bottom: 0, alignItems: "center", justifyContent: "center", paddingTop: 10, paddingHorizontal: 28 },
+  landingFooterInflow: { alignItems: "center", justifyContent: "center", paddingTop: 28, width: "100%" },
   landingFooterText: { fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.35)", fontSize: 11, letterSpacing: 3, textAlign: "center" },
 });

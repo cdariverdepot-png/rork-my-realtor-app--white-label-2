@@ -498,6 +498,21 @@ test('portal guest path uses enterGuestClient and shows demo hint', () => {
   assert.match(src, /Demo code:/);
   assert.match(src, /GUEST_ACCESS_CODE/);
 });
+
+test('portal realtor login surfaces GuestAccessCard with DEMO hint', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.match(src, /function GuestAccessCard/);
+  assert.match(src, /HAVE A CLIENT CODE\?/);
+  assert.match(src, /stage\.startsWith\(["']realtor["']\)[\s\S]*GuestAccessCard/);
+  assert.match(src, /Demo code:/);
+});
+test('welcome landing shows access-code field and DEMO hint', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/index.tsx'), 'utf8');
+  assert.match(src, /HAVE AN ACCESS CODE\?/);
+  assert.match(src, /Demo code:/);
+  assert.match(src, /enterGuestClient/);
+  assert.match(src, /isGuestAccessCode/);
+});
 test('AuthContext exposes enterGuestClient that clears prior session', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
   assert.match(src, /enterGuestClient/);
