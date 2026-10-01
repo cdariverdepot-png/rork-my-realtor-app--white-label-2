@@ -590,3 +590,11 @@ test('production keeps AUTH_BYPASS off and Microsoft sign-in', () => {
   assert.match(social, /id:\s*["']azure["']|Microsoft|MICROSOFT|microsoft/);
   assert.match(social, /EXPO_PUBLIC_MICROSOFT_SIGN_IN/);
 });
+
+test('portal entry has no Explore Demo button', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.doesNotMatch(src, /Explore Demo/);
+  assert.doesNotMatch(src, /onExploreDemo/);
+  assert.doesNotMatch(src, /enterDemoView/);
+  assert.doesNotMatch(src, /handleExploreDemo/);
+});

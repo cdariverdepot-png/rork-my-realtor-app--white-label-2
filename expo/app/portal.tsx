@@ -17,7 +17,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
-import { ArrowRight, ChevronLeft, Lock, Building2, Eye, DoorClosed } from "lucide-react-native";
+import { ArrowRight, ChevronLeft, Lock, Building2, DoorClosed } from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
@@ -50,9 +50,7 @@ export default function Portal() {
     isAdmin,
     isPreviewAdmin,
     authBypassEnabled,
-    previewAdmin,
     enterAuthBypass,
-    enterDemoView,
     realtorSignup,
     realtorLogin,
     clientSignup,
@@ -203,19 +201,6 @@ export default function Portal() {
     } catch {
       setError("We couldn't check that code. Please try again.");
       triggerShake();
-    } finally { setBusy(false); }
-  };
-
-  // Explore Demo — enter the immutable Eliza Vance showcase
-  const handleExploreDemo = async () => {
-    if (busy) return;
-    setBusy(true);
-    try {
-      if (Platform.OS !== "web") Haptics.selectionAsync();
-      await previewAdmin();
-      // Suppress admin redirect and lock the demo brand so only Eliza Vance shows.
-      enterDemoView();
-      router.replace("/");
     } finally { setBusy(false); }
   };
 
@@ -377,7 +362,6 @@ export default function Portal() {
                       router.replace({ pathname: "/portal", params: { entry: "client" } });
                       transitionTo("code");
                     }}
-                    onExploreDemo={handleExploreDemo}
                     onSkipLogin={authBypassEnabled ? handleSkipLogin : undefined}
                     busy={busy}
                     error={error}
@@ -453,12 +437,11 @@ export default function Portal() {
 
 // ── Entry form: choose realtor or client ─────────────────────────────
 function EntryForm({
-  onRealtor, onClient, onExploreDemo, onSkipLogin, busy, error,
+  onRealtor, onClient, onSkipLogin, busy, error,
   code, onChangeCode, onSubmitCode,
 }: {
   onRealtor: () => void;
   onClient: () => void;
-  onExploreDemo: () => void;
   onSkipLogin?: () => void;
   busy: boolean;
   error: string | null;
@@ -504,10 +487,6 @@ function EntryForm({
         <Text style={{ fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 12, letterSpacing: 1 }}>Open full client sign-in</Text>
       </PressableScale>
 
-      <PressableScale onPress={onExploreDemo} disabled={busy} haptic="selection" scaleTo={0.97} hitSlop={14} style={styles.demoBtn}>
-        <Eye size={14} color="rgba(244,239,230,0.45)" strokeWidth={1.4} />
-        <Text style={styles.demoText}>Explore Demo</Text>
-      </PressableScale>
     </View>
   );
 }
@@ -656,8 +635,6 @@ const styles = StyleSheet.create({
   error: { fontFamily: fonts.sansMedium, color: "#E8B7A6", fontSize: 11.5, letterSpacing: 0.6, marginTop: 14, textAlign: "center" },
   cta: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, backgroundColor: brand.ivory, paddingVertical: 17, marginTop: 26, minHeight: 52, borderRadius: 10 },
   ctaText: { fontFamily: fonts.sansSemi, color: brand.forestDeep, fontSize: 12, letterSpacing: 3 },
-  demoBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 16, marginTop: 4, minHeight: 48 },
-  demoText: { fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 13, letterSpacing: 1.2 },
   switchRow: { flexDirection: "row", justifyContent: "center", gap: 8, marginTop: 22 },
   switchHint: { fontFamily: fonts.sans, color: "rgba(244,239,230,0.55)", fontSize: 12 },
   switchLink: { fontFamily: fonts.sansSemi, color: brand.goldLight, fontSize: 12, letterSpacing: 1.2 },
