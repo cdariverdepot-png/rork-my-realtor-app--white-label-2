@@ -6,6 +6,26 @@ import { ensureSupabaseSession, supabase } from "@/lib/supabase";
 import type { BuildSource, SourceEvidence } from "./sourceModel";
 import type { ClientLayoutId } from "@/constants/clientLayouts";
 
+export type DiscoveredListing = {
+  title: string;
+  description: string;
+  price: string;
+  beds: number;
+  baths: number;
+  sqft: string;
+  neighborhood: string;
+  image: string;
+  images: string[];
+  sourceUrl: string;
+};
+
+export type ListingDiscoveryMeta = {
+  visited: string[];
+  hops: number;
+  found: number;
+  maxDepth: number;
+};
+
 export type BuildDraft = {
   heroMessage?: string;
   welcomeNote?: string;
@@ -17,6 +37,9 @@ export type BuildDraft = {
   layoutId?: ClientLayoutId | null;
   portraitSourceId?: string | null;
   potentialListingSources?: string[];
+  /** Listings found by multi-hop crawl during website setup. */
+  discoveredListings?: DiscoveredListing[];
+  listingDiscovery?: ListingDiscoveryMeta;
 };
 
 export type SavedBuild = {
@@ -213,6 +236,39 @@ export async function saveBuildSources(realtorId: string, sources: BuildSource[]
   if (error) throw error;
 }
 
+/** Append sources without wiping evidence/draft (listings soft-prompt path). */
+export async function appendBuildSources(realtorId: string, extra: BuildSource[]): Promise<BuildSource[]> {
+  const route = await resolveBuilderRoute();
+  if (route.kind === "local") {
+    const id = route.realtorId || realtorId;
+    const prev = (await readLocalBuild(id)) ?? emptyBuild();
+    const byUri = new Set(extra.map(source => source.uri));
+    const merged = [...prev.sources.filter(source => !byUri.has(source.uri)), ...extra];
+    await writeLocalBuild(id, { ...prev, sources: merged });
+    return merged;
+  }
+
+  const saved = await loadBuild();
+  const prevSources = saved?.sources ?? [];
+  const byUri = new Set(extra.map(source => source.uri));
+  const merged = [...prevSources.filter(source => !byUri.has(source.uri)), ...extra];
+  const { error } = await supabase!.from("realtor_builds").upsert(
+    {
+      auth_user_id: route.user.id,
+      realtor_id: realtorId,
+      sources: merged,
+      evidence: saved?.evidence ?? [],
+      draft: saved?.draft ?? {},
+      selected_layout: saved?.selected_layout ?? null,
+      status: saved?.status ?? "collecting",
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "auth_user_id" },
+  );
+  if (error) throw error;
+  return merged;
+}
+
 export async function uploadBuildFile(
   asset: { uri: string; name: string; mimeType?: string; size?: number },
   kind: "document" | "image",
@@ -340,4 +396,50 @@ export async function markBuildComplete(): Promise<void> {
     })
     .eq("auth_user_id", route.user.id);
   if (error) throw error;
+}
+
+/**
+ * Soft-prompt follow-up: crawl a listings URL (and existing sources) without
+ * re-running profile AI. Used when the first website scrape found zero homes.
+ */
+export async function discoverListingsBuild(listingsUrl?: string): Promise<SavedBuild> {
+  const route = await resolveBuilderRoute();
+  if (route.kind === "local") {
+    const saved = (await readLocalBuild(route.realtorId)) ?? emptyBuild();
+    if (!supabase || !(await ensureSupabaseSession())) {
+      throw new Error("Could not connect to the app builder. Please retry.");
+    }
+    const { data, error } = await supabase.functions.invoke("analyze-realtor-build", {
+      body: {
+        guest: true,
+        mode: "discover-listings",
+        sources: saved.sources,
+        draft: saved.draft,
+        evidence: saved.evidence ?? [],
+        ...(listingsUrl ? { listingsUrl } : {}),
+      },
+    });
+    if (error || data?.error) {
+      throw await functionError(error, data, "Those listing pages could not be read. Please retry.");
+    }
+    const draft = {
+      ...saved.draft,
+      ...(data.draft ?? {}),
+      discoveredListings: data.discoveredListings ?? data.draft?.discoveredListings ?? [],
+      listingDiscovery: data.listingDiscovery ?? data.draft?.listingDiscovery,
+    };
+    const next: SavedBuild = { ...saved, draft };
+    await writeLocalBuild(route.realtorId, next);
+    return next;
+  }
+
+  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
+    body: { mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) },
+  });
+  if (error || data?.error) {
+    throw await functionError(error, data, "Those listing pages could not be read. Please retry.");
+  }
+  const saved = await loadBuild();
+  if (!saved) throw new Error("The listing import result could not be loaded.");
+  return saved;
 }

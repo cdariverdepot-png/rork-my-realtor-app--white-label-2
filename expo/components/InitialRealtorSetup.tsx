@@ -19,11 +19,13 @@ import { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts
 import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import { themeSampleListings } from "@/constants/themeSamples";
 import ThemeFace from "@/components/ThemeFace";
-import { analyzeBuild, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, discoverListingsBuild, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import { mergeDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
 import { useClients } from "@/contexts/ClientsContext";
+import { useListings } from "@/contexts/ListingsContext";
 import PressableScale from "@/components/PressableScale";
 import { checkSite, useSiteCheck } from "@/lib/siteCheck";
 
@@ -109,7 +111,7 @@ function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: (
 }
 
 type Phase = "collect" | "building" | "review";
-type ErrorPlace = "sources" | "review" | "hero" | "intro";
+type ErrorPlace = "sources" | "review" | "hero" | "intro" | "listings";
 type AskId = "name" | "city" | "phone" | "email" | "heroLine";
 type ConfirmField = "realtor.name" | "realtor.title" | "realtor.city" | "realtor.phone" | "realtor.email" | "realtor.brandName";
 
@@ -128,6 +130,7 @@ const ASK_FOR_FIELD: Partial<Record<ConfirmField, AskId>> = {
 export default function InitialRealtorSetup() {
   const auth = useAuth();
   const { importMany } = useClients();
+  const { all: existingListings, update: updateListings } = useListings();
   const { brand, saveBrand } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -157,6 +160,9 @@ export default function InitialRealtorSetup() {
   const [editingSources, setEditingSources] = useState(false);
   const [regenerating, setRegenerating] = useState<"heroMessage" | "aboutParagraph" | null>(null);
   const [showLicense, setShowLicense] = useState(false);
+  const [importedListingCount, setImportedListingCount] = useState(0);
+  const [listingsUrl, setListingsUrl] = useState("");
+  const [listingsPromptDismissed, setListingsPromptDismissed] = useState(false);
   /**
    * Which inputs the review asks for, fixed when the draft is created. Rendering
    * from live values made a field vanish after its first keystroke (it stopped
@@ -165,6 +171,8 @@ export default function InitialRealtorSetup() {
   const [askFor, setAskFor] = useState<AskId[]>([]);
   const [confirmList, setConfirmList] = useState<{ field: ConfirmField; also: string[] }[]>([]);
   const localImages = useRef<Record<string, string>>({});
+  const listingsSnapshot = useRef(existingListings);
+  useEffect(() => { listingsSnapshot.current = existingListings; }, [existingListings]);
 
   const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
   const isGuestAccess = !!auth.isGuestAccess;
@@ -200,6 +208,21 @@ export default function InitialRealtorSetup() {
     setDraft(next);
   };
 
+  /** Seamlessly fold multi-hop discoveries into the realtor's listing collection. */
+  const applyDiscoveredListings = (saved: SavedBuild) => {
+    const found = saved.draft.discoveredListings ?? [];
+    if (!found.length) {
+      setImportedListingCount(0);
+      return 0;
+    }
+    const merged = mergeDiscoveredListings(listingsSnapshot.current, found);
+    listingsSnapshot.current = merged;
+    updateListings(merged);
+    setImportedListingCount(found.length);
+    setListingsPromptDismissed(true);
+    return found.length;
+  };
+
   const loadSavedBuild = useCallback(async () => {
     const saved = await loadBuild();
     if (!saved) return;
@@ -207,7 +230,11 @@ export default function InitialRealtorSetup() {
     const primary = saved.sources.find(source => source.kind === "url");
     if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
     setResult(saved);
-    if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+    if (saved.evidence.length) {
+      startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+      const found = saved.draft.discoveredListings ?? [];
+      setImportedListingCount(found.length);
+    }
   }, [brand]);
 
   // Product model: real users sign up/in BEFORE /admin/build. Guest REALTOR codes
@@ -377,6 +404,10 @@ export default function InitialRealtorSetup() {
       const portraitUri = saved.draft.portraitSourceId && localImages.current[saved.draft.portraitSourceId];
       if (portraitUri) next.portraitUrl = await toPortableImage(portraitUri, 1600);
       startReview(saved, next);
+      setActivity(saved.draft.discoveredListings?.length
+        ? `Importing ${saved.draft.discoveredListings.length} listing${saved.draft.discoveredListings.length === 1 ? "" : "s"}…`
+        : "Finishing your profile…");
+      applyDiscoveredListings(saved);
     } finally {
       setBuilding(false);
     }
@@ -422,6 +453,34 @@ export default function InitialRealtorSetup() {
       }
     })();
   };
+
+  /** Secondary path when the website crawl found no homes — paste a listings page URL. */
+  const importListingsFromUrl = () => void act("listings", async () => {
+    if (!auth.realtorId) throw new Error("Sign in to import listings.");
+    const uri = normalizeUrl(listingsUrl);
+    if (!uri) throw new Error("That doesn’t look like a web address yet. Try the page that shows your homes for sale.");
+    const listingSource: BuildSource = {
+      id: randomUUID(), kind: "listing", label: new URL(uri).hostname, uri, status: "queued",
+    };
+    const nextSources = await appendBuildSources(auth.realtorId, [listingSource]);
+    setSources(nextSources);
+    setActivity("Looking for your listings…");
+    const saved = await discoverListingsBuild(uri);
+    setResult(prev => {
+      const base = prev ?? saved;
+      return {
+        ...base,
+        sources: nextSources,
+        draft: { ...base.draft, ...saved.draft },
+      };
+    });
+    const count = applyDiscoveredListings(saved);
+    setListingsUrl("");
+    if (!count) {
+      throw new Error("We still couldn’t find listings on that page. Try a link that opens your property list without signing in.");
+    }
+  });
+
   const missingLabels = draft ? requiredStatus(draft).missing.map(item => item.label) : [];
   const finish = () => void act("review", async () => {
     if (!draft) throw new Error("Build your app first.");
@@ -636,8 +695,8 @@ export default function InitialRealtorSetup() {
 
       {/* Separate alternative path. */}
       <View style={{ marginTop: 40, paddingTop: 24, borderTopWidth: 1, borderTopColor: "#2A3238" }}>
-        <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>Prefer to enter everything yourself?</Text>
-        <Text style={{ color: "#9AA4AA", marginTop: 4 }}>Skip the website import and add your information manually.</Text>
+        <Text style={{ color: "#9AA4AA", fontSize: 14, fontWeight: "600" }}>Or enter details manually</Text>
+        <Text style={{ color: "#7A848A", marginTop: 4, fontSize: 13 }}>Most realtors start with a website link above. Manual entry is available if you prefer.</Text>
         {button("Enter Details Manually", () => setManual(true))}
       </View>
     </>}
@@ -698,6 +757,50 @@ export default function InitialRealtorSetup() {
       {button(regenerating === "aboutParagraph" ? "Writing a new introduction…" : "Try another introduction",
         () => regenerate("aboutParagraph"), false, busy || !!regenerating)}
       {errorFor("intro")}
+
+      {/* Listings imported via multi-hop crawl — or a soft ask for a better URL. */}
+      {importedListingCount > 0 ? (
+        <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#2E8B57", backgroundColor: "rgba(46,139,87,0.12)" }}>
+          <Text style={{ color: "#8FD9B4", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
+          <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
+            We imported {importedListingCount} listing{importedListingCount === 1 ? "" : "s"} from your site
+          </Text>
+          <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
+            They’ll show in your app. You can edit or hide any of them from your dashboard after setup.
+          </Text>
+        </View>
+      ) : !listingsPromptDismissed ? (
+        <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#C2A276", backgroundColor: "rgba(194,162,118,0.10)" }}>
+          <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
+          <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
+            We couldn’t find listings on that page
+          </Text>
+          <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
+            We imported what we could for your profile. If you have a page that shows your homes for sale — even on another site — paste that link and we’ll bring them in.
+          </Text>
+          <View style={{ marginTop: 12, flexDirection: "row", alignItems: "center", borderRadius: 10, borderWidth: 1,
+            borderColor: "#657079", backgroundColor: "#0C1014", paddingHorizontal: 12 }}>
+            <TextInput value={listingsUrl} onChangeText={setListingsUrl}
+              placeholder="Link to your property listings" placeholderTextColor="#6F7A80"
+              accessibilityLabel="Link to your property listings"
+              autoCapitalize="none" autoCorrect={false} keyboardType="url" returnKeyType="go"
+              onSubmitEditing={importListingsFromUrl}
+              style={{ flex: 1, color: "white", fontSize: 16, paddingVertical: 12 }} />
+          </View>
+          <View style={{ flexDirection: "row", gap: 10, marginTop: 12 }}>
+            <Pressable accessibilityRole="button" onPress={importListingsFromUrl} disabled={busy || !listingsUrl.trim()}
+              style={{ flex: 1, minHeight: 46, borderRadius: 10, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center",
+                opacity: busy || !listingsUrl.trim() ? 0.55 : 1 }}>
+              <Text style={{ color: "#172027", fontWeight: "700" }}>{busy ? "Looking…" : "Import listings"}</Text>
+            </Pressable>
+            <Pressable accessibilityRole="button" onPress={() => setListingsPromptDismissed(true)} disabled={busy}
+              style={{ minHeight: 46, paddingHorizontal: 14, borderRadius: 10, borderWidth: 1, borderColor: "#657079", alignItems: "center", justifyContent: "center" }}>
+              <Text style={{ color: "#C8D0D0" }}>Not now</Text>
+            </Pressable>
+          </View>
+          {errorFor("listings")}
+        </View>
+      ) : null}
 
       {/* Portrait — recommended and prominent, never blocking. */}
       <View style={{ marginTop: 26, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: draft.portraitUrl ? "#2E3A40" : "#C2A276",

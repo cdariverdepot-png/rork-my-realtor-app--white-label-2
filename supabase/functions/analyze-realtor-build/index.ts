@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { discoverListings, type DiscoveredListing } from "./listingDiscovery.ts";
 
 type Source = {
   id: string;
@@ -395,6 +396,46 @@ Deno.serve(async (request) => {
     if (error) return reply({ error: "Could not save the new variation." }, 503);
     return reply({ draft });
   }
+  // Soft-prompt path: realtor pasted a URL that goes straight to their listings.
+  // Re-crawl only — do not re-run profile AI.
+  if (input?.mode === "discover-listings") {
+    const seeds = (Array.isArray(build.sources) ? build.sources as Source[] : [])
+      .filter((source) => source && (source.kind === "url" || source.kind === "listing") && typeof source.uri === "string")
+      .map((source) => source.uri);
+    const extra = typeof input.listingsUrl === "string" ? input.listingsUrl.trim() : "";
+    if (extra) {
+      try { seeds.unshift((await publicHttps(extra)).toString()); }
+      catch (error) {
+        return reply({ error: error instanceof Error ? error.message : "That listings link could not be used." }, 400);
+      }
+    }
+    if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
+    let discovery;
+    try {
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 3, maxPages: 10, maxListings: 24 });
+    } catch (error) {
+      console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
+      return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
+    }
+    const draft = {
+      ...(build.draft && typeof build.draft === "object" ? build.draft : {}),
+      discoveredListings: discovery.listings,
+      listingDiscovery: discovery.meta,
+    };
+    if (!guest) {
+      const { error } = await admin.from("realtor_builds").update({
+        draft, updated_at: new Date().toISOString(),
+      }).eq("auth_user_id", userId);
+      if (error) return reply({ error: "Listings were found but could not be saved." }, 503);
+    }
+    return reply({
+      draft,
+      discoveredListings: discovery.listings,
+      listingDiscovery: discovery.meta,
+      status: build.status ?? "needs-input",
+    });
+  }
+
   const sources = Array.isArray(build.sources) ? build.sources as Source[] : [];
   if (!sources.length || sources.length > 12) return reply({ error: "Add between one and twelve sources." }, 400);
 
@@ -466,6 +507,27 @@ Deno.serve(async (request) => {
       processed.push({ ...source, status: "failed", error: error instanceof Error ? error.message : "Could not analyze source." });
     }
   }
+  // Multi-hop listing discovery from website / listing sources (landing → CTA → IDX/FlexMLS).
+  let discoveredListings: DiscoveredListing[] = [];
+  let listingDiscovery: { visited: string[]; hops: number; found: number; maxDepth: number } = {
+    visited: [], hops: 0, found: 0, maxDepth: 0,
+  };
+  const listingSeeds = processed
+    .filter((source) => source.status === "ready" && (source.kind === "url" || source.kind === "listing"))
+    .map((source) => source.uri);
+  if (listingSeeds.length) {
+    try {
+      const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
+        maxDepth: 3, maxPages: 10, maxListings: 24,
+      });
+      discoveredListings = discovery.listings;
+      listingDiscovery = discovery.meta;
+      console.log("[build] listing discovery", listingDiscovery);
+    } catch (error) {
+      console.error("[build] listing discovery error", error instanceof Error ? error.message : String(error));
+    }
+  }
+
   const readyIds = new Set(processed.filter((source) => source.status === "ready" && source.kind !== "contacts").map((source) => source.id));
   const imageIds = new Set(processed.filter(source => source.status === "ready" && source.kind === "image").map(source => source.id));
   if (!readyIds.size) {
@@ -524,10 +586,22 @@ Deno.serve(async (request) => {
   if (!result.evidence.length || !result.draft.heroMessage || !result.draft.aboutParagraph) {
     return reply({ error: "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page." }, 422);
   }
+  const draftWithListings = {
+    ...result.draft,
+    discoveredListings,
+    listingDiscovery,
+  };
   const { error: saveError } = guest ? { error: null } : await admin.from("realtor_builds")
-    .update({ sources: processed, evidence: result.evidence, draft: result.draft,
+    .update({ sources: processed, evidence: result.evidence, draft: draftWithListings,
       selected_layout: result.draft.layoutId, status: "needs-input", updated_at: new Date().toISOString() })
     .eq("auth_user_id", userId);
   if (saveError) return reply({ error: "Analysis finished but could not be saved." }, 503);
-  return reply({ ...result, sources: processed, status: "needs-input" });
+  return reply({
+    ...result,
+    draft: draftWithListings,
+    discoveredListings,
+    listingDiscovery,
+    sources: processed,
+    status: "needs-input",
+  });
 });

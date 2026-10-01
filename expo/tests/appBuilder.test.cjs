@@ -15,8 +15,29 @@ const { resolveFacts } = moduleRef.exports;
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
 async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
-    .replace(/^import .*createClient.*;\r?\n/, '');
-  const code = ts.transpileModule(edge, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+    .replace(/^import .*createClient.*;\r?\n/, '')
+    .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
+  // Inline a minimal discoverListings so the edge function body still runs in fixtures.
+  const discoveryStub = `
+    async function discoverListings(seeds, fetchHtml) {
+      const visited = [];
+      const listings = [];
+      for (const uri of seeds.slice(0, 2)) {
+        try {
+          const page = await fetchHtml(uri);
+          visited.push(page.finalUrl.toString());
+          const price = (page.html.match(/\\$[\\d,]+/) || [])[0] || '';
+          const title = (page.html.match(/<title[^>]*>([^<]*)<\\/title>/i) || [])[1] || '';
+          if (price || /listing|property|home/i.test(page.html)) {
+            listings.push({ title: title || 'Listing', description: '', price, beds: 0, baths: 0, sqft: '',
+              neighborhood: '', image: '', images: [], sourceUrl: page.finalUrl.toString() });
+          }
+        } catch {}
+      }
+      return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0 } };
+    }
+  `;
+  const code = ts.transpileModule(discoveryStub + '\n' + edge, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   let handler, aiBody, update, reads = 0;
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
