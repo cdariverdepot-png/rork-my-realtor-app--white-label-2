@@ -45,7 +45,9 @@ export default function Portal() {
     isAuthenticated,
     isAdmin,
     isPreviewAdmin,
+    authBypassEnabled,
     previewAdmin,
+    enterAuthBypass,
     enterDemoView,
     realtorSignup,
     realtorLogin,
@@ -90,14 +92,30 @@ export default function Portal() {
     return () => { mounted = false; };
   }, [isAuthenticated, entryParam, invite, lookupRealtorByCode]);
 
+  // Temporary AUTH_BYPASS: auto-enter admin preview when unauthenticated.
+  useEffect(() => {
+    if (!authHydrated || !authBypassEnabled || isAuthenticated) return;
+    let cancelled = false;
+    (async () => {
+      await enterAuthBypass();
+      if (!cancelled) router.replace("/admin");
+    })().catch(() => {});
+    return () => { cancelled = true; };
+  }, [authHydrated, authBypassEnabled, isAuthenticated, enterAuthBypass, router]);
+
   // Auto-route if already authenticated
   useEffect(() => {
     if (!authHydrated) return;
     if (entryParam) return;
     if (!isAuthenticated) return;
+    // Bypass preview sessions should land on admin (not stay on portal).
+    if (isPreviewAdmin && authBypassEnabled) {
+      router.replace("/admin");
+      return;
+    }
     if (isPreviewAdmin) return;
     router.replace(isAdmin ? "/admin" : "/");
-  }, [authHydrated, entryParam, isAuthenticated, isAdmin, isPreviewAdmin, router]);
+  }, [authHydrated, entryParam, isAuthenticated, isAdmin, isPreviewAdmin, authBypassEnabled, router]);
 
   // Animations
   const entrance = useRef(new Animated.Value(0)).current;
@@ -158,6 +176,17 @@ export default function Portal() {
       // Suppress admin redirect and lock the demo brand so only Eliza Vance shows.
       enterDemoView();
       router.replace("/");
+    } finally { setBusy(false); }
+  };
+
+  // Temporary AUTH_BYPASS — skip login into admin (dashboard + build walkthrough).
+  const handleSkipLogin = async () => {
+    if (busy || !authBypassEnabled) return;
+    setBusy(true);
+    try {
+      if (Platform.OS !== "web") Haptics.selectionAsync();
+      await enterAuthBypass();
+      router.replace("/admin");
     } finally { setBusy(false); }
   };
 
@@ -286,7 +315,7 @@ export default function Portal() {
 
               <Animated.View style={shakeStyle}>
                 {stage === "entry" ? (
-                  <EntryForm onRealtor={() => transitionTo("realtor-signin")} onClient={() => transitionTo("code")} onExploreDemo={handleExploreDemo} busy={busy} error={error} />
+                  <EntryForm onRealtor={() => transitionTo("realtor-signin")} onClient={() => transitionTo("code")} onExploreDemo={handleExploreDemo} onSkipLogin={authBypassEnabled ? handleSkipLogin : undefined} busy={busy} error={error} />
                 ) : stage === "code" ? (
                   <CodeForm code={code} onChange={setCode} onSubmit={submitCode} error={error} busy={busy} />
                 ) : stage === "client-full" ? (
@@ -339,9 +368,24 @@ export default function Portal() {
 }
 
 // ── Entry form: choose realtor or client ─────────────────────────────
-function EntryForm({ onRealtor, onClient, onExploreDemo, busy, error }: { onRealtor: () => void; onClient: () => void; onExploreDemo: () => void; busy: boolean; error: string | null }) {
+function EntryForm({ onRealtor, onClient, onExploreDemo, onSkipLogin, busy, error }: { onRealtor: () => void; onClient: () => void; onExploreDemo: () => void; onSkipLogin?: () => void; busy: boolean; error: string | null }) {
   return (
     <View style={{ width: "100%", gap: 14 }}>
+      {onSkipLogin ? (
+        <View style={{ gap: 8, marginBottom: 4 }}>
+          <Pressable onPress={onSkipLogin} disabled={busy} style={({ pressed }) => [styles.roleBtn, styles.roleBtnRealtor, busy && { opacity: 0.5 }, pressed && { opacity: 0.85 }]}>
+            <DoorClosed size={20} color={brand.goldLight} strokeWidth={1.6} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.roleBtnTitle}>Continue without login</Text>
+              <Text style={styles.roleBtnSub}>Skip login · preview (temporary)</Text>
+            </View>
+            <ArrowRight size={16} color={brand.goldLight} strokeWidth={1.8} />
+          </Pressable>
+          <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", lineHeight: 18 }}>
+            Temporary preview mode — turn off EXPO_PUBLIC_AUTH_BYPASS when ready for real sign-in.
+          </Text>
+        </View>
+      ) : null}
       <Pressable onPress={onRealtor} style={({ pressed }) => [styles.roleBtn, styles.roleBtnRealtor, pressed && { opacity: 0.85 }]}>
         <Building2 size={20} color={brand.goldLight} strokeWidth={1.6} />
         <View style={{ flex: 1 }}>

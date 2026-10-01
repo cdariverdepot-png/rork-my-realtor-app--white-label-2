@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   PlayfairDisplay_500Medium,
@@ -144,6 +145,7 @@ function RootLayoutInner() {
     isAuthenticated,
     isAdmin,
     isPreviewAdmin,
+    authBypassEnabled,
     demoViewMode,
     viewAsClient,
   } = useAuth();
@@ -170,7 +172,9 @@ function RootLayoutInner() {
     : "client";
 
   const tourSeen = audience === "realtor" ? realtorTourSeen : clientTourSeen;
-  const suppressed = pathname === "/admin/ready" || isPreviewAdmin || demoViewMode || viewAsClient || !setupHydrated ||
+  // AUTH_BYPASS preview sessions still get the realtor walkthrough; classic
+  // Explore Demo / view-as-client previews stay suppressed.
+  const suppressed = pathname === "/admin/ready" || (isPreviewAdmin && !authBypassEnabled) || demoViewMode || viewAsClient || !setupHydrated ||
     (!isAdmin && (!myProfileShared || !myEssentialsMet));
 
   const showOnboarding =
@@ -188,6 +192,13 @@ function RootLayoutInner() {
     <>
       <GestureHandlerRootView style={{ flex: 1, backgroundColor: dark.bg }}>
         <StatusBar style="light" />
+        {authBypassEnabled && isAuthenticated && isPreviewAdmin ? (
+          <View style={{ backgroundColor: "#5c4a1f", paddingVertical: 6, paddingHorizontal: 12 }}>
+            <Text style={{ color: "#f3ead9", fontSize: 11, textAlign: "center", letterSpacing: 0.4 }}>
+              Temporary preview · login skipped (EXPO_PUBLIC_AUTH_BYPASS) — turn off before real users
+            </Text>
+          </View>
+        ) : null}
         <RootLayoutNav />
         <ConciergeBanner />
         <DocsAutomation />

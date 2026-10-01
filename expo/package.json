@@ -12,7 +12,9 @@
     "start": "bunx rork start -p f1knpwwi8zqtl28f4k733",
     "start-web": "bunx rork start -p f1knpwwi8zqtl28f4k733 --web",
     "start-web-dev": "DEBUG=expo* bunx rork start -p f1knpwwi8zqtl28f4k733 --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "postinstall": "node ./scripts/ensure-auth-bypass-env.cjs",
+    "ensure-auth-bypass-env": "node ./scripts/ensure-auth-bypass-env.cjs"
   },
   "dependencies": {
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",

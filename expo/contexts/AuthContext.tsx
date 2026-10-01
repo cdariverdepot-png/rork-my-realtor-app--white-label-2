@@ -69,6 +69,28 @@ const SESSION_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 30;
 /** Demo realtor ID for preview/dev fallback. */
 export const DEMO_REALTOR_ID = "00000000-0000-0000-0000-000000000001";
 
+/**
+ * Temporary production skip-login. Metro inlines the literal env read.
+ * When true, portal/home can enter a local admin preview session without Supabase auth.
+ * Turn off (remove or set false) to restore normal login.
+ */
+export const AUTH_BYPASS_ENABLED = process.env.EXPO_PUBLIC_AUTH_BYPASS === "true";
+
+function makePreviewRealtorRecord(): RealtorRecord {
+  const now = new Date().toISOString();
+  return {
+    id: DEMO_REALTOR_ID,
+    email: "preview@local",
+    name: "Preview",
+    brand_name: "PREVIEW",
+    monogram: "PR",
+    client_code: "PREVIEW",
+    client_code_enabled: true,
+    created_at: now,
+    updated_at: now,
+  };
+}
+
 async function secureSet(key: string, value: string): Promise<void> {
   if (Platform.OS === "web") {
     await AsyncStorage.setItem(key, value);
@@ -165,18 +187,34 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
         if (raw) {
           const parsed = JSON.parse(raw) as Session;
+          const isPreviewOrDemo = !!(parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID);
           // Read the stored Supabase session (works offline) instead of a
           // network getUser(): a cold start without signal must not log the
-          // realtor out.
-          const authUser = parsed?.role === "admin" && supabase
+          // realtor out. Skip for temporary AUTH_BYPASS preview/demo sessions.
+          const authUser = parsed?.role === "admin" && !isPreviewOrDemo && supabase
             ? (await supabase.auth.getSession()).data.session?.user ?? null : null;
-          if (parsed?.preview || parsed?.realtorId === DEMO_REALTOR_ID ||
-              (parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS) ||
-              (parsed?.role === "admin" && (!authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||
-                authUser.email?.toLowerCase() !== parsed.email.toLowerCase()))) {
+          const expired = !!(parsed?.iat && Date.now() - parsed.iat > SESSION_MAX_AGE_MS);
+          const dropPreview = isPreviewOrDemo && !AUTH_BYPASS_ENABLED;
+          const adminAuthInvalid = parsed?.role === "admin" && !isPreviewOrDemo && (
+            !authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||
+            authUser.email?.toLowerCase() !== parsed.email.toLowerCase()
+          );
+          if (expired || dropPreview || adminAuthInvalid) {
             await secureDel(STORAGE_KEY);
           } else {
             setSession(parsed);
+            // Keep bypass preview usable: seed realtorCache so OnboardingGuard
+            // does not treat setup as forever incomplete.
+            if (AUTH_BYPASS_ENABLED && isPreviewOrDemo) {
+              setRealtorCache((prev) => {
+                const existing = prev.find((r) => r.id === DEMO_REALTOR_ID);
+                if (existing?.client_code_enabled) return prev;
+                const record = makePreviewRealtorRecord();
+                const next = [record, ...prev.filter((r) => r.id !== DEMO_REALTOR_ID)];
+                void AsyncStorage.setItem(REALTOR_CACHE_KEY, JSON.stringify(next));
+                return next;
+              });
+            }
             // Hydrate accounts for the session's realtor
             if (parsed?.realtorId) {
               const accRaw = await AsyncStorage.getItem(
@@ -366,6 +404,33 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     setDemoViewMode(true);
     setViewAsClient(true);
   }, []);
+
+  /**
+   * Temporary AUTH_BYPASS: local admin session so walkthrough + dashboard work
+   * without Supabase login. Does not gut signup/login — flag false = normal auth.
+   * demoViewMode/viewAsClient stay false so admin UI (not Explore Demo) is shown.
+   */
+  const enterAuthBypass = useCallback(async (): Promise<void> => {
+    if (!AUTH_BYPASS_ENABLED) return;
+    setDemoViewMode(false);
+    setViewAsClient(false);
+    const record = makePreviewRealtorRecord();
+    setRealtorCache((prev) => {
+      const next = [record, ...prev.filter((item) => item.id !== record.id)];
+      void persistRealtorCache(next);
+      return next;
+    });
+    const next: Session = {
+      email: "preview@local",
+      role: "admin",
+      realtorId: DEMO_REALTOR_ID,
+      name: "Preview",
+      iat: Date.now(),
+      preview: true,
+    };
+    setSession(next);
+    await persistSession(next);
+  }, [persistRealtorCache, persistSession]);
 
   const exitPreview = useCallback(async (): Promise<void> => {
     if (!session?.preview) return;
@@ -661,6 +726,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     exitDemoView,
     isAuthenticated,
     isPreviewAdmin: !!session?.preview,
+    authBypassEnabled: AUTH_BYPASS_ENABLED,
     realtorId: realtorIdVal,
     realtorRecord,
     currentClientId,
@@ -669,6 +735,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     realtorLogin,
     completeRealtorSignIn,
     previewAdmin,
+    enterAuthBypass,
     exitPreview,
     clientSignup,
     clientLogin,
@@ -680,7 +747,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     session, hydrated, isAdmin, isClient, viewAsClient, demoViewMode,
     enterViewAsClient, exitViewAsClient, enterDemoView, exitDemoView,
     isAuthenticated, realtorIdVal, realtorRecord, currentClientId,
-    login, realtorSignup, realtorLogin, completeRealtorSignIn, previewAdmin, exitPreview,
+    login, realtorSignup, realtorLogin, completeRealtorSignIn, previewAdmin, enterAuthBypass, exitPreview,
     clientSignup, clientLogin, updateClientProfile, logout, lookupRealtorByCode, unlockSharingCredentials,
   ]);
 });

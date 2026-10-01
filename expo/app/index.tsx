@@ -56,9 +56,20 @@ import {
 export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { hydrated, isAuthenticated, isAdmin, isClient, previewAdmin, viewAsClient, demoViewMode, enterDemoView } = useAuth();
+  const { hydrated, isAuthenticated, isAdmin, isClient, previewAdmin, enterAuthBypass, authBypassEnabled, viewAsClient, demoViewMode, enterDemoView } = useAuth();
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
+
+  // Temporary AUTH_BYPASS: skip landing login and enter admin preview.
+  useEffect(() => {
+    if (!hydrated || !authBypassEnabled || isAuthenticated || demoViewMode) return;
+    let cancelled = false;
+    (async () => {
+      await enterAuthBypass();
+      if (!cancelled) router.replace("/admin");
+    })().catch(() => {});
+    return () => { cancelled = true; };
+  }, [hydrated, authBypassEnabled, isAuthenticated, demoViewMode, enterAuthBypass, router]);
 
   // Redirect admins to dashboard — unless they're previewing the client side.
   // Only while this screen is focused: a copy sitting under other screens (or
