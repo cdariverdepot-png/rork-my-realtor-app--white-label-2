@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { File } from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { Platform } from "react-native";
-import { supabase } from "@/lib/supabase";
+import { ensureSupabaseSession, supabase } from "@/lib/supabase";
 import type { BuildSource, SourceEvidence } from "./sourceModel";
 import type { ClientLayoutId } from "@/constants/clientLayouts";
 
@@ -137,87 +137,29 @@ async function resolveBuilderRoute(): Promise<BuilderRoute> {
   return { kind: "cloud", user: data.user };
 }
 
-/** Local/preview analyze: mark sources ready and seed a draft the review UI can edit.
- * Does not call the cloud edge function (guests have no verified JWT). */
-async function analyzeLocal(realtorId: string): Promise<SavedBuild> {
-  const saved = (await readLocalBuild(realtorId)) ?? emptyBuild();
-  if (!saved.sources.some((source) => source.kind !== "contacts")) {
-    throw new Error("Enter your website to get started, or add a document or image.");
-  }
-  const sources = saved.sources.map((source) =>
-    source.kind === "contacts" ? source : { ...source, status: "ready" as const, error: undefined },
-  );
-  const evidence: SourceEvidence[] = [];
-  for (const source of sources) {
-    if (source.kind !== "url" && source.kind !== "listing") continue;
-    try {
-      const host = new URL(source.uri).hostname.replace(/^www\./i, "");
-      const label = host.split(".")[0]?.replace(/[-_]+/g, " ") ?? "";
-      if (label) {
-        evidence.push({
-          field: "realtor.brandName",
-          value: label.replace(/\b\w/g, (c) => c.toUpperCase()),
-          sourceId: source.id,
-          locator: source.uri,
-          confidence: 0.55,
-        });
-      }
-    } catch {
-      /* ignore bad uri */
-    }
-  }
-  const next: SavedBuild = {
-    sources,
-    evidence,
-    draft: {
-      heroMessage: "Welcome — customize this opening line for your clients.",
-      aboutParagraph:
-        "Tell clients who you are and how you help. Edit this introduction anytime from your app builder.",
-      tagline: "",
-      welcomeNote: "",
-      conciergeLine: "How can I help you today?",
-      contactLine: "Reach out anytime.",
-      tone: "warm",
-      layoutId: "warm-concierge",
-      portraitSourceId: sources.find((s) => s.kind === "image")?.id ?? null,
-      potentialListingSources: [],
-    },
-    selected_layout: "warm-concierge",
-    status: "needs-input",
-  };
-  await writeLocalBuild(realtorId, next);
-  return next;
-}
-
-async function regenerateLocal(
-  realtorId: string,
-  target: "heroMessage" | "welcomeNote" | "aboutParagraph",
-): Promise<SavedBuild> {
+/** Guest drafts stay on the device, but URL analysis uses the real service. */
+async function generateLocal(realtorId: string, target?: "heroMessage" | "welcomeNote" | "aboutParagraph"): Promise<SavedBuild> {
   const saved = (await readLocalBuild(realtorId)) ?? emptyBuild();
   if (saved.status === "complete") throw new Error("This draft cannot be regenerated.");
-  const alternates: Record<typeof target, string[]> = {
-    heroMessage: [
-      "Your next home starts with a conversation.",
-      "Local expertise. Personal guidance. Real results.",
-      "Let’s find the place that feels like yours.",
-    ],
-    welcomeNote: [
-      "Thanks for stopping by — I’m glad you’re here.",
-      "Welcome. I’m ready when you are.",
-    ],
-    aboutParagraph: [
-      "I help clients navigate every step of buying and selling with clear advice and steady support.",
-      "From first search to closing day, you’ll have a partner who listens and delivers.",
-    ],
+  const sources = saved.sources.filter(source => source.kind === "url" || source.kind === "listing");
+  if (!sources.length) throw new Error("Add your website URL to generate your app copy.");
+  if (!supabase || !(await ensureSupabaseSession())) throw new Error("Could not connect to the app builder. Please retry.");
+  const { data, error } = await supabase.functions.invoke("analyze-realtor-build", {
+    body: { guest: true, sources, draft: saved.draft, ...(target ? { mode: "regenerate", target } : {}) },
+  });
+  if (error || data?.error) throw await functionError(error, data, "Your website could not be analyzed. Please retry.");
+  if (!data?.draft || !(target ? data.draft[target] : data.draft.heroMessage)?.trim()) {
+    throw new Error("No website-based copy came back. Your current draft is still saved.");
+  }
+  const next: SavedBuild = target ? { ...saved, draft: data.draft } : {
+    ...saved, sources: saved.sources.map(source => data.sources?.find((item: BuildSource) => item.id === source.id) ?? source),
+    evidence: data.evidence, draft: data.draft, selected_layout: data.draft.layoutId, status: "needs-input",
   };
-  const options = alternates[target];
-  const current = (saved.draft[target] ?? "").trim();
-  const nextValue = options.find((item) => item !== current) ?? options[0];
-  const draft = { ...saved.draft, [target]: nextValue };
-  const next = { ...saved, draft };
   await writeLocalBuild(realtorId, next);
   return next;
 }
+const analyzeLocal = (realtorId: string) => generateLocal(realtorId);
+const regenerateLocal = (realtorId: string, target: "heroMessage" | "welcomeNote" | "aboutParagraph") => generateLocal(realtorId, target);
 
 export async function loadBuild(): Promise<SavedBuild | null> {
   const route = await resolveBuilderRoute();
