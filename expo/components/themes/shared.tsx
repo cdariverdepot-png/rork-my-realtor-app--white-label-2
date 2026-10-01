@@ -32,7 +32,7 @@ export function useFrame(p: HeroProps, referenceHeight: number) {
 export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: HeroProps; frame: ReturnType<typeof useFrame>; colors: readonly [string, string, ...string[]]; left?: number; vertical?: boolean }) {
   return <View style={StyleSheet.absoluteFill} pointerEvents="none">
     {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View style={{ position: "absolute", left: left * frame.s, right: 0, top: -28 * frame.s, bottom: -28 * frame.s,
-      transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
+      transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }} renderToHardwareTextureAndroid shouldRasterizeIOS>
       <View style={[StyleSheet.absoluteFill, zoomStyle(p)]}>
         <PortraitImage source={p.portraitSource} uri={p.brand.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} priority="high" accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
       </View>

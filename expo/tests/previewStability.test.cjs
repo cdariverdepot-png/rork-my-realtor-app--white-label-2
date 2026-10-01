@@ -36,13 +36,16 @@ test('Reveal entrance is one-shot and waits for reduce-motion readiness', () => 
   assert.match(src, /ready/);
   // Must not restart solely because delay/reduced churn after first play.
   assert.match(src, /plays at most once|one-shot|one shot/i);
+  // Interrupted tween must snap visible — never leave opacity at 0 (page blink).
+  assert.match(src, /v\.setValue\(1\)/);
 });
 
 test('useReducedMotion stays unresolved until AccessibilityInfo answers', () => {
   const src = fs.readFileSync(path.join(root, 'hooks/useThemeMotion.ts'), 'utf8');
   assert.match(src, /ready:\s*false/);
   assert.match(src, /ReducedMotionState/);
-  assert.match(src, /still = !ready \|\| reduced \|\| disabled/);
+  assert.match(src, /still = !ready \|\| \(frozenReduced/);
+  assert.match(src, /cachedMotion/);
 });
 
 test('Preview my app path gates on brand+listings hydrate and locks reveal delays', () => {

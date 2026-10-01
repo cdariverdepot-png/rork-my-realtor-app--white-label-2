@@ -573,6 +573,10 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
           scrollEventThrottle={16}
           onScroll={onHomeScroll}
+          // iOS keeps bounces for RefreshControl; parallax clamps overscroll translate.
+          // Android/web: kill rubber-band so hero scale/translate is not driven by bounce.
+          overScrollMode="never"
+          style={Platform.OS === "web" ? ({ flex: 1, overscrollBehaviorY: "none" } as object) : { flex: 1 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

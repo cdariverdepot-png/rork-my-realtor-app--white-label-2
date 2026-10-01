@@ -47,6 +47,16 @@ test('useThemeMotion always exposes Animated interpolations (no number swap)', (
   assert.doesNotMatch(src, /imgScale:\s*still\s*\?\s*1\s*:/);
 });
 
+test('useThemeMotion never translates the hero downward over content', () => {
+  const src = read('hooks/useThemeMotion.ts');
+  // Overscroll hold + upward parallax only (negative translate on scroll).
+  assert.match(src, /outputRange:\s*\[0,\s*0,\s*-travel\]/);
+  assert.doesNotMatch(src, /travelDown/);
+  // Opacity must stay fully on — scroll fades looked like whole-page flicker.
+  assert.match(src, /contentOpacity:[\s\S]*?outputRange:\s*\[1,\s*1\]/);
+  assert.match(src, /cachedMotion|motionListeners/);
+});
+
 test('theme preview and client heroes route portraits through PortraitImage', () => {
   for (const file of [
     'components/themes/shared.tsx',

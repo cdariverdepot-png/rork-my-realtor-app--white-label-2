@@ -8,24 +8,47 @@ export type ReducedMotionState = {
 };
 
 /**
+ * Process-wide reduce-motion cache. Every Reveal / hero used to subscribe on its
+ * own; staggered ready flips restarted entrances and swapped parallax nodes so
+ * the client home flashed off/on while scrolling.
+ */
+let cachedMotion: ReducedMotionState = { ready: false, reduced: true };
+const motionListeners = new Set<(state: ReducedMotionState) => void>();
+let motionSubscribed = false;
+
+function publishMotion(next: ReducedMotionState) {
+  cachedMotion = next;
+  motionListeners.forEach(listener => listener(next));
+}
+
+function ensureMotionSubscription() {
+  if (motionSubscribed) return;
+  motionSubscribed = true;
+  let changed = false;
+  AccessibilityInfo.addEventListener("reduceMotionChanged", value => {
+    changed = true;
+    publishMotion({ ready: true, reduced: value });
+  });
+  AccessibilityInfo.isReduceMotionEnabled().then(value => {
+    if (!changed) publishMotion({ ready: true, reduced: value });
+  }).catch(() => {
+    if (!changed) publishMotion({ ready: true, reduced: false });
+  });
+}
+
+/**
  * Start unresolved so entrance animations wait for the real preference instead of
  * painting at full opacity and then replaying when `true → false` arrives.
  */
 export function useReducedMotion(): ReducedMotionState {
-  const [state, setState] = useState<ReducedMotionState>({ ready: false, reduced: true });
+  const [state, setState] = useState<ReducedMotionState>(cachedMotion);
   useEffect(() => {
-    let active = true;
-    let changed = false;
-    const subscription = AccessibilityInfo.addEventListener("reduceMotionChanged", value => {
-      changed = true;
-      if (active) setState({ ready: true, reduced: value });
-    });
-    AccessibilityInfo.isReduceMotionEnabled().then(value => {
-      if (active && !changed) setState({ ready: true, reduced: value });
-    }).catch(() => {
-      if (active && !changed) setState({ ready: true, reduced: false });
-    });
-    return () => { active = false; subscription.remove(); };
+    ensureMotionSubscription();
+    setState(cachedMotion);
+    if (cachedMotion.ready) return;
+    const listener = (next: ReducedMotionState) => setState(next);
+    motionListeners.add(listener);
+    return () => { motionListeners.delete(listener); };
   }, []);
   return state;
 }
@@ -35,32 +58,39 @@ export function useThemeMotion(scrollY: Animated.Value | undefined, height: numb
   const fallback = useRef(new Animated.Value(0)).current;
   const { ready, reduced } = useReducedMotion();
   const sy = scrollY ?? fallback;
-  // Stay still until the preference is known so parallax values do not swap mid-frame.
-  const still = !ready || reduced || disabled;
+  // Freeze the a11y preference after the first answer so a mid-scroll
+  // reduceMotionChanged cannot recreate interpolations and flash the tree.
+  const frozenReduced = useRef<boolean | null>(null);
+  if (ready && frozenReduced.current === null) frozenReduced.current = reduced;
+  const still = !ready || (frozenReduced.current ?? true) || disabled;
   const h = Math.max(1, height);
   // Always return Animated nodes (never raw numbers) so parent re-renders and
   // reduce-motion readiness do not remount the parallax Image wrapper.
   return useMemo(() => {
-    const travelUp = still ? 0 : Math.min(h * 0.5, imageTravelLimit);
-    const travelDown = still ? 0 : Math.min(h * 0.35, imageTravelLimit);
-    const pullScale = still ? 1 : 1.25;
-    const pushScale = still ? 1 : 1.06;
+    // Upward travel only — positive translateY was dropping the portrait ~travel
+    // limit (~0.25in) over BUY A HOME / action tiles on scroll.
+    const travel = still ? 0 : Math.min(h * 0.35, imageTravelLimit);
+    const pullScale = still ? 1 : 1.22;
+    const pushScale = still ? 1 : 1.05;
     return {
+      // Overscroll (pull-down): translate stays 0 — scale-only zoom, never drops
+      // into content. Scroll down: classic parallax (image moves UP). Keep scale.
       imgTranslate: sy.interpolate({
-        inputRange: [-h, 0, h], outputRange: [-travelUp, 0, travelDown], extrapolate: "clamp",
+        inputRange: [-h, 0, h], outputRange: [0, 0, -travel], extrapolate: "clamp",
       }),
       imgScale: sy.interpolate({
         inputRange: [-h, 0, h], outputRange: [pullScale, 1, pushScale], extrapolate: "clamp",
       }),
-      // Keep interactive content perceivable while it remains on screen.
+      // Scroll-linked opacity fades read as the whole page blinking on bounce /
+      // overscroll; parallax is transform-only.
       topBarOpacity: sy.interpolate({
-        inputRange: [0, 160, 260], outputRange: still ? [1, 1, 1] : [1, 0.6, 0.35], extrapolate: "clamp",
+        inputRange: [0, 1], outputRange: [1, 1], extrapolate: "clamp",
       }),
       contentTranslate: sy.interpolate({
-        inputRange: [0, h], outputRange: still ? [0, 0] : [0, -60], extrapolate: "clamp",
+        inputRange: [0, h], outputRange: still ? [0, 0] : [0, -36], extrapolate: "clamp",
       }),
       contentOpacity: sy.interpolate({
-        inputRange: [0, h * 0.55, h * 0.85], outputRange: still ? [1, 1, 1] : [1, 0.85, 0.35], extrapolate: "clamp",
+        inputRange: [0, 1], outputRange: [1, 1], extrapolate: "clamp",
       }),
     };
   }, [sy, h, still, imageTravelLimit]);

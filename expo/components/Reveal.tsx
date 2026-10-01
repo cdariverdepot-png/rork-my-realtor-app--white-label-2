@@ -26,7 +26,8 @@ type Props = {
  * Critical for Preview my app: brand/listings sync and reduce-motion resolution
  * used to change `delay` / `reduced` after first paint, which restarted the
  * tween (opacity 1→0→1 + translate) and made every section flicker and jump.
- * The entrance plays at most once per mount.
+ * The entrance plays at most once per mount. If the tween is interrupted
+ * (deps churn / unmount), snap to visible — never leave opacity stuck at 0.
  */
 export default function Reveal({
   delay = 0,
@@ -37,6 +38,10 @@ export default function Reveal({
 }: Props) {
   const v = useRef(new Animated.Value(0)).current;
   const played = useRef(false);
+  const delayRef = useRef(delay);
+  const durationRef = useRef(duration);
+  delayRef.current = delay;
+  durationRef.current = duration;
   const { ready, reduced } = useReducedMotion();
 
   useEffect(() => {
@@ -49,16 +54,20 @@ export default function Reveal({
     v.setValue(0);
     const anim = Animated.timing(v, {
       toValue: 1,
-      duration,
-      delay,
+      duration: durationRef.current,
+      delay: delayRef.current,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     });
-    anim.start();
+    anim.start(({ finished }) => {
+      if (!finished) v.setValue(1);
+    });
     return () => {
       anim.stop();
+      // Interrupted entrance must not leave the section invisible (page blink).
+      v.setValue(1);
     };
-  }, [ready, reduced, delay, duration, v]);
+  }, [ready, reduced, v]);
 
   return (
     <Animated.View

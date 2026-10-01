@@ -68,7 +68,13 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
               {subtitle ? <Text numberOfLines={1} style={{ color: "#A9A294", fontSize: 12, marginTop: 2 }}>{subtitle}</Text> : null}
             </View>
           </View>
-          <Animated.ScrollView onScroll={onScroll} scrollEventThrottle={16}>
+          <Animated.ScrollView
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            overScrollMode="never"
+            bounces={false}
+            style={Platform.OS === "web" ? ({ overscrollBehaviorY: "none" } as object) : undefined}
+          >
             <View style={{ maxWidth: 390, width: "100%", alignSelf: "center" }}>
               <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} />
             </View>
