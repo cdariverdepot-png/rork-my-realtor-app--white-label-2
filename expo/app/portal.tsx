@@ -56,7 +56,9 @@ export default function Portal() {
     lookupRealtorByCode,
   } = useAuth();
 
-  const { entry: entryParam, invite } = useLocalSearchParams<{ entry?: string; invite?: string }>();
+  const { entry: entryParam, invite, confirmed: confirmedParam } = useLocalSearchParams<{ entry?: string; invite?: string; confirmed?: string }>();
+  const emailAlreadyConfirmed =
+    confirmedParam === "1" || confirmedParam === "true" || String(confirmedParam ?? "").toLowerCase() === "yes";
   const initialStage: Stage = entryParam === "realtor" ? "realtor-signin" : entryParam === "client" ? "code" : "entry";
 
   const [stage, setStage] = useState<Stage>(initialStage);
@@ -339,12 +341,16 @@ export default function Portal() {
                     }}
                   />
                   {stage.startsWith("realtor") && <SocialSignIn />}
-                  {stage.startsWith("realtor") && (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase() || stage === "realtor-setup") ? (
+                  {stage.startsWith("realtor") && emailAlreadyConfirmed ? (
                     <Text style={{ color: "#f3ead9", textAlign: "center", marginTop: 18, lineHeight: 22 }}>
-                      Check your email for the confirmation link. Open it on this device to finish sign-in.
+                      Your email is confirmed. Sign in with your password, or request an email code below.
+                    </Text>
+                  ) : stage.startsWith("realtor") && (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase() || stage === "realtor-setup") ? (
+                    <Text style={{ color: "#f3ead9", textAlign: "center", marginTop: 18, lineHeight: 22 }}>
+                      Check your email for the confirmation link. Open it on this device to finish sign-in. If the link opened elsewhere, return here and use your password or an email code.
                     </Text>
                   ) : null}
-                  {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
+                  {stage.startsWith("realtor") && <EmailCodeSignIn email={email} confirmation={emailAlreadyConfirmed || stage === "realtor-setup" || (!!confirmationEmail && confirmationEmail === email.trim().toLowerCase())} />}
                   </>
                 )}
               </Animated.View>

@@ -1,7 +1,11 @@
 import { Platform } from "react-native";
 
+/** Legacy GitHub Pages callback (still allowlisted). Prefer Expo host / native scheme when configured. */
 export const PUBLISHED_AUTH_RETURN =
   "https://cdariverdepot-png.github.io/rork-my-realtor-app--white-label-2/auth/callback/";
+
+/** Native email / OTP return — mirrors social OAuth so confirms can deep-link into the app. */
+export const NATIVE_AUTH_RETURN = "rork-app://auth/callback";
 
 /** Loopback origins used by Expo web local preview only. Must be in Supabase redirect allowlist. */
 const LOCAL_ORIGIN_RE = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i;
@@ -24,6 +28,12 @@ const HOSTED_ORIGIN = (() => {
 })();
 const isHostedOrigin = (origin: string): boolean => !!HOSTED_ORIGIN && normalizeOrigin(origin) === HOSTED_ORIGIN;
 
+/** Prefer live Expo host when configured; else legacy Pages. */
+function productionHttpsCallback(): string {
+  if (HOSTED_ORIGIN) return `${HOSTED_ORIGIN}/auth/callback`;
+  return PUBLISHED_AUTH_RETURN;
+}
+
 function localCallback(origin: string): string {
   // Expo serves under experiments.baseUrl in dev too; keep it when the page is under it.
   const underBase = !!BASE_PATH && typeof window !== "undefined" &&
@@ -34,22 +44,23 @@ function localCallback(origin: string): string {
 /**
  * Destination for signup / confirm / OTP emailRedirectTo.
  *
- * Production rule (any user, any device):
- * - Native (iOS/Android): always the published HTTPS Pages callback.
- * - Web on localhost / 127.0.0.1 only: same-origin /auth/callback (local web dev).
- * - All other web (GitHub Pages, phone browsers, etc.): published HTTPS callback.
+ * - Native (iOS/Android): app scheme (same as social) so the confirm can open the app.
+ * - Web on localhost / 127.0.0.1: same-origin /auth/callback (local web dev / PKCE).
+ * - Web on EXPO_PUBLIC_APP_URL host: that host's /auth/callback (production auto-login).
+ * - Otherwise: Expo host when configured, else GitHub Pages.
  *
  * Dashboard "Invite user" always uses Supabase Site URL and ignores this helper.
+ * Prefer TokenHash email templates so confirms work across browsers/devices.
  */
 export function signupEmailRedirect(origin?: string): string {
   if (Platform.OS !== "web") {
-    return PUBLISHED_AUTH_RETURN;
+    return NATIVE_AUTH_RETURN;
   }
   if (origin && LOCAL_ORIGIN_RE.test(normalizeOrigin(origin))) {
     return localCallback(origin);
   }
   if (origin && isHostedOrigin(origin)) return `${HOSTED_ORIGIN}/auth/callback`;
-  return PUBLISHED_AUTH_RETURN;
+  return productionHttpsCallback();
 }
 
 /** Same rules as signup — password recovery / invite links land on /auth/callback. */
@@ -67,7 +78,7 @@ export function socialCallbackRedirect(origin: string): string {
 }
 /**
  * Pass into signupEmailRedirect / passwordResetRedirect only from web.
- * Native never implies localhost — returns undefined so helpers use PUBLISHED_AUTH_RETURN.
+ * Native never implies localhost — returns undefined so helpers use the native scheme.
  */
 export function webOriginForRedirect(): string | undefined {
   if (Platform.OS !== "web") return undefined;

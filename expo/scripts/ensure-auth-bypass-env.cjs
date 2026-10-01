@@ -1,17 +1,14 @@
 /**
- * Temporary: deploy-web.yml rewrites expo/.env.production to APP_URL only.
- * Pushing workflow edits needs a GitHub token with `workflow` scope; until then,
- * postinstall re-appends EXPO_PUBLIC_AUTH_BYPASS after that rewrite and before export.
+ * Deploy-web.yml rewrites expo/.env.production to APP_URL (+ bypass flag).
+ * postinstall normalizes EXPO_PUBLIC_AUTH_BYPASS after that rewrite and before export.
  *
- * To turn off later:
- *   1) Set DEFAULT_BYPASS = "false" (or remove this script + package.json postinstall)
- *   2) Remove EXPO_PUBLIC_AUTH_BYPASS from expo/.env.production
- *   3) Prefer restoring the deploy-web.yml preserve logic when workflow scope is available
+ * Production default is OFF so real login/verification/password-reset work.
+ * Set DEFAULT_BYPASS = "true" only for intentional preview/demo builds.
  */
 const fs = require("node:fs");
 const path = require("node:path");
 
-const DEFAULT_BYPASS = "true";
+const DEFAULT_BYPASS = "false";
 const envPath = path.join(__dirname, "..", ".env.production");
 const KEY = "EXPO_PUBLIC_AUTH_BYPASS";
 

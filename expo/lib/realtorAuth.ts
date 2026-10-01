@@ -36,7 +36,7 @@ export async function signUpRealtorWithAuth(input: {
     return {
       ok: false,
       verificationRequired: true,
-      error: "Check your email to confirm your account, then return here and sign in.",
+      error: "Check your email to confirm your account. Open the link on this same device when possible; then return here and sign in with your password or an email code.",
     };
   }
   return await ensureRealtorAuthRecord(input.name);

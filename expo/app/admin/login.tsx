@@ -10,8 +10,8 @@ import { AUTH_BYPASS_ENABLED } from "@/contexts/AuthContext";
  * we bounce them to the portal so the realtor re-enters via the same
  * cinematic gate as everyone else.
  *
- * TEMP AUTH_BYPASS: send straight to /admin/ so we never re-show the
- * Welcome gateway while skip-login is on.
+ * When EXPO_PUBLIC_AUTH_BYPASS is on, send straight to /admin/ so preview
+ * never re-shows the Welcome gateway.
  */
 export default function AdminLoginRedirect() {
   const router = useRouter();

@@ -193,10 +193,44 @@ test('reset-password screen is link-based with set mode', () => {
 });
 
 test('passwordResetRedirect mirrors signup localhost vs Pages rules', () => {
+  const prevAppUrl = process.env.EXPO_PUBLIC_APP_URL;
+  delete process.env.EXPO_PUBLIC_APP_URL;
   const { passwordResetRedirect, signupEmailRedirect, PUBLISHED_AUTH_RETURN } = load('lib/authRedirect', {});
   assert.equal(passwordResetRedirect('http://localhost:8081'), signupEmailRedirect('http://localhost:8081'));
   assert.equal(passwordResetRedirect('http://127.0.0.1:4179'), 'http://127.0.0.1:4179/auth/callback');
   assert.equal(passwordResetRedirect(), PUBLISHED_AUTH_RETURN);
+  if (prevAppUrl === undefined) delete process.env.EXPO_PUBLIC_APP_URL;
+  else process.env.EXPO_PUBLIC_APP_URL = prevAppUrl;
+});
+
+test('hosted Expo origin is preferred for web email redirects when APP_URL is set', () => {
+  const prevAppUrl = process.env.EXPO_PUBLIC_APP_URL;
+  process.env.EXPO_PUBLIC_APP_URL = 'https://cdariverdepot-my-realtor.expo.app';
+  const { signupEmailRedirect, passwordResetRedirect, socialCallbackRedirect } = load('lib/authRedirect', {});
+  assert.equal(signupEmailRedirect('https://cdariverdepot-my-realtor.expo.app'), 'https://cdariverdepot-my-realtor.expo.app/auth/callback');
+  assert.equal(passwordResetRedirect('https://cdariverdepot-my-realtor.expo.app'), 'https://cdariverdepot-my-realtor.expo.app/auth/callback');
+  assert.equal(socialCallbackRedirect('https://cdariverdepot-my-realtor.expo.app'), 'https://cdariverdepot-my-realtor.expo.app/auth/callback');
+  if (prevAppUrl === undefined) delete process.env.EXPO_PUBLIC_APP_URL;
+  else process.env.EXPO_PUBLIC_APP_URL = prevAppUrl;
+});
+
+test('AUTH_BYPASS is env-gated only (never forced true in source)', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'contexts/AuthContext.tsx'), 'utf8');
+  assert.doesNotMatch(src, /true\s*\|\|\s*process\.env\.EXPO_PUBLIC_AUTH_BYPASS/);
+  assert.match(src, /AUTH_BYPASS_ENABLED\s*=\s*\n?\s*process\.env\.EXPO_PUBLIC_AUTH_BYPASS\s*===\s*["']true["']/);
+});
+
+test('callback other-device path points users to portal confirmed sign-in', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/auth/callback.tsx'), 'utf8');
+  assert.match(src, /confirmed=1/);
+  assert.match(src, /other-device/);
+  assert.match(src, /email code/i);
+});
+
+test('portal surfaces EmailCodeSignIn after confirmed callback', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.match(src, /confirmedParam|emailAlreadyConfirmed/);
+  assert.match(src, /EmailCodeSignIn/);
 });
 
 test('PKCE recovery uses SDK redirect type without relying on event timing', async () => {

@@ -25,6 +25,8 @@ export default function AuthCallback() {
   const router = useRouter();
   const { completeRealtorSignIn } = useAuth();
   const [message, setMessage] = useState("Completing sign-in…");
+  /** After email is confirmed but session could not be established here (PKCE / other device). */
+  const [confirmedContinue, setConfirmedContinue] = useState(false);
 
   useEffect(() => {
     if (started.current) return;
@@ -52,9 +54,10 @@ export default function AuthCallback() {
 
       const opened = await completeRealtorSignIn();
       if (!opened.ok) {
+        setConfirmedContinue(true);
         setMessage(
           opened.error ??
-            "Your email is confirmed. Open the My Realtor App on your phone and sign in with your email and password to continue."
+            "Your email is confirmed. Sign in with your email and password, or use an email code on the portal."
         );
         return;
       }
@@ -62,8 +65,9 @@ export default function AuthCallback() {
     })().catch((e: unknown) => {
       if (Platform.OS === "web" && typeof window !== "undefined") window.history.replaceState(null, "", window.location.pathname);
       if (e instanceof AuthCallbackError && e.reason === "other-device") {
+        setConfirmedContinue(true);
         setMessage(
-          "Your email is confirmed. This link was opened in a different browser or app than the one you signed up in, so sign in with your email and password to continue. If you were resetting your password, request the reset link again from this device."
+          "Your email is confirmed. This link opened in a different browser or app than the one you signed up in. Sign in with your email and password, or request an email code on the portal. If you were resetting your password, request the reset link again from this device."
         );
         return;
       }
@@ -73,11 +77,17 @@ export default function AuthCallback() {
     });
   }, [code, typeParam, tokenHashParam, completeRealtorSignIn, router]);
 
+  const goPortalSignIn = () => {
+    router.replace(confirmedContinue ? "/portal?entry=realtor&confirmed=1" : "/portal?entry=realtor");
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#171717", padding: 30, justifyContent: "center", gap: 24 }}>
       <Text style={{ color: "white", fontSize: 20 }}>{message}</Text>
-      <Pressable accessibilityRole="button" onPress={() => router.replace("/portal?entry=realtor")}>
-        <Text style={{ color: "#e0bc72" }}>Return to sign-in</Text>
+      <Pressable accessibilityRole="button" onPress={goPortalSignIn}>
+        <Text style={{ color: "#e0bc72" }}>
+          {confirmedContinue ? "Continue to sign-in (password or email code)" : "Return to sign-in"}
+        </Text>
       </Pressable>
       <Pressable accessibilityRole="button" onPress={() => router.replace("/reset-password")}>
         <Text style={{ color: "#e0bc72" }}>Forgot password? Request a new link</Text>

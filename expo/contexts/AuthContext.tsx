@@ -70,13 +70,12 @@ const SESSION_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 30;
 export const DEMO_REALTOR_ID = "00000000-0000-0000-0000-000000000001";
 
 /**
- * TEMPORARY: force skip-login ON so static web export cannot miss env inlining.
- * Keep the EXPO_PUBLIC_AUTH_BYPASS path for later; set this back to
- * `process.env.EXPO_PUBLIC_AUTH_BYPASS === "true"` when real sign-in returns.
+ * Optional skip-login for local/demo previews only.
+ * Enabled solely when EXPO_PUBLIC_AUTH_BYPASS === "true" (never forced in production).
  * When true, portal/home enter a local admin preview session without Supabase auth.
  */
 export const AUTH_BYPASS_ENABLED =
-  true || process.env.EXPO_PUBLIC_AUTH_BYPASS === "true";
+  process.env.EXPO_PUBLIC_AUTH_BYPASS === "true";
 
 function makePreviewRealtorRecord(): RealtorRecord {
   const now = new Date().toISOString();
