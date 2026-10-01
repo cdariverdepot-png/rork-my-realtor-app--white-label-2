@@ -419,3 +419,44 @@ test('Google ID-token redirect stays on app origin, never supabase.co', () => {
   // Documented production fallback callback on expo.app
   assert.match(src, /cdariverdepot-my-realtor\.expo\.app\/auth\/callback/);
 });
+
+test('Google web sign-in uses full-page redirect, not a post-await popup', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.match(src, /window\.location\.assign\(authUrl\)/);
+  assert.match(src, /completeGoogleIdTokenCallback/);
+  assert.match(src, /GOOGLE_OIDC_NONCE_KEY/);
+  // Web path must not call promptAsync (popup after awaits gets blocked).
+  const googleFn = src.slice(src.indexOf('async function startGoogleIdTokenSignIn'), src.indexOf('async function startSupabaseOAuth'));
+  assert.match(googleFn, /Platform\.OS === ["']web["']/);
+  assert.match(googleFn, /makeAuthUrlAsync/);
+  // Native still uses promptAsync
+  assert.match(googleFn, /promptAsync/);
+});
+
+test('auth callback completes Google ID-token returns before email OAuth parsing', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/auth/callback.tsx'), 'utf8');
+  assert.match(src, /completeGoogleIdTokenCallback/);
+  // Compare call sites inside the effect body (imports list completeAuthCallback first).
+  const body = src.slice(src.indexOf('void (async () => {'));
+  assert.ok(body.indexOf('completeGoogleIdTokenCallback') < body.indexOf('completeAuthCallback('));
+});
+
+test('portal defaults to welcome entry; back from code clears sticky entry=client', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.match(src, /goWelcome/);
+  assert.match(src, /router\.replace\(["']\/portal["']\)/);
+  assert.match(src, /Default \(missing \/ unknown\) is the welcome gateway/);
+  assert.match(src, /entryParam === ["']client["'] \? ["']code["'] : ["']entry["']/);
+  // Back from code must clear sticky query, not only transitionTo("entry")
+  const onBack = src.slice(src.indexOf('const onBack'), src.indexOf('return (', src.indexOf('const onBack')));
+  assert.match(onBack, /goWelcome\(\)/);
+  assert.doesNotMatch(onBack, /stage === ["']code["']\)\s*\{\s*transitionTo\(["']entry["']\)/);
+});
+
+test('login and logout land on welcome /, not sticky portal client code', () => {
+  for (const file of ['app/login.tsx', 'app/account.tsx', 'components/Hero.tsx', 'app/client-profile.tsx', 'app/admin/index.tsx']) {
+    const src = fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
+    assert.doesNotMatch(src, /router\.replace\(["']\/portal["']\)/, file);
+  }
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'app/login.tsx'), 'utf8'), /router\.replace\(["']\/["']\)/);
+});

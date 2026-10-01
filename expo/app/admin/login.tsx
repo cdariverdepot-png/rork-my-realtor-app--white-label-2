@@ -16,7 +16,7 @@ import { AUTH_BYPASS_ENABLED } from "@/contexts/AuthContext";
 export default function AdminLoginRedirect() {
   const router = useRouter();
   useEffect(() => {
-    router.replace(AUTH_BYPASS_ENABLED ? "/admin/" : "/portal");
+    router.replace(AUTH_BYPASS_ENABLED ? "/admin/" : "/");
   }, [router]);
   return <View style={{ flex: 1, backgroundColor: dark.bg }} />;
 }

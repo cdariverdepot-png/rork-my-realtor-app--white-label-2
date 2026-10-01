@@ -90,7 +90,7 @@ export default function ClientAccount() {
   const handleSignOut = async () => {
     if (Platform.OS === "web") {
       await logout();
-      router.replace("/portal");
+      router.replace("/");
       return;
     }
     Alert.alert("Sign out", "You'll need your email and password to sign back in.", [
@@ -101,7 +101,7 @@ export default function ClientAccount() {
         onPress: async () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
           await logout();
-          router.replace("/portal");
+          router.replace("/");
         },
       },
     ]);
@@ -127,7 +127,7 @@ export default function ClientAccount() {
           clientId: session.clientId,
         });
         await logout();
-        router.replace("/portal");
+        router.replace("/");
       } catch (e) {
         console.log("[account] delete failed", e);
         setDeleting(false);

@@ -7,6 +7,7 @@ import {
   needsSetPassword,
   readAuthCallbackType,
 } from "@/lib/authCallback";
+import { completeGoogleIdTokenCallback } from "@/lib/socialSignIn";
 
 function hashParams(): URLSearchParams {
   if (Platform.OS !== "web" || typeof window === "undefined") return new URLSearchParams();
@@ -32,6 +33,30 @@ export default function AuthCallback() {
     if (started.current) return;
     started.current = true;
     void (async () => {
+      // Google ID-token return (full-page redirect or popup child).
+      // Must run before email/OAuth callback parsing — hash has id_token, not code.
+      const google = await completeGoogleIdTokenCallback();
+      if (google) {
+        if (Platform.OS === "web") window.history.replaceState(null, "", window.location.pathname);
+        if (google.redirecting) {
+          // Popup child handed the URL to the opener; nothing else to do here.
+          setMessage("You can close this window and return to the app.");
+          return;
+        }
+        if (!google.ok) {
+          setMessage(google.error || "Couldn't complete Google sign-in. Please try again.");
+          return;
+        }
+        const opened = await completeRealtorSignIn();
+        if (!opened.ok) {
+          setConfirmedContinue(true);
+          setMessage(opened.error ?? "Signed in with Google. Continue to open your account.");
+          return;
+        }
+        router.replace("/admin");
+        return;
+      }
+
       // Capture type before establishSession / URL cleanup consumes the hash.
       const fromUrl = readAuthCallbackType(hashParams(), queryParams());
       const fromRoute = typeof typeParam === "string" ? typeParam.toLowerCase() : null;

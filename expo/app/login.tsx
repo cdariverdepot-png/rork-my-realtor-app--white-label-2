@@ -11,7 +11,7 @@ import { dark } from "@/constants/colors";
 export default function ClientLoginRedirect() {
   const router = useRouter();
   useEffect(() => {
-    router.replace("/portal");
+    router.replace("/");
   }, [router]);
   return <View style={{ flex: 1, backgroundColor: dark.bg }} />;
 }

@@ -360,7 +360,7 @@ export default function AdminDashboard() {
         return;
       }
       await logout();
-      router.replace("/portal");
+      router.replace("/");
     };
 
     if (Platform.OS === "web") { void run(); return; }
@@ -523,7 +523,7 @@ export default function AdminDashboard() {
                   <Eye size={14} color={admin.goldLight} strokeWidth={1.7} />
                 </Pressable>
                 <Pressable
-                  onPress={async () => { await logout(); router.replace("/portal"); }}
+                  onPress={async () => { await logout(); router.replace("/"); }}
                   style={({ pressed }) => [styles.chromeBtn, pressed && { opacity: 0.7 }]}
                   hitSlop={8}
                 >

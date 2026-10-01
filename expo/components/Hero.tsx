@@ -95,7 +95,7 @@ export default function Hero({ scrollY }: Props) {
     const doSignOut = async (): Promise<void> => {
       try {
         await logout();
-        router.replace("/portal");
+        router.replace("/");
       } catch (e) {
         console.log("[hero] sign out", e);
       }

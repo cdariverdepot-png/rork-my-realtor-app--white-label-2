@@ -233,7 +233,7 @@ export default function ClientProfileFlow() {
    */
   const exitProfile = useCallback(() => {
     if (myProfileShared || !isClient) { router.back(); return; }
-    void logout().then(() => router.replace("/portal"));
+    void logout().then(() => router.replace("/"));
   }, [myProfileShared, isClient, logout, router]);
 
   const goBack = useCallback(() => {

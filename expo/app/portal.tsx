@@ -56,12 +56,16 @@ export default function Portal() {
     lookupRealtorByCode,
   } = useAuth();
 
-  const { entry: entryParam, invite, confirmed: confirmedParam } = useLocalSearchParams<{ entry?: string; invite?: string; confirmed?: string }>();
+  const { entry: entryRaw, invite, confirmed: confirmedParam } = useLocalSearchParams<{ entry?: string | string[]; invite?: string; confirmed?: string }>();
+  // Expo Router may hand back string[]; only an explicit single "client" opens the code stage.
+  // Default (missing / unknown) is the welcome gateway — never client code.
+  const entryParam = Array.isArray(entryRaw) ? entryRaw[0] : entryRaw;
   const emailAlreadyConfirmed =
     confirmedParam === "1" || confirmedParam === "true" || String(confirmedParam ?? "").toLowerCase() === "yes";
   const initialStage: Stage = entryParam === "realtor" ? "realtor-signin" : entryParam === "client" ? "code" : "entry";
 
   const [stage, setStage] = useState<Stage>(initialStage);
+
   const [code, setCode] = useState<string>(invite ?? "");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -73,6 +77,19 @@ export default function Portal() {
   const [resolvedRealtorName, setResolvedRealtorName] = useState<string>("");
   const [resolvedBrandName, setResolvedBrandName] = useState<string>("");
   const [resolvedMonogram, setResolvedMonogram] = useState<string>("");
+
+  /** Return to the welcome gateway and drop sticky ?entry=client so refresh cannot force the code screen. */
+  const goWelcome = () => {
+    setCode("");
+    setEmail("");
+    setPassword("");
+    setName("");
+    setError(null);
+    setConfirmationEmail("");
+    void AsyncStorage.removeItem("onboarding.pendingInvite.v1").catch(() => {});
+    setStage("entry");
+    router.replace("/portal");
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -272,9 +289,9 @@ export default function Portal() {
   const showBack = stage !== "entry";
   const onBack = () => {
     if (Platform.OS !== "web") Haptics.selectionAsync();
-    if (stage === "code") { transitionTo("entry"); setCode(""); return; }
+    // Code / realtor → welcome gateway with a clean URL (no sticky entry=client).
+    if (stage === "code" || stage.startsWith("realtor")) { goWelcome(); return; }
     if (stage.startsWith("client")) { transitionTo("code"); setEmail(""); setPassword(""); setName(""); return; }
-    if (stage.startsWith("realtor")) { transitionTo("entry"); setEmail(""); setPassword(""); setName(""); return; }
     if (router.canGoBack()) router.back();
     else router.replace("/");
   };
@@ -319,7 +336,21 @@ export default function Portal() {
 
               <Animated.View style={shakeStyle}>
                 {stage === "entry" ? (
-                  <EntryForm onRealtor={() => transitionTo("realtor-signin")} onClient={() => transitionTo("code")} onExploreDemo={handleExploreDemo} onSkipLogin={authBypassEnabled ? handleSkipLogin : undefined} busy={busy} error={error} />
+                  <EntryForm
+                    onRealtor={() => {
+                      // Explicit realtor entry — replace sticky ?entry=client if present.
+                      router.replace({ pathname: "/portal", params: { entry: "realtor" } });
+                      transitionTo("realtor-signin");
+                    }}
+                    onClient={() => {
+                      router.replace({ pathname: "/portal", params: { entry: "client" } });
+                      transitionTo("code");
+                    }}
+                    onExploreDemo={handleExploreDemo}
+                    onSkipLogin={authBypassEnabled ? handleSkipLogin : undefined}
+                    busy={busy}
+                    error={error}
+                  />
                 ) : stage === "code" ? (
                   <CodeForm code={code} onChange={setCode} onSubmit={submitCode} error={error} busy={busy} />
                 ) : stage === "client-full" ? (

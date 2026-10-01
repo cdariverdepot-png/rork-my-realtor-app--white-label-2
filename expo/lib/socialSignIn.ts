@@ -35,6 +35,9 @@ const GOOGLE_DISCOVERY: AuthSession.DiscoveryDocument = {
   revocationEndpoint: "https://oauth2.googleapis.com/revoke",
 };
 
+const GOOGLE_OIDC_NONCE_KEY = "google.oidc.nonce.v1";
+const GOOGLE_OIDC_STATE_KEY = "google.oidc.state.v1";
+
 function socialFlag(name: string, defaultOn: boolean): boolean {
   const raw = SOCIAL_ENV[name];
   if (raw === "false" || raw === "0") return false;
@@ -56,6 +59,33 @@ export const SOCIAL_PROVIDERS = [
 export type SocialSignInResult =
   | { ok: true; redirecting?: boolean }
   | { ok: false; error: string };
+
+function webSessionGet(key: string): string | null {
+  if (Platform.OS !== "web" || typeof sessionStorage === "undefined") return null;
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function webSessionSet(key: string, value: string): void {
+  if (Platform.OS !== "web" || typeof sessionStorage === "undefined") return;
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {
+    /* private mode */
+  }
+}
+
+function webSessionClear(...keys: string[]): void {
+  if (Platform.OS !== "web" || typeof sessionStorage === "undefined") return;
+  try {
+    for (const key of keys) sessionStorage.removeItem(key);
+  } catch {
+    /* private mode */
+  }
+}
 
 async function makeOidcNonce(): Promise<{ raw: string; hashed: string }> {
   const bytes = await Crypto.getRandomBytesAsync(32);
@@ -103,10 +133,88 @@ function parseIdTokenFromAuthUrl(url: string): string | null {
   }
 }
 
+function parseStateFromAuthUrl(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    const fromQuery = parsed.searchParams.get("state");
+    if (fromQuery) return fromQuery;
+    const hash = parsed.hash.startsWith("#") ? parsed.hash.slice(1) : parsed.hash;
+    if (!hash) return null;
+    return new URLSearchParams(hash).get("state");
+  } catch {
+    return null;
+  }
+}
+
+async function exchangeGoogleIdToken(idToken: string, nonce: string | undefined): Promise<SocialSignInResult> {
+  const sb = supabase;
+  if (!sb) return { ok: false, error: "This sign-in option isn't available yet. Please use email." };
+  const signed = await withEmailAuth(() =>
+    sb.auth.signInWithIdToken({
+      provider: "google",
+      token: idToken,
+      ...(nonce ? { nonce } : {}),
+    })
+  );
+  return signed.error ? { ok: false, error: authErrorMessage(signed.error) } : { ok: true };
+}
+
+/**
+ * Finish a Google ID-token redirect that landed on /auth/callback.
+ * Returns null when this URL is not a Google ID-token return (so email/OAuth
+ * callback handling can continue).
+ */
+export async function completeGoogleIdTokenCallback(returnUrl?: string): Promise<SocialSignInResult | null> {
+  if (Platform.OS !== "web" || typeof window === "undefined") return null;
+  // Popup flow: close the child window and hand the URL to the opener.
+  try {
+    const completed = WebBrowser.maybeCompleteAuthSession();
+    if (completed?.type === "success") {
+      return { ok: true, redirecting: true };
+    }
+  } catch {
+    /* no opener / not a popup — continue with full-page handling */
+  }
+
+  const url = returnUrl || window.location.href;
+  const idToken = parseIdTokenFromAuthUrl(url);
+  if (!idToken) return null;
+
+  const expectedState = webSessionGet(GOOGLE_OIDC_STATE_KEY);
+  const returnedState = parseStateFromAuthUrl(url);
+  const nonce = webSessionGet(GOOGLE_OIDC_NONCE_KEY) ?? undefined;
+  webSessionClear(GOOGLE_OIDC_NONCE_KEY, GOOGLE_OIDC_STATE_KEY);
+
+  if (expectedState && returnedState && expectedState !== returnedState) {
+    return { ok: false, error: "Couldn't complete Google sign-in (state mismatch). Please try again." };
+  }
+
+  await clearAnonymousSessionForEmailAuth();
+  return exchangeGoogleIdToken(idToken, nonce);
+}
+
+function buildGoogleAuthRequest(redirectUri: string, hashedNonce: string): AuthSession.AuthRequest {
+  return new AuthSession.AuthRequest({
+    clientId: GOOGLE_WEB_CLIENT_ID,
+    redirectUri,
+    scopes: ["openid", "email", "profile"],
+    responseType: AuthSession.ResponseType.IdToken,
+    usePKCE: false,
+    extraParams: {
+      nonce: hashedNonce,
+      prompt: "select_account",
+    },
+  });
+}
+
 /**
  * Google via AuthSession → ID token → supabase.auth.signInWithIdToken.
  * Authorize URL is accounts.google.com with redirect_uri on the app origin,
  * so consent never routes through xdcqjaodcvnlawqcunrr.supabase.co.
+ *
+ * Web uses a full-page redirect (not a popup). Popup open must be synchronous
+ * with the click; any await (anon clear, nonce crypto) before window.open gets
+ * the popup blocked and surfaces as "Couldn't connect to the sign-in provider".
  */
 async function startGoogleIdTokenSignIn(): Promise<SocialSignInResult> {
   if (!GOOGLE_WEB_CLIENT_ID) {
@@ -118,36 +226,37 @@ async function startGoogleIdTokenSignIn(): Promise<SocialSignInResult> {
   }
   const redirectUri = googleIdTokenRedirectUri();
   const { raw: nonce, hashed: hashedNonce } = await makeOidcNonce();
-  const request = new AuthSession.AuthRequest({
-    clientId: GOOGLE_WEB_CLIENT_ID,
-    redirectUri,
-    scopes: ["openid", "email", "profile"],
-    responseType: AuthSession.ResponseType.IdToken,
-    usePKCE: false,
-    extraParams: {
-      nonce: hashedNonce,
-      prompt: "select_account",
-    },
-  });
+  const request = buildGoogleAuthRequest(redirectUri, hashedNonce);
+
+  // Web: full-page redirect so we never race the user-gesture popup window.
+  if (Platform.OS === "web") {
+    const authUrl = await request.makeAuthUrlAsync(GOOGLE_DISCOVERY);
+    if (!authUrl) {
+      return { ok: false, error: "Couldn't start Google sign-in. Please try again." };
+    }
+    webSessionSet(GOOGLE_OIDC_NONCE_KEY, nonce);
+    if (request.state) webSessionSet(GOOGLE_OIDC_STATE_KEY, request.state);
+    window.location.assign(authUrl);
+    return { ok: true, redirecting: true };
+  }
+
   const result = await request.promptAsync(GOOGLE_DISCOVERY, { showInRecents: true });
   if (result.type === "dismiss" || result.type === "cancel") {
     return { ok: false, error: "Sign-in was cancelled. You can try again or use email." };
   }
+  if (result.type === "locked") {
+    return { ok: false, error: "Sign-in is already in progress. Please wait a moment and try again." };
+  }
   if (result.type !== "success") {
-    return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+    return { ok: false, error: `Couldn't complete Google sign-in (${result.type}). Please try again.` };
   }
   const idToken =
     result.params.id_token ||
     (typeof result.url === "string" ? parseIdTokenFromAuthUrl(result.url) : null);
   if (!idToken) {
-    return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+    return { ok: false, error: "Google did not return an ID token. Check the redirect URI on the Google Web client." };
   }
-  const sb = supabase;
-  if (!sb) return { ok: false, error: "This sign-in option isn't available yet. Please use email." };
-  const signed = await withEmailAuth(() =>
-    sb.auth.signInWithIdToken({ provider: "google", token: idToken, nonce })
-  );
-  return signed.error ? { ok: false, error: authErrorMessage(signed.error) } : { ok: true };
+  return exchangeGoogleIdToken(idToken, nonce);
 }
 
 /** Microsoft / Apple stay on Supabase OAuth (redirect still goes through supabase.co authorize). */
@@ -195,6 +304,20 @@ async function startSupabaseOAuth(provider: "apple" | "azure"): Promise<SocialSi
   return exchanged.error ? { ok: false, error: authErrorMessage(exchanged.error) } : { ok: true };
 }
 
+function connectErrorMessage(e: unknown): string {
+  if (e instanceof Error && e.message) {
+    if (/Unconfigured authentication origin/.test(e.message)) {
+      return "Google, Apple and Microsoft sign-in work in the installed app and on the published site. Use email and password here.";
+    }
+    if (/ERR_WEB_BROWSER_BLOCKED|Popup window was blocked/i.test(e.message)) {
+      return "The sign-in window was blocked. Allow popups for this site, or try again.";
+    }
+    // Surface the real error temporarily so production debugging is possible.
+    return `Couldn't connect to the sign-in provider (${e.message}). Please try again.`;
+  }
+  return "Couldn't connect to the sign-in provider. Please try again.";
+}
+
 export async function startSocialSignIn(provider: "google" | "apple" | "azure"): Promise<SocialSignInResult> {
   if (!SOCIAL_PROVIDERS.find(p => p.id === provider)?.enabled || !supabase) {
     return { ok: false, error: "This sign-in option isn't available yet. Please use email." };
@@ -204,17 +327,11 @@ export async function startSocialSignIn(provider: "google" | "apple" | "azure"):
   }
   try {
     // Start from a clean slate so a guest session can't outlive social sign-in.
+    // (Web Google uses full-page redirect after this; popup is not used there.)
     await clearAnonymousSessionForEmailAuth();
     if (provider === "google") return await startGoogleIdTokenSignIn();
     return await startSupabaseOAuth(provider);
   } catch (e) {
-    if (e instanceof Error && /Unconfigured authentication origin/.test(e.message)) {
-      return {
-        ok: false,
-        error:
-          "Google, Apple and Microsoft sign-in work in the installed app and on the published site. Use email and password here.",
-      };
-    }
-    return { ok: false, error: "Couldn't connect to the sign-in provider. Please try again." };
+    return { ok: false, error: connectErrorMessage(e) };
   }
 }
