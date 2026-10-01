@@ -14,7 +14,6 @@ import { toPortableImage } from "@/lib/portableImage";
 import { useAuth } from "@/contexts/AuthContext";
 import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
 import { analyzeBuild, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
-import EmailCodeSignIn from "@/components/EmailCodeSignIn";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
@@ -126,15 +125,8 @@ export default function InitialRealtorSetup() {
   const [error, setError] = useState<{ place: ErrorPlace; message: string } | null>(null);
   const [manual, setManual] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  /** null = still checking; false = need email/sign-in on this page; true = builder unlocked. */
+  /** null = still checking; false = need portal sign-in (never invent signup here); true = unlocked. */
   const [builderReady, setBuilderReady] = useState<boolean | null>(null);
-  const [authMode, setAuthMode] = useState<"signup" | "signin">("signup");
-  const [authName, setAuthName] = useState("");
-  const [authEmail, setAuthEmail] = useState("");
-  const [authPassword, setAuthPassword] = useState("");
-  const [authBusy, setAuthBusy] = useState(false);
-  const [authMessage, setAuthMessage] = useState("");
-  const [verificationPending, setVerificationPending] = useState(false);
   const [contactCount, setContactCount] = useState(0);
   const [pendingContacts, setPendingContacts] = useState<{ contacts: ReturnType<typeof parseCsvContacts>; format: "csv" | "vcard" } | null>(null);
   const [activity, setActivity] = useState("");
@@ -158,8 +150,10 @@ export default function InitialRealtorSetup() {
 
   const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
   const isGuestAccess = !!auth.isGuestAccess;
-  // Never gate guest REALTOR access-code sessions; edge gate only for non-guest without cloud auth.
-  const needsBuilderAuth = !isGuestAccess && builderReady === false;
+  const authHydrated = !!auth.hydrated;
+  // Guest REALTOR access codes: never gate. Edge (non-guest, no cloud auth): send to portal —
+  // build must never invent signup/sign-in forms.
+  const needsBuilderAuth = authHydrated && !isGuestAccess && builderReady === false;
 
   // Moving to the next stage brings it into view — no hunting for new content.
   useEffect(() => {
@@ -198,22 +192,21 @@ export default function InitialRealtorSetup() {
     if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
   }, [brand]);
 
-  // Product model: real users are signed in before /admin/build. Guest REALTOR
-  // access codes are test-only and use the local builder — never show email/account
-  // panels for those sessions. Gate only the edge case: realtor, not guest, no auth.
+  // Product model: real users sign up/in BEFORE /admin/build. Guest REALTOR codes
+  // are owner-test only and use the local builder — never an account panel.
+  // Wait for auth hydrate so guest sessions are not briefly treated as "need email".
   useEffect(() => {
+    if (!authHydrated) return;
     let alive = true;
     void (async () => {
       try {
         if (isGuestAccess) {
-          // Access-code guest realtor → local/preview builder, no account panel.
           if (!alive) return;
           setBuilderReady(true);
           try { await loadSavedBuild(); }
           catch (e) {
             if (!alive) return;
             const message = e instanceof Error ? e.message : "Could not load your app build.";
-            // Local path should not bounce guests into the email gate.
             if (message !== BUILDER_AUTH_MESSAGE) setError({ place: "sources", message });
           }
           return;
@@ -235,7 +228,7 @@ export default function InitialRealtorSetup() {
       }
     })();
     return () => { alive = false; };
-  }, [loadSavedBuild, isGuestAccess]);
+  }, [loadSavedBuild, isGuestAccess, authHydrated]);
 
   const leaveBuild = useCallback(async () => {
     // Incomplete setup is forced onto this screen — escape by signing out to the portal.
@@ -248,40 +241,11 @@ export default function InitialRealtorSetup() {
     else router.replace("/admin");
   }, [auth, router]);
 
-  const focusAuthPanel = () => {
+  /** Edge case only: non-guest without cloud auth — send to portal (never invent signup here). */
+  const goPortalAuth = useCallback(() => {
     setError(null);
-    setAuthMessage(BUILDER_AUTH_MESSAGE);
-    scrollRef.current?.scrollTo({ y: Math.max(0, authPanelY.current - 24), animated: true });
-  };
-
-  const submitBuilderAuth = () => void (async () => {
-    if (authBusy) return;
-    setAuthBusy(true);
-    setAuthMessage("");
-    try {
-      const result = authMode === "signup"
-        ? await auth.realtorSignup({ name: authName, email: authEmail, password: authPassword })
-        : await auth.realtorLogin(authEmail, authPassword);
-      if (!result.ok) {
-        if (result.verificationRequired) {
-          setVerificationPending(true);
-          setAuthMessage(result.error ?? "Check your email to confirm your account, then sign in here.");
-          return;
-        }
-        setAuthMessage(result.error ?? "Couldn’t complete sign-in. Please try again.");
-        return;
-      }
-      setVerificationPending(false);
-      setBuilderReady(true);
-      setAuthMessage("You’re signed in. Continue building your app below.");
-      setError(null);
-      try { await loadSavedBuild(); } catch {}
-    } catch {
-      setAuthMessage("Couldn’t complete sign-in. Please try again.");
-    } finally {
-      setAuthBusy(false);
-    }
-  })();
+    router.replace({ pathname: "/portal", params: { entry: "realtor" } });
+  }, [router]);
 
   const act = async (place: ErrorPlace, work: () => Promise<void>) => {
     if (busy) return;
@@ -289,12 +253,10 @@ export default function InitialRealtorSetup() {
     try { await work(); }
     catch (e) {
       const message = e instanceof Error ? e.message : "Please try again.";
-      // Auth gate: show fields, never an orphan red prompt with nowhere to type.
       if (!isGuestAccess && (message === BUILDER_AUTH_MESSAGE || message.includes("Sign in to save"))) {
         setBuilderReady(false);
-        setAuthMessage(BUILDER_AUTH_MESSAGE);
         setError(null);
-        focusAuthPanel();
+        goPortalAuth();
       } else {
         setError({ place, message });
       }
@@ -362,7 +324,7 @@ export default function InitialRealtorSetup() {
     }
   });
   const analyze = () => {
-    if (!isGuestAccess && builderReady === false) { focusAuthPanel(); return; }
+    if (!isGuestAccess && builderReady === false) { goPortalAuth(); return; }
     void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
@@ -493,51 +455,22 @@ export default function InitialRealtorSetup() {
     images.length ? `${images.length} image${images.length > 1 ? "s" : ""}` : "",
   ].filter(Boolean).join(" · ");
 
-  const authField = (label: string, value: string, onChange: (v: string) => void, opts?: { keyboard?: "default" | "email-address"; secure?: boolean; autoCap?: "none" | "words" }) =>
-    <View style={{ marginTop: 12 }}>
-      <Text style={{ color: "#D7D8D3", marginBottom: 6 }}>{label}</Text>
-      <TextInput value={value} onChangeText={onChange} accessibilityLabel={label}
-        keyboardType={opts?.keyboard ?? "default"} secureTextEntry={!!opts?.secure}
-        autoCapitalize={opts?.autoCap ?? (opts?.keyboard === "email-address" ? "none" : "words")}
-        autoCorrect={false} autoComplete={opts?.secure ? "password" : opts?.keyboard === "email-address" ? "email" : "name"}
-        style={{ color: "white", borderColor: "#646C70", borderWidth: 1, borderRadius: 10, padding: 12, fontSize: 16, minHeight: 48 }} />
-    </View>;
-
+  // Build never invents signup — edge case only points realtors back to the portal.
   const builderAuthPanel = needsBuilderAuth ? (
     <View
       onLayout={e => { authPanelY.current = e.nativeEvent.layout.y; }}
       style={{ marginTop: 24, padding: 18, borderRadius: 16, borderWidth: 1, borderColor: "#C2A276", backgroundColor: "rgba(194,162,118,0.10)" }}
     >
-      <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>ACCOUNT REQUIRED</Text>
-      <Text style={{ color: "white", fontSize: 18, fontWeight: "600", marginTop: 6 }}>Confirm your realtor email</Text>
+      <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.6 }}>SIGN IN REQUIRED</Text>
+      <Text style={{ color: "white", fontSize: 18, fontWeight: "600", marginTop: 6 }}>Finish account setup in the portal</Text>
       <Text style={{ color: "#C8D0D0", marginTop: 8, lineHeight: 22 }}>
-        Sign in or create your builder account to save your website import and build your app.
+        Real realtor accounts sign up or sign in before building. Continue at the portal — this page does not create accounts.
       </Text>
-      {authMode === "signup" && authField("Your name", authName, setAuthName, { autoCap: "words" })}
-      {authField("Realtor email", authEmail, setAuthEmail, { keyboard: "email-address", autoCap: "none" })}
-      {authField("Password", authPassword, setAuthPassword, { secure: true, autoCap: "none" })}
-      <PressableScale accessibilityRole="button" onPress={submitBuilderAuth} disabled={authBusy} haptic="medium" style={{ marginTop: 16 }}>
-        <View style={{ minHeight: 52, borderRadius: 12, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center", opacity: authBusy ? 0.6 : 1 }}>
-          <Text style={{ color: "#172027", fontSize: 16, fontWeight: "700" }}>
-            {authBusy ? "Please wait…" : authMode === "signup" ? "Create account & continue" : "Sign in & continue"}
-          </Text>
+      <PressableScale accessibilityRole="button" onPress={goPortalAuth} haptic="medium" style={{ marginTop: 16 }}>
+        <View style={{ minHeight: 52, borderRadius: 12, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center" }}>
+          <Text style={{ color: "#172027", fontSize: 16, fontWeight: "700" }}>Go to realtor sign-in</Text>
         </View>
       </PressableScale>
-      <Pressable accessibilityRole="button" onPress={() => { setAuthMode(m => m === "signup" ? "signin" : "signup"); setAuthMessage(""); }}
-        hitSlop={8} style={{ marginTop: 14, minHeight: 44, justifyContent: "center" }}>
-        <Text style={{ color: "#C2A276", textAlign: "center", fontWeight: "600" }}>
-          {authMode === "signup" ? "Already have an account? Sign in" : "Need an account? Create one"}
-        </Text>
-      </Pressable>
-      {(verificationPending || authMode === "signin") && !!authEmail.trim() && (
-        <EmailCodeSignIn email={authEmail.trim()} confirmation={verificationPending || authMode === "signup"} />
-      )}
-      {!!authMessage && (
-        <Text accessibilityRole="alert" accessibilityLiveRegion="polite"
-          style={{ color: verificationPending || builderReady ? "#D6BA91" : "#FFBAA9", marginTop: 12, lineHeight: 20 }}>
-          {authMessage}
-        </Text>
-      )}
     </View>
   ) : null;
 
@@ -558,7 +491,7 @@ export default function InitialRealtorSetup() {
     <Text style={{ color: "white", fontSize: 32, fontWeight: "600" }}>Build Your App</Text>
     {phase === "collect" && <Text style={{ color: "#C8D0D0", marginTop: 10, fontSize: 16, lineHeight: 24 }}>
       {needsBuilderAuth
-        ? "Enter your website below, then confirm your realtor email so we can save and build your app."
+        ? "Sign in at the portal first — real realtor accounts are created before Build Step 1."
         : "Start with your website. We’ll use it to gather most of the information needed to build your app."}
     </Text>}
     {!loaded && <Text style={{ color: "#C8D0D0", marginTop: 20 }}>Loading…</Text>}
@@ -652,11 +585,12 @@ export default function InitialRealtorSetup() {
 
       {builderAuthPanel}
       {errorFor("sources")}
-      <PressableScale accessibilityRole="button" onPress={analyze} disabled={busy || builderReady === null} haptic="medium" style={{ marginTop: 26 }}>
+      <PressableScale accessibilityRole="button" onPress={needsBuilderAuth ? goPortalAuth : analyze}
+        disabled={busy || (!needsBuilderAuth && builderReady === null) || !authHydrated} haptic="medium" style={{ marginTop: 26 }}>
         <View style={{ minHeight: 60, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center",
-          opacity: (busy || builderReady === null) ? 0.6 : 1 }}>
+          opacity: (busy || (!needsBuilderAuth && builderReady === null) || !authHydrated) ? 0.6 : 1 }}>
           <Text style={{ color: "#172027", fontSize: 18, fontWeight: "700" }}>
-            {needsBuilderAuth ? "Sign in above, then build" : "Let’s Build My App!"}
+            {needsBuilderAuth ? "Go to realtor sign-in" : "Let’s Build My App!"}
           </Text>
         </View>
       </PressableScale>

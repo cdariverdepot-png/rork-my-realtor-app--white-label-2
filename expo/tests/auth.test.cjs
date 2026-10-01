@@ -607,27 +607,39 @@ test('client tour finish gates home flash until /client-profile', () => {
 });
 
 
-test('build onboarding skips account gate for guest REALTOR; edge gate only otherwise', () => {
+test('build onboarding: guest local path; never invents signup; edge sends to portal', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'components/InitialRealtorSetup.tsx'), 'utf8');
   assert.match(src, /hasVerifiedBuilderAuth/);
   assert.match(src, /BUILDER_AUTH_MESSAGE/);
   assert.match(src, /isGuestAccess/);
-  // Guest access-code sessions never show ACCOUNT REQUIRED / email panels.
-  assert.match(src, /!isGuestAccess && builderReady === false/);
+  assert.match(src, /authHydrated/);
+  assert.match(src, /goPortalAuth/);
+  // Guest access-code sessions never show invent-signup panels.
   assert.match(src, /needsBuilderAuth/);
   assert.match(src, /builderAuthPanel/);
   assert.match(src, /Let's Build My App!|Let’s Build My App!/);
-  // Edge-case panel still exists for non-guest realtor without cloud auth.
-  assert.match(src, /ACCOUNT REQUIRED/);
-  assert.match(src, /Confirm your realtor email/);
-  assert.match(src, /Realtor email/);
+  assert.doesNotMatch(src, /ACCOUNT REQUIRED/);
+  assert.doesNotMatch(src, /Create account & continue/);
+  assert.doesNotMatch(src, /EmailCodeSignIn/);
+  assert.doesNotMatch(src, /submitBuilderAuth/);
+  // Edge case: portal redirect, not invent-signup forms on build.
+  assert.match(src, /SIGN IN REQUIRED/);
+  assert.match(src, /Go to realtor sign-in/);
+  assert.match(src, /entry: "realtor"/);
   assert.match(src, /leaveBuild/);
   assert.match(src, /accessibilityLabel="Back"/);
   assert.match(src, /accessibilityLabel="Close"/);
-  // Must not surface the auth message as an orphan sources error without inputs.
   assert.match(src, /if \(error\.message === BUILDER_AUTH_MESSAGE\) return null/);
-  // Guest must not be forced into the email gate from act/analyze failures.
   assert.match(src, /!isGuestAccess && \(message === BUILDER_AUTH_MESSAGE/);
+});
+
+test('real realtor signup goes to /admin for walkthrough before build', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  const signup = src.match(/if \(stage === "realtor-setup"\) \{[\s\S]*?\} else if \(stage === "realtor-signin"\)/);
+  assert.ok(signup, 'realtor-setup branch');
+  assert.match(signup[0], /prepareNewRealtorTour\(\)/);
+  assert.match(signup[0], /router\.replace\("\/admin\/"\)/);
+  assert.doesNotMatch(signup[0], /router\.replace\("\/admin\/build"\)/);
 });
 
 test('guest REALTOR session mints guestAccess and local builder flag', () => {

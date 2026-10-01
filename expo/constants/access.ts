@@ -6,11 +6,10 @@
  * version of the app. The code is stored in the Supabase `realtors` table
  * and cached locally for offline use.
  *
- * Guest role codes (never shown in the UI) mint a fresh local session:
- * - REALTOR → admin walkthrough → /admin/build (email capture / sign-in on that
- *   page unlocks the cloud app builder — never an orphan "confirm email" prompt)
+ * Guest role codes (never shown in the UI) are OWNER TEST ONLY:
+ * - REALTOR → admin walkthrough → /admin/build with local builder (no account gate)
  * - CLIENT / DEMO → client walkthrough → client profile build
- * Realtors can also sign up / sign in with email through the portal.
+ * Real realtors always sign up / sign in on the portal BEFORE /admin/build.
  */
 
 export const CLIENT_CODE_LENGTH = 6;

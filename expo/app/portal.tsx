@@ -229,7 +229,9 @@ export default function Portal() {
       if (stage === "realtor-setup") {
         const res = await realtorSignup({ name, email, password });
         if (!res.ok) { if (res.verificationRequired) setConfirmationEmail(email.trim().toLowerCase()); setError(res.error ?? "Couldn't create your account."); if (!res.verificationRequired) triggerShake(); return; }
-        success(); router.replace("/admin/build");
+        // Real realtor: signup → walkthrough → build (never land on Step 1 before tour).
+        prepareNewRealtorTour();
+        success(); router.replace("/admin/");
       } else if (stage === "realtor-signin") {
         const res = await realtorLogin(email, password);
         if (!res.ok) { if (res.verificationRequired) setConfirmationEmail(email.trim().toLowerCase()); setError(res.error ?? "Sign-in failed."); triggerShake(); return; }
