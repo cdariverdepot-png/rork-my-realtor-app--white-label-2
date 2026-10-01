@@ -16,8 +16,10 @@ function listingId(item: DiscoveredListing, index: number): string {
   try {
     const host = new URL(item.sourceUrl).hostname.replace(/^www\./, "").slice(0, 18);
     const path = new URL(item.sourceUrl).pathname.split("/").filter(Boolean).pop() ?? "";
-    const base = slug(`${host}-${path || item.title}`) || `listing-${index}`;
-    return base.slice(0, 48);
+    // Hash the full URL: MLS ids often share long prefixes, and some sites use ?id=.
+    let hash = 2166136261;
+    for (const ch of item.sourceUrl) hash = Math.imul(hash ^ ch.charCodeAt(0), 16777619);
+    return `${slug(`${host}-${path || item.title}`)}-${(hash >>> 0).toString(36)}`;
   } catch {
     return `${slug(item.title)}-${index}`;
   }

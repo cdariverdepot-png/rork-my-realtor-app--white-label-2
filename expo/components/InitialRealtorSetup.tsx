@@ -475,7 +475,7 @@ export default function InitialRealtorSetup() {
       };
     });
     const count = applyDiscoveredListings(saved);
-    setListingsUrl("");
+    if (count) setListingsUrl("");
     if (!count) {
       throw new Error("We still couldn’t find listings on that page. Try a link that opens your property list without signing in.");
     }
@@ -763,7 +763,7 @@ export default function InitialRealtorSetup() {
         <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#2E8B57", backgroundColor: "rgba(46,139,87,0.12)" }}>
           <Text style={{ color: "#8FD9B4", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
           <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
-            We imported {importedListingCount} listing{importedListingCount === 1 ? "" : "s"} from your site
+            We imported {importedListingCount} listing{importedListingCount === 1 ? "" : "s"} from your linked pages
           </Text>
           <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
             They’ll show in your app. You can edit or hide any of them from your dashboard after setup.
@@ -773,10 +773,10 @@ export default function InitialRealtorSetup() {
         <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#C2A276", backgroundColor: "rgba(194,162,118,0.10)" }}>
           <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
           <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
-            We couldn’t find listings on that page
+            {result.draft?.listingDiscovery?.outcome === "unreadable" ? "We found a listings link, but couldn’t read the properties yet" : "We couldn’t find your listings yet"}
           </Text>
           <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
-            We imported what we could for your profile. If you have a page that shows your homes for sale — even on another site — paste that link and we’ll bring them in.
+            We imported the information we could and followed links to look for your properties. Paste the link that opens your listings — even on another website — and we’ll try importing them from there.
           </Text>
           <View style={{ marginTop: 12, flexDirection: "row", alignItems: "center", borderRadius: 10, borderWidth: 1,
             borderColor: "#657079", backgroundColor: "#0C1014", paddingHorizontal: 12 }}>
@@ -799,6 +799,7 @@ export default function InitialRealtorSetup() {
             </Pressable>
           </View>
           {errorFor("listings")}
+          <Text style={{ color: "#9AA4AA", marginTop: 16, fontSize: 13 }}>You can also add properties manually from your dashboard after setup.</Text>
         </View>
       ) : null}
 

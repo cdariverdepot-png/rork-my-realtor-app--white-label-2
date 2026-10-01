@@ -8,7 +8,7 @@
     "expo:android": "expo start --android",
     "expo:ios": "expo start --ios",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/onboarding.test.cjs tests/appBuilder.test.cjs tests/auth.test.cjs tests/workflow.test.cjs tests/previewStability.test.cjs tests/profileImageCrop.test.cjs tests/setupThemePreview.test.cjs",
+    "test": "node --test tests/onboarding.test.cjs tests/appBuilder.test.cjs tests/auth.test.cjs tests/workflow.test.cjs tests/previewStability.test.cjs tests/profileImageCrop.test.cjs tests/setupThemePreview.test.cjs tests/listingDiscovery.test.cjs",
     "start": "bunx rork start -p f1knpwwi8zqtl28f4k733",
     "start-web": "bunx rork start -p f1knpwwi8zqtl28f4k733 --web",
     "start-web-dev": "DEBUG=expo* bunx rork start -p f1knpwwi8zqtl28f4k733 --web",

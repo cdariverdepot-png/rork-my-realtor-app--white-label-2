@@ -24,6 +24,9 @@ export type ListingDiscoveryMeta = {
   hops: number;
   found: number;
   maxDepth: number;
+  failed?: string[];
+  inventoryUrls?: string[];
+  outcome?: "found" | "unreadable" | "not-found" | "partial";
 };
 
 export type BuildDraft = {
