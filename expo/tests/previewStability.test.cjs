@@ -46,6 +46,9 @@ test('useReducedMotion stays unresolved until AccessibilityInfo answers', () => 
   assert.match(src, /ReducedMotionState/);
   assert.match(src, /still = !ready \|\| \(frozenReduced/);
   assert.match(src, /cachedMotion/);
+  // Overscroll fight clamp: no pull-zoom, planted content translate.
+  assert.match(src, /outputRange:\s*\[1,\s*1,\s*pushScale\]/);
+  assert.match(src, /contentTranslate:[\s\S]*?outputRange:\s*\[0,\s*0\]/);
 });
 
 test('Preview my app path gates on brand+listings hydrate and locks reveal delays', () => {

@@ -14,6 +14,7 @@ export default function CoastalHero({ brand, scrollY }: { brand: Brand; scrollY?
   const insets = useSafeAreaInsets();
   const { width, fontScale } = useWindowDimensions();
   const [height, setHeight] = useState(700);
+  const measured = React.useRef(false);
   const motion = useThemeMotion(scrollY, height, false, 24);
   const r = brand.realtor;
   const portrait = brand.portraitUrl?.trim();
@@ -24,7 +25,7 @@ export default function CoastalHero({ brand, scrollY }: { brand: Brand; scrollY?
   const firstName = name.split(/\s+/)[0];
   const message = () => router.push("/message");
   const photo = portrait ? <View style={stacked ? styles.stackedPhoto : styles.photoFrame}>
-    <Animated.View style={[StyleSheet.absoluteFill, { top: -32, bottom: -32,
+    <Animated.View collapsable={false} style={[StyleSheet.absoluteFill, { top: -40, bottom: -40,
       transform: [{ translateY: motion.imgTranslate }, { scale: motion.imgScale }] }]}>
       <PortraitImage uri={portrait} contentFit="cover"
         contentPosition={imagePosition(brand.theme, brand.layoutId)} style={StyleSheet.absoluteFill}
@@ -32,7 +33,10 @@ export default function CoastalHero({ brand, scrollY }: { brand: Brand; scrollY?
         accessibilityLabel={name ? `Portrait of ${name}` : "Realtor portrait"} />
     </Animated.View>
   </View> : null;
-  return <View onLayout={e => setHeight(e.nativeEvent.layout.height)}
+  return <View onLayout={e => {
+      const next = Math.round(e.nativeEvent.layout.height);
+      if (!measured.current && next > 0) { measured.current = true; setHeight(next); }
+    }}
     style={[styles.root, { paddingTop: insets.top + 24, minHeight: portrait && !stacked ? 720 : undefined }]}>
     {!stacked && photo}
     {!stacked && portrait && <></>}

@@ -73,9 +73,12 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
             scrollEventThrottle={16}
             overScrollMode="never"
             bounces={false}
+            alwaysBounceVertical={false}
+            // Avoid recycling the hero offscreen — remounts looked like whole-page blinks.
+            removeClippedSubviews={false}
             style={Platform.OS === "web" ? ({ overscrollBehaviorY: "none" } as object) : undefined}
           >
-            <View style={{ maxWidth: 390, width: "100%", alignSelf: "center" }}>
+            <View style={{ maxWidth: 390, width: "100%", alignSelf: "center", overflow: "hidden" }}>
               <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} />
             </View>
             {note ? <Text style={{ color: "#C5BDAF", padding: 24, textAlign: "center", lineHeight: 21 }}>{note}</Text> : null}

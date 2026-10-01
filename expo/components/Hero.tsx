@@ -173,27 +173,31 @@ export default function Hero({ scrollY }: Props) {
 
   return (
     <View style={[styles.wrap, { minHeight: heroHeight, backgroundColor: theme.band.deep }]}>
-      <Animated.View
-        style={[
-          StyleSheet.absoluteFill,
-          { transform: [{ translateY: imgTranslate }, { scale: imgScale }] },
-        ]}
-      >
-        {hasPortrait ? (
-          <PortraitImage
-            uri={b.portraitUrl}
-            contentPosition={imagePosition(b.theme, b.layoutId)}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-            priority="high"
-          />
-        ) : (
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.band.base }]} />
-        )}
-        {/* Bottom fade — depth + text readability only. Derived from the band so
-            the fade never stays green under a non-gold palette. */}
-        <></>
-      </Animated.View>
+      {/* Clip on non-transformed frame so parallax scale/translate cannot paint into tiles. */}
+      <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]} pointerEvents="none" collapsable={false}>
+        <Animated.View
+          collapsable={false}
+          style={[
+            StyleSheet.absoluteFill,
+            { top: -40, bottom: -40, transform: [{ translateY: imgTranslate }, { scale: imgScale }] },
+          ]}
+        >
+          {hasPortrait ? (
+            <PortraitImage
+              uri={b.portraitUrl}
+              contentPosition={imagePosition(b.theme, b.layoutId)}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              priority="high"
+            />
+          ) : (
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.band.base }]} />
+          )}
+          {/* Bottom fade — depth + text readability only. Derived from the band so
+              the fade never stays green under a non-gold palette. */}
+          <></>
+        </Animated.View>
+      </View>
 
       {/* Top brand bar */}
       <Animated.View style={[styles.topBar, { paddingTop: insets.top + 14, opacity: topBarOpacity }]}>

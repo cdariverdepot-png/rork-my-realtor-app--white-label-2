@@ -52,9 +52,23 @@ test('useThemeMotion never translates the hero downward over content', () => {
   // Overscroll hold + upward parallax only (negative translate on scroll).
   assert.match(src, /outputRange:\s*\[0,\s*0,\s*-travel\]/);
   assert.doesNotMatch(src, /travelDown/);
+  // Overscroll must not pull-zoom (scale stayed 1) — that fought tiles under the hero.
+  assert.match(src, /outputRange:\s*\[1,\s*1,\s*pushScale\]/);
+  assert.doesNotMatch(src, /pullScale/);
   // Opacity must stay fully on — scroll fades looked like whole-page flicker.
   assert.match(src, /contentOpacity:[\s\S]*?outputRange:\s*\[1,\s*1\]/);
+  // Content slide fought the portrait; keep copy planted.
+  assert.match(src, /contentTranslate:[\s\S]*?outputRange:\s*\[0,\s*0\]/);
   assert.match(src, /cachedMotion|motionListeners/);
+});
+
+test('Backdrop clips on a non-transformed frame and does not rasterize', () => {
+  const src = read('components/themes/shared.tsx');
+  assert.match(src, /overflow:\s*["']hidden["']/);
+  assert.match(src, /collapsable=\{false\}/);
+  // Props must be absent (comments may still mention the old approach).
+  assert.doesNotMatch(src, /shouldRasterizeIOS[=\s>]/);
+  assert.doesNotMatch(src, /renderToHardwareTextureAndroid[=\s>]/);
 });
 
 test('theme preview and client heroes route portraits through PortraitImage', () => {
