@@ -8,7 +8,7 @@ import type { PropsWithChildren } from "react";
  */
 export default function Root({ children }: PropsWithChildren) {
   return (
-    <html lang="en" style={{ height: "100%", backgroundColor: "#000000" }}>
+    <html lang="en" style={{ height: "100%", backgroundColor: "#0a0a0a" }}>
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -19,7 +19,7 @@ export default function Root({ children }: PropsWithChildren) {
         <ScrollViewStyleReset />
         <style dangerouslySetInnerHTML={{ __html: ROOT_CSS }} />
       </head>
-      <body style={{ height: "100%", backgroundColor: "#000000", margin: 0 }}>
+      <body style={{ height: "100%", backgroundColor: "#0a0a0a", margin: 0 }}>
         {children}
       </body>
     </html>
@@ -34,7 +34,7 @@ html, body {
   height: 100dvh;
   margin: 0;
   padding: 0;
-  background-color: #000000;
+  background-color: #0a0a0a;
   overscroll-behavior: none;
 }
 body {
@@ -47,6 +47,6 @@ body {
   min-height: 100dvh;
   height: 100%;
   height: 100dvh;
-  background-color: #000000;
+  background-color: #0a0a0a;
 }
 `;

@@ -1,200 +1,203 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
   Platform,
   StyleSheet,
-  useWindowDimensions,
+  View,
 } from "react-native";
+import { Asset } from "expo-asset";
 import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
+import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 
-const LOGO = require("@/assets/images/boot-logo-v2.png");
+const SPLASH_MODULE = require("@/assets/splash-loading.mp4");
+const POSTER = require("@/assets/splash-loading-poster.jpg");
 
 interface Props {
+  /** True once auth has hydrated — curtain may fade after the video holds. */
+  ready?: boolean;
   /** Called once the curtain has fully faded out and the boot screen can unmount. */
   onFinish: () => void;
 }
 
 /**
- * Cinematic launch sequence shown over the app on cold start.
- *
- * Sequence:
- *  1. Pure black holds briefly.
- *  2. Logo rises out of darkness.
- *  3. A thin shimmer sweeps across the logo only.
- *  4. Curtain dissolves, revealing the app.
+ * Full-viewport launch splash using the branded loading animation video.
+ * Plays once, holds the final glowing frame, then fades when the app is ready.
+ * Black/#0a0a0a curtain prevents any peek of underlying UI.
  */
-const LOGO_SIZE_RATIO = 0.68;
-
-export default function BootScreen({ onFinish }: Props) {
-  const { width } = useWindowDimensions();
-  const logoSize = Math.min(width * LOGO_SIZE_RATIO, 260);
-
+export default function BootScreen({ ready = true, onFinish }: Props) {
   const curtain = useRef(new Animated.Value(1)).current;
-  const logoOpacity = useRef(new Animated.Value(0)).current;
-  const logoScale = useRef(new Animated.Value(0.92)).current;
-  // Shimmer sweep — constrained to logo bounds via overflow hidden on parent
-  const sweepX = useRef(new Animated.Value(-1)).current;
-  const sweepOpacity = useRef(new Animated.Value(0)).current;
+  const [videoUri, setVideoUri] = useState<string | null>(null);
+  const [videoDone, setVideoDone] = useState(false);
+  const fading = useRef(false);
+  const videoElRef = useRef<HTMLVideoElement | null>(null);
+  const nativeRef = useRef<Video>(null);
+  const onFinishRef = useRef(onFinish);
+  onFinishRef.current = onFinish;
 
   useEffect(() => {
-    const seq = Animated.sequence([
-      // ── beat of pure black ──
-      Animated.delay(350),
+    let cancelled = false;
+    (async () => {
+      try {
+        const asset = Asset.fromModule(SPLASH_MODULE);
+        await asset.downloadAsync();
+        const uri = asset.localUri ?? asset.uri;
+        if (!cancelled && uri) setVideoUri(uri);
+      } catch (e) {
+        console.log("[BootScreen] asset load failed", e);
+        if (!cancelled) setVideoDone(true);
+      }
+    })();
+    const failSafe = setTimeout(() => {
+      if (!cancelled) setVideoDone(true);
+    }, 12000);
+    return () => {
+      cancelled = true;
+      clearTimeout(failSafe);
+    };
+  }, []);
 
-      // ── logo rises out of darkness ──
-      Animated.parallel([
-        Animated.timing(logoOpacity, {
-          toValue: 1,
-          duration: 1200,
-          easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoScale, {
-          toValue: 1,
-          duration: 1300,
-          easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-          useNativeDriver: true,
-        }),
-      ]),
-
-      // ── breath ──
-      Animated.delay(400),
-
-      // ── shimmer sweeps across the logo only ──
-      Animated.parallel([
-        Animated.timing(sweepX, {
-          toValue: 1,
-          duration: 1100,
-          easing: Easing.bezier(0.3, 0, 0.7, 1),
-          useNativeDriver: true,
-        }),
-        Animated.sequence([
-          Animated.timing(sweepOpacity, {
-            toValue: 1,
-            duration: 180,
-            useNativeDriver: true,
-          }),
-          Animated.delay(380),
-          Animated.timing(sweepOpacity, {
-            toValue: 0,
-            duration: 220,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]),
-
-      // ── breathe ──
-      Animated.delay(500),
-
-      // ── dissolve: curtain lifts ──
-      Animated.timing(curtain, {
-        toValue: 0,
-        duration: 550,
-        easing: Easing.bezier(0.42, 0, 0.58, 1),
-        useNativeDriver: true,
-      }),
-    ]);
-
-    seq.start(({ finished }) => {
-      if (finished) onFinish();
+  const beginFade = useCallback(() => {
+    if (fading.current) return;
+    fading.current = true;
+    Animated.timing(curtain, {
+      toValue: 0,
+      duration: 550,
+      easing: Easing.bezier(0.42, 0, 0.58, 1),
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished) onFinishRef.current();
     });
-  }, [curtain, logoOpacity, logoScale, sweepX, sweepOpacity, onFinish]);
+  }, [curtain]);
 
-  // Sweep translates from just-left to just-right of the logo
-  const sweepTranslate = sweepX.interpolate({
-    inputRange: [-1, 1],
-    outputRange: [-logoSize * 0.6, logoSize * 1.35],
-  });
+  useEffect(() => {
+    if (videoDone && ready) beginFade();
+  }, [videoDone, ready, beginFade]);
+
+  const holdLastFrameWeb = useCallback(() => {
+    const el = videoElRef.current;
+    if (el && Number.isFinite(el.duration) && el.duration > 0) {
+      try {
+        el.currentTime = Math.max(0, el.duration - 0.05);
+        el.pause();
+      } catch {
+        /* ignore */
+      }
+    }
+    setVideoDone(true);
+  }, []);
+
+  const onNativeStatus = useCallback((status: AVPlaybackStatus) => {
+    if (!status.isLoaded) return;
+    if (status.didJustFinish) {
+      // Hold last frame — expo-av stays on final frame when not looping.
+      void nativeRef.current?.pauseAsync().catch(() => {});
+      setVideoDone(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS !== "web" || !videoUri) return;
+    const el = videoElRef.current;
+    if (!el) return;
+    el.muted = true;
+    el.defaultMuted = true;
+    el.playsInline = true;
+    el.setAttribute("playsinline", "true");
+    el.setAttribute("webkit-playsinline", "true");
+    el.loop = false;
+    const play = el.play();
+    if (play && typeof play.catch === "function") {
+      play.catch(() => setVideoDone(true));
+    }
+  }, [videoUri]);
+
+  const webVideo =
+    Platform.OS === "web"
+      ? React.createElement("video", {
+          ref: (node: HTMLVideoElement | null) => {
+            videoElRef.current = node;
+          },
+          src: videoUri ?? undefined,
+          muted: true,
+          autoPlay: true,
+          playsInline: true,
+          preload: "auto",
+          // @ts-expect-error webkit attribute
+          "webkit-playsinline": "true",
+          disablePictureInPicture: true,
+          controls: false,
+          onEnded: holdLastFrameWeb,
+          onError: () => setVideoDone(true),
+          style: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            backgroundColor: "#0a0a0a",
+          },
+        })
+      : null;
 
   return (
     <Animated.View
       pointerEvents="none"
       style={[styles.fill, { opacity: curtain }]}
+      accessibilityLabel="Loading"
     >
-      {/* Logo + shimmer — clipped so shimmer never bleeds beyond the logo */}
-      <Animated.View
-        style={[
-          { opacity: logoOpacity, transform: [{ scale: logoScale }] },
-        ]}
-      >
-        <Animated.View style={styles.logoClip(logoSize)}>
-          <Image
-            source={LOGO}
-            style={styles.logo(logoSize)}
-            contentFit="contain"
-            transition={0}
+      <View style={styles.videoHost}>
+        {/* Poster underneath so last-frame / load gap never shows UI */}
+        <Image
+          source={POSTER}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          transition={0}
+        />
+        {Platform.OS === "web" ? (
+          webVideo
+        ) : videoUri ? (
+          <Video
+            ref={nativeRef}
+            source={{ uri: videoUri }}
+            style={StyleSheet.absoluteFill}
+            resizeMode={ResizeMode.COVER}
+            shouldPlay
+            isLooping={false}
+            isMuted
+            onPlaybackStatusUpdate={onNativeStatus}
+            onError={() => setVideoDone(true)}
           />
-
-          {/* Shimmer — absolutely positioned bar that sweeps within the clipped logo area */}
-          <Animated.View
-            style={[
-              styles.sweep(logoSize),
-              {
-                opacity: sweepOpacity,
-                transform: [
-                  { translateX: sweepTranslate },
-                  { rotate: "15deg" },
-                ],
-              },
-            ]}
-          >
-            <LinearGradient
-              colors={[
-                "rgba(255,255,255,0)",
-                "rgba(255,255,255,0.22)",
-                "rgba(255,252,240,0.5)",
-                "rgba(255,255,255,0.22)",
-                "rgba(255,255,255,0)",
-              ]}
-              locations={[0, 0.3, 0.5, 0.7, 1]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={StyleSheet.absoluteFill}
-            />
-          </Animated.View>
-        </Animated.View>
-      </Animated.View>
+        ) : null}
+      </View>
     </Animated.View>
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   fill: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     ...(Platform.OS === "web"
       ? {
-          position: "fixed" as const,
+          position: "fixed" as unknown as "absolute",
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          width: "100%" as const,
-          // 100dvh tracks Safari chrome; minHeight fallback for older browsers
+          width: "100%" as unknown as number,
           height: "100dvh" as unknown as number,
           minHeight: "100dvh" as unknown as number,
         }
       : {}),
-    backgroundColor: "#000000",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
+    backgroundColor: "#0a0a0a",
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 9999,
   },
-
-  logoClip: (size: number) => ({
-    width: size,
-    height: size,
-    overflow: "hidden" as const,
-  }),
-  logo: (size: number) => ({
-    width: size,
-    height: size,
-  }),
-  sweep: (size: number) => ({
-    position: "absolute" as const,
-    top: 0,
-    bottom: 0,
-    width: size * 0.28,
-  }),
-};
+  videoHost: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#0a0a0a",
+    overflow: "hidden",
+  },
+});

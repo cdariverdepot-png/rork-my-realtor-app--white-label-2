@@ -204,17 +204,6 @@ export default function Portal() {
     } finally { setBusy(false); }
   };
 
-  // Temporary AUTH_BYPASS — skip login into admin (dashboard + build walkthrough).
-  const handleSkipLogin = async () => {
-    if (busy || !authBypassEnabled) return;
-    setBusy(true);
-    try {
-      if (Platform.OS !== "web") Haptics.selectionAsync();
-      await enterAuthBypass();
-      router.replace("/admin/");
-    } finally { setBusy(false); }
-  };
-
   // Submit account (realtor or client)
   const submitAccount = async () => {
     if (busy) return;
@@ -362,7 +351,6 @@ export default function Portal() {
                       router.replace({ pathname: "/portal", params: { entry: "client" } });
                       transitionTo("code");
                     }}
-                    onSkipLogin={authBypassEnabled ? handleSkipLogin : undefined}
                     busy={busy}
                     error={error}
                     code={code}
@@ -437,12 +425,11 @@ export default function Portal() {
 
 // ── Entry form: choose realtor or client ─────────────────────────────
 function EntryForm({
-  onRealtor, onClient, onSkipLogin, busy, error,
+  onRealtor, onClient, busy, error,
   code, onChangeCode, onSubmitCode,
 }: {
   onRealtor: () => void;
   onClient: () => void;
-  onSkipLogin?: () => void;
   busy: boolean;
   error: string | null;
   code: string;
@@ -451,21 +438,6 @@ function EntryForm({
 }) {
   return (
     <View style={{ width: "100%", gap: 14 }}>
-      {onSkipLogin ? (
-        <View style={{ gap: 8, marginBottom: 4 }}>
-          <PressableScale onPress={onSkipLogin} disabled={busy} haptic="selection" scaleTo={0.97} hitSlop={12} style={[styles.roleBtn, styles.roleBtnRealtor, busy && { opacity: 0.5 }]}>
-            <DoorClosed size={20} color={brand.goldLight} strokeWidth={1.6} />
-            <View style={{ flex: 1 }}>
-              <Text style={styles.roleBtnTitle}>Continue without login</Text>
-              <Text style={styles.roleBtnSub}>Skip login · preview (temporary)</Text>
-            </View>
-            <ArrowRight size={16} color={brand.goldLight} strokeWidth={1.8} />
-          </PressableScale>
-          <Text style={{ color: "rgba(244,239,230,0.55)", fontSize: 12, textAlign: "center", lineHeight: 18 }}>
-            Temporary preview mode — turn off EXPO_PUBLIC_AUTH_BYPASS when ready for real sign-in.
-          </Text>
-        </View>
-      ) : null}
       <PressableScale onPress={onRealtor} haptic="selection" scaleTo={0.97} hitSlop={12} style={[styles.roleBtn, styles.roleBtnRealtor]}>
         <Building2 size={20} color={brand.goldLight} strokeWidth={1.6} />
         <View style={{ flex: 1 }}>

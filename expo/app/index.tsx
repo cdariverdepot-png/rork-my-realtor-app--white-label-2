@@ -62,7 +62,7 @@ import {
 export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { hydrated, isAuthenticated, isAdmin, isClient, previewAdmin, enterAuthBypass, authBypassEnabled, viewAsClient, demoViewMode, enterDemoView } = useAuth();
+  const { hydrated, isAuthenticated, isAdmin, isClient, enterAuthBypass, authBypassEnabled, viewAsClient, demoViewMode } = useAuth();
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
   const { hydrated: onboardingHydrated, clientTourSeen } = useOnboarding();
@@ -105,15 +105,6 @@ export default function Home() {
     }
   }, [hydrated, onboardingHydrated, profilesHydrated, isClient, demoViewMode, clientTourSeen, myProfileShared, router]));
 
-  // Preview admin bypass — show pure Eliza Vance demo client experience
-  const handleExploreDemo = useCallback(async () => {
-    if (Platform.OS !== "web") Haptics.selectionAsync();
-    await previewAdmin();
-    // Enter demo-view mode so the admin redirect is suppressed and the
-    // client home renders with the pure Eliza Vance showcase (no edit UI).
-    enterDemoView();
-  }, [previewAdmin, enterDemoView]);
-
   if (!hydrated) {
     return <View style={styles.root} />;
   }
@@ -126,7 +117,7 @@ export default function Home() {
 
   // Unauthenticated — show landing screen
   if (!isAuthenticated && !demoViewMode) {
-    return <LandingScreen onExploreDemo={handleExploreDemo} insets={insets} />;
+    return <LandingScreen insets={insets} />;
   }
 
   // Client home experience (existing editorial layout)
@@ -135,7 +126,7 @@ export default function Home() {
 
 // ── Landing Screen (3 paths) ──────────────────────────────────────────
 
-function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise<void>; insets: { top: number; bottom: number } }) {
+function LandingScreen({ insets }: { insets: { top: number; bottom: number } }) {
   const router = useRouter();
   const { enterGuestClient, lookupRealtorByCode } = useAuth();
   const { prepareNewClientTour } = useOnboarding();
@@ -247,17 +238,6 @@ function LandingScreen({ onExploreDemo, insets }: { onExploreDemo: () => Promise
               error={codeError}
             />
           </View>
-
-          <PressableScale
-            onPress={onExploreDemo}
-            haptic="selection"
-            scaleTo={0.97}
-            hitSlop={14}
-            style={styles.demoBtn}
-          >
-            <Eye size={14} color="rgba(244,239,230,0.45)" strokeWidth={1.4} />
-            <Text style={styles.demoText}>Explore Demo</Text>
-          </PressableScale>
 
           <View style={[styles.landingFooterInflow, { paddingBottom: Math.max(insets.bottom, 8) }]}>
             <Text style={styles.landingFooterText}>MY REALTOR APP · PRIVATE</Text>
@@ -752,8 +732,6 @@ const styles = StyleSheet.create({
     backgroundColor: brand.ivory, paddingVertical: 16, marginTop: 16, borderRadius: 10, minHeight: 52,
   },
   accessCtaText: { fontFamily: fonts.sansSemi, color: brand.forestDeep, fontSize: 12, letterSpacing: 3 },
-  demoBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingVertical: 16, paddingHorizontal: 20, minHeight: 48 },
-  demoText: { fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.45)", fontSize: 13, letterSpacing: 1.2 },
   landingFooterInflow: { alignItems: "center", justifyContent: "center", paddingTop: 28, width: "100%" },
   landingFooterText: { fontFamily: fonts.sansMedium, color: "rgba(244,239,230,0.35)", fontSize: 11, letterSpacing: 3, textAlign: "center" },
 });

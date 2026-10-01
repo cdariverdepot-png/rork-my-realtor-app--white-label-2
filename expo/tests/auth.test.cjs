@@ -598,3 +598,30 @@ test('portal entry has no Explore Demo button', () => {
   assert.doesNotMatch(src, /enterDemoView/);
   assert.doesNotMatch(src, /handleExploreDemo/);
 });
+
+test('landing and realtor login screens have no Explore/View Demo CTAs', () => {
+  const files = [
+    'app/index.tsx',
+    'app/welcome.tsx',
+    'app/portal.tsx',
+    'app/login.tsx',
+    'app/admin/login.tsx',
+  ];
+  for (const rel of files) {
+    const src = fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
+    assert.doesNotMatch(src, /Explore Demo/, rel);
+    assert.doesNotMatch(src, /View Demo/, rel);
+    assert.doesNotMatch(src, /onExploreDemo/, rel);
+    assert.doesNotMatch(src, /handleExploreDemo/, rel);
+    assert.doesNotMatch(src, /Continue without login/, rel);
+    assert.doesNotMatch(src, /onSkipLogin/, rel);
+  }
+  const landing = fs.readFileSync(path.join(__dirname, '..', 'app/index.tsx'), 'utf8');
+  assert.doesNotMatch(landing, /enterDemoView/);
+  const admin = fs.readFileSync(path.join(__dirname, '..', 'app/admin/index.tsx'), 'utf8');
+  assert.doesNotMatch(admin, /View Demo/);
+  assert.doesNotMatch(admin, /enterDemoView\(\)/);
+  const portal = fs.readFileSync(path.join(__dirname, '..', 'app/portal.tsx'), 'utf8');
+  assert.doesNotMatch(portal, /handleSkipLogin/);
+  assert.doesNotMatch(portal, /Skip login/);
+});

@@ -32,7 +32,6 @@ import {
   CalendarDays,
   FileText,
   Bell,
-  Sparkles,
   Users,
   CalendarSync,
   Pin,
@@ -175,7 +174,7 @@ function useCountUp(target: number, duration = 1200, enabled = true): number {
 export default function AdminDashboard() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, enterDemoView, realtorId, authBypassEnabled, enterAuthBypass } = useAuth();
+  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, realtorId, authBypassEnabled, enterAuthBypass } = useAuth();
   const { all, remove, toggleHidden, syncStatus, refreshFromSource } = useListings();
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
 
@@ -996,11 +995,6 @@ export default function AdminDashboard() {
             <Pressable onPress={tap(() => router.push("/admin/plans"))} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
               <Crown size={13} color={admin.goldLight} strokeWidth={1.6} />
               <Text style={[styles.supportText, styles.supportTextGold]}>Plans</Text>
-            </Pressable>
-            <View style={styles.supportDivider} />
-            <Pressable onPress={tap(() => { enterDemoView(); router.replace("/"); })} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
-              <Sparkles size={13} color={admin.goldLight} strokeWidth={1.6} />
-              <Text style={[styles.supportText, styles.supportTextGold]}>View Demo</Text>
             </Pressable>
           </View>
 

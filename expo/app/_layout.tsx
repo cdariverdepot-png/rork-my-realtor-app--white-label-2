@@ -249,7 +249,10 @@ function RootLayoutInner() {
           />
         ) : null}
         {booting && (
-          <BootScreen onFinish={() => setBooting(false)} />
+          <BootScreen
+            ready={authHydrated}
+            onFinish={() => setBooting(false)}
+          />
         )}
       </GestureHandlerRootView>
     </>
