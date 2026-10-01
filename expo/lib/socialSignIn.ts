@@ -177,6 +177,31 @@ export async function completeGoogleIdTokenCallback(returnUrl?: string): Promise
   }
 
   const url = returnUrl || window.location.href;
+  // Google may bounce back with error= / error_description= and no id_token.
+  // Handle that here so we never leave the user staring at a bare error page
+  // or a cryptic expired-link message from the email callback path.
+  try {
+    const parsed = new URL(url);
+    const hash = parsed.hash.startsWith("#") ? parsed.hash.slice(1) : parsed.hash;
+    const fromHash = new URLSearchParams(hash || "");
+    const oauthErr =
+      parsed.searchParams.get("error_description") ||
+      parsed.searchParams.get("error") ||
+      fromHash.get("error_description") ||
+      fromHash.get("error");
+    if (oauthErr && !parseIdTokenFromAuthUrl(url)) {
+      webSessionClear(GOOGLE_OIDC_NONCE_KEY, GOOGLE_OIDC_STATE_KEY);
+      if (/access_denied|cancelled|canceled/i.test(oauthErr)) {
+        return { ok: false, error: "Sign-in was cancelled. You can try again or use email." };
+      }
+      return {
+        ok: false,
+        error: "Couldn't complete Google sign-in. Please try again or use email.",
+      };
+    }
+  } catch {
+    /* continue */
+  }
   const idToken = parseIdTokenFromAuthUrl(url);
   if (!idToken) return null;
 
@@ -259,6 +284,61 @@ async function startGoogleIdTokenSignIn(): Promise<SocialSignInResult> {
   return exchangeGoogleIdToken(idToken, nonce);
 }
 
+const PROVIDER_UNAVAILABLE =
+  "That sign-in provider isn't connected yet. Use email and password, or ask your admin to add Google, Microsoft, or Apple in Supabase Auth.";
+
+function looksLikeProviderDisabled(text: string): boolean {
+  return /provider is not enabled|unsupported provider|validation_failed|not configured|error_code/i.test(text);
+}
+
+/**
+ * Supabase's OAuth helper builds an authorize URL even when the provider is
+ * disabled. Navigating there dumps raw JSON in the browser. Probe first and
+ * keep the user on the app with a friendly message instead.
+ */
+async function probeOAuthAuthorizeUrl(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      redirect: "manual",
+      credentials: "omit",
+      headers: { Accept: "application/json" },
+    });
+    // 3xx → provider accepted the request and is sending us to IdP.
+    if (res.status >= 300 && res.status < 400) return null;
+    const ct = (res.headers.get("content-type") || "").toLowerCase();
+    let body = "";
+    try {
+      body = await res.text();
+    } catch {
+      body = "";
+    }
+    if (
+      res.status >= 400 ||
+      ct.includes("application/json") ||
+      looksLikeProviderDisabled(body) ||
+      /^\s*\{/.test(body)
+    ) {
+      if (looksLikeProviderDisabled(body) || looksLikeProviderDisabled(ct)) {
+        return PROVIDER_UNAVAILABLE;
+      }
+      return "Couldn't start that sign-in. Please try again or use email.";
+    }
+    return null;
+  } catch {
+    // CORS / network failure: do not block an otherwise-working provider.
+    return null;
+  }
+}
+
+function scrubProviderErrorText(raw: string): string {
+  if (!raw) return PROVIDER_UNAVAILABLE;
+  if (looksLikeProviderDisabled(raw) || /^\s*\{/.test(raw) || /"error_code"\s*:/.test(raw)) {
+    return PROVIDER_UNAVAILABLE;
+  }
+  return authErrorMessage({ message: raw });
+}
+
 /** Microsoft / Apple stay on Supabase OAuth (redirect still goes through supabase.co authorize). */
 async function startSupabaseOAuth(provider: "apple" | "azure"): Promise<SocialSignInResult> {
   const redirectTo = Platform.OS === "web" ? socialCallbackRedirect(window.location.origin) : "rork-app://auth/callback";
@@ -275,28 +355,41 @@ async function startSupabaseOAuth(provider: "apple" | "azure"): Promise<SocialSi
       (error && typeof error === "object" && "message" in error
         ? String((error as { message?: string }).message)
         : "") || "";
-    if (
-      !data?.url ||
-      /provider is not enabled|unsupported provider|validation_failed|not configured/i.test(msg)
-    ) {
-      return {
-        ok: false,
-        error:
-          "That sign-in provider isn't connected yet. Use email and password, or ask your admin to add Google, Microsoft, or Apple in Supabase Auth.",
-      };
+    if (!data?.url || looksLikeProviderDisabled(msg)) {
+      return { ok: false, error: PROVIDER_UNAVAILABLE };
     }
-    return { ok: false, error: authErrorMessage(error) };
+    return { ok: false, error: scrubProviderErrorText(msg) };
   }
+
+  const probeError = await probeOAuthAuthorizeUrl(data.url);
+  if (probeError) return { ok: false, error: probeError };
+
   if (Platform.OS === "web") {
     window.location.assign(data.url);
     return { ok: true, redirecting: true };
   }
   const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
   if (result.type !== "success") return { ok: false, error: "Sign-in was cancelled. You can try again or use email." };
-  const callback = new URL(result.url);
-  if (`${callback.protocol}//${callback.host}${callback.pathname}` !== redirectTo) {
+  // If the in-app browser somehow landed on a Supabase JSON error page, never
+  // surface that raw body — treat it as a disabled/unavailable provider.
+  if (typeof result.url === "string" && looksLikeProviderDisabled(result.url)) {
+    return { ok: false, error: PROVIDER_UNAVAILABLE };
+  }
+  let callback: URL;
+  try {
+    callback = new URL(result.url);
+  } catch {
     return { ok: false, error: "Couldn't complete sign-in. Please try again." };
   }
+  if (`${callback.protocol}//${callback.host}${callback.pathname}` !== redirectTo) {
+    // Stay on supabase.co with JSON / error pages should not leak to the UI.
+    if (/supabase\.co/i.test(callback.host) || looksLikeProviderDisabled(callback.href)) {
+      return { ok: false, error: PROVIDER_UNAVAILABLE };
+    }
+    return { ok: false, error: "Couldn't complete sign-in. Please try again." };
+  }
+  const oauthErr = callback.searchParams.get("error") || callback.searchParams.get("error_description");
+  if (oauthErr) return { ok: false, error: scrubProviderErrorText(oauthErr) };
   const code = callback.searchParams.get("code");
   if (!code) return { ok: false, error: "Couldn't complete sign-in. Please try again." };
   const sb = supabase!;
@@ -312,8 +405,10 @@ function connectErrorMessage(e: unknown): string {
     if (/ERR_WEB_BROWSER_BLOCKED|Popup window was blocked/i.test(e.message)) {
       return "The sign-in window was blocked. Allow popups for this site, or try again.";
     }
-    // Surface the real error temporarily so production debugging is possible.
-    return `Couldn't connect to the sign-in provider (${e.message}). Please try again.`;
+    if (looksLikeProviderDisabled(e.message) || /^\s*\{/.test(e.message)) {
+      return PROVIDER_UNAVAILABLE;
+    }
+    return "Couldn't connect to the sign-in provider. Please try again.";
   }
   return "Couldn't connect to the sign-in provider. Please try again.";
 }

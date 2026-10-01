@@ -1,7 +1,16 @@
-/** Never expose database names, queries, or provider diagnostics to customers. */
+/** Never expose database names, queries, raw JSON, or provider diagnostics to customers. */
 export function authErrorMessage(error: unknown): string {
   const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
   const message = error && typeof error === "object" && "message" in error ? String(error.message) : "";
+  // Supabase authorize failures often arrive as JSON blobs or validation_failed.
+  if (
+    code === "validation_failed" ||
+    /provider is not enabled|unsupported provider|validation_failed/i.test(message) ||
+    /^\s*\{/.test(message) ||
+    /"error_code"\s*:/.test(message)
+  ) {
+    return "That sign-in provider isn't connected yet. Use email and password, or ask your admin to add Google, Microsoft, or Apple in Supabase Auth.";
+  }
   // Supabase's built-in mailer refuses non-team addresses and fails hard when
   // custom SMTP is misconfigured. Say so plainly instead of a generic error.
   if (code === "email_address_not_authorized" || /not authorized/i.test(message)) {

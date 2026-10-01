@@ -420,6 +420,29 @@ test('Google ID-token redirect stays on app origin, never supabase.co', () => {
   assert.match(src, /cdariverdepot-my-realtor\.expo\.app\/auth\/callback/);
 });
 
+test('Supabase OAuth probes authorize URL before browser redirect (no raw JSON)', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.match(src, /probeOAuthAuthorizeUrl/);
+  assert.match(src, /redirect:\s*["']manual["']/);
+  assert.match(src, /PROVIDER_UNAVAILABLE/);
+  assert.match(src, /looksLikeProviderDisabled/);
+  const oauthFn = src.slice(src.indexOf('async function startSupabaseOAuth'), src.indexOf('function connectErrorMessage'));
+  assert.ok(oauthFn.indexOf('probeOAuthAuthorizeUrl') < oauthFn.indexOf('window.location.assign'));
+  assert.ok(oauthFn.indexOf('probeOAuthAuthorizeUrl') < oauthFn.indexOf('openAuthSessionAsync'));
+});
+
+test('authErrors scrub provider-disabled JSON instead of showing it', () => {
+  const { authErrorMessage } = load('lib/authErrors');
+  assert.match(
+    authErrorMessage({ code: 'validation_failed', message: 'Unsupported provider: provider is not enabled' }),
+    /isn't connected yet/
+  );
+  assert.match(
+    authErrorMessage({ message: '{"code":400,"error_code":"validation_failed","msg":"Unsupported provider: provider is not enabled"}' }),
+    /isn't connected yet/
+  );
+});
+
 test('Google web sign-in uses full-page redirect, not a post-await popup', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
   assert.match(src, /window\.location\.assign\(authUrl\)/);

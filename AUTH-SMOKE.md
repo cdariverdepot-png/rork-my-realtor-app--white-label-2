@@ -64,8 +64,8 @@ Management API cannot toggle anonymous auth on project `xdcqjaodcvnlawqcunrr` wi
 1. Buttons show on portal without a local `.env`. Apple shows on iOS.
 2. **Google** uses AuthSession → Google ID token → `supabase.auth.signInWithIdToken` so consent uses the Expo app origin (`cdariverdepot-my-realtor.expo.app` / localhost), **not** `*.supabase.co`.
 3. On **web**, Google uses a **full-page redirect** to accounts.google.com (then back to `/auth/callback#id_token=…`). A popup after `await` is blocked by browsers and used to show "Couldn't connect to the sign-in provider".
-4. **Microsoft / Apple** still use Supabase `signInWithOAuth` (authorize host remains supabase.co until a similar ID-token path exists).
-5. Until Google Web client ID + Supabase Google provider secrets exist, social taps show a clear error — email path still works.
+4. **Microsoft / Apple** still use Supabase OAuth (authorize host remains supabase.co until a similar ID-token path exists). Before opening that URL, the app **probes** `/auth/v1/authorize` so a disabled provider never dumps raw Supabase JSON in the browser — users see a friendly in-app message instead.
+5. Microsoft requires Supabase Auth → Azure enabled with Application (client) ID + secret from an Entra app registration (redirect `https://xdcqjaodcvnlawqcunrr.supabase.co/auth/v1/callback`). Until that is configured, the Microsoft button stays visible but shows the friendly "provider isn't connected" message. Google ID-token path stays independent.
 6. Google redirect URIs must include the Expo `/auth/callback` (and localhost for web dev) on the **Google Cloud Web client**, in addition to the Supabase callback URI.
 7. Cold start / logout lands on `/` (welcome). Portal without `entry=client` shows the welcome gateway — not the client code screen. Back from code clears sticky `?entry=client`.
 
