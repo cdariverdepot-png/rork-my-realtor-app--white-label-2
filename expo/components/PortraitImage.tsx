@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from "react";
 import { type StyleProp } from "react-native";
 import { Image, type ImageContentPosition, type ImageProps, type ImageStyle } from "expo-image";
+import { safeImageSource, safeUri } from "@/lib/safeImageSource";
 
 type PortraitImageProps = {
   /** Remote / data / file URI for a real profile portrait. */
@@ -23,6 +24,9 @@ type PortraitImageProps = {
  * on parent re-renders (theme preview scroll, parallax, draft identity churn).
  * This helper keeps source identity, recyclingKey, disk cache, and transition
  * locked so the same portrait never flickers across preview / home / dash.
+ *
+ * Also guards against non-string `uri` values (numeric require ids, nested
+ * objects) which otherwise crash expo-image's `uri.startsWith('sf:/')` check.
  */
 function PortraitImage({
   uri,
@@ -34,15 +38,19 @@ function PortraitImage({
   recyclingKey,
   priority,
 }: PortraitImageProps) {
-  const trimmed = uri?.trim() || "";
-  const resolved = source !== undefined ? source : trimmed || null;
+  const uriStr = safeUri(uri);
   const imageSource = useMemo(() => {
-    if (resolved == null || resolved === "") return null;
-    return typeof resolved === "number" ? resolved : { uri: resolved };
-  }, [resolved]);
+    // Bundled sample portraits win when provided.
+    if (source !== undefined && source !== null) {
+      return safeImageSource(source);
+    }
+    return uriStr ? safeImageSource(uriStr) : null;
+  }, [source, uriStr]);
   const key =
     recyclingKey
-    ?? (typeof resolved === "number" ? `portrait-asset:${resolved}` : resolved || undefined);
+    ?? (typeof source === "number"
+      ? `portrait-asset:${source}`
+      : uriStr || undefined);
 
   if (!imageSource) return null;
 

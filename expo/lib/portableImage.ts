@@ -17,7 +17,7 @@ import { uploadJpegToStorage } from "./imageUpload";
  * Already-portable URLs (http(s)://, data:) are returned unchanged.
  */
 export async function toPortableImage(uri: string, maxWidth: number = 1400): Promise<string> {
-  if (!uri) return uri;
+  if (!uri || typeof uri !== "string") return typeof uri === "string" ? uri : "";
   if (uri.startsWith("http://") || uri.startsWith("https://") || uri.startsWith("data:")) {
     return uri;
   }

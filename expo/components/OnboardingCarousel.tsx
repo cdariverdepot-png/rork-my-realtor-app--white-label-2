@@ -13,6 +13,7 @@ import {
   type NativeSyntheticEvent,
 } from "react-native";
 import { Image } from "expo-image";
+import { safeImageSource } from "@/lib/safeImageSource";
 import * as Haptics from "expo-haptics";
 import {
   ArrowLeft,
@@ -274,7 +275,7 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
           <AnimatedImage
             key={i}
             pointerEvents="none"
-            source={slide.bg}
+            source={safeImageSource(slide.bg) ?? undefined}
             style={[
               StyleSheet.absoluteFill,
               {

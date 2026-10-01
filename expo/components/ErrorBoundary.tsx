@@ -2,6 +2,7 @@ import React from "react";
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { brand, fonts } from "@/constants/colors";
+import { ERROR_REPORT_EMAIL, reportClientError } from "@/lib/reportClientError";
 
 type Props = {
   children: React.ReactNode;
@@ -12,6 +13,8 @@ type State = {
   /** Bumped on retry so the subtree remounts from scratch. */
   attempt: number;
   copied: boolean;
+  reported: boolean;
+  reportFailed: boolean;
 };
 
 /**
@@ -19,28 +22,82 @@ type State = {
  *
  * Without one, a single bad render anywhere unmounts the whole tree and leaves
  * a white screen with no route back and no way for the user to tell us what
- * happened. This catches the throw, keeps the app's own voice, and offers the
- * two things that actually help: try again, and copy the details to send over.
- *
- * Retry works by remounting the subtree under a new key. That clears transient
- * failures (a bad fetch result, a malformed cached record) without a full app
- * restart. A genuinely broken screen will simply throw again and land back
- * here, which is the honest outcome.
+ * happened. This catches the throw, keeps the app's own voice, offers try
+ * again / go home / hard refresh, and emails the full report to support
+ * automatically so the user is never stuck copying details.
  */
 export default class ErrorBoundary extends React.Component<Props, State> {
-  state: State = { error: null, attempt: 0, copied: false };
+  state: State = {
+    error: null,
+    attempt: 0,
+    copied: false,
+    reported: false,
+    reportFailed: false,
+  };
 
   static getDerivedStateFromError(error: Error): Partial<State> {
-    return { error };
+    return { error, reported: false, reportFailed: false, copied: false };
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo): void {
-    // Sanitised: message and stack only, never app state or user records.
     console.log("[boundary] caught", error.message, info.componentStack?.slice(0, 800));
+    void this.sendReport(error, info.componentStack ?? undefined);
   }
 
+  private sendReport = async (error: Error, componentStack?: string): Promise<void> => {
+    const result = await reportClientError({
+      message: error.message,
+      stack: error.stack,
+      componentStack,
+    });
+    if (result.ok) {
+      this.setState({ reported: true, reportFailed: false });
+    } else {
+      this.setState({ reportFailed: true });
+    }
+  };
+
   private retry = (): void => {
-    this.setState((s) => ({ error: null, attempt: s.attempt + 1, copied: false }));
+    this.setState((s) => ({
+      error: null,
+      attempt: s.attempt + 1,
+      copied: false,
+      reported: false,
+      reportFailed: false,
+    }));
+  };
+
+  private goHome = (): void => {
+    // Clear the boundary first so the destination can mount.
+    this.setState((s) => ({
+      error: null,
+      attempt: s.attempt + 1,
+      copied: false,
+      reported: false,
+      reportFailed: false,
+    }));
+    if (Platform.OS === "web" && typeof window !== "undefined") {
+      try {
+        window.location.replace("/");
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+    // Native: best-effort deep link home via location-like navigation is web-only;
+    // remounting the tree (attempt bump) recovers most transient native faults.
+  };
+
+  private hardRefresh = (): void => {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
+      try {
+        window.location.reload();
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+    this.retry();
   };
 
   private copy = async (): Promise<void> => {
@@ -50,6 +107,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
       `Message: ${error.message}`,
       `Platform: ${Platform.OS} ${Platform.Version}`,
       `When: ${new Date().toISOString()}`,
+      `Support: ${ERROR_REPORT_EMAIL}`,
       "",
       (error.stack ?? "").slice(0, 2000),
     ].join("\n");
@@ -62,7 +120,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   };
 
   render(): React.ReactNode {
-    const { error, attempt, copied } = this.state;
+    const { error, attempt, copied, reported, reportFailed } = this.state;
 
     if (!error) {
       return <React.Fragment key={attempt}>{this.props.children}</React.Fragment>;
@@ -89,6 +147,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
             </Text>
           </View>
 
+          <Text style={styles.reportNote}>
+            {reported
+              ? `A report was sent to ${ERROR_REPORT_EMAIL}.`
+              : reportFailed
+                ? `We couldn't auto-send the report. You can copy the details below or email ${ERROR_REPORT_EMAIL}.`
+                : "Sending a report to support…"}
+          </Text>
+
           <Pressable
             onPress={this.retry}
             style={({ pressed }) => [styles.primary, pressed && { opacity: 0.85 }]}
@@ -99,13 +165,33 @@ export default class ErrorBoundary extends React.Component<Props, State> {
           </Pressable>
 
           <Pressable
+            onPress={this.goHome}
+            style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.85 }]}
+            accessibilityRole="button"
+            accessibilityLabel="Go to home"
+          >
+            <Text style={styles.secondaryBtnText}>GO TO HOME</Text>
+          </Pressable>
+
+          {Platform.OS === "web" ? (
+            <Pressable
+              onPress={this.hardRefresh}
+              style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.85 }]}
+              accessibilityRole="button"
+              accessibilityLabel="Hard refresh"
+            >
+              <Text style={styles.secondaryBtnText}>HARD REFRESH</Text>
+            </Pressable>
+          ) : null}
+
+          <Pressable
             onPress={this.copy}
-            style={({ pressed }) => [styles.secondary, pressed && { opacity: 0.7 }]}
+            style={({ pressed }) => [styles.tertiary, pressed && { opacity: 0.7 }]}
             accessibilityRole="button"
             accessibilityLabel="Copy error details"
           >
-            <Text style={styles.secondaryText}>
-              {copied ? "COPIED — SEND IT TO SUPPORT" : "COPY DETAILS"}
+            <Text style={styles.tertiaryText}>
+              {copied ? "COPIED" : "COPY DETAILS"}
             </Text>
           </Pressable>
         </ScrollView>
@@ -145,7 +231,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(244,239,230,0.14)",
     backgroundColor: "rgba(244,239,230,0.04)",
     padding: 14,
-    marginBottom: 26,
+    marginBottom: 16,
     gap: 7,
   },
   detailLabel: {
@@ -159,6 +245,13 @@ const styles = StyleSheet.create({
     color: "rgba(244,239,230,0.78)",
     fontSize: 11.5,
     lineHeight: 17,
+  },
+  reportNote: {
+    fontFamily: fonts.sans,
+    color: "rgba(244,239,230,0.48)",
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 22,
   },
   primary: {
     height: 52,
@@ -175,8 +268,22 @@ const styles = StyleSheet.create({
     fontSize: 11,
     letterSpacing: 2.4,
   },
-  secondary: { height: 46, alignItems: "center", justifyContent: "center" },
-  secondaryText: {
+  secondaryBtn: {
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(244,239,230,0.18)",
+    marginBottom: 10,
+  },
+  secondaryBtnText: {
+    fontFamily: fonts.sansSemi,
+    color: "rgba(244,239,230,0.78)",
+    fontSize: 11,
+    letterSpacing: 2.2,
+  },
+  tertiary: { height: 46, alignItems: "center", justifyContent: "center", marginTop: 4 },
+  tertiaryText: {
     fontFamily: fonts.sansMedium,
     color: "rgba(244,239,230,0.5)",
     fontSize: 10.5,
