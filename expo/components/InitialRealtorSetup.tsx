@@ -640,9 +640,17 @@ export default function InitialRealtorSetup() {
         <View style={{ flex: 1, padding: 20 }}>
           <Text style={{ color: draft.layoutId === "coastal-personal" ? "#1D2526" : "#F7F1EA",
             fontSize: 23, fontFamily: "PlayfairDisplay_500Medium", opacity: regenerating === "heroMessage" ? 0.4 : 1 }} numberOfLines={4}>
-            {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.name}
+            {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.brandName || "Your opening line"}
           </Text>
-          <Text style={{ color: "#B7956E", marginTop: 13 }}>{draft.realtor.name}{draft.realtor.city ? ` · ${draft.realtor.city}` : ""}</Text>
+          {/* Business/brand fields only — never auth login, email local-part, or session handle. */}
+          {(() => {
+            const authLocal = (auth.session?.email ?? draft.realtor.email).split("@")[0]?.trim().toLowerCase() ?? "";
+            const brand = draft.realtor.brandName.trim();
+            const city = draft.realtor.city.trim();
+            const showBrand = !!brand && brand.toLowerCase() !== authLocal;
+            const subtitle = [showBrand ? brand : "", city].filter(Boolean).join(" · ");
+            return subtitle ? <Text style={{ color: "#B7956E", marginTop: 13 }}>{subtitle}</Text> : null;
+          })()}
         </View>
         {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }}
           style={{ width: "38%", height: 185 }} contentFit="cover" /> : null}

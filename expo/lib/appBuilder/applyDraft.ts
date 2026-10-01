@@ -3,6 +3,14 @@ import type { BuildDraft } from "./buildService";
 import type { ResolvedFact } from "./sourceModel";
 import { CLIENT_LAYOUTS, isClientLayoutId } from "@/constants/clientLayouts";
 
+/** True when `name` is just the email local-part (legacy signup/DB habit), not a real display name. */
+export function isEmailLocalPartName(name: string, email: string): boolean {
+  const n = name.trim().toLowerCase();
+  if (!n) return false;
+  const local = (email.split("@")[0] ?? "").trim().toLowerCase();
+  return !!local && n === local;
+}
+
 /** The generated content becomes a local draft. Saving is a separate action. */
 export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildDraft): Brand {
   const next: Brand = {
@@ -18,8 +26,15 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
   for (const fact of facts) {
     if (!fact.value) continue;
     const [group, field, nested] = fact.field.split(".");
-    // The signup name is the realtor's display name; a website never replaces it.
-    if (fact.field === "realtor.name" && next.realtor.name.trim()) continue;
+    // Keep a real signup display name; never protect an email-local-part stand-in
+    // (older rows / metadata gaps) — a scraped website name should win there.
+    if (
+      fact.field === "realtor.name" &&
+      next.realtor.name.trim() &&
+      !isEmailLocalPartName(next.realtor.name, next.realtor.email)
+    ) {
+      continue;
+    }
     if (group === "realtor" && field in next.realtor) {
       (next.realtor as unknown as Record<string, unknown>)[field] = fact.value;
     } else if (group === "credentials" && field === "license" && nested in next.credentials.license) {
@@ -27,6 +42,15 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
     } else if (fact.field === "portraitUrl" && /^https:\/\//.test(fact.value)) {
       next.portraitUrl = fact.value;
     }
+  }
+  // Drop leftover login handles so the review asks for a real name instead of
+  // treating "jdouglastaylor" as a completed display name.
+  if (isEmailLocalPartName(next.realtor.name, next.realtor.email)) {
+    next.realtor.name = "";
+  }
+  // Brand lockup derived only from an email handle is not a business name.
+  if (isEmailLocalPartName(next.realtor.brandName, next.realtor.email)) {
+    next.realtor.brandName = "";
   }
   if (copy.heroMessage?.trim()) next.realtor.heroMessage = copy.heroMessage.trim();
   if (copy.welcomeNote?.trim()) next.realtor.welcomeNote = copy.welcomeNote.trim();
