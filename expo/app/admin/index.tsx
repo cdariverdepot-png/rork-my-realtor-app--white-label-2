@@ -175,7 +175,7 @@ function useCountUp(target: number, duration = 1200, enabled = true): number {
 export default function AdminDashboard() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, enterDemoView, realtorId } = useAuth();
+  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, enterDemoView, realtorId, authBypassEnabled, enterAuthBypass } = useAuth();
   const { all, remove, toggleHidden, syncStatus, refreshFromSource } = useListings();
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
 
@@ -236,9 +236,16 @@ export default function AdminDashboard() {
   const pendingAppts = appts.filter((a) => a.status === "requested").length;
   const liveCount = all.filter((l) => !l.hidden).length;
 
+  // AUTH_BYPASS preview must stay on the dashboard — never bounce to
+  // /admin/login → /portal (Welcome gateway). Enter bypass if needed.
   useEffect(() => {
-    if (hydrated && !isAdmin) router.replace("/admin/login");
-  }, [hydrated, isAdmin, router]);
+    if (!hydrated || isAdmin) return;
+    if (authBypassEnabled) {
+      void enterAuthBypass();
+      return;
+    }
+    router.replace("/admin/login");
+  }, [hydrated, isAdmin, authBypassEnabled, enterAuthBypass, router]);
 
   const tap = <A extends unknown[]>(cb: (...args: A) => void) => (...args: A) => {
     if (Platform.OS !== "web") Haptics.selectionAsync();

@@ -93,29 +93,27 @@ export default function Portal() {
   }, [isAuthenticated, entryParam, invite, lookupRealtorByCode]);
 
   // Temporary AUTH_BYPASS: auto-enter admin preview when unauthenticated.
+  // Do not cancel the replace when isAuthenticated flips (effect cleanup race).
   useEffect(() => {
-    if (!authHydrated || !authBypassEnabled || isAuthenticated) return;
-    let cancelled = false;
-    (async () => {
-      await enterAuthBypass();
-      if (!cancelled) router.replace("/admin");
-    })().catch(() => {});
-    return () => { cancelled = true; };
-  }, [authHydrated, authBypassEnabled, isAuthenticated, enterAuthBypass, router]);
-
-  // Auto-route if already authenticated
-  useEffect(() => {
-    if (!authHydrated) return;
-    if (entryParam) return;
-    if (!isAuthenticated) return;
-    // Bypass preview sessions should land on admin (not stay on portal).
-    if (isPreviewAdmin && authBypassEnabled) {
-      router.replace("/admin");
+    if (!authHydrated || !authBypassEnabled) return;
+    if (isAuthenticated) {
+      router.replace("/admin/");
       return;
     }
+    (async () => {
+      await enterAuthBypass();
+      router.replace("/admin/");
+    })().catch(() => {});
+  }, [authHydrated, authBypassEnabled, isAuthenticated, enterAuthBypass, router]);
+
+  // Auto-route if already authenticated (normal login — not AUTH_BYPASS).
+  useEffect(() => {
+    if (!authHydrated || authBypassEnabled) return;
+    if (entryParam) return;
+    if (!isAuthenticated) return;
     if (isPreviewAdmin) return;
-    router.replace(isAdmin ? "/admin" : "/");
-  }, [authHydrated, entryParam, isAuthenticated, isAdmin, isPreviewAdmin, authBypassEnabled, router]);
+    router.replace(isAdmin ? "/admin/" : "/");
+  }, [authHydrated, authBypassEnabled, entryParam, isAuthenticated, isAdmin, isPreviewAdmin, router]);
 
   // Animations
   const entrance = useRef(new Animated.Value(0)).current;
@@ -186,7 +184,7 @@ export default function Portal() {
     try {
       if (Platform.OS !== "web") Haptics.selectionAsync();
       await enterAuthBypass();
-      router.replace("/admin");
+      router.replace("/admin/");
     } finally { setBusy(false); }
   };
 
@@ -204,7 +202,7 @@ export default function Portal() {
       } else if (stage === "realtor-signin") {
         const res = await realtorLogin(email, password);
         if (!res.ok) { if (res.verificationRequired) setConfirmationEmail(email.trim().toLowerCase()); setError(res.error ?? "Sign-in failed."); triggerShake(); return; }
-        success(); router.replace("/admin");
+        success(); router.replace("/admin/");
       } else if (stage === "client-setup") {
         if (!resolvedRealtorId) { setError("Please go back and enter your code first."); return; }
         const res = await clientSignup({ name, email, password, realtorId: resolvedRealtorId });
@@ -264,6 +262,10 @@ export default function Portal() {
 
   const hydrated = authHydrated;
   if (!hydrated) return <View style={[styles.root, { backgroundColor: dark.bg }]} />;
+  // AUTH_BYPASS: never paint entry gateway while entering admin preview.
+  if (authBypassEnabled && !isAuthenticated) {
+    return <View style={[styles.root, { backgroundColor: dark.bg }]} />;
+  }
 
   const showBack = stage !== "entry";
   const onBack = () => {

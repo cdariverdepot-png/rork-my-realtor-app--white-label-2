@@ -60,26 +60,33 @@ export default function Home() {
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
 
-  // Temporary AUTH_BYPASS: skip landing login and enter admin preview.
+  // Temporary AUTH_BYPASS: never show the Welcome gateway; enter admin preview
+  // and hard-redirect to /admin/. Do NOT gate the replace on effect cleanup —
+  // enterAuthBypass flips isAuthenticated, which re-runs this effect and would
+  // cancel the navigate mid-flight.
   useEffect(() => {
-    if (!hydrated || !authBypassEnabled || isAuthenticated || demoViewMode) return;
-    let cancelled = false;
+    if (!hydrated || !authBypassEnabled || demoViewMode) return;
+    if (isAuthenticated) {
+      if (isAdmin && !viewAsClient) router.replace("/admin/");
+      return;
+    }
     (async () => {
       await enterAuthBypass();
-      if (!cancelled) router.replace("/admin");
+      router.replace("/admin/");
     })().catch(() => {});
-    return () => { cancelled = true; };
-  }, [hydrated, authBypassEnabled, isAuthenticated, demoViewMode, enterAuthBypass, router]);
+  }, [hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, demoViewMode, enterAuthBypass, router]);
 
   // Redirect admins to dashboard — unless they're previewing the client side.
   // Only while this screen is focused: a copy sitting under other screens (or
   // leaving mid-transition) must not fire a second redirect.
+  // AUTH_BYPASS path above already replaces; keep this for normal signed-in admins.
   useFocusEffect(useCallback(() => {
     if (!hydrated) return;
+    if (authBypassEnabled) return;
     if (isAuthenticated && isAdmin && !viewAsClient) {
-      router.replace("/admin");
+      router.replace("/admin/");
     }
-  }, [hydrated, isAuthenticated, isAdmin, viewAsClient, router]));
+  }, [hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, router]));
 
   // A valid invite creates the relationship, but never grants the app before
   // the required client profile has been saved. The profile context is scoped
@@ -100,6 +107,12 @@ export default function Home() {
   }, [previewAdmin, enterDemoView]);
 
   if (!hydrated) {
+    return <View style={styles.root} />;
+  }
+
+  // AUTH_BYPASS: never paint the Welcome gateway (Realtor/Client/Demo).
+  // Blank while enterAuthBypass + redirect to /admin/ run.
+  if (authBypassEnabled && !isAuthenticated && !demoViewMode) {
     return <View style={styles.root} />;
   }
 
