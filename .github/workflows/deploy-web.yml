@@ -38,7 +38,7 @@ jobs:
     env:
       CI: '1'
       EXPO_NO_TELEMETRY: '1'
-      DEPLOY: ${{ github.event_name == 'push' || inputs.deploy }}
+      DEPLOY: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.deploy) }}
       EXPO_PROJECT_ID: ${{ inputs.project_id || vars.EXPO_PROJECT_ID }}
       HOSTING_SUBDOMAIN: ${{ inputs.subdomain || vars.EXPO_HOSTING_SUBDOMAIN || 'cdariverdepot-my-realtor' }}
     steps:

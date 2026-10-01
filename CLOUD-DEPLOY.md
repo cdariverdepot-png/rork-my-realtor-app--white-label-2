@@ -14,7 +14,7 @@ Open GitHub Actions → **Build and deploy Expo web** → **Run workflow** on `m
 
 The workflow installs the locked dependencies, runs the app tests, exports all static pages, and deploys to production. Everything runs on GitHub's servers. The saved Actions secret `EXPO_TOKEN` authenticates with Expo; never commit its value.
 
-Ordinary app pushes run build validation only. The **Check Expo hosting** workflow can also be run manually to verify the root, welcome, and callback URLs. Checks retry for propagation delays observed on the first deployment.
+Pushes to `main` that touch `expo/**` or this workflow also deploy to production (same as a manual run with Deploy enabled). You can still use **Run workflow** for an on-demand deploy or to skip deploy by turning the input off. The **Check Expo hosting** workflow can also be run manually to verify the root, welcome, and callback URLs. Checks retry for propagation delays observed on the first deployment.
 
 ## Supabase authentication
 
