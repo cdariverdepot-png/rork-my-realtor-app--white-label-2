@@ -13,8 +13,11 @@ import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 const SPLASH_MODULE = require("@/assets/splash-loading.mp4");
 const POSTER = require("@/assets/splash-loading-poster.jpg");
 
-/** Drop AE glow hold after the key finishes pointing down (~1s settle kept). */
-const TRIM_TAIL_MS = 2000;
+/**
+ * Splash is ~6.04s. Key/glow motion settles ~4.4s; keep ~1.25s hold after that,
+ * then fade (≈5.65s mark). Trim is duration minus that end point.
+ */
+const SPLASH_END_SEC = 5.65;
 
 interface Props {
   /** True once auth has hydrated — curtain may fade after the video holds. */
@@ -25,7 +28,7 @@ interface Props {
 
 /**
  * Full-viewport launch splash using the branded loading animation video.
- * Plays once, cuts ~2s after key/glow settle (keep ~1s hold), then fades when ready.
+ * Plays through key/glow settle, holds ~1.25s, then fades when the app is ready.
  * Black/#0a0a0a curtain prevents any peek of underlying UI.
  */
 export default function BootScreen({ ready = true, onFinish }: Props) {
@@ -96,7 +99,7 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
   const onWebTimeUpdate = useCallback(() => {
     const el = videoElRef.current;
     if (!el || !Number.isFinite(el.duration) || el.duration <= 0) return;
-    const cutAt = Math.max(0, el.duration - TRIM_TAIL_MS / 1000);
+    const cutAt = Math.min(el.duration, SPLASH_END_SEC);
     if (el.currentTime >= cutAt) {
       try {
         el.pause();
@@ -111,7 +114,7 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
     if (!status.isLoaded) return;
     const duration = status.durationMillis ?? 0;
     const position = status.positionMillis ?? 0;
-    if (duration > 0 && position >= Math.max(0, duration - TRIM_TAIL_MS)) {
+    if (duration > 0 && position >= Math.min(duration, SPLASH_END_SEC * 1000)) {
       void nativeRef.current?.pauseAsync().catch(() => {});
       finishVideo();
       return;
