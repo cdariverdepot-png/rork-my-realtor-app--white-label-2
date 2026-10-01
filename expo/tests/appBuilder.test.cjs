@@ -228,9 +228,13 @@ test('URL preview card never renders realtor.name / auth handle under the headli
   const src = fs.readFileSync(path.resolve(__dirname, '../components/InitialRealtorSetup.tsx'), 'utf8');
   const reviewStart = src.indexOf('your app</Text>');
   assert.ok(reviewStart > 0, 'review heading missing');
-  const review = src.slice(reviewStart, src.indexOf('YOUR INTRODUCTION', reviewStart));
-  // Bronze subtitle must not interpolate draft.realtor.name (auth identity leak).
+  const introAt = src.indexOf('YOUR INTRODUCTION', reviewStart);
+  assert.ok(introAt > reviewStart, 'introduction card missing');
+  const review = src.slice(reviewStart, introAt);
+  // Review now mounts the real ThemeFace canvas — never a flat brown stub.
+  assert.match(review, /ThemeFace/);
+  assert.match(review, /themeCandidate/);
+  // Opening-line / review chrome must not interpolate draft.realtor.name (auth identity leak).
   assert.doesNotMatch(review, /\{draft\.realtor\.name\}/);
-  assert.match(review, /never auth login/);
-  assert.match(review, /brandName/);
+  assert.doesNotMatch(review, /#29231F/);
 });

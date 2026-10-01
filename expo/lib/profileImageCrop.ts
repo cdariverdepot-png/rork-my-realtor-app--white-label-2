@@ -18,6 +18,29 @@ export function clampCropFocus(focus: CropFocus): CropFocus {
 }
 
 /**
+ * Hands-off default crop when a photo is opened for adjust or after upload.
+ * No face-detection dependency in this app: upper-third bias for tall portraits
+ * (where faces usually sit), mild zoom for wide landscapes, gentle center for
+ * near-square shots. User can always drag/pinch from here.
+ */
+export function proposeCropFocus(imageWidth: number, imageHeight: number): CropFocus {
+  const w = Math.max(1, imageWidth);
+  const h = Math.max(1, imageHeight);
+  const aspect = w / h;
+  if (aspect < 0.85) {
+    // Tall portrait — keep the head/shoulders in frame.
+    return clampCropFocus({ x: 50, y: 32, zoom: aspect < 0.6 ? 1.18 : 1.08 });
+  }
+  if (aspect > 1.35) {
+    // Wide landscape — zoom enough that the square crop is not empty sky/floor.
+    const zoom = Math.min(MAX_CROP_ZOOM, 1 + Math.min(1.2, (aspect - 1.35) * 0.4));
+    return clampCropFocus({ x: 50, y: 42, zoom });
+  }
+  return clampCropFocus({ x: 50, y: 45, zoom: 1.05 });
+}
+
+
+/**
  * Square cover-crop in source-image pixels.
  * At zoom=1 the crop side equals min(width, height); higher zoom zooms in.
  * Focal x/y (0–100) pick which part of the remaining slack is visible.

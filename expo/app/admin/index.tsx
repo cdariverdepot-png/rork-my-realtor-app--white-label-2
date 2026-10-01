@@ -213,12 +213,13 @@ export default function AdminDashboard() {
     attempts: turnedAway, acknowledgeAttempts,
   } = useSeats();
 
-  const { pickPortable, cropper: portraitCropper } = usePortraitPicker({ maxWidth: 800, cropOutputSize: 800 });
+  const { editPortrait, cropper: portraitCropper } = usePortraitPicker({ maxWidth: 800, cropOutputSize: 800 });
 
   const pickPortrait = async () => {
     try {
       if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
-      const portable = await pickPortable();
+      // Tap avatar → adjust existing photo (crop/reposition). Replace is secondary in the cropper.
+      const portable = await editPortrait(brandData.portraitUrl);
       if (!portable) return;
       updateBrand((d) => ({ ...d, portraitUrl: portable }));
       if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});

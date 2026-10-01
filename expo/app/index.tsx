@@ -28,7 +28,7 @@ import ThemeCollection from "@/components/ThemeCollection";
 import ThemeContentSection from "@/components/ThemeContentSection";
 import ThemeCarousel from "@/components/ThemeCarousel";
 import ReferenceHome from "@/components/themes/ReferenceHome";
-import { themeCandidate } from "@/constants/themeDesigns";
+import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import type { Brand } from "@/contexts/BrandContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { orderThemeSections } from "@/constants/themeStructure";
@@ -545,9 +545,15 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const setupIncomplete = !demoViewMode && !required.complete;
   const gateAudience: "realtor" | "client" = viewAsClient || previewingDraft ? "realtor" : "client";
   const previewDataReady = brandHydrated && listingsHydrated;
+  // Designed themes own their canvas. Never paint warmsand/bone paper behind a dark Warm Concierge (etc.) — that muddy fallback is what users called "brown dog shit".
+  const designedCanvas = previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing
+    ? themeDesign(previewBrand.layoutId, previewBrand.theme).background
+    : null;
+  const pageBackground = designedCanvas ?? theme.band.deep;
+  const scrollBackground = designedCanvas ?? theme.surface.paper;
 
   const body = !previewDataReady ? (
-    <View style={[styles.root, { backgroundColor: theme.band.deep }]} />
+    <View style={[styles.root, { backgroundColor: pageBackground }]} />
   ) : setupIncomplete ? (
     <SetupGate
       missing={required.missing}
@@ -556,11 +562,11 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
       onBack={previewingDraft ? exitDraftPreview : viewAsClient ? exitTemplate : undefined}
     />
   ) : (
-    <View style={[styles.root, { backgroundColor: theme.band.deep }]}>
+    <View style={[styles.root, { backgroundColor: pageBackground }]}>
         <Animated.ScrollView
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ backgroundColor: theme.surface.paper, paddingBottom: bottomPad }}
+          contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
           scrollEventThrottle={16}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],

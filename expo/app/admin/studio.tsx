@@ -696,7 +696,7 @@ function ProfileSection({ draft, setBrand }: SectionProps) {
   return (
     <View>
       <SectionHeader title="Who you are" hint="Your name, contact and city — used everywhere in the app." />
-      <PortraitField uri={draft.portraitUrl} onChange={(uri) => setBrand((d) => ({ ...d, portraitUrl: uri }))} label="HERO PORTRAIT" hint="Tap to choose a new portrait." />
+      <PortraitField uri={draft.portraitUrl} onChange={(uri) => setBrand((d) => ({ ...d, portraitUrl: uri }))} label="HERO PORTRAIT" hint="Tap to adjust position, or replace from the cropper." />
       <Field label="FULL NAME" value={r.name} onChange={(v) => set("name", v)} placeholder={ph.profile.name} />
       <PickerField
         label="TITLE"
@@ -2142,14 +2142,15 @@ function PortraitField({
   hint?: string;
   square?: boolean;
 }) {
-  const { pickPortable, cropper } = usePortraitPicker({
+  const { editPortrait, cropper } = usePortraitPicker({
     maxWidth: square ? 800 : 1400,
     cropOutputSize: square ? 800 : 1400,
   });
   const pick = async () => {
     try {
       if (square) {
-        const portable = await pickPortable();
+        // Existing portrait → adjust crop/position; empty → new pick. Replace in cropper.
+        const portable = await editPortrait(uri);
         if (!portable) return;
         onChange(portable);
       } else {
@@ -2195,7 +2196,7 @@ function PortraitField({
           >
             <ImagePlus size={14} color="#F4EFE6" strokeWidth={1.9} />
             <Text style={styles.uploadBtnText}>
-              {uri ? "REPLACE PHOTO" : "UPLOAD PHOTO"}
+              {uri ? "ADJUST PHOTO" : "UPLOAD PHOTO"}
             </Text>
           </Pressable>
           {uri ? null : (

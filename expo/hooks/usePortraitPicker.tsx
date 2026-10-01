@@ -54,7 +54,9 @@ async function launchSource(source: Source): Promise<string | null> {
 }
 
 /**
- * Shared realtor portrait flow: pick/take → pan/zoom crop → portable URI for portraitUrl.
+ * Shared realtor portrait flow.
+ * - With an existing photo: tap opens crop/reposition (industry-standard), Replace is secondary.
+ * - Without: pick/take → auto-calibrated crop → portable URI for portraitUrl.
  * Render `cropper` once near the screen root.
  */
 export function usePortraitPicker(options?: {
@@ -66,6 +68,7 @@ export function usePortraitPicker(options?: {
   const [pendingUri, setPendingUri] = useState<string | null>(null);
   const [opening, setOpening] = useState(false);
   const resolveRef = useRef<((uri: string | null) => void) | null>(null);
+  const replacingRef = useRef(false);
 
   const settle = useCallback((uri: string | null) => {
     const resolve = resolveRef.current;
@@ -74,6 +77,12 @@ export function usePortraitPicker(options?: {
     resolve?.(uri);
   }, []);
 
+  const openCropper = useCallback((raw: string) => new Promise<string | null>((resolve) => {
+    resolveRef.current = resolve;
+    setPendingUri(raw);
+  }), []);
+
+  /** Pick or take a new photo, then open the cropper with a smart default. */
   const pickPortable = useCallback(async (): Promise<string | null> => {
     if (opening || pendingUri || resolveRef.current) return null;
     setOpening(true);
@@ -82,17 +91,32 @@ export function usePortraitPicker(options?: {
       if (!source) return null;
       const raw = await launchSource(source);
       if (!raw) return null;
-      return await new Promise<string | null>((resolve) => {
-        resolveRef.current = resolve;
-        setPendingUri(raw);
-      });
+      return await openCropper(raw);
     } catch {
       Alert.alert("Couldn’t load image", "Please try another photo.");
       return null;
     } finally {
       setOpening(false);
     }
-  }, [opening, pendingUri]);
+  }, [opening, pendingUri, openCropper]);
+
+  /**
+   * Industry-standard avatar tap: if a portrait already exists, open crop/reposition
+   * on that photo. Otherwise start a new pick. Replace stays available inside the cropper.
+   */
+  const editPortrait = useCallback(async (currentUri?: string | null): Promise<string | null> => {
+    if (opening || pendingUri || resolveRef.current) return null;
+    const existing = (currentUri ?? "").trim();
+    if (existing) {
+      setOpening(true);
+      try {
+        return await openCropper(existing);
+      } finally {
+        setOpening(false);
+      }
+    }
+    return pickPortable();
+  }, [opening, pendingUri, openCropper, pickPortable]);
 
   const onCropDone = useCallback(async (croppedLocal: string) => {
     try {
@@ -104,6 +128,25 @@ export function usePortraitPicker(options?: {
     }
   }, [maxWidth, settle]);
 
+  const onReplace = useCallback(() => {
+    if (replacingRef.current) return;
+    replacingRef.current = true;
+    void (async () => {
+      try {
+        const source = await chooseSource();
+        if (!source) return;
+        const raw = await launchSource(source);
+        if (!raw) return;
+        // Keep the same pending promise; swap the source under the cropper.
+        setPendingUri(raw);
+      } catch {
+        Alert.alert("Couldn’t load image", "Please try another photo.");
+      } finally {
+        replacingRef.current = false;
+      }
+    })();
+  }, []);
+
   const cropper = (
     <ProfileImageCropper
       visible={!!pendingUri}
@@ -111,11 +154,13 @@ export function usePortraitPicker(options?: {
       outputSize={cropOutputSize}
       onDone={(cropped) => { void onCropDone(cropped); }}
       onCancel={() => settle(null)}
+      onReplace={onReplace}
     />
   );
 
   return {
     pickPortable,
+    editPortrait,
     cropper,
     busy: opening || !!pendingUri,
   };

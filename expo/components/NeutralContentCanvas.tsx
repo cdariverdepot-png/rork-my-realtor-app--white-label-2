@@ -33,12 +33,12 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
   const hidden = CLIENT_SECTIONS.filter(s => !s.structural && sectionState(draft, s.id, s.isReady(context)) === "hidden");
   const identity = (key: keyof Brand["realtor"], value: string) => onChange(b => ({ ...b, realtor: { ...b.realtor, [key]: value } }));
   const copy = (label: string, value: string, change: (text: string) => void, large = false, fallback = "") => <Copy label={label} value={value} onChange={change} large={large} fallback={fallback} />;
-  const { pickPortable, cropper, busy: pickingPortrait } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
+  const { editPortrait, cropper, busy: pickingPortrait } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
   const portrait = async () => {
     if (uploading || pickingPortrait) return;
     setUploading(true);
     try {
-      const uri = await pickPortable();
+      const uri = await editPortrait(draft.portraitUrl);
       if (uri) onChange(b => ({ ...b, portraitUrl: uri }));
     } catch { Alert.alert("Couldn’t load image", "Please try another image."); }
     finally { setUploading(false); }
@@ -49,7 +49,7 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
         {copy("Brand name", draft.realtor.brandName, v => identity("brandName", v))}
         <Pressable accessibilityRole="button" accessibilityLabel="Edit portrait" disabled={uploading} onPress={() => void portrait()}>
           {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }} contentFit="contain" style={{ height: 260, backgroundColor: "#eee", borderRadius: 8 }} /> : <View style={{ height: 180, backgroundColor: "#eee", justifyContent: "center", alignItems: "center" }}><Text>Tap to add your portrait</Text></View>}
-          <Text style={{ color: "#666", paddingVertical: 10 }}>{uploading ? "Loading image…" : "Tap image to replace · crop after choosing"}</Text>
+          <Text style={{ color: "#666", paddingVertical: 10 }}>{uploading ? "Loading image…" : draft.portraitUrl ? "Tap to adjust position · Replace inside cropper" : "Tap to add your portrait"}</Text>
         </Pressable>
         {copy("Opening line", draft.realtor.heroMessage, v => identity("heroMessage", v), true, draft.realtor.tagline)}
         {copy("Full name", draft.realtor.name, v => identity("name", v))}

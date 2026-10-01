@@ -145,7 +145,14 @@ async function generateLocal(realtorId: string, target?: "heroMessage" | "welcom
   if (!sources.length) throw new Error("Add your website URL to generate your app copy.");
   if (!supabase || !(await ensureSupabaseSession())) throw new Error("Could not connect to the app builder. Please retry.");
   const { data, error } = await supabase.functions.invoke("analyze-realtor-build", {
-    body: { guest: true, sources, draft: saved.draft, ...(target ? { mode: "regenerate", target } : {}) },
+    body: {
+      guest: true,
+      sources,
+      draft: saved.draft,
+      // Guest drafts keep evidence on-device; the edge function needs it for grounded variations.
+      evidence: saved.evidence ?? [],
+      ...(target ? { mode: "regenerate", target } : {}),
+    },
   });
   if (error || data?.error) throw await functionError(error, data, "Your website could not be analyzed. Please retry.");
   if (!data?.draft || !(target ? data.draft[target] : data.draft.heroMessage)?.trim()) {

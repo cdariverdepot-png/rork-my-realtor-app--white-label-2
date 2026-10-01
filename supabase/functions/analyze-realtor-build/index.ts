@@ -234,10 +234,28 @@ function encode(bytes: Uint8Array): string {
 }
 
 function responseText(value: any): string {
-  return (Array.isArray(value.output) ? value.output : [])
-    .flatMap((entry: any) => Array.isArray(entry.content) ? entry.content : [])
-    .filter((part: any) => part.type === "output_text" && typeof part.text === "string")
-    .map((part: any) => part.text).join("");
+  if (!value || typeof value !== "object") return "";
+  if (typeof value.output_text === "string" && value.output_text.trim()) return value.output_text;
+  const fromOutput = (Array.isArray(value.output) ? value.output : [])
+    .flatMap((entry: any) => {
+      if (typeof entry?.text === "string") return [entry.text];
+      if (Array.isArray(entry?.content)) return entry.content;
+      return [];
+    })
+    .filter((part: any) => {
+      if (typeof part === "string") return part.trim().length > 0;
+      return part && (part.type === "output_text" || part.type === "text") && typeof part.text === "string";
+    })
+    .map((part: any) => typeof part === "string" ? part : part.text)
+    .join("");
+  if (fromOutput.trim()) return fromOutput;
+  // Rare Responses shapes nest the JSON under a message/content path.
+  const nested = JSON.stringify(value);
+  const match = nested.match(/"value"\s*:\s*"((?:\\.|[^"\\])*)"/);
+  if (match) {
+    try { return JSON.parse(`"${match[1]}"`); } catch { return match[1]; }
+  }
+  return "";
 }
 
 function validate(value: any, ids: Set<string>, imageIds: Set<string>) {
@@ -296,7 +314,8 @@ Deno.serve(async (request) => {
   const { data: build } = guest ? { data: {
     sources: (Array.isArray(input.sources) ? input.sources : []).filter((source: any) =>
       source && (source.kind === "url" || source.kind === "listing")),
-    evidence: [], draft: input.draft && typeof input.draft === "object" ? input.draft : {}, status: "collecting",
+    evidence: Array.isArray(input.evidence) ? input.evidence : [],
+    draft: input.draft && typeof input.draft === "object" ? input.draft : {}, status: "collecting",
   } } : await admin.from("realtor_builds")
     .select("sources,evidence,draft,status").eq("auth_user_id", userId).single();
   if (!build) return reply({ error: "Start your app build first." }, 404);
@@ -348,19 +367,28 @@ Deno.serve(async (request) => {
     } catch { return reply({ error: "Could not create another variation." }, 502); }
     if (!response.ok) return reply({ error: "Could not create another variation." }, 502);
     let value: unknown;
+    let rawText = "";
     try {
-      const raw = responseText(await response.json()).trim();
+      const payload = await response.json();
+      rawText = responseText(payload).trim();
       let parsed: unknown;
-      try { parsed = JSON.parse(raw); } catch { parsed = raw; }
+      try { parsed = rawText ? JSON.parse(rawText) : null; } catch { parsed = rawText; }
       if (typeof parsed === "string") value = parsed;
       else if (parsed && typeof parsed === "object") {
         const obj = parsed as Record<string, unknown>;
         // Prefer the requested key; tolerate the model naming it after the field or anything else.
-        value = [obj.value, obj[target], ...Object.values(obj)]
-          .find((item) => typeof item === "string" && item.trim());
+        value = [obj.value, obj[target], obj.copy, ...Object.values(obj)]
+          .find((item) => typeof item === "string" && (item as string).trim());
+      }
+      // Last resort: the model returned plain prose instead of JSON.
+      if ((typeof value !== "string" || !value.trim()) && rawText && !rawText.trimStart().startsWith("{")) {
+        value = rawText;
       }
     } catch { return reply({ error: "The new variation was incomplete." }, 502); }
-    if (typeof value !== "string" || !value.trim()) return reply({ error: "The new variation was empty." }, 502);
+    if (typeof value !== "string" || !value.trim()) {
+      console.error("[analyze-realtor-build] empty variation", { target, rawPreview: rawText.slice(0, 240) });
+      return reply({ error: "The new variation was empty." }, 502);
+    }
     const draft = { ...build.draft, [target]: value.trim().slice(0, target === "aboutParagraph" ? 750 : 300) };
     const { error } = guest ? { error: null } : await admin.from("realtor_builds").update({ draft, updated_at: new Date().toISOString() })
       .eq("auth_user_id", userId);

@@ -13,21 +13,23 @@ import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-g
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import {
-  DEFAULT_CROP_FOCUS,
   MAX_CROP_ZOOM,
   MIN_CROP_ZOOM,
   clampCropFocus,
   cropImageLayout,
   cropProfileImage,
   getImageSize,
+  proposeCropFocus,
   type CropFocus,
 } from "@/lib/profileImageCrop";
 
 const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
 /**
- * Square pan/zoom cropper shown after the realtor picks or takes a profile photo.
- * Done writes a cropped local JPEG URI; callers persist via toPortableImage → portraitUrl.
+ * Square pan/zoom cropper for realtor portraits.
+ * Opens on an existing photo (adjust) or a freshly picked one; proposes a
+ * sensible default crop, then lets the user tweak. Optional Replace swaps the
+ * source without forcing a new pick up front.
  */
 export default function ProfileImageCropper({
   visible,
@@ -35,32 +37,41 @@ export default function ProfileImageCropper({
   outputSize = 800,
   onDone,
   onCancel,
+  onReplace,
 }: {
   visible: boolean;
   uri: string;
   outputSize?: number;
   onDone: (croppedUri: string) => void;
   onCancel: () => void;
+  /** Secondary action: pick a different photo while keeping the cropper flow. */
+  onReplace?: () => void;
 }) {
   const window = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const viewSize = Math.min(window.width - 36, 360);
-  const [focus, setFocus] = useState<CropFocus>(DEFAULT_CROP_FOCUS);
+  const [focus, setFocus] = useState<CropFocus>({ x: 50, y: 50, zoom: 1 });
+  const [proposed, setProposed] = useState<CropFocus>({ x: 50, y: 50, zoom: 1 });
   const [natural, setNatural] = useState<{ width: number; height: number } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const start = useRef<CropFocus>(DEFAULT_CROP_FOCUS);
+  const start = useRef<CropFocus>({ x: 50, y: 50, zoom: 1 });
 
   useEffect(() => {
     if (!visible || !uri) return;
-    setFocus(DEFAULT_CROP_FOCUS);
-    start.current = DEFAULT_CROP_FOCUS;
     setNatural(null);
     setError("");
     setBusy(false);
     let alive = true;
     void getImageSize(uri)
-      .then((size) => { if (alive) setNatural(size); })
+      .then((size) => {
+        if (!alive) return;
+        const smart = proposeCropFocus(size.width, size.height);
+        setProposed(smart);
+        setFocus(smart);
+        start.current = smart;
+        setNatural(size);
+      })
       .catch(() => { if (alive) setError("Couldn’t open that photo. Try another."); });
     return () => { alive = false; };
   }, [visible, uri]);
@@ -108,7 +119,7 @@ export default function ProfileImageCropper({
 
   const reset = () => {
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
-    setFocus(DEFAULT_CROP_FOCUS);
+    setFocus(proposed);
   };
 
   return (
@@ -174,11 +185,27 @@ export default function ProfileImageCropper({
           )}
         </View>
 
-        <View style={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 24, alignItems: "center", gap: 10 }}>
+        <View style={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 24, alignItems: "center", gap: 12 }}>
           <Text style={{ color: "#C8C2B4", textAlign: "center" }}>Drag to move · Pinch to zoom</Text>
-          <Pressable onPress={reset} accessibilityRole="button" hitSlop={8} disabled={busy}>
-            <Text style={{ color: "#D4B989" }}>Reset</Text>
-          </Pressable>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 22 }}>
+            <Pressable onPress={reset} accessibilityRole="button" hitSlop={8} disabled={busy}>
+              <Text style={{ color: "#D4B989" }}>Reset</Text>
+            </Pressable>
+            {onReplace ? (
+              <Pressable
+                onPress={() => {
+                  if (busy) return;
+                  if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
+                  onReplace();
+                }}
+                accessibilityRole="button"
+                hitSlop={8}
+                disabled={busy}
+              >
+                <Text style={{ color: "#D4B989" }}>Replace photo</Text>
+              </Pressable>
+            ) : null}
+          </View>
         </View>
       </GestureHandlerRootView>
     </Modal>

@@ -503,8 +503,16 @@ function scrubDemoContent(b: Brand, isDemo: boolean, fallback: Brand): Brand {
  * identity to decide whether the correction needs writing back.
  */
 function normalizeBrand(b: Brand, isDemo: boolean, fallback: Brand): Brand {
-  // Existing saved content is user-owned, including legacy themes and copy
-  // identical to demo text. Demo isolation happens at the context boundary.
+  // Existing saved content is user-owned. Demo isolation happens at the context boundary.
+  // Brands that already have a chosen client layout but predate presentationVersion 2
+  // still need the real themed canvases — otherwise Preview my app paints muddy paper.
+  if (!isDemo && b.layoutId && b.theme?.presentationVersion !== 2 && (b.themeChosen || b.layoutId !== DEFAULT_CLIENT_LAYOUT)) {
+    return {
+      ...b,
+      themeChosen: true,
+      theme: { ...b.theme, presentationVersion: 2 },
+    };
+  }
   return b;
 }
 

@@ -1,6 +1,6 @@
 import { useSetupDraft } from "@/hooks/useSetupDraft";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
 import { ArrowLeft, Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
@@ -14,7 +14,10 @@ import { PROFILE_FIELDS, RECOMMENDED_FIELDS, REQUIRED_FIELDS, requiredStatus } f
 import { toPortableImage } from "@/lib/portableImage";
 import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import { useAuth } from "@/contexts/AuthContext";
-import { CLIENT_LAYOUTS } from "@/constants/clientLayouts";
+import { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts";
+import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
+import { themeSampleListings } from "@/constants/themeSamples";
+import ThemeFace from "@/components/ThemeFace";
 import { analyzeBuild, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -46,10 +49,10 @@ function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: (
       <TextInput accessibilityLabel={label} value={value} onChangeText={onChangeText} autoCorrect={false}
         style={{ minHeight: 48, borderWidth: 1, borderColor: "#555C64", borderRadius: 8, padding: 12, color: "white" }} />
     </View>;
-  const { pickPortable, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
+  const { editPortrait, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
   const pick = async () => {
     try {
-      const uri = await pickPortable();
+      const uri = await editPortrait(draft.portraitUrl);
       if (!uri) return;
       change(b => ({ ...b, portraitUrl: uri }));
     } catch { Alert.alert("Couldn’t load image", "Please try another image."); }
@@ -127,7 +130,8 @@ export default function InitialRealtorSetup() {
   const { brand, saveBrand } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { pickPortable, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
+  const { width: windowWidth } = useWindowDimensions();
+  const { editPortrait, cropper } = usePortraitPicker({ maxWidth: 1600, cropOutputSize: 1200 });
   const scrollRef = useRef<ScrollView>(null);
   const authPanelY = useRef(0);
   const [url, setUrl] = useState("");
@@ -423,7 +427,11 @@ export default function InitialRealtorSetup() {
     // Same rule set the rest of the app uses — REQUIRED_FIELDS is the only source of truth.
     const missing = requiredStatus(draft).missing;
     if (missing.length) throw new Error(`Please add: ${missing.map(item => item.label.toLowerCase()).join(", ")}.`);
-    await saveBrand(draft);
+    // Guarantee the published brand uses the real themed canvas for the AI-picked layout.
+    const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
+      ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
+    const publish = themeCandidate(draft, layoutId);
+    await saveBrand(publish);
     await markBuildComplete();
     await progressDraft.clear();
     router.replace("/admin/ready");
@@ -434,7 +442,7 @@ export default function InitialRealtorSetup() {
     setDraft(current => current && ({ ...current, credentials: { ...current.credentials,
       license: { ...current.credentials.license, [key]: value } } }));
   const selectPortrait = () => void act("review", async () => {
-    const uri = await pickPortable();
+    const uri = await editPortrait(draft?.portraitUrl);
     if (!uri) return;
     setDraft(current => current && ({ ...current, portraitUrl: uri }));
   });
@@ -639,38 +647,53 @@ export default function InitialRealtorSetup() {
         We used {CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? "a starting layout"} for your style — you can switch later from Edit My App.
       </Text>
 
-      {/* Live preview of the copy the realtor can regenerate. */}
-      <View style={{ marginTop: 18, borderRadius: 16, overflow: "hidden", minHeight: 185,
-        backgroundColor: draft.layoutId === "coastal-personal" ? "#F8F4EF" : "#29231F",
-        flexDirection: "row", alignItems: "center" }}>
-        <View style={{ flex: 1, padding: 20 }}>
-          <Text style={{ color: draft.layoutId === "coastal-personal" ? "#1D2526" : "#F7F1EA",
-            fontSize: 23, fontFamily: "PlayfairDisplay_500Medium", opacity: regenerating === "heroMessage" ? 0.4 : 1 }} numberOfLines={4}>
-            {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.brandName || "Your opening line"}
-          </Text>
-          {/* Business/brand fields only — never auth login, email local-part, or session handle. */}
-          {(() => {
-            const authLocal = (auth.session?.email ?? draft.realtor.email).split("@")[0]?.trim().toLowerCase() ?? "";
-            const brand = draft.realtor.brandName.trim();
-            const city = draft.realtor.city.trim();
-            const showBrand = !!brand && brand.toLowerCase() !== authLocal;
-            const subtitle = [showBrand ? brand : "", city].filter(Boolean).join(" · ");
-            return subtitle ? <Text style={{ color: "#B7956E", marginTop: 13 }}>{subtitle}</Text> : null;
-          })()}
-        </View>
-        {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }}
-          style={{ width: "38%", height: 185 }} contentFit="cover" /> : null}
-      </View>
+      {/* Real themed canvas — never a flat brown/charcoal stub. AI layoutId maps to an actual ThemeFace. */}
+      {(() => {
+        const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
+          ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
+        const previewBrand = themeCandidate(draft, layoutId);
+        const design = themeDesign(layoutId, previewBrand.theme);
+        const width = Math.min(Math.max(260, windowWidth - 48), 360);
+        return <>
+          <View style={{ marginTop: 18, alignItems: "center" }}>
+            <View style={{ opacity: regenerating === "heroMessage" ? 0.55 : 1, width }}>
+              <ThemeFace
+                id={layoutId}
+                brand={previewBrand}
+                listings={themeSampleListings(layoutId)}
+                width={width}
+                radius={16}
+              />
+            </View>
+            <Text style={{ color: "#9AA4AA", marginTop: 10, textAlign: "center", fontSize: 13 }}>
+              {design.name} · how your clients will see the opening screen
+            </Text>
+          </View>
+          {/* Opening line under the real theme so regenerate still has a clear target. */}
+          <View style={{ marginTop: 14, padding: 14, borderRadius: 12, backgroundColor: design.panel, borderWidth: 1, borderColor: design.accent + "44" }}>
+            <Text style={{ color: design.accent, fontSize: 11, fontWeight: "700", letterSpacing: 1.2 }}>OPENING LINE</Text>
+            <Text style={{ color: design.ink, marginTop: 8, fontSize: 18, fontFamily: "PlayfairDisplay_500Medium",
+              opacity: regenerating === "heroMessage" ? 0.4 : 1 }} numberOfLines={4}>
+              {draft.realtor.heroMessage || draft.realtor.tagline || draft.realtor.brandName || "Your opening line"}
+            </Text>
+          </View>
+        </>;
+      })()}
       {button(regenerating === "heroMessage" ? "Writing a new opening line…" : "Try another opening line",
         () => regenerate("heroMessage"), false, busy || !!regenerating)}
       {errorFor("hero")}
 
-      <View style={{ marginTop: 18, padding: 16, borderRadius: 14, backgroundColor: "#1A2127" }}>
-        <Text style={{ color: "#C2A276", fontSize: 12, fontWeight: "700", letterSpacing: 1.4 }}>YOUR INTRODUCTION</Text>
-        <Text style={{ color: "#E6E9EA", marginTop: 8, lineHeight: 22, opacity: regenerating === "aboutParagraph" ? 0.4 : 1 }}>
-          {draft.note.body[0] || "Your introduction will appear here."}
-        </Text>
-      </View>
+      {(() => {
+        const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
+          ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
+        const design = themeDesign(layoutId, themeCandidate(draft, layoutId).theme);
+        return <View style={{ marginTop: 18, padding: 16, borderRadius: 14, backgroundColor: design.panel, borderWidth: 1, borderColor: design.accent + "33" }}>
+          <Text style={{ color: design.accent, fontSize: 12, fontWeight: "700", letterSpacing: 1.4 }}>YOUR INTRODUCTION</Text>
+          <Text style={{ color: design.ink, marginTop: 8, lineHeight: 22, opacity: regenerating === "aboutParagraph" ? 0.4 : 1 }}>
+            {draft.note.body[0] || "Your introduction will appear here."}
+          </Text>
+        </View>;
+      })()}
       {button(regenerating === "aboutParagraph" ? "Writing a new introduction…" : "Try another introduction",
         () => regenerate("aboutParagraph"), false, busy || !!regenerating)}
       {errorFor("intro")}
@@ -686,7 +709,7 @@ export default function InitialRealtorSetup() {
           <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>{draft.portraitUrl ? "Your portrait" : "Add your portrait"}</Text>
           <Text style={{ color: "#9AA4AA", marginTop: 2 }}>{draft.portraitUrl ? "Shown on your app’s first screen." : "Recommended — your app opens on your photo."}</Text>
           <Pressable accessibilityRole="button" onPress={selectPortrait} disabled={busy} hitSlop={6} style={{ marginTop: 8 }}>
-            <Text style={{ color: "#C2A276", fontWeight: "600" }}>{draft.portraitUrl ? "Choose a different photo" : "Choose a photo"}</Text>
+            <Text style={{ color: "#C2A276", fontWeight: "600" }}>{draft.portraitUrl ? "Adjust or replace photo" : "Choose a photo"}</Text>
           </Pressable>
         </View>
       </View>

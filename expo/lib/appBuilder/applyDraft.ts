@@ -62,8 +62,16 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
   if (copy.conciergeLine?.trim()) next.concierge.title = copy.conciergeLine.trim();
   if (copy.contactLine?.trim()) next.quickContact.sub = copy.contactLine.trim();
   if (isClientLayoutId(copy.layoutId)) {
+    const layout = CLIENT_LAYOUTS.find(layout => layout.id === copy.layoutId)!;
     next.layoutId = copy.layoutId;
-    next.theme = CLIENT_LAYOUTS.find(layout => layout.id === copy.layoutId)!.defaultTheme;
+    // Opt into the real themed canvases (ReferenceHome / ThemeFace). Without
+    // presentationVersion 2 the client falls back to muddy stub surfaces.
+    next.themeChosen = true;
+    next.theme = {
+      ...layout.defaultTheme,
+      imagePositions: next.theme?.imagePositions,
+      presentationVersion: 2,
+    };
   }
   return next;
 }
