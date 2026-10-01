@@ -17,6 +17,7 @@ export type DiscoveredListing = {
   image: string;
   images: string[];
   sourceUrl: string;
+  importKey?: string;
 };
 
 export type ListingDiscoveryMeta = {
@@ -43,6 +44,7 @@ export type BuildDraft = {
   /** Listings found by multi-hop crawl during website setup. */
   discoveredListings?: DiscoveredListing[];
   listingDiscovery?: ListingDiscoveryMeta;
+  listingImportWarnings?: string[];
 };
 
 export type SavedBuild = {
@@ -274,7 +276,7 @@ export async function appendBuildSources(realtorId: string, extra: BuildSource[]
 
 export async function uploadBuildFile(
   asset: { uri: string; name: string; mimeType?: string; size?: number },
-  kind: "document" | "image",
+  kind: "document" | "image" | "listing-file",
 ): Promise<BuildSource> {
   const route = await resolveBuilderRoute();
   const extension = asset.name.toLowerCase().split(".").pop();
@@ -287,7 +289,7 @@ export async function uploadBuildFile(
     png: "image/png",
     webp: "image/webp",
   };
-  const mimeType =
+  const mimeType = kind === "listing-file" && extension === "csv" ? "text/plain" :
     !asset.mimeType || asset.mimeType === "application/octet-stream"
       ? (inferred[extension ?? ""] ?? "application/octet-stream")
       : asset.mimeType;
@@ -298,9 +300,10 @@ export async function uploadBuildFile(
           "application/pdf",
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           "text/plain",
+          ...(kind === "listing-file" ? ["image/jpeg", "image/png", "image/webp"] : []),
         ];
   if (!allowed.includes(mimeType)) {
-    throw new Error("Choose a PDF, Word document, text file, JPG, PNG, or WebP image.");
+    throw new Error(kind === "listing-file" ? "Choose a PDF, CSV, Word (.docx), text file, JPG, PNG, or WebP listing report." : "Choose a PDF, Word document, text file, JPG, PNG, or WebP image.");
   }
   if (asset.size && asset.size > 20_971_520) throw new Error("Files must be 20 MB or smaller.");
 
@@ -308,6 +311,7 @@ export async function uploadBuildFile(
 
   // Guest / local path: keep the device URI — no cloud storage upload.
   if (route.kind === "local") {
+    if (kind === "listing-file") throw new Error("Sign in to your realtor account to upload listing files. Public links still work in this preview.");
     return { id, kind, label: asset.name, uri: asset.uri, mimeType, status: "queued" };
   }
 
@@ -325,6 +329,19 @@ export async function uploadBuildFile(
     .upload(uri, bytes, { contentType: mimeType, upsert: false });
   if (error) throw error;
   return { id, kind, label: asset.name, uri, mimeType, status: "queued" };
+}
+
+/** Bulk property import preserves the profile and reads only the selected saved files. */
+export async function importListingFilesBuild(sourceIds: string[]): Promise<SavedBuild> {
+  const route = await resolveBuilderRoute();
+  if (route.kind === "local") throw new Error("Sign in to your realtor account to upload listing files.");
+  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
+    body: { mode: "import-listing-files", sourceIds },
+  });
+  if (error || data?.error) throw await functionError(error, data, "The listing files could not be read. Please retry.");
+  const saved = await loadBuild();
+  if (!saved) throw new Error("Your listing import could not be loaded. Your files are still saved.");
+  return saved;
 }
 
 /** supabase-js hides the function's JSON body behind a generic "non-2xx" error. */

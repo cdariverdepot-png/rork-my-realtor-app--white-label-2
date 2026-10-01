@@ -13,6 +13,12 @@ const slug = (s: string): string =>
 
 /** Stable-ish id so re-imports of the same source URL update instead of duplicating. */
 function listingId(item: DiscoveredListing, index: number): string {
+  if (item.importKey || !item.sourceUrl) {
+    const identity = item.importKey || `${item.title}|${item.neighborhood}`.toLowerCase();
+    let hash = 2166136261;
+    for (const ch of identity) hash = Math.imul(hash ^ ch.charCodeAt(0), 16777619);
+    return `${slug(item.title)}-${(hash >>> 0).toString(36)}`;
+  }
   try {
     const host = new URL(item.sourceUrl).hostname.replace(/^www\./, "").slice(0, 18);
     const path = new URL(item.sourceUrl).pathname.split("/").filter(Boolean).pop() ?? "";

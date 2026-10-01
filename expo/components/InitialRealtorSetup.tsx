@@ -19,7 +19,8 @@ import { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts
 import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import { themeSampleListings } from "@/constants/themeSamples";
 import ThemeFace from "@/components/ThemeFace";
-import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, discoverListingsBuild, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, discoverListingsBuild, importListingFilesBuild, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
+import { LISTING_IMPORT_GUIDANCE, LISTING_FILE_PICKER_TYPES } from "@/lib/appBuilder/listingImportGuidance";
 import { mergeDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -163,6 +164,8 @@ export default function InitialRealtorSetup() {
   const [importedListingCount, setImportedListingCount] = useState(0);
   const [listingsUrl, setListingsUrl] = useState("");
   const [listingsPromptDismissed, setListingsPromptDismissed] = useState(false);
+  const [listingImportChoice, setListingImportChoice] = useState<"link" | "file">("link");
+  const [listingFilesToRetry, setListingFilesToRetry] = useState<string[]>([]);
   /**
    * Which inputs the review asks for, fixed when the draft is created. Rendering
    * from live values made a field vanish after its first keystroke (it stopped
@@ -277,10 +280,11 @@ export default function InitialRealtorSetup() {
 
   const progressDraft = useSetupDraft(
     "myrealtor.build-draft.v1:" + auth.realtorId,
-    { url, draft, result, askFor, confirmList, editingSources },
+    { url, draft, result, askFor, confirmList, editingSources, listingImportChoice, listingFilesToRetry },
     saved => {
       setUrl(saved.url); setDraft(saved.draft); setResult(saved.result);
       setAskFor(saved.askFor); setConfirmList(saved.confirmList); setEditingSources(saved.editingSources);
+      setListingImportChoice(saved.listingImportChoice ?? "link"); setListingFilesToRetry(saved.listingFilesToRetry ?? []);
     }, loaded && !!auth.realtorId);
 
   const leaveBuild = async () => {
@@ -479,6 +483,32 @@ export default function InitialRealtorSetup() {
     if (!count) {
       throw new Error("We still couldn’t find listings on that page. Try a link that opens your property list without signing in.");
     }
+  });
+
+  const importListingFiles = () => void act("listings", async () => {
+    if (!auth.realtorId) throw new Error("Sign in to import listings.");
+    let sourceIds = listingFilesToRetry;
+    if (!sourceIds.length) {
+      const picked = await DocumentPicker.getDocumentAsync({ type: LISTING_FILE_PICKER_TYPES, multiple: true, copyToCacheDirectory: true });
+      if (picked.canceled) return;
+      if (picked.assets.length > 5) throw new Error("Choose up to five listing files at a time.");
+      if (picked.assets.reduce((sum, asset) => sum + (asset.size ?? 0), 0) > 52_428_800) throw new Error("Choose files under 50 MB combined.");
+      const uploaded: BuildSource[] = [];
+      for (const asset of picked.assets) {
+        setActivity(`Uploading ${asset.name}…`);
+        // Save each successful upload immediately, so a later upload failure cannot lose it.
+        const source = await uploadBuildFile(asset, "listing-file");
+        uploaded.push(source);
+        setSources(await appendBuildSources(auth.realtorId, [source]));
+        setListingFilesToRetry(uploaded.map(file => file.id));
+      }
+      sourceIds = uploaded.map(file => file.id);
+    }
+    setActivity("Reading your listing files…");
+    const saved = await importListingFilesBuild(sourceIds);
+    setResult(prev => ({ ...saved, draft: { ...(prev?.draft ?? {}), ...saved.draft } }));
+    applyDiscoveredListings(saved);
+    setListingFilesToRetry([]);
   });
 
   const missingLabels = draft ? requiredStatus(draft).missing.map(item => item.label) : [];
@@ -763,11 +793,12 @@ export default function InitialRealtorSetup() {
         <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#2E8B57", backgroundColor: "rgba(46,139,87,0.12)" }}>
           <Text style={{ color: "#8FD9B4", fontSize: 12, fontWeight: "700", letterSpacing: 1.2 }}>LISTINGS</Text>
           <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
-            We imported {importedListingCount} listing{importedListingCount === 1 ? "" : "s"} from your linked pages
+            We imported {importedListingCount} listing{importedListingCount === 1 ? "" : "s"}
           </Text>
           <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
             They’ll show in your app. You can edit or hide any of them from your dashboard after setup.
           </Text>
+          {result.draft?.listingImportWarnings?.map((warning, index) => <Text key={index} style={{ color: "#C8D0D0", marginTop: 8 }}>{warning}</Text>)}
         </View>
       ) : !listingsPromptDismissed ? (
         <View style={{ marginTop: 22, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: "#C2A276", backgroundColor: "rgba(194,162,118,0.10)" }}>
@@ -775,9 +806,23 @@ export default function InitialRealtorSetup() {
           <Text style={{ color: "white", fontSize: 17, fontWeight: "600", marginTop: 6 }}>
             {result.draft?.listingDiscovery?.outcome === "unreadable" ? "We found a listings link, but couldn’t read the properties yet" : "We couldn’t find your listings yet"}
           </Text>
-          <Text style={{ color: "#C8D0D0", marginTop: 6, lineHeight: 21 }}>
-            We imported the information we could and followed links to look for your properties. Paste the link that opens your listings — even on another website — and we’ll try importing them from there.
-          </Text>
+          <View accessibilityLabel="Assistant response" style={{ marginTop: 12, padding: 14, borderRadius: 14, borderTopLeftRadius: 3, backgroundColor: "#1B242B" }}>
+            <Text style={{ color: "#C8D0D0", lineHeight: 22 }}>{LISTING_IMPORT_GUIDANCE.intro}</Text>
+          </View>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
+            <Pressable accessibilityRole="button" accessibilityState={{ selected: listingImportChoice === "link" }} disabled={busy} onPress={() => setListingImportChoice("link")}
+              style={{ padding: 12, borderRadius: 10, borderWidth: 1, borderColor: listingImportChoice === "link" ? "#C2A276" : "#657079" }}>
+              <Text style={{ color: "white" }}>Use a public link</Text>
+            </Pressable>
+            <Pressable accessibilityRole="button" accessibilityState={{ selected: listingImportChoice === "file" }} disabled={busy} onPress={() => setListingImportChoice("file")}
+              style={{ padding: 12, borderRadius: 10, borderWidth: 1, borderColor: listingImportChoice === "file" ? "#C2A276" : "#657079" }}>
+              <Text style={{ color: "white" }}>Import a listing file</Text>
+            </Pressable>
+          </View>
+          <View accessibilityLabel="Assistant response with examples" style={{ marginTop: 12, padding: 14, borderRadius: 14, borderTopLeftRadius: 3, backgroundColor: "#1B242B" }}>
+            <Text style={{ color: "#C8D0D0", lineHeight: 22 }}>{LISTING_IMPORT_GUIDANCE[listingImportChoice]}</Text>
+          </View>
+          {listingImportChoice === "link" ? <>
           <View style={{ marginTop: 12, flexDirection: "row", alignItems: "center", borderRadius: 10, borderWidth: 1,
             borderColor: "#657079", backgroundColor: "#0C1014", paddingHorizontal: 12 }}>
             <TextInput value={listingsUrl} onChangeText={setListingsUrl}
@@ -798,8 +843,25 @@ export default function InitialRealtorSetup() {
               <Text style={{ color: "#C8D0D0" }}>Not now</Text>
             </Pressable>
           </View>
+          </> : <View style={{ marginTop: 12 }}>
+            {isGuestAccess ? <>
+              <View accessibilityLabel="Assistant response" style={{ padding: 14, borderRadius: 14, backgroundColor: "#1B242B" }}>
+                <Text style={{ color: "#C8D0D0", lineHeight: 22 }}>File uploads need a signed-in realtor account. Your public links still work in this preview.</Text>
+              </View>
+              {button("Sign in to upload", goPortalAuth, true)}
+            </> : <>
+              {button(busy ? "Reading files…" : listingFilesToRetry.length ? "Retry saved files" : "Choose listing files", importListingFiles, true)}
+              {listingFilesToRetry.length > 0 && <>
+                <Text style={{ color: "#C8D0D0", marginTop: 8 }}>{listingFilesToRetry.length} file{listingFilesToRetry.length === 1 ? " is" : "s are"} saved. Retry without uploading again, or choose different files.</Text>
+                {button("Choose different files", () => setListingFilesToRetry([]))}
+              </>}
+              {button("Not now", () => setListingsPromptDismissed(true))}
+            </>}
+          </View>}
           {errorFor("listings")}
-          <Text style={{ color: "#9AA4AA", marginTop: 16, fontSize: 13 }}>You can also add properties manually from your dashboard after setup.</Text>
+          <View accessibilityLabel="Assistant response" style={{ marginTop: 16 }}>
+            <Text style={{ color: "#9AA4AA", fontSize: 13 }}>{LISTING_IMPORT_GUIDANCE.manual}</Text>
+          </View>
         </View>
       ) : null}
 

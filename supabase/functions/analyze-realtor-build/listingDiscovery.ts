@@ -17,6 +17,7 @@ export type DiscoveredListing = {
   image: string;
   images: string[];
   sourceUrl: string;
+  importKey?: string;
 };
 
 export type ListingDiscoveryMeta = {

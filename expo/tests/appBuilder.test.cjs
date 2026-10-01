@@ -17,6 +17,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
+  const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml) {
@@ -37,7 +38,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
       return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0 } };
     }
   `;
-  const code = ts.transpileModule(discoveryStub + '\n' + edge, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const code = ts.transpileModule(discoveryStub + '\n' + edgeWithoutFiles, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   let handler, aiBody, update, reads = 0;
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
