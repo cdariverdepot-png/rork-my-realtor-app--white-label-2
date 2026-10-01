@@ -34,7 +34,7 @@ export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: 
     {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View style={{ position: "absolute", left: left * frame.s, right: 0, top: -28 * frame.s, bottom: -28 * frame.s,
       transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
       <View style={[StyleSheet.absoluteFill, zoomStyle(p)]}>
-        <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
+        <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} transition={0} accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
       </View>
     </Animated.View>}
     <></>

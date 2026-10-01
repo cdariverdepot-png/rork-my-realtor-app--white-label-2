@@ -34,7 +34,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
     <Bath size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.baths}</Text>
     <Maximize size={11} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.sqft}</Text>
   </View>;
-  const image = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityLabel={item.title} />;
+  const image = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityLabel={item.title} />;
   const badge = (item: ManagedListing) => item.tag?.trim() ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,
     borderRadius: discovery ? 16 : 3, backgroundColor: burgundy ? "#5E1526" : discovery ? "#C7A06B" : "#111713DD", color: discovery ? "#191713" : "#F9F2E8", fontSize: 7, letterSpacing: 0.8 }}>{item.tag.toUpperCase()}</Text> : null;
   const card = (item: ManagedListing, compact = false) => {

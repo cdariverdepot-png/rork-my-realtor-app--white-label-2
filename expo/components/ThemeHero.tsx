@@ -21,7 +21,7 @@ export default function ThemeHero(p: HeroProps) {
     const d = themeDesign(p.brand.layoutId, p.brand.theme);
     return <View style={{ backgroundColor: d.background, padding: 24, paddingTop: p.topInset ?? 24, gap: 20 }}>
       <Text style={{ color: d.accent, fontSize: 18 }}>{p.brand.realtor.brandName || p.brand.realtor.name}</Text>
-      {(p.portraitSource !== undefined || !!p.brand.portraitUrl) && <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={{ height: 300 }} contentFit="cover" />}
+      {(p.portraitSource !== undefined || !!p.brand.portraitUrl) && <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={{ height: 300 }} contentFit="cover" transition={0} />}
       <Text style={{ color: d.ink, fontSize: 30 }}>{p.brand.realtor.heroMessage || p.brand.realtor.tagline || p.brand.realtor.name}</Text>
       <Text style={{ color: d.muted, fontSize: 17, lineHeight: 26 }}>{p.brand.realtor.welcomeNote}</Text>
       <Action s={1} label="Explore homes" onPress={p.onBrowse} color={d.ink} border={d.accent} />

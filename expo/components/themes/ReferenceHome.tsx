@@ -30,14 +30,14 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
   const first = r.name.trim().split(/\s+/)[0] || "your realtor";
   const text = (copy: string, size: number, color = d.ink, serif = false) => <Text style={{ color, fontSize: size * s, fontFamily: serif ? SERIF : "Inter_400Regular" }}>{copy}</Text>;
   const title = (copy: string, color = d.ink) => <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ fontFamily: SERIF, color, fontSize: Math.min(22, 300 / Math.max(1, copy.length * 0.5)) * s }}>{copy.replace(/\s+/g, " ")}</Text>;
-  const portrait = <Image source={{ uri: b.portraitUrl }} contentFit="cover" style={{ width: 41 * s, height: 41 * s, borderRadius: 23 * s }} />;
+  const portrait = <Image source={{ uri: b.portraitUrl }} contentFit="cover" transition={0} style={{ width: 41 * s, height: 41 * s, borderRadius: 23 * s }} />;
   const saved = p.isFavorite ? items.filter(item => p.isFavorite?.(item.id)) : [];
   const heroProps: HeroProps = { brand: b, portraitSource: p.portraitSource, width, scrollY: p.scrollY, preview: p.miniature, topInset: p.topInset,
     onBrowse: nav("/listings"), onMessage: nav("/message"), onSaved: nav("/favorites"), onSchedule: nav("/calendar"), onCall: p.onCall, onNotifications: nav("/notifications") };
   const favorite = (item: ManagedListing, bottom = false) => <Pressable disabled={!p.onFavorite} onPress={() => p.onFavorite?.(item.id)} accessibilityRole="button"
     accessibilityLabel={p.isFavorite?.(item.id) ? "Remove saved home" : "Save home"} accessibilityState={{ selected: !!p.isFavorite?.(item.id) }}
     style={{ position: "absolute", right: 4 * s, top: bottom ? undefined : 3 * s, bottom: bottom ? 3 * s : undefined, padding: 7 * s }}><Heart color="#FFFCF4" size={18 * s} fill={p.isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
-  const photo = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" accessibilityLabel={item.title} style={{ position: "absolute", width: "100%", height: "100%" }} />;
+  const photo = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} accessibilityLabel={item.title} style={{ position: "absolute", width: "100%", height: "100%" }} />;
   const meta = (item: ManagedListing, size = 8) => <Text style={{ color: "#CDCBC0", fontSize: size * s, marginTop: 6 * s }}>{item.beds} bd  ·  {item.baths} ba  ·  {item.sqft}</Text>;
   const card = (item: ManagedListing, kind: CardKind) => {
     const w = { coastal: 163, journal: 194, discovery: 119, burgundy: 153, nora: 112, mina: 169, editorial: 270 }[kind];

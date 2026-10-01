@@ -28,6 +28,7 @@ export default function CoastalHero({ brand, scrollY }: { brand: Brand; scrollY?
       transform: [{ translateY: motion.imgTranslate }, { scale: motion.imgScale }] }]}>
       <Image source={{ uri: portrait }} contentFit="cover"
         contentPosition={imagePosition(brand.theme, brand.layoutId)} style={StyleSheet.absoluteFill}
+        transition={0}
         accessibilityLabel={name ? `Portrait of ${name}` : "Realtor portrait"} />
     </Animated.View>
   </View> : null;

@@ -186,7 +186,7 @@ export default function Hero({ scrollY }: Props) {
             style={StyleSheet.absoluteFill}
             contentFit="cover"
             recyclingKey={b.portraitUrl}
-            transition={200}
+            transition={0}
           />
         ) : (
           <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.band.base }]} />

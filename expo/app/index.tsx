@@ -291,16 +291,17 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   }, [demoViewMode, isAdmin, isPreviewAdmin, guardExit, exitViewAsClient, exitDemoView, router, edgeX]);
   const exitTemplate = useCallback(() => leavePreview(true), [leavePreview]);
   const exitDemo = exitTemplate;
-  const { refresh: refreshListings } = useListings();
-  const { refresh: refreshBrand } = useBrand();
+  const { refresh: refreshListings, hydrated: listingsHydrated } = useListings();
+  const { refresh: refreshBrand, brand: b, theme, previewingDraft, setDraftPreview, hydrated: brandHydrated } = useBrand();
   const { refresh: refreshFeed } = useClientFeed();
   const { refresh: refreshDocs } = useDocuments();
   const { refresh: refreshMessages } = useMessages();
   const { refresh: refreshNotifs } = useNotifications();
   const { refresh: refreshAppts } = useAppointments();
   const { refresh: refreshClients } = useClients();
-  const { brand: b, theme, previewingDraft, setDraftPreview } = useBrand();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  /** Hold the first hydrated section cascade so KV echoes do not reshuffle delays. */
+  const lockedDelays = useRef<Record<string, number> | null>(null);
 
   /** Leave the unpublished-draft preview and return to Studio. */
   const exitDraftPreview = useCallback(() => {
@@ -415,7 +416,26 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     },
     [sectionCtx]
   );
-  const delays = useMemo(() => revealDelays(visible), [visible]);
+  const delays = useMemo(() => {
+    if (!brandHydrated || !listingsHydrated) return revealDelays(visible);
+    if (!lockedDelays.current) {
+      lockedDelays.current = revealDelays(visible);
+      return lockedDelays.current;
+    }
+    // Keep existing delays; assign fresh ids only for newly visible sections.
+    const locked = lockedDelays.current;
+    let changed = false;
+    const next: Record<string, number> = { ...locked };
+    const base = Math.max(0, ...Object.values(locked));
+    visible.forEach((id, i) => {
+      if (next[id] === undefined) {
+        next[id] = base + 80 * (i + 1);
+        changed = true;
+      }
+    });
+    if (changed) lockedDelays.current = next;
+    return lockedDelays.current;
+  }, [visible, brandHydrated, listingsHydrated]);
 
   const renderSection = useCallback(
     (id: ClientSectionId) => {
@@ -524,8 +544,11 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const required = useMemo(() => requiredStatus(previewBrand), [previewBrand]);
   const setupIncomplete = !demoViewMode && !required.complete;
   const gateAudience: "realtor" | "client" = viewAsClient || previewingDraft ? "realtor" : "client";
+  const previewDataReady = brandHydrated && listingsHydrated;
 
-  const body = setupIncomplete ? (
+  const body = !previewDataReady ? (
+    <View style={[styles.root, { backgroundColor: theme.band.deep }]} />
+  ) : setupIncomplete ? (
     <SetupGate
       missing={required.missing}
       met={required.met}

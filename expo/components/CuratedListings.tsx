@@ -74,7 +74,7 @@ const ListingCard = React.memo(function ListingCard({
           source={{ uri: bustedUri(item.images?.[0] ?? item.image, item.updatedAt) }}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
-          transition={300}
+          transition={0}
         />
         <></>
         <View

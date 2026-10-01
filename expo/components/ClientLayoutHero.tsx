@@ -71,7 +71,7 @@ export default function ClientLayoutHero({ brand, scrollY }: { brand: Brand; scr
 
   if (design.image === "right") return <View onLayout={measure} style={{ overflow: "hidden", minHeight: 690, backgroundColor: design.background,
     paddingTop: insets.top + 25 }}>
-    {portrait ? <View style={[{ position: "absolute", width: "67%", height: "92%", right: 0, top: 58 }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
+    {portrait ? <View style={[{ position: "absolute", width: "67%", height: "92%", right: 0, top: 58 }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} transition={0} /></Animated.View></View> : null}
     <></>
     <Animated.View style={{ paddingHorizontal: 26, opacity: motion.topBarOpacity }}>{masthead}</Animated.View>
     <View style={{ paddingHorizontal: 26, paddingTop: 75, paddingBottom: 95, width: "82%" }}>{message}</View>
@@ -79,7 +79,7 @@ export default function ClientLayoutHero({ brand, scrollY }: { brand: Brand; scr
 
   if (design.image === "top") return <View onLayout={measure} style={{ overflow: "hidden", backgroundColor: design.background, paddingTop: insets.top + 24 }}>
     <Animated.View style={{ paddingHorizontal: 26, opacity: motion.topBarOpacity }}>{masthead}</Animated.View>
-    {portrait ? <View style={[{ marginTop: 28, height: 330, width: "100%" }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
+    {portrait ? <View style={[{ marginTop: 28, height: 330, width: "100%" }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} transition={0} /></Animated.View></View> : null}
     <View style={{ padding: 28, paddingTop: 36 }}>{message}</View>
   </View>;
 
@@ -87,13 +87,13 @@ export default function ClientLayoutHero({ brand, scrollY }: { brand: Brand; scr
     paddingTop: insets.top + 25, paddingHorizontal: 26, paddingBottom: 60, minHeight: 740 }}>
     {masthead}
     {portrait ? <View style={[{ width: 220, height: 220, borderRadius: 110,
-      alignSelf: "center", marginTop: 34, borderWidth: 2, borderColor: design.accent }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
+      alignSelf: "center", marginTop: 34, borderWidth: 2, borderColor: design.accent }, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} transition={0} /></Animated.View></View> : null}
     <View style={{ marginTop: 36 }}>{message}</View>
   </View>;
 
   return <View onLayout={measure} style={{ overflow: "hidden", minHeight: layout === "portrait-statement" ? 830 : 740,
     backgroundColor: design.background, justifyContent: "space-between", paddingTop: insets.top + 25 }}>
-    {portrait ? <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} /></Animated.View></View> : null}
+    {portrait ? <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]}><Animated.View style={[StyleSheet.absoluteFill, imageStyle]}><Image source={{ uri: portrait }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(brand.theme, brand.layoutId)} transition={0} /></Animated.View></View> : null}
     <></>
     <Animated.View style={{ paddingHorizontal: 26, opacity: motion.topBarOpacity }}>{masthead}</Animated.View>
     <View style={{ padding: layout === "portrait-statement" ? 34 : 26, paddingBottom: 70 }}>{message}</View>

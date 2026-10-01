@@ -7,6 +7,7 @@ import { isKvEnabled, kvSet } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import { scrapeListing } from "@/lib/scrapeListing";
+import { sameJson } from "@/lib/sameJson";
 
 export type ListingStatus = "active" | "pending" | "contingent" | "sold" | "off_market";
 
@@ -72,6 +73,8 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
   const initialItems = useCallback((): ManagedListing[] => (isDemoScope ? seed() : []), [isDemoScope]);
 
   const [items, setItems] = useState<ManagedListing[]>(initialItems);
+  const itemsRef = useRef<ManagedListing[]>(items);
+  useEffect(() => { itemsRef.current = items; }, [items]);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [revision, setRevision] = useState<number>(0);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("idle");
@@ -168,6 +171,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
       if (!data?.items) return;
       if (data.rev <= revRef.current) return;
       const incoming = isDemoScope ? data.items : stripDemoListings(data.items);
+      if (sameJson(incoming, itemsRef.current)) return;
       revRef.current = data.rev;
       setRevision(data.rev);
       setItems(incoming);
@@ -216,6 +220,14 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
       const force = meta?.initial || meta?.forced;
       if (!force && row.rev <= revRef.current) return;
       const incoming = isDemoScope ? row.value.items : stripDemoListings(row.value.items);
+      if (sameJson(incoming, itemsRef.current)) {
+        const rev = Math.max(revRef.current, row.rev);
+        if (rev !== revRef.current) {
+          revRef.current = rev;
+          setRevision(rev);
+        }
+        return;
+      }
       revRef.current = Math.max(revRef.current, row.rev);
       setRevision(revRef.current);
       setItems(incoming);
@@ -243,8 +255,6 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     }
   }, [refreshKv]);
 
-  const itemsRef = useRef<ManagedListing[]>(items);
-  useEffect(() => { itemsRef.current = items; }, [items]);
   const getItemsRef = useCallback(() => itemsRef.current, []);
 
   const broadcast = useCallback((next: ManagedListing[], rev: number) => {

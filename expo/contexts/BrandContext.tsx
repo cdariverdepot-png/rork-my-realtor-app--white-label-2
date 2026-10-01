@@ -7,6 +7,7 @@ import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import { requiredStatus } from "@/constants/sections";
 import { preserveProfile } from "@/lib/preserveProfile";
+import { sameJson } from "@/lib/sameJson";
 import { realtor as seedRealtor, personalNote as seedNote, marketBeat as seedBeat, testimonials as seedTestimonials, recentlyClosed as seedClosed } from "@/constants/realtor";
 import { neighborhoods as seedNeighborhoods, marketPulse as seedPulse, type Neighborhood } from "@/constants/insights";
 import { assets as seedAssets } from "@/constants/assets";
@@ -739,6 +740,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       setRevision(data.rev);
       // Peers can be running an un-migrated copy — normalize on the way in.
       const incoming = preserveProfile(brandRef.current, data.brand);
+      if (sameJson(incoming, brandRef.current)) return;
       setBrand(incoming);
       void persist(incoming, data.rev);
     });
@@ -798,8 +800,6 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       if (!row?.value) return;
       const force = meta?.initial || meta?.forced;
       if (!force && row.rev <= revRef.current) return;
-      revRef.current = Math.max(revRef.current, row.rev);
-      setRevision(revRef.current);
       const base = seed;
       const merged: Brand = preserveProfile(base, row.value);
       // THIS is what kept the showcase content alive. The initial durable fetch is
@@ -807,6 +807,16 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       // after local hydration had already cleaned the brand. Every ingress point
       // has to normalize, not just the one that reads AsyncStorage.
       const migrated = normalizeBrand(merged, isDemoScope, seed);
+      if (sameJson(migrated, brandRef.current)) {
+        // Same payload as what is already on screen — bump rev quietly so KV
+        // stays aligned, but do not setBrand (avoids preview section remounts).
+        const rev = Math.max(revRef.current, row.rev);
+        if (rev !== revRef.current) {
+          revRef.current = rev;
+          setRevision(rev);
+        }
+        return;
+      }
       setBrand(migrated);
       const rev = migrated === merged ? row.rev : Math.max(row.rev, Date.now());
       revRef.current = Math.max(revRef.current, rev);
