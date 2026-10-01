@@ -575,7 +575,7 @@ test('client profile intake never shows Eliza/Vance demo chrome for DEMO realtor
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/client-profile.tsx'), 'utf8');
   assert.match(src, /DEMO_REALTOR_ID/);
   assert.match(src, /isDemoAgent/);
-  assert.match(src, /Only your agent sees this/);
+  assert.match(src, /Only your agent can see this/);
   assert.match(src, /MY REALTOR/);
   assert.match(src, /chromeBrand/);
   assert.doesNotMatch(src, /Only Eliza sees this/);

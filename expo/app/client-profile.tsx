@@ -413,8 +413,8 @@ export default function ClientProfileFlow() {
               <ShieldCheck size={13} color={ACCENT} strokeWidth={1.7} />
               <Text style={styles.privacyText}>
                 {realtorFirst
-                  ? `Only ${realtorFirst} sees this. It is never shown to other clients and never sold on.`
-                  : "Only your agent sees this. It is never shown to other clients and never sold on."}
+                  ? `Only ${realtorFirst} can see this. It's never shared with other clients or sold.`
+                  : "Only your agent can see this. It's never shared with other clients or sold."}
               </Text>
             </View>
           ) : null}
