@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { bookingLink } from "@/lib/bookingLink";
+import { clientInviteLink } from "@/lib/bookingLink";
 import {
   ActivityIndicator,
   Alert,
@@ -62,7 +62,6 @@ import {
   Crown,
   ShieldCheck,
   ScrollText,
-  Link2,
   QrCode,
 } from "lucide-react-native";
 import { brand, fonts } from "@/constants/colors";
@@ -173,7 +172,7 @@ function useCountUp(target: number, duration = 1200, enabled = true): number {
 export default function AdminDashboard() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, realtorId, authBypassEnabled, enterAuthBypass } = useAuth();
+  const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, authBypassEnabled, enterAuthBypass } = useAuth();
   const { all, remove, toggleHidden, syncStatus, refreshFromSource } = useListings();
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
 
@@ -259,17 +258,22 @@ export default function AdminDashboard() {
     return `Good evening, ${first}.`;
   }, [realtorName]);
 
+  // Client invite link → /portal?entry=client&invite=<code> (authenticated client app entry).
+  const inviteCode = (realtorRecord?.client_code ?? clientCode ?? "").trim();
+  const clientInviteUrl = inviteCode ? clientInviteLink(inviteCode) : "";
+  const [showInviteQr, setShowInviteQr] = useState(false);
+
   const buildShareMessage = (): string =>
     [
       `${realtorName} invited you to their private app.`,
       "",
-      `Your access code: ${realtorRecord?.client_code ?? clientCode}`,
+      `Your access code: ${inviteCode}`,
       "",
-      `Download: ${WEBSITE_URL}`,
+      clientInviteUrl ? `Open: ${clientInviteUrl}` : `Download: ${WEBSITE_URL}`,
     ].join("\n");
 
   const copyClientCode = async () => {
-    const code = realtorRecord?.client_code ?? clientCode;
+    const code = inviteCode || (realtorRecord?.client_code ?? clientCode);
     await Clipboard.setStringAsync(code);
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     Alert.alert("Copied", `Access code ${code} copied.`);
@@ -288,30 +292,11 @@ export default function AdminDashboard() {
     } catch (e) { console.log("[admin] share client code", e); }
   };
 
-  // Public booking link (/welcome?ref=<realtor id>): anyone can request a viewing.
-  const bookingUrl = realtorId ? bookingLink(realtorId) : "";
-  const [showBookingQr, setShowBookingQr] = useState(false);
-  const copyBookingLink = async () => {
-    await Clipboard.setStringAsync(bookingUrl);
+  const copyClientInviteLink = async () => {
+    if (!clientInviteUrl) return;
+    await Clipboard.setStringAsync(clientInviteUrl);
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Alert.alert("Copied", "Booking link copied.");
-  };
-  const openBookingLink = async () => {
-    if (!bookingUrl) return;
-    try {
-      await Linking.openURL(bookingUrl);
-    } catch (e) {
-      console.log("[admin] open booking link", e);
-      Alert.alert("Unable to open", "Copy the link and paste it in your browser instead.");
-    }
-  };
-  const shareBookingLink = async () => {
-    if (Platform.OS !== "web") Haptics.selectionAsync();
-    const message = `Book a private viewing with ${realtorName}:\n${bookingUrl}`;
-    try {
-      if (Platform.OS === "web") { await copyBookingLink(); return; }
-      await Share.share({ message, url: bookingUrl, title: "Book a private viewing" });
-    } catch (e) { console.log("[admin] share booking link", e); }
+    Alert.alert("Copied", "Client invite link copied.");
   };
 
   const confirmDelete = (l: ManagedListing) => {
@@ -887,14 +872,15 @@ export default function AdminDashboard() {
                 <View style={styles.qrHeroFrame}>
                   <Image
                     source={{
-                      uri: `https://quickchart.io/qr?text=${encodeURIComponent(`myrealtorapp://code/${realtorRecord?.client_code ?? clientCode}`)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M`,
+                      uri: `https://quickchart.io/qr?text=${encodeURIComponent(clientInviteUrl || `myrealtorapp://code/${inviteCode}`)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M`,
                     }}
                     style={styles.qrHeroImage}
                     contentFit="contain"
                     transition={200}
+                    accessibilityLabel="Client invite QR code"
                   />
                 </View>
-                <Text style={styles.qrHeroHint}>Scan to download your app</Text>
+                <Text style={styles.qrHeroHint}>Scan to open your client app</Text>
               </View>
 
               {/* Access code display */}
@@ -945,50 +931,33 @@ export default function AdminDashboard() {
                 </Pressable>
               </View>
 
-              {/* Public booking link — for anyone, no access code needed. */}
-              {bookingUrl ? <View style={styles.inviteCodeRow}>
+              {/* Client invite — portal entry with access code (not guest /welcome booking). */}
+              {clientInviteUrl ? <View style={styles.inviteCodeRow}>
                 <View style={styles.inviteCodeLabelRow}>
-                  <Link2 size={11} color={admin.goldLight} strokeWidth={1.8} />
-                  <Text style={styles.inviteCodeLabel}>PUBLIC BOOKING LINK</Text>
+                  <UserPlus size={11} color={admin.goldLight} strokeWidth={1.8} />
+                  <Text style={styles.inviteCodeLabel}>CLIENT INVITE</Text>
                 </View>
                 <Text style={styles.bookingLinkHint}>
-                  Share so anyone can book a viewing — no access code needed.
+                  Clients open this to download or log in to your app.
                 </Text>
-                <Pressable
-                  onPress={tap(openBookingLink)}
-                  onLongPress={tap(copyBookingLink)}
-                  delayLongPress={350}
-                  accessibilityRole="link"
-                  accessibilityLabel="Open public booking page"
-                  accessibilityHint="Opens your client booking page. Long press to copy the link."
-                  style={({ pressed }) => [styles.bookingLinkPressable, pressed && { opacity: 0.75 }]}
-                  hitSlop={8}
-                >
-                  <Text style={styles.bookingLinkText} numberOfLines={2}>{bookingUrl}</Text>
-                  <ArrowUpRight size={14} color={admin.goldLight} strokeWidth={2} />
-                </Pressable>
-                {showBookingQr ? <View style={[styles.qrHeroFrame, { marginTop: 14 }]}>
+                {showInviteQr ? <View style={[styles.qrHeroFrame, { marginTop: 4 }]}>
                   <Image
-                    source={{ uri: `https://quickchart.io/qr?text=${encodeURIComponent(bookingUrl)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M` }}
+                    source={{ uri: `https://quickchart.io/qr?text=${encodeURIComponent(clientInviteUrl)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M` }}
                     style={styles.qrHeroImage}
                     contentFit="contain"
                     transition={200}
-                    accessibilityLabel="Booking link QR code"
+                    accessibilityLabel="Client invite QR code"
                   />
                 </View> : null}
               </View> : null}
-              {bookingUrl ? <View style={styles.inviteActions}>
-                <Pressable onPress={tap(copyBookingLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6} accessibilityLabel="Copy booking link">
+              {clientInviteUrl ? <View style={styles.inviteActions}>
+                <Pressable onPress={tap(copyClientInviteLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6} accessibilityLabel="Copy client invite link">
                   <Copy size={14} color={admin.text} strokeWidth={1.6} />
                   <Text style={styles.inviteGhostBtnText}>Copy</Text>
                 </Pressable>
-                <Pressable onPress={tap(() => setShowBookingQr(v => !v))} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6}>
+                <Pressable onPress={tap(() => setShowInviteQr(v => !v))} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6} accessibilityLabel="Toggle client invite QR">
                   <QrCode size={14} color={admin.text} strokeWidth={1.6} />
-                  <Text style={styles.inviteGhostBtnText}>{showBookingQr ? "Hide QR" : "QR"}</Text>
-                </Pressable>
-                <Pressable onPress={tap(shareBookingLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6}>
-                  <Send size={14} color={admin.text} strokeWidth={1.6} />
-                  <Text style={styles.inviteGhostBtnText}>Share</Text>
+                  <Text style={styles.inviteGhostBtnText}>{showInviteQr ? "Hide QR" : "QR"}</Text>
                 </Pressable>
               </View> : null}
             </View> : (
@@ -2118,14 +2087,6 @@ const styles = StyleSheet.create({
   bookingLinkHint: {
     fontFamily: fonts.sans, color: admin.textMuted, fontSize: 12, lineHeight: 17,
     textAlign: "center", marginBottom: 10, maxWidth: 320,
-  },
-  bookingLinkPressable: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
-    maxWidth: "100%", paddingVertical: 4, paddingHorizontal: 4,
-  },
-  bookingLinkText: {
-    fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 12, lineHeight: 17,
-    textDecorationLine: "underline", flexShrink: 1, maxWidth: "92%", textAlign: "center",
   },
   inviteActions: {
     flexDirection: "row", paddingHorizontal: 20, paddingBottom: 20, gap: 10,

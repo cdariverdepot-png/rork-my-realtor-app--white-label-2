@@ -218,7 +218,7 @@ export default function AdminInsightsScreen() {
 
         <Section label="UPCOMING SHOWINGS" hint="Next 7 days">
           {upcomingShowings.length === 0 ? (
-            <Empty title="No showings booked." sub="Share your booking link to fill the week." />
+            <Empty title="No showings booked." sub="Invite clients to your app to fill the week." />
           ) : (
             <View style={styles.col}>
               {upcomingShowings.slice(0, 5).map((a) => {
