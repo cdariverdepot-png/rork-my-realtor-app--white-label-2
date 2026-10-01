@@ -12,6 +12,72 @@ const moduleRef = { exports: {} };
 new Function('module', 'exports', source)(moduleRef, moduleRef.exports);
 const { resolveFacts } = moduleRef.exports;
 
+// Execute the real Edge Function with website/API boundaries replaced by fixtures.
+async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html } = {}) {
+  const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
+    .replace(/^import .*createClient.*;\r?\n/, '');
+  const code = ts.transpileModule(edge, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  let handler, aiBody, update, reads = 0;
+  const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
+  const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
+  const build = { sources:[source], evidence:[], draft, status:'needs-input' };
+  const admin = { auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:()=> {
+    reads++;
+    return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:async()=>{update=value;return {error:null};}}) };
+  } };
+  const fetchFixture = async (url, options) => {
+    if (String(url).startsWith('https://api.openai.com/')) {
+      aiBody=JSON.parse(options.body);
+      const generated = mode === 'regenerate' ? {value:'Cindy Carlson Realty: your North Idaho guide.'} : {
+        evidence:noFacts?[]:[{field:'realtor.brandName',value:'Cindy Carlson Realty',sourceId:'website',locator:source.uri,confidence:0.95}],
+        copy:{heroMessage:'Cindy Carlson Realty: your North Idaho guide.',aboutParagraph:'Personal help buying and selling in North Idaho.'},
+        tone:'warm',layoutId:'warm-concierge',portraitSourceId:null,potentialListingSources:[],
+      };
+      return Response.json({output:[{content:[{type:'output_text',text:JSON.stringify(generated)}]}]});
+    }
+    if (unreadable) return new Response('Unavailable',{status:503});
+    return new Response(html ?? '<html><title>Cindy Carlson Realty</title><p>Full Service Agency in North Idaho.</p></html>',{headers:{'Content-Type':'text/html'}});
+  };
+  new Function('Deno','createClient','fetch',code)({env:{get:()=> 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture);
+  const response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
+  return {status:response.status,result:await response.json(),aiBody,update,reads};
+}
+
+test('guest testing-code builds read URL content and generate real copy without account writes', async () => {
+  const r=await runWebsiteBuild({guest:true});
+  assert.equal(r.status,200);
+  assert.match(JSON.stringify(r.aiBody.input),/Cindy Carlson Realty/);
+  assert.match(JSON.stringify(r.aiBody.input),/North Idaho/);
+  assert.equal(r.aiBody.text.format.type,'json_schema');
+  assert.ok(r.aiBody.text.format.schema.required.includes('evidence'));
+  assert.equal(r.result.evidence[0].value,'Cindy Carlson Realty');
+  assert.equal(r.reads,0);
+});
+
+test('retries reread URLs for existing drafts with zero facts and change only selected copy', async () => {
+  for (const guest of [true,false]) {
+    const r=await runWebsiteBuild({guest,mode:'regenerate'});
+    assert.equal(r.status,200);
+    assert.match(JSON.stringify(r.aiBody.input),/Full Service Agency in North Idaho/);
+    assert.equal(r.result.draft.aboutParagraph,'Original introduction');
+    assert.match(r.result.draft.heroMessage,/Cindy Carlson/);
+    if (guest) assert.equal(r.reads,0);
+    else assert.equal(r.update.draft.aboutParagraph,'Original introduction');
+  }
+});
+
+test('failed URL reads or empty extracted facts cannot produce a successful generic build', async () => {
+  for (const mode of [undefined,'regenerate']) {
+    const r=await runWebsiteBuild({guest:true,mode,unreadable:true});
+    assert.equal(r.status,422);
+    assert.equal(r.aiBody,undefined);
+    assert.equal(r.update,undefined);
+  }
+  const empty=await runWebsiteBuild({noFacts:true});
+  assert.equal(empty.status,422);
+  assert.equal(empty.update,undefined);
+});
+
 test('independent matching sources strengthen a draft fact', () => {
   const facts = resolveFacts([
     { field: 'realtor.name', value: 'Avery Reed', sourceId: 'site', confidence: 0.72 },
