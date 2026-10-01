@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions, type TextStyle, type ViewStyle } from "react-native";
-import { Image } from "expo-image";
+import PortraitImage from "../PortraitImage";
 import { ArrowRight, MessageCircle, X, type LucideIcon } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import { themeDesign } from "@/constants/themeDesigns";
@@ -34,7 +34,7 @@ export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: 
     {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View style={{ position: "absolute", left: left * frame.s, right: 0, top: -28 * frame.s, bottom: -28 * frame.s,
       transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
       <View style={[StyleSheet.absoluteFill, zoomStyle(p)]}>
-        <Image source={p.portraitSource ?? { uri: p.brand.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} transition={0} accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
+        <PortraitImage source={p.portraitSource} uri={p.brand.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} priority="high" accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
       </View>
     </Animated.View>}
     <></>

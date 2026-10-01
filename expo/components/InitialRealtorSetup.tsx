@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
 import { ArrowLeft, Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
 import { Image } from "expo-image";
+import PortraitImage from "./PortraitImage";
 import * as ImagePicker from "expo-image-picker";
 import { randomUUID } from "expo-crypto";
 import * as DocumentPicker from "expo-document-picker";
@@ -90,7 +91,7 @@ function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: (
       <Text style={{ color: "white", fontSize: 19 }}>{index + 1}. {item.label}{RECOMMENDED_FIELDS.includes(item) ? <Text style={{ color: "#9AA4AA", fontSize: 15 }}> (optional)</Text> : null}{item.met(draft) ? " ✓" : ""}</Text>
       {item.id === "name" && field("Full name", draft.realtor.name, v => identity("name", v))}
       {item.id === "portrait" && <Pressable onPress={pick} accessibilityRole="button" style={{ paddingVertical: 16 }}>
-        {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }} style={{ height: 180, borderRadius: 8 }} contentFit="contain" /> : null}
+        {draft.portraitUrl ? <PortraitImage uri={draft.portraitUrl} style={{ height: 180, borderRadius: 8 }} contentFit="contain" /> : null}
         <Text style={{ color: "#9ECFFF", marginTop: 12 }}>Choose portrait</Text>
       </Pressable>}
       {item.id === "city" && field("City or region", draft.realtor.city, v => identity("city", v))}
@@ -702,7 +703,7 @@ export default function InitialRealtorSetup() {
       <View style={{ marginTop: 26, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: draft.portraitUrl ? "#2E3A40" : "#C2A276",
         flexDirection: "row", alignItems: "center", gap: 14 }}>
         {draft.portraitUrl
-          ? <Image source={{ uri: draft.portraitUrl }} style={{ width: 64, height: 64, borderRadius: 32 }} contentFit="cover" />
+          ? <PortraitImage uri={draft.portraitUrl} style={{ width: 64, height: 64, borderRadius: 32 }} contentFit="cover" />
           : <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: "#2A3238", alignItems: "center", justifyContent: "center" }}>
             <ImageIcon size={24} color="#C2A276" /></View>}
         <View style={{ flex: 1 }}>

@@ -18,6 +18,7 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "@/components/PortraitImage";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import NeutralContentCanvas from "@/components/NeutralContentCanvas";
@@ -1654,13 +1655,24 @@ function ThemePreview({
   return (
     <View style={{ backgroundColor: surface.paper }}>
       <View style={styles.tpBand}>
-        <Image
-          source={portraitUrl ? { uri: portraitUrl } : PREVIEW_PHOTO}
-          contentPosition={imagePosition(themeConfig, layoutId)}
-          style={StyleSheet.absoluteFill}
-          contentFit="cover"
-          transition={300}
-        />
+        {portraitUrl ? (
+          <PortraitImage
+            uri={portraitUrl}
+            contentPosition={imagePosition(themeConfig, layoutId)}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            priority="high"
+          />
+        ) : (
+          <Image
+            source={PREVIEW_PHOTO}
+            contentPosition={imagePosition(themeConfig, layoutId)}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={0}
+            cachePolicy="memory-disk"
+          />
+        )}
         <></>
         <></>
         <View style={styles.tpBandInner}>
@@ -2201,7 +2213,7 @@ function PortraitField({
           ]}
         >
           {uri ? (
-            <Image source={{ uri }} style={StyleSheet.absoluteFill} contentFit="cover" />
+            <PortraitImage uri={uri} style={StyleSheet.absoluteFill} contentFit="cover" />
           ) : (
             <ImagePlus size={22} color="rgba(244,239,230,0.6)" strokeWidth={1.5} />
           )}

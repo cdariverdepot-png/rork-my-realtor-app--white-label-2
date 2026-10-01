@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AccessibilityInfo, Animated } from "react-native";
 
 export type ReducedMotionState = {
@@ -38,22 +38,30 @@ export function useThemeMotion(scrollY: Animated.Value | undefined, height: numb
   // Stay still until the preference is known so parallax values do not swap mid-frame.
   const still = !ready || reduced || disabled;
   const h = Math.max(1, height);
-  return {
-    imgTranslate: still ? 0 : sy.interpolate({
-      inputRange: [-h, 0, h], outputRange: [-Math.min(h * 0.5, imageTravelLimit), 0, Math.min(h * 0.35, imageTravelLimit)], extrapolate: "clamp",
-    }),
-    imgScale: still ? 1 : sy.interpolate({
-      inputRange: [-h, 0, h], outputRange: [1.25, 1, 1.06], extrapolate: "clamp",
-    }),
-    // Keep interactive content perceivable while it remains on screen.
-    topBarOpacity: still ? 1 : sy.interpolate({
-      inputRange: [0, 160, 260], outputRange: [1, 0.6, 0.35], extrapolate: "clamp",
-    }),
-    contentTranslate: still ? 0 : sy.interpolate({
-      inputRange: [0, h], outputRange: [0, -60], extrapolate: "clamp",
-    }),
-    contentOpacity: still ? 1 : sy.interpolate({
-      inputRange: [0, h * 0.55, h * 0.85], outputRange: [1, 0.85, 0.35], extrapolate: "clamp",
-    }),
-  };
+  // Always return Animated nodes (never raw numbers) so parent re-renders and
+  // reduce-motion readiness do not remount the parallax Image wrapper.
+  return useMemo(() => {
+    const travelUp = still ? 0 : Math.min(h * 0.5, imageTravelLimit);
+    const travelDown = still ? 0 : Math.min(h * 0.35, imageTravelLimit);
+    const pullScale = still ? 1 : 1.25;
+    const pushScale = still ? 1 : 1.06;
+    return {
+      imgTranslate: sy.interpolate({
+        inputRange: [-h, 0, h], outputRange: [-travelUp, 0, travelDown], extrapolate: "clamp",
+      }),
+      imgScale: sy.interpolate({
+        inputRange: [-h, 0, h], outputRange: [pullScale, 1, pushScale], extrapolate: "clamp",
+      }),
+      // Keep interactive content perceivable while it remains on screen.
+      topBarOpacity: sy.interpolate({
+        inputRange: [0, 160, 260], outputRange: still ? [1, 1, 1] : [1, 0.6, 0.35], extrapolate: "clamp",
+      }),
+      contentTranslate: sy.interpolate({
+        inputRange: [0, h], outputRange: still ? [0, 0] : [0, -60], extrapolate: "clamp",
+      }),
+      contentOpacity: sy.interpolate({
+        inputRange: [0, h * 0.55, h * 0.85], outputRange: still ? [1, 1, 1] : [1, 0.85, 0.35], extrapolate: "clamp",
+      }),
+    };
+  }, [sy, h, still, imageTravelLimit]);
 }

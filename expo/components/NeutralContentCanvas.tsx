@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Pressable, Text, TextInput, View } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "./PortraitImage";
 import * as ImagePicker from "expo-image-picker";
 import type { Brand } from "@/contexts/BrandContext";
 import { CLIENT_SECTIONS, sectionState, type ClientSectionId } from "@/constants/sections";
@@ -48,7 +49,7 @@ export default function NeutralContentCanvas({ draft, onChange, details, listing
       case "hero": return <>
         {copy("Brand name", draft.realtor.brandName, v => identity("brandName", v))}
         <Pressable accessibilityRole="button" accessibilityLabel="Edit portrait" disabled={uploading} onPress={() => void portrait()}>
-          {draft.portraitUrl ? <Image source={{ uri: draft.portraitUrl }} contentFit="contain" style={{ height: 260, backgroundColor: "#eee", borderRadius: 8 }} /> : <View style={{ height: 180, backgroundColor: "#eee", justifyContent: "center", alignItems: "center" }}><Text>Tap to add your portrait</Text></View>}
+          {draft.portraitUrl ? <PortraitImage uri={draft.portraitUrl} contentFit="contain" style={{ height: 260, backgroundColor: "#eee", borderRadius: 8 }} /> : <View style={{ height: 180, backgroundColor: "#eee", justifyContent: "center", alignItems: "center" }}><Text>Tap to add your portrait</Text></View>}
           <Text style={{ color: "#666", paddingVertical: 10 }}>{uploading ? "Loading image…" : draft.portraitUrl ? "Tap to adjust position · Replace inside cropper" : "Tap to add your portrait"}</Text>
         </Pressable>
         {copy("Opening line", draft.realtor.heroMessage, v => identity("heroMessage", v), true, draft.realtor.tagline)}

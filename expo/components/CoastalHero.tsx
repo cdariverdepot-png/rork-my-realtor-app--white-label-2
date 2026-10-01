@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View, useWindowDimensions } from "react-native";
-import { Image } from "expo-image";
+import PortraitImage from "./PortraitImage";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MessageCircle, ArrowRight } from "lucide-react-native";
@@ -26,9 +26,9 @@ export default function CoastalHero({ brand, scrollY }: { brand: Brand; scrollY?
   const photo = portrait ? <View style={stacked ? styles.stackedPhoto : styles.photoFrame}>
     <Animated.View style={[StyleSheet.absoluteFill, { top: -32, bottom: -32,
       transform: [{ translateY: motion.imgTranslate }, { scale: motion.imgScale }] }]}>
-      <Image source={{ uri: portrait }} contentFit="cover"
+      <PortraitImage uri={portrait} contentFit="cover"
         contentPosition={imagePosition(brand.theme, brand.layoutId)} style={StyleSheet.absoluteFill}
-        transition={0}
+        priority="high"
         accessibilityLabel={name ? `Portrait of ${name}` : "Realtor portrait"} />
     </Animated.View>
   </View> : null;

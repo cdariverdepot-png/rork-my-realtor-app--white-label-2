@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "@/components/PortraitImage";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -126,7 +127,7 @@ export default function ListingDetail() {
         <View style={styles.takeCard}>
           <View style={styles.takeHead}>
             {b.portraitUrl ? (
-              <Image source={{ uri: b.portraitUrl }} style={styles.avatar} contentFit="cover" />
+              <PortraitImage uri={b.portraitUrl} style={styles.avatar} contentFit="cover" />
             ) : (
               <View style={[styles.avatar, styles.avatarFallback]}>
                 <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />

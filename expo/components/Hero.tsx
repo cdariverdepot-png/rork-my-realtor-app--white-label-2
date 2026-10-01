@@ -11,7 +11,7 @@ import {
   View,
   Platform,
 } from "react-native";
-import { Image } from "expo-image";
+import PortraitImage from "./PortraitImage";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { ArrowRight, LogOut, MessageCircle } from "lucide-react-native";
@@ -180,13 +180,12 @@ export default function Hero({ scrollY }: Props) {
         ]}
       >
         {hasPortrait ? (
-          <Image
-            source={{ uri: b.portraitUrl }}
+          <PortraitImage
+            uri={b.portraitUrl}
             contentPosition={imagePosition(b.theme, b.layoutId)}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
-            recyclingKey={b.portraitUrl}
-            transition={0}
+            priority="high"
           />
         ) : (
           <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.band.base }]} />

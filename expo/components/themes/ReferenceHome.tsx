@@ -1,6 +1,7 @@
 import React from "react";
 import { Animated, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "../PortraitImage";
 import { ArrowRight, ChevronRight, Heart, Phone, MessageCircle, CalendarDays, UserPlus, KeyRound, Star, House, BellRing, TrendingUp, ConciergeBell, ShieldCheck, type LucideIcon } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
@@ -30,7 +31,7 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
   const first = r.name.trim().split(/\s+/)[0] || "your realtor";
   const text = (copy: string, size: number, color = d.ink, serif = false) => <Text style={{ color, fontSize: size * s, fontFamily: serif ? SERIF : "Inter_400Regular" }}>{copy}</Text>;
   const title = (copy: string, color = d.ink) => <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ fontFamily: SERIF, color, fontSize: Math.min(22, 300 / Math.max(1, copy.length * 0.5)) * s }}>{copy.replace(/\s+/g, " ")}</Text>;
-  const portrait = <Image source={{ uri: b.portraitUrl }} contentFit="cover" transition={0} style={{ width: 41 * s, height: 41 * s, borderRadius: 23 * s }} />;
+  const portrait = <PortraitImage uri={b.portraitUrl} contentFit="cover" style={{ width: 41 * s, height: 41 * s, borderRadius: 23 * s }} />;
   const saved = p.isFavorite ? items.filter(item => p.isFavorite?.(item.id)) : [];
   const heroProps: HeroProps = { brand: b, portraitSource: p.portraitSource, width, scrollY: p.scrollY, preview: p.miniature, topInset: p.topInset,
     onBrowse: nav("/listings"), onMessage: nav("/message"), onSaved: nav("/favorites"), onSchedule: nav("/calendar"), onCall: p.onCall, onNotifications: nav("/notifications") };

@@ -12,6 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
+import PortraitImage from "@/components/PortraitImage";
 import { ArrowRight, CalendarDays, ShieldCheck, Sparkles } from "lucide-react-native";
 import { brand, fonts } from "@/constants/colors";
 import { avatarPlaceholder } from "@/constants/assets";
@@ -80,11 +81,11 @@ export default function Welcome() {
     <View style={styles.root}>
       <View style={[styles.hero, { paddingTop: insets.top + 32 }]}> 
         {b.portraitUrl ? (
-          <Image
-            source={{ uri: b.portraitUrl }}
+          <PortraitImage
+            uri={b.portraitUrl}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
-            transition={400}
+            priority="high"
           />
         ) : (
           <View style={[StyleSheet.absoluteFill, { backgroundColor: "#07070A" }]}>

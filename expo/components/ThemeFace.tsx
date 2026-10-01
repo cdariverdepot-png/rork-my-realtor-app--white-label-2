@@ -12,6 +12,23 @@ import ThemeNavigation from "./ThemeNavigation";
 export const THEME_CARD_ASPECT = 844 / 390;
 export const themeCardHeight = (_id: ClientLayoutId, width: number) => width * THEME_CARD_ASPECT;
 
+function sameFace(
+  prev: { id: ClientLayoutId; brand: Brand; listings: ManagedListing[]; portraitSource?: number; width: number; radius?: number },
+  next: { id: ClientLayoutId; brand: Brand; listings: ManagedListing[]; portraitSource?: number; width: number; radius?: number },
+) {
+  return prev.id === next.id
+    && prev.width === next.width
+    && (prev.radius ?? 18) === (next.radius ?? 18)
+    && prev.portraitSource === next.portraitSource
+    && prev.brand.portraitUrl === next.brand.portraitUrl
+    && prev.brand.layoutId === next.brand.layoutId
+    && prev.brand.theme === next.brand.theme
+    && prev.brand.realtor === next.brand.realtor
+    && prev.listings === next.listings
+    && prev.brand.curated === next.brand.curated
+    && prev.brand.concierge === next.brand.concierge;
+}
+
 /** One miniature theme preview. Memoised: carousels move these, never rebuild them. */
 export default memo(function ThemeFace({ id, brand, listings, portraitSource, width, radius = 18 }: {
   id: ClientLayoutId; brand: Brand; listings: ManagedListing[]; portraitSource?: number; width: number; radius?: number;
@@ -30,4 +47,4 @@ export default memo(function ThemeFace({ id, brand, listings, portraitSource, wi
       <ThemeNavigation brand={brand} />
     </View>}
   </View>;
-});
+}, sameFace);

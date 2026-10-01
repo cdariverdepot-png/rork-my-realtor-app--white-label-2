@@ -66,15 +66,35 @@ test('brand and listings sync skip setState when payload is unchanged', () => {
 });
 
 test('preview hero and listing images disable fade-in transitions', () => {
+  // Portrait heroes delegate transition locking to PortraitImage.
   for (const file of [
-    'components/Hero.tsx',
+    'components/PortraitImage.tsx',
     'components/CuratedListings.tsx',
-    'components/themes/shared.tsx',
     'components/ThemeCollection.tsx',
-    'components/CoastalHero.tsx',
   ]) {
     const src = fs.readFileSync(path.join(root, file), 'utf8');
     assert.match(src, /transition=\{0\}/, `${file} should disable image transition`);
     assert.doesNotMatch(src, /transition=\{(?:200|300)\}/, `${file} must not fade images in`);
+  }
+  for (const file of [
+    'components/Hero.tsx',
+    'components/CoastalHero.tsx',
+    'components/themes/shared.tsx',
+    'components/ClientLayoutHero.tsx',
+  ]) {
+    const src = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(src, /PortraitImage/, `${file} should use PortraitImage`);
+    assert.doesNotMatch(src, /transition=\{(?:200|300)\}/, `${file} must not fade portraits in`);
+  }
+});
+
+test('portrait heroes use shared PortraitImage helper', () => {
+  for (const file of [
+    'components/Hero.tsx',
+    'components/CoastalHero.tsx',
+    'components/themes/shared.tsx',
+  ]) {
+    const src = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(src, /PortraitImage/, `${file} should use PortraitImage`);
   }
 });

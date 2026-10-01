@@ -6,6 +6,7 @@ import {
   Linking,
 } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "./PortraitImage";
 import { useRouter } from "expo-router";
 import { Phone, MessageSquare, CalendarDays } from "lucide-react-native";
 import { brand, fonts } from "@/constants/colors";
@@ -79,8 +80,8 @@ export default function QuickContact() {
     <View style={styles.section}>
       <View style={styles.headRow}>
         {b.portraitUrl ? (
-          <Image
-            source={{ uri: b.portraitUrl }}
+          <PortraitImage
+            uri={b.portraitUrl}
             style={[styles.avatar, { borderColor: theme.accent.base }]}
             contentFit="cover"
           />

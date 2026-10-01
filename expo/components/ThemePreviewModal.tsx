@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Animated, Modal, Platform, Pressable, Text, View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -42,6 +42,16 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
       }
     }), [windowWidth]);
 
+  const previewWidth = Math.min(windowWidth, 390);
+  // Create the scroll binding once — recreating Animated.event each render can thrash native bindings.
+  const onScroll = useMemo(
+    () => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }),
+    [scrollY],
+  );
+  useEffect(() => {
+    if (visible) scrollY.setValue(0);
+  }, [visible, scrollY]);
+
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={swipeBack}>
@@ -58,9 +68,9 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
               {subtitle ? <Text numberOfLines={1} style={{ color: "#A9A294", fontSize: 12, marginTop: 2 }}>{subtitle}</Text> : null}
             </View>
           </View>
-          <Animated.ScrollView onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })} scrollEventThrottle={16}>
+          <Animated.ScrollView onScroll={onScroll} scrollEventThrottle={16}>
             <View style={{ maxWidth: 390, width: "100%", alignSelf: "center" }}>
-              <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={Math.min(windowWidth, 390)} scrollY={scrollY} />
+              <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} />
             </View>
             {note ? <Text style={{ color: "#C5BDAF", padding: 24, textAlign: "center", lineHeight: 21 }}>{note}</Text> : null}
           </Animated.ScrollView>

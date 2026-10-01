@@ -49,7 +49,11 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
   const step = (delta: number) => stepRef.current?.(delta);
   const selectedId = THEME_CAROUSEL_ORDER[index];
   const candidate = themeCandidate(draft, selectedId);
-  const preview = withSamplePortrait(themePreview(draft, listings, selectedId, demo, contentMode));
+  // Stable across parent re-renders so expanded preview / comparison do not remount portraits.
+  const preview = useMemo(
+    () => withSamplePortrait(themePreview(draft, listings, selectedId, demo, contentMode)),
+    [draft, listings, selectedId, demo, contentMode],
+  );
   const d = themeDesign(selectedId);
   // Compact: size the fan from width and remaining phone height so one screen fits
   // (top nav + fan + name/index + action row) with open air above/below the fan.

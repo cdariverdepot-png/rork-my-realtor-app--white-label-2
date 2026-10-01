@@ -339,6 +339,10 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const scrollRef = useRef<ScrollView>(null);
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const onHomeScroll = useMemo(
+    () => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }),
+    [scrollY],
+  );
   const bottomPad = Math.max(insets.bottom, 10) + 128;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
@@ -568,10 +572,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
           scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: true }
-          )}
+          onScroll={onHomeScroll}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

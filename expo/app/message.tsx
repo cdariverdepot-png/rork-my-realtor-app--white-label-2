@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "@/components/PortraitImage";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { Send, Check } from "lucide-react-native";
@@ -98,7 +99,7 @@ export default function Message() {
         <Reveal delay={40}>
         <View style={styles.intro}>
           {b.portraitUrl ? (
-            <Image source={{ uri: b.portraitUrl }} style={styles.avatar} contentFit="cover" />
+            <PortraitImage uri={b.portraitUrl} style={styles.avatar} contentFit="cover" />
           ) : (
             <View style={[styles.avatar, styles.avatarFallback]}>
               <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />

@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { Image } from "expo-image";
+import PortraitImage from "@/components/PortraitImage";
 import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -530,7 +531,7 @@ export default function AdminDashboard() {
                 hitSlop={8}
               >
                 {brandData.portraitUrl ? (
-                  <Image source={{ uri: brandData.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" />
+                  <PortraitImage uri={brandData.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" priority="high" />
                 ) : (
                   <View style={styles.heroPortraitFallback}>
                     <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />
@@ -1120,7 +1121,7 @@ function AppPreviewCard({
             {/* Client app hero */}
             <View style={styles.miniHero}>
               {brandData.portraitUrl.trim().length > 0 ? (
-                <Image source={{ uri: brandData.portraitUrl }} style={StyleSheet.absoluteFill} contentFit="cover" transition={200} />
+                <PortraitImage uri={brandData.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" priority="high" />
               ) : (
                 <View style={styles.miniHeroFallback}>
                   <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />

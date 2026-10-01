@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
+import PortraitImage from "./PortraitImage";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import {
@@ -160,7 +161,7 @@ export default function ChatThread({
       >
         <View style={styles.intro}>
           {role === "client" && b.portraitUrl ? (
-            <Image source={{ uri: b.portraitUrl }} style={styles.avatar} contentFit="cover" />
+            <PortraitImage uri={b.portraitUrl} style={styles.avatar} contentFit="cover" />
           ) : (
             <View style={[styles.avatar, styles.avatarFallback]}>
               <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />
