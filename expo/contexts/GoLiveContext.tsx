@@ -156,7 +156,7 @@ export const [GoLiveProvider, useGoLive] = createContextHook(() => {
 
   // ── Derive the live checklist from real saved state ──
   const items: GoLiveItem[] = useMemo(() => {
-    const themeTouched =
+    const themeTouched = brand.themeChosen === true ||
       brand.theme.accent !== DEFAULT_THEME.accent || brand.theme.displayFont !== DEFAULT_THEME.displayFont;
 
     // The required tier is derived straight from the client-side rule set, so
@@ -232,9 +232,9 @@ export const [GoLiveProvider, useGoLive] = createContextHook(() => {
       },
       {
         id: "calendar",
-        label: "Calendar linked",
-        cta: "Link your calendar",
-        hint: "Showings land straight in your schedule.",
+        label: "Calendar events imported",
+        cta: "Import calendar events",
+        hint: "See external events here. New viewing requests are managed in this app.",
         done: feeds.length > 0,
         href: "/admin/calendar-import",
         required: false,

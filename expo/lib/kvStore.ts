@@ -129,8 +129,11 @@ export function isKvEnabled(): boolean {
   return !!supabase && !tableMissing;
 }
 
-export async function kvGet<T>(key: string): Promise<KvRow<T> | null> {
-  if (!supabase || tableMissing) return null;
+export async function kvGet<T>(key: string, requireSuccess = false): Promise<KvRow<T> | null> {
+  if (!supabase || tableMissing) {
+    if (requireSuccess) throw new Error("Shared storage is unavailable. Please retry when connected.");
+    return null;
+  }
   try {
     await ensureSupabaseSession();
     const { data, error } = await supabase
@@ -139,6 +142,7 @@ export async function kvGet<T>(key: string): Promise<KvRow<T> | null> {
       .eq("key", key)
       .maybeSingle();
     if (error) {
+      if (requireSuccess) throw error;
       if (isMissingTableError(error)) {
         tableMissing = true;
         console.log("[kv] table public.app_kv missing — run SQL setup. Falling back to broadcast-only sync.");
@@ -152,6 +156,7 @@ export async function kvGet<T>(key: string): Promise<KvRow<T> | null> {
   } catch (e) {
     if (isMissingTableError(e)) tableMissing = true;
     console.log("[kv] get exception", key, e);
+    if (requireSuccess) throw new Error("Could not load shared data. Check your connection and retry.");
     return null;
   }
 }

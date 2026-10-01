@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import {
   Alert,
   ScrollView,
@@ -23,6 +23,8 @@ import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
+import BookingStatus from "@/components/BookingStatus";
+import { randomUUID } from "expo-crypto";
 
 const ACCENT = SCREEN_ACCENT.book;
 
@@ -53,12 +55,12 @@ export default function BookShowing() {
   const invited = params.invite === "1";
   const { visible } = useListings();
   // Booking-link visitors: the linked realtor's name and listings, not the demo's.
-  const { brand: b, listings: refListings } = useRefRealtor(params.ref, ownBrand);
+  const { brand: b, listings: refListings, loading: resolving, error: linkError, retry } = useRefRealtor(params.ref, ownBrand);
   const realtor = b.realtor;
   const firstName = realtor.name.split(" ")[0] ?? realtor.name;
-  const { upsert } = useAppointments();
-  const { isAdmin, isClient, currentClientId } = useAuth();
-  const listings = refListings ?? (visible.length ? visible : []);
+  const { upsert, refresh } = useAppointments();
+  const { isAdmin, isClient, currentClientId, realtorId, isGuestAccess } = useAuth();
+  const listings = params.ref ? (refListings ?? []) : visible;
   const days = useMemo(() => nextDays(10), []);
 
   const [listingId, setListingId] = useState<string>(
@@ -72,53 +74,50 @@ export default function BookShowing() {
   const [day, setDay] = useState<string>(days[0].key);
   const [time, setTime] = useState<string>(TIMES[2]);
   const [done, setDone] = useState<boolean>(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+  const submitting = useRef(false);
+  const requestId = useRef(randomUUID());
 
-  const confirm = () => {
-    // A realtor previewing their app must not create a real request in their own calendar.
+  const confirm = async () => {
+    if (submitting.current) return;
     if (isAdmin && !isClient) {
-      Alert.alert("Preview only", "In your clients' app this sends you a viewing request with their name.");
+      setError("Preview only. Clients can send you viewing requests from this screen.");
       return;
     }
-    if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    const dt = new Date(day);
-    const [hh, mm] = time.split(":").map(Number);
-    dt.setHours(hh, mm, 0, 0);
-    const listing = listings.find((l) => l.id === listingId);
-    // Visitor from a realtor's public booking link: the request goes to that realtor.
-    if (!isClient && !isAdmin && isRealtorRef(params.ref)) {
-      void appendLeadAppointment(params.ref, {
-        id: `a_${Date.now()}`,
-        listingId,
-        listingTitle: listing?.title ?? "Private viewing",
-        startsAt: dt.getTime(),
-        durationMin: 45,
-        status: "requested",
-        createdBy: "client",
-        recipientIds: params.leadId ? [params.leadId] : undefined,
-        note: [params.leadName, params.leadContact].filter(Boolean).join(" · ") || undefined,
+    const listing = listings.find(l => l.id === listingId);
+    if (!listing || resolving || linkError) return;
+    const target = params.ref ?? realtorId;
+    if (!target || (!isClient && !params.leadId) || (params.ref && !params.leadId)) {
+      setError("Please open your realtor's booking link and add your contact details first."); return;
+    }
+    submitting.current = true; setSending(true); setError("");
+    try {
+      const dt = new Date(day);
+      const [hh, mm] = time.split(":").map(Number);
+      dt.setHours(hh, mm, 0, 0);
+      const request = {
+        id: requestId.current, listingId: listing.id, listingTitle: listing.title,
+        startsAt: dt.getTime(), durationMin: 45, status: "requested" as const,
+        createdBy: "client" as const,
+        recipientIds: params.ref ? [params.leadId!] : currentClientId ? [currentClientId] : undefined,
+        note: params.ref ? [params.leadName, params.leadContact].filter(Boolean).join(" · ") : undefined,
         updatedAt: Date.now(),
-      }).catch((e) => console.log("[book] lead appointment", e));
-      // A visitor has no calendar of their own here, so return to the start
-      // screen after the confirmation instead of opening one.
+      };
+      // Owner-test sessions remain local and never acquire an account/login gate.
+      if (isGuestAccess && !params.ref) upsert(request);
+      else {
+        await appendLeadAppointment(target, request);
+        if (!params.ref) void refresh();
+      }
       setDone(true);
-      setTimeout(() => router.replace("/"), 2200);
-      return;
-    }
-    upsert({
-      id: `a_${Date.now()}`,
-      listingId,
-      listingTitle: listing?.title ?? "Private viewing",
-      startsAt: dt.getTime(),
-      durationMin: 45,
-      status: "requested",
-      createdBy: "client",
-      // Who asked — so the realtor can see and confirm with the right client.
-      recipientIds: currentClientId ? [currentClientId] : undefined,
-      updatedAt: Date.now(),
-    });
-    setDone(true);
-    setTimeout(() => router.replace("/calendar"), 1600);
+    } catch {
+      setError("Your request wasn't confirmed as saved. Check your connection and retry.");
+    } finally { submitting.current = false; setSending(false); }
   };
+
+  if (resolving || linkError || !listings.length) return <BookingStatus loading={resolving} retry={retry}
+    message={linkError || "No homes are available to book yet. Please contact your realtor."} />;
 
   if (done) {
     return (
@@ -127,10 +126,11 @@ export default function BookShowing() {
         <View style={styles.checkBubble}>
           <Check size={28} color={brand.nightDeep} strokeWidth={2} />
         </View>
-        <Text style={styles.doneTitle}>You're on the books.</Text>
+        <Text style={styles.doneTitle}>Request sent.</Text>
         <Text style={styles.doneSub}>
-          {firstName} will confirm your private viewing within the hour.
+          {firstName} will follow up to confirm availability. Your time is not confirmed yet.
         </Text>
+        <PressableScale onPress={() => router.replace(params.ref ? "/portal" : "/calendar")} style={{ padding: 20 }}><Text style={{ color: brand.goldLight }}>Done</Text></PressableScale>
       </View>
     );
   }
@@ -139,11 +139,12 @@ export default function BookShowing() {
     <View style={styles.root}>
       <ScreenBackdrop screen="book" />
       <ModalChrome eyebrow="A private showing" />
+      {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", padding: 16 }}>{error}</Text> : null}
       <ScrollView contentContainerStyle={{ paddingBottom: 160 }}>
         <Reveal delay={40}>
         <Text style={styles.intro}>
           {invited
-            ? "You're in. Pick a time that works — we'll text the confirmation to the number you just shared."
+            ? "Pick a preferred time. Your realtor will follow up using the contact details you shared."
             : `Pick a time that works. ${firstName} will personally walk you through the home — no broker, no buyer's agent unless you bring one.`}
         </Text>
         </Reveal>
@@ -211,7 +212,7 @@ export default function BookShowing() {
         </Reveal>
 
         <Reveal delay={280}>
-        <Text style={styles.label}>WHICH TIME</Text>
+        <Text style={styles.label}>PREFERRED TIME · SUBJECT TO CONFIRMATION</Text>
         <View style={styles.times}>
           {TIMES.map((t) => {
             const on = time === t;
@@ -234,11 +235,12 @@ export default function BookShowing() {
       <View style={[styles.dock, { paddingBottom: insets.bottom + 14 }]}>
         <PressableScale
           onPress={confirm}
+          disabled={sending || !listings.some(l => l.id === listingId)}
           haptic="medium"
           scaleTo={0.97}
           style={styles.confirm}
         >
-          <Text style={styles.confirmText}>Request private viewing</Text>
+          <Text style={styles.confirmText}>{sending ? "Sending…" : "Request private viewing"}</Text>
         </PressableScale>
       </View>
     </View>

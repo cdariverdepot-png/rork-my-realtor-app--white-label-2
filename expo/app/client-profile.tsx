@@ -50,20 +50,7 @@ import {
 
 const ACCENT = SCREEN_ACCENT.clientProfile;
 
-/**
- * The client's guided intake.
- *
- * Mirrors the realtor's own onboarding in shape — one question set per screen,
- * a progress rail, the same picker sheets — because the two sides of this app
- * should feel like one product. It differs in one deliberate way: the realtor's
- * setup is a gate (there is genuinely no client app until it is done), whereas
- * this is a guided path a client can step off. Blocking a buyer from looking at
- * houses until they disclose their finances would cost the realtor the client,
- * which is the opposite of the point.
- *
- * Every step writes as it is completed, so a profile abandoned at step three is
- * still three steps of intelligence the agent did not have before.
- */
+/** Initial intake saves as you go. Completed profiles use a draft until Save. */
 export default function ClientProfileFlow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -145,8 +132,8 @@ export default function ClientProfileFlow() {
 
   const setValue = useCallback((id: string, value: string | string[]) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
-    saveAnswers({ [id]: value });
-  }, [saveAnswers]);
+    if (!myProfileShared) saveAnswers({ [id]: value });
+  }, [saveAnswers, myProfileShared]);
 
   const transition = useCallback(
     (mutate: () => void) => {
@@ -169,14 +156,14 @@ export default function ClientProfileFlow() {
   );
 
   const persistStep = useCallback(() => {
-    if (!step) return;
+    if (!step || myProfileShared) return;
     const patch: ProfileAnswers = {};
     for (const f of visibleFields(step, answers)) {
       const v = answers[f.id];
       if (v !== undefined) patch[f.id] = v;
     }
     if (Object.keys(patch).length > 0) saveAnswers(patch);
-  }, [step, answers, saveAnswers]);
+  }, [step, answers, saveAnswers, myProfileShared]);
 
   const finish = useCallback(async () => {
     if (saving) return;
@@ -232,8 +219,14 @@ export default function ClientProfileFlow() {
    * portal (e.g. a client who used the wrong invite code).
    */
   const exitProfile = useCallback(() => {
-    if (myProfileShared || !isClient) { router.back(); return; }
-    void logout().then(() => router.replace("/"));
+    const exit = () => {
+      if (myProfileShared || !isClient) { router.replace("/"); return; }
+      void logout().then(() => router.replace("/"));
+    };
+    const message = myProfileShared ? "Discard your unsaved profile changes?" : "Sign out? Your saved answers will be here when you sign in again.";
+    if (Platform.OS === "web") { if (window.confirm(message)) exit(); }
+    else Alert.alert(myProfileShared ? "Discard changes?" : "Sign out?", message,
+      [{ text: "Keep editing", style: "cancel" }, { text: myProfileShared ? "Discard" : "Sign out", onPress: exit }]);
   }, [myProfileShared, isClient, logout, router]);
 
   const goBack = useCallback(() => {
@@ -278,7 +271,7 @@ export default function ClientProfileFlow() {
         uri = hosted ?? `data:image/jpeg;base64,${asset.base64}`;
       }
       setValue("photo", uri);
-      saveAnswers({ photo: uri });
+
     } catch (e) {
       console.log("[clientProfile] photo pick", e);
     } finally {

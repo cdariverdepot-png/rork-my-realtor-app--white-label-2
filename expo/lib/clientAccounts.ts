@@ -10,18 +10,21 @@ import { supabase } from "@/lib/supabase";
  * the SQL hasn't been run or Supabase is unreachable these quietly report
  * "unavailable" and the app behaves exactly as before.
  */
+export type RegistrationResult = { ok: true } | { ok: false; reason: "existing" | "unavailable" };
+
 export async function registerClientAccount(input: {
   realtorId: string; email: string; pwHash: string; clientId: string; name: string;
-}): Promise<void> {
-  if (!supabase) return;
+}): Promise<RegistrationResult> {
+  if (!supabase) return { ok: false, reason: "unavailable" };
   try {
-    const { error } = await supabase.rpc("register_client_account", {
+    const { data, error } = await supabase.rpc("register_client_account", {
       p_realtor_id: input.realtorId, p_email: input.email, p_pw_hash: input.pwHash,
       p_client_id: input.clientId, p_name: input.name,
     });
-    if (error) console.log("[clientAccounts] register", error.message);
-  } catch (e) {
-    console.log("[clientAccounts] register", e);
+    if (error || data?.ok !== true) return { ok: false, reason: "unavailable" };
+    return data.created === true ? { ok: true } : { ok: false, reason: "existing" };
+  } catch {
+    return { ok: false, reason: "unavailable" };
   }
 }
 

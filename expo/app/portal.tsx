@@ -61,7 +61,7 @@ export default function Portal() {
   } = useAuth();
   const { prepareNewClientTour, prepareNewRealtorTour } = useOnboarding();
 
-  const { entry: entryRaw, invite, confirmed: confirmedParam } = useLocalSearchParams<{ entry?: string | string[]; invite?: string; confirmed?: string }>();
+  const { entry: entryRaw, invite, confirmed: confirmedParam, signin } = useLocalSearchParams<{ entry?: string | string[]; invite?: string; confirmed?: string; signin?: string }>();
   // Expo Router may hand back string[]; only an explicit single "client" opens the code stage.
   // Default (missing / unknown) is the welcome gateway — never client code.
   const entryParam = Array.isArray(entryRaw) ? entryRaw[0] : entryRaw;
@@ -111,10 +111,10 @@ export default function Portal() {
       setResolvedMonogram(record.monogram);
       await AsyncStorage.setItem("onboarding.pendingInvite.v1", JSON.stringify(accepted));
       setCode(accepted.code);
-      setStage("client-setup");
+      setStage(signin === "1" ? "client-signin" : "client-setup");
     })().catch(() => {});
     return () => { mounted = false; };
-  }, [isAuthenticated, entryParam, invite, lookupRealtorByCode]);
+  }, [isAuthenticated, entryParam, invite, signin, lookupRealtorByCode]);
 
   // Temporary AUTH_BYPASS: auto-enter admin preview when unauthenticated.
   // Do not cancel the replace when isAuthenticated flips (effect cleanup race).
@@ -386,7 +386,9 @@ export default function Portal() {
                     stage={stage} name={name} email={email} password={password}
                     onChangeName={setName} onChangeEmail={setEmail} onChangePassword={setPassword}
                     onSubmit={submitAccount} error={error} busy={busy}
-                    onForgot={() => router.push("/reset-password")}
+                    onForgot={() => stage === "client-signin"
+                      ? router.push({ pathname: "/client-recovery", params: { realtorId: resolvedRealtorId, invite: code, email } })
+                      : router.push("/reset-password")}
                     onToggleMode={() => {
                       if (stage === "client-setup") transitionTo("client-signin");
                       else if (stage === "client-signin") transitionTo("client-setup");
@@ -546,10 +548,8 @@ function AccountForm({ stage, name, email, password, onChangeName, onChangeEmail
         </PressableScale>
       ) : null}
 
-      {/* Recovery is offered to realtors only. A locked-out realtor loses their
-          entire studio; a locked-out client can be re-invited by their agent in
-          seconds, and email delivery is the slower, more failure-prone path. */}
-      {stage === "realtor-signin" ? (
+      {/* Client recovery verifies email and retains the original profile. */}
+      {(stage === "realtor-signin" || stage === "client-signin") ? (
         <PressableScale onPress={onForgot} haptic="selection" scaleTo={0.98} hitSlop={12} style={styles.forgotRow}>
           <Text style={styles.forgotText}>Forgot your password?</Text>
         </PressableScale>

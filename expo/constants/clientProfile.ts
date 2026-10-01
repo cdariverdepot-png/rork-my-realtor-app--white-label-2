@@ -270,6 +270,8 @@ export const PROFILE_STEPS: ProfileStep[] = [
         kind: "phone",
         placeholder: "(208) 555-0134",
         required: true,
+        showIf: a => ["text", "call"].includes(str(a, "contactMethod")),
+        hint: "Required when you choose calls or texts.",
       },
       {
         id: "contactMethod",

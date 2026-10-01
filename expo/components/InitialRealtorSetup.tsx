@@ -1,3 +1,4 @@
+import { useSetupDraft } from "@/hooks/useSetupDraft";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { ArrowLeft, Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
@@ -21,11 +22,15 @@ import { useClients } from "@/contexts/ClientsContext";
 import PressableScale from "@/components/PressableScale";
 import { checkSite, useSiteCheck } from "@/lib/siteCheck";
 
-function ManualSetup({ onBack }: { onBack: () => void }) {
+function ManualSetup({ onBack, onComplete }: { onBack: () => void; onComplete: () => Promise<void> }) {
   const { brand, hydrated, saveBrand } = useBrand();
   const [draft, setDraft] = useState(brand);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
+  const { realtorId } = useAuth();
+  const progressDraft = useSetupDraft(
+    `myrealtor.manual-draft.v1:${realtorId}`, draft,
+    saved => { setDraft(saved); setDirty(true); }, hydrated && !!realtorId);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   useEffect(() => { if (!dirty) setDraft(brand); }, [brand, dirty]);
@@ -53,23 +58,26 @@ function ManualSetup({ onBack }: { onBack: () => void }) {
     if (saving || (continueToApp && !complete)) return;
     setSaving(true);
     try {
-      await saveBrand(draft);
-      setDirty(false);
-      if (continueToApp) router.replace("/admin/ready");
-      else Alert.alert("Progress saved", "Your setup will be here when you return.");
+      if (continueToApp) await saveBrand(draft);
+      else await progressDraft.flush();
+      if (continueToApp) setDirty(false);
+      if (continueToApp) {
+        await progressDraft.clear(); await onComplete(); router.replace("/admin/ready");
+      } else Alert.alert("Progress saved", "Your setup will be here when you return.");
     } catch { Alert.alert("Couldn’t save", "Your edits are still here. Please try again."); }
     finally { setSaving(false); }
   };
-  if (!hydrated) return null;
+  if (!hydrated || !progressDraft.ready) return null;
   return <ScrollView style={{ flex: 1, backgroundColor: "#101419" }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={onBack} hitSlop={12}
+      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => void progressDraft.flush().then(onBack).catch(() => Alert.alert("Couldn’t save", "Please retry before leaving."))} hitSlop={12}
         style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
         <ArrowLeft size={18} color="white" strokeWidth={1.8} />
       </Pressable>
       <Text style={{ color: "#9AA4AA", fontSize: 12, letterSpacing: 1.4 }}>MANUAL SETUP</Text>
       <View style={{ width: 40 }} />
     </View>
+    {progressDraft.error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9" }}>{progressDraft.error}</Text> : null}
     <Text style={{ color: "white", fontSize: 30 }}>Let’s create your app.</Text>
     <Text style={{ color: "#CBD0D6", marginTop: 12, lineHeight: 23 }}>Fill in the essentials below. Your portrait and license details are optional and can be added any time. Your sharing credentials become available after setup; you choose when to share them.</Text>
     {PROFILE_FIELDS.map((item, index) => <View key={item.id} style={{ marginTop: 24, padding: 18, borderRadius: 14, backgroundColor: "#20262D" }}>
@@ -230,16 +238,28 @@ export default function InitialRealtorSetup() {
     return () => { alive = false; };
   }, [loadSavedBuild, isGuestAccess, authHydrated]);
 
-  const leaveBuild = useCallback(async () => {
-    // Incomplete setup is forced onto this screen — escape by signing out to the portal.
-    if (auth.realtorRecord?.client_code_enabled !== true) {
-      await auth.logout();
-      router.replace("/portal");
-      return;
-    }
-    if (router.canGoBack()) router.back();
-    else router.replace("/admin");
-  }, [auth, router]);
+  const progressDraft = useSetupDraft(
+    "myrealtor.build-draft.v1:" + auth.realtorId,
+    { url, draft, result, askFor, confirmList, editingSources },
+    saved => {
+      setUrl(saved.url); setDraft(saved.draft); setResult(saved.result);
+      setAskFor(saved.askFor); setConfirmList(saved.confirmList); setEditingSources(saved.editingSources);
+    }, loaded && !!auth.realtorId);
+
+  const leaveBuild = async () => {
+    if (busy || building) return;
+    try {
+      await progressDraft.flush();
+      if (auth.realtorRecord?.client_code_enabled === true) { router.replace("/admin"); return; }
+      const message = auth.isGuestAccess
+        ? "Leave this owner-test session? Entering the test code again starts a new test account."
+        : "Your progress is saved on this device. Sign out and return later to finish setup?";
+      const exit = async () => { await auth.logout(); router.replace("/portal"); };
+      if (Platform.OS === "web") { if (window.confirm(message)) await exit(); }
+      else Alert.alert("Sign out?", message, [{ text: "Keep building", style: "cancel" },
+        { text: "Sign out", onPress: () => { void exit(); } }]);
+    } catch { setError({ place: phase === "review" ? "review" : "sources", message: "Couldn't save progress. Please retry before leaving." }); }
+  };
 
   /** Edge case only: non-guest without cloud auth — send to portal (never invent signup here). */
   const goPortalAuth = useCallback(() => {
@@ -400,6 +420,7 @@ export default function InitialRealtorSetup() {
     if (missing.length) throw new Error(`Please add: ${missing.map(item => item.label.toLowerCase()).join(", ")}.`);
     await saveBrand(draft);
     await markBuildComplete();
+    await progressDraft.clear();
     router.replace("/admin/ready");
   });
   const setProfile = (key: keyof Brand["realtor"], value: string) =>
@@ -446,7 +467,8 @@ export default function InitialRealtorSetup() {
     </Text>;
   const readValue = (field: ConfirmField) => draft ? String(draft.realtor[field.split(".")[1] as keyof Brand["realtor"]] ?? "") : "";
 
-  if (manual) return <ManualSetup onBack={() => setManual(false)} />;
+  if (loaded && !progressDraft.ready) return <View style={{ flex: 1, backgroundColor: "#101419", justifyContent: "center" }}><ActivityIndicator color="white" /></View>;
+  if (manual) return <ManualSetup onBack={() => setManual(false)} onComplete={progressDraft.clear} />;
 
   const sourceSummary = [
     primarySource ? primarySource.uri.replace(/^https:\/\//, "").replace(/\/$/, "") : websiteUri ? websiteUri.replace(/^https:\/\//, "").replace(/\/$/, "") : "",
@@ -478,9 +500,9 @@ export default function InitialRealtorSetup() {
     contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 36 }}
     keyboardShouldPersistTaps="handled">
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => void leaveBuild()} hitSlop={12}
+      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => phase === "review" ? setEditingSources(true) : void leaveBuild()} hitSlop={12}
         style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: "#555C64", alignItems: "center", justifyContent: "center" }}>
-        <ArrowLeft size={18} color="white" strokeWidth={1.8} />
+        <Text style={{ color: "white", fontSize: 11 }}>{phase === "review" ? "Back" : "Exit"}</Text>
       </Pressable>
       <Text style={{ color: "#9AA4AA", fontSize: 12, letterSpacing: 1.4 }}>APP BUILDER</Text>
       <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => void leaveBuild()} hitSlop={12}
@@ -488,6 +510,7 @@ export default function InitialRealtorSetup() {
         <X size={18} color="white" strokeWidth={1.8} />
       </Pressable>
     </View>
+    {progressDraft.error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9" }}>{progressDraft.error}</Text> : null}
     <Text style={{ color: "white", fontSize: 32, fontWeight: "600" }}>Build Your App</Text>
     {phase === "collect" && <Text style={{ color: "#C8D0D0", marginTop: 10, fontSize: 16, lineHeight: 24 }}>
       {needsBuilderAuth

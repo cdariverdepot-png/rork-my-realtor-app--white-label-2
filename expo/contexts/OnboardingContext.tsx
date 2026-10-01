@@ -1,157 +1,47 @@
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useMemo, useState } from "react";
-
-/**
- * OnboardingContext — tracks the walkthroughs, all of which run *after*
- * authentication so each audience only ever sees copy meant for them.
- *
- * - realtorTourSeen: 5-step studio walkthrough, after a realtor signs in
- * - clientTourSeen:  5-step mirrored walkthrough, after a client redeems a code
- * - tourSeen:        the small in-dashboard arrival note (separate, older flow)
- */
+import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export type Audience = "realtor" | "client";
-
-export type OnboardingState = {
-  tourSeen: boolean;
-  realtorTourSeen: boolean;
-  clientTourSeen: boolean;
-};
-
-const STORAGE_KEY = "vance.onboarding.v3";
-
-const initialState: OnboardingState = {
-  tourSeen: false,
-  realtorTourSeen: false,
-  clientTourSeen: false,
-};
+export type OnboardingState = { tourSeen: boolean; realtorTourSeen: boolean; clientTourSeen: boolean };
+const initialState: OnboardingState = { tourSeen: false, realtorTourSeen: false, clientTourSeen: false };
 
 export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
-  const [state, setState] = useState<OnboardingState>(initialState);
-  const [hydrated, setHydrated] = useState<boolean>(false);
-
+  const { session } = useAuth();
+  // A new device shows orientation once; another account never inherits it.
+  const key = ["myrealtor.onboarding.v4", session?.role ?? "signed-out", session?.realtorId ?? "", session?.clientId ?? ""].join(":");
+  const [snapshot, setSnapshot] = useState<{ key: string; state: OnboardingState } | null>(null);
+  const hydrated = snapshot?.key === key;
+  const state = hydrated ? snapshot.state : initialState;
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const raw = await AsyncStorage.getItem(STORAGE_KEY);
-        if (mounted && raw) {
-          const parsed = JSON.parse(raw) as Partial<OnboardingState>;
-          setState({
-            tourSeen: Boolean(parsed.tourSeen),
-            realtorTourSeen: Boolean(parsed.realtorTourSeen),
-            clientTourSeen: Boolean(parsed.clientTourSeen),
-          });
-        }
-      } catch (e) {
-        console.log("[onboarding] hydrate", e);
-      } finally {
-        if (mounted) setHydrated(true);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const persist = useCallback(async (next: OnboardingState) => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch (e) {
-      console.log("[onboarding] persist", e);
-    }
-  }, []);
-
-  const patch = useCallback(
-    (key: keyof OnboardingState, value: boolean) => {
-      setState((prev) => {
-        if (prev[key] === value) return prev;
-        const next: OnboardingState = { ...prev, [key]: value };
-        void persist(next);
-        return next;
-      });
-    },
-    [persist]
-  );
-
+    let alive = true;
+    void AsyncStorage.getItem(key).then(raw => {
+      const parsed = raw ? JSON.parse(raw) : {};
+      if (alive) setSnapshot({ key, state: {
+        tourSeen: parsed.tourSeen === true, realtorTourSeen: parsed.realtorTourSeen === true,
+        clientTourSeen: parsed.clientTourSeen === true,
+      } });
+    }).catch(() => { if (alive) setSnapshot({ key, state: initialState }); });
+    return () => { alive = false; };
+  }, [key]);
+  const patch = useCallback((field: keyof OnboardingState, value: boolean) => {
+    setSnapshot(previous => {
+      const next = { ...(previous?.key === key ? previous.state : initialState), [field]: value };
+      void AsyncStorage.setItem(key, JSON.stringify(next)).catch(() => {});
+      return { key, state: next };
+    });
+  }, [key]);
   const markSeen = useCallback(() => patch("tourSeen", true), [patch]);
-
-  /** Marks the walkthrough complete for whichever side just finished it. */
-  const markTourSeen = useCallback(
-    (audience: Audience) =>
-      patch(audience === "realtor" ? "realtorTourSeen" : "clientTourSeen", true),
-    [patch]
-  );
-
-  /** Lets a realtor replay their own walkthrough from the dashboard. */
-  const replayTour = useCallback(
-    (audience: Audience) =>
-      patch(audience === "realtor" ? "realtorTourSeen" : "clientTourSeen", false),
-    [patch]
-  );
-
-  /**
-   * Fresh client sessions (guest access code, new email signup) must re-run the
-   * 5-page walkthrough even if a prior client on this device already finished it.
-   */
-  const prepareNewClientTour = useCallback(() => {
-    setState((prev) => {
-      if (!prev.clientTourSeen) return prev;
-      const next: OnboardingState = { ...prev, clientTourSeen: false };
-      void persist(next);
-      return next;
-    });
-  }, [persist]);
-
-  /**
-   * Fresh realtor guest sessions (REALTOR access code) must re-run the 5-page
-   * walkthrough even if a prior realtor on this device already finished it.
-   */
-  const prepareNewRealtorTour = useCallback(() => {
-    setState((prev) => {
-      if (!prev.realtorTourSeen) return prev;
-      const next: OnboardingState = { ...prev, realtorTourSeen: false };
-      void persist(next);
-      return next;
-    });
-  }, [persist]);
-
+  const markTourSeen = useCallback((audience: Audience) => patch(audience === "realtor" ? "realtorTourSeen" : "clientTourSeen", true), [patch]);
+  const replayTour = useCallback((audience: Audience) => patch(audience === "realtor" ? "realtorTourSeen" : "clientTourSeen", false), [patch]);
+  // Each signup/guest identity has an untouched key; no cross-account reset needed.
+  const prepareNewClientTour = useCallback(() => {}, []);
+  const prepareNewRealtorTour = useCallback(() => {}, []);
   const reopen = useCallback(() => patch("tourSeen", false), [patch]);
-
   const reset = useCallback(() => {
-    void persist(initialState);
-    setState(initialState);
-  }, [persist]);
-
-  const value = useMemo(
-    () => ({
-      hydrated,
-      tourSeen: state.tourSeen,
-      realtorTourSeen: state.realtorTourSeen,
-      clientTourSeen: state.clientTourSeen,
-      markSeen,
-      markTourSeen,
-      replayTour,
-      prepareNewClientTour,
-      prepareNewRealtorTour,
-      reopen,
-      reset,
-    }),
-    [
-      hydrated,
-      state.tourSeen,
-      state.realtorTourSeen,
-      state.clientTourSeen,
-      markSeen,
-      markTourSeen,
-      replayTour,
-      prepareNewClientTour,
-      prepareNewRealtorTour,
-      reopen,
-      reset,
-    ]
-  );
-
-  return value;
+    setSnapshot({ key, state: initialState });
+    void AsyncStorage.setItem(key, JSON.stringify(initialState)).catch(() => {});
+  }, [key]);
+  return { hydrated, ...state, markSeen, markTourSeen, replayTour, prepareNewClientTour, prepareNewRealtorTour, reopen, reset };
 });

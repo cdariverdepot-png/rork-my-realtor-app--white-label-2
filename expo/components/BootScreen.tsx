@@ -123,7 +123,6 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
           autoPlay: true,
           playsInline: true,
           preload: "auto",
-          // @ts-expect-error webkit attribute
           "webkit-playsinline": "true",
           disablePictureInPicture: true,
           controls: false,
@@ -177,7 +176,7 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
 
 const styles = StyleSheet.create({
   fill: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     ...(Platform.OS === "web"
       ? {
           position: "fixed" as unknown as "absolute",
@@ -196,7 +195,7 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   videoHost: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "#0a0a0a",
     overflow: "hidden",
   },

@@ -185,7 +185,7 @@ function RootLayoutInner() {
   // Explore Demo / view-as-client previews stay suppressed.
   // Client profile incompleteness must NOT suppress the tour — new clients
   // see the 5-page walkthrough first, then land on profile build.
-  const suppressed = pathname === "/admin/ready" || (isPreviewAdmin && !authBypassEnabled) || demoViewMode || viewAsClient || !setupHydrated;
+  const suppressed = ["/admin/ready", "/admin/onboarding", "/client-recovery", "/auth/callback", "/reset-password", "/welcome", "/book"].includes(pathname) || (isPreviewAdmin && !authBypassEnabled) || demoViewMode || viewAsClient || !setupHydrated;
 
   const showOnboarding =
     authHydrated &&
@@ -199,6 +199,7 @@ function RootLayoutInner() {
     // an opaque gate) up until /client-profile is committed. Marking the tour
     // seen too early unmounts the carousel over home and flashes demo UI.
     if (audience === "client" && (!myProfileShared || !myEssentialsMet)) {
+      if (pathname === "/client-profile") { markTourSeen("client"); return; }
       pendingClientProfileAfterTour.current = true;
       setProfileGateCover(true);
       router.replace("/client-profile");
@@ -208,15 +209,16 @@ function RootLayoutInner() {
     if (
       audience === "realtor" &&
       realtorRecord?.client_code_enabled !== true &&
-      realtorSetupState(savedBrand, realtorRecord?.client_code_enabled === true) === "setup-incomplete"
+      realtorSetupState(savedBrand, false) === "setup-incomplete"
     ) {
+      if (pathname === "/admin/build") { markTourSeen("realtor"); return; }
       pendingRealtorBuildAfterTour.current = true;
       setProfileGateCover(true);
       router.replace("/admin/build");
       return;
     }
     if (audience) markTourSeen(audience);
-  }, [audience, markTourSeen, myProfileShared, myEssentialsMet, realtorRecord, savedBrand, router]);
+  }, [audience, markTourSeen, myProfileShared, myEssentialsMet, realtorRecord, savedBrand, pathname, router]);
 
   useEffect(() => {
     if (!pendingClientProfileAfterTour.current) return;

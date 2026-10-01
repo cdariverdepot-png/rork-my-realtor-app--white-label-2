@@ -7,7 +7,7 @@ import { getRandomBytes } from "expo-crypto";
 import { Platform } from "react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { hashPassword, verifyPassword } from "@/lib/passwordHash";
+import { hashPassword } from "@/lib/passwordHash";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { claimClientSeat } from "@/lib/seats";
 import { ensureRealtorAuthRecord, signInRealtorWithAuth, signUpRealtorWithAuth } from "@/lib/realtorAuth";
@@ -550,6 +550,10 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         realtorId: input.realtorId,
         createdAt: Date.now(),
       };
+      const registration = await registerClientAccount({ realtorId: input.realtorId, email, pwHash: account.pw, clientId, name });
+      if (!registration.ok) return { ok: false, error: registration.reason === "existing"
+        ? "An account already exists for this email. Sign in or reset your password."
+        : "We couldn't save your account. Check your connection and try again." };
       const nextAccounts = [account, ...realmAccounts];
       setAccounts(nextAccounts);
       try {
@@ -557,8 +561,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       } catch (e) {
         console.log("[auth] persist accounts error", e);
       }
-      // Server copy, so the client can sign in on another device.
-      void registerClientAccount({ realtorId: input.realtorId, email, pwHash: account.pw, clientId, name });
+
 
       // Save the client onto the realtor's roster under the CORRECT realtorId,
       // independent of any session-scoped context. This is what stops new
@@ -617,24 +620,18 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           if (Array.isArray(parsed)) realmAccounts = parsed;
         }
       } catch {}
-      let account = realmAccounts.find((a) => a.email === e);
-      let verdict = { ok: false, needsUpgrade: false };
-      if (account) {
-        verdict = await verifyPassword(e, password, account.pw);
-        if (!verdict.ok) return { ok: false, error: "Incorrect password." };
-      } else {
-        // Not on this device (new phone, reinstall): check the server copy.
-        const pwHash = await hashPassword(e, password);
-        const remote = await verifyClientAccount(realtorId, e, pwHash);
-        if (remote.status === "bad_password") return { ok: false, error: "Incorrect password." };
-        if (remote.status === "locked") return { ok: false, error: "Too many attempts. Please wait 15 minutes and try again." };
-        if (remote.status !== "ok")
-          return { ok: false, error: "No account found. Create one to get started." };
-        account = { email: e, pw: pwHash, clientId: remote.clientId, name: remote.name || e.split("@")[0], realtorId, createdAt: Date.now() };
-        realmAccounts = [account, ...realmAccounts];
-        try { await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts)); } catch {}
-        verdict = { ok: true, needsUpgrade: false };
-      }
+      // The server is authoritative: a cached password must not override a reset.
+      const pwHash = await hashPassword(e, password);
+      const remote = await verifyClientAccount(realtorId, e, pwHash);
+      if (remote.status === "bad_password") return { ok: false, error: "Incorrect password. Try again or reset your password." };
+      if (remote.status === "locked") return { ok: false, error: "Too many attempts. Please wait 15 minutes and try again." };
+      if (remote.status === "unavailable") return { ok: false, error: "We couldn't reach sign-in. Check your connection and try again." };
+      if (remote.status === "not_found") return { ok: false, error: "No account found for this realtor. Check your invitation or create an account." };
+      if (remote.status !== "ok") return { ok: false, error: "Please retry sign-in." };
+      const account: ClientAccount = { email: e, pw: pwHash, clientId: remote.clientId,
+        name: remote.name || e.split("@")[0], realtorId, createdAt: Date.now() };
+      realmAccounts = [account, ...realmAccounts.filter(a => a.email !== e)];
+      try { await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts)); } catch {}
       const found = account as ClientAccount;
       const seat = await claimClientSeat({
         realtorId,
@@ -648,22 +645,6 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           atCapacity: seat.reason === "limit",
           error: "This agent isn't accepting new clients right now.",
         };
-      }
-      // Backfill the server copy (after the seat claim, which it requires) so
-      // accounts created before it existed work on other devices too.
-      void hashPassword(e, password).then((pwHash) =>
-        registerClientAccount({ realtorId, email: e, pwHash, clientId: found.clientId, name: found.name }));
-      // Upgrade any legacy-hashed local account to SHA-256 on successful login.
-      if (verdict.needsUpgrade) {
-        try {
-          const modern = await hashPassword(e, password);
-          realmAccounts = realmAccounts.map((a) =>
-            a.clientId === found.clientId ? { ...a, pw: modern } : a
-          );
-          await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts));
-        } catch (err) {
-          console.log("[auth] client hash upgrade", err);
-        }
       }
       const next: Session = {
         email: e,
