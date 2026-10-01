@@ -435,6 +435,45 @@ export default function StudioScreen() {
     }
   };
 
+  /** Themes editor: choose + save in one tap from the carousel action row. */
+  const persistTheme = async (next: Brand) => {
+    if (saving) return;
+    editGen.current += 1;
+    const savedGen = editGen.current;
+    setSaving(true);
+    setDraft(next);
+    setDirty(true);
+    try {
+      await saveBrand(editorSave(live, next, "theme"));
+    } catch {
+      setSaving(false);
+      // Keep the chosen theme in draft; the same action row stays tappable to retry.
+      Alert.alert("Couldn't save", "Your theme choice is still here. Please try again.");
+      return;
+    }
+    setSaving(false);
+    const clean = editGen.current === savedGen;
+    if (clean) {
+      setDraftPreview(null);
+      setDirty(false);
+    }
+    const status = requiredStatus(next);
+    flashConfirm(
+      !status.complete
+        ? `Saved · ${status.missing.length} still needed before clients see a finished app`
+        : offline
+          ? "Saved · will sync when you're back online"
+          : "Saved · your app is ready to preview and share when you choose"
+    );
+    if (Platform.OS !== "web") {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    }
+    if (status.complete && clean) {
+      enterViewAsClient();
+      router.replace("/");
+    }
+  };
+
   /** Throw away the unpublished draft and snap back to what clients currently see. */
   const discard = () => {
     const drop = () => {
@@ -516,63 +555,25 @@ export default function StudioScreen() {
         </Pressable>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.brandName}>{params.section === "theme" ? "THEMES" : "EDIT CONTENT"}</Text>
-          <Text style={styles.brandSub}>{headTitle.toUpperCase()}</Text>
+          {params.section !== "theme" && <Text style={styles.brandSub}>{headTitle.toUpperCase()}</Text>}
         </View>
         <View style={styles.iconBtn} />
       </View>
 
-      {params.section === "theme" && <View style={styles.tabsWrap}>
-        <ScrollView
-          ref={tabsRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.tabs}
-          onScroll={onTabsScroll}
-          onContentSizeChange={() => {
-            tabsRef.current?.scrollTo({ x: 0, animated: false });
-          }}
-          scrollEventThrottle={16}
-        >
-          {SECTIONS.filter(s => params.section === "theme" ? s.id === "theme" : s.id !== "theme").map((s) => {
-            const on = s.id === active;
-            return (
-              <KeyCap
-                key={s.id}
-                active={on}
-                onPress={() => {
-                  if (Platform.OS !== "web") Haptics.selectionAsync();
-                  setActive(s.id);
-                }}
-                capStyle={[styles.tab, on && styles.tabOn]}
-              >
-                <Text style={[styles.tabText, on && styles.tabTextOn]}>{s.label}</Text>
-              </KeyCap>
-            );
-          })}
-        </ScrollView>
-        {!tabsAtEnd && (
-          <View pointerEvents="none" style={styles.tabsFade}>
-            <LinearGradient
-              colors={["rgba(8,10,9,0)", "rgba(8,10,9,0.92)"]}
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: 0.5 }}
-              style={StyleSheet.absoluteFill}
-            />
-            <View style={styles.tabsFadeChip}>
-              <ChevronRight size={15} color={brand.goldLight} strokeWidth={2.2} />
-            </View>
-          </View>
-        )}
-      </View>}
+      {/* Themes: no section tab strip — THEMES top nav is enough; the old single gold "Theme" chip was inert. */}
+      {params.section === "theme" ? (
+        <View style={{ flex: 1 }}>
+          <ThemeSection draft={draft} setBrand={setBrand} onPersist={persistTheme} />
+        </View>
+      ) : (
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: insets.bottom + 140 }}
           showsVerticalScrollIndicator={false}
         >
-          {params.section !== "theme" && <UpdateUrlSection setBrand={setBrand} />}
-          {params.section === "theme" ? <ThemeSection draft={draft} setBrand={setBrand} /> :
-            <NeutralContentCanvas draft={draft} onChange={setBrand}
+          <UpdateUrlSection setBrand={setBrand} />
+          <NeutralContentCanvas draft={draft} onChange={setBrand}
               listings={liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
               onListingChange={(id, patch) => { editGen.current += 1; setListingEdits(edits => ({ ...edits, [id]: { ...edits[id], ...patch } })); setDirty(true); }} details={{
               hero: <><ProfileSection draft={draft} setBrand={setBrand} /><HeroSection draft={draft} setBrand={setBrand} /></>,
@@ -583,15 +584,16 @@ export default function StudioScreen() {
               social: <><VoicesSection draft={draft} setBrand={setBrand} /><ClosedSection draft={draft} setBrand={setBrand} /></>,
               footer: <FooterSection draft={draft} setBrand={setBrand} />,
               additional: <><NeighborhoodsSection draft={draft} setBrand={setBrand} /><PulseSection draft={draft} setBrand={setBrand} /></>,
-            }} />}
+            }} />
         </ScrollView>
       </KeyboardAvoidingView>
+      )}
 
       <Animated.View
         pointerEvents="none"
         style={[
           styles.confirmWrap,
-          { bottom: insets.bottom + 86, opacity: confirmOpacity, transform: [{ translateY: confirmLift }] },
+          { bottom: insets.bottom + (params.section === "theme" ? 72 : 86), opacity: confirmOpacity, transform: [{ translateY: confirmLift }] },
         ]}
       >
         <View style={styles.confirmPill}>
@@ -603,7 +605,7 @@ export default function StudioScreen() {
       {/* The floor, stated plainly and only while it is unmet. Tapping jumps to
           the tab that owns the first missing field rather than making the
           realtor hunt for it. */}
-      {!required.complete ? (
+      {params.section !== "theme" && !required.complete ? (
         <Pressable
           onPress={() => {
             if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
@@ -624,7 +626,7 @@ export default function StudioScreen() {
         </Pressable>
       ) : null}
 
-      <View style={[styles.dock, { paddingBottom: insets.bottom + 12 }]}>
+      {params.section !== "theme" && <View style={[styles.dock, { paddingBottom: insets.bottom + 12 }]}>
         <Pressable
           onPress={discard}
           disabled={!dirty}
@@ -676,7 +678,7 @@ export default function StudioScreen() {
                 : "Saved · not finished"}
           </Text>
         </Pressable>
-      </View>
+      </View>}
     </View>
   );
 }
@@ -1097,7 +1099,7 @@ const LOOK_CARD_W = 116;
 const LOOK_CARD_GAP = 10;
 const LOOKS_PER_PAGE = 3;
 
-function ThemeSection({ draft, setBrand }: SectionProps) {
+function ThemeSection({ draft, setBrand, onPersist }: SectionProps & { onPersist?: (next: Brand) => void | Promise<void> }) {
   const { all: listings } = useListings();
   const accentId: ThemeAccent = draft.theme?.accent ?? "gold";
   const fontId: ThemeFont = draft.theme?.displayFont ?? "playfair";
@@ -1166,6 +1168,21 @@ function ThemeSection({ draft, setBrand }: SectionProps) {
     const page = Math.round(x / ((LOOK_CARD_W + LOOK_CARD_GAP) * LOOKS_PER_PAGE));
     setLooksPage(Math.max(0, Math.min(looksPageCount - 1, page)));
   };
+
+  // Compact Studio Themes: carousel owns the screen; skip tip copy so one phone height fits.
+  if (onPersist) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ThemeCarousel
+          compact
+          draft={draft}
+          listings={listings}
+          onChoose={next => setBrand(() => next)}
+          onPersist={onPersist}
+        />
+      </View>
+    );
+  }
 
   return (
     <View>
