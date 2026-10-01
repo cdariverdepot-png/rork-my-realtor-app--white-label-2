@@ -533,3 +533,60 @@ test('AuthContext exposes enterGuestClient that clears prior session', () => {
   assert.match(src, /clientTourSeen: false/);
   assert.match(src, /const name = "";/);
 });
+
+test('walkthrough Next advances from page 0 via scrollToOffset + live width', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'components/OnboardingCarousel.tsx'), 'utf8');
+  assert.match(src, /export function nextWalkthroughIndex/);
+  assert.match(src, /useWindowDimensions/);
+  assert.match(src, /scrollToOffset/);
+  assert.match(src, /getItemLayout/);
+  assert.match(src, /syncIndex\(next\)/);
+  assert.doesNotMatch(src, /const \{ width: SCREEN_W \} = Dimensions\.get\("window"\)/);
+  // Mirror the pure helper (source-tested above) so we do not eval TS.
+  function nextWalkthroughIndex(current, total) {
+    if (total <= 0) return null;
+    if (current < 0) return 0;
+    if (current >= total - 1) return null;
+    return current + 1;
+  }
+  assert.equal(nextWalkthroughIndex(0, 5), 1);
+  assert.equal(nextWalkthroughIndex(1, 5), 2);
+  assert.equal(nextWalkthroughIndex(4, 5), null);
+  assert.equal(nextWalkthroughIndex(3, 5), 4);
+});
+
+test('client tour finish gates home flash until /client-profile', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/_layout.tsx'), 'utf8');
+  assert.match(src, /profileGateCover/);
+  assert.match(src, /pendingClientProfileAfterTour/);
+  assert.match(src, /router\.replace\("\/client-profile"\)/);
+  // Must not markTourSeen before replace for incomplete client profiles.
+  const finish = src.match(/const handleOnboardingFinish = useCallback\(\(\) => \{[\s\S]*?\}, \[/);
+  assert.ok(finish);
+  assert.match(finish[0], /setProfileGateCover\(true\)/);
+  assert.match(finish[0], /router\.replace\("\/client-profile"\)/);
+  assert.match(finish[0], /return;/);
+  // markTourSeen("client") happens in the pathname effect, not before replace.
+  assert.match(src, /if \(pathname !== "\/client-profile"\) return;/);
+  assert.match(src, /markTourSeen\("client"\)/);
+});
+
+test('client profile intake never shows Eliza/Vance demo chrome for DEMO realtor', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'app/client-profile.tsx'), 'utf8');
+  assert.match(src, /DEMO_REALTOR_ID/);
+  assert.match(src, /isDemoAgent/);
+  assert.match(src, /Only your agent sees this/);
+  assert.match(src, /MY REALTOR/);
+  assert.match(src, /chromeBrand/);
+  assert.doesNotMatch(src, /Only Eliza sees this/);
+  assert.doesNotMatch(src, /"VANCE PRIVATE"/);
+  assert.doesNotMatch(src, /Only \{realtorFirst\} sees this/);
+});
+
+test('production keeps AUTH_BYPASS off and Microsoft sign-in', () => {
+  const env = fs.readFileSync(path.join(__dirname, '..', '.env.production'), 'utf8');
+  assert.match(env, /EXPO_PUBLIC_AUTH_BYPASS=false/);
+  const social = fs.readFileSync(path.join(__dirname, '..', 'lib/socialSignIn.ts'), 'utf8');
+  assert.match(social, /id:\s*["']azure["']|Microsoft|MICROSOFT|microsoft/);
+  assert.match(social, /EXPO_PUBLIC_MICROSOFT_SIGN_IN/);
+});

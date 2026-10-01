@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
-  Dimensions,
   Easing,
   FlatList,
   Platform,
@@ -9,6 +8,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from "react-native";
@@ -27,7 +27,6 @@ import {
 import { brand, dark, fonts } from "@/constants/colors";
 import type { Audience } from "@/contexts/OnboardingContext";
 
-const { width: SCREEN_W } = Dimensions.get("window");
 
 interface Slide {
   icon: React.ReactNode;
@@ -113,6 +112,14 @@ interface Props {
   onFinish: () => void;
 }
 
+/** Pure step helper — Next from page i (0-based). null means Finish. */
+export function nextWalkthroughIndex(current: number, total: number): number | null {
+  if (total <= 0) return null;
+  if (current < 0) return 0;
+  if (current >= total - 1) return null;
+  return current + 1;
+}
+
 /**
  * Animating opacity directly on the image keeps each background a single
  * compositing layer. Wrapping it in an extra Animated.View forces iOS to
@@ -122,11 +129,22 @@ const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 export default function OnboardingCarousel({ audience, onFinish }: Props) {
   const slides: Slide[] = audience === "client" ? CLIENT_SLIDES : SLIDES;
+  // Live window width — module-level Dimensions.get("window") is stale on Expo
+  // web (SSR / first paint) and made slide width ≠ FlatList viewport, so the
+  // first Next (0→1) looked like a no-op while later swipe/back still moved.
+  const { width: windowWidth } = useWindowDimensions();
+  const [pageWidth, setPageWidth] = useState<number>(windowWidth);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<FlatList<Slide>>(null);
+  const indexRef = useRef<number>(0);
   const isSkipping = useRef<boolean>(false);
   const scrollX = useRef(new Animated.Value(0)).current;
-  const bgFade = Animated.divide(scrollX, SCREEN_W);
+  const pageWidthSafe = pageWidth > 0 ? pageWidth : windowWidth > 0 ? windowWidth : 1;
+  const bgFade = Animated.divide(scrollX, pageWidthSafe);
+
+  useEffect(() => {
+    if (windowWidth > 0) setPageWidth(windowWidth);
+  }, [windowWidth]);
 
   // Entrance animation. This runs while the boot curtain is still covering the
   // screen, so the carousel is already fully opaque by the time the logo
@@ -141,142 +159,213 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
     }).start();
   }, [entrance]);
 
+  const syncIndex = useCallback((idx: number) => {
+    const clamped = Math.max(0, Math.min(slides.length - 1, idx));
+    indexRef.current = clamped;
+    setCurrentIndex((prev) => (prev === clamped ? prev : clamped));
+  }, [slides.length]);
+
   const handleScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_W);
-      if (idx !== currentIndex) setCurrentIndex(idx);
+      const w = pageWidthSafe;
+      const idx = Math.round(e.nativeEvent.contentOffset.x / w);
+      if (idx !== indexRef.current) syncIndex(idx);
     },
-    [currentIndex],
+    [pageWidthSafe, syncIndex],
   );
 
   const finish = useCallback(() => {
     if (isSkipping.current) return;
     isSkipping.current = true;
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    // Tell the host immediately so it can route to /client-profile and raise an
+    // opaque gate before this overlay unmounts. Fading the *content* only —
+    // never the root — so the Eliza Vance home underneath cannot flash through.
+    onFinish();
     Animated.timing(entrance, {
       toValue: 0,
-      duration: 520,
+      duration: 420,
       easing: Easing.bezier(0.4, 0, 0.2, 1),
       useNativeDriver: true,
-    }).start(() => onFinish());
+    }).start();
   }, [entrance, onFinish]);
 
+  const scrollToPage = useCallback(
+    (index: number, animated = true) => {
+      const offset = index * pageWidthSafe;
+      // scrollToOffset is reliable on web; scrollToIndex often no-ops on the
+      // first advance before cells are measured (exactly the 0→1 failure).
+      const list = flatListRef.current;
+      if (!list) return;
+      if (typeof list.scrollToOffset === "function") {
+        list.scrollToOffset({ offset, animated });
+      } else {
+        list.scrollToIndex({ index, animated });
+      }
+    },
+    [pageWidthSafe],
+  );
+
   const goNext = useCallback(() => {
-    if (currentIndex < slides.length - 1) {
-      if (Platform.OS !== "web") Haptics.selectionAsync();
-      flatListRef.current?.scrollToIndex({ index: currentIndex + 1, animated: true });
-    } else {
+    const next = nextWalkthroughIndex(indexRef.current, slides.length);
+    if (next == null) {
       finish();
+      return;
     }
-  }, [currentIndex, slides.length, finish]);
+    if (Platform.OS !== "web") Haptics.selectionAsync();
+    // Optimistic index so repeated Next works even if momentum end is quiet on web.
+    // Critical for page 0→1: do not wait on scrollToIndex measurement.
+    syncIndex(next);
+    scrollToPage(next, true);
+  }, [slides.length, finish, syncIndex, scrollToPage]);
+
+  const getItemLayout = useCallback(
+    (_: ArrayLike<Slide> | null | undefined, index: number) => ({
+      length: pageWidthSafe,
+      offset: pageWidthSafe * index,
+      index,
+    }),
+    [pageWidthSafe],
+  );
+
+  const onScrollToIndexFailed = useCallback(
+    (info: { index: number }) => {
+      requestAnimationFrame(() => scrollToPage(info.index, false));
+    },
+    [scrollToPage],
+  );
 
   const opacity = entrance.interpolate({ inputRange: [0, 1], outputRange: [0, 1] });
   const translateY = entrance.interpolate({ inputRange: [0, 1], outputRange: [24, 0] });
 
   return (
-    <Animated.View
-      style={[styles.root, { opacity: entrance }]}
+    <View
+      style={styles.root}
+      onLayout={(e) => {
+        const w = e.nativeEvent.layout.width;
+        if (w > 0 && Math.abs(w - pageWidth) > 0.5) {
+          setPageWidth(w);
+          requestAnimationFrame(() => {
+            flatListRef.current?.scrollToOffset({
+              offset: indexRef.current * w,
+              animated: false,
+            });
+          });
+        }
+      }}
     >
-      {/* Fallback base color so the crossfade never shows a gap */}
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: dark.bg }]} />
+      {/* Solid curtain — never animated away, so home/demo cannot flash under exit. */}
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: dark.bg }]} pointerEvents="none" />
 
-      {/* Cross-fading photographic backgrounds, one per slide */}
-      {slides.map((slide, i) => (
-        <AnimatedImage
-          key={i}
-          pointerEvents="none"
-          source={slide.bg}
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              opacity: bgFade.interpolate({
-                inputRange: [i - 1, i, i + 1],
-                outputRange: [0, 1, 0],
-                extrapolate: "clamp",
-              }),
-            },
-          ]}
-          contentFit="cover"
-          contentPosition="center"
-          transition={0}
-          allowDownscaling={false}
-          cachePolicy="memory-disk"
-          priority="high"
-        />
-      ))}
-
-      {/* Skip button — top right */}
-      <Pressable
-        onPress={finish}
-        hitSlop={12}
-        style={styles.skipBtn}
+      <Animated.View
+        pointerEvents="box-none"
+        style={[styles.content, { opacity, transform: [{ translateY }] }]}
       >
-        <Text style={styles.skipText}>Skip</Text>
-      </Pressable>
+        {slides.map((slide, i) => (
+          <AnimatedImage
+            key={i}
+            pointerEvents="none"
+            source={slide.bg}
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                opacity: bgFade.interpolate({
+                  inputRange: [i - 1, i, i + 1],
+                  outputRange: [0, 1, 0],
+                  extrapolate: "clamp",
+                }),
+              },
+            ]}
+            contentFit="cover"
+            contentPosition="center"
+            transition={0}
+            allowDownscaling={false}
+            cachePolicy="memory-disk"
+            priority="high"
+          />
+        ))}
 
-      {/* Slides */}
-      <Animated.View style={[styles.slideArea, { opacity, transform: [{ translateY }] }]}>
-        <Animated.FlatList
-          ref={flatListRef}
-          data={slides}
-          keyExtractor={(_, i) => String(i)}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={handleScroll}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
-          scrollEventThrottle={16}
-          bounces={false}
-          renderItem={({ item }) => (
-            <View style={styles.slide}>
-              <View style={styles.iconRing}>
-                {item.icon}
+        <Pressable
+          onPress={finish}
+          hitSlop={12}
+          style={styles.skipBtn}
+          accessibilityRole="button"
+          accessibilityLabel="Skip walkthrough"
+        >
+          <Text style={styles.skipText}>Skip</Text>
+        </Pressable>
+
+        <View style={styles.slideArea} pointerEvents="box-none">
+          <Animated.FlatList
+            ref={flatListRef}
+            data={slides}
+            keyExtractor={(_, i) => String(i)}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={handleScroll}
+            onScrollEndDrag={handleScroll}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
+            scrollEventThrottle={16}
+            bounces={false}
+            getItemLayout={getItemLayout}
+            onScrollToIndexFailed={onScrollToIndexFailed}
+            renderItem={({ item }) => (
+              <View style={[styles.slide, { width: pageWidthSafe }]}>
+                <View style={styles.iconRing}>
+                  {item.icon}
+                </View>
+                <Text style={styles.slideTitle}>{item.title}</Text>
+                <Text style={styles.slideBody}>{item.body}</Text>
               </View>
-              <Text style={styles.slideTitle}>{item.title}</Text>
-              <Text style={styles.slideBody}>{item.body}</Text>
-            </View>
-          )}
-        />
-      </Animated.View>
-
-      {/* Bottom controls */}
-      <View style={styles.bottomBar}>
-        {/* Dots */}
-        <View style={styles.dotsRow}>
-          {slides.map((_, i) => (
-            <View
-              key={i}
-              style={[
-                styles.dot,
-                i === currentIndex && styles.dotActive,
-              ]}
-            />
-          ))}
+            )}
+          />
         </View>
 
-        {/* Next / Get Started */}
-        <Pressable
-          onPress={goNext}
-          style={({ pressed }) => [
-            styles.nextBtn,
-            pressed && { opacity: 0.8, transform: [{ scale: 0.97 }] },
-          ]}
-        >
-          <Text style={styles.nextText}>
-            {currentIndex === slides.length - 1 ? "GET STARTED" : "NEXT"}
-          </Text>
-          <ArrowRight size={16} color={dark.bg} strokeWidth={2.2} />
-        </Pressable>
-      </View>
-    </Animated.View>
+        <View style={styles.bottomBar} pointerEvents="box-none">
+          <View style={styles.dotsRow}>
+            {slides.map((_, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.dot,
+                  i === currentIndex && styles.dotActive,
+                ]}
+              />
+            ))}
+          </View>
+
+          <Pressable
+            onPress={goNext}
+            accessibilityRole="button"
+            accessibilityLabel={currentIndex === slides.length - 1 ? "Get started" : "Next"}
+            hitSlop={8}
+            style={({ pressed }) => [
+              styles.nextBtn,
+              pressed && { opacity: 0.8, transform: [{ scale: 0.97 }] },
+              Platform.OS === "web" ? ({ cursor: "pointer" } as object) : null,
+            ]}
+          >
+            <Text style={styles.nextText}>
+              {currentIndex === slides.length - 1 ? "GET STARTED" : "NEXT"}
+            </Text>
+            <ArrowRight size={16} color={dark.bg} strokeWidth={2.2} />
+          </Pressable>
+        </View>
+      </Animated.View>
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFill,
     backgroundColor: dark.bg,
     zIndex: 9998,
+  },
+  content: {
+    flex: 1,
   },
   skipBtn: {
     position: "absolute",
@@ -301,9 +390,9 @@ const styles = StyleSheet.create({
   slideArea: {
     flex: 1,
     justifyContent: "center",
+    overflow: "hidden",
   },
   slide: {
-    width: SCREEN_W,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 40,
@@ -348,6 +437,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     paddingBottom: 44,
     gap: 24,
+    zIndex: 20,
+    elevation: 20,
   },
   dotsRow: {
     flexDirection: "row",

@@ -3,9 +3,9 @@ import { Stack, usePathname, useRouter } from "expo-router";
 import { navIntent } from "@/lib/navIntent";
 import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Platform, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   PlayfairDisplay_500Medium,
@@ -153,6 +153,10 @@ function RootLayoutInner() {
   const { savedBrand, hydrated: setupHydrated } = useBrand();
   const { myProfileShared, myEssentialsMet } = useClientProfiles();
   const [booting, setBooting] = useState(true);
+  // Opaque curtain after client tour until /client-profile is on screen —
+  // prevents a one-frame Eliza Vance home flash when the carousel unmounts.
+  const [profileGateCover, setProfileGateCover] = useState(false);
+  const pendingClientProfileAfterTour = useRef(false);
 
   /**
    * The walkthrough is audience-specific, so it can only run once we know who
@@ -188,12 +192,26 @@ function RootLayoutInner() {
     !suppressed;
 
   const handleOnboardingFinish = useCallback(() => {
-    if (audience) markTourSeen(audience);
-    // After the client walkthrough, incomplete profiles go to intake.
+    // Clients with incomplete profiles: route first, keep the tour chrome (or
+    // an opaque gate) up until /client-profile is committed. Marking the tour
+    // seen too early unmounts the carousel over home and flashes demo UI.
     if (audience === "client" && (!myProfileShared || !myEssentialsMet)) {
+      pendingClientProfileAfterTour.current = true;
+      setProfileGateCover(true);
       router.replace("/client-profile");
+      return;
     }
+    if (audience) markTourSeen(audience);
   }, [audience, markTourSeen, myProfileShared, myEssentialsMet, router]);
+
+  useEffect(() => {
+    if (!pendingClientProfileAfterTour.current) return;
+    if (pathname !== "/client-profile") return;
+    pendingClientProfileAfterTour.current = false;
+    markTourSeen("client");
+    // Drop the gate on the next frame so /client-profile paints under it first.
+    requestAnimationFrame(() => setProfileGateCover(false));
+  }, [pathname, markTourSeen]);
 
   return (
     <>
@@ -224,6 +242,12 @@ function RootLayoutInner() {
             onFinish={handleOnboardingFinish}
           />
         )}
+        {profileGateCover ? (
+          <View
+            pointerEvents="auto"
+            style={[StyleSheet.absoluteFill, styles.profileGateCover]}
+          />
+        ) : null}
         {booting && (
           <BootScreen onFinish={() => setBooting(false)} />
         )}
@@ -331,3 +355,10 @@ export default function RootLayout() {
     </ErrorBoundary>
   );
 }
+
+const styles = StyleSheet.create({
+  profileGateCover: {
+    backgroundColor: dark.bg,
+    zIndex: 9999,
+  },
+});

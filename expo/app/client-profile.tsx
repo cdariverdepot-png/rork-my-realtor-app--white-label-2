@@ -31,7 +31,7 @@ import { brand, dark, fonts } from "@/constants/colors";
 import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import { PickerField, MultiPickerField } from "@/components/PickerField";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import { useListings } from "@/contexts/ListingsContext";
 import { useClientProfiles } from "@/contexts/ClientProfileContext";
@@ -70,7 +70,7 @@ export default function ClientProfileFlow() {
   const params = useLocalSearchParams<{ edit?: string }>();
   const isEditing = params.edit === "1";
 
-  const { session, isClient, hydrated: authHydrated, updateClientProfile, logout } = useAuth();
+  const { session, isClient, hydrated: authHydrated, updateClientProfile, logout, realtorRecord } = useAuth();
   const { brand: b } = useBrand();
   const { all: allListings } = useListings();
   const {
@@ -286,7 +286,19 @@ export default function ClientProfileFlow() {
     }
   }, [setValue, saveAnswers]);
 
-  const realtorFirst = (b.realtor.name ?? "").split(" ")[0] || "your agent";
+  // Guest/demo clients are scoped to DEMO_REALTOR_ID, whose showcase brand is
+  // Eliza Vance. Never surface that demo name on intake — use the assigned
+  // realtor when real, otherwise neutral "your agent" / MY REALTOR.
+  const isDemoAgent = session?.realtorId === DEMO_REALTOR_ID;
+  const agentFullName = isDemoAgent
+    ? ""
+    : (realtorRecord?.name || b.realtor.name || "").trim();
+  const realtorFirst = agentFullName.split(/\s+/)[0] || "";
+  const chromeBrand = (
+    isDemoAgent
+      ? "MY REALTOR"
+      : (b.realtor.brandName || realtorRecord?.name || b.realtor.name || "MY REALTOR")
+  ).trim();
 
   if (!authHydrated || !profileHydrated || !seeded) {
     return <View style={styles.root} />;
@@ -343,7 +355,7 @@ export default function ClientProfileFlow() {
         <View style={{ alignItems: "center" }}>
           <Text style={styles.chromeTitle}>YOUR PROFILE</Text>
           <Text style={styles.chromeSub}>
-            {(b.realtor.brandName || "MY REALTOR").toUpperCase()} PRIVATE
+            {chromeBrand.toUpperCase()} PRIVATE
           </Text>
         </View>
         <Pressable hitSlop={12} onPress={leave} style={styles.iconBtn}>
@@ -400,8 +412,9 @@ export default function ClientProfileFlow() {
             <View style={styles.privacy}>
               <ShieldCheck size={13} color={ACCENT} strokeWidth={1.7} />
               <Text style={styles.privacyText}>
-                Only {realtorFirst} sees this. It is never shown to other clients and never
-                sold on.
+                {realtorFirst
+                  ? `Only ${realtorFirst} sees this. It is never shown to other clients and never sold on.`
+                  : "Only your agent sees this. It is never shown to other clients and never sold on."}
               </Text>
             </View>
           ) : null}
@@ -618,7 +631,7 @@ function Confirmation({
             {name ? `Thank you, ${name}.` : "Thank you."}
           </Text>
           <Text style={styles.confirmBody}>
-            {realtorFirst} has your profile and can start lining up homes against it. You&apos;ll
+            {realtorFirst || "Your agent"} has your profile and can start lining up homes against it. You&apos;ll
             hear from them the way you asked to be contacted.
           </Text>
 
