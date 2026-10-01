@@ -13,6 +13,9 @@ import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 const SPLASH_MODULE = require("@/assets/splash-loading.mp4");
 const POSTER = require("@/assets/splash-loading-poster.jpg");
 
+/** Drop AE glow hold after the key finishes pointing down (~1s settle kept). */
+const TRIM_TAIL_MS = 2000;
+
 interface Props {
   /** True once auth has hydrated — curtain may fade after the video holds. */
   ready?: boolean;
@@ -22,7 +25,7 @@ interface Props {
 
 /**
  * Full-viewport launch splash using the branded loading animation video.
- * Plays once, holds the final glowing frame, then fades when the app is ready.
+ * Plays once, cuts ~2s after key/glow settle (keep ~1s hold), then fades when ready.
  * Black/#0a0a0a curtain prevents any peek of underlying UI.
  */
 export default function BootScreen({ ready = true, onFinish }: Props) {
@@ -74,27 +77,50 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
     if (videoDone && ready) beginFade();
   }, [videoDone, ready, beginFade]);
 
+  const finishVideo = useCallback(() => {
+    setVideoDone(true);
+  }, []);
+
   const holdLastFrameWeb = useCallback(() => {
     const el = videoElRef.current;
     if (el && Number.isFinite(el.duration) && el.duration > 0) {
       try {
-        el.currentTime = Math.max(0, el.duration - 0.05);
         el.pause();
       } catch {
         /* ignore */
       }
     }
-    setVideoDone(true);
-  }, []);
+    finishVideo();
+  }, [finishVideo]);
+
+  const onWebTimeUpdate = useCallback(() => {
+    const el = videoElRef.current;
+    if (!el || !Number.isFinite(el.duration) || el.duration <= 0) return;
+    const cutAt = Math.max(0, el.duration - TRIM_TAIL_MS / 1000);
+    if (el.currentTime >= cutAt) {
+      try {
+        el.pause();
+      } catch {
+        /* ignore */
+      }
+      finishVideo();
+    }
+  }, [finishVideo]);
 
   const onNativeStatus = useCallback((status: AVPlaybackStatus) => {
     if (!status.isLoaded) return;
-    if (status.didJustFinish) {
-      // Hold last frame — expo-av stays on final frame when not looping.
+    const duration = status.durationMillis ?? 0;
+    const position = status.positionMillis ?? 0;
+    if (duration > 0 && position >= Math.max(0, duration - TRIM_TAIL_MS)) {
       void nativeRef.current?.pauseAsync().catch(() => {});
-      setVideoDone(true);
+      finishVideo();
+      return;
     }
-  }, []);
+    if (status.didJustFinish) {
+      void nativeRef.current?.pauseAsync().catch(() => {});
+      finishVideo();
+    }
+  }, [finishVideo]);
 
   useEffect(() => {
     if (Platform.OS !== "web" || !videoUri) return;
@@ -127,6 +153,7 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
           disablePictureInPicture: true,
           controls: false,
           onEnded: holdLastFrameWeb,
+          onTimeUpdate: onWebTimeUpdate,
           onError: () => setVideoDone(true),
           style: {
             position: "absolute",
