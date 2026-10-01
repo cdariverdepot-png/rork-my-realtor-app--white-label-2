@@ -296,6 +296,15 @@ export default function AdminDashboard() {
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     Alert.alert("Copied", "Booking link copied.");
   };
+  const openBookingLink = async () => {
+    if (!bookingUrl) return;
+    try {
+      await Linking.openURL(bookingUrl);
+    } catch (e) {
+      console.log("[admin] open booking link", e);
+      Alert.alert("Unable to open", "Copy the link and paste it in your browser instead.");
+    }
+  };
   const shareBookingLink = async () => {
     if (Platform.OS !== "web") Haptics.selectionAsync();
     const message = `Book a private viewing with ${realtorName}:\n${bookingUrl}`;
@@ -940,9 +949,24 @@ export default function AdminDashboard() {
               {bookingUrl ? <View style={styles.inviteCodeRow}>
                 <View style={styles.inviteCodeLabelRow}>
                   <Link2 size={11} color={admin.goldLight} strokeWidth={1.8} />
-                  <Text style={styles.inviteCodeLabel}>BOOKING LINK</Text>
+                  <Text style={styles.inviteCodeLabel}>PUBLIC BOOKING LINK</Text>
                 </View>
-                <Text style={styles.bookingLinkText} selectable numberOfLines={1}>{bookingUrl}</Text>
+                <Text style={styles.bookingLinkHint}>
+                  Share so anyone can book a viewing — no access code needed.
+                </Text>
+                <Pressable
+                  onPress={tap(openBookingLink)}
+                  onLongPress={tap(copyBookingLink)}
+                  delayLongPress={350}
+                  accessibilityRole="link"
+                  accessibilityLabel="Open public booking page"
+                  accessibilityHint="Opens your client booking page. Long press to copy the link."
+                  style={({ pressed }) => [styles.bookingLinkPressable, pressed && { opacity: 0.75 }]}
+                  hitSlop={8}
+                >
+                  <Text style={styles.bookingLinkText} numberOfLines={2}>{bookingUrl}</Text>
+                  <ArrowUpRight size={14} color={admin.goldLight} strokeWidth={2} />
+                </Pressable>
                 {showBookingQr ? <View style={[styles.qrHeroFrame, { marginTop: 14 }]}>
                   <Image
                     source={{ uri: `https://quickchart.io/qr?text=${encodeURIComponent(bookingUrl)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M` }}
@@ -954,7 +978,7 @@ export default function AdminDashboard() {
                 </View> : null}
               </View> : null}
               {bookingUrl ? <View style={styles.inviteActions}>
-                <Pressable onPress={tap(copyBookingLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6}>
+                <Pressable onPress={tap(copyBookingLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6} accessibilityLabel="Copy booking link">
                   <Copy size={14} color={admin.text} strokeWidth={1.6} />
                   <Text style={styles.inviteGhostBtnText}>Copy</Text>
                 </Pressable>
@@ -2091,7 +2115,18 @@ const styles = StyleSheet.create({
   inviteCode: {
     fontFamily: fonts.serif, color: admin.text, fontSize: 28, letterSpacing: 8,
   },
-  bookingLinkText: { fontFamily: fonts.sans, color: admin.textMuted, fontSize: 12, maxWidth: "100%" },
+  bookingLinkHint: {
+    fontFamily: fonts.sans, color: admin.textMuted, fontSize: 12, lineHeight: 17,
+    textAlign: "center", marginBottom: 10, maxWidth: 320,
+  },
+  bookingLinkPressable: {
+    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
+    maxWidth: "100%", paddingVertical: 4, paddingHorizontal: 4,
+  },
+  bookingLinkText: {
+    fontFamily: fonts.sansSemi, color: admin.goldLight, fontSize: 12, lineHeight: 17,
+    textDecorationLine: "underline", flexShrink: 1, maxWidth: "92%", textAlign: "center",
+  },
   inviteActions: {
     flexDirection: "row", paddingHorizontal: 20, paddingBottom: 20, gap: 10,
     borderTopWidth: 1, borderTopColor: admin.hairline, paddingTop: 16,
