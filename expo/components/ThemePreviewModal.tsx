@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,26 +22,31 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   const scrollRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const dragX = useRef(new Animated.Value(0)).current;
+  const [sliding, setSliding] = useState(false);
 
   const close = () => {
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
     onClose();
   };
   const swipeBack = useMemo(() => Gesture.Pan()
-    .activeOffsetX(14)
-    .failOffsetY([-16, 16])
+    .activeOffsetX(24)
+    .failOffsetY([-12, 12])
     .runOnJS(true)
+    .onTouchesDown((e, manager) => { const touch = e.allTouches[0]; if (!touch || touch.x > 32) manager.fail(); })
+    .onStart(() => setSliding(true))
     .onUpdate(e => dragX.setValue(Math.max(0, e.translationX)))
     .onEnd(e => {
       if (e.translationX > windowWidth * 0.28 || e.velocityX > 700) {
         Animated.timing(dragX, { toValue: windowWidth, duration: 170, useNativeDriver: true }).start(() => {
           close();
           dragX.setValue(0);
+          setSliding(false);
         });
       } else {
-        Animated.spring(dragX, { toValue: 0, useNativeDriver: true, damping: 20, stiffness: 220 }).start();
+        Animated.spring(dragX, { toValue: 0, useNativeDriver: true, damping: 20, stiffness: 220 }).start(() => setSliding(false));
       }
-    }), [windowWidth]);
+    })
+    .onFinalize((_e, success) => { if (!success) { dragX.setValue(0); setSliding(false); } }), [windowWidth]);
 
   const previewWidth = Math.min(windowWidth, 390);
   // Create the scroll binding once — recreating Animated.event each render can thrash native bindings.
@@ -56,7 +61,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={swipeBack}>
-        <Animated.View style={{ flex: 1, backgroundColor: "#111713", transform: [{ translateX: dragX }] }}>
+        <Animated.View style={[{ flex: 1, backgroundColor: "#111713" }, sliding ? { transform: [{ translateX: dragX }] } : undefined]}>
           <View style={{ paddingTop: insets.top + 10, paddingHorizontal: 14, paddingBottom: 12, flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Pressable onPress={close} accessibilityRole="button" accessibilityLabel="Back" hitSlop={10}
               style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 2, paddingLeft: 6, paddingRight: 12, paddingVertical: 8,

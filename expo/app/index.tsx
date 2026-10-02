@@ -340,6 +340,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const scrollRef = useRef<ScrollView>(null);
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const onHomeScroll = useMemo(() => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }), [scrollY]);
   const bottomPad = Math.max(insets.bottom, 10) + 128;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
@@ -569,11 +570,13 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     />
   ) : (
     <View style={[styles.root, { backgroundColor: pageBackground }]}>
-        <ScrollView
+        <Animated.ScrollView
           ref={scrollRef}
+          onScroll={onHomeScroll}
+          scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
-          // Portraits stay static; this scroll container has no animated image binding.
+          // Stable binding drives only the padded photo layer, never the page.
           overScrollMode="never"
           removeClippedSubviews={false}
           style={Platform.OS === "web" ? ({ flex: 1, overscrollBehaviorY: "none" } as object) : { flex: 1 }}
@@ -597,7 +600,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
                 if (phone) void Linking.openURL(`tel:${phone}`).catch(() => Alert.alert("Contact your realtor", previewBrand.realtor.phone));
               } : undefined}
               renderAdditional={renderSection} /> : visible.map(renderSection)}
-        </ScrollView>
+        </Animated.ScrollView>
       {!demoViewMode && !editing && !previewingDraft && <BottomNav />}
       {demoViewMode && <Pressable accessibilityRole="button" onPress={() => setDemoThemeDraft(themeCandidate(b, "eliza-editorial"))}
         style={{ position: "absolute", bottom: insets.bottom + 18, alignSelf: "center", backgroundColor: "#D4B989", paddingHorizontal: 22, paddingVertical: 15, borderRadius: 26 }}>

@@ -45,7 +45,6 @@ export function useReducedMotion(): ReducedMotionState {
   useEffect(() => {
     ensureMotionSubscription();
     setState(cachedMotion);
-    if (cachedMotion.ready) return;
     const listener = (next: ReducedMotionState) => setState(next);
     motionListeners.add(listener);
     return () => { motionListeners.delete(listener); };
@@ -55,6 +54,15 @@ export function useReducedMotion(): ReducedMotionState {
 
 /** Shared demo-derived motion. No profile, navigation or persistence ownership. */
 export function useThemeMotion(scrollY: Animated.Value | undefined, height: number, disabled = false, imageTravelLimit = Infinity) {
-  // Hero imagery and copy are stationary; scrolling cannot create or swap interpolation nodes.
-  return useMemo(() => ({ imgTranslate: 0, imgScale: 1, topBarOpacity: 1, contentTranslate: 0, contentOpacity: 1 }), []);
+  const fallback = useRef(new Animated.Value(0)).current;
+  const { ready, reduced } = useReducedMotion();
+  const sy = scrollY ?? fallback;
+  const h = Math.max(1, Math.round(height));
+  const travel = disabled || !ready || reduced ? 0 : Math.min(24, Math.max(0, imageTravelLimit));
+  // Only the photo's padded inner layer moves. No zoom, opacity fades, layout
+  // writes, changing keys or scroll-dependent React state.
+  return useMemo(() => ({
+    imgTranslate: sy.interpolate({ inputRange: [-h, 0, h], outputRange: [0, 0, -travel], extrapolate: "clamp" }),
+    imgScale: 1, topBarOpacity: 1, contentTranslate: 0, contentOpacity: 1,
+  }), [sy, h, travel]);
 }

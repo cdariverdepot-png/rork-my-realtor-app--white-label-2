@@ -287,6 +287,19 @@ function responseText(value: any): string {
   return "";
 }
 
+function copyVariationValue(text: string, target: string): string {
+  const raw = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  if (!raw) return "";
+  try {
+    const parsed = JSON.parse(raw);
+    const value = typeof parsed === "string" ? parsed : parsed?.value ?? parsed?.[target] ?? parsed?.copy;
+    return typeof value === "string" ? value.trim() : "";
+  } catch {
+    // Plain prose is supported, but malformed JSON must never appear as copy.
+    return /^[{\[]/.test(raw) ? "" : raw;
+  }
+}
+
 function validate(value: any, ids: Set<string>, imageIds: Set<string>) {
   if (!value || typeof value !== "object") throw new Error("Invalid model output");
   const evidence = (Array.isArray(value.evidence) ? value.evidence : [])
@@ -372,7 +385,11 @@ Deno.serve(async (request) => {
     if (!pages.length && !facts.length) {
       return reply({ error: "Your website could not be read. Check the URL and build again before requesting new wording." }, 422);
     }
-    let response: Response;
+    let value = "";
+    // Retry one empty/incomplete result automatically; never replace saved copy
+    // with an empty string, unrelated JSON metadata, a refusal or partial output.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      let response: Response;
     try {
       response = await fetch("https://api.openai.com/v1/responses", {
         method: "POST", headers: { Authorization: `Bearer ${openaiKey}`, "Content-Type": "application/json" },
@@ -391,33 +408,21 @@ Deno.serve(async (request) => {
             type: "object", properties: { value: { type: "string" } },
             required: ["value"], additionalProperties: false,
           } } } }),
-        signal: AbortSignal.timeout(30_000),
+        signal: AbortSignal.timeout(20_000),
       });
-    } catch { return reply({ error: "Could not create another variation." }, 502); }
-    if (!response.ok) return reply({ error: "Could not create another variation." }, 502);
-    let value: unknown;
-    let rawText = "";
-    try {
-      const payload = await response.json();
-      rawText = responseText(payload).trim();
-      let parsed: unknown;
-      try { parsed = rawText ? JSON.parse(rawText) : null; } catch { parsed = rawText; }
-      if (typeof parsed === "string") value = parsed;
-      else if (parsed && typeof parsed === "object") {
-        const obj = parsed as Record<string, unknown>;
-        // Prefer the requested key; tolerate the model naming it after the field or anything else.
-        value = [obj.value, obj[target], obj.copy, ...Object.values(obj)]
-          .find((item) => typeof item === "string" && (item as string).trim());
-      }
-      // Last resort: the model returned plain prose instead of JSON.
-      if ((typeof value !== "string" || !value.trim()) && rawText && !rawText.trimStart().startsWith("{")) {
-        value = rawText;
-      }
-    } catch { return reply({ error: "The new variation was incomplete." }, 502); }
-    if (typeof value !== "string" || !value.trim()) {
-      console.error("[analyze-realtor-build] empty variation", { target, rawPreview: rawText.slice(0, 240) });
-      return reply({ error: "The new variation was empty." }, 502);
+    } catch { if (attempt === 0) continue; break; }
+    if (!response.ok) { if (attempt === 0 && (response.status === 429 || response.status >= 500)) continue; break; }
+
+      try {
+        const payload = await response.json();
+        if (payload.status === "incomplete" || payload.status === "failed") continue;
+        if (payload.output?.some((entry: any) => entry.content?.some((part: any) => part.type === "refusal"))) break;
+        value = copyVariationValue(responseText(payload), target);
+        if (value) break;
+        console.warn("[analyze-realtor-build] retrying empty copy", { target, attempt, responseId: payload.id, status: payload.status });
+      } catch { /* A truncated response gets one bounded retry. */ }
     }
+    if (!value) return reply({ error: "We couldn’t create a new version this time. Your current wording is saved—please try again." }, 502);
     const draft = { ...build.draft, [target]: value.trim().slice(0, target === "aboutParagraph" ? 750 : 300) };
     const { error } = guest ? { error: null } : await admin.from("realtor_builds").update({ draft, updated_at: new Date().toISOString() })
       .eq("auth_user_id", userId);

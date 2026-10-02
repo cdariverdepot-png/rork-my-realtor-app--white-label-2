@@ -39,21 +39,10 @@ test('imagePosition returns a stable object for identical framing', () => {
   assert.deepEqual(a, { left: '50%', top: '50%' });
 });
 
-test('portrait and copy motion stays constant and ignores scroll input', () => {
-  const src = ts.transpileModule(read('hooks/useThemeMotion.ts'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
-  const module = { exports: {} };
-  new Function('require', 'module', 'exports', src)(id => id === 'react' ? { useMemo: fn => fn() } : {}, module, module.exports);
-  const scroll = new Proxy({}, { get() { throw Error('Hero must never subscribe to scroll'); } });
-  assert.deepEqual(module.exports.useThemeMotion(scroll, 800), { imgTranslate: 0, imgScale: 1, topBarOpacity: 1, contentTranslate: 0, contentOpacity: 1 });
+test('parallax is bounded inside the full photo gutter and never zooms or fades',()=>{
+ const hook=fs.readFileSync(path.join(root,'hooks/useThemeMotion.ts'),'utf8');assert.match(hook,/outputRange: \[0, 0, -travel\]/);assert.match(hook,/imgScale: 1/);assert.match(hook,/contentOpacity: 1/);assert.match(hook,/extrapolate: "clamp"/);
+ const photo=fs.readFileSync(path.join(root,'components/FullPortrait.tsx'),'utf8');assert.match(photo,/height: height \+ gutter \* 2/);assert.match(photo,/paddingTop: gutter/);assert.match(photo,/crop \? "cover" : "contain"/);assert.doesNotMatch(photo,/shouldRasterizeIOS|renderToHardwareTextureAndroid/);
 });
-
-test('full portrait clips only explicit crops and never hardware-rasterizes', () => {
-  const src = read('components/FullPortrait.tsx');
-  assert.match(src, /portraitFit === "crop"/);
-  assert.match(src, /crop \? "cover" : "contain"/);
-  assert.doesNotMatch(src, /imgTranslate|imgScale|shouldRasterizeIOS|renderToHardwareTextureAndroid/);
-});
-
 test('theme preview and client heroes route portraits through PortraitImage', () => {
   for (const file of [
     'components/themes/shared.tsx',
