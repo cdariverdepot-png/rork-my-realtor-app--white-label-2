@@ -70,6 +70,7 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
     next.theme = {
       ...layout.defaultTheme,
       imagePositions: next.theme?.imagePositions,
+      portraitFit: next.theme?.portraitFit,
       presentationVersion: 2,
     };
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Modal, Platform, Pressable, Text, View, useWindowDimensions } from "react-native";
+import { Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -23,11 +23,13 @@ export default function PortraitPositioner({ visible, brand, onDone, onCancel }:
   const insets = useSafeAreaInsets();
   const width = Math.min(window.width, 430);
   const key = imagePositionKey(brand.theme, brand.layoutId);
+  const [crop, setCrop] = useState(brand.theme.portraitFit === "crop");
   const [frame, setFrame] = useState<Frame>(() => imageFrame(brand.theme, brand.layoutId));
   const start = useRef<Frame>(frame);
   // Each time the editor opens, start from the saved framing for this look.
   useEffect(() => {
     if (!visible) return;
+    setCrop(brand.theme.portraitFit === "crop");
     const fresh = imageFrame(brand.theme, brand.layoutId);
     start.current = fresh;
     setFrame(fresh);
@@ -35,11 +37,11 @@ export default function PortraitPositioner({ visible, brand, onDone, onCancel }:
 
   const live: Brand = useMemo(() => ({
     ...brand,
-    theme: { ...brand.theme, imagePositions: { ...brand.theme.imagePositions, [key]: frame } },
-  }), [brand, key, frame]);
+    theme: { ...brand.theme, portraitFit: crop ? "crop" : "full", imagePositions: { ...brand.theme.imagePositions, [key]: frame } },
+  }), [brand, key, frame, crop]);
 
   const gesture = useMemo(() => {
-    const pan = Gesture.Pan().runOnJS(true)
+    const pan = Gesture.Pan().enabled(crop).runOnJS(true)
       .onBegin(() => { start.current = frame; })
       .onUpdate(e => {
         // Dragging the photo right reveals more of its left side, so the focal point moves left.
@@ -48,11 +50,11 @@ export default function PortraitPositioner({ visible, brand, onDone, onCancel }:
           x: clamp(start.current.x - e.translationX * factor, 0, 100),
           y: clamp(start.current.y - e.translationY * factor, 0, 100) }));
       });
-    const pinch = Gesture.Pinch().runOnJS(true)
+    const pinch = Gesture.Pinch().enabled(crop).runOnJS(true)
       .onBegin(() => { start.current = frame; })
       .onUpdate(e => setFrame(current => ({ ...current, zoom: clamp(start.current.zoom * e.scale, 1, 3) })));
     return Gesture.Simultaneous(pan, pinch);
-  }, [frame, width]);
+  }, [frame, width, crop]);
 
   const finish = () => {
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
@@ -69,22 +71,26 @@ export default function PortraitPositioner({ visible, brand, onDone, onCancel }:
         <Pressable onPress={onCancel} accessibilityRole="button" hitSlop={10} style={{ padding: 8 }}>
           <Text style={{ color: "#C8C2B4", fontSize: 16 }}>Cancel</Text>
         </Pressable>
-        <Text style={{ flex: 1, color: "#F5EFE5", textAlign: "center", fontSize: 16, fontWeight: "600" }}>Position your portrait</Text>
+        <Text style={{ flex: 1, color: "#F5EFE5", textAlign: "center", fontSize: 16, fontWeight: "600" }}>Photo layout</Text>
         <Pressable onPress={finish} accessibilityRole="button" hitSlop={10}
           style={({ pressed }) => ({ paddingVertical: 8, paddingHorizontal: 16, borderRadius: 999, backgroundColor: "#D4B989", transform: [{ scale: pressed ? 0.95 : 1 }] })}>
           <Text style={{ color: "#171713", fontSize: 16, fontWeight: "700" }}>Done</Text>
         </Pressable>
       </View>
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flexDirection: "row", justifyContent: "center", gap: 12, padding: 12 }}>
+        <Pressable accessibilityRole="button" accessibilityState={{ selected: !crop }} onPress={() => setCrop(false)}><Text style={{ color: !crop ? "#D4B989" : "#C8C2B4" }}>Show full photo</Text></Pressable>
+        <Pressable accessibilityRole="button" accessibilityState={{ selected: crop }} onPress={() => setCrop(true)}><Text style={{ color: crop ? "#D4B989" : "#C8C2B4" }}>Crop photo</Text></Pressable>
+      </View>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: "center", paddingBottom: 20 }}>
         <GestureDetector gesture={gesture}>
           <View style={{ width, overflow: "hidden", borderRadius: 18 }} collapsable={false}>
             <View pointerEvents="none"><ThemeHero brand={withThemeSlots(live)} width={width} preview /></View>
           </View>
         </GestureDetector>
-      </View>
+      </ScrollView>
       <View style={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 24, alignItems: "center", gap: 10 }}>
-        <Text style={{ color: "#C8C2B4", textAlign: "center" }}>Drag to move · Pinch to zoom</Text>
-        <Pressable onPress={reset} accessibilityRole="button" hitSlop={8}><Text style={{ color: "#D4B989" }}>Reset</Text></Pressable>
+        <Text style={{ color: "#C8C2B4", textAlign: "center" }}>{crop ? "Drag to move · Pinch to zoom" : "The layout adapts to show your entire photo."}</Text>
+        {crop && <Pressable onPress={reset} accessibilityRole="button" hitSlop={8}><Text style={{ color: "#D4B989" }}>Reset crop</Text></Pressable>}
       </View>
     </GestureHandlerRootView>
   </Modal>;

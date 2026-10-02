@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { Animated, Modal, Platform, Pressable, Text, View, useWindowDimensions } from "react-native";
+import { Animated, Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChevronLeft } from "lucide-react-native";
@@ -19,6 +19,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
 }) {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const scrollRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const dragX = useRef(new Animated.Value(0)).current;
 
@@ -49,8 +50,8 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     [scrollY],
   );
   useEffect(() => {
-    if (visible) scrollY.setValue(0);
-  }, [visible, scrollY]);
+    if (visible) { scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
+  }, [visible, brand.layoutId, scrollY]);
 
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -69,6 +70,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
             </View>
           </View>
           <Animated.ScrollView
+            ref={scrollRef}
             onScroll={onScroll}
             scrollEventThrottle={16}
             overScrollMode="never"

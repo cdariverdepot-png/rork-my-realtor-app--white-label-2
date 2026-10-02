@@ -163,11 +163,11 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
     <>
       {canPosition && !compact && <Pressable onPress={() => { tick(); setPositioning(true); }} accessibilityRole="button" hitSlop={6}
         style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, padding: 12, opacity: pressed ? 0.6 : 1 })}>
-        <Move size={15} color="#D4B989" /><Text style={{ color: "#D4B989" }}>Position your portrait (or tap the preview)</Text></Pressable>}
+        <Move size={15} color="#D4B989" /><Text style={{ color: "#D4B989" }}>Photo layout (or tap the preview)</Text></Pressable>}
       {!compact && <Text style={{ color: "#C5BDAF", textAlign: "center", fontSize: 12 }}>{demo ? "Demo selections are temporary and never change a real profile." : "Theme selection is a draft until you save below."}</Text>}
       {!compact && <Pressable onPress={() => setComparing(true)} accessibilityRole="button" style={{ alignSelf: "center", padding: 14 }}><Text style={{ color: "#D4B989", textDecorationLine: "underline" }}>Compare with your original image</Text></Pressable>}
       <PortraitPositioner visible={positioning} brand={candidate} onCancel={() => setPositioning(false)}
-        onDone={next => { setPositioning(false); onChoose({ ...draft, theme: { ...draft.theme, imagePositions: next.theme.imagePositions } }); }} />
+        onDone={next => { setPositioning(false); onChoose({ ...draft, theme: { ...draft.theme, imagePositions: next.theme.imagePositions, portraitFit: next.theme.portraitFit } }); }} />
       <Modal visible={comparing} animationType="none" onRequestClose={() => setComparing(false)}>
         <View style={{ flex: 1, backgroundColor: "#171A17", paddingTop: 24 }}>
           <View style={{ flexDirection: "row", padding: 16, alignItems: "center" }}><Text style={{ color: "#F5EFE5", flex: 1 }}>{d.name} · Reference comparison</Text><Pressable onPress={() => step(-1)} accessibilityRole="button" accessibilityLabel="Previous comparison theme" style={{ padding: 12 }}><ChevronLeft color="#F5EFE5" /></Pressable><Pressable onPress={() => step(1)} accessibilityRole="button" accessibilityLabel="Next comparison theme" style={{ padding: 12 }}><ChevronRight color="#F5EFE5" /></Pressable><Pressable onPress={() => setComparing(false)} accessibilityRole="button" accessibilityLabel="Close reference comparison" style={{ padding: 12 }}><X color="#F5EFE5" /></Pressable></View>

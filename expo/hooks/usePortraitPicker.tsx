@@ -56,7 +56,7 @@ async function launchSource(source: Source): Promise<string | null> {
 /**
  * Shared realtor portrait flow.
  * - With an existing photo: tap opens crop/reposition (industry-standard), Replace is secondary.
- * - Without: pick/take → auto-calibrated crop → portable URI for portraitUrl.
+ * - Without: pick/take → full photo by default (optional explicit crop) → portable URI for portraitUrl.
  * Render `cropper` once near the screen root.
  */
 export function usePortraitPicker(options?: {
@@ -82,7 +82,7 @@ export function usePortraitPicker(options?: {
     setPendingUri(raw);
   }), []);
 
-  /** Pick or take a new photo, then open the cropper with a smart default. */
+  /** Pick or take a photo; the confirmation keeps its entire image by default. */
   const pickPortable = useCallback(async (): Promise<string | null> => {
     if (opening || pendingUri || resolveRef.current) return null;
     setOpening(true);

@@ -55,49 +55,6 @@ export function useReducedMotion(): ReducedMotionState {
 
 /** Shared demo-derived motion. No profile, navigation or persistence ownership. */
 export function useThemeMotion(scrollY: Animated.Value | undefined, height: number, disabled = false, imageTravelLimit = Infinity) {
-  const fallback = useRef(new Animated.Value(0)).current;
-  const { ready, reduced } = useReducedMotion();
-  const sy = scrollY ?? fallback;
-  // Freeze the a11y preference after the first answer so a mid-scroll
-  // reduceMotionChanged cannot recreate interpolations and flash the tree.
-  const frozenReduced = useRef<boolean | null>(null);
-  if (ready && frozenReduced.current === null) frozenReduced.current = reduced;
-  const still = !ready || (frozenReduced.current ?? true) || disabled;
-  // Round height so onLayout jitter (sub-pixel / font measure) does not remint
-  // interpolation nodes mid-scroll — that remounts the parallax layer and blinks.
-  const h = Math.max(1, Math.round(height));
-  const travelCap = Number.isFinite(imageTravelLimit) ? Math.round(imageTravelLimit) : imageTravelLimit;
-  // Always return Animated nodes (never raw numbers) so parent re-renders and
-  // reduce-motion readiness do not remount the parallax Image wrapper.
-  return useMemo(() => {
-    // Upward travel only — positive translateY was dropping the portrait ~travel
-    // limit (~0.25in) over BUY A HOME / action tiles on scroll.
-    const travel = still ? 0 : Math.min(h * 0.35, travelCap);
-    // Overscroll (negative scrollY / rubber-band): keep scale at 1. Pull-zoom was
-    // expanding the portrait past overflow:hidden into the tiles beneath during
-    // bounce — the "quarter-inch fight". Scroll-down parallax keeps mild push scale.
-    const pushScale = still ? 1 : 1.05;
-    return {
-      // Overscroll: translate 0 (no drop). Scroll down: image moves UP. Keep parallax.
-      imgTranslate: sy.interpolate({
-        inputRange: [-h, 0, h], outputRange: [0, 0, -travel], extrapolate: "clamp",
-      }),
-      imgScale: sy.interpolate({
-        inputRange: [-h, 0, h], outputRange: [1, 1, pushScale], extrapolate: "clamp",
-      }),
-      // Scroll-linked opacity fades read as the whole page blinking on bounce /
-      // overscroll; parallax is transform-only.
-      topBarOpacity: sy.interpolate({
-        inputRange: [0, 1], outputRange: [1, 1], extrapolate: "clamp",
-      }),
-      // Content slide fought the portrait (relative quarter-inch shifts). Image
-      // parallax stays; hero copy stays planted in the frame.
-      contentTranslate: sy.interpolate({
-        inputRange: [0, 1], outputRange: [0, 0], extrapolate: "clamp",
-      }),
-      contentOpacity: sy.interpolate({
-        inputRange: [0, 1], outputRange: [1, 1], extrapolate: "clamp",
-      }),
-    };
-  }, [sy, h, still, travelCap]);
+  // Hero imagery and copy are stationary; scrolling cannot create or swap interpolation nodes.
+  return useMemo(() => ({ imgTranslate: 0, imgScale: 1, topBarOpacity: 1, contentTranslate: 0, contentOpacity: 1 }), []);
 }

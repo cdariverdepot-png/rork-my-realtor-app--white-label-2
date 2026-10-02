@@ -39,36 +39,19 @@ test('imagePosition returns a stable object for identical framing', () => {
   assert.deepEqual(a, { left: '50%', top: '50%' });
 });
 
-test('useThemeMotion always exposes Animated interpolations (no number swap)', () => {
-  const src = read('hooks/useThemeMotion.ts');
-  assert.match(src, /useMemo/);
-  assert.match(src, /Always return Animated nodes/);
-  assert.doesNotMatch(src, /imgTranslate:\s*still\s*\?\s*0\s*:/);
-  assert.doesNotMatch(src, /imgScale:\s*still\s*\?\s*1\s*:/);
+test('portrait and copy motion stays constant and ignores scroll input', () => {
+  const src = ts.transpileModule(read('hooks/useThemeMotion.ts'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
+  const module = { exports: {} };
+  new Function('require', 'module', 'exports', src)(id => id === 'react' ? { useMemo: fn => fn() } : {}, module, module.exports);
+  const scroll = new Proxy({}, { get() { throw Error('Hero must never subscribe to scroll'); } });
+  assert.deepEqual(module.exports.useThemeMotion(scroll, 800), { imgTranslate: 0, imgScale: 1, topBarOpacity: 1, contentTranslate: 0, contentOpacity: 1 });
 });
 
-test('useThemeMotion never translates the hero downward over content', () => {
-  const src = read('hooks/useThemeMotion.ts');
-  // Overscroll hold + upward parallax only (negative translate on scroll).
-  assert.match(src, /outputRange:\s*\[0,\s*0,\s*-travel\]/);
-  assert.doesNotMatch(src, /travelDown/);
-  // Overscroll must not pull-zoom (scale stayed 1) — that fought tiles under the hero.
-  assert.match(src, /outputRange:\s*\[1,\s*1,\s*pushScale\]/);
-  assert.doesNotMatch(src, /pullScale/);
-  // Opacity must stay fully on — scroll fades looked like whole-page flicker.
-  assert.match(src, /contentOpacity:[\s\S]*?outputRange:\s*\[1,\s*1\]/);
-  // Content slide fought the portrait; keep copy planted.
-  assert.match(src, /contentTranslate:[\s\S]*?outputRange:\s*\[0,\s*0\]/);
-  assert.match(src, /cachedMotion|motionListeners/);
-});
-
-test('Backdrop clips on a non-transformed frame and does not rasterize', () => {
-  const src = read('components/themes/shared.tsx');
-  assert.match(src, /overflow:\s*["']hidden["']/);
-  assert.match(src, /collapsable=\{false\}/);
-  // Props must be absent (comments may still mention the old approach).
-  assert.doesNotMatch(src, /shouldRasterizeIOS[=\s>]/);
-  assert.doesNotMatch(src, /renderToHardwareTextureAndroid[=\s>]/);
+test('full portrait clips only explicit crops and never hardware-rasterizes', () => {
+  const src = read('components/FullPortrait.tsx');
+  assert.match(src, /portraitFit === "crop"/);
+  assert.match(src, /crop \? "cover" : "contain"/);
+  assert.doesNotMatch(src, /imgTranslate|imgScale|shouldRasterizeIOS|renderToHardwareTextureAndroid/);
 });
 
 test('theme preview and client heroes route portraits through PortraitImage', () => {

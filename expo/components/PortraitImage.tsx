@@ -32,7 +32,7 @@ function PortraitImage({
   uri,
   source,
   style,
-  contentFit = "cover",
+  contentFit = "contain",
   contentPosition,
   accessibilityLabel,
   recyclingKey,

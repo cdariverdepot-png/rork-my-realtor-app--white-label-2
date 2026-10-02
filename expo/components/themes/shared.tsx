@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions, type TextStyle, type ViewStyle } from "react-native";
-import PortraitImage from "../PortraitImage";
+import FullPortrait from "../FullPortrait"; // Stable PortraitImage source identity.
 import { ArrowRight, MessageCircle, X, type LucideIcon } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import { themeDesign } from "@/constants/themeDesigns";
 import { useThemeMotion } from "@/hooks/useThemeMotion";
 import { imageFrame, imagePosition } from "@/lib/themeImages";
-
-/** Zoom around the chosen focal point; at zoom ≥ 1 the frame always stays filled. Sample portraits are never reframed. */
-function zoomStyle(p: { portraitSource?: number; brand: Brand }): ViewStyle {
-  if (p.portraitSource !== undefined) return {};
-  const f = imageFrame(p.brand.theme, p.brand.layoutId);
-  return f.zoom > 1 ? { transform: [{ scale: f.zoom }], transformOrigin: `${f.x}% ${f.y}%` } : {};
-}
 
 export type HeroProps = { brand: Brand; portraitSource?: number; width?: number; scrollY?: Animated.Value; preview?: boolean; topInset?: number;
   onBrowse?: () => void; onMessage?: () => void; onSaved?: () => void; onSchedule?: () => void; onCall?: () => void; onNotifications?: () => void };
@@ -30,22 +23,7 @@ export function useFrame(p: HeroProps, referenceHeight: number) {
     first: p.brand.realtor.name.trim().split(/\s+/)[0] || "your realtor" };
 }
 export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: HeroProps; frame: ReturnType<typeof useFrame>; colors: readonly [string, string, ...string[]]; left?: number; vertical?: boolean }) {
-  // Clip on a NON-transformed ancestor. Transformed children (parallax) escape
-  // overflow when hardware-rasterized — that was the portrait fighting tiles
-  // beneath. Overscan covers upward travel + mild push scale.
-  const bleed = 36 * frame.s;
-  return <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]} pointerEvents="none" collapsable={false}>
-    {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View
-      collapsable={false}
-      style={{ position: "absolute", left: left * frame.s, right: 0, top: -bleed, bottom: -bleed,
-        transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
-      <View style={[StyleSheet.absoluteFill, zoomStyle(p)]} collapsable={false}>
-        <PortraitImage source={p.portraitSource} uri={p.brand.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} priority="high" accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
-      </View>
-    </Animated.View>}
-    <></>
-    {!vertical && !frame.d.light && <></>}
-  </View>;
+  return <FullPortrait brand={p.brand} source={p.portraitSource} width={390 * frame.s} />;
 }
 /** Font size that keeps a one-line label (e.g. a name) inside `width`, never above `max`. */
 export function fitSize(text: string, max: number, width: number, perChar = 0.5) {
