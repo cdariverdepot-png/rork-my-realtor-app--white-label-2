@@ -22,7 +22,8 @@ test('preview account paths lead to a useful menu while signed-in clients keep t
 test('all seven footer designs have useful menu routes in preview and retain client profile controls', () => {
   const react = { createElement: (type, props, ...children) => ({type,props:props||{},children:children.flat(Infinity)}) };
   const component = load('components/ThemeNavigation.tsx', {
-    react, 'react-native': {Pressable:'button',Text:'text',View:'view'}, 'lucide-react-native': {},
+    react, 'react-native': {Text:'text',View:'view',StyleSheet:{create:x=>x}}, 'lucide-react-native': {}, 'expo-blur':{BlurView:'blur'}, './TactilePressable':'button',
+    '@/hooks/useReducedTransparency': {useReducedTransparency:()=>false},
     '@/constants/themeDesigns': {themeDesign:(id)=>({composition:id,background:'#111111',accent:'#aa9900',muted:'#888888'})},
   }).default;
   const buttons = node => node && typeof node === 'object' ? (node.type === 'button' ? [node] : node.children.flatMap(buttons)) : [];
@@ -34,6 +35,23 @@ test('all seven footer designs have useful menu routes in preview and retain cli
       assert.ok(routes.includes(preview || ['discovery','concierge'].includes(composition) ? '/menu' : '/account'));
       if (preview) assert.ok(!routes.includes('/account'));
     }
+  }
+});
+
+test('theme presses respond immediately, preserve handlers, and respect reduced motion', () => {
+  for(const reduced of [false,true]) {
+    let cursor=0;const slots=[];let haptics=0,presses=0;
+    class Value {constructor(value){this.value=value;}setValue(value){this.value=value;}stopAnimation(){}}
+    const flatten=s=>Array.isArray(s)?Object.assign({},...s.filter(Boolean).map(flatten)):s||{};
+    const react={createElement:(type,props,...children)=>({type,props,children}),useRef:value=>{const i=cursor++;return slots[i]??(slots[i]={current:value});},useState:value=>{const i=cursor++;slots[i]??=value;return [slots[i],next=>{slots[i]=next;}];}};
+    const component=load('components/TactilePressable.tsx',{react,'react-native':{Pressable:'button',Platform:{OS:'ios'},StyleSheet:{flatten},Animated:{Value,createAnimatedComponent:()=> 'button',spring:(value,opts)=>({start:()=>value.setValue(opts.toValue)})}},'expo-haptics':{selectionAsync:()=>{haptics++;return Promise.resolve();}},'@/hooks/useThemeMotion':{useReducedMotion:()=>({reduced})}}).default;
+    const render=()=>{cursor=0;return component({onPress:()=>presses++,style:{minHeight:12,minWidth:20}});};
+    let button=render();let style=flatten(button.props.style);
+    assert.equal(style.minHeight,44);assert.equal(style.minWidth,44);
+    button.props.onPressIn({});button=render();style=flatten(button.props.style);
+    assert.equal(style.opacity,0.78);assert.equal(style.transform.at(-1).scale.value,reduced?1:0.975);
+    button.props.onPress({});assert.equal(presses,1);assert.equal(haptics,1);
+    button.props.onPressOut({});button=render();assert.equal(flatten(button.props.style).opacity,1);
   }
 });
 test('a client only sees explicitly assigned transactions and appropriate shared documents', () => {

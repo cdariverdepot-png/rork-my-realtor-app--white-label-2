@@ -1,5 +1,6 @@
+import Pressable from './TactilePressable';
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { Animated, Modal, Platform, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChevronLeft } from "lucide-react-native";
@@ -26,6 +27,8 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   const dragX = useRef(new Animated.Value(0)).current;
   const [sliding, setSliding] = useState(false);
   const [page, setPage] = useState('/');
+  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const toggleSaved = (id: string) => setSavedIds(ids => ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id]);
   const navigate = (path: string) => { setPage(clientDestination(path, true)); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); };
 
   const close = () => {
@@ -59,7 +62,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     [scrollY],
   );
   useEffect(() => {
-    if (visible) { setPage('/'); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
+    if (visible) { setPage('/'); setSavedIds([]); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
   }, [visible, brand.layoutId, scrollY]);
 
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
@@ -87,14 +90,19 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
             alwaysBounceVertical={false}
             // Avoid recycling the hero offscreen — remounts looked like whole-page blinks.
             removeClippedSubviews={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ paddingBottom: 116 + insets.bottom }}
             style={Platform.OS === "web" ? ({ overscrollBehaviorY: "none" } as object) : undefined}
           >
             <View style={{ maxWidth: 390, width: "100%", alignSelf: "center", overflow: "hidden" }}>
-              {page === '/' ? <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} onNavigate={navigate} /> : <ThemePreviewPage route={page} brand={brand} listings={listings} onNavigate={navigate} />}
+              {page === '/' ? <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} onNavigate={navigate}
+                onOpen={id => navigate(`/listing/${id}`)} onFavorite={toggleSaved} isFavorite={id => savedIds.includes(id)}
+                onCall={() => navigate('/message')} onContact={() => navigate('/message')} /> :
+                <ThemePreviewPage route={page} brand={brand} listings={listings} onNavigate={navigate} savedIds={savedIds} onFavorite={toggleSaved} />}
             </View>
             {note ? <Text style={{ color: "#C5BDAF", padding: 24, textAlign: "center", lineHeight: 21 }}>{note}</Text> : null}
           </Animated.ScrollView>
-          <View style={{ width: "100%", maxWidth: 390, alignSelf: "center", paddingBottom: insets.bottom }}><ThemeNavigation brand={brand} preview pathname={page} onNavigate={navigate} /></View>
+          <View pointerEvents="box-none" style={{ position: 'absolute', bottom: 0, width: "100%", maxWidth: 390, alignSelf: "center", paddingBottom: insets.bottom }}><ThemeNavigation brand={brand} preview pathname={page} onNavigate={navigate} saved={savedIds.length} /></View>
         </Animated.View>
       </GestureDetector>
     </GestureHandlerRootView>

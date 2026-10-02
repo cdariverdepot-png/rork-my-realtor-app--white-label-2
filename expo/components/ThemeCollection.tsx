@@ -1,6 +1,7 @@
+import Pressable from './TactilePressable';
 import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React from "react";
-import { Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { Heart, ArrowRight, BedDouble, Bath, Maximize } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
@@ -29,7 +30,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const cardWidth = coastal || minimal || c === "journal" ? pairedWidth : discovery ? Math.max(124, (width - 50) / 3) : burgundy ? width * 0.40 : width * 0.73;
   const favorite = (item: ManagedListing) => <Pressable disabled={!onFavorite} onPress={() => onFavorite?.(item.id)} accessibilityRole="button"
     accessibilityLabel={isFavorite?.(item.id) ? "Remove saved home" : "Save home"} accessibilityState={{ selected: !!isFavorite?.(item.id) }}
-    style={{ position: "absolute", top: 4, right: 2, padding: 10 }}><Heart size={20} color="#FFF8EC" fill={isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
+    style={{ position: "absolute", top: 4, right: 4, width: 44, height: 44, borderRadius: 22, backgroundColor: "#11171388", alignItems: "center", justifyContent: "center", zIndex: 2 }}><Heart size={20} color="#FFF8EC" fill={isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
   const specs = (item: ManagedListing, size = 9) => <View style={{ flexDirection: "row", alignItems: "center", gap: 5, flexWrap: "wrap", marginTop: 8 }}>
     <BedDouble size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.beds}</Text>
     <Bath size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.baths}</Text>

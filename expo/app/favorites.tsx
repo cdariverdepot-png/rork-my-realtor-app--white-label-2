@@ -55,7 +55,7 @@ export default function FavoritesScreen() {
     <View style={styles.root}>
       <ScreenBackdrop screen="favorites" />
       <ModalChrome eyebrow="Saved by you" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <Reveal delay={40}>
           <Text style={styles.intro}>
             Make this yours. I'll always know what you've quietly fallen for.

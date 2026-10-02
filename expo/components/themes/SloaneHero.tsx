@@ -1,5 +1,6 @@
+import Pressable from '../TactilePressable';
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Search, SlidersHorizontal } from "lucide-react-native";
 import { useHero, Masthead, Photo, Eyebrow, Title, Introduction, Buttons, DirectLine } from "./heroElements";
 import type { HeroProps } from "./shared";

@@ -202,7 +202,7 @@ export default function ClientAccount() {
 
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 80 }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 116 }}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.hero}>

@@ -183,7 +183,7 @@ export default function DocumentsScreen() {
     <View style={styles.root}>
       <ScreenBackdrop screen="documents" intensity="deep" />
       <ModalChrome eyebrow="Your documents" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <Reveal delay={40}>
           <Text style={styles.intro}>
             Filed by transaction. Sign securely through the same platforms your closing team uses.

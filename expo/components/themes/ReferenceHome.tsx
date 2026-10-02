@@ -1,6 +1,7 @@
+import Pressable from '../TactilePressable';
 import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React, { useMemo } from "react";
-import { Animated, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { Animated, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import PortraitImage from "../PortraitImage";
 import { ArrowRight, ChevronRight, Heart, Phone, MessageCircle, CalendarDays, UserPlus, KeyRound, Star, House, BellRing, TrendingUp, ConciergeBell, ShieldCheck, type LucideIcon } from "lucide-react-native";
@@ -17,7 +18,7 @@ import { SERIF, type HeroProps } from "./shared";
 export type ReferenceRoute = "/listings" | "/message" | "/favorites" | "/calendar" | "/insights" | "/notifications" | "/account" | "/book" | "/documents" | "/note";
 export type ReferenceHomeProps = { brand: Brand; portraitSource?: number; listings: ManagedListing[]; width?: number; scrollY?: Animated.Value; topInset?: number; miniature?: boolean; primaryOnly?: boolean;
   onNavigate?: (route: ReferenceRoute) => void; onCall?: () => void; onOpen?: (id: string) => void; onFavorite?: (id: string) => void; isFavorite?: (id: string) => boolean;
-  renderAdditional?: (section: ClientSectionId) => React.ReactNode };
+  onContact?: (channel: "call" | "text" | "email") => void; renderAdditional?: (section: ClientSectionId) => React.ReactNode };
 type CardKind = "coastal" | "journal" | "discovery" | "burgundy" | "nora" | "mina" | "editorial";
 
 export default function ReferenceHome(p: ReferenceHomeProps) {
@@ -38,7 +39,7 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
     onBrowse: nav("/listings"), onMessage: nav("/message"), onSaved: nav("/favorites"), onSchedule: nav("/calendar"), onCall: p.onCall, onNotifications: nav("/notifications") };
   const favorite = (item: ManagedListing, bottom = false) => <Pressable disabled={!p.onFavorite} onPress={() => p.onFavorite?.(item.id)} accessibilityRole="button"
     accessibilityLabel={p.isFavorite?.(item.id) ? "Remove saved home" : "Save home"} accessibilityState={{ selected: !!p.isFavorite?.(item.id) }}
-    style={{ position: "absolute", right: 4 * s, top: bottom ? undefined : 3 * s, bottom: bottom ? 3 * s : undefined, padding: 7 * s }}><Heart color="#FFFCF4" size={18 * s} fill={p.isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
+    style={{ position: "absolute", right: 4 * s, top: bottom ? undefined : 3 * s, bottom: bottom ? 3 * s : undefined, padding: 11 * s, width: 44, height: 44, borderRadius: 22, backgroundColor: "#11171388", alignItems: "center", justifyContent: "center", zIndex: 2 }}><Heart color="#FFFCF4" size={18 * s} fill={p.isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
   const photo = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} accessibilityLabel={item.title} style={{ position: "absolute", width: "100%", height: "100%" }} />;
   const meta = (item: ManagedListing, size = 8) => <Text style={{ color: "#CDCBC0", fontSize: size * s, marginTop: 6 * s }}>{item.beds} bd  ·  {item.baths} ba  ·  {item.sqft}</Text>;
   const card = (item: ManagedListing, kind: CardKind) => {
@@ -67,10 +68,10 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
   const heading = (label: string, options: { light?: boolean; eyebrow?: boolean; small?: boolean } = {}) => <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 23 * s, paddingTop: (options.small ? 6 : b.layoutId === "private-collection" ? 9 : 14) * s, paddingBottom: (options.small ? 6 : b.layoutId === "private-collection" ? 8 : 13) * s, gap: 12 * s }}>
     <View style={{ flex: 1 }}>{options.eyebrow && !!b.curated.eyebrow && <Text style={{ color: d.accent, fontSize: 7 * s, letterSpacing: 1.4 * s, marginBottom: 4 * s }}>{b.curated.eyebrow.toUpperCase()}</Text>}
       {options.small ? <Text numberOfLines={1} style={{ color: d.accent, fontSize: 8 * s, letterSpacing: 1.8 * s }}>{label.replace(/\s+/g, " ").toUpperCase()}</Text> : <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ fontFamily: SERIF, fontSize: (b.layoutId === "coastal-personal" ? 19 : 22) * s, color: options.light ? "#232B26" : d.ink }}>{label.replace(/\s+/g, " ")}</Text>}</View>
-    <Pressable disabled={!p.onNavigate} onPress={nav("/listings")} accessibilityRole="button" accessibilityLabel="View all homes" style={{ flexDirection: "row", gap: 7 * s, paddingVertical: (options.small ? 3 : 8) * s }}>{text("View all", 8, d.accent)}<ArrowRight color={d.accent} size={14 * s} /></Pressable>
+    <Pressable disabled={!p.onNavigate} onPress={nav("/listings")} accessibilityRole="button" accessibilityLabel="View all homes" style={{ flexDirection: "row", gap: 7 * s, paddingVertical: (options.small ? 3 : 8) * s }}>{text("View all", 11, d.accent)}<ArrowRight color={d.accent} size={14 * s} /></Pressable>
   </View>;
   const serviceTile = (name: string, sub: string, Icon: LucideIcon, route: ReferenceRoute) => <Pressable key={name} disabled={!p.onNavigate} onPress={nav(route)} accessibilityRole="button" style={{ flex: 1, minWidth: 0, alignItems: "center", paddingVertical: 14 * s, paddingHorizontal: 4 * s, borderRadius: 9 * s, backgroundColor: "#20211CCC", borderWidth: 1, borderColor: d.accent + "22" }}>
-    <Icon size={24 * s} color={d.accent} /><Text numberOfLines={2} style={{ color: "#F1EEE3", fontSize: 8 * s, textAlign: "center", marginTop: 9 * s }}>{name}</Text><Text numberOfLines={2} style={{ color: d.accent, fontSize: 6 * s, textAlign: "center", marginTop: 7 * s, letterSpacing: 0.5 * s }}>{sub}</Text>
+    <Icon size={24 * s} color={d.accent} /><Text numberOfLines={2} style={{ color: "#F1EEE3", fontSize: 11 * s, textAlign: "center", marginTop: 9 * s }}>{name}</Text><Text numberOfLines={2} style={{ color: d.accent, fontSize: 9 * s, textAlign: "center", marginTop: 7 * s, letterSpacing: 0.5 * s }}>{sub}</Text>
   </Pressable>;
   const coastalUtilities = <View style={{ paddingHorizontal: 25 * s, gap: 8 * s, paddingTop: 14 * s, paddingBottom: 12 * s }}>
     <Pressable disabled={!p.onNavigate} onPress={nav("/favorites")} accessibilityRole="button" style={{ flexDirection: "row", alignItems: "center", backgroundColor: "#FFFFFFB0", borderRadius: 13 * s, padding: 10 * s, gap: 17 * s }}>
@@ -136,6 +137,6 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
   if (!["eliza-editorial", "advisor-journal"].includes(b.layoutId || "")) consumed.push("concierge");
   return <View style={{ backgroundColor: b.layoutId === "coastal-personal" ? "#F5F1E9" : d.background }}>
     {primary}
-    {!p.primaryOnly && orderThemeSections(visible, b.layoutId).filter(id => !consumed.includes(id)).map(id => p.renderAdditional ? p.renderAdditional(id) : <ThemeContentSection key={id} id={id} brand={b} onNavigate={p.onNavigate} />)}
+    {!p.primaryOnly && orderThemeSections(visible, b.layoutId).filter(id => !consumed.includes(id)).map(id => p.renderAdditional ? p.renderAdditional(id) : <ThemeContentSection key={id} id={id} brand={b} onNavigate={p.onNavigate} onContact={p.onContact} />)}
   </View>;
 }

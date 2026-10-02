@@ -30,7 +30,7 @@ export default function LegalScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 48 }]}
+        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 116 }]}
       >
         <View style={styles.rule} />
         <Text style={styles.title}>{doc.title}</Text>

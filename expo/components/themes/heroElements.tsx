@@ -21,7 +21,7 @@ export function Masthead({ p, s, d, serif = false }: ElementProps & { serif?: bo
   return <View style={{ flexDirection: "row", alignItems: "center", gap: 12 * s, paddingVertical: 20 * s }}>
     <View style={{ flex: 1 }}><BrandMark p={p} s={s} color={d.ink} accent={d.accent} serif={serif} /></View>
     <Circle s={s} color={d.accent} onPress={p.onMessage} />
-    {!!p.onNotifications && <Circle s={s} color={d.accent} Icon={Bell} onPress={p.onNotifications} />}
+    {!!p.onNotifications && <Circle s={s} color={d.accent} Icon={Bell} label="Updates" onPress={p.onNotifications} />}
   </View>;
 }
 export function Photo({ p, width, maxHeight }: { p: HeroProps; width: number; maxHeight?: number }) {

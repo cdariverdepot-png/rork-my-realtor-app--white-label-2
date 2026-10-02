@@ -342,7 +342,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
   const onHomeScroll = useMemo(() => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }), [scrollY]);
-  const bottomPad = 32;
+  const bottomPad = Math.max(insets.bottom, 10) + 116;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
   /** Floating Back (left) + quiet "Viewing as client" label — shared by every client preview, including the demo. */
@@ -576,6 +576,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           onScroll={onHomeScroll}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
           // Stable binding drives only the padded photo layer, never the page.
           overScrollMode="never"

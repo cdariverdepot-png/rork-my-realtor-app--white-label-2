@@ -9,6 +9,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import * as Haptics from "expo-haptics";
+import { useReducedMotion } from '@/hooks/useThemeMotion';
 
 /** Placement-only keys that stay on the outer touch target. */
 const OUTER_KEYS = new Set(["flex", "flexGrow", "flexShrink", "flexBasis", "alignSelf", "position", "top", "left", "right", "bottom", "zIndex", "opacity", "display"]);
@@ -39,11 +40,15 @@ export default function PressableScale({
 }: Props) {
   const scale = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(1)).current;
+  const { reduced } = useReducedMotion();
 
   const spring = (pressed: boolean) => {
+    scale.stopAnimation();
+    opacity.stopAnimation();
+    if (pressed) { scale.setValue(reduced ? 1 : scaleTo); opacity.setValue(0.82); return; }
     Animated.parallel([
       Animated.spring(scale, {
-        toValue: pressed ? scaleTo : 1,
+        toValue: 1,
         useNativeDriver: true,
         friction: 7,
         tension: 220,
@@ -58,9 +63,9 @@ export default function PressableScale({
 
   const fire = () => {
     if (Platform.OS === "web" || haptic === "none") return;
-    if (haptic === "light") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    else if (haptic === "medium") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    else Haptics.selectionAsync();
+    if (haptic === "light") void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    else if (haptic === "medium") void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+    else void Haptics.selectionAsync().catch(() => {});
   };
 
   // The button's own look (row layout, padding, fill, radius, border) belongs on
@@ -80,6 +85,7 @@ export default function PressableScale({
   return (
     <Pressable
       {...rest}
+      accessibilityRole={rest.accessibilityRole ?? 'button'}
       style={outer as ViewStyle}
       hitSlop={rest.hitSlop ?? 10}
       onPressIn={(e) => {

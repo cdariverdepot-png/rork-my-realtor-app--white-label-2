@@ -51,7 +51,7 @@ export default function NotificationsScreen() {
     <View style={styles.root}>
       <ScreenBackdrop screen="notifications" />
       <ModalChrome eyebrow="Concierge alerts" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <Reveal delay={40}>
         <Text style={styles.intro}>
           Curated, never spam. Just the moments worth your attention.

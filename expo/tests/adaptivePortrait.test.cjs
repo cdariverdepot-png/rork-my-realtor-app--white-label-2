@@ -11,6 +11,7 @@ function runtime(ratio=0.5, known=true, fontScale=1) {
  new Function('require','module','exports',code)(id=>{
  if(id==='react')return react;if(id==='react-native')return rn;if(id==='expo-image')return {Image:'Image'};
  if(id==='lucide-react-native')return new Proxy({},{get:(_,key)=>key});
+ if(id.endsWith('/TactilePressable'))return 'Pressable';
  if(id==='@/hooks/usePortraitDimensions')return {usePortraitDimensions:()=>({ratio,known,hasPhoto:true})};
  if(id==='@/hooks/useThemeMotion')return {useThemeMotion:()=>({imgTranslate:0})};
  let next=id.startsWith('@/')?path.join(root,id.slice(2)):path.resolve(path.dirname(file),id);

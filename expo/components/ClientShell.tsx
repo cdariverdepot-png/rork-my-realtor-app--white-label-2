@@ -1,5 +1,6 @@
+import Pressable from './TactilePressable';
 import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { usePathname, useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBrand } from '@/contexts/BrandContext';
@@ -29,8 +30,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       })} style={{ padding: 10 }}><Text style={{ color: d.accent }}>‹ Dashboard</Text></Pressable>
       <Text style={{ color: d.muted, fontSize: 12 }}>Viewing as client</Text>
     </View> : null}
-    <View style={{ flex: 1 }}>{children}</View>
-    {visible ? <BottomNav embedded /> : null}
+    <View style={{ flex: 1, paddingBottom: visible && (['/messages', '/message', '/book', '/client-profile', '/note'].includes(path) || path.startsWith('/listing/')) ? 96 + insets.bottom : 0 }}>{children}</View>
+    {visible ? <View pointerEvents="box-none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}><BottomNav embedded /></View> : null}
   </View>;
 }
 
@@ -44,7 +45,7 @@ export function ClientPreviewBoundary({ children }: { children: React.ReactNode 
 }
 function PreviewFeature({ title, copy, schedule }: { title: string; copy: string; schedule: boolean }) {
   const router = useRouter(), { brand } = useBrand(), d = themeDesign(brand.layoutId, brand.theme);
-  return <ScrollView contentContainerStyle={{ padding: 28, gap: 22 }}>
+  return <ScrollView contentContainerStyle={{ padding: 28, paddingBottom: 140, gap: 22 }} keyboardShouldPersistTaps="handled">
     <Text style={{ color: d.accent, letterSpacing: 2, fontSize: 11 }}>CLIENT EXPERIENCE</Text>
     <Text style={{ color: d.ink, fontSize: 32, fontFamily: 'CormorantGaramond_500Medium' }}>{title}</Text>
     <Text style={{ color: d.muted, fontSize: 16, lineHeight: 25 }}>{copy}</Text>

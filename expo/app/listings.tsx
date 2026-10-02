@@ -114,7 +114,7 @@ export default function AllListings() {
         columnWrapperStyle={{ gap: COL_GAP, paddingHorizontal: SIDE }}
         contentContainerStyle={{
           paddingTop: 18,
-          paddingBottom: insets.bottom + 36,
+          paddingBottom: insets.bottom + 116,
           gap: COL_GAP,
         }}
         showsVerticalScrollIndicator={false}

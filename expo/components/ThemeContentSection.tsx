@@ -1,5 +1,6 @@
+import Pressable from './TactilePressable';
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { ArrowUpRight, Heart, MessageCircle, CalendarDays, FileText, TrendingUp, Bell, ChevronRight } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
@@ -108,7 +109,7 @@ export default function ThemeContentSection({ id, brand: b, onNavigate, onContac
     case "footer":
       content = <>{text(b.realtor.brandName || b.realtor.name, true)}{text(b.realtor.title)}{text(b.realtor.city)}
         {text(b.realtor.email)}{text([b.credentials.license.brokerage, b.credentials.license.number, b.credentials.license.state].filter(Boolean).join(" · "))}
-        {text("Equal Housing Opportunity")}{text(b.copyright)}{link("My account", "/account")}</>;
+        {text("Equal Housing Opportunity")}{text(b.copyright)}</>;
       break;
     default: return null;
   }

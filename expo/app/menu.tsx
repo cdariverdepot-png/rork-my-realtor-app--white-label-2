@@ -1,5 +1,6 @@
+import Pressable from '@/components/TactilePressable';
 import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBrand } from '@/contexts/BrandContext';
@@ -17,7 +18,7 @@ export default function AppMenu() {
   ];
   return <View style={{ flex: 1, backgroundColor: d.background }}>
     <ModalChrome eyebrow="App menu" onDark={!d.light} />
-    <ScrollView contentContainerStyle={{ padding: 24, gap: 12, paddingBottom: 40 }}>
+    <ScrollView contentContainerStyle={{ padding: 24, gap: 12, paddingBottom: 140 }}>
       {preview ? <Text style={{ color: d.muted, lineHeight: 22, marginBottom: 10 }}>Explore your client app. Client account and preference controls appear when a client signs in.</Text> : null}
       {links.map(([label, path]) => <Pressable key={path} accessibilityRole="button" onPress={() => router.navigate(clientDestination(path, preview) as never)} style={{ padding: 18, borderBottomWidth: 1, borderColor: d.accent + '33', flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={{ color: d.ink, fontSize: 17 }}>{label}</Text><Text style={{ color: d.accent }}>›</Text>
