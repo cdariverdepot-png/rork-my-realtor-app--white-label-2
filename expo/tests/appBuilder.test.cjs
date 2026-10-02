@@ -253,8 +253,8 @@ test('URL preview card never renders realtor.name / auth handle under the headli
   const introAt = src.indexOf('YOUR INTRODUCTION', reviewStart);
   assert.ok(introAt > reviewStart, 'introduction card missing');
   const review = src.slice(reviewStart, introAt);
-  // Review now mounts the real ThemeFace canvas — never a flat brown stub.
-  assert.match(review, /ThemeFace/);
+  // Review now mounts the real client canvas — never a flat brown stub.
+  assert.match(review, /OnboardingThemePreview/);
   assert.match(review, /themeCandidate/);
   // Opening-line / review chrome must not interpolate draft.realtor.name (auth identity leak).
   assert.doesNotMatch(review, /\{draft\.realtor\.name\}/);

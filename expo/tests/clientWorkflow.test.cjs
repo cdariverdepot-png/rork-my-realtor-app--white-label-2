@@ -24,6 +24,7 @@ test('all seven footer designs have useful menu routes in preview and retain cli
   const component = load('components/ThemeNavigation.tsx', {
     react, 'react-native': {Text:'text',View:'view',StyleSheet:{create:x=>x}}, 'lucide-react-native': {}, 'expo-blur':{BlurView:'blur'}, './TactilePressable':'button',
     '@/hooks/useReducedTransparency': {useReducedTransparency:()=>false},
+    '@/constants/liveThemeDesigns': {liveThemeDesign:(id)=>({composition:id,background:'#111111',accent:'#aa9900',muted:'#888888'})},
     '@/constants/themeDesigns': {themeDesign:(id)=>({composition:id,background:'#111111',accent:'#aa9900',muted:'#888888'})},
   }).default;
   const buttons = node => node && typeof node === 'object' ? (node.type === 'button' ? [node] : node.children.flatMap(buttons)) : [];

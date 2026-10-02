@@ -43,7 +43,7 @@ export default memo(function ThemeFace({ id, brand, listings, portraitSource, wi
       <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={390} miniature primaryOnly />
     </View>
     {id !== "eliza-editorial" && <View pointerEvents="none" style={{ position: "absolute", bottom: 0, width: 390, transform: [{ scale }], transformOrigin: "bottom left" }}>
-      <ThemeNavigation brand={brand} />
+      <ThemeNavigation brand={brand} miniature />
     </View>}
   </View>;
 }, sameFace);

@@ -275,3 +275,20 @@ test('importDiscoveredListings merges on sourceUrl', () => {
   assert.equal(new Set(imported.map(l => l.id)).size, 2);
   assert.equal(mergeDiscoveredListings(imported, pair).length, 2);
 });
+
+test('continues a scoped Flexmls inventory shell even when server omits hydration markers', async () => {
+  const seed='https://agent.example/', flex='https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings';
+  const fragment=flex+'?list_view=photo&page=1&per_page=24';
+  const result=await discoverListings([seed],fixtureFetch({[seed]:`<a href="${flex}">View our properties</a>`,[flex]:'<title>Our listings</title><main>Loading properties</main>',[fragment]:propertyPage('123 Lake Ave',flex+'/123')}));
+  assert.equal(result.listings.length,1);
+  assert.ok(result.meta.visited.includes(fragment));
+});
+
+test('reads quoted and unquoted inventory counts for completeness checks', async () => {
+  for (const count of ['data-search-results-search-count=9','data-search-results-search-count="9"']) {
+    const uri='https://agent.example/listings';
+    const result=await discoverListings([uri],fixtureFetch({[uri]:`<main ${count}>${propertyPage('123 Lake Ave',uri+'/123')}</main>`}));
+    assert.equal(result.meta.expectedCount,9);
+    assert.equal(result.meta.outcome,'partial');
+  }
+});

@@ -6,7 +6,7 @@ import { Image } from "expo-image";
 import { Heart, ArrowRight, BedDouble, Bath, Maximize } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
-import { themeDesign } from "@/constants/themeDesigns";
+import { liveThemeDesign as themeDesign } from "@/constants/liveThemeDesigns";
 import { sectionState } from "@/constants/sections";
 
 export default function ThemeCollection({ brand, listings, width: previewWidth, onOpen, onBrowse, onFavorite, isFavorite }:
@@ -24,7 +24,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const feature = c === "property";
   const editorial = c === "editorial";
   const burgundy = c === "concierge";
-  const ink = coastal || editorial ? "#18231E" : d.ink;
+  const ink = d.ink;
   const serif = "CormorantGaramond_500Medium";
   const pairedWidth = Math.max(138, (width - 54) / 2);
   const cardWidth = coastal || minimal || c === "journal" ? pairedWidth : discovery ? Math.max(124, (width - 50) / 3) : burgundy ? width * 0.40 : width * 0.73;
@@ -43,7 +43,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
     const overlay = coastal || discovery || compact || editorial;
     const height = coastal ? 155 : discovery ? 236 : compact ? 195 : editorial ? 310 : undefined;
     return <View key={item.id} style={{ width: compact ? Math.max(126, (width - 54) / 3) : cardWidth, overflow: "hidden", borderRadius: editorial ? 0 : 10,
-      borderWidth: 1, borderColor: d.accent + "33", backgroundColor: coastal ? "#FFFDF8" : "#151714" }}>
+      borderWidth: 1, borderColor: d.accent + "33", backgroundColor: coastal ? "#FFFDF8" : d.background }}>
       <Pressable disabled={!onOpen} onPress={() => onOpen?.(item.id)} accessibilityRole="button" accessibilityLabel={item.title}>
         <View style={{ height: height ?? (minimal ? 155 : burgundy ? 180 : 132) }}>
           {image(item)}{badge(item)}

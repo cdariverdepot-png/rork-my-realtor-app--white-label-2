@@ -3,12 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Home, Search, Heart, MessageCircle, UserRound, CalendarDays, Menu, Layers, Ellipsis } from 'lucide-react-native';
 import type { Brand } from '@/contexts/BrandContext';
+import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 import { themeDesign } from '@/constants/themeDesigns';
 import TactilePressable from './TactilePressable';
 import { useReducedTransparency } from '@/hooks/useReducedTransparency';
 export type ThemeRoute = '/' | '/listings' | '/favorites' | '/message' | '/calendar' | '/account' | '/menu';
-export default function ThemeNavigation({ brand, onNavigate, pathname = '/', unread = 0, saved = 0, preview = false }: { brand: Brand; onNavigate?: (route: ThemeRoute) => void; pathname?: string; unread?: number; saved?: number; preview?: boolean }) {
-  const d = themeDesign(brand.layoutId, brand.theme);
+export default function ThemeNavigation({ brand, onNavigate, pathname = '/', unread = 0, saved = 0, preview = false, miniature = false }: { brand: Brand; onNavigate?: (route: ThemeRoute) => void; pathname?: string; unread?: number; saved?: number; preview?: boolean; miniature?:boolean }) {
+  const d = miniature ? themeDesign(brand.layoutId,brand.theme) : liveThemeDesign(brand.layoutId,brand.theme);
   const solid = useReducedTransparency();
   const tabs: [string, ThemeRoute, typeof Home][] = d.composition === 'coastal' ? [['Home', '/', Home], ['Collection', '/listings', Layers], ['Saved', '/favorites', Heart], ['Profile', '/account', UserRound]] :
     d.composition === 'discovery' ? [['Discover', '/', Home], ['Saved', '/favorites', Heart], ['Concierge', '/message', MessageCircle], ['Schedule', '/calendar', CalendarDays], ['Menu', '/menu', Menu]] :

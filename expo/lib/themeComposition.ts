@@ -2,8 +2,8 @@ import type { ManagedListing } from '@/contexts/ListingsContext';
 import type { ClientLayoutId } from '@/constants/clientLayouts';
 
 export const LIVE_THEME_BACKGROUNDS: Record<ClientLayoutId,string> = {
-  'eliza-editorial':'#081E1B', 'coastal-personal':'#EFF2EF', 'advisor-journal':'#111C22',
-  'warm-concierge':'#13251F', 'private-collection':'#231420', 'modern-editorial':'#101B24', 'portrait-statement':'#142720',
+  'eliza-editorial':'#071B19', 'coastal-personal':'#EBF0EC', 'advisor-journal':'#111E2A',
+  'warm-concierge':'#081F25', 'private-collection':'#1A1024', 'modern-editorial':'#101A32', 'portrait-statement':'#112723',
 };
 export function liveThemeBackground(id?:ClientLayoutId) { return LIVE_THEME_BACKGROUNDS[id ?? 'private-collection']; }
 

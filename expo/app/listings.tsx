@@ -120,10 +120,9 @@ export default function AllListings() {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={styles.intro}>
-            <Text style={styles.introCount}>{visible.length} homes currently represented</Text>
+            <Text style={styles.introCount}>{visible.length ? `${visible.length} homes to explore` : 'Your next home is worth the wait.'}</Text>
             <Text style={styles.introCopy}>
-              Every home here, I've walked personally. Tap one to step inside — or send me a note if
-              you'd like a private showing.
+              {visible.length ? 'Explore the collection, or get in touch to arrange a private showing.' : 'New homes will appear here as they become available. Get in touch to talk about what you’re looking for.'}
             </Text>
           </View>
         }

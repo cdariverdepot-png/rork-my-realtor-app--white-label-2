@@ -618,7 +618,11 @@ test('build onboarding: guest local path; never invents signup; edge sends to po
   // Guest access-code sessions never show invent-signup panels.
   assert.match(src, /needsBuilderAuth/);
   assert.match(src, /builderAuthPanel/);
-  assert.match(src, /Let's Build My App!|Let’s Build My App!/);
+  assert.match(src, /BuildUrlEntry/);
+  const entry = fs.readFileSync(path.join(__dirname, "..", "components/BuildUrlEntry.tsx"), "utf8");
+  assert.match(entry, /Import my listings/);
+  assert.equal((entry.match(/<TextInput\s/g)||[]).length,1);
+  assert.doesNotMatch(entry, /Upload PDF|Import contacts|Add link/);
   assert.doesNotMatch(src, /ACCOUNT REQUIRED/);
   assert.doesNotMatch(src, /Create account & continue/);
   assert.doesNotMatch(src, /EmailCodeSignIn/);

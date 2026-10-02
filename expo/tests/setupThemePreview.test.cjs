@@ -63,11 +63,13 @@ test('Warm Concierge themeDesign is the dark discovery canvas, not muddy paper',
   assert.notEqual(d.background.toLowerCase(), '#f3eadc'); // warmsand paper must not win
 });
 
-test('setup review renders ThemeFace for the AI-picked layout (no brown stub)', () => {
+test('setup review uses the actual client renderer and discovered inventory', () => {
   const src = fs.readFileSync(path.join(root, 'components/InitialRealtorSetup.tsx'), 'utf8');
-  assert.match(src, /ThemeFace/);
+  assert.match(src, /OnboardingThemePreview/);
+  assert.doesNotMatch(src,/themeSampleListings/);
+  assert.match(src,/mergeDiscoveredListings\(existingListings/);
   assert.match(src, /themeCandidate/);
-  assert.match(src, /themeDesign/);
+  assert.match(src, /liveThemeDesign/);
   assert.doesNotMatch(src, /backgroundColor: draft\.layoutId === "coastal-personal" \? "#F8F4EF" : "#29231F"/);
   assert.doesNotMatch(src, /#29231F/);
 });

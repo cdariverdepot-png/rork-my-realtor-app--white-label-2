@@ -7,7 +7,7 @@ import { useBrand } from '@/contexts/BrandContext';
 import { useEditMode } from '@/contexts/EditModeContext';
 import { useClientProfiles } from '@/contexts/ClientProfileContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { themeDesign } from '@/constants/themeDesigns';
+import { liveThemeDesign as themeDesign } from '@/constants/liveThemeDesigns';
 import { requiredStatus } from '@/constants/sections';
 import { isClientPage, isPrivateClientPage, previewFeatures } from '@/lib/clientNavigation';
 import { leavePreviewToDashboard } from '@/lib/navIntent';

@@ -622,7 +622,7 @@ function collectInventoryFragments(html: string, base: URL): string[] {
     if (url && sameSite(new URL(url), base)) out.push(url);
   }
   if (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/listings\/?$/.test(base.pathname) &&
-      /data-search-results-search-count|mapSupportData/.test(html) && !base.searchParams.has("list_view")) {
+      (/data-search-results-search-count|mapSupportData/.test(html) || /\/(?:office|agent)_listing_categories\/[^/]+\/listings\/?$/.test(base.pathname)) && !base.searchParams.has("list_view")) {
     const url = new URL(base);
     url.searchParams.set("list_view", "photo");
     url.searchParams.set("page", "1");
@@ -742,7 +742,7 @@ async function discoverListings(
     // A general market search is a navigation step, not evidence of the agent's inventory.
     const broad = next.broad && !/office_listing_categories|agent_listing_categories/.test(finalUrl.pathname);
     if (!broad) {
-      const count = html.match(/data-(?:search-results-search-count|listings-count|results-count)=["'](\d+)["']/i)?.[1];
+      const count = html.match(/data-(?:search-results-search-count|listings-count|results-count)\s*=\s*["']?(\d+)/i)?.[1];
       if (count) expectedCount = Math.max(expectedCount, Number(count));
       if (/data-has-next-page=["']true["']|\b(?:load more properties|load more listings|infinite-scroll)\b/i.test(html)) unresolvedPagination = true;
     }

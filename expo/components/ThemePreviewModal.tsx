@@ -16,9 +16,9 @@ import { clientDestination } from '@/lib/clientNavigation';
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
  * or by swiping right — the screen follows the finger and slides away.
  */
-export default function ThemePreviewModal({ visible, title, subtitle, note, brand, listings, portraitSource, onClose }: {
+export default function ThemePreviewModal({ visible, title, subtitle, note, brand, listings, portraitSource, initialRoute = "/", onClose }: {
   visible: boolean; title: string; subtitle?: string; note?: string;
-  brand: Brand; listings: ManagedListing[]; portraitSource?: number; onClose: () => void;
+  brand: Brand; listings: ManagedListing[]; portraitSource?: number; initialRoute?:string; onClose: () => void;
 }) {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -62,8 +62,8 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     [scrollY],
   );
   useEffect(() => {
-    if (visible) { setPage('/'); setSavedIds([]); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
-  }, [visible, brand.layoutId, scrollY]);
+    if (visible) { setPage(clientDestination(initialRoute,true)); setSavedIds([]); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
+  }, [visible, brand.layoutId, scrollY, initialRoute]);
 
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
     <GestureHandlerRootView style={{ flex: 1 }}>
