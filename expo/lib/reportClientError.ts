@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
-import { supabase } from "@/lib/supabase";
+import { ensureSupabaseSession, supabase } from "@/lib/supabase";
 
 /** Owner support inbox — same address the admin dashboard uses. */
 export const ERROR_REPORT_EMAIL = "contact@myrealtorapp.com";
@@ -96,6 +96,7 @@ export async function reportClientError( partial: {
     console.log("[error-report]", report.message, report.pathname, report.role);
 
     if (supabase) {
+      await ensureSupabaseSession();
       const { data, error } = await supabase.functions.invoke("report-client-error", {
         body: report,
       });

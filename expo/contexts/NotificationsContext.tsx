@@ -1,3 +1,4 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import { isForClient } from "@/lib/audience";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -32,7 +33,8 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
   /** What this viewer may see: realtor-only items for realtors; targeted items only for their clients. */
   const visibleTo = useCallback((n: NotifItem) => (n.audience !== "realtor" || isAdmin) && isForClient(n.recipientIds, currentClientId), [isAdmin, currentClientId]);
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:notifs.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:notifs.v1`;
   const CHANNEL = `${scope}:notifs`;
   const KV_KEY = `${scope}:notifs.v1`;
 
@@ -46,7 +48,7 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
   const channelRef = useRef<ReturnType<NonNullable<typeof supabase>["channel"]> | null>(null);
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => { setItems(SEED); setRev(0); revRef.current = 0; setHydrated(false); }, [realtorId]);
+  useEffect(() => { setItems(SEED); setRev(0); revRef.current = 0; setHydrated(false); }, [cacheScope]);
 
   // A client's "read" marks are their own, kept on their device — the shared
   // list's `read` flag belongs to the realtor, so one client can't clear
@@ -102,7 +104,7 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
 
   useEffect(() => {
     if (!supabase || !hydrated) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "push" }, (payload) => {
       const n = payload.payload as NotifItem; if (!n?.id) return;
       setItems((prev) => { if (prev.some((p) => p.id === n.id)) return prev; const next = [n, ...prev]; void persist(next); return next; });

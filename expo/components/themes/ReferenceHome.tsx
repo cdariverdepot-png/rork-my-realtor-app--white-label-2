@@ -13,6 +13,7 @@ import { themeDesign } from "@/constants/themeDesigns";
 import { withThemeSlots } from "@/constants/themeSlots";
 import ThemeHero from "../ThemeHero";
 import ThemeContentSection from "../ThemeContentSection";
+import LiveThemeHome from "./LiveThemeHome";
 import { SERIF, type HeroProps } from "./shared";
 
 export type ReferenceRoute = "/listings" | "/message" | "/favorites" | "/calendar" | "/insights" | "/notifications" | "/account" | "/book" | "/documents" | "/note";
@@ -22,6 +23,10 @@ export type ReferenceHomeProps = { brand: Brand; portraitSource?: number; listin
 type CardKind = "coastal" | "journal" | "discovery" | "burgundy" | "nora" | "mina" | "editorial";
 
 export default function ReferenceHome(p: ReferenceHomeProps) {
+  return p.miniature ? <CarouselReferenceHome {...p} /> : <LiveThemeHome {...p} />;
+}
+
+function CarouselReferenceHome(p: ReferenceHomeProps) {
   const window = useWindowDimensions();
   const width = p.width ?? window.width, s = width / 390;
   // The theme owns the layout; the profile only fills its slots.

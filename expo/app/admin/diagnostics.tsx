@@ -15,6 +15,8 @@ import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft, CheckCircle2, XCircle, Loader, Copy, Trash2, RefreshCw } from "lucide-react-native";
 
+import { useAuth } from '@/contexts/AuthContext';
+import { ensureSupabaseSession } from '@/lib/supabase';
 import { supabase } from "@/lib/supabase";
 import {
   clearKvWriteLog,
@@ -54,41 +56,8 @@ const c = {
   red: "#E5664F",
 } as const;
 
-const SETUP_SQL = `-- Run this once in Supabase Dashboard → SQL Editor.
-
-create table if not exists public.app_kv (
-  key text primary key,
-  value jsonb not null,
-  rev bigint not null default 0,
-  updated_at timestamptz not null default now()
-);
-
-alter publication supabase_realtime add table public.app_kv;
-
-alter table public.app_kv enable row level security;
-
-drop policy if exists "kv read"   on public.app_kv;
-drop policy if exists "kv insert" on public.app_kv;
-drop policy if exists "kv update" on public.app_kv;
-
-create policy "kv read"   on public.app_kv for select using (true);
-create policy "kv insert" on public.app_kv for insert with check (true);
-create policy "kv update" on public.app_kv for update using (true) with check (true);
-
--- Storage bucket policies (create the bucket first in Storage → New bucket
--- named "app-images" with "public bucket" enabled, then run this):
-
-drop policy if exists "app-images public read" on storage.objects;
-drop policy if exists "app-images anon upload" on storage.objects;
-
-create policy "app-images public read"
-  on storage.objects for select
-  using (bucket_id = 'app-images');
-
-create policy "app-images anon upload"
-  on storage.objects for insert
-  with check (bucket_id = 'app-images');
-`;
+const SETUP_SQL = `-- Apply the versioned supabase/migrations through the deployment pipeline.
+-- Never restore open KV or anonymous image-upload policies.`;
 
 type ProbeStatus = "pending" | "running" | "pass" | "fail";
 
@@ -117,6 +86,7 @@ function base64ToBytes(b64: string): Uint8Array {
 
 export default function DiagnosticsScreen() {
   const router = useRouter();
+  const {realtorId}=useAuth();
   const insets = useSafeAreaInsets();
 
   const [probes, setProbes] = useState<Probe[]>([
@@ -134,13 +104,13 @@ export default function DiagnosticsScreen() {
   // (key, payload size, ok/error + Supabase error string) without needing
   // a Mac to view console logs. This is the definitive answer to "are
   // realtor edits actually writing to Supabase?".
-  const [writeLog, setWriteLog] = useState<readonly KvWriteLogEntry[]>(getKvWriteLog());
+  const [writeLog, setWriteLog] = useState<readonly KvWriteLogEntry[]>(getKvWriteLog().filter(e=>!!realtorId && e.key.startsWith(realtorId+":")));
   useEffect(() => {
     const unsub = subscribeKvWriteLog(() => {
-      setWriteLog([...getKvWriteLog()]);
+      setWriteLog(getKvWriteLog().filter(e=>!!realtorId && e.key.startsWith(realtorId+":")));
     });
     return unsub;
-  }, []);
+  }, [realtorId]);
 
   // Server snapshot — reads every known sync key live from Supabase so the
   // client phone can confirm "yes, the row exists on the server with rev=X
@@ -275,18 +245,10 @@ export default function DiagnosticsScreen() {
 
       // 4 · kv write
       update("kvWrite", { status: "running" });
-      const probeKey = "diagnostics.probe";
+      const probeKey = realtorId + ":diagnostics.probe";
       const probeRev = Date.now();
       const probeValue = { hello: "rork", ts: probeRev };
-      const { error: writeErr } = await supabase.from("app_kv").upsert(
-        {
-          key: probeKey,
-          value: probeValue,
-          rev: probeRev,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: "key" }
-      );
+      const { error: writeErr } = await supabase.rpc('secure_kv_set',{p_key:probeKey,p_value:probeValue,p_rev:probeRev});
       if (writeErr) {
         update("kvWrite", { status: "fail", detail: writeErr.message ?? String(writeErr) });
         update("kvRoundtrip", { status: "fail", detail: "Skipped — write failed." });
@@ -320,7 +282,9 @@ export default function DiagnosticsScreen() {
     update("storage", { status: "running" });
     try {
       const bytes = base64ToBytes(TINY_JPEG_BASE64);
-      const path = `diagnostics/${Date.now().toString(36)}.jpg`;
+      const identity=await ensureSupabaseSession();
+      if(!identity) throw new Error("Please sign in again.");
+      const path = `${identity.user.id}/diagnostics/${Date.now().toString(36)}.jpg`;
       const { error: upErr } = await supabase.storage
         .from("app-images")
         .upload(path, bytes, { contentType: "image/jpeg", upsert: true });

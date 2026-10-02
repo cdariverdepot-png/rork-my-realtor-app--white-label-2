@@ -1,3 +1,4 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -18,9 +19,10 @@ const WEEK = 7 * DAY;
 const MAX_EVENTS = 500;
 
 export const [EngagementProvider, useEngagement] = createContextHook(() => {
-  const { realtorId, demoViewMode } = useAuth();
+  const { realtorId, demoViewMode, isAdmin, currentClientId } = useAuth();
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:engagement.views.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:engagement.views.v1`;
 
   const [views, setViews] = useState<ListingView[]>([]);
   const [hydrated, setHydrated] = useState<boolean>(false);
@@ -32,7 +34,7 @@ export const [EngagementProvider, useEngagement] = createContextHook(() => {
   const { clients } = useClients();
   const { summaries } = useMessages();
 
-  useEffect(() => { setViews([]); setHydrated(false); }, [realtorId]);
+  useEffect(() => { setViews([]); setHydrated(false); }, [cacheScope]);
 
   useEffect(() => {
     let mounted = true;

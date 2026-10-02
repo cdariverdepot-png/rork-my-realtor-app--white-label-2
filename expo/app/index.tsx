@@ -29,6 +29,7 @@ import ThemeCollection from "@/components/ThemeCollection";
 import ThemeContentSection from "@/components/ThemeContentSection";
 import ThemeCarousel from "@/components/ThemeCarousel";
 import ReferenceHome from "@/components/themes/ReferenceHome";
+import { liveThemeBackground } from '@/lib/themeComposition';
 import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import type { Brand } from "@/contexts/BrandContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
@@ -555,7 +556,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const previewDataReady = brandHydrated && listingsHydrated;
   // Designed themes own their canvas. Never paint warmsand/bone paper behind a dark Warm Concierge (etc.) — that muddy fallback is what users called "brown dog shit".
   const designedCanvas = previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing
-    ? themeDesign(previewBrand.layoutId, previewBrand.theme).background
+    ? liveThemeBackground(previewBrand.layoutId)
     : null;
   const pageBackground = designedCanvas ?? theme.band.deep;
   const scrollBackground = designedCanvas ?? theme.surface.paper;
@@ -597,6 +598,12 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
             <ReferenceHome brand={previewBrand} listings={previewListings} scrollY={scrollY} topInset={insets.top + 24}
               onNavigate={path => router.navigate(clientDestination(path, isAdmin && viewAsClient) as never)} onOpen={id => router.push(`/listing/${id}`)}
               onFavorite={id => toggleListing("favorites", id)} isFavorite={isFavorited}
+              onContact={channel => {
+                const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
+                const email = previewBrand.realtor.email.trim();
+                const url = channel === "email" ? email ? `mailto:${encodeURIComponent(email)}` : "" : phone ? `${channel === "call" ? "tel" : "sms"}:${phone}` : "";
+                if (url) void Linking.openURL(url).catch(() => Alert.alert("Contact your realtor", channel === "email" ? email : previewBrand.realtor.phone));
+              }}
               onCall={previewBrand.realtor.phone.trim() ? () => {
                 const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
                 if (phone) void Linking.openURL(`tel:${phone}`).catch(() => Alert.alert("Contact your realtor", previewBrand.realtor.phone));

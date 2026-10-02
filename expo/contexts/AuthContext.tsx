@@ -6,7 +6,7 @@ import * as SecureStore from "expo-secure-store";
 import { getRandomBytes } from "expo-crypto";
 import { Platform } from "react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase,endPrivateSession } from "@/lib/supabase";
 import { hashPassword } from "@/lib/passwordHash";
 import { appendClientToRoster } from "@/lib/clientRoster";
 import { claimClientSeat } from "@/lib/seats";
@@ -209,7 +209,17 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
             !authUser || authUser.is_anonymous || !authUser.email_confirmed_at ||
             authUser.email?.toLowerCase() !== parsed.email.toLowerCase()
           );
-          if (expired || dropPreview || adminAuthInvalid) {
+          let clientAuthInvalid = false;
+          if (parsed?.role === 'client' && !isGuestAccessSession && supabase) {
+            const { data, error } = await supabase.rpc('current_client_identity');
+            clientAuthInvalid = !!error || data?.realtorId !== parsed.realtorId || data?.clientId !== parsed.clientId;
+          }
+          let guestOwnerInvalid = false;
+          if (parsed?.role === 'admin' && isGuestAccessSession && !isPreviewSession && supabase) {
+            const {data,error} = await supabase.from('realtors').select('id').eq('id',parsed.realtorId).maybeSingle();
+            guestOwnerInvalid = !!error || data?.id !== parsed.realtorId;
+          }
+          if (expired || dropPreview || adminAuthInvalid || clientAuthInvalid || guestOwnerInvalid) {
             await secureDel(STORAGE_KEY);
             await setGuestBuilderAccess(null);
           } else {
@@ -239,7 +249,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
               if (accRaw) {
                 try {
                   const accParsed = JSON.parse(accRaw) as ClientAccount[];
-                  if (Array.isArray(accParsed)) setAccounts(accParsed);
+                  if (Array.isArray(accParsed)) {const own=accParsed.filter(a=>a.clientId===parsed.clientId).map(a=>({...a,pw:""}));setAccounts(own);await AsyncStorage.setItem(ACCOUNTS_KEY_PREFIX+parsed.realtorId,JSON.stringify(own));}
                 } catch (e) {
                   console.log("[auth] accounts parse", e);
                 }
@@ -268,7 +278,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       if (raw) {
         try {
           const parsed = JSON.parse(raw) as ClientAccount[];
-          if (Array.isArray(parsed)) setAccounts(parsed);
+          if (Array.isArray(parsed)) {const own=parsed.filter(a=>a.clientId===session?.clientId).map(a=>({...a,pw:""}));setAccounts(own);await AsyncStorage.setItem(accountsKey,JSON.stringify(own));}
         } catch {}
       } else {
         setAccounts([]);
@@ -277,7 +287,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     return () => {
       cancelled = true;
     };
-  }, [accountsKey, hydrated]);
+  }, [accountsKey, hydrated, session?.clientId]);
 
   const persistSession = useCallback(async (next: Session) => {
     try {
@@ -554,7 +564,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       if (!registration.ok) return { ok: false, error: registration.reason === "existing"
         ? "An account already exists for this email. Sign in or reset your password."
         : "We couldn't save your account. Check your connection and try again." };
-      const nextAccounts = [account, ...realmAccounts];
+      account.pw = ''; // Never persist reusable password derivatives on the device.
+      const nextAccounts = [account];
       setAccounts(nextAccounts);
       try {
         await AsyncStorage.setItem(accKey, JSON.stringify(nextAccounts));
@@ -630,7 +641,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       if (remote.status !== "ok") return { ok: false, error: "Please retry sign-in." };
       const account: ClientAccount = { email: e, pw: pwHash, clientId: remote.clientId,
         name: remote.name || e.split("@")[0], realtorId, createdAt: Date.now() };
-      realmAccounts = [account, ...realmAccounts.filter(a => a.email !== e)];
+      account.pw = '';
+      realmAccounts = [account];
       try { await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts)); } catch {}
       const found = account as ClientAccount;
       const seat = await claimClientSeat({
@@ -713,13 +725,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           );
         } catch {}
 
-        if (supabase) {
-          try {
-            await supabase.auth.signOut({ scope: "local" });
-          } catch (e) {
-            console.log("[auth] guest clear session", e);
-          }
-        }
+        if (supabase) await endPrivateSession();
 
         const bytes = getRandomBytes(16);
         const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
@@ -788,7 +794,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
         const account: ClientAccount = {
           email,
-          pw: await hashPassword(email, password),
+          pw: '',
           clientId,
           name,
           realtorId: DEMO_REALTOR_ID,
@@ -801,7 +807,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           const parsed = raw ? (JSON.parse(raw) as ClientAccount[]) : [];
           if (Array.isArray(parsed)) realmAccounts = parsed;
         } catch {}
-        const nextAccounts = [account, ...realmAccounts.filter((a) => a.clientId !== clientId)];
+        const nextAccounts = [account];
         setAccounts(nextAccounts);
         try {
           await AsyncStorage.setItem(accKey, JSON.stringify(nextAccounts));
@@ -861,19 +867,18 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
           );
         } catch {}
 
-        if (supabase) {
-          try {
-            await supabase.auth.signOut({ scope: "local" });
-          } catch (e) {
-            console.log("[auth] guest realtor clear session", e);
-          }
-        }
+        if (supabase) await endPrivateSession();
 
         const bytes = getRandomBytes(16);
         const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
         const uuid = `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
-        const realtorId = uuid;
-        const email = `guest+realtor+${uuid}@guest.myrealtor.app`;
+        const { ensureSupabaseSession } = await import('@/lib/supabase');
+        const guestSession = await ensureSupabaseSession();
+        if (!supabase || !guestSession) throw new Error('A connection is required to start a private guest workspace.');
+        const { data: guestRealtorId,error: guestError } = await supabase.rpc('create_guest_realtor');
+        if (guestError || typeof guestRealtorId !== 'string') throw new Error('Could not create a private workspace.');
+        const realtorId = guestRealtorId;
+        const email = `guest+realtor+${realtorId}@guest.myrealtor.app`;
         // Blank name so /admin/build ("Let's create your app") is incomplete.
         const name = "";
         const now = new Date().toISOString();
@@ -917,7 +922,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
   );
 
   const logout = useCallback(async () => {
-    if (session?.role === "admin" && supabase) await supabase.auth.signOut();
+    if (supabase) await endPrivateSession();
     // Preview flags are per signed-in session; never carry them to the next person.
     setViewAsClient(false);
     setDemoViewMode(false);

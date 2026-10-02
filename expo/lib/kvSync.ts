@@ -52,21 +52,24 @@ export function useKvSync<T>(args: {
   currentScope.current = { key, enabled };
 
   const lastPushedRevRef = useRef<number>(-1);
-  const [initialFetched, setInitialFetched] = useState<boolean>(false);
+  const [fetchedScope, setFetchedScope] = useState<string | null>(null);
+  const initialFetched = fetchedScope === key;
 
   // Initial fetch + realtime subscription.
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
-    setInitialFetched(false);
+    setFetchedScope(null);
+    lastPushedRevRef.current = -1;
     (async () => {
       const startedRev = revRef.current;
       const row = await kvGet<T>(key);
-      if (cancelled) return;
+      if (cancelled || currentScope.current.key !== key || !currentScope.current.enabled) return;
       if (row) onRemoteRef.current(row, { initial: true, forced: true, startedRev });
-      setInitialFetched(true);
+      setFetchedScope(key);
     })();
     const unsub = kvSubscribe<T>(key, (row) => {
+      if (cancelled || currentScope.current.key !== key || !currentScope.current.enabled) return;
       onRemoteRef.current(row, { initial: false, forced: false });
     });
     return () => {

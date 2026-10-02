@@ -50,7 +50,7 @@ function PortraitImage({
     recyclingKey
     ?? (typeof source === "number"
       ? `portrait-asset:${source}`
-      : uriStr || undefined);
+      : safeUri(source) || uriStr || undefined);
 
   if (!imageSource) return null;
 

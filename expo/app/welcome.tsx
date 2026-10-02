@@ -17,13 +17,13 @@ import { ArrowRight, CalendarDays, ShieldCheck, Sparkles } from "lucide-react-na
 import { brand, fonts } from "@/constants/colors";
 import { avatarPlaceholder } from "@/constants/assets";
 import { useBrand } from "@/contexts/BrandContext";
-import { appendClientToRoster } from "@/lib/clientRoster";
-import { isRealtorRef } from "@/lib/leadBooking";
+
+import { capturePublicLead, isRealtorRef } from "@/lib/leadBooking";
 import { useRefRealtor } from "@/lib/useRefRealtor";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 import BookingStatus from "@/components/BookingStatus";
-import { randomUUID } from "expo-crypto";
+
 
 /**
  * /welcome — the landing flow for anyone who taps a realtor's public booking link.
@@ -48,7 +48,7 @@ export default function Welcome() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState("");
   const submitting = useRef(false);
-  const leadIdRef = useRef(randomUUID());
+
 
   const realtorFirst = useMemo(() => b.realtor.name.split(" ")[0] ?? b.realtor.name, [b.realtor.name]);
   const valid = name.trim().length >= 2 && (phone.trim().length >= 6 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()));
@@ -58,10 +58,7 @@ export default function Welcome() {
     submitting.current = true;
     setLoading(true); setError("");
     try {
-      const leadId = await appendClientToRoster(params.ref, {
-        id: leadIdRef.current, name: name.trim(), email: email.trim(), phone: phone.trim() || undefined,
-        tag: "Booking", source: "booking", createdAt: Date.now(),
-      }, true);
+      const leadId = await capturePublicLead(params.ref, { name: name.trim(), email: email.trim(), phone: phone.trim() || undefined });
       router.replace({ pathname: "/book", params: {
         listingId: params.listingId ?? "", invite: "1", ref: params.ref, leadId,
         leadName: name.trim(), leadContact: phone.trim() || email.trim(),

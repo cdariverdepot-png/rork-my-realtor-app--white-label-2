@@ -727,7 +727,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
     setSyncStatus("connecting");
     const sb = supabase;
     const ch = sb.channel(CHANNEL, {
-      config: { broadcast: { self: false, ack: false } },
+      config: { private: true, broadcast: { self: false, ack: false } },
     });
 
     const scheduleReconnect = () => {

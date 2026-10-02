@@ -25,7 +25,7 @@ test('client registration rejects duplicate and failed server writes', async () 
     [{ data: { ok: false, reason: 'no_seat' } }, { ok: false, reason: 'unavailable' }],
     [{ error: { message: 'offline' } }, { ok: false, reason: 'unavailable' }],
   ]) {
-    const api = load('lib/clientAccounts', { '@/lib/supabase': { supabase: { rpc: async () => reply } } });
+    const api = load('lib/clientAccounts', { '@/lib/supabase': { ensureSupabaseSession:async()=>null, supabase: { rpc: async () => reply } } });
     assert.deepEqual(await api.registerClientAccount(input), expected);
   }
 });
@@ -37,14 +37,14 @@ test('account lookup preserves unavailable, not-found and password errors', asyn
     [{ data: { ok: false, reason: 'bad_password' } }, 'bad_password'],
     [{ data: { ok: false, reason: 'locked' } }, 'locked'],
   ]) {
-    const api = load('lib/clientAccounts', { '@/lib/supabase': { supabase: { rpc: async () => reply } } });
+    const api = load('lib/clientAccounts', { '@/lib/supabase': { ensureSupabaseSession:async()=>null, supabase: { rpc: async () => reply } } });
     assert.equal((await api.verifyClientAccount('agent', 'a@example.com', 'hash')).status, status);
   }
 });
 
 test('registration does not finish while the server write is pending', async () => {
   let resolve, complete = false;
-  const api = load('lib/clientAccounts', { '@/lib/supabase': { supabase: { rpc: () => new Promise(r => { resolve = r; }) } } });
+  const api = load('lib/clientAccounts', { '@/lib/supabase': { ensureSupabaseSession:async()=>null, supabase: { rpc: () => new Promise(r => { resolve = r; }) } } });
   const result = api.registerClientAccount({}).then(value => { complete = true; return value; });
   await Promise.resolve();
   assert.equal(complete, false);
@@ -81,28 +81,16 @@ test('public contact capture rejects failed reads and writes instead of continui
   }
 });
 
-test('booking retry keeps one request with the same ID and preserves other appointments', async () => {
-  const realtor = '11111111-1111-1111-1111-111111111111';
-  let saved = [{ id: 'existing' }];
-  const api = load('lib/leadBooking', {
-    '@react-native-async-storage/async-storage': {},
-    '@/lib/kvStore': { isKvEnabled: () => true,
-      kvGet: async (key, strict) => { assert.equal(strict, true); return { value: saved }; },
-      kvSet: async (key, value, rev, strict) => { assert.equal(key, realtor + ':appointments.v1'); assert.equal(strict, true); saved = value; } },
-  });
-  await api.appendLeadAppointment(realtor, { id: 'request' });
-  await api.appendLeadAppointment(realtor, { id: 'request' });
-  assert.deepEqual(saved.map(a => a.id), ['request', 'existing']);
+test('booking retries use the same write-only request ID without reading private collections', async () => {
+ const calls=[]; const api=load('lib/leadBooking',{'@/lib/supabase':{ensureSupabaseSession:async()=>null,supabase:{rpc:async(name,args)=>{calls.push({name,args});return {error:null};}}}});
+ const appointment={id:'request',listingId:'home',startsAt:123,durationMin:45,recipientIds:['forged']};
+ await api.appendLeadAppointment('11111111-1111-1111-1111-111111111111',appointment);
+ await api.appendLeadAppointment('11111111-1111-1111-1111-111111111111',appointment);
+ assert.equal(calls.length,2); assert.equal(calls[0].name,'request_public_showing');assert.deepEqual(calls[0],calls[1]);assert.equal(calls[0].args.recipientIds,undefined);
 });
-
-test('failed booking reads never overwrite an appointment collection', async () => {
-  let writes = 0;
-  const api = load('lib/leadBooking', {
-    '@react-native-async-storage/async-storage': {},
-    '@/lib/kvStore': { isKvEnabled: () => true, kvGet: async () => { throw Error('offline'); }, kvSet: async () => { writes++; } },
-  });
-  await assert.rejects(api.appendLeadAppointment('11111111-1111-1111-1111-111111111111', { id: 'request' }));
-  assert.equal(writes, 0);
+test('failed booking authentication never sends a request', async()=>{
+ let writes=0;const api=load('lib/leadBooking',{'@/lib/supabase':{ensureSupabaseSession:async()=>{throw Error('offline')},supabase:{rpc:async()=>{writes++}}}});
+ await assert.rejects(api.appendLeadAppointment('11111111-1111-1111-1111-111111111111',{id:'request'}));assert.equal(writes,0);
 });
 
 test('phone is required for call/text preferences but not email or in-app messages', () => {

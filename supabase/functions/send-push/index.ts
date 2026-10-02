@@ -6,7 +6,7 @@
 // is already awake with the app open.
 //
 // Deploy:
-//   supabase functions deploy send-push --no-verify-jwt
+//   supabase functions deploy send-push
 //
 // No third-party keys required — Expo's push service is free and needs no
 // credentials for tokens it issued itself.
@@ -69,25 +69,20 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   const db = createClient(url, key);
 
-  // Resolve the audience to a concrete list of device tokens.
-  let query = db
-    .from("push_tokens")
-    .select("token, role, client_id")
-    .eq("realtor_id", realtorId);
+  const authorization = req.headers.get('authorization') ?? '';
+  const jwt = authorization.replace(/^Bearer\s+/i,'');
+  const { data: verified,error: authError } = await db.auth.getUser(jwt);
+  if (!jwt || authError || !verified.user) return json(401,{ok:false,error:'Sign in is required'});
+  const userDb = createClient(url,Deno.env.get('SUPABASE_ANON_KEY') ?? '',{global:{headers:{Authorization:authorization}},auth:{persistSession:false}});
+  const { data: allowed,error: permissionError } = await userDb.rpc('authorize_push',{p_realtor_id:realtorId,p_audience:audience.kind});
+  if (permissionError || allowed !== true) return json(403,{ok:false,error:'Not authorized for this audience'});
+  if (title.length>200 || body.length>2000) return json(400,{ok:false,error:'Notification is too long'});
 
-  if (audience.kind === "realtor") {
-    query = query.eq("role", "admin");
-  } else {
-    query = query.eq("role", "client");
-    if (audience.kind === "clients") {
-      const ids = Array.isArray(audience.clientIds) ? audience.clientIds.filter(Boolean) : [];
-      // An explicit but empty recipient list means "nobody", not "everybody".
-      if (ids.length === 0) return json(200, { ok: true, sent: 0, note: "no recipients" });
-      query = query.in("client_id", ids);
-    }
-  }
-
-  const { data, error } = await query;
+  const ids = audience.kind === 'clients' && Array.isArray(audience.clientIds) ? audience.clientIds.filter(Boolean) : null;
+  if (ids?.length === 0) return json(200,{ok:true,sent:0,note:'no recipients'});
+  if (!['realtor','clients','all-clients'].includes(audience.kind)) return json(400,{ok:false,error:'Invalid audience'});
+  // Service-only RPC excludes logged-out, switched and password-reset client sessions.
+  const { data,error } = await db.rpc('resolve_push_recipients',{p_realtor_id:realtorId,p_target_role:audience.kind === 'realtor' ? 'admin' : 'client',p_client_ids:ids});
   if (error) {
     console.log("[send-push] token query failed", error.message);
     return json(500, { ok: false, error: "Could not load devices" });

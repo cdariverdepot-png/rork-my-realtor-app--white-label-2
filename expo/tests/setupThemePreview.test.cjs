@@ -72,9 +72,9 @@ test('setup review renders ThemeFace for the AI-picked layout (no brown stub)', 
   assert.doesNotMatch(src, /#29231F/);
 });
 
-test('client home uses themeDesign background when presentationVersion is 2', () => {
+test('client home uses the live theme canvas when presentationVersion is 2', () => {
   const src = fs.readFileSync(path.join(root, 'app/index.tsx'), 'utf8');
   assert.match(src, /designedCanvas/);
-  assert.match(src, /themeDesign\(previewBrand\.layoutId/);
+  assert.match(src, /liveThemeBackground\(previewBrand\.layoutId/);
   assert.match(src, /scrollBackground/);
 });

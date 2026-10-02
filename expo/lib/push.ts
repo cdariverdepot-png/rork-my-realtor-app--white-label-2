@@ -3,6 +3,7 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants, { ExecutionEnvironment } from "expo-constants";
 import { supabase } from "@/lib/supabase";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * Expo push registration + delivery.
@@ -95,6 +96,7 @@ export async function registerDevice(input: {
       console.log("[push] register error", error.message);
       return null;
     }
+    await AsyncStorage.setItem('myrealtor.device.pushToken',token);
     return token;
   } catch (e) {
     console.log("[push] register exception", e);

@@ -60,7 +60,7 @@ test('a client only sees explicitly assigned transactions and appropriate shared
   const docs=[{id:'general'},{id:'direct',recipientIds:['a']},{id:'other',recipientIds:['b']},{id:'mine-tx',transactionId:'mine'},{id:'other-tx',transactionId:'other'},{id:'unassigned-tx',transactionId:'unassigned'},{id:'restricted',transactionId:'mine',recipientIds:['b']}];
   const result=clientDocuments(docs,tx,'a');
   assert.deepEqual(result.transactions.map(x=>x.id),['mine']);
-  assert.deepEqual(result.items.map(x=>x.id),['general','direct','mine-tx']);
+  assert.deepEqual(result.items.map(x=>x.id),['direct','mine-tx']);
   assert.deepEqual(clientDocuments(docs,tx,undefined),{items:[],transactions:[]});
 });
 test('notification callback changes do not repeatedly mark all notifications read', () => {

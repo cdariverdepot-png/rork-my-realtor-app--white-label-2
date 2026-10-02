@@ -38,7 +38,7 @@ type ReportBody = {
 
 function clip(v: unknown, max: number): string {
   if (v == null) return "";
-  const s = String(v);
+  const s = String(v).replace(/Bearer\s+[\w.-]+/gi,'Bearer [redacted]').replace(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g,'[email]').replace(/(https?:\/\/[^\s?#]+)[?#][^\s]*/g,'$1').replace(/(password|token|secret|api[_-]?key)\s*[:=]\s*[^\s,;]+/gi,'$1=[redacted]');
   return s.length > max ? s.slice(0, max) : s;
 }
 
@@ -53,6 +53,14 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const url=Deno.env.get('SUPABASE_URL')!, key=Deno.env.get('SUPABASE_ANON_KEY')!;
+  const authorization=req.headers.get('authorization')??'';
+  const caller=createClient(url,key,{global:{headers:{Authorization:authorization}},auth:{persistSession:false}});
+  const {data:identity,error:identityError}=await caller.auth.getUser(authorization.replace(/^Bearer\s+/i,''));
+  if(identityError || !identity.user) return new Response('Sign in required',{status:401,headers:cors});
+  const {data:allowed,error:quotaError}=await caller.rpc('allow_error_report');
+  if(quotaError || allowed!==true) return new Response('Please try later',{status:429,headers:cors});
+  if(Number(req.headers.get('content-length')??0)>16000) return new Response('Report too large',{status:413,headers:cors});
   let body: ReportBody = {};
   try {
     body = (await req.json()) as ReportBody;
@@ -69,7 +77,7 @@ Deno.serve(async (req: Request) => {
 
   const message = clip(body.message, 2000) || "Unknown error";
   const timestamp = clip(body.timestamp, 80) || new Date().toISOString();
-  const pathname = clip(body.pathname, 300);
+  const pathname = clip(body.pathname, 300).split(/[?#]/)[0];
   const platform = clip(body.platform, 40);
   const platformVersion = clip(body.platformVersion, 40);
   const role = clip(body.role, 40) || "unknown";

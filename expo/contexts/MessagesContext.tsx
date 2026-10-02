@@ -30,15 +30,7 @@ export type ThreadSummary = {
 };
 
 /** A fresh thread always opens with the realtor's standing welcome. */
-const welcomeSeed = (): ChatMessage[] => [
-  {
-    id: "seed-1",
-    role: "realtor",
-    text: "Welcome — this is my direct line. Ask me anything, anytime. I read every note myself.",
-    createdAt: Date.now() - 1000 * 60 * 60 * 24,
-    read: true,
-  },
-];
+const welcomeSeed = (): ChatMessage[] => [];
 
 const threadKey = (realtorId: string, clientId: string): string =>
   `${realtorId}:${clientId}:chat.v1`;
@@ -137,7 +129,7 @@ export const [MessagesProvider, useMessages] = createContextHook(() => {
   // Realtime broadcast for the active thread (instant typing / delivery).
   useEffect(() => {
     if (!supabase || !hydrated || !hasThread) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "msg" }, (payload) => {
       const m = payload.payload as ChatMessage;
       if (!m?.id) return;

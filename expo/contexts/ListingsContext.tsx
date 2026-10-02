@@ -165,7 +165,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     setSyncStatus("connecting");
     const sb = supabase;
     const ch = sb.channel(CHANNEL, {
-      config: { broadcast: { self: false, ack: false } },
+      config: { private: true, broadcast: { self: false, ack: false } },
     });
 
     const scheduleReconnect = () => {

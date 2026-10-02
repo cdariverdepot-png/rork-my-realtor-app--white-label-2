@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase, ensureSupabaseSession } from "@/lib/supabase";
 
 /**
  * Credentials: `pwHash` is always the app's one-way SHA-256 derivative
@@ -17,6 +17,7 @@ export async function registerClientAccount(input: {
 }): Promise<RegistrationResult> {
   if (!supabase) return { ok: false, reason: "unavailable" };
   try {
+    await ensureSupabaseSession();
     const { data, error } = await supabase.rpc("register_client_account", {
       p_realtor_id: input.realtorId, p_email: input.email, p_pw_hash: input.pwHash,
       p_client_id: input.clientId, p_name: input.name,
@@ -35,6 +36,7 @@ export type VerifyResult =
 export async function verifyClientAccount(realtorId: string, email: string, pwHash: string): Promise<VerifyResult> {
   if (!supabase) return { status: "unavailable" };
   try {
+    await ensureSupabaseSession();
     const { data, error } = await supabase.rpc("verify_client_account", {
       p_realtor_id: realtorId, p_email: email, p_pw_hash: pwHash,
     });

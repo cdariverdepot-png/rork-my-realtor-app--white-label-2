@@ -341,6 +341,17 @@ export default function RootLayout() {
       persistOptions={{ persister: queryPersister, maxAge: 1000 * 60 * 60 * 24 }}
     >
       <AuthProvider>
+        <AccountData />
+      </AuthProvider>
+    </PersistQueryClientProvider>
+    </ErrorBoundary>
+  );
+}
+
+function AccountData() {
+  const { session } = useAuth();
+  const identity = session ? session.role+':'+session.realtorId+':'+(session.clientId ?? '') : 'signed-out';
+  return <React.Fragment key={identity}>
         <AccessProvider>
         <SeatsProvider>
         <BrandProvider>
@@ -380,10 +391,7 @@ export default function RootLayout() {
         </BrandProvider>
         </SeatsProvider>
         </AccessProvider>
-      </AuthProvider>
-    </PersistQueryClientProvider>
-    </ErrorBoundary>
-  );
+  </React.Fragment>;
 }
 
 const styles = StyleSheet.create({

@@ -6,7 +6,7 @@ type Dimensions = { width: number; height: number };
 const cache = new Map<string, Dimensions>();
 const pending = new Map<string, Promise<Dimensions | undefined>>();
 export function usePortraitDimensions(uri?: string | null, source?: number) {
-  const safe = safeUri(uri), key = source !== undefined ? "asset:" + source : safe;
+  const safe = safeUri(uri), key = source !== undefined ? "asset:" + (safeUri(source) || source) : safe;
   const [loaded, setLoaded] = useState<{ key: string; size?: Dimensions }>();
   useEffect(() => {
     let live = true;

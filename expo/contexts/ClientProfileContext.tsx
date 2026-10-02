@@ -1,3 +1,4 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -61,7 +62,8 @@ export const [ClientProfileProvider, useClientProfiles] = createContextHook(() =
   const { realtorId, currentClientId, session, isAdmin } = useAuth();
   const { notifyClientJoined } = useNotifications();
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:clientProfiles.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:clientProfiles.v1`;
   const CHANNEL = `${scope}:clientProfiles`;
   const KV_KEY = `${scope}:clientProfiles.v1`;
 
@@ -76,7 +78,7 @@ export const [ClientProfileProvider, useClientProfiles] = createContextHook(() =
     setRev(0);
     revRef.current = 0;
     setHydrated(false);
-  }, [realtorId]);
+  }, [cacheScope]);
 
   const bumpRev = useCallback(() => {
     const next = Math.max(revRef.current + 1, Date.now());
@@ -119,7 +121,7 @@ export const [ClientProfileProvider, useClientProfiles] = createContextHook(() =
   // realtor's dashboard without either of them reopening the app.
   useEffect(() => {
     if (!supabase || !hydrated) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "set" }, (payload) => {
       const p = payload.payload as ClientProfile;
       if (!p?.clientId) return;
@@ -202,7 +204,7 @@ export const [ClientProfileProvider, useClientProfiles] = createContextHook(() =
       };
       const out = { ...profiles, [currentClientId]: next };
       const nextRev = Math.max(revRef.current + 1, Date.now());
-      if (supabase) await kvSet(KV_KEY, out, nextRev, true);
+      if (supabase && !session?.guestAccess) await kvSet(KV_KEY, out, nextRev, true);
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(out));
       setProfiles(out);
       bumpRev();
