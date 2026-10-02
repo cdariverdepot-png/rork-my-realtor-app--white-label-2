@@ -171,7 +171,7 @@ async function resolveBuilderRoute(): Promise<BuilderRoute> {
 /** Guest drafts stay on the device, but URL analysis uses the real service. */
 async function generateLocal(realtorId: string, target?: "heroMessage" | "welcomeNote" | "aboutParagraph"): Promise<SavedBuild> {
   const saved = (await readLocalBuild(realtorId)) ?? emptyBuild();
-  if (saved.status === "complete") throw new Error("This draft cannot be regenerated.");
+  // A completed onboarding draft remains a valid source for Edit Content refreshes.
   const sources = saved.sources.filter(source => source.kind === "url" || source.kind === "listing");
   if (!sources.length) throw new Error("Add your website URL to generate your app copy.");
   if (!supabase || !(await ensureSupabaseSession())) throw new Error("Could not connect to the app builder. Please retry.");

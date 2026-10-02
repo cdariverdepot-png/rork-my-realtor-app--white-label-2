@@ -1313,7 +1313,7 @@ Deno.serve(async (request) => {
   if (input?.mode === "regenerate") {
     const target = input.target;
     if (!["heroMessage", "welcomeNote", "aboutParagraph"].includes(target) ||
-        !Array.isArray(build.evidence) || !build.draft || build.status === "complete") {
+        !Array.isArray(build.evidence) || !build.draft) {
       return reply({ error: "This draft cannot be regenerated." }, 400);
     }
     const facts = build.evidence.filter((item: any) => item && typeof item.field === "string" &&
