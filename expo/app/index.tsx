@@ -273,6 +273,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   // Leaving a preview (the realtor's own app or the demo) for the dashboard.
   // The page slides aside first (the swipe has already done this), then the
   // dashboard comes in from the left; the leaving page stays aside until then.
+  const [previewSliding, setPreviewSliding] = useState(false);
   const edgeX = useRef(new Animated.Value(0)).current;
   const leavePreview = useCallback((slide: boolean) => {
     const go = () => {
@@ -284,9 +285,9 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
       }
       guardExit(() => leavePreviewToDashboard(path => router.replace(path),
         demoViewMode ? () => void exitDemoView() : exitViewAsClient));
-      setTimeout(() => edgeX.setValue(0), 700);
+      setTimeout(() => { edgeX.setValue(0); setPreviewSliding(false); }, 700);
     };
-    if (slide) Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true }).start(go);
+    if (slide) { setPreviewSliding(true); Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true }).start(go); }
     else go();
   }, [demoViewMode, isAdmin, isPreviewAdmin, guardExit, exitViewAsClient, exitDemoView, router, edgeX]);
   const exitTemplate = useCallback(() => leavePreview(true), [leavePreview]);
@@ -339,10 +340,6 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const scrollRef = useRef<ScrollView>(null);
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const onHomeScroll = useMemo(
-    () => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }),
-    [scrollY],
-  );
   const bottomPad = Math.max(insets.bottom, 10) + 128;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
@@ -374,19 +371,24 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const edgeBack = useMemo(() => Gesture.Pan()
     .enabled(viewAsClient && !previewingDraft && !editing)
     .hitSlop({ left: 0, width: 32 })
-    .activeOffsetX(12)
-    .failOffsetY([-24, 24])
+    .activeOffsetX(24)
+    .failOffsetY([-12, 12])
     .runOnJS(true)
+    .onTouchesDown((event, manager) => {
+      const touch = event.allTouches[0];
+      if (!touch || touch.x > 32) manager.fail();
+    })
+    .onStart(() => setPreviewSliding(true))
     .onUpdate(e => { edgeX.setValue(Math.max(0, e.translationX)); })
     .onEnd(e => {
       if (e.translationX > 90 || e.velocityX > 700) {
         Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true })
           .start(() => leavePreview(false));
       } else {
-        Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start();
+        Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start(() => setPreviewSliding(false));
       }
     })
-    .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(); }),
+    .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(() => setPreviewSliding(false)); }),
   [viewAsClient, previewingDraft, editing, edgeX, leavePreview]);
   useEffect(() => {
     Animated.timing(bannerAnim, {
@@ -567,14 +569,11 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     />
   ) : (
     <View style={[styles.root, { backgroundColor: pageBackground }]}>
-        <Animated.ScrollView
+        <ScrollView
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
-          scrollEventThrottle={16}
-          onScroll={onHomeScroll}
-          // iOS keeps bounces for RefreshControl; parallax clamps overscroll translate+scale.
-          // Android/web: kill rubber-band so hero transforms are not driven by bounce.
+          // Portraits stay static; this scroll container has no animated image binding.
           overScrollMode="never"
           removeClippedSubviews={false}
           style={Platform.OS === "web" ? ({ flex: 1, overscrollBehaviorY: "none" } as object) : { flex: 1 }}
@@ -598,7 +597,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
                 if (phone) void Linking.openURL(`tel:${phone}`).catch(() => Alert.alert("Contact your realtor", previewBrand.realtor.phone));
               } : undefined}
               renderAdditional={renderSection} /> : visible.map(renderSection)}
-        </Animated.ScrollView>
+        </ScrollView>
       {!demoViewMode && !editing && !previewingDraft && <BottomNav />}
       {demoViewMode && <Pressable accessibilityRole="button" onPress={() => setDemoThemeDraft(themeCandidate(b, "eliza-editorial"))}
         style={{ position: "absolute", bottom: insets.bottom + 18, alignSelf: "center", backgroundColor: "#D4B989", paddingHorizontal: 22, paddingVertical: 15, borderRadius: 26 }}>
@@ -673,7 +672,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   if (viewAsClient && !previewingDraft) {
     return (
       <GestureDetector gesture={edgeBack}>
-        <Animated.View style={{ flex: 1, transform: [{ translateX: edgeX }] }}>
+        <Animated.View style={{ flex: 1, ...(previewSliding ? { transform: [{ translateX: edgeX }] } : {}) }}>
           {body}
         </Animated.View>
       </GestureDetector>

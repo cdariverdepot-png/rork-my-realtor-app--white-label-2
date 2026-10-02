@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { isKvEnabled, kvSet } from "@/lib/kvStore";
+import { shouldApplyRemoteRevision } from "@/lib/remoteRevision";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import { requiredStatus } from "@/constants/sections";
@@ -804,10 +805,9 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
 
   // Durable Postgres sync
   const applyRemote = useCallback(
-    (row: { value: Brand; rev: number }, meta?: { initial?: boolean; forced?: boolean }) => {
+    (row: { value: Brand; rev: number }, meta?: { initial?: boolean; forced?: boolean; startedRev?: number }) => {
       if (!row?.value) return;
-      const force = meta?.initial || meta?.forced;
-      if (!force && row.rev <= revRef.current) return;
+      if (!shouldApplyRemoteRevision(row.rev, revRef.current, meta)) return;
       const base = seed;
       const merged: Brand = preserveProfile(base, row.value);
       // THIS is what kept the showcase content alive. The initial durable fetch is
@@ -859,7 +859,8 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       // The Eliza Vance demo is a frozen, read-only showcase — never accept writes.
       if (demoViewMode) return;
       const next = { ...mutator(brandRef.current), updatedAt: Date.now() };
-      const rev = Math.max(revRef.current, Date.now());
+      const rev = Math.max(revRef.current + 1, Date.now());
+      brandRef.current = next;
       revRef.current = rev;
       setRevision(rev);
       setBrand(next);
