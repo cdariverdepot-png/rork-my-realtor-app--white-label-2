@@ -1,6 +1,7 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Stack, usePathname, useRouter } from "expo-router";
 import { navIntent } from "@/lib/navIntent";
+import ClientShell, { ClientPreviewBoundary } from '@/components/ClientShell';
 import * as SplashScreen from "expo-splash-screen";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -80,7 +81,6 @@ import { OnboardingProvider } from "@/contexts/OnboardingContext";
 import { GoLiveProvider } from "@/contexts/GoLiveContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import ConciergeBanner from "@/components/ConciergeBanner";
-import DocsAutomation from "@/components/DocsAutomation";
 import SecurityHardener from "@/components/SecurityHardener";
 import { listings as seedListings } from "@/constants/realtor";
 import { queryClient, queryPersister } from "@/lib/queryPersist";
@@ -92,16 +92,18 @@ import { useOnboarding, type Audience } from "@/contexts/OnboardingContext";
 
 SplashScreen.preventAutoHideAsync();
 
+const clientScreenLayout = ({ children }: { children: React.ReactNode }) => <OnboardingGuard><ClientPreviewBoundary>{children}</ClientPreviewBoundary></OnboardingGuard>;
 function RootLayoutNav() {
+  const { isClient, viewAsClient } = useAuth();
   const modal = {
-    presentation: "modal" as const,
+    presentation: isClient || viewAsClient ? "card" as const : "modal" as const,
     headerShown: false,
     animation: "slide_from_bottom" as const,
     animationDuration: 320,
   };
   return (
-    <Stack
-      screenLayout={({ children }) => <OnboardingGuard>{children}</OnboardingGuard>}
+    <ClientShell><Stack
+      screenLayout={clientScreenLayout}
       screenOptions={{
         headerBackTitle: "Back",
         contentStyle: { backgroundColor: dark.bg },
@@ -124,12 +126,13 @@ function RootLayoutNav() {
       <Stack.Screen name="note" options={modal} />
       <Stack.Screen name="login" options={modal} />
       <Stack.Screen name="account" options={modal} />
+      <Stack.Screen name="menu" options={modal} />
       <Stack.Screen name="client-profile" options={{ headerShown: false, animation: "slide_from_bottom", animationDuration: 340 }} />
       <Stack.Screen name="legal" options={modal} />
       <Stack.Screen name="reset-password" options={{ headerShown: false, animation: "slide_from_right" }} />
       <Stack.Screen name="portal" options={{ headerShown: false, animation: "fade", animationDuration: 360 }} />
       <Stack.Screen name="admin" options={() => ({ headerShown: false, animationTypeForReplace: navIntent.replaceAsBack ? "pop" : "push" })} />
-    </Stack>
+    </Stack></ClientShell>
   );
 }
 
@@ -255,7 +258,7 @@ function RootLayoutInner() {
         ) : null}
         <RootLayoutNav />
         <ConciergeBanner />
-        <DocsAutomation />
+        {/* Document status must come from actual provider events, never a demo timer. */}
         <SecurityHardener />
         {/* Runs after authentication, so it always sits above the signed-in
             app rather than in front of the lock screen. */}

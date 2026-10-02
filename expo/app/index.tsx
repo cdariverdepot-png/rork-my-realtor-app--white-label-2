@@ -7,6 +7,7 @@ import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
+import { clientDestination } from "@/lib/clientNavigation";
 import { leavePreviewToDashboard } from "@/lib/navIntent";
 import { useAuth } from "@/contexts/AuthContext";
 import { setConsultInfo } from "@/lib/contact";
@@ -32,7 +33,7 @@ import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import type { Brand } from "@/contexts/BrandContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { orderThemeSections } from "@/constants/themeStructure";
-import BottomNav from "@/components/BottomNav";
+
 import CuratedListings from "@/components/CuratedListings";
 import PersonalNote from "@/components/PersonalNote";
 import Credentials from "@/components/Credentials";
@@ -341,7 +342,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
   const onHomeScroll = useMemo(() => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }), [scrollY]);
-  const bottomPad = Math.max(insets.bottom, 10) + 128;
+  const bottomPad = 32;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
   /** Floating Back (left) + quiet "Viewing as client" label — shared by every client preview, including the demo. */
@@ -449,7 +450,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
       const designed = previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing;
       if (designed && id !== "hero" && id !== "listings" && id !== "footer") {
         return <Reveal key={id} delay={delays[id] ?? 200}>
-          <ThemeContentSection id={id} brand={previewBrand} onNavigate={path => router.push(path)}
+          <ThemeContentSection id={id} brand={previewBrand} onNavigate={path => router.navigate(clientDestination(path, isAdmin && viewAsClient) as never)}
             onContact={channel => {
               const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
               const email = previewBrand.realtor.email.trim();
@@ -469,7 +470,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return demoViewMode || editing
             ? <Hero key="hero" onPrimary={scrollToListings} scrollY={scrollY} />
             : <ThemeHero key="hero" brand={previewBrand} scrollY={scrollY} topInset={insets.top + 24}
-                onBrowse={() => router.push("/listings")} onMessage={() => router.push("/message")}
+                onBrowse={() => router.navigate("/listings")} onMessage={() => router.navigate("/messages")}
                 onSaved={() => router.push("/favorites")} onSchedule={() => router.push("/calendar")} />;
         case "listings":
           return (
@@ -534,7 +535,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return null;
       }
     },
-    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing]
+    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing, isAdmin, viewAsClient]
   );
 
   /**
@@ -593,7 +594,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         >
           {previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing ?
             <ReferenceHome brand={previewBrand} listings={previewListings} scrollY={scrollY} topInset={insets.top + 24}
-              onNavigate={path => router.push(path)} onOpen={id => router.push(`/listing/${id}`)}
+              onNavigate={path => router.navigate(clientDestination(path, isAdmin && viewAsClient) as never)} onOpen={id => router.push(`/listing/${id}`)}
               onFavorite={id => toggleListing("favorites", id)} isFavorite={isFavorited}
               onCall={previewBrand.realtor.phone.trim() ? () => {
                 const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
@@ -601,7 +602,6 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
               } : undefined}
               renderAdditional={renderSection} /> : visible.map(renderSection)}
         </Animated.ScrollView>
-      {!demoViewMode && !editing && !previewingDraft && <BottomNav />}
       {demoViewMode && <Pressable accessibilityRole="button" onPress={() => setDemoThemeDraft(themeCandidate(b, "eliza-editorial"))}
         style={{ position: "absolute", bottom: insets.bottom + 18, alignSelf: "center", backgroundColor: "#D4B989", paddingHorizontal: 22, paddingVertical: 15, borderRadius: 26 }}>
         <Text style={{ color: "#111713", fontWeight: "600" }}>Explore the seven themes</Text>

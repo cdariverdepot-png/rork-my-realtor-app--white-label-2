@@ -1,5 +1,5 @@
 import { listingStatusLabel } from "@/lib/listingStatusLabel";
-import React from "react";
+import React, { useMemo } from "react";
 import { Animated, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import PortraitImage from "../PortraitImage";
@@ -24,7 +24,7 @@ export default function ReferenceHome(p: ReferenceHomeProps) {
   const window = useWindowDimensions();
   const width = p.width ?? window.width, s = width / 390;
   // The theme owns the layout; the profile only fills its slots.
-  const b = withThemeSlots(p.brand), r = b.realtor, d = themeDesign(b.layoutId, b.theme);
+  const b = useMemo(() => withThemeSlots(p.brand), [p.brand]), r = b.realtor, d = themeDesign(b.layoutId, b.theme);
   const items = p.listings.filter(item => !item.hidden && !item.sourceArchived);
   const visible = visibleSections({ brand: b, visibleListingCount: items.length });
   const has = (id: ClientSectionId) => visible.includes(id);

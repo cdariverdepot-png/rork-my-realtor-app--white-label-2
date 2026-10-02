@@ -66,6 +66,7 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
   const markReadLocal = useCallback((ids: string[]) => {
     if (!READ_KEY) return;
     setReadIds((prev) => {
+      if (ids.every(id => prev.has(id))) return prev;
       const next = new Set(prev); ids.forEach((id) => next.add(id));
       void AsyncStorage.setItem(READ_KEY, JSON.stringify([...next].slice(-500))).catch(() => {});
       return next;
@@ -181,13 +182,15 @@ export const [NotificationsProvider, useNotifications] = createContextHook(() =>
 
   const markAllRead = useCallback(() => {
     if (READ_KEY) { markReadLocal(items.filter(visibleTo).map((n) => n.id)); return; }
+    if (!items.some(n => visibleTo(n) && !n.read)) return;
     // Only what this viewer can see — never items meant for the realtor or other clients.
     setItems((prev) => { const next = prev.map((n) => (visibleTo(n) ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
   }, [persist, bumpRev, visibleTo, READ_KEY, markReadLocal, items]);
   const markRead = useCallback((id: string) => {
     if (READ_KEY) { markReadLocal([id]); return; }
+    if (!items.some(n => n.id === id && !n.read)) return;
     setItems((prev) => { const next = prev.map((n) => (n.id === id ? { ...n, read: true } : n)); void persist(next); return next; }); bumpRev();
-  }, [persist, bumpRev, READ_KEY, markReadLocal]);
+  }, [persist, bumpRev, READ_KEY, markReadLocal, items]);
 
   const notifyClientJoined = useCallback((clientId: string, name: string) => {
     if (!realtorId || demoViewMode) return;

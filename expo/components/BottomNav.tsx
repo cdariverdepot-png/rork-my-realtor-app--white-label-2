@@ -23,6 +23,8 @@ import { useBrand } from "@/contexts/BrandContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useMessages } from "@/contexts/MessagesContext";
 import ThemeNavigation from "./ThemeNavigation";
+import { useAuth } from '@/contexts/AuthContext';
+import { clientDestination } from '@/lib/clientNavigation';
 
 /** Floating concierge tab bar — sticks low on the screen so returning
  *  clients can jump straight to a watchlist, message thread or showing. */
@@ -38,14 +40,16 @@ const TABS: { key: TabKey; label: string; path: string; Icon: typeof HomeIcon }[
 
 export const BOTTOM_NAV_HEIGHT = 64;
 
-export default function BottomNav() {
+export default function BottomNav({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
   const { theme, brand: currentBrand } = useBrand();
+  const { isAdmin, viewAsClient, isClient } = useAuth();
+  const preview = isAdmin && viewAsClient;
   const { totalFavorites } = useFavorites();
   const { messages } = useMessages();
-  const unreadMsgs = messages.filter((m) => m.role === "realtor" && !m.read).length;
+  const unreadMsgs = isClient ? messages.filter((m) => m.role === "realtor" && !m.read).length : 0;
 
   const mount = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -59,11 +63,8 @@ export default function BottomNav() {
 
   const handle = (path: string) => {
     if (Platform.OS !== "web") Haptics.selectionAsync();
-    if (path === "/") {
-      router.replace("/");
-    } else {
-      router.push(path as never);
-    }
+    const destination = clientDestination(path, preview);
+    if (destination !== pathname) router.navigate(destination as never);
   };
 
   const translateY = mount.interpolate({
@@ -80,18 +81,19 @@ export default function BottomNav() {
       ? "messages"
       : pathname.startsWith("/calendar") || pathname.startsWith("/book")
       ? "showings"
-      : pathname.startsWith("/account")
+      : pathname.startsWith("/account") || pathname === '/menu'
       ? "account"
       : "home";
 
-  if (currentBrand.theme.presentationVersion === 2) return <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, paddingBottom: insets.bottom, backgroundColor: "transparent" }}>
-    <ThemeNavigation brand={currentBrand} pathname={pathname} unread={unreadMsgs} saved={totalFavorites} onNavigate={path => handle(path === "/message" ? "/messages" : path)} />
+  if (currentBrand.theme.presentationVersion === 2) return <View style={{ ...(embedded ? {} : { position: "absolute" as const, bottom: 0, left: 0, right: 0 }), paddingBottom: insets.bottom, backgroundColor: "transparent" }}>
+    <ThemeNavigation brand={currentBrand} pathname={pathname} preview={preview} unread={unreadMsgs} saved={totalFavorites} onNavigate={handle} />
   </View>;
 
   return (
     <Animated.View
       style={[
         styles.wrap,
+        embedded && { position: 'relative' },
         {
           paddingBottom: Math.max(insets.bottom, 10),
           opacity: mount,
@@ -131,6 +133,8 @@ export default function BottomNav() {
               <Pressable
                 key={key}
                 onPress={() => handle(path)}
+                accessibilityRole="button"
+                accessibilityLabel={preview && key === 'account' ? 'App menu' : label}
                 style={styles.tab}
                 hitSlop={6}
               >
@@ -154,7 +158,7 @@ export default function BottomNav() {
                     { color: active ? theme.accent.light : theme.onBand.muted },
                   ]}
                 >
-                  {label}
+                  {preview && key === 'account' ? 'Menu' : label}
                 </Text>
                 {active ? (
                   <View style={[styles.activeDot, { backgroundColor: theme.accent.base }]} />

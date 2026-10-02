@@ -8,6 +8,8 @@ import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
 import ReferenceHome from "./themes/ReferenceHome";
 import ThemeNavigation from "./ThemeNavigation";
+import ThemePreviewPage from './ThemePreviewPage';
+import { clientDestination } from '@/lib/clientNavigation';
 
 /**
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
@@ -23,6 +25,8 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   const scrollY = useRef(new Animated.Value(0)).current;
   const dragX = useRef(new Animated.Value(0)).current;
   const [sliding, setSliding] = useState(false);
+  const [page, setPage] = useState('/');
+  const navigate = (path: string) => { setPage(clientDestination(path, true)); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); };
 
   const close = () => {
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
@@ -55,7 +59,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     [scrollY],
   );
   useEffect(() => {
-    if (visible) { scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
+    if (visible) { setPage('/'); scrollY.setValue(0); scrollRef.current?.scrollTo({ y: 0, animated: false }); }
   }, [visible, brand.layoutId, scrollY]);
 
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
@@ -86,11 +90,11 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
             style={Platform.OS === "web" ? ({ overscrollBehaviorY: "none" } as object) : undefined}
           >
             <View style={{ maxWidth: 390, width: "100%", alignSelf: "center", overflow: "hidden" }}>
-              <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} />
+              {page === '/' ? <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} onNavigate={navigate} /> : <ThemePreviewPage route={page} brand={brand} listings={listings} onNavigate={navigate} />}
             </View>
             {note ? <Text style={{ color: "#C5BDAF", padding: 24, textAlign: "center", lineHeight: 21 }}>{note}</Text> : null}
           </Animated.ScrollView>
-          <View style={{ width: "100%", maxWidth: 390, alignSelf: "center", paddingBottom: insets.bottom }}><ThemeNavigation brand={brand} /></View>
+          <View style={{ width: "100%", maxWidth: 390, alignSelf: "center", paddingBottom: insets.bottom }}><ThemeNavigation brand={brand} preview pathname={page} onNavigate={navigate} /></View>
         </Animated.View>
       </GestureDetector>
     </GestureHandlerRootView>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Animated, View } from "react-native";
 import PortraitImage from "./PortraitImage";
 import type { Brand } from "@/contexts/BrandContext";
@@ -6,7 +6,7 @@ import { usePortraitDimensions } from "@/hooks/usePortraitDimensions";
 import { imageFrame, imagePosition } from "@/lib/themeImages";
 import { useThemeMotion } from "@/hooks/useThemeMotion";
 /** Natural-flow photo panel: only an explicit crop choice enables saved framing. */
-export default function FullPortrait({ brand, source, width, ratio: measuredRatio, maxHeight, scrollY, preview = false }: { brand: Brand; source?: number; width: number; ratio?: number; maxHeight?: number; scrollY?: Animated.Value; preview?: boolean }) {
+function FullPortrait({ brand, source, width, ratio: measuredRatio, maxHeight, scrollY, preview = false }: { brand: Brand; source?: number; width: number; ratio?: number; maxHeight?: number; scrollY?: Animated.Value; preview?: boolean }) {
   const dimensions = usePortraitDimensions(brand.portraitUrl, source);
   const crop = brand.theme.portraitFit === "crop";
   const ratio = crop ? 0.8 : measuredRatio ?? dimensions.ratio;
@@ -24,3 +24,7 @@ export default function FullPortrait({ brand, source, width, ratio: measuredRati
     </Animated.View>
   </View>;
 }
+export default memo(FullPortrait, (a, b) => a.source === b.source && a.width === b.width && a.ratio === b.ratio &&
+  a.maxHeight === b.maxHeight && a.scrollY === b.scrollY && a.preview === b.preview &&
+  a.brand.portraitUrl === b.brand.portraitUrl && a.brand.realtor.name === b.brand.realtor.name &&
+  a.brand.layoutId === b.brand.layoutId && JSON.stringify(a.brand.theme) === JSON.stringify(b.brand.theme));

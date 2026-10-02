@@ -26,7 +26,9 @@ export default function ModalChrome({
         <Text style={[styles.title, { color: fg }]}>{eyebrow}</Text>
       </View>
       <Pressable
-        onPress={() => router.back()}
+        onPress={() => router.canGoBack() ? router.back() : router.replace('/')}
+        accessibilityRole="button"
+        accessibilityLabel="Close page"
         hitSlop={14}
         style={[
           styles.close,

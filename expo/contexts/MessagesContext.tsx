@@ -53,12 +53,12 @@ const threadKey = (realtorId: string, clientId: string): string =>
  *     `openThread(clientId)`, and get an inbox of all clients via `summaries`.
  */
 export const [MessagesProvider, useMessages] = createContextHook(() => {
-  const { realtorId, isAdmin, isClient, currentClientId } = useAuth();
+  const { realtorId, isAdmin, isClient, currentClientId, viewAsClient } = useAuth();
   const { clients } = useClients();
 
   // Admin picks the active thread; a client is always pinned to their own.
   const [activeClientId, setActiveClientId] = useState<string | null>(null);
-  const threadClientId = isClient ? currentClientId ?? null : activeClientId;
+  const threadClientId = isClient ? currentClientId ?? null : viewAsClient ? null : activeClientId;
   const scope = realtorId ?? "demo";
   const hasThread = !!realtorId && !!threadClientId;
   const THREAD_KEY = hasThread ? threadKey(scope, threadClientId as string) : "";
