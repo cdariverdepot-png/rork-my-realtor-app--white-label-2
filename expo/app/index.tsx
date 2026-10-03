@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, usePathname, useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from "lucide-react-native";
@@ -63,8 +63,14 @@ import {
 /** Landing screen (unauthenticated) or client home (authenticated client). Admins redirect to /admin. */
 export default function Home() {
   const router = useRouter();
+  const pathname = usePathname();
   const insets = useSafeAreaInsets();
   const { hydrated, isAuthenticated, isAdmin, isClient, enterAuthBypass, authBypassEnabled, viewAsClient, demoViewMode } = useAuth();
+  useFocusEffect(useCallback(() => {
+    if (!isClient || !isAuthenticated) return;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => true);
+    return () => subscription.remove();
+  }, [isClient, isAuthenticated]));
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
   const { hydrated: onboardingHydrated, clientTourSeen } = useOnboarding();
@@ -74,7 +80,7 @@ export default function Home() {
   // enterAuthBypass flips isAuthenticated, which re-runs this effect and would
   // cancel the navigate mid-flight.
   useEffect(() => {
-    if (!hydrated || !authBypassEnabled || demoViewMode) return;
+    if (pathname !== '/' || !hydrated || !authBypassEnabled || demoViewMode) return;
     if (isAuthenticated) {
       if (isAdmin && !viewAsClient) router.replace("/admin/");
       return;
@@ -83,29 +89,29 @@ export default function Home() {
       await enterAuthBypass();
       router.replace("/admin/");
     })().catch(() => {});
-  }, [hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, demoViewMode, enterAuthBypass, router]);
+  }, [pathname, hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, demoViewMode, enterAuthBypass, router]);
 
   // Redirect admins to dashboard — unless they're previewing the client side.
   // Only while this screen is focused: a copy sitting under other screens (or
   // leaving mid-transition) must not fire a second redirect.
   // AUTH_BYPASS path above already replaces; keep this for normal signed-in admins.
   useFocusEffect(useCallback(() => {
-    if (!hydrated) return;
+    if (pathname !== '/' || !hydrated) return;
     if (authBypassEnabled) return;
     if (isAuthenticated && isAdmin && !viewAsClient) {
       router.replace("/admin/");
     }
-  }, [hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, router]));
+  }, [pathname, hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, router]));
 
   // A valid invite creates the relationship, but never grants the app before
   // the required client profile has been saved. The profile context is scoped
   // to the authenticated realtor/client pair and preserves partial answers.
   useFocusEffect(useCallback(() => {
     // Profile build comes after the 5-page walkthrough for new clients.
-    if (hydrated && onboardingHydrated && profilesHydrated && isClient && !demoViewMode && clientTourSeen && !myProfileShared) {
+    if (pathname === '/' && hydrated && onboardingHydrated && profilesHydrated && isClient && !demoViewMode && clientTourSeen && !myProfileShared) {
       router.replace("/client-profile");
     }
-  }, [hydrated, onboardingHydrated, profilesHydrated, isClient, demoViewMode, clientTourSeen, myProfileShared, router]));
+  }, [pathname, hydrated, onboardingHydrated, profilesHydrated, isClient, demoViewMode, clientTourSeen, myProfileShared, router]));
 
   if (!hydrated) {
     return <View style={styles.root} />;
@@ -285,7 +291,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         void exitDemoView().then(() => router.replace("/"));
         return;
       }
-      guardExit(() => leavePreviewToDashboard(path => router.replace(path),
+      guardExit(() => leavePreviewToDashboard(path => router.dismissTo(path),
         demoViewMode ? () => void exitDemoView() : exitViewAsClient));
       setTimeout(() => { edgeX.setValue(0); setPreviewSliding(false); }, 700);
     };
@@ -309,7 +315,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   /** Leave the unpublished-draft preview and return to Studio. */
   const exitDraftPreview = useCallback(() => {
     setDraftPreview(null);
-    router.back();
+    router.dismissTo('/admin/studio');
   }, [setDraftPreview, router]);
 
   useEffect(() => {

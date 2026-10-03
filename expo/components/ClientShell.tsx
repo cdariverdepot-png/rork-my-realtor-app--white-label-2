@@ -26,7 +26,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     {visible && preview && path !== '/' ? <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 18, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
       <Pressable accessibilityRole="button" accessibilityLabel="Return to realtor dashboard" onPress={() => edit.guardExit(() => {
         brand.setDraftPreview(null);
-        leavePreviewToDashboard(p => router.replace(p), auth.exitViewAsClient);
+        leavePreviewToDashboard(p => router.dismissTo(p), auth.exitViewAsClient);
       })} style={{ padding: 10 }}><Text style={{ color: d.accent }}>‹ Dashboard</Text></Pressable>
       <Text style={{ color: d.muted, fontSize: 12 }}>Viewing as client</Text>
     </View> : null}

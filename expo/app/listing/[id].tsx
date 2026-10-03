@@ -1,3 +1,4 @@
+import { useWorkflowBack } from '@/hooks/useWorkflowBack';
 import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React, { useEffect } from "react";
 import {
@@ -38,6 +39,7 @@ const { height: H } = Dimensions.get("window");
 export default function ListingDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const { brand: b } = useBrand();
   const realtor = b.realtor;
@@ -59,7 +61,7 @@ export default function ListingDetail() {
     return (
       <View style={[styles.root, { alignItems: "center", justifyContent: "center", padding: 32 }]}>
         <Text style={{ fontFamily: fonts.serif, color: brand.ink, fontSize: 20, textAlign: "center" }}>This home is no longer available.</Text>
-        <PressableScale onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))} haptic="selection" style={{ marginTop: 18 }}>
+        <PressableScale onPress={() => back()} haptic="selection" style={{ marginTop: 18 }}>
           <Text style={{ fontFamily: fonts.sansSemi, color: brand.ink, fontSize: 14, letterSpacing: 1.4 }}>GO BACK</Text>
         </PressableScale>
       </View>
@@ -78,7 +80,7 @@ export default function ListingDetail() {
           />
           <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
             <PressableScale
-              onPress={() => router.back()}
+              onPress={() => back()}
               hitSlop={12}
               haptic="light"
               scaleTo={0.9}

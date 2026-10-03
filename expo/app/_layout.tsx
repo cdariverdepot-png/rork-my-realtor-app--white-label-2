@@ -85,16 +85,18 @@ import SecurityHardener from "@/components/SecurityHardener";
 import { listings as seedListings } from "@/constants/realtor";
 import { queryClient, queryPersister } from "@/lib/queryPersist";
 import BootScreen from "@/components/BootScreen";
+import { WorkflowDraftProvider } from '@/contexts/WorkflowDraftContext';
 import OnboardingGuard from "@/components/OnboardingGuard";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
 import { realtorSetupState } from "@/lib/onboardingState";
 import { useOnboarding, type Audience } from "@/contexts/OnboardingContext";
 
 SplashScreen.preventAutoHideAsync();
+export const unstable_settings = { initialRouteName: 'index' };
 
 const clientScreenLayout = ({ children }: { children: React.ReactNode }) => <OnboardingGuard><ClientPreviewBoundary>{children}</ClientPreviewBoundary></OnboardingGuard>;
 function RootLayoutNav() {
-  const { isClient, viewAsClient } = useAuth();
+  const { isClient, viewAsClient, isAuthenticated } = useAuth();
   const modal = {
     presentation: isClient || viewAsClient ? "card" as const : "modal" as const,
     headerShown: false,
@@ -110,7 +112,7 @@ function RootLayoutNav() {
         animationDuration: 280,
       }}
     >
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="index" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="listing/[id]" options={modal} />
       <Stack.Screen name="watchlist/[id]" options={modal} />
       <Stack.Screen name="favorites" options={modal} />
@@ -124,14 +126,16 @@ function RootLayoutNav() {
       <Stack.Screen name="book" options={modal} />
       <Stack.Screen name="welcome" options={modal} />
       <Stack.Screen name="note" options={modal} />
-      <Stack.Screen name="login" options={modal} />
+      <Stack.Protected guard={!isAuthenticated}>
+        <Stack.Screen name="login" options={modal} />
+        <Stack.Screen name="portal" options={{ headerShown: false, animation: "fade", animationDuration: 360 }} />
+      </Stack.Protected>
       <Stack.Screen name="account" options={modal} />
       <Stack.Screen name="menu" options={modal} />
-      <Stack.Screen name="client-profile" options={{ headerShown: false, animation: "slide_from_bottom", animationDuration: 340 }} />
+      <Stack.Screen name="client-profile" options={{ headerShown: false, animation: "slide_from_bottom", animationDuration: 340, gestureEnabled: false }} />
       <Stack.Screen name="legal" options={modal} />
       <Stack.Screen name="reset-password" options={{ headerShown: false, animation: "slide_from_right" }} />
-      <Stack.Screen name="portal" options={{ headerShown: false, animation: "fade", animationDuration: 360 }} />
-      <Stack.Screen name="admin" options={() => ({ headerShown: false, animationTypeForReplace: navIntent.replaceAsBack ? "pop" : "push" })} />
+      <Stack.Screen name="admin" options={() => ({ headerShown: false, gestureEnabled: false, animationTypeForReplace: navIntent.replaceAsBack ? "pop" : "push" })} />
     </Stack></ClientShell>
   );
 }
@@ -157,7 +161,6 @@ function RootLayoutInner() {
   } = useAuth();
   const { savedBrand, hydrated: setupHydrated } = useBrand();
   const { myProfileShared, myEssentialsMet } = useClientProfiles();
-  const [booting, setBooting] = useState(true);
   // Opaque curtain after client tour until /client-profile is on screen —
   // prevents a one-frame Eliza Vance home flash when the carousel unmounts.
   const [profileGateCover, setProfileGateCover] = useState(false);
@@ -275,12 +278,6 @@ function RootLayoutInner() {
             style={[StyleSheet.absoluteFill, styles.profileGateCover]}
           />
         ) : null}
-        {booting && (
-          <BootScreen
-            ready={authHydrated}
-            onFinish={() => setBooting(false)}
-          />
-        )}
       </GestureHandlerRootView>
     </>
   );
@@ -342,16 +339,25 @@ export default function RootLayout() {
     >
       <AuthProvider>
         <AccountData />
+        <LaunchOverlay />
       </AuthProvider>
     </PersistQueryClientProvider>
     </ErrorBoundary>
   );
 }
 
+/** App launch chrome is outside both route history and account-scoped remounts. */
+function LaunchOverlay() {
+  const { hydrated } = useAuth();
+  const [finished, setFinished] = useState(false);
+  return finished ? null : <BootScreen ready={hydrated} onFinish={() => setFinished(true)} />;
+}
+
 function AccountData() {
   const { session } = useAuth();
   const identity = session ? session.role+':'+session.realtorId+':'+(session.clientId ?? '') : 'signed-out';
   return <React.Fragment key={identity}>
+        <WorkflowDraftProvider>
         <AccessProvider>
         <SeatsProvider>
         <BrandProvider>
@@ -391,6 +397,7 @@ function AccountData() {
         </BrandProvider>
         </SeatsProvider>
         </AccessProvider>
+        </WorkflowDraftProvider>
   </React.Fragment>;
 }
 

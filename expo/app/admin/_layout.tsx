@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import React from "react";
+export const unstable_settings = { initialRouteName: 'index' };
 export default function AdminLayout() {
   return (
     <Stack
@@ -19,7 +20,7 @@ export default function AdminLayout() {
             animationDuration: 320,
           }}
         />
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" options={{ gestureEnabled: false }} />
         <Stack.Screen name="listings" />
         <Stack.Screen name="add" />
         <Stack.Screen name="edit/[id]" />

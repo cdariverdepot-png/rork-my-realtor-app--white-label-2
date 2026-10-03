@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
+  BackHandler,
   Easing,
   FlatList,
   Platform,
@@ -228,6 +229,10 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
     syncIndex(prev);
     scrollToPage(prev, true);
   }, [syncIndex, scrollToPage]);
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => { goBack(); return true; });
+    return () => subscription.remove();
+  }, [goBack]);
 
   const getItemLayout = useCallback(
     (_: ArrayLike<Slide> | null | undefined, index: number) => ({

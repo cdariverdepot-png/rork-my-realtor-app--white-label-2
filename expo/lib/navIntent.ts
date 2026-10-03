@@ -32,7 +32,7 @@ export function cancelPendingPreviewExit() {
 }
 
 /** Back, or to the dashboard when there's no history (web refresh, deep link). */
-export function backOr(router: { canGoBack: () => boolean; back: () => void; replace: (path: "/admin") => void }) {
+export function backOr(router: { canGoBack: () => boolean; back: () => void; replace: (path: "/admin" | "/") => void }, fallback: "/admin" | "/" = "/admin") {
   if (router.canGoBack()) router.back();
-  else router.replace("/admin");
+  else router.replace(fallback);
 }

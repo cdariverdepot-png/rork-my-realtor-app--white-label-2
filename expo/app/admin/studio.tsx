@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { backOr } from "@/lib/navIntent";
+import { useWorkflowDrafts } from '@/contexts/WorkflowDraftContext';
 import {
   ActivityIndicator,
   Alert,
@@ -301,11 +302,15 @@ export default function StudioScreen() {
   const { brand: live, saveBrand, syncStatus, setDraftPreview } = useBrand();
   const [saving, setSaving] = useState(false);
   const { all: liveListings, saveListings } = useListings();
-  const [listingEdits, setListingEdits] = useState<Record<string, Partial<ManagedListing>>>({});
+  const workflowDrafts = useWorkflowDrafts();
+  const draftKey = params.section === 'theme' ? 'studio:theme' : 'studio:content';
+  const resume = workflowDrafts.get(draftKey) as { draft: Brand; active: SectionId; dirty: boolean; listingEdits: Record<string, Partial<ManagedListing>> } | undefined;
+  const [listingEdits, setListingEdits] = useState<Record<string, Partial<ManagedListing>>>(resume?.listingEdits ?? {});
 
-  const [draft, setDraft] = useState<Brand>(live);
-  const [active, setActive] = useState<SectionId>(params.section === "theme" ? "theme" : "profile");
-  const [dirty, setDirty] = useState<boolean>(false);
+  const [draft, setDraft] = useState<Brand>(resume?.dirty ? resume.draft : live);
+  const [active, setActive] = useState<SectionId>(resume?.active ?? (params.section === "theme" ? "theme" : "profile"));
+  const [dirty, setDirty] = useState<boolean>(resume?.dirty ?? false);
+  useEffect(() => { workflowDrafts.set(draftKey, { draft, active, dirty, listingEdits }); }, [workflowDrafts, draftKey, draft, active, dirty, listingEdits]);
   const [tabsAtEnd, setTabsAtEnd] = useState<boolean>(false);
   const tabsRef = useRef<ScrollView>(null);
 
@@ -494,40 +499,11 @@ export default function StudioScreen() {
     ]);
   };
 
-  /** Leaving with unpublished edits should never silently drop them. */
+  /** Navigation retains unpublished edits in the account-scoped workflow. */
   const leave = () => {
-    if (!dirty) {
-      setDraftPreview(null);
-      backOr(router);
-      return;
-    }
-    if (Platform.OS === "web") {
-      if (typeof window !== "undefined" && window.confirm("Save your changes?")) {
-        void save();
-        return;
-      } else {
-        setDraftPreview(null);
-      }
-      backOr(router);
-      return;
-    }
-    Alert.alert("Unsaved changes", "Save your edits before leaving?", [
-      { text: "Keep editing", style: "cancel" },
-      {
-        text: "Discard",
-        style: "destructive",
-        onPress: () => {
-          setDraftPreview(null);
-          backOr(router);
-        },
-      },
-      {
-        text: "Save changes",
-        onPress: () => {
-          void save();
-        },
-      },
-    ]);
+    workflowDrafts.set(draftKey, { draft, active, dirty, listingEdits });
+    setDraftPreview(null);
+    backOr(router);
   };
 
   // The iOS back swipe and Android back button must go through the same
@@ -548,10 +524,10 @@ export default function StudioScreen() {
 
   return (
     <View style={styles.root}>
-      <Stack.Screen options={{ gestureEnabled: !dirty }} />
+      <Stack.Screen options={{ gestureEnabled: true }} />
 
       <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
-        <Pressable hitSlop={12} onPress={leave} style={styles.iconBtn}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Back" hitSlop={12} onPress={leave} style={styles.iconBtn}>
           <ArrowLeft size={18} color={brand.ivory} strokeWidth={1.5} />
         </Pressable>
         <View style={{ alignItems: "center" }}>

@@ -16,6 +16,7 @@ import { Image } from "expo-image";
 import { THEME_REFERENCES } from "@/constants/themeReferences";
 import { themePreview } from "@/constants/themeSamples";
 import { withSamplePortrait } from "@/constants/themeSamplePortraits";
+import { useWorkflowDrafts } from '@/contexts/WorkflowDraftContext';
 
 const tick = () => { if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {}); };
 
@@ -33,15 +34,19 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
 }) {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const workflowDrafts = useWorkflowDrafts();
+  const carouselKey = demo ? 'carousel:demo' : compact ? 'carousel:theme' : 'carousel:content';
+  const resumed = workflowDrafts.get(carouselKey) as { index: number; contentMode: "auto" | "sample" | "profile" } | undefined;
   const [containerWidth, setContainerWidth] = useState(windowWidth);
-  const [initialIndex] = useState(() => draft.themeChosen && draft.layoutId
-    ? Math.max(0, THEME_CAROUSEL_ORDER.indexOf(draft.layoutId)) : 0);
+  const [initialIndex] = useState(() => resumed?.index ?? (draft.themeChosen && draft.layoutId
+    ? Math.max(0, THEME_CAROUSEL_ORDER.indexOf(draft.layoutId)) : 0));
   const [index, setIndex] = useState(initialIndex);
   const stepRef = useRef<((delta: number) => void) | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [comparing, setComparing] = useState(false);
   const [positioning, setPositioning] = useState(false);
-  const [contentMode, setContentMode] = useState<"auto" | "sample" | "profile">("sample");
+  const [contentMode, setContentMode] = useState<"auto" | "sample" | "profile">(resumed?.contentMode ?? "sample");
+  useEffect(() => { workflowDrafts.set(carouselKey, { index, contentMode }); }, [workflowDrafts, carouselKey, index, contentMode]);
   const [persisting, setPersisting] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const count = THEME_CAROUSEL_ORDER.length;

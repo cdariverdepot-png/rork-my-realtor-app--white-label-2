@@ -1,6 +1,6 @@
 import { useSetupDraft } from "@/hooks/useSetupDraft";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
+import { ActivityIndicator, Alert, BackHandler, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
 import { Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
 import { Image } from "expo-image";
 import PortraitImage from "./PortraitImage";
@@ -8,7 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 import { randomUUID } from "expo-crypto";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { REQUIRED_FIELDS, requiredStatus } from "@/constants/sections";
@@ -146,6 +146,9 @@ export default function InitialRealtorSetup() {
   const loadSavedBuild = useCallback(async () => {
     const saved = await loadBuild();
     if (!saved) return;
+    // Historical onboarding URLs must not reopen a completed build. URL refresh
+    // remains available in Studio and can still reuse this completed source.
+    if (saved.status === 'complete') { router.dismissTo('/admin'); return; }
     setSources(saved.sources);
     const primary = saved.sources.find(source => source.kind === "url");
     if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
@@ -155,7 +158,7 @@ export default function InitialRealtorSetup() {
       const found = saved.draft.discoveredListings ?? [];
       setImportedListingCount(found.length);
     }
-  }, [brand]);
+  }, [brand, router]);
 
   // Product model: real users sign up/in BEFORE /admin/build. Guest REALTOR codes
   // are owner-test only and use the local builder — never an account panel.
@@ -217,6 +220,12 @@ export default function InitialRealtorSetup() {
         { text: "Sign out", onPress: () => { void exit(); } }]);
     } catch { setError({ place: phase === "review" ? "review" : "sources", message: "Couldn't save progress. Please retry before leaving." }); }
   };
+  const leaveBuildRef = useRef(leaveBuild);
+  leaveBuildRef.current = leaveBuild;
+  useFocusEffect(useCallback(() => {
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => { void leaveBuildRef.current(); return true; });
+    return () => subscription.remove();
+  }, []));
 
   /** Edge case only: non-guest without cloud auth — send to portal (never invent signup here). */
   const goPortalAuth = useCallback(() => {

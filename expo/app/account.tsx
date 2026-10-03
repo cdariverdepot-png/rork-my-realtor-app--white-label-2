@@ -1,3 +1,4 @@
+import { useWorkflowBack } from '@/hooks/useWorkflowBack';
 import React, { useMemo, useState } from "react";
 import {
   Alert,
@@ -45,6 +46,7 @@ import { deleteClientAccount } from "@/lib/accountDelete";
 
 export default function ClientAccount() {
   const router = useRouter();
+  const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const {
     hydrated,
@@ -188,7 +190,7 @@ export default function ClientAccount() {
     <View style={styles.root}>
       <ScreenBackdrop screen="account" />
       <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
-        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.iconBtn}>
+        <Pressable hitSlop={12} onPress={() => back()} style={styles.iconBtn}>
           <X size={18} color={brand.ivory} strokeWidth={1.5} />
         </Pressable>
         <View style={{ alignItems: "center" }}>
