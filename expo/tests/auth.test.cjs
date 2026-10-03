@@ -559,7 +559,8 @@ test('AuthContext exposes enterGuestRealtor that mints admin without DEMO_REALTO
   assert.match(src, /realtorTourSeen: false/);
   assert.match(src, /role: "admin"/);
   assert.match(src, /client_code_enabled: false/);
-  assert.match(src, /guest\+realtor\+\$\{uuid\}@guest\.myrealtor\.app/);
+  assert.match(src, /guest\+realtor\+\$\{realtorId\}@guest\.myrealtor\.app/);
+  assert.match(src, /rpc\('create_guest_realtor'\)/);
   // Must not pin guest realtor onto the Eliza showcase id.
   const start = src.indexOf('const enterGuestRealtor = useCallback');
   assert.ok(start >= 0, 'enterGuestRealtor callback body');
@@ -617,7 +618,11 @@ test('build onboarding: guest local path; never invents signup; edge sends to po
   // Guest access-code sessions never show invent-signup panels.
   assert.match(src, /needsBuilderAuth/);
   assert.match(src, /builderAuthPanel/);
-  assert.match(src, /Let's Build My App!|Let’s Build My App!/);
+  assert.match(src, /BuildUrlEntry/);
+  const entry = fs.readFileSync(path.join(__dirname, "..", "components/BuildUrlEntry.tsx"), "utf8");
+  assert.match(entry, /Import my listings/);
+  assert.equal((entry.match(/<TextInput\s/g)||[]).length,1);
+  assert.doesNotMatch(entry, /Upload PDF|Import contacts|Add link/);
   assert.doesNotMatch(src, /ACCOUNT REQUIRED/);
   assert.doesNotMatch(src, /Create account & continue/);
   assert.doesNotMatch(src, /EmailCodeSignIn/);
@@ -650,7 +655,7 @@ test('guest REALTOR session mints guestAccess and local builder flag', () => {
   assert.match(authSrc, /isGuestAccess:/);
   const start = authSrc.indexOf('const enterGuestRealtor = useCallback');
   assert.ok(start >= 0);
-  const body = authSrc.slice(start, start + 2500);
+  const body = authSrc.slice(start, authSrc.indexOf('const logout = useCallback',start));
   assert.match(body, /guestAccess: true/);
 });
 

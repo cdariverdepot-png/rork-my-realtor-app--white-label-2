@@ -1,5 +1,6 @@
+import Pressable from './TactilePressable';
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { ArrowUpRight, Heart, MessageCircle, CalendarDays, FileText, TrendingUp, Bell, ChevronRight } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
@@ -7,20 +8,21 @@ import type { ClientSectionId } from "@/constants/sections";
 import { themeDesign } from "@/constants/themeDesigns";
 
 type ContentRoute = "/message" | "/favorites" | "/calendar" | "/documents" | "/insights" | "/notifications" | "/account" | "/book" | "/note";
-export default function ThemeContentSection({ id, brand: b, onNavigate, onContact }: {
+export default function ThemeContentSection({ id, brand: b, onNavigate, onContact, material }: {
   id: ClientSectionId; brand: Brand; onNavigate?: (route: ContentRoute) => void;
   onContact?: (channel: "call" | "text" | "email") => void;
+  material?: { ink: string; accent: string; radius: number; light: boolean };
 }) {
   const d = themeDesign(b.layoutId, b.theme);
   const paper = d.light || d.composition === "editorial";
-  const background = paper ? "#FBF8F2" : d.background;
-  const ink = paper ? "#25312C" : d.ink;
-  const muted = paper ? "#62675E" : d.muted;
-  const accent = paper ? "#806039" : d.accent;
-  const panel = paper ? "#FFFFFF" : d.panel;
-  const radius = d.composition === "coastal" ? 24 : d.composition === "minimal" ? 8 : 16;
+  const background = material ? 'transparent' : paper ? "#FBF8F2" : d.background;
+  const ink = material?.ink ?? (paper ? "#25312C" : d.ink);
+  const muted = material ? material.ink + 'CC' : paper ? "#62675E" : d.muted;
+  const accent = material?.accent ?? (paper ? "#806039" : d.accent);
+  const panel = material ? material.light ? '#FFFFFFCC' : '#FFFFFF0C' : paper ? "#FFFFFF" : d.panel;
+  const radius = material?.radius ?? (d.composition === "coastal" ? 24 : d.composition === "minimal" ? 8 : 16);
   const compactTools = ["discovery", "concierge", "property"].includes(d.composition);
-  if (id === "beat" && d.composition === "journal") {
+  if (!material && id === "beat" && d.composition === "journal") {
     return <View style={{ backgroundColor: d.background, padding: 18 }}><Pressable disabled={!onNavigate} onPress={() => onNavigate?.("/insights")} accessibilityRole="button"
       style={{ borderWidth: 1, borderColor: "#C6AC7D22", borderRadius: 8, backgroundColor: "#171918", padding: 16, flexDirection: "row", alignItems: "center", gap: 14 }}>
       <TrendingUp color={accent} size={28} /><View style={{ flex: 1 }}><Text style={{ color: accent, fontSize: 8, letterSpacing: 1.5, marginBottom: 7 }}>CURRENT MARKET INSIGHT</Text>
@@ -108,7 +110,7 @@ export default function ThemeContentSection({ id, brand: b, onNavigate, onContac
     case "footer":
       content = <>{text(b.realtor.brandName || b.realtor.name, true)}{text(b.realtor.title)}{text(b.realtor.city)}
         {text(b.realtor.email)}{text([b.credentials.license.brokerage, b.credentials.license.number, b.credentials.license.state].filter(Boolean).join(" · "))}
-        {text("Equal Housing Opportunity")}{text(b.copyright)}{link("My account", "/account")}</>;
+        {text("Equal Housing Opportunity")}{text(b.copyright)}</>;
       break;
     default: return null;
   }

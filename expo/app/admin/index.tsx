@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { clientInviteLink } from "@/lib/bookingLink";
 import {
   ActivityIndicator,
+  BackHandler,
   Alert,
   Animated,
   Easing,
@@ -19,7 +20,7 @@ import * as Clipboard from "expo-clipboard";
 import { Image } from "expo-image";
 import PortraitImage from "@/components/PortraitImage";
 import { usePortraitPicker } from "@/hooks/usePortraitPicker";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
@@ -172,6 +173,10 @@ function useCountUp(target: number, duration = 1200, enabled = true): number {
 /* ─── Main Dashboard ─── */
 export default function AdminDashboard() {
   const router = useRouter();
+  useFocusEffect(useCallback(() => {
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => true);
+    return () => subscription.remove();
+  }, []));
   const insets = useSafeAreaInsets();
   const { isAdmin, hydrated, logout, session, realtorRecord, enterViewAsClient, authBypassEnabled, enterAuthBypass } = useAuth();
   const { all, remove, toggleHidden, syncStatus, refreshFromSource } = useListings();

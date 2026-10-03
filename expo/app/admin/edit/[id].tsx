@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { backOr } from "@/lib/navIntent";
+import { useWorkflowDrafts } from '@/contexts/WorkflowDraftContext';
 import {
   ActivityIndicator,
   Alert,
@@ -42,11 +43,14 @@ export default function EditListing() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getById, upsert, remove } = useListings();
   const { brand: b } = useBrand();
+  const workflowDrafts = useWorkflowDrafts();
+  const draftKey = 'listing:' + id;
   const [polishing, setPolishing] = useState<boolean>(false);
   const [headlining, setHeadlining] = useState<boolean>(false);
   const original = useMemo(() => (id ? getById(id) : undefined), [id, getById]);
 
-  const [draft, setDraft] = useState<ManagedListing | null>(original ?? null);
+  const [draft, setDraft] = useState<ManagedListing | null>(() => workflowDrafts.get(draftKey) as ManagedListing | undefined ?? original ?? null);
+  useEffect(() => { if (draft) workflowDrafts.set(draftKey, draft); }, [workflowDrafts, draftKey, draft]);
 
   // Seed the draft once per listing. Re-seeding on every listings change (a sync
   // echo, a refresh) wiped whatever was being typed.
@@ -54,7 +58,7 @@ export default function EditListing() {
   useEffect(() => {
     if (!original || seededFor.current === id) return;
     seededFor.current = id ?? null;
-    setDraft(original);
+    setDraft(workflowDrafts.get(draftKey) as ManagedListing | undefined ?? original);
   }, [original, id]);
 
   if (!draft) {
@@ -78,6 +82,7 @@ export default function EditListing() {
     if (!draft) return;
     const cover = draft.images[0] ?? draft.image;
     upsert({ ...draft, image: cover });
+    workflowDrafts.delete(draftKey);
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     backOr(router);
   };

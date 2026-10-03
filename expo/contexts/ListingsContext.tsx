@@ -6,18 +6,31 @@ import { supabase } from "@/lib/supabase";
 import { isKvEnabled, kvSet } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
-import { scrapeListing } from "@/lib/scrapeListing";
+import { invokeListingSync } from "@/lib/listingSourceService";
 import { sameJson } from "@/lib/sameJson";
 
 export type ListingStatus = "active" | "pending" | "contingent" | "sold" | "off_market";
 
-export type ManagedListing = SeedListing & {
+export type ManagedListing = Omit<SeedListing, "tag"> & {
+  tag: string;
   images: string[];
   hidden: boolean;
   sourceUrl?: string;
   updatedAt?: number;
   status?: ListingStatus;
   lastRefreshedAt?: number;
+  lastStatusVerifiedAt?: number;
+  lastSyncAttemptAt?: number;
+  nextSyncAt?: number;
+  syncState?: "verified" | "status-unconfirmed" | "unavailable";
+  syncError?: string;
+  syncFailures?: number;
+  sourceId?: string;
+  sourceArchived?: boolean;
+  sourceMissingCount?: number;
+  sourceMissingAt?: number;
+  listingNumber?: string;
+  propertyType?: string;
   /** Optional long-form copy pulled in when a listing is imported/refreshed from a source URL. */
   description?: string;
 };
@@ -152,7 +165,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     setSyncStatus("connecting");
     const sb = supabase;
     const ch = sb.channel(CHANNEL, {
-      config: { broadcast: { self: false, ack: false } },
+      config: { private: true, broadcast: { self: false, ack: false } },
     });
 
     const scheduleReconnect = () => {
@@ -325,7 +338,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
   const demoItems = useMemo(() => seed(), []);
   const effectiveItems = demoViewMode ? demoItems : items;
   const getById = useCallback((id: string): ManagedListing | undefined => effectiveItems.find((x) => x.id === id), [effectiveItems]);
-  const visible = useMemo(() => effectiveItems.filter((x) => !x.hidden), [effectiveItems]);
+  const visible = useMemo(() => effectiveItems.filter((x) => !x.hidden && !x.sourceArchived), [effectiveItems]);
   const reset = useCallback(() => { update(isDemoScope ? seed() : []); }, [update, isDemoScope]);
   /**
    * Guided walkthrough hook. A real realtor's collection starts and stays empty
@@ -337,46 +350,15 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     update(seed());
   }, [update, isDemoScope]);
 
-  const refreshLocally = useCallback(
-    async (id: string): Promise<{ ok: boolean; error?: string; updated?: number }> => {
-      const current = itemsRef.current;
-      const target = current.find((x: ManagedListing) => x.id === id);
-      if (!target) return { ok: false, error: "Listing not found" };
-      if (!target.sourceUrl) return { ok: false, error: "No source URL on this listing" };
-      try {
-        const scraped = await scrapeListing(target.sourceUrl);
-        const haystack = `${scraped.title} ${scraped.description}`.toLowerCase();
-        let status: ListingStatus | undefined = target.status;
-        if (/\bsold\b/.test(haystack)) status = "sold";
-        else if (/\bpending\b/.test(haystack)) status = "pending";
-        else if (/\bcontingent\b/.test(haystack)) status = "contingent";
-        else if (/off[\s-]?market/.test(haystack)) status = "off_market";
-        else if (/\bactive\b|for sale/.test(haystack)) status = "active";
-        const merged: ManagedListing = {
-          ...target, title: scraped.title || target.title,
-          description: scraped.description || target.description,
-          price: scraped.price || target.price,
-          image: scraped.images[0] ?? target.image,
-          images: scraped.images.length > 0 ? scraped.images : target.images,
-          status, lastRefreshedAt: Date.now(), updatedAt: Date.now(),
-        };
-        const next = current.map((x: ManagedListing) => (x.id === id ? merged : x));
-        update(next);
-        return { ok: true, updated: 1 };
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
-        return { ok: false, error: msg };
-      }
-    },
-    [update]
-  );
-
   const refreshFromSource = useCallback(
     async (id?: string): Promise<{ ok: boolean; error?: string }> => {
-      if (!id) return { ok: false, error: "Tap a single listing to refresh it from its source URL." };
-      return refreshLocally(id);
-    },
-    [refreshLocally]
+      if (demoViewMode || isDemoScope) return { ok: false, error: "The demo is read-only." };
+      try {
+        const result = await invokeListingSync(id ? { listingId: id } : {});
+        await refreshKv();
+        return result.warning ? { ok: false, error: result.warning } : { ok: true };
+      } catch (e) { return { ok: false, error: e instanceof Error ? e.message : "We couldn't check that source. Please retry." }; }
+    }, [demoViewMode, isDemoScope, refreshKv]
   );
 
   return useMemo(() => ({

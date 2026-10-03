@@ -1,3 +1,4 @@
+import { useWorkflowBack } from '@/hooks/useWorkflowBack';
 import React from "react";
 import {
   FlatList,
@@ -32,6 +33,7 @@ const CARD_H = Math.round(CARD_W * 1.32);
 
 function Card({ item }: { item: ManagedListing }) {
   const router = useRouter();
+  const back = useWorkflowBack();
   const { isFavorited, toggleListing } = useFavorites();
   const liked = isFavorited(item.id);
   const onPress = () => {
@@ -89,6 +91,7 @@ function Card({ item }: { item: ManagedListing }) {
 /** Full browse of every active listing the realtor represents. */
 export default function AllListings() {
   const router = useRouter();
+  const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const { visible } = useListings();
 
@@ -96,7 +99,7 @@ export default function AllListings() {
     <View style={styles.root}>
       <ScreenBackdrop screen="listings" />
       <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-        <Pressable onPress={() => router.back()} hitSlop={14} style={styles.back}>
+        <Pressable onPress={() => back()} hitSlop={14} style={styles.back}>
           <ArrowLeft size={20} color={dark.text} strokeWidth={1.6} />
         </Pressable>
         <View style={styles.headerCenter}>
@@ -114,16 +117,15 @@ export default function AllListings() {
         columnWrapperStyle={{ gap: COL_GAP, paddingHorizontal: SIDE }}
         contentContainerStyle={{
           paddingTop: 18,
-          paddingBottom: insets.bottom + 36,
+          paddingBottom: insets.bottom + 116,
           gap: COL_GAP,
         }}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={styles.intro}>
-            <Text style={styles.introCount}>{visible.length} homes currently represented</Text>
+            <Text style={styles.introCount}>{visible.length ? `${visible.length} homes to explore` : 'Your next home is worth the wait.'}</Text>
             <Text style={styles.introCopy}>
-              Every home here, I've walked personally. Tap one to step inside — or send me a note if
-              you'd like a private showing.
+              {visible.length ? 'Explore the collection, or get in touch to arrange a private showing.' : 'New homes will appear here as they become available. Get in touch to talk about what you’re looking for.'}
             </Text>
           </View>
         }

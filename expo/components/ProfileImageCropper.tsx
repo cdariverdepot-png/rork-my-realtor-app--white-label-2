@@ -50,6 +50,7 @@ export default function ProfileImageCropper({
   const window = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const viewSize = Math.min(window.width - 36, 360);
+  const [crop, setCrop] = useState(false);
   const [focus, setFocus] = useState<CropFocus>({ x: 50, y: 50, zoom: 1 });
   const [proposed, setProposed] = useState<CropFocus>({ x: 50, y: 50, zoom: 1 });
   const [natural, setNatural] = useState<{ width: number; height: number } | null>(null);
@@ -59,6 +60,7 @@ export default function ProfileImageCropper({
 
   useEffect(() => {
     if (!visible || !uri) return;
+    setCrop(false);
     setNatural(null);
     setError("");
     setBusy(false);
@@ -82,7 +84,7 @@ export default function ProfileImageCropper({
   }, [natural, viewSize, focus]);
 
   const gesture = useMemo(() => {
-    const pan = Gesture.Pan().runOnJS(true)
+    const pan = Gesture.Pan().enabled(crop).runOnJS(true)
       .onBegin(() => { start.current = focus; })
       .onUpdate((e) => {
         const factor = 100 / (viewSize * 0.85) / start.current.zoom;
@@ -92,21 +94,21 @@ export default function ProfileImageCropper({
           y: clamp(start.current.y - e.translationY * factor, 0, 100),
         }));
       });
-    const pinch = Gesture.Pinch().runOnJS(true)
+    const pinch = Gesture.Pinch().enabled(crop).runOnJS(true)
       .onBegin(() => { start.current = focus; })
       .onUpdate((e) => setFocus((current) => clampCropFocus({
         ...current,
         zoom: clamp(start.current.zoom * e.scale, MIN_CROP_ZOOM, MAX_CROP_ZOOM),
       })));
     return Gesture.Simultaneous(pan, pinch);
-  }, [focus, viewSize]);
+  }, [focus, viewSize, crop]);
 
   const finish = async () => {
     if (!uri || busy) return;
     setBusy(true);
     setError("");
     try {
-      const cropped = await cropProfileImage(uri, focus, outputSize);
+      const cropped = crop ? await cropProfileImage(uri, focus, outputSize) : uri;
       if (Platform.OS !== "web") {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
       }
@@ -133,7 +135,7 @@ export default function ProfileImageCropper({
             <Text style={{ color: "#C8C2B4", fontSize: 16 }}>Cancel</Text>
           </Pressable>
           <Text style={{ flex: 1, color: "#F5EFE5", textAlign: "center", fontSize: 16, fontWeight: "600" }}>
-            Position your photo
+            Your photo
           </Text>
           <Pressable
             onPress={() => void finish()}
@@ -153,6 +155,10 @@ export default function ProfileImageCropper({
           </Pressable>
         </View>
 
+        <View style={{ flexDirection: "row", justifyContent: "center", gap: 20, padding: 12 }}>
+          <Pressable accessibilityRole="button" accessibilityState={{ selected: !crop }} onPress={() => setCrop(false)}><Text style={{ color: !crop ? "#D4B989" : "#C8C2B4" }}>Show full photo</Text></Pressable>
+          <Pressable accessibilityRole="button" accessibilityState={{ selected: crop }} onPress={() => setCrop(true)}><Text style={{ color: crop ? "#D4B989" : "#C8C2B4" }}>Crop photo</Text></Pressable>
+        </View>
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
           {error ? (
             <Text style={{ color: "#FFBAA9", paddingHorizontal: 24, textAlign: "center" }}>{error}</Text>
@@ -166,18 +172,19 @@ export default function ProfileImageCropper({
                   overflow: "hidden", backgroundColor: "#1A1C1B",
                 }}
                 collapsable={false}
-                accessibilityLabel="Drag to move, pinch to zoom"
+                accessibilityLabel={crop ? "Drag to move, pinch to zoom" : "Full uploaded photo"}
               >
                 <Image
                   source={{ uri }}
-                  style={{
+                  style={crop ? {
                     position: "absolute",
                     width: layout.width,
                     height: layout.height,
                     left: layout.left,
                     top: layout.top,
-                  }}
-                  contentFit="fill"
+                  } : { width: "100%", height: "100%" }}
+                  contentFit={crop ? "fill" : "contain"}
+                  transition={0}
                   pointerEvents="none"
                 />
               </View>
@@ -186,11 +193,11 @@ export default function ProfileImageCropper({
         </View>
 
         <View style={{ paddingBottom: insets.bottom + 20, paddingHorizontal: 24, alignItems: "center", gap: 12 }}>
-          <Text style={{ color: "#C8C2B4", textAlign: "center" }}>Drag to move · Pinch to zoom</Text>
+          <Text style={{ color: "#C8C2B4", textAlign: "center" }}>{crop ? "Drag to move · Pinch to zoom" : "Your whole photo will be saved."}</Text>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 22 }}>
-            <Pressable onPress={reset} accessibilityRole="button" hitSlop={8} disabled={busy}>
-              <Text style={{ color: "#D4B989" }}>Reset</Text>
-            </Pressable>
+            {crop && <Pressable onPress={reset} accessibilityRole="button" hitSlop={8} disabled={busy}>
+              <Text style={{ color: "#D4B989" }}>Reset crop</Text>
+            </Pressable>}
             {onReplace ? (
               <Pressable
                 onPress={() => {

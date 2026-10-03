@@ -100,7 +100,7 @@ export default React.memo(function Footer() {
           </View>
         </PressableScale>
 
-        {!demoViewMode && <PressableScale
+        {!demoViewMode && !isClient && !(isAdmin && viewAsClient) && <PressableScale
           onPress={() => isAdmin && viewAsClient
             // Leaving the client preview: same clean exit as its Back button.
             ? leavePreviewToDashboard(path => router.replace(path), exitViewAsClient)

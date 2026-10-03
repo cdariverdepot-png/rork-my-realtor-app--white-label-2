@@ -9,22 +9,7 @@ import { uploadJpegToStorage } from "./imageUpload";
  * keyed by string. Replaces the previous broadcast-only sync, which was
  * ephemeral and lost any update made while the other device was offline.
  *
- * SQL setup (run once in Supabase SQL editor):
- *
- *   create table if not exists public.app_kv (
- *     key text primary key,
- *     value jsonb not null,
- *     rev bigint not null default 0,
- *     updated_at timestamptz not null default now()
- *   );
- *   alter publication supabase_realtime add table public.app_kv;
- *   alter table public.app_kv enable row level security;
- *   create policy "kv read"   on public.app_kv for select using (true);
- *   create policy "kv insert" on public.app_kv for insert with check (true);
- *   create policy "kv update" on public.app_kv for update using (true) with check (true);
- *
- * Policies are intentionally open for the preview build — production would
- * gate by an `owner_id` column matched against `auth.uid()`.
+ * Access is enforced by the versioned privacy migrations and checked RPCs.
  */
 
 const TABLE = "app_kv";
@@ -136,11 +121,7 @@ export async function kvGet<T>(key: string, requireSuccess = false): Promise<KvR
   }
   try {
     await ensureSupabaseSession();
-    const { data, error } = await supabase
-      .from(TABLE)
-      .select("value, rev")
-      .eq("key", key)
-      .maybeSingle();
+    const { data, error } = await supabase.rpc('secure_kv_get', { p_key:key });
     if (error) {
       if (requireSuccess) throw error;
       if (isMissingTableError(error)) {
@@ -255,7 +236,7 @@ export async function kvSet<T>(key: string, value: T, rev: number, requireSucces
     // blob stays tiny. Without this, legacy data persisted before the
     // Storage flow shipped causes every upsert to fail with HTTP 413
     // "request entity too large" — which is silent from the user's POV.
-    const { value: sanitized, replaced, skipped } = await sanitizeInlineImages(value);
+    const { value: sanitized, replaced, skipped } = (/:(brand.v2|listings.v2)$/.test(key) ? await sanitizeInlineImages(value) : {value,replaced:0,skipped:0});
     if (replaced > 0 || skipped > 0) {
       console.log(`[kv] sanitized "${key}": ${replaced} inline image(s) → Storage URL, ${skipped} kept inline`);
     }
@@ -269,15 +250,7 @@ export async function kvSet<T>(key: string, value: T, rev: number, requireSucces
         `[kv] WARNING: payload for "${key}" is ${(approxBytes / 1024).toFixed(0)}KB even after sanitization — Supabase will likely reject this. Check for non-image inline data.`
       );
     }
-    const { error } = await supabase.from(TABLE).upsert(
-      {
-        key,
-        value: sanitized as unknown as Record<string, unknown>,
-        rev,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "key" }
-    );
+    const { error } = await supabase.rpc('secure_kv_set', { p_key:key, p_value:sanitized, p_rev:rev });
     if (error) {
       if (requireSuccess) throw error;
       const errMsg = error.message ?? String(error);

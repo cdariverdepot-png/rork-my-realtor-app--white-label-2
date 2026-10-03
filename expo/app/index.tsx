@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Animated, BackHandler, Dimensions, Easing, Linking, Modal, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, usePathname, useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowRight, Building2, User, Eye, X, Pencil, Check, ChevronLeft } from "lucide-react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import { brand, dark, fonts } from "@/constants/colors";
+import { clientDestination } from "@/lib/clientNavigation";
 import { leavePreviewToDashboard } from "@/lib/navIntent";
 import { useAuth } from "@/contexts/AuthContext";
 import { setConsultInfo } from "@/lib/contact";
@@ -28,11 +29,12 @@ import ThemeCollection from "@/components/ThemeCollection";
 import ThemeContentSection from "@/components/ThemeContentSection";
 import ThemeCarousel from "@/components/ThemeCarousel";
 import ReferenceHome from "@/components/themes/ReferenceHome";
+import { liveThemeBackground } from '@/lib/themeComposition';
 import { themeCandidate, themeDesign } from "@/constants/themeDesigns";
 import type { Brand } from "@/contexts/BrandContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { orderThemeSections } from "@/constants/themeStructure";
-import BottomNav from "@/components/BottomNav";
+
 import CuratedListings from "@/components/CuratedListings";
 import PersonalNote from "@/components/PersonalNote";
 import Credentials from "@/components/Credentials";
@@ -61,8 +63,14 @@ import {
 /** Landing screen (unauthenticated) or client home (authenticated client). Admins redirect to /admin. */
 export default function Home() {
   const router = useRouter();
+  const pathname = usePathname();
   const insets = useSafeAreaInsets();
   const { hydrated, isAuthenticated, isAdmin, isClient, enterAuthBypass, authBypassEnabled, viewAsClient, demoViewMode } = useAuth();
+  useFocusEffect(useCallback(() => {
+    if (!isClient || !isAuthenticated) return;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => true);
+    return () => subscription.remove();
+  }, [isClient, isAuthenticated]));
   const { brand: b } = useBrand();
   const { hydrated: profilesHydrated, myProfileShared } = useClientProfiles();
   const { hydrated: onboardingHydrated, clientTourSeen } = useOnboarding();
@@ -72,7 +80,7 @@ export default function Home() {
   // enterAuthBypass flips isAuthenticated, which re-runs this effect and would
   // cancel the navigate mid-flight.
   useEffect(() => {
-    if (!hydrated || !authBypassEnabled || demoViewMode) return;
+    if (pathname !== '/' || !hydrated || !authBypassEnabled || demoViewMode) return;
     if (isAuthenticated) {
       if (isAdmin && !viewAsClient) router.replace("/admin/");
       return;
@@ -81,29 +89,29 @@ export default function Home() {
       await enterAuthBypass();
       router.replace("/admin/");
     })().catch(() => {});
-  }, [hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, demoViewMode, enterAuthBypass, router]);
+  }, [pathname, hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, demoViewMode, enterAuthBypass, router]);
 
   // Redirect admins to dashboard — unless they're previewing the client side.
   // Only while this screen is focused: a copy sitting under other screens (or
   // leaving mid-transition) must not fire a second redirect.
   // AUTH_BYPASS path above already replaces; keep this for normal signed-in admins.
   useFocusEffect(useCallback(() => {
-    if (!hydrated) return;
+    if (pathname !== '/' || !hydrated) return;
     if (authBypassEnabled) return;
     if (isAuthenticated && isAdmin && !viewAsClient) {
       router.replace("/admin/");
     }
-  }, [hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, router]));
+  }, [pathname, hydrated, authBypassEnabled, isAuthenticated, isAdmin, viewAsClient, router]));
 
   // A valid invite creates the relationship, but never grants the app before
   // the required client profile has been saved. The profile context is scoped
   // to the authenticated realtor/client pair and preserves partial answers.
   useFocusEffect(useCallback(() => {
     // Profile build comes after the 5-page walkthrough for new clients.
-    if (hydrated && onboardingHydrated && profilesHydrated && isClient && !demoViewMode && clientTourSeen && !myProfileShared) {
+    if (pathname === '/' && hydrated && onboardingHydrated && profilesHydrated && isClient && !demoViewMode && clientTourSeen && !myProfileShared) {
       router.replace("/client-profile");
     }
-  }, [hydrated, onboardingHydrated, profilesHydrated, isClient, demoViewMode, clientTourSeen, myProfileShared, router]));
+  }, [pathname, hydrated, onboardingHydrated, profilesHydrated, isClient, demoViewMode, clientTourSeen, myProfileShared, router]));
 
   if (!hydrated) {
     return <View style={styles.root} />;
@@ -273,6 +281,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   // Leaving a preview (the realtor's own app or the demo) for the dashboard.
   // The page slides aside first (the swipe has already done this), then the
   // dashboard comes in from the left; the leaving page stays aside until then.
+  const [previewSliding, setPreviewSliding] = useState(false);
   const edgeX = useRef(new Animated.Value(0)).current;
   const leavePreview = useCallback((slide: boolean) => {
     const go = () => {
@@ -282,11 +291,11 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         void exitDemoView().then(() => router.replace("/"));
         return;
       }
-      guardExit(() => leavePreviewToDashboard(path => router.replace(path),
+      guardExit(() => leavePreviewToDashboard(path => router.dismissTo(path),
         demoViewMode ? () => void exitDemoView() : exitViewAsClient));
-      setTimeout(() => edgeX.setValue(0), 700);
+      setTimeout(() => { edgeX.setValue(0); setPreviewSliding(false); }, 700);
     };
-    if (slide) Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true }).start(go);
+    if (slide) { setPreviewSliding(true); Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true }).start(go); }
     else go();
   }, [demoViewMode, isAdmin, isPreviewAdmin, guardExit, exitViewAsClient, exitDemoView, router, edgeX]);
   const exitTemplate = useCallback(() => leavePreview(true), [leavePreview]);
@@ -306,7 +315,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   /** Leave the unpublished-draft preview and return to Studio. */
   const exitDraftPreview = useCallback(() => {
     setDraftPreview(null);
-    router.back();
+    router.dismissTo('/admin/studio');
   }, [setDraftPreview, router]);
 
   useEffect(() => {
@@ -339,11 +348,8 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const scrollRef = useRef<ScrollView>(null);
   const listingsY = useRef<number>(0);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const onHomeScroll = useMemo(
-    () => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }),
-    [scrollY],
-  );
-  const bottomPad = Math.max(insets.bottom, 10) + 128;
+  const onHomeScroll = useMemo(() => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true }), [scrollY]);
+  const bottomPad = Math.max(insets.bottom, 10) + 116;
 
   const bannerAnim = useRef(new Animated.Value(0)).current;
   /** Floating Back (left) + quiet "Viewing as client" label — shared by every client preview, including the demo. */
@@ -374,19 +380,24 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const edgeBack = useMemo(() => Gesture.Pan()
     .enabled(viewAsClient && !previewingDraft && !editing)
     .hitSlop({ left: 0, width: 32 })
-    .activeOffsetX(12)
-    .failOffsetY([-24, 24])
+    .activeOffsetX(24)
+    .failOffsetY([-12, 12])
     .runOnJS(true)
+    .onTouchesDown((event, manager) => {
+      const touch = event.allTouches[0];
+      if (!touch || touch.x > 32) manager.fail();
+    })
+    .onStart(() => setPreviewSliding(true))
     .onUpdate(e => { edgeX.setValue(Math.max(0, e.translationX)); })
     .onEnd(e => {
       if (e.translationX > 90 || e.velocityX > 700) {
         Animated.timing(edgeX, { toValue: Dimensions.get("window").width, duration: 160, useNativeDriver: true })
           .start(() => leavePreview(false));
       } else {
-        Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start();
+        Animated.spring(edgeX, { toValue: 0, useNativeDriver: true, tension: 120, friction: 14 }).start(() => setPreviewSliding(false));
       }
     })
-    .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(); }),
+    .onFinalize((_e, success) => { if (!success) Animated.spring(edgeX, { toValue: 0, useNativeDriver: true }).start(() => setPreviewSliding(false)); }),
   [viewAsClient, previewingDraft, editing, edgeX, leavePreview]);
   useEffect(() => {
     Animated.timing(bannerAnim, {
@@ -406,7 +417,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   // Knowing the visible list up front is what lets the entrance cascade stay
   // even no matter how much of their profile the realtor has filled in.
   const visibleListingCount = useMemo(
-    () => previewListings.filter((l) => !l.hidden).length,
+    () => previewListings.filter((l) => !l.hidden && !l.sourceArchived).length,
     [previewListings]
   );
   const sectionCtx: SectionContext = useMemo(
@@ -446,7 +457,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
       const designed = previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing;
       if (designed && id !== "hero" && id !== "listings" && id !== "footer") {
         return <Reveal key={id} delay={delays[id] ?? 200}>
-          <ThemeContentSection id={id} brand={previewBrand} onNavigate={path => router.push(path)}
+          <ThemeContentSection id={id} brand={previewBrand} onNavigate={path => router.navigate(clientDestination(path, isAdmin && viewAsClient) as never)}
             onContact={channel => {
               const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
               const email = previewBrand.realtor.email.trim();
@@ -466,7 +477,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return demoViewMode || editing
             ? <Hero key="hero" onPrimary={scrollToListings} scrollY={scrollY} />
             : <ThemeHero key="hero" brand={previewBrand} scrollY={scrollY} topInset={insets.top + 24}
-                onBrowse={() => router.push("/listings")} onMessage={() => router.push("/message")}
+                onBrowse={() => router.navigate("/listings")} onMessage={() => router.navigate("/messages")}
                 onSaved={() => router.push("/favorites")} onSchedule={() => router.push("/calendar")} />;
         case "listings":
           return (
@@ -531,7 +542,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return null;
       }
     },
-    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing]
+    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing, isAdmin, viewAsClient]
   );
 
   /**
@@ -551,7 +562,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const previewDataReady = brandHydrated && listingsHydrated;
   // Designed themes own their canvas. Never paint warmsand/bone paper behind a dark Warm Concierge (etc.) — that muddy fallback is what users called "brown dog shit".
   const designedCanvas = previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing
-    ? themeDesign(previewBrand.layoutId, previewBrand.theme).background
+    ? liveThemeBackground(previewBrand.layoutId)
     : null;
   const pageBackground = designedCanvas ?? theme.band.deep;
   const scrollBackground = designedCanvas ?? theme.surface.paper;
@@ -569,12 +580,12 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
     <View style={[styles.root, { backgroundColor: pageBackground }]}>
         <Animated.ScrollView
           ref={scrollRef}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
-          scrollEventThrottle={16}
           onScroll={onHomeScroll}
-          // iOS keeps bounces for RefreshControl; parallax clamps overscroll translate+scale.
-          // Android/web: kill rubber-band so hero transforms are not driven by bounce.
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ backgroundColor: scrollBackground, paddingBottom: bottomPad }}
+          // Stable binding drives only the padded photo layer, never the page.
           overScrollMode="never"
           removeClippedSubviews={false}
           style={Platform.OS === "web" ? ({ flex: 1, overscrollBehaviorY: "none" } as object) : { flex: 1 }}
@@ -591,15 +602,20 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
         >
           {previewBrand.theme.presentationVersion === 2 && !demoViewMode && !editing ?
             <ReferenceHome brand={previewBrand} listings={previewListings} scrollY={scrollY} topInset={insets.top + 24}
-              onNavigate={path => router.push(path)} onOpen={id => router.push(`/listing/${id}`)}
+              onNavigate={path => router.navigate(clientDestination(path, isAdmin && viewAsClient) as never)} onOpen={id => router.push(`/listing/${id}`)}
               onFavorite={id => toggleListing("favorites", id)} isFavorite={isFavorited}
+              onContact={channel => {
+                const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
+                const email = previewBrand.realtor.email.trim();
+                const url = channel === "email" ? email ? `mailto:${encodeURIComponent(email)}` : "" : phone ? `${channel === "call" ? "tel" : "sms"}:${phone}` : "";
+                if (url) void Linking.openURL(url).catch(() => Alert.alert("Contact your realtor", channel === "email" ? email : previewBrand.realtor.phone));
+              }}
               onCall={previewBrand.realtor.phone.trim() ? () => {
                 const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
                 if (phone) void Linking.openURL(`tel:${phone}`).catch(() => Alert.alert("Contact your realtor", previewBrand.realtor.phone));
               } : undefined}
               renderAdditional={renderSection} /> : visible.map(renderSection)}
         </Animated.ScrollView>
-      {!demoViewMode && !editing && !previewingDraft && <BottomNav />}
       {demoViewMode && <Pressable accessibilityRole="button" onPress={() => setDemoThemeDraft(themeCandidate(b, "eliza-editorial"))}
         style={{ position: "absolute", bottom: insets.bottom + 18, alignSelf: "center", backgroundColor: "#D4B989", paddingHorizontal: 22, paddingVertical: 15, borderRadius: 26 }}>
         <Text style={{ color: "#111713", fontWeight: "600" }}>Explore the seven themes</Text>
@@ -673,7 +689,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   if (viewAsClient && !previewingDraft) {
     return (
       <GestureDetector gesture={edgeBack}>
-        <Animated.View style={{ flex: 1, transform: [{ translateX: edgeX }] }}>
+        <Animated.View style={{ flex: 1, ...(previewSliding ? { transform: [{ translateX: edgeX }] } : {}) }}>
           {body}
         </Animated.View>
       </GestureDetector>

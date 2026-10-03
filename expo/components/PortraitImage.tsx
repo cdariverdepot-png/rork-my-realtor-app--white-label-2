@@ -23,7 +23,7 @@ type PortraitImageProps = {
  * expo-image treats a fresh `{ uri }` object as a new source and can fade/reload
  * on parent re-renders (theme preview scroll, parallax, draft identity churn).
  * This helper keeps source identity, recyclingKey, disk cache, and transition
- * locked so the same portrait never flickers across preview / home / dash.
+ * stable to avoid unnecessary reloads across preview / home / dashboard.
  *
  * Also guards against non-string `uri` values (numeric require ids, nested
  * objects) which otherwise crash expo-image's `uri.startsWith('sf:/')` check.
@@ -32,7 +32,7 @@ function PortraitImage({
   uri,
   source,
   style,
-  contentFit = "cover",
+  contentFit = "contain",
   contentPosition,
   accessibilityLabel,
   recyclingKey,
@@ -50,7 +50,7 @@ function PortraitImage({
     recyclingKey
     ?? (typeof source === "number"
       ? `portrait-asset:${source}`
-      : uriStr || undefined);
+      : safeUri(source) || uriStr || undefined);
 
   if (!imageSource) return null;
 
@@ -63,6 +63,7 @@ function PortraitImage({
       recyclingKey={key}
       cachePolicy="memory-disk"
       transition={0}
+      loading="eager"
       priority={priority}
       accessibilityLabel={accessibilityLabel}
     />

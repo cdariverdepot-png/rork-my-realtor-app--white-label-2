@@ -319,6 +319,16 @@ test('every hero text slot is bounded so custom names and copy cannot spill into
   const dir = path.join(root, 'components/themes');
   for (const file of fs.readdirSync(dir).filter(name => /Hero\.tsx$/.test(name))) {
     const src = fs.readFileSync(path.join(dir, file), 'utf8');
+    // AdaptiveHero uses separate flow blocks; its height grows with custom copy.
+    if (file === "PremiumHero.tsx") {
+      assert.doesNotMatch(src, /position:\s*['"]absolute['"][^}]*height:\s*f.height/);
+      assert.match(src, /numberOfLines=\{expanded\s*\?\s*undefined\s*:\s*4\}/);
+      continue;
+    }
+    if (file === "AdaptiveHero.tsx" || src.includes("useHero(p)")) {
+      assert.doesNotMatch(src, /position: "absolute"|height: f.height/);
+      continue;
+    }
     for (const match of src.matchAll(/<Text\b[^>]*>/g)) {
       const tag = match[0];
       // Fixed UI labels (e.g. the search placeholder) and nested italic spans are exempt.

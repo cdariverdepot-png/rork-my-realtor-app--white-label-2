@@ -1,10 +1,12 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { isKvEnabled } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
+import { clientDocuments } from '@/lib/clientDocuments';
 
 export type DocCategory = "Contract" | "Disclosure" | "Inspection" | "Other";
 export type DocPortal = "docusign" | "dotloop" | "skyslope" | "authentisign" | "adobesign" | "hellosign" | "other";
@@ -40,16 +42,18 @@ const SEED: DocItem[] = [{
 }];
 
 export const [DocumentsProvider, useDocuments] = createContextHook(() => {
-  const { realtorId } = useAuth();
+  const { realtorId, isClient, currentClientId, isAdmin, viewAsClient, demoViewMode } = useAuth();
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:docs.v2`;
-  const TX_STORAGE_KEY = `${scope}:tx.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:docs.v2`;
+  const TX_STORAGE_KEY = `${cacheScope}:tx.v1`;
   const CHANNEL = `${scope}:docs`;
   const KV_DOCS_KEY = `${scope}:docs.v2`;
   const KV_TX_KEY = `${scope}:tx.v1`;
 
-  const [items, setItems] = useState<DocItem[]>(SEED);
-  const [transactions, setTransactions] = useState<Transaction[]>(SEED_TX);
+  const demoScope = !realtorId || realtorId === DEMO_REALTOR_ID;
+  const [items, setItems] = useState<DocItem[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [docsRev, setDocsRev] = useState<number>(0);
   const [txRev, setTxRev] = useState<number>(0);
   const docsRevRef = useRef<number>(0);
@@ -58,10 +62,10 @@ export const [DocumentsProvider, useDocuments] = createContextHook(() => {
   const channelRef = useRef<ReturnType<NonNullable<typeof supabase>["channel"]> | null>(null);
 
   useEffect(() => {
-    setItems(SEED); setTransactions(SEED_TX);
+    setItems(demoScope ? SEED : []); setTransactions(demoScope ? SEED_TX : []);
     setDocsRev(0); setTxRev(0); docsRevRef.current = 0; txRevRef.current = 0;
     setHydrated(false);
-  }, [realtorId]);
+  }, [cacheScope]);
 
   const bumpDocs = useCallback(() => { const n = Math.max(docsRevRef.current + 1, Date.now()); docsRevRef.current = n; setDocsRev(n); }, []);
   const bumpTx = useCallback(() => { const n = Math.max(txRevRef.current + 1, Date.now()); txRevRef.current = n; setTxRev(n); }, []);
@@ -89,7 +93,7 @@ export const [DocumentsProvider, useDocuments] = createContextHook(() => {
 
   useEffect(() => {
     if (!supabase || !hydrated) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "upsert" }, (payload) => {
       const d = payload.payload as DocItem; if (!d?.id) return;
       setItems((prev) => { const exists = prev.some((p) => p.id === d.id); const next = exists ? prev.map((p) => (p.id === d.id ? d : p)) : [d, ...prev]; void persistDocs(next); return next; });
@@ -178,11 +182,14 @@ export const [DocumentsProvider, useDocuments] = createContextHook(() => {
   const { refresh: refreshTx } = useKvSync<Transaction[]>({ key: KV_TX_KEY, enabled: hydrated && isKvEnabled(), value: transactions, rev: txRev, onRemote: applyTxRemote });
   const refresh = useCallback(async (): Promise<void> => { await Promise.all([refreshDocs(), refreshTx()]); }, [refreshDocs, refreshTx]);
 
+  const visible = useMemo(() => isAdmin && viewAsClient && !demoViewMode ? { items: [], transactions: [] } :
+    isClient ? clientDocuments(items, transactions, currentClientId) : { items, transactions },
+    [items, transactions, isClient, currentClientId, isAdmin, viewAsClient, demoViewMode]);
   const grouped = useMemo(() => {
     const byTx = new Map<string, DocItem[]>(); const loose: DocItem[] = [];
-    for (const d of items) { if (d.transactionId) { const arr = byTx.get(d.transactionId) ?? []; arr.push(d); byTx.set(d.transactionId, arr); } else { loose.push(d); } }
+    for (const d of visible.items) { if (d.transactionId) { const arr = byTx.get(d.transactionId) ?? []; arr.push(d); byTx.set(d.transactionId, arr); } else { loose.push(d); } }
     return { byTx, loose };
-  }, [items]);
+  }, [visible.items]);
 
-  return { items, transactions, grouped, hydrated, add, remove, markViewed, markSigned, setStatus, createTransaction, closeTransaction, upsertTransaction, refresh };
+  return { items: visible.items, transactions: visible.transactions, grouped, hydrated, add, remove, markViewed, markSigned, setStatus, createTransaction, closeTransaction, upsertTransaction, refresh };
 });

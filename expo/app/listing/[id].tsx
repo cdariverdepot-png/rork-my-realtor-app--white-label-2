@@ -1,3 +1,5 @@
+import { useWorkflowBack } from '@/hooks/useWorkflowBack';
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React, { useEffect } from "react";
 import {
   Dimensions,
@@ -37,6 +39,7 @@ const { height: H } = Dimensions.get("window");
 export default function ListingDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const { brand: b } = useBrand();
   const realtor = b.realtor;
@@ -58,7 +61,7 @@ export default function ListingDetail() {
     return (
       <View style={[styles.root, { alignItems: "center", justifyContent: "center", padding: 32 }]}>
         <Text style={{ fontFamily: fonts.serif, color: brand.ink, fontSize: 20, textAlign: "center" }}>This home is no longer available.</Text>
-        <PressableScale onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))} haptic="selection" style={{ marginTop: 18 }}>
+        <PressableScale onPress={() => back()} haptic="selection" style={{ marginTop: 18 }}>
           <Text style={{ fontFamily: fonts.sansSemi, color: brand.ink, fontSize: 14, letterSpacing: 1.4 }}>GO BACK</Text>
         </PressableScale>
       </View>
@@ -77,7 +80,7 @@ export default function ListingDetail() {
           />
           <View style={[styles.topBar, { paddingTop: insets.top + 14 }]}>
             <PressableScale
-              onPress={() => router.back()}
+              onPress={() => back()}
               hitSlop={12}
               haptic="light"
               scaleTo={0.9}
@@ -102,7 +105,7 @@ export default function ListingDetail() {
               </PressableScale>
               <View style={styles.tag}>
                 <View style={styles.tagDot} />
-                <Text style={styles.tagText}>{item.tag.toUpperCase()}</Text>
+                <Text style={styles.tagText}>{listingStatusLabel(item).toUpperCase()}</Text>
               </View>
             </View>
           </View>
@@ -150,7 +153,7 @@ export default function ListingDetail() {
           <Detail label="Bedrooms" value={String(item.beds)} />
           <Detail label="Bathrooms" value={String(item.baths)} />
           <Detail label="Interior" value={item.sqft} />
-          <Detail label="Status" value={item.tag} />
+          <Detail label="Status" value={listingStatusLabel(item)} />
           <Detail label="Showings" value="Private · by appointment" last />
         </View>
         </Reveal>
@@ -167,7 +170,7 @@ export default function ListingDetail() {
           <MessageSquare size={16} color={brand.ivory} strokeWidth={1.5} />
           <Text style={styles.dockSecondaryText}>Ask {firstName}</Text>
         </PressableScale>
-        <PressableScale
+        {!item.sourceArchived && item.status !== "sold" && item.status !== "off_market" && <PressableScale
           onPress={() => router.replace({ pathname: "/book", params: { listingId: item.id } })}
           haptic="medium"
           scaleTo={0.96}
@@ -175,7 +178,7 @@ export default function ListingDetail() {
         >
           <CalendarDays size={16} color={brand.forestDeep} strokeWidth={2} />
           <Text style={styles.dockPrimaryText}>Book private showing</Text>
-        </PressableScale>
+        </PressableScale>}
       </View>
     </View>
   );

@@ -1,6 +1,6 @@
 /** Source and evidence records used while a realtor's app is being assembled.
  * These records are drafts. BrandContext remains the published app model. */
-export type BuildSourceKind = "url" | "document" | "image" | "contacts" | "listing";
+export type BuildSourceKind = "url" | "document" | "image" | "contacts" | "listing" | "listing-file";
 export type BuildSourceStatus = "queued" | "processing" | "ready" | "failed";
 
 export type BuildSource = {

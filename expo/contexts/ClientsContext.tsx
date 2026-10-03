@@ -1,3 +1,4 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -51,9 +52,10 @@ const selfClient = (name: string, email: string, createdAt: number): Client => (
 });
 
 export const [ClientsProvider, useClients] = createContextHook(() => {
-  const { realtorId, realtorRecord } = useAuth();
+  const { realtorId, realtorRecord, isAdmin, currentClientId } = useAuth();
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:clients.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:clients.v1`;
   const CHANNEL = `${scope}:clients`;
   const KV_KEY = `${scope}:clients.v1`;
 
@@ -115,7 +117,7 @@ export const [ClientsProvider, useClients] = createContextHook(() => {
 
   useEffect(() => {
     if (!supabase || !hydrated) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "upsert" }, (payload) => {
       const c = payload.payload as Client;
       if (!c?.id) return;

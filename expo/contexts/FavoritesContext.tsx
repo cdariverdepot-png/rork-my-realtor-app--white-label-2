@@ -2,6 +2,7 @@ import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { useKvSync } from '@/lib/kvSync';
 import { useAuth } from "@/contexts/AuthContext";
 
 export type Watchlist = {
@@ -33,6 +34,7 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("idle");
   const [retryTick, setRetryTick] = useState<number>(0);
+  const [revision,setRevision]=useState(0);
   const revRef = useRef<number>(0);
   const channelRef = useRef<ReturnType<NonNullable<typeof supabase>["channel"]> | null>(null);
   const listsRef = useRef<Watchlist[]>(DEFAULT_WATCHLISTS);
@@ -64,7 +66,7 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
     if (!supabase || !hydrated) return;
     setSyncStatus("connecting");
     const sb = supabase;
-    const ch = sb.channel(CHANNEL, { config: { broadcast: { self: false, ack: false } } });
+    const ch = sb.channel(CHANNEL, { config: { private: true, broadcast: { self: false, ack: false } } });
     const scheduleReconnect = () => {
       if (retryTimerRef.current) return;
       const attempt = retryAttemptRef.current + 1; retryAttemptRef.current = attempt;
@@ -91,10 +93,12 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
 
   const update = useCallback((next: Watchlist[]) => {
     if (demoViewMode) return;
-    const rev = Math.max(revRef.current, Date.now()); revRef.current = rev; setLists(next); void persist(next, rev);
+    const rev = Math.max(revRef.current, Date.now()); revRef.current = rev; setRevision(rev); setLists(next); void persist(next, rev);
     if (channelRef.current) { channelRef.current.send({ type: "broadcast", event: "set", payload: { lists: next, rev } }).catch((e) => console.log("[favorites] broadcast", e)); }
   }, [persist, demoViewMode]);
 
+  useKvSync({ key:STORAGE_KEY, enabled:hydrated && !!realtorId && !!currentClientId && !demoViewMode, value:lists, rev:revision,
+    onRemote:(row,meta)=>{if(Array.isArray(row.value) && (row.rev>revRef.current || meta.initial && revision===0)){revRef.current=row.rev;setRevision(row.rev);setLists(row.value);void persist(row.value,row.rev);}} });
   const createList = useCallback((name: string): Watchlist => { const list: Watchlist = { id: `wl_${Date.now()}`, name: name.trim() || "Untitled", listingIds: [], createdAt: Date.now() }; update([...lists, list]); return list; }, [lists, update]);
   const renameList = useCallback((id: string, name: string) => { update(lists.map((l) => (l.id === id ? { ...l, name } : l))); }, [lists, update]);
   const deleteList = useCallback((id: string) => { if (id === "favorites") return; update(lists.filter((l) => l.id !== id)); }, [lists, update]);

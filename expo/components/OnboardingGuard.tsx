@@ -6,6 +6,7 @@ import { useBrand } from "@/contexts/BrandContext";
 import { useClientProfiles } from "@/contexts/ClientProfileContext";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { clientSetupState, realtorSetupState } from "@/lib/onboardingState";
+import { isPrivateClientPage } from '@/lib/clientNavigation';
 
 /**
  * Route access derives from saved data, including direct links and back gestures.
@@ -51,6 +52,12 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
       if (returningFromDemo) cover = true;
       // Demo feature links must never open authenticated forms or tools.
       else if (path !== "/") redirectTo = "/";
+    } else if (!auth.isAuthenticated && isPrivateClientPage(path)) {
+      redirectTo = '/portal?entry=client';
+    } else if (auth.isClient && path.startsWith('/admin')) {
+      redirectTo = '/';
+    } else if (auth.isAdmin && ['/account', '/client-profile', '/client-recovery'].includes(path)) {
+      redirectTo = auth.viewAsClient ? '/menu' : '/admin';
     } else if (!publicRoute && auth.isAdmin &&
       // Walkthrough first (same as clients): do not force build until the tour ends.
       realtorTourSeen &&

@@ -1,3 +1,4 @@
+import { useWorkflowBack } from '@/hooks/useWorkflowBack';
 import React, { useState } from "react";
 import {
   Alert,
@@ -40,6 +41,7 @@ const PROMPTS = [
 /** Modal letter composer — direct line to the realtor. */
 export default function Message() {
   const router = useRouter();
+  const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const { brand: b } = useBrand();
   const realtor = b.realtor;
@@ -65,7 +67,7 @@ export default function Message() {
     sendChat("client", body);
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setSent(true);
-    setTimeout(() => router.back(), 1400);
+    setTimeout(() => back(), 1400);
   };
 
   if (sent) {

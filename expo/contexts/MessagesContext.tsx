@@ -30,15 +30,7 @@ export type ThreadSummary = {
 };
 
 /** A fresh thread always opens with the realtor's standing welcome. */
-const welcomeSeed = (): ChatMessage[] => [
-  {
-    id: "seed-1",
-    role: "realtor",
-    text: "Welcome — this is my direct line. Ask me anything, anytime. I read every note myself.",
-    createdAt: Date.now() - 1000 * 60 * 60 * 24,
-    read: true,
-  },
-];
+const welcomeSeed = (): ChatMessage[] => [];
 
 const threadKey = (realtorId: string, clientId: string): string =>
   `${realtorId}:${clientId}:chat.v1`;
@@ -53,12 +45,12 @@ const threadKey = (realtorId: string, clientId: string): string =>
  *     `openThread(clientId)`, and get an inbox of all clients via `summaries`.
  */
 export const [MessagesProvider, useMessages] = createContextHook(() => {
-  const { realtorId, isAdmin, isClient, currentClientId } = useAuth();
+  const { realtorId, isAdmin, isClient, currentClientId, viewAsClient } = useAuth();
   const { clients } = useClients();
 
   // Admin picks the active thread; a client is always pinned to their own.
   const [activeClientId, setActiveClientId] = useState<string | null>(null);
-  const threadClientId = isClient ? currentClientId ?? null : activeClientId;
+  const threadClientId = isClient ? currentClientId ?? null : viewAsClient ? null : activeClientId;
   const scope = realtorId ?? "demo";
   const hasThread = !!realtorId && !!threadClientId;
   const THREAD_KEY = hasThread ? threadKey(scope, threadClientId as string) : "";
@@ -137,7 +129,7 @@ export const [MessagesProvider, useMessages] = createContextHook(() => {
   // Realtime broadcast for the active thread (instant typing / delivery).
   useEffect(() => {
     if (!supabase || !hydrated || !hasThread) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "msg" }, (payload) => {
       const m = payload.payload as ChatMessage;
       if (!m?.id) return;

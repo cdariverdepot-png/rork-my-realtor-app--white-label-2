@@ -37,6 +37,6 @@ export function themeCandidate(saved: Brand, layoutId: ClientLayoutId): Brand {
   if (!layout) return saved;
   if (saved.layoutId === layoutId && saved.theme.presentationVersion === 2) return { ...saved, themeChosen: true };
   return { ...saved, layoutId, themeChosen: true, theme: {
-    ...layout.defaultTheme, imagePositions: saved.theme.imagePositions, presentationVersion: 2,
+    ...layout.defaultTheme, imagePositions: saved.theme.imagePositions, portraitFit: saved.theme.portraitFit, presentationVersion: 2,
   } };
 }

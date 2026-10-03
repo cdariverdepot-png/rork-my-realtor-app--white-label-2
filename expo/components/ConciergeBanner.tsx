@@ -15,12 +15,15 @@ import { Bell } from "lucide-react-native";
 import { brand, fonts } from "@/constants/colors";
 import { useNotifications } from "@/contexts/NotificationsContext";
 import { useBrand } from "@/contexts/BrandContext";
+import { useAuth } from '@/contexts/AuthContext';
 
 /**
  * Floating in-app banner that surfaces incoming concierge notifications
  * while the app is in the foreground. Auto-dismisses after a few seconds.
  */
 export default function ConciergeBanner() {
+  const { viewAsClient, isAdmin, demoViewMode, isAuthenticated } = useAuth();
+  const suppressed = demoViewMode || (isAdmin && viewAsClient) || !isAuthenticated;
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { foreground, dismissForeground, markRead, permission, requestPermission } =
@@ -33,13 +36,13 @@ export default function ConciergeBanner() {
 
   // Ask for permission once after mount on native devices.
   useEffect(() => {
-    if (Platform.OS === "web") return;
+    if (Platform.OS === "web" || suppressed) return;
     if (permission !== "undetermined") return;
     const t = setTimeout(() => {
       requestPermission().catch(() => {});
     }, 1400);
     return () => clearTimeout(t);
-  }, [permission, requestPermission]);
+  }, [permission, requestPermission, suppressed]);
 
   useEffect(() => {
     if (foreground) {
@@ -78,7 +81,7 @@ export default function ConciergeBanner() {
     }
   }, [foreground, opacity, translate]);
 
-  if (!foreground) return null;
+  if (!foreground || suppressed) return null;
 
   const onTap = () => {
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});

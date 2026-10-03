@@ -13,10 +13,11 @@ new Function('module', 'exports', source)(moduleRef, moduleRef.exports);
 const { resolveFacts } = moduleRef.exports;
 
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
-async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html } = {}) {
+async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input' } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
+  const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml) {
@@ -37,11 +38,11 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
       return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0 } };
     }
   `;
-  const code = ts.transpileModule(discoveryStub + '\n' + edge, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const code = ts.transpileModule(discoveryStub + '\n' + edgeWithoutFiles, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   let handler, aiBody, update, reads = 0;
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
-  const build = { sources:[source], evidence:[], draft, status:'needs-input' };
+  const build = { sources:[source], evidence:[], draft, status };
   const admin = { auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:()=> {
     reads++;
     return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:async()=>{update=value;return {error:null};}}) };
@@ -252,10 +253,42 @@ test('URL preview card never renders realtor.name / auth handle under the headli
   const introAt = src.indexOf('YOUR INTRODUCTION', reviewStart);
   assert.ok(introAt > reviewStart, 'introduction card missing');
   const review = src.slice(reviewStart, introAt);
-  // Review now mounts the real ThemeFace canvas — never a flat brown stub.
-  assert.match(review, /ThemeFace/);
+  // Review now mounts the real client canvas — never a flat brown stub.
+  assert.match(review, /OnboardingThemePreview/);
   assert.match(review, /themeCandidate/);
   // Opening-line / review chrome must not interpolate draft.realtor.name (auth identity leak).
   assert.doesNotMatch(review, /\{draft\.realtor\.name\}/);
   assert.doesNotMatch(review, /#29231F/);
+});
+
+test('completed cloud drafts remain editable after onboarding', async () => {
+  for (const mode of [undefined, 'regenerate']) {
+    const r = await runWebsiteBuild({ status: 'complete', mode });
+    assert.equal(r.status, 200);
+    assert.match(r.result.draft.heroMessage, /Cindy Carlson/);
+    assert.ok(r.update);
+  }
+});
+
+test('completed guest drafts can refresh the same URL and retain saved content on failure', async () => {
+  const original = { sources: [{id:'site',kind:'url',uri:'https://example.com/'}], evidence:[], draft:{heroMessage:'Saved copy'}, selected_layout:'warm-concierge',status:'complete' };
+  let saved = original, fail = false, calls = 0;
+  const code = ts.transpileModule(fs.readFileSync(path.resolve(__dirname, '../lib/appBuilder/buildService.ts'), 'utf8'), {compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+  const mod = {exports:{}};
+  const storage = {getItem:async key => key.includes('guestAccess') ? JSON.stringify({realtorId:'guest'}) : JSON.stringify(saved), setItem:async (key,value) => {saved=JSON.parse(value);}};
+  new Function('require','module','exports',code)(id => {
+    if (id==='@react-native-async-storage/async-storage') return {__esModule:true,default:storage};
+    if (id==='expo-file-system') return {File:class{}};
+    if (id==='expo-crypto') return {randomUUID:()=> 'id'};
+    if (id==='react-native') return {Platform:{OS:'web'}};
+    if (id==='@/lib/supabase') return {ensureSupabaseSession:async()=>true,supabase:{functions:{invoke:async()=>{calls++;return fail ? {data:{error:'Website unavailable'}} : {data:{draft:{heroMessage:'Fresh copy'},evidence:[],sources:original.sources}};}}}};
+    throw new Error(id);
+  },mod,mod.exports);
+  await mod.exports.analyzeBuild();
+  assert.equal(calls,1);
+  assert.equal(saved.draft.heroMessage,'Fresh copy');
+  assert.equal(saved.sources[0].uri,original.sources[0].uri);
+  saved=original; fail=true;
+  await assert.rejects(mod.exports.analyzeBuild(),/Website unavailable/);
+  assert.deepEqual(saved,original);
 });

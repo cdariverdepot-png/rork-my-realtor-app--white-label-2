@@ -1,10 +1,12 @@
+import Pressable from './TactilePressable';
+import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import React from "react";
-import { Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { Heart, ArrowRight, BedDouble, Bath, Maximize } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
-import { themeDesign } from "@/constants/themeDesigns";
+import { liveThemeDesign as themeDesign } from "@/constants/liveThemeDesigns";
 import { sectionState } from "@/constants/sections";
 
 export default function ThemeCollection({ brand, listings, width: previewWidth, onOpen, onBrowse, onFavorite, isFavorite }:
@@ -13,7 +15,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const window = useWindowDimensions();
   const width = previewWidth ?? window.width;
   const d = themeDesign(brand.layoutId, brand.theme);
-  const items = listings.filter(item => !item.hidden);
+  const items = listings.filter(item => !item.hidden && !item.sourceArchived);
   if (sectionState(brand, "listings", items.length > 0) !== "present") return null;
   const c = d.composition;
   const coastal = c === "coastal";
@@ -22,29 +24,29 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const feature = c === "property";
   const editorial = c === "editorial";
   const burgundy = c === "concierge";
-  const ink = coastal || editorial ? "#18231E" : d.ink;
+  const ink = d.ink;
   const serif = "CormorantGaramond_500Medium";
   const pairedWidth = Math.max(138, (width - 54) / 2);
   const cardWidth = coastal || minimal || c === "journal" ? pairedWidth : discovery ? Math.max(124, (width - 50) / 3) : burgundy ? width * 0.40 : width * 0.73;
   const favorite = (item: ManagedListing) => <Pressable disabled={!onFavorite} onPress={() => onFavorite?.(item.id)} accessibilityRole="button"
     accessibilityLabel={isFavorite?.(item.id) ? "Remove saved home" : "Save home"} accessibilityState={{ selected: !!isFavorite?.(item.id) }}
-    style={{ position: "absolute", top: 4, right: 2, padding: 10 }}><Heart size={20} color="#FFF8EC" fill={isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
+    style={{ position: "absolute", top: 4, right: 4, width: 44, height: 44, borderRadius: 22, backgroundColor: "#11171388", alignItems: "center", justifyContent: "center", zIndex: 2 }}><Heart size={20} color="#FFF8EC" fill={isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
   const specs = (item: ManagedListing, size = 9) => <View style={{ flexDirection: "row", alignItems: "center", gap: 5, flexWrap: "wrap", marginTop: 8 }}>
     <BedDouble size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.beds}</Text>
     <Bath size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.baths}</Text>
     <Maximize size={11} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.sqft}</Text>
   </View>;
   const image = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityLabel={item.title} />;
-  const badge = (item: ManagedListing) => item.tag?.trim() ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,
-    borderRadius: discovery ? 16 : 3, backgroundColor: burgundy ? "#5E1526" : discovery ? "#C7A06B" : "#111713DD", color: discovery ? "#191713" : "#F9F2E8", fontSize: 7, letterSpacing: 0.8 }}>{item.tag.toUpperCase()}</Text> : null;
+  const badge = (item: ManagedListing) => listingStatusLabel(item) ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,
+    borderRadius: discovery ? 16 : 3, backgroundColor: burgundy ? "#5E1526" : discovery ? "#C7A06B" : "#111713DD", color: discovery ? "#191713" : "#F9F2E8", fontSize: 7, letterSpacing: 0.8 }}>{listingStatusLabel(item).toUpperCase()}</Text> : null;
   const card = (item: ManagedListing, compact = false) => {
     const overlay = coastal || discovery || compact || editorial;
     const height = coastal ? 155 : discovery ? 236 : compact ? 195 : editorial ? 310 : undefined;
     return <View key={item.id} style={{ width: compact ? Math.max(126, (width - 54) / 3) : cardWidth, overflow: "hidden", borderRadius: editorial ? 0 : 10,
-      borderWidth: 1, borderColor: d.accent + "33", backgroundColor: coastal ? "#FFFDF8" : "#151714" }}>
+      borderWidth: 1, borderColor: d.accent + "33", backgroundColor: coastal ? "#FFFDF8" : d.background }}>
       <Pressable disabled={!onOpen} onPress={() => onOpen?.(item.id)} accessibilityRole="button" accessibilityLabel={item.title}>
         <View style={{ height: height ?? (minimal ? 155 : burgundy ? 180 : 132) }}>
-          {image(item)}{!coastal && badge(item)}
+          {image(item)}{badge(item)}
           {overlay && <><></>
             <View style={{ position: "absolute", bottom: 10, left: 9, right: 9 }}>
               <Text style={{ fontFamily: coastal ? "Inter_400Regular" : serif, fontSize: coastal ? 10 : compact ? 16 : 18, color: "#FFF8EF" }}>{coastal ? item.neighborhood || item.title : item.title}</Text>

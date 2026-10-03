@@ -11,7 +11,7 @@ import {
   View,
   Platform,
 } from "react-native";
-import PortraitImage from "./PortraitImage";
+import FullPortrait from "./FullPortrait"; // Shared stable PortraitImage rendering.
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { ArrowRight, LogOut, MessageCircle } from "lucide-react-native";
@@ -34,7 +34,7 @@ interface Props {
 
 export default function Hero({ scrollY }: Props) {
   const router = useRouter();
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const HERO_H = Math.max(windowHeight * 0.92, 720);
   const HERO_H_TYPE = Math.max(windowHeight * 0.62, 480);
   const insets = useSafeAreaInsets();
@@ -60,7 +60,7 @@ export default function Hero({ scrollY }: Props) {
    * isn't. Editing always shows the full arrangement so every field stays
    * reachable even while blank.
    */
-  const hasPortrait = filled(b.portraitUrl);
+  const hasPortrait = filled(previewBrand.portraitUrl);
   const typographic = !hasPortrait && !editing;
   const heroHeight = typographic ? HERO_H_TYPE : HERO_H;
 
@@ -172,33 +172,7 @@ export default function Hero({ scrollY }: Props) {
   }, [realtor.phone, realtor.email, realtor.name, router]);
 
   return (
-    <View style={[styles.wrap, { minHeight: heroHeight, backgroundColor: theme.band.deep }]}>
-      {/* Clip on non-transformed frame so parallax scale/translate cannot paint into tiles. */}
-      <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]} pointerEvents="none" collapsable={false}>
-        <Animated.View
-          collapsable={false}
-          style={[
-            StyleSheet.absoluteFill,
-            { top: -40, bottom: -40, transform: [{ translateY: imgTranslate }, { scale: imgScale }] },
-          ]}
-        >
-          {hasPortrait ? (
-            <PortraitImage
-              uri={b.portraitUrl}
-              contentPosition={imagePosition(b.theme, b.layoutId)}
-              style={StyleSheet.absoluteFill}
-              contentFit="cover"
-              priority="high"
-            />
-          ) : (
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.band.base }]} />
-          )}
-          {/* Bottom fade — depth + text readability only. Derived from the band so
-              the fade never stays green under a non-gold palette. */}
-          <></>
-        </Animated.View>
-      </View>
-
+    <View style={[styles.wrap, { backgroundColor: theme.band.deep }]}>
       {/* Top brand bar */}
       <Animated.View style={[styles.topBar, { paddingTop: insets.top + 14, opacity: topBarOpacity }]}>
         <View style={styles.brandLeft}>
@@ -255,6 +229,8 @@ export default function Hero({ scrollY }: Props) {
           ) : null}
         </View>
       </Animated.View>
+
+      {hasPortrait && <View style={{ paddingHorizontal: 24, paddingVertical: 20 }}><FullPortrait brand={previewBrand} width={windowWidth - 48} /></View>}
 
       {/* Bottom content */}
       <Animated.View
@@ -373,7 +349,7 @@ export default function Hero({ scrollY }: Props) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { width: "100%", backgroundColor: brand.forestDeep, overflow: "hidden", justifyContent: "space-between" },
+  wrap: { width: "100%", backgroundColor: brand.forestDeep, overflow: "hidden", justifyContent: "flex-start" },
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -414,7 +390,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(8,26,21,0.3)",
   },
   bottom: {
-    paddingTop: 100,
+    paddingTop: 24,
     paddingHorizontal: 24,
   },
   eyebrow: {

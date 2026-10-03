@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase, ensureSupabaseSession } from "./supabase";
 
 /**
  * Uploads a base64-encoded JPEG to the public `app-images` Supabase Storage
@@ -51,7 +51,9 @@ export async function uploadJpegToStorage(base64: string): Promise<string | null
     const bytes = base64ToBytes(base64);
     if (bytes.byteLength === 0) return null;
     const name = `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}.jpg`;
-    const path = `uploads/${name}`;
+    const session = await ensureSupabaseSession();
+    if (!session) return null;
+    const path = `${session.user.id}/${name}`;
     const { error } = await supabase.storage.from(BUCKET).upload(path, bytes, {
       contentType: "image/jpeg",
       upsert: false,

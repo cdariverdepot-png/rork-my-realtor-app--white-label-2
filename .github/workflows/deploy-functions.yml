@@ -37,7 +37,7 @@ jobs:
         run: supabase functions deploy analyze-realtor-build --project-ref "$SUPABASE_PROJECT_REF" --use-api
 
       - name: Deploy refresh-listings
-        run: supabase functions deploy refresh-listings --project-ref "$SUPABASE_PROJECT_REF" --use-api
+        run: supabase functions deploy refresh-listings --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
 
       - name: Deploy send-push
         run: supabase functions deploy send-push --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt

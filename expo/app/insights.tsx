@@ -50,7 +50,7 @@ export default function InsightsScreen() {
     <View style={styles.root}>
       <ScreenBackdrop screen="insights" />
       <ModalChrome eyebrow="Neighborhoods" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <Reveal delay={40}>
         <View style={styles.pulse}>
           <Text style={styles.pulseEyebrow}>{marketPulse.date.toUpperCase()} · MARKET PULSE</Text>

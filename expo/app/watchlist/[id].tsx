@@ -37,7 +37,7 @@ export default function WatchlistDetail() {
   return (
     <View style={styles.root}>
       <ModalChrome eyebrow={list.name} />
-      <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         {homes.length === 0 ? (
           <Reveal delay={60}>
           <View style={styles.empty}>

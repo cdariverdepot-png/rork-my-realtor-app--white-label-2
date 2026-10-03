@@ -1,18 +1,12 @@
+import Pressable from '../TactilePressable';
 import React, { useState } from "react";
-import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions, type TextStyle, type ViewStyle } from "react-native";
-import PortraitImage from "../PortraitImage";
+import { Animated, Modal, ScrollView, StyleSheet, Text, View, useWindowDimensions, type TextStyle, type ViewStyle } from "react-native";
+import FullPortrait from "../FullPortrait"; // Stable PortraitImage source identity.
 import { ArrowRight, MessageCircle, X, type LucideIcon } from "lucide-react-native";
 import type { Brand } from "@/contexts/BrandContext";
 import { themeDesign } from "@/constants/themeDesigns";
 import { useThemeMotion } from "@/hooks/useThemeMotion";
 import { imageFrame, imagePosition } from "@/lib/themeImages";
-
-/** Zoom around the chosen focal point; at zoom ≥ 1 the frame always stays filled. Sample portraits are never reframed. */
-function zoomStyle(p: { portraitSource?: number; brand: Brand }): ViewStyle {
-  if (p.portraitSource !== undefined) return {};
-  const f = imageFrame(p.brand.theme, p.brand.layoutId);
-  return f.zoom > 1 ? { transform: [{ scale: f.zoom }], transformOrigin: `${f.x}% ${f.y}%` } : {};
-}
 
 export type HeroProps = { brand: Brand; portraitSource?: number; width?: number; scrollY?: Animated.Value; preview?: boolean; topInset?: number;
   onBrowse?: () => void; onMessage?: () => void; onSaved?: () => void; onSchedule?: () => void; onCall?: () => void; onNotifications?: () => void };
@@ -30,22 +24,7 @@ export function useFrame(p: HeroProps, referenceHeight: number) {
     first: p.brand.realtor.name.trim().split(/\s+/)[0] || "your realtor" };
 }
 export function Backdrop({ p, frame, colors, left = 0, vertical = false }: { p: HeroProps; frame: ReturnType<typeof useFrame>; colors: readonly [string, string, ...string[]]; left?: number; vertical?: boolean }) {
-  // Clip on a NON-transformed ancestor. Transformed children (parallax) escape
-  // overflow when hardware-rasterized — that was the portrait fighting tiles
-  // beneath. Overscan covers upward travel + mild push scale.
-  const bleed = 36 * frame.s;
-  return <View style={[StyleSheet.absoluteFill, { overflow: "hidden" }]} pointerEvents="none" collapsable={false}>
-    {(p.portraitSource !== undefined || !!p.brand.portraitUrl?.trim()) && <Animated.View
-      collapsable={false}
-      style={{ position: "absolute", left: left * frame.s, right: 0, top: -bleed, bottom: -bleed,
-        transform: [{ translateY: frame.motion.imgTranslate }, { scale: frame.motion.imgScale }] }}>
-      <View style={[StyleSheet.absoluteFill, zoomStyle(p)]} collapsable={false}>
-        <PortraitImage source={p.portraitSource} uri={p.brand.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition={imagePosition(p.brand.theme, p.brand.layoutId)} priority="high" accessibilityLabel={`Portrait of ${p.brand.realtor.name}`} />
-      </View>
-    </Animated.View>}
-    <></>
-    {!vertical && !frame.d.light && <></>}
-  </View>;
+  return <FullPortrait brand={p.brand} source={p.portraitSource} width={390 * frame.s} />;
 }
 /** Font size that keeps a one-line label (e.g. a name) inside `width`, never above `max`. */
 export function fitSize(text: string, max: number, width: number, perChar = 0.5) {
@@ -126,11 +105,11 @@ export function Intro({ p, s, lines = 4, color, serif = false, content }: { p: H
   </>;
 }
 export function Action({ label, onPress, s, bg = "transparent", color, border, radius = 3, Icon = ArrowRight, iconFirst = false }: { label: string; onPress?: () => void; s: number; bg?: string; color: string; border?: string; radius?: number; Icon?: LucideIcon; iconFirst?: boolean }) {
-  return <Pressable disabled={!onPress} onPress={onPress} accessibilityRole="button" style={({ pressed }) => ({ flex: 1, minHeight: 0, paddingHorizontal: 10 * s, paddingVertical: 6 * s,
+  return <Pressable disabled={!onPress} onPress={onPress} accessibilityRole="button" style={({ pressed }) => ({ flex: 1, minHeight: 0, paddingHorizontal: 10 * s, paddingVertical: 12 * s,
     flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 9 * s, backgroundColor: bg, borderColor: border || bg, borderWidth: border ? 1 : 0, borderRadius: radius * s, opacity: pressed ? 0.7 : 1 })}>
-    {iconFirst && <Icon size={16 * s} color={color} />}<Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ color, fontSize: (label.length > 16 ? 8 : 9) * s, letterSpacing: 0.45 * s, flexShrink: 1 }}>{label}</Text>{!iconFirst && <Icon size={16 * s} color={color} />}
+    {iconFirst && <Icon size={16 * s} color={color} />}<Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ color, fontSize: (label.length > 16 ? 11 : 12) * s, letterSpacing: 0.1 * s, flexShrink: 1 }}>{label}</Text>{!iconFirst && <Icon size={16 * s} color={color} />}
   </Pressable>;
 }
-export function Circle({ onPress, Icon = MessageCircle, color, s, size = 34 }: { onPress?: () => void; Icon?: LucideIcon; color: string; s: number; size?: number }) {
-  return <Pressable disabled={!onPress} onPress={onPress} accessibilityRole="button" accessibilityLabel={Icon === MessageCircle ? "Message your realtor" : "Contact your realtor"} style={{ width: size * s, height: size * s, borderRadius: size * s / 2, borderWidth: 1, borderColor: color + "99", alignItems: "center", justifyContent: "center" }}><Icon size={18 * s} color={color} /></Pressable>;
+export function Circle({ onPress, Icon = MessageCircle, color, s, size = 34, label }: { onPress?: () => void; Icon?: LucideIcon; color: string; s: number; size?: number; label?: string }) {
+  return <Pressable disabled={!onPress} onPress={onPress} accessibilityRole="button" accessibilityLabel={label || (Icon === MessageCircle ? "Message your realtor" : "Contact your realtor")} style={{ width: Math.max(onPress ? 44 : 0, size * s), height: Math.max(onPress ? 44 : 0, size * s), borderRadius: Math.max(onPress ? 44 : 0, size * s) / 2, borderWidth: 1, borderColor: color + "99", alignItems: "center", justifyContent: "center" }}><Icon size={18 * s} color={color} /></Pressable>;
 }

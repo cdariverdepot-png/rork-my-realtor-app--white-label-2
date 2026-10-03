@@ -1,3 +1,4 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -19,9 +20,10 @@ export type Appointment = {
 };
 
 export const [AppointmentsProvider, useAppointments] = createContextHook(() => {
-  const { realtorId } = useAuth();
+  const { realtorId, isAdmin, currentClientId } = useAuth();
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:appointments.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:appointments.v1`;
   const CHANNEL = `${scope}:appointments`;
   const KV_KEY = `${scope}:appointments.v1`;
 
@@ -31,7 +33,7 @@ export const [AppointmentsProvider, useAppointments] = createContextHook(() => {
   const [hydrated, setHydrated] = useState<boolean>(false);
   const channelRef = useRef<ReturnType<NonNullable<typeof supabase>["channel"]> | null>(null);
 
-  useEffect(() => { setItems([]); setRev(0); revRef.current = 0; setHydrated(false); }, [realtorId]);
+  useEffect(() => { setItems([]); setRev(0); revRef.current = 0; setHydrated(false); }, [cacheScope]);
 
   const bumpRev = useCallback(() => { const n = Math.max(revRef.current + 1, Date.now()); revRef.current = n; setRev(n); }, []);
 
@@ -53,7 +55,7 @@ export const [AppointmentsProvider, useAppointments] = createContextHook(() => {
 
   useEffect(() => {
     if (!supabase || !hydrated) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "upsert" }, (payload) => {
       const a = payload.payload as Appointment; if (!a?.id) return;
       setItems((prev) => {

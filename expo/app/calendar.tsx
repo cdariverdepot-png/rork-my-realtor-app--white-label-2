@@ -166,7 +166,7 @@ export default function CalendarScreen() {
     <View style={styles.root}>
       <ScreenBackdrop screen="calendar" />
       <ModalChrome eyebrow="Your private calendar" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <Reveal delay={40}>
           <Text style={styles.intro}>
             Showings, calls, and our coffees — kept simple. {firstName} will confirm anything you request.

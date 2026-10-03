@@ -43,6 +43,7 @@ export type ThemeConfig = {
   presentationVersion?: 2;
   /** Presentation-only positions keyed by look; uploaded assets stay canonical. */
   /** Portrait framing per look: focal point (0–100 %) and zoom (1 = fill). */
+  portraitFit?: "full" | "crop";
   imagePositions?: Record<string, { x: number; y: number; zoom?: number }>;
   accent: ThemeAccent;
   displayFont: ThemeFont;

@@ -1,3 +1,4 @@
+import { privateCacheScope } from '@/lib/privateCache';
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -49,11 +50,12 @@ function matches(l: ManagedListing, s: SavedSearch): boolean {
 }
 
 export const [ClientFeedProvider, useClientFeed] = createContextHook(() => {
-  const { realtorId } = useAuth();
+  const { realtorId, isAdmin, currentClientId } = useAuth();
   const scope = realtorId ? realtorId : "demo";
-  const STORAGE_KEY = `${scope}:clientFeed.v1`;
-  const PRICE_KEY = `${scope}:clientFeed.priceSnap.v1`;
-  const SEEN_KEY = `${scope}:clientFeed.seenListings.v1`;
+  const cacheScope = privateCacheScope(realtorId,currentClientId,isAdmin);
+  const STORAGE_KEY = `${cacheScope}:clientFeed.v1`;
+  const PRICE_KEY = `${cacheScope}:clientFeed.priceSnap.v1`;
+  const SEEN_KEY = `${cacheScope}:clientFeed.seenListings.v1`;
   const CHANNEL = `${scope}:clientFeed`;
   const KV_KEY = `${scope}:clientFeed.v1`;
 
@@ -70,7 +72,7 @@ export const [ClientFeedProvider, useClientFeed] = createContextHook(() => {
   const seenIdsRef = useRef<Set<string>>(new Set());
   const snapshotsLoaded = useRef<boolean>(false);
 
-  useEffect(() => { setFeeds({}); setRev(0); revRef.current = 0; setHydrated(false); snapshotsLoaded.current = false; }, [realtorId]);
+  useEffect(() => { setFeeds({}); setRev(0); revRef.current = 0; setHydrated(false); snapshotsLoaded.current = false; }, [cacheScope]);
 
   const bumpRev = useCallback(() => { const next = Math.max(revRef.current + 1, Date.now()); revRef.current = next; setRev(next); return next; }, []);
 
@@ -94,7 +96,7 @@ export const [ClientFeedProvider, useClientFeed] = createContextHook(() => {
 
   useEffect(() => {
     if (!supabase || !hydrated) return;
-    const ch = supabase.channel(CHANNEL, { config: { broadcast: { self: false } } });
+    const ch = supabase.channel(CHANNEL, { config: { private: true, broadcast: { self: false } } });
     ch.on("broadcast", { event: "set" }, (payload) => {
       const f = payload.payload as ClientFeed; if (!f?.clientId) return;
       setFeeds((prev) => { const cur = prev[f.clientId]; if (cur && cur.updatedAt >= f.updatedAt) return prev; const next = { ...prev, [f.clientId]: f }; void persist(next); return next; });

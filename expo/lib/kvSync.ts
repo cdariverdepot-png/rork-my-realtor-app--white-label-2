@@ -16,12 +16,14 @@ import { kvGet, kvSet, kvSubscribe, recordKvWrite, type KvRow } from "./kvStore"
  */
 export type KvRemoteMeta = {
   /** True on the very first fetch after mount (cold start / login). Consumers
-   *  should bypass any local-rev guards in this case so the server is
-   *  treated as the source of truth. */
+   *  may use the server to repair a cold cache, provided no local edit occurred
+   *  after startedRev. */
   initial: boolean;
   /** True when triggered by an explicit manual refresh (e.g. pull-to-refresh).
-   *  Also bypasses the local-rev guard so stale local state can't win. */
+   *  Can repair a stale local cache; never supersedes an edit made during the read. */
   forced: boolean;
+  /** Local revision when this request began. */
+  startedRev?: number;
 };
 
 export function useKvSync<T>(args: {
@@ -45,21 +47,29 @@ export function useKvSync<T>(args: {
     revRef.current = rev;
   }, [value, rev]);
 
+  // Reject requests from a previous account/key before invoking the current callback.
+  const currentScope = useRef({ key, enabled });
+  currentScope.current = { key, enabled };
+
   const lastPushedRevRef = useRef<number>(-1);
-  const [initialFetched, setInitialFetched] = useState<boolean>(false);
+  const [fetchedScope, setFetchedScope] = useState<string | null>(null);
+  const initialFetched = fetchedScope === key;
 
   // Initial fetch + realtime subscription.
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
-    setInitialFetched(false);
+    setFetchedScope(null);
+    lastPushedRevRef.current = -1;
     (async () => {
+      const startedRev = revRef.current;
       const row = await kvGet<T>(key);
-      if (cancelled) return;
-      if (row) onRemoteRef.current(row, { initial: true, forced: true });
-      setInitialFetched(true);
+      if (cancelled || currentScope.current.key !== key || !currentScope.current.enabled) return;
+      if (row) onRemoteRef.current(row, { initial: true, forced: true, startedRev });
+      setFetchedScope(key);
     })();
     const unsub = kvSubscribe<T>(key, (row) => {
+      if (cancelled || currentScope.current.key !== key || !currentScope.current.enabled) return;
       onRemoteRef.current(row, { initial: false, forced: false });
     });
     return () => {
@@ -110,20 +120,24 @@ export function useKvSync<T>(args: {
 
   // Manual refetch — useful for pull-to-refresh and periodic polling when
   // the realtime channel hasn't delivered an update.
-  const refresh = useCallback(async (): Promise<void> => {
+  const read = useCallback(async (forced: boolean): Promise<void> => {
     if (!enabled) return;
+    const startedRev = revRef.current;
     const row = await kvGet<T>(key);
-    if (row) onRemoteRef.current(row, { initial: false, forced: true });
+    if (currentScope.current.key !== key || !currentScope.current.enabled) return;
+    if (row) onRemoteRef.current(row, { initial: false, forced, startedRev });
   }, [enabled, key]);
+
+  const refresh = useCallback(() => read(true), [read]);
 
   // Lightweight polling fallback in case the realtime channel is dropped.
   useEffect(() => {
     if (!enabled) return;
     const id = setInterval(() => {
-      void refresh();
+      void read(false);
     }, 20000);
     return () => clearInterval(id);
-  }, [enabled, refresh]);
+  }, [enabled, read]);
 
   return { refresh };
 }

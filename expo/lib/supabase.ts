@@ -132,6 +132,25 @@ export const supabase: SupabaseClient | null = (() => {
 
 export const isSupabaseLive = !!supabase;
 
+/** End private device access before discarding the JWT used to revoke it. */
+export async function endPrivateSession(): Promise<void> {
+  if (!supabase) return;
+  if (ensurePromise) await ensurePromise;
+  const { data } = await supabase.auth.getSession();
+  if (data.session) {
+    const { error } = await supabase.rpc('revoke_client_identity');
+    if (error) throw new Error('Reconnect before signing out so private access can be revoked.');
+    const token = await AsyncStorage.getItem('myrealtor.device.pushToken');
+    if (token) {
+      const { error: tokenError } = await supabase.from('push_tokens').delete().eq('token',token);
+      if (tokenError) throw new Error('Reconnect before signing out.');
+      await AsyncStorage.removeItem('myrealtor.device.pushToken');
+    }
+  }
+  await supabase.auth.signOut({scope:'local'});
+  ensurePromise = null;
+}
+
 /** Recovery verifies email without replacing a realtor or guest app session. */
 export function createClientRecoverySession(): SupabaseClient {
   return createClient(url, anon, {
@@ -205,12 +224,13 @@ export async function clearAnonymousSessionForEmailAuth(): Promise<void> {
     // Otherwise a late anonymous sign-in can race password/OTP authentication.
     if (ensurePromise) await ensurePromise;
     const { data } = await supabase.auth.getSession();
-    if (data?.session?.user?.is_anonymous) {
-      console.log("[supabase] clearing anonymous session before email auth");
-      await supabase.auth.signOut({ scope: "local" });
+    if (data?.session) {
+      console.log("[supabase] ending previous private device session before email auth");
+      await endPrivateSession();
     }
   } catch (e) {
     console.log("[supabase] clearAnonymousSessionForEmailAuth", e);
+    throw e;
   } finally {
     ensurePromise = null;
   }

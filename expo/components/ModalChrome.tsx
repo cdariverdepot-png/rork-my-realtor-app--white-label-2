@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useRouter } from "expo-router";
+import { useWorkflowBack } from '@/hooks/useWorkflowBack';
 import { X } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { brand, dark, fonts } from "@/constants/colors";
@@ -13,7 +13,7 @@ export default function ModalChrome({
   eyebrow: string;
   onDark?: boolean;
 }) {
-  const router = useRouter();
+  const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const { brand: b } = useBrand();
   const fg = onDark ? dark.text : brand.ink;
@@ -26,7 +26,9 @@ export default function ModalChrome({
         <Text style={[styles.title, { color: fg }]}>{eyebrow}</Text>
       </View>
       <Pressable
-        onPress={() => router.back()}
+        onPress={back}
+        accessibilityRole="button"
+        accessibilityLabel="Close page"
         hitSlop={14}
         style={[
           styles.close,

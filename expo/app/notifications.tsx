@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useRef } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
+import { useBrand } from '@/contexts/BrandContext';
 import { Bell, BellOff, Home, TrendingDown, MessageCircle, CalendarCheck } from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
 import { useNotifications, type NotifKind } from "@/contexts/NotificationsContext";
@@ -39,18 +40,18 @@ function rel(t: number): string {
 export default function NotificationsScreen() {
   const router = useRouter();
   const { items, permission, requestPermission, markRead, markAllRead } = useNotifications();
-
-  useEffect(() => {
-    return () => {
-      markAllRead();
-    };
-  }, [markAllRead]);
+  const { brand: currentBrand } = useBrand();
+  const markAllReadRef = useRef(markAllRead);
+  markAllReadRef.current = markAllRead;
+  // Mark once on blur, not on every callback identity change. The old cleanup
+  // wrote a new revision, recreated its dependency, then wrote again forever.
+  useFocusEffect(useCallback(() => () => markAllReadRef.current(), []));
 
   return (
     <View style={styles.root}>
       <ScreenBackdrop screen="notifications" />
       <ModalChrome eyebrow="Concierge alerts" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <Reveal delay={40}>
         <Text style={styles.intro}>
           Curated, never spam. Just the moments worth your attention.
@@ -108,7 +109,7 @@ export default function NotificationsScreen() {
                     <Icon size={16} color={brand.ivory} strokeWidth={1.5} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.kind}>{KIND_LABEL[n.kind]}</Text>
+                    <Text style={styles.kind}>{n.kind === 'personal' ? `FROM ${(currentBrand.realtor.name.split(' ')[0] || 'YOUR REALTOR').toUpperCase()}` : KIND_LABEL[n.kind]}</Text>
                     <Text style={styles.title}>{n.title}</Text>
                     <Text style={styles.body} numberOfLines={3}>
                       {n.body}

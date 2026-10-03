@@ -2,4 +2,6 @@ allowBuilds:
   unrs-resolver: set this to true or false
 overrides:
   axios: 1.13.2
-  '@ai-sdk/provider-utils': 3.0.19
+  '@ai-sdk/provider-utils': 3.0.28
+  'brace-expansion@>=4.0.0 <5.0.12': 5.0.12
+  'uuid@<11.1.1': 11.1.1
