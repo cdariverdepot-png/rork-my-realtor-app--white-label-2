@@ -1,5 +1,46 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+type DiscoveredListing = {
+  title: string;
+  description: string;
+  price: string;
+  beds: number;
+  baths: number;
+  sqft: string;
+  neighborhood: string;
+  image: string;
+  images: string[];
+  sourceUrl: string;
+  status?: "active" | "pending" | "contingent" | "sold" | "off_market";
+  listingNumber?: string;
+  propertyType?: string;
+  importKey?: string;
+};
+type ListingDiscoveryMeta = {
+  visited: string[];
+  hops: number;
+  found: number;
+  /** Highest hop depth reached while looking for inventory. */
+  maxDepth: number;
+  failed?: string[];
+  failureDetails?: {url:string;reason:string}[];
+  inventoryUrls?: string[];
+  outcome?: "found" | "unreadable" | "not-found" | "partial";
+  expectedCount?: number;
+  interfaces?: string[];
+  coverage?: "collection" | "showcase" | "unknown";
+  issues?: { code: "requires-rendering" | "limited-showcase" | "missing-photos"; url: string; interface?: string }[];
+};
+type FetchHtml = (uri: string, options?: { fragment?: boolean; activationToken?: string }) => Promise<{ html: string; finalUrl: URL }>;
+type NavigationCandidate = { url: string; label: string };
+type SelectInventoryLinks = (page: string, candidates: NavigationCandidate[]) => Promise<string[]>;
+type ListingInterfaceAdapter = {
+  id: string;
+  matches: (html: string, url: URL) => boolean;
+  extract: (html: string, url: URL) => DiscoveredListing[];
+  fragments?: (html: string, url: URL) => string[];
+};
+const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings } = (() => {
 /**
  * Multi-hop listing inventory discovery for the realtor app builder.
  *
@@ -1190,6 +1231,9 @@ async function discoverListings(
   };
 }
 
+
+return { publicListingRequestHeaders, decodePublicListingResponse, discoverListings };
+})();
 
 const { parseListingCsv, validateFileListings, mergeFileListings } = (() => {
 
