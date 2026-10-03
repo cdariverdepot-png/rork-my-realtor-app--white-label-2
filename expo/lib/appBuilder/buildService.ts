@@ -31,6 +31,9 @@ export type ListingDiscoveryMeta = {
   failed?: string[];
   inventoryUrls?: string[];
   outcome?: "found" | "unreadable" | "not-found" | "partial";
+  interfaces?: string[];
+  coverage?: "collection" | "showcase" | "unknown";
+  issues?: { code: "requires-rendering" | "limited-showcase" | "missing-photos"; url: string; interface?: string }[];
 };
 
 export type BuildDraft = {

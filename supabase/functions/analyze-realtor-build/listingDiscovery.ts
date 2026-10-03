@@ -30,12 +30,16 @@ export type ListingDiscoveryMeta = {
   /** Highest hop depth reached while looking for inventory. */
   maxDepth: number;
   failed?: string[];
+  failureDetails?: {url:string;reason:string}[];
   inventoryUrls?: string[];
   outcome?: "found" | "unreadable" | "not-found" | "partial";
   expectedCount?: number;
+  interfaces?: string[];
+  coverage?: "collection" | "showcase" | "unknown";
+  issues?: { code: "requires-rendering" | "limited-showcase" | "missing-photos"; url: string; interface?: string }[];
 };
 
-export type FetchHtml = (uri: string, options?: { fragment?: boolean }) => Promise<{ html: string; finalUrl: URL }>;
+export type FetchHtml = (uri: string, options?: { fragment?: boolean; activationToken?: string }) => Promise<{ html: string; finalUrl: URL }>;
 export type NavigationCandidate = { url: string; label: string };
 export type SelectInventoryLinks = (page: string, candidates: NavigationCandidate[]) => Promise<string[]>;
 
@@ -51,7 +55,7 @@ const decodeEntities = (value: string) =>
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n, 10)));
 
 const attr = (tag: string, name: string) =>
-  decodeEntities(tag.match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, "i"))?.[1] ?? "").trim();
+  decodeEntities(tag.match(new RegExp(`\\b${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, "i"))?.[2] ?? "").trim();
 
 const stripTags = (s: string) => s.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 
@@ -59,7 +63,7 @@ const stripTags = (s: string) => s.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ")
 export const MLS_INVENTORY_HOST =
   /(?:^|\.)(?:flexmls\.com|idx\.|mls\.|listingbook\.com|homesnap\.com|showcaseidx\.com|ihomefinder\.com|realgeeks\.com|placester\.com|kvcore\.com|followupboss\.com|liondesk\.com|diverse-solutions\.com|search\.|listings\.)/i;
 
-const LOGIN_PATH = /\/(login|signin|sign-in|auth|account|dashboard|portal|admin|members|agent-only)(\/|$)/i;
+const LOGIN_PATH = /\/(login|userlogin|usersignup|myaccount|signin|sign-in|auth|account|dashboard|portal|admin|members|agent-only)(\/|$)/i;
 
 /** Phrases that mean "go look at my properties". */
 const CTA_LABEL =
@@ -69,7 +73,7 @@ const PATH_INVENTORY =
   /\/(?:[a-z]+-)?(listings?|properties|homes?(?:-for-sale)?|for-sale|search|idx|mls|gallery|inventory|featured|buy)(?:[/-]|$)/i;
 
 const DETAIL_PATH =
-  /\/(listing|property|home|homes|listings|properties|detail|p)\/[^/?#]+/i;
+  /\/(listing|property|home|homes|homes-for-sale|listings|properties|detail|p)\/[^/?#]+/i;
 
 const looksLikeChrome = (u: string) => {
   const lc = u.toLowerCase();
@@ -142,11 +146,11 @@ export function scoreInventoryLink(href: string, label: string, seed: URL): numb
 export function collectInventoryLinks(html: string, base: URL, limit = 8): { url: string; score: number; label: string }[] {
   const seen = new Set<string>();
   const out: { url: string; score: number; label: string }[] = [];
-  const hrefs = [...html.matchAll(/<a\b([^>]*)href\s*=\s*["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi)];
-  for (const [, before, rawHref, after, rawLabel] of hrefs) {
-    const href = absolutize(decodeEntities(rawHref).trim(), base);
+  const hrefs = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
+  for (const [, attributes, rawLabel] of hrefs) {
+    const tag = `<a ${attributes}>`;
+    const href = absolutize(attr(tag, "href"), base);
     if (!href || seen.has(href)) continue;
-    const tag = `<a ${before} ${after}>`;
     const label = decodeEntities(`${stripTags(rawLabel)} ${attr(tag, "aria-label")} ${attr(tag, "title")}`).trim().slice(0, 200);
     const score = scoreInventoryLink(href, label, base);
     if (score < 30) continue;
@@ -159,7 +163,7 @@ export function collectInventoryLinks(html: string, base: URL, limit = 8): { url
       attr(tag, "onclick").match(/(?:location(?:\.href)?\s*=|(?:window\.)?open\s*\()\s*["']([^"']+)["']/)?.[1] || "";
     const href = src ? absolutize(src, base) : null;
     if (!href || seen.has(href)) continue;
-    const score = scoreInventoryLink(href, `${attr(tag, "title")} ${attr(tag, "aria-label")} embedded listings`, base) + 15;
+    const score = scoreInventoryLink(href, `${attr(tag, "title")} ${attr(tag, "aria-label")}`, base) + 15;
     if (score < 30) continue;
     seen.add(href);
     out.push({ url: href, score, label: "embedded listings" });
@@ -393,8 +397,12 @@ export function listingsFromCards(html: string, base: URL, limit = 24): Discover
     if (!pathOk && label.length < 8) continue;
     // Peek at a window of HTML around the match for price / beds.
     const idx = match.index ?? 0;
-    const window = html.slice(Math.max(0, idx - 200), Math.min(html.length, idx + match[0].length + 400));
-    const text = stripTags(window);
+    const ownPrice = /\$\s?\d/.test(stripTags(match[4]));
+    // A priced anchor is the complete card. Never borrow fields or a photo from its neighbors.
+    const before = html.slice(Math.max(0, idx - 200), idx).split(/<\/a>/i).pop() ?? "";
+    const after = html.slice(idx + match[0].length, idx + match[0].length + 400).split(/<a\b/i)[0];
+    const window = ownPrice ? match[4] : before + match[0] + after;
+    const text = decodeEntities(stripTags(window));
     const priceMatch = text.match(/\$\s?\d{1,3}(?:,\d{3})+(?:\.\d+)?|\$\s?\d+(?:\.\d+)?\s?[MK]/i);
     if (!priceMatch || !pathOk) continue;
     const price = priceMatch ? priceMatch[0].replace(/\s+/g, "") : "";
@@ -402,10 +410,13 @@ export function listingsFromCards(html: string, base: URL, limit = 24): Discover
     let image = "";
     const img = window.match(/<img\b[^>]*(?:src|data-src|data-lazy-src)\s*=\s*["']([^"']+)["'][^>]*>/i);
     if (img) {
-      const a = absolutize(img[1], base);
+      const a = absolutize(attr(img[0], "data-src") || attr(img[0], "data-lazy-src") || attr(img[0], "src"), base);
       if (a && !looksLikeChrome(a)) image = a;
     }
+    if (!image) image = absolutize(window.match(/background-image\s*:\s*url\(["']?([^"')]+)/i)?.[1] ?? "", base) ?? "";
+    const address = window.match(/class=["'][^"']*(?:__street|listing-address)[^"']*["'][^>]*>([\s\S]*?)<\/(?:div|h[1-6])>/i)?.[1];
     const title =
+      (address ? decodeEntities(stripTags(address)) : "") ||
       label.replace(/\s+/g, " ").trim() ||
       decodeEntities(attr(match[0], "title") || attr(`<a ${match[1]}>`, "aria-label") || "").trim() ||
       link.pathname.split("/").filter(Boolean).pop()?.replace(/[-_]/g, " ") ||
@@ -471,6 +482,8 @@ export function listingFromMeta(html: string, base: URL): DiscoveredListing | nu
 }
 
 function extractPropertyRecords(html: string, base: URL): DiscoveredListing[] {
+  const adapted = extractAdapterListings(html, base);
+  if (adapted.length) return adapted;
   const structuredCards = listingsFromStructuredCards(html, base);
   if (structuredCards.length) return structuredCards;
   const hydrated = listingsFromHydration(html, base);
@@ -554,7 +567,7 @@ export function statusForProperty(html: string, item: Pick<DiscoveredListing, "t
 }
 
 export function extractListingsFromPage(html: string, base: URL): DiscoveredListing[] {
-  return extractPropertyRecords(html, base).map(item => ({ ...item, status: statusForProperty(html, item, base) ??
+  return extractPropertyRecords(html, base).map(item => ({ ...item, status: item.status ?? statusForProperty(html, item, base) ??
     // Flexmls's explicitly filtered collection establishes active membership.
     (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/(?:office|agent)_listing_categories\/Active\/listings/.test(base.pathname) ? "active" : undefined) }));
 }
@@ -608,9 +621,300 @@ export function listingsFromHydration(html: string, base: URL): DiscoveredListin
   return found;
 }
 
+
+/** Brivity's public featured widget exposes its exact agent/office search scope.
+ * Ignore the accompanying regional "new listings" widget and never use fallback inventory.
+ */
+export function brivityInventoryFragments(html: string, base: URL): string[] {
+  if (!/cdn\d*\.brivityidx\.com\/[^"']*FeaturedProperties/i.test(html)) return [];
+  const out: string[] = [];
+  for (const tag of html.match(/<[^>]+\bdata-settings=["'][^>]+>/gi) ?? []) {
+    try {
+      const data = JSON.parse(attr(tag, "data-settings")).mlsData;
+      if (!data || Number(data.agent_office_listings_only) !== 1) continue;
+      const strings = (xs: unknown) => Array.isArray(xs) ? xs.map(String).filter(x => x.trim() && x.length < 100) : [];
+      const agents = strings(data.mls_agent_ids), offices = strings(data.mls_office_ids);
+      const mls = Array.isArray(data.mls_ids) ? data.mls_ids.map((x: { id?: unknown }) => String(x.id ?? "")).filter(Boolean) : [];
+      if (!mls.length || (!agents.length && !offices.length)) continue;
+      const url = new URL("/pages/search.php/", base);
+      url.searchParams.set("mlsId", mls.join("|"));
+      const priority = data.user_priority === "office"
+        ? `office.id=${offices.join(",")}|agents.0.id=${agents.join(",")}`
+        : `agents.0.id=${agents.join(",")}|office.id=${offices.join(",")}`;
+      url.searchParams.set("q_prioritize", priority);
+      url.searchParams.set("q_include_all", "0");
+      url.searchParams.set("status", "1");
+      url.searchParams.set("q_sort", String(data.sort_by || "price-"));
+      url.searchParams.set("q_include_total_count", "false");
+      url.searchParams.set("q_photos_available", "true");
+      const types = strings(data.property_type);
+      if (types.length) url.searchParams.set("propertyType", types.join("|"));
+      if (data.min_price || data.max_price) url.searchParams.set("price", `${data.min_price || ""}:${data.max_price || ""}`);
+      for (const [key, field] of [["city", "multi_search"], ["multi_cat", "multi_cat"]]) {
+        const values = strings(data[key]); if (values.length) url.searchParams.set(field, values.join("|"));
+      }
+      for (const [key, field] of [["beds", "bedrooms"], ["baths", "totalBaths"], ["garage", "garageCap"], ["sqft", "sqFeet"], ["lot", "acreage"], ["year", "year"]]) {
+        if (data[key]) url.searchParams.set(field, String(data[key]) + ":");
+      }
+      out.push(url.toString());
+    } catch { /* malformed widgets cannot authorize an unscoped search */ }
+  }
+  return [...new Set(out)];
+}
+
+export function listingsFromBrivityResponse(html: string, base: URL): { listings: DiscoveredListing[]; count: number } | null {
+  if (!/\/pages\/search\.php\/?$/.test(base.pathname) || base.searchParams.get("q_include_all") !== "0" ||
+      !base.searchParams.has("q_prioritize")) return null;
+  try {
+    const payload = JSON.parse(html);
+    if (!Array.isArray(payload.data)) return null;
+    const listings: DiscoveredListing[] = [];
+    const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    for (const row of payload.data) {
+      if (!row || row.permissions?.displayListing === false || row.permissions?.displayAddress === false ||
+          !row.address?.street || !row.blossorId || !/^[\w-]+$/.test(String(row.blossorId))) continue;
+      const status = normalizeListingStatus(row.statusText || row.mlsStatus);
+      if (status !== "active") continue;
+      const a = row.address;
+      const url = new URL(`/homes-for-sale/${String(a.state || "").toUpperCase()}/${slug(String(a.city || ""))}/${slug(String(a.zip || ""))}/${slug(a.street)}/bid-${row.blossorId}`, base).toString();
+      const item = listingFromLd({ "@type": "RealEstateListing", name: a.street, price: row.price,
+        url, description: row.description || row.remarks || "", bedrooms: row.bedrooms, bathrooms: row.totalBaths,
+        floorSize: { value: row.sqFeet }, image: row.photos || row.main_photo,
+        address: { addressLocality: a.city, addressRegion: a.state }, listingNumber: row.mlsNum, propertyType: row.propertyType }, base);
+      if (item) listings.push({ ...item, status });
+    }
+    return { listings, count: Number(payload.count) || listings.length };
+  } catch { return null; }
+}
+
+
+/** Read the public IDX Broker showcase's literal property fields without executing JavaScript. */
+export function listingsFromIdxShowcase(script: string, base: URL): DiscoveredListing[] {
+  if (!/\/idx\/customshowcasejs\.php$/.test(base.pathname) || !base.searchParams.has("widgetid")) return [];
+  const starts = [...script.matchAll(/aLink\s*=\s*idx\(\s*'(<a\b[^']+)'\s*\)/g)];
+  const out: DiscoveredListing[] = [];
+  starts.forEach((m, i) => {
+    const block = script.slice(m.index, starts[i + 1]?.index ?? script.length);
+    const sourceUrl = absolutize(attr(m[1], "href"), base);
+    if (!sourceUrl || !/\/idx\/details\/listing\//.test(new URL(sourceUrl).pathname)) return;
+    const literal = (value: string) => decodeEntities(value.replace(/\\(['"\\])/g, "$1").replace(/\\[nr]/g, " "));
+    const field = (name: string) => literal(block.match(new RegExp(`['"]IDX-showcase${name}(?:[^'"]*)['"]\\)\\s*\\.html\\(\\s*'((?:\\\\.|[^'\\\\])*)'`))?.[1] ?? "").trim();
+    const title = field("Address");
+    const status = normalizeListingStatus(field("Status"));
+    if (status && status !== "active") return;
+    let image = "";
+    try { image = decodeURIComponent(block.match(/imgUrl\s*=\s*decodeURIComponent\(\s*["']([^"']+)/)?.[1] ?? ""); } catch { /* invalid image */ }
+    const url = new URL(sourceUrl); url.searchParams.delete("widgetReferer");
+    const item = listingFromLd({ "@type": "RealEstateListing", name: title, price: field("Price"), url: url.toString(),
+      bedrooms: parseFloat(field("Beds")), bathrooms: parseFloat(field("Baths")), image,
+      description: field("Remarks"), listingNumber: field("ListingID"), address: { addressLocality: field("City"), addressRegion: field("StateAbrv") } }, base);
+    if (item) out.push({ ...item, status });
+  });
+  return out;
+}
+
+/** Provider-scoped detail fields avoid treating wrapper navigation or related homes as the property. */
+export function listingFromIdxDetail(html: string, base: URL): DiscoveredListing | null {
+  if (!/\/idx\/details\/listing\//.test(base.pathname)) return null;
+  const field = (id: string) => decodeEntities(stripTags(html.match(new RegExp(`<(?:span|div|p)[^>]*id=["']${id}["'][^>]*>([\\s\\S]*?)<\\/(?:span|div|p)>`, "i"))?.[1] ?? ""));
+  const part = (name: string) => decodeEntities(stripTags(html.match(new RegExp(`<span[^>]*class=["']IDX-detailsAddress${name}["'][^>]*>([\\s\\S]*?)<\\/span>`, "i"))?.[1] ?? ""));
+  const title = [part("Number"),part("Direction"),part("Name")].filter(Boolean).join(" ");
+  const imageTag = (html.match(/<img\b[^>]*>/gi) ?? []).find(t => attr(t, "id") === "IDX-detailsPhoto");
+  const item = listingFromLd({ "@type": "RealEstateListing", name: title, url: base.toString(), price: field("IDX-detailsPrice"),
+    bedrooms: field("IDX-summaryField-bedrooms-data"), bathrooms: field("IDX-summaryField-totalBaths-data"),
+    floorSize: {value: field("IDX-summaryField-sqFt-data")}, image: imageTag ? attr(imageTag, "src") : "",
+    description: field("IDX-detailsDescription"), address: { addressLocality: part("City"), addressRegion: part("StateAbrv") },
+    listingNumber: base.pathname.match(/\/listing\/[^/]+\/([^/]+)/)?.[1] }, base);
+  return item ? { ...item, status: normalizeListingStatus(field("IDX-summaryField-propStatus-data")) } : null;
+}
+
+
+/** Common public data transport, including RESO-style property fields.
+ * URLs must be present in the record; never manufacture provider endpoints or detail URLs.
+ */
+export function listingsFromPublicJson(text: string, base: URL): DiscoveredListing[] {
+  let payload: unknown;
+  try { payload = JSON.parse(text); } catch { return []; }
+  const out: DiscoveredListing[] = [];
+  walkLd([payload], row => {
+    const address = row.address && typeof row.address === "object" ? row.address as Record<string, unknown> : {};
+    const street = row.UnparsedAddress ?? row.streetAddress ?? row.StreetAddress ?? row.addressLine1 ?? address.streetAddress;
+    const rawUrl = row.detailUrl ?? row.listingUrl ?? row.url ?? row.URL;
+    if (typeof street !== "string" || typeof rawUrl !== "string" || !street.trim()) return;
+    const media = row.images ?? row.photos ?? row.image ?? row.Media;
+    const images = Array.isArray(media) ? media.map(value => typeof value === "object" && value ?
+      (value as Record<string, unknown>).MediaURL ?? (value as Record<string, unknown>).url : value) : media;
+    const item = listingFromLd({ "@type": "RealEstateListing", name: street,
+      price: row.ListPrice ?? row.listPrice ?? row.CurrentPrice ?? row.price, url: rawUrl,
+      description: row.PublicRemarks ?? row.description ?? row.remarks ?? "",
+      bedrooms: row.BedroomsTotal ?? row.BedsTotal ?? row.bedrooms,
+      bathrooms: row.BathroomsTotalInteger ?? row.BathsTotal ?? row.totalBaths ?? row.bathrooms,
+      floorSize: {value: row.LivingArea ?? row.sqFeet ?? row.sqft}, image: images,
+      address: { addressLocality: row.City ?? address.city ?? address.addressLocality,
+        addressRegion: row.StateOrProvince ?? address.state ?? address.addressRegion },
+      listingNumber: row.ListingId ?? row.MLSNumber ?? row.mlsNumber ?? row.listingNumber,
+      propertyType: row.PropertyType ?? row.propertyType }, base);
+    if (item) out.push({ ...item, status: normalizeListingStatus(row.StandardStatus ?? row.statusText ?? row.listingStatus ?? row.status) });
+  });
+  // JSON-LD APIs may identify a property with name/type instead of streetAddress.
+  if (!out.length) return listingsFromJsonLd('<script type="application/ld+json">'+text+'</script>', base);
+  return out;
+}
+
+
+/** Public Kestrel widget requests: retain featured scope and never use a general MLS search. */
+export function kestrelInventoryRequests(html: string): { url: string; activationToken: string }[] {
+  if (!/kestrel\.idxhome\.com\/ihf-kestrel\.js/i.test(html)) return [];
+  const raw = html.match(/ihfKestrel\.config\s*=\s*(\{[^;]+\})\s*;/)?.[1];
+  let activationToken = "";
+  try { activationToken = JSON.parse(raw ?? "{}").activationToken ?? ""; } catch { return []; }
+  if (!/^[a-z0-9-]{20,80}$/i.test(activationToken)) return [];
+  for (const m of html.matchAll(/ihfKestrel\.render\((\{[^;]+?\})\)/g)) {
+    let widget: Record<string, unknown>; try { widget = JSON.parse(m[1]); } catch { continue; }
+    if (!(widget.featured === true && widget.component === "listingSearchWidget" || widget.component === "gallerySliderWidget" && widget.featured !== false && !widget.id)) continue;
+    const u = new URL("https://www.idxhome.com/api/kestrel/listings.json");
+    u.searchParams.set("featuredOnlyYn", "true"); u.searchParams.set("status", "active");
+    u.searchParams.set("limit", "100"); u.searchParams.set("context", "RESULT");
+    if (typeof widget.sort === "string") u.searchParams.set("sort", widget.sort);
+    for (const [key, value] of Object.entries({cityId:widget.cityIds,zip:widget.zip,propertyType:widget.propertyType}))
+      if (value != null) u.searchParams.set(key, Array.isArray(value) ? value.join(",") : String(value));
+    return [{url:u.toString(), activationToken}];
+  }
+  return [];
+}
+
+/** This public widget token must never travel to another provider or redirect target. */
+export function publicListingRequestHeaders(uri: URL, options?: { activationToken?: string }): Record<string,string> {
+  if (!options?.activationToken) return {};
+  if (uri.hostname !== "www.idxhome.com" || !(uri.pathname === "/api/kestrel/listings.json" && uri.searchParams.get("featuredOnlyYn") === "true" || /^\/api\/kestrel\/listing\/[a-z0-9_-]+\.json$/i.test(uri.pathname) && uri.searchParams.get("context") === "DETAIL")) throw new Error("Unexpected public listing endpoint.");
+  return {"X-Activation-Token":options.activationToken,"X-Https-Urls":"true"};
+}
+
+/** Decode exactly the public transport used by ihf-kestrel.js; no account/session credentials. */
+export async function decodePublicListingResponse(text: string, contentType: string, uri: URL, options?: {activationToken?:string}): Promise<string> {
+  if (!/^application\/base64/i.test(contentType)) return text;
+  publicListingRequestHeaders(uri,options);
+  if (!options?.activationToken) throw new Error("Unknown encoded listing response.");
+  const {createDecipheriv} = await import("node:crypto");
+  const bytes = Uint8Array.from(atob(text.trim()), c=>c.charCodeAt(0));
+  const decoder = createDecipheriv("aes-128-ecb",Uint8Array.from([111,87,76,114,66,90,108,122,52,84,103,114,78,121,100,104]),new Uint8Array(0));
+  const first=decoder.update(bytes),last=decoder.final(); const joined=new Uint8Array(first.length+last.length);
+  joined.set(first);joined.set(last,first.length); const result=new TextDecoder().decode(joined);
+  JSON.parse(result); return result;
+}
+
+export function listingsFromKestrel(text: string, base: URL): DiscoveredListing[] {
+  if (base.hostname!=="www.idxhome.com" || !/^\/api\/kestrel\/(?:listings|listing\/[a-z0-9_-]+)\.json$/i.test(base.pathname)) return [];
+  let rows: unknown; try {rows=JSON.parse(text);} catch{return [];}
+  if (!Array.isArray(rows)) rows = rows && typeof rows === "object" ? [rows] : [];
+  return (rows as Record<string,any>[]).flatMap(row=>{
+    if (!row || !["RESULT","DETAIL"].includes(row.context) || row.featured!==true || row.statusId!=="active" || !row.listingPageUrl || !row.listPrice) return [];
+    const sourceUrl=absolutize(row.listingPageUrl,base); if (!sourceUrl) return [];
+    const title=String(row.address??"").split(/\\n|\n/)[0].trim(); if (!title) return [];
+    const images=(row.images??[]).map((img:{url?:string})=>absolutize(img.url??"",base)).filter((u:string|null)=>u&&!looksLikeChrome(u));
+    return [{title,sourceUrl,price:priceFrom({price:row.listPrice}),description:String(row.description??""),beds:Number(row.bedrooms??0),
+      baths:Number(row.fullBathrooms??0)+Number(row.partialBathrooms??0)*0.5,sqft:row.squareFeet?String(row.squareFeet):"",
+      neighborhood:[row.city,row.state].filter(Boolean).join(", "),image:images[0]??"",images:images.slice(0,12),status:"active" as const,
+      listingNumber:String(row.listingNumber??""),propertyType:String(row.propertyTypeLabel??"")}];
+  });
+}
+
+/** Balanced JSON object literals; never evaluate third-party script code. */
+function jsonObjectAfter(html: string, marker: RegExp): Record<string,unknown> | null {
+  const m=marker.exec(html);if(!m)return null;const start=(m.index??0)+m[0].length-1;
+  let depth=0,quoted=false,escape=false;
+  for(let i=start;i<html.length;i++){const c=html[i];if(quoted){if(escape)escape=false;else if(c==="\\")escape=true;else if(c==='"')quoted=false;continue;}
+    if(c==='"')quoted=true;else if(c==="{")depth++;else if(c==="}"&&!--depth){try{return JSON.parse(html.slice(start,i+1));}catch{return null;}}}
+  return null;
+}
+
+
+/** dsIDXpress detail fields are property-scoped, unlike recommendation cards or prose. */
+export function listingFromDsidxDetail(html:string,base:URL):DiscoveredListing|null{
+  if(!/\/idx\/mls-/.test(base.pathname)||!html.includes('id="dsidx-primary-data"'))return null;
+  const meta=(name:string)=>{for(const tag of html.match(/<meta\b[^>]*>/gi)??[])if((attr(tag,"property")||attr(tag,"name"))===name)return attr(tag,"content");return "";};
+  const image=absolutize(meta("og:image"),base)??"";
+  const item:DiscoveredListing={title:meta("og:title")||decodeEntities(stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]??"")),price:"",description:"",beds:0,baths:0,sqft:"",neighborhood:"",image,images:image?[image]:[],sourceUrl:base.toString()};
+  const field=(name:string)=>decodeEntities(stripTags(html.match(new RegExp('data-dsidx=["\\\']'+name+'["\\\'][^>]*>([\\s\\S]*?)<\\/(?:span|td|b)>',"i"))?.[1]??""));
+  const price=field("Price").match(/\$[\d,.]+/)?.[0];if(!price)return null;
+  return {...item,price,beds:Number(field("Beds")),baths:Number(field("Baths")),sqft:field("ImprovedSqFt"),description:field("Description"),status:normalizeListingStatus(field("Status")),listingNumber:base.pathname.match(/\/mls-(\d+-\d+)-/)?.[1]??"",propertyType:field("Property Type")};
+}
+
+export function listingsFromMoxi(html: string, base: URL): DiscoveredListing[] {
+  const data=jsonObjectAfter(html,/\blisting_detail\s*:\s*\{/); const out:DiscoveredListing[]=[];
+  if(data && data.location && data.list_price && data.url_slug){
+    const loc=data.location as Record<string,unknown>;
+    const images=(Array.isArray(data.images)?data.images:[]).map((img:Record<string,unknown>)=>absolutize(String(img.full_url??img.gallery_url??""),base)).filter((u):u is string=>!!u&&!looksLikeChrome(u));
+    // Some Moxi detail payloads call this 'image' instead of 'images'.
+    if(!images.length) for(const tag of html.match(/<img\b[^>]*>/gi)??[]){if(!/Property Photo:/i.test(attr(tag,"alt")))continue;const u=absolutize(attr(tag,"data-src")||attr(tag,"src"),base);if(u&&!images.includes(u))images.push(u);}
+    const sourceUrl=absolutize("/listing"+String(data.url_slug),base);
+    if(sourceUrl)out.push({title:String(loc.address??""),description:String(data.comments??""),price:priceFrom({price:data.list_price}),beds:Number(data.bedrooms??0),baths:Number(data.bathrooms??0),sqft:String(data.sqr_footage??data.living_area??""),neighborhood:[loc.city,loc.state].filter(Boolean).join(", "),image:images[0]??"",images:images.slice(0,12),sourceUrl,status:normalizeListingStatus(data.status_name_for_view??data.status),listingNumber:String(data.mlsnumber??""),propertyType:String(data.property_type??"")});
+    return out;
+  }
+  for(const m of html.matchAll(/<a\b[^>]*class=["'][^"']*linktooverlay[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)){
+    const b=m[1],sourceUrl=absolutize(attr(m[0].split(">")[0]+">","href"),base);if(!sourceUrl)continue;
+    const field=(name:string)=>decodeEntities(stripTags(b.match(new RegExp('class=["\\\'][^"\\\']*'+name+'[^"\\\']*["\\\'][^>]*>([\\s\\S]*?)<\\/div>',"i"))?.[1]??""));
+    const title=field("single-listing-address"),price=field("single-listing-img-price").match(/\$[\d,.]+/)?.[0]??"";
+    if(!title||!price)continue;
+    const image=absolutize(attr(b.match(/<[^>]*\bdata-bg=["'][^>]*>/i)?.[0]??"","data-bg"),base)??"";
+    const status=normalizeListingStatus(b.match(/class=["']status-label["'][^>]*>([^<]+)/i)?.[1]);
+    out.push({title,sourceUrl,price,description:field("single-listing-comments"),...specsFrom({},decodeEntities(stripTags(b))),neighborhood:"",image,images:image?[image]:[],status,listingNumber:field("single-listing-mlsnumber").replace(/^MLS#?\s*/i,"")});
+  }
+  return out;
+}
+
+export type ListingInterfaceAdapter = {
+  id: string;
+  matches: (html: string, url: URL) => boolean;
+  extract: (html: string, url: URL) => DiscoveredListing[];
+  fragments?: (html: string, url: URL) => string[];
+};
+
+/** Reusable transport/platform adapters. No customer domains or inventory IDs belong here. */
+export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
+  {id:"moxiworks",matches:h=>/moxiworks|listing_detail\s*:|linktooverlay/.test(h),extract:listingsFromMoxi},
+  {id:"ihomefinder",matches:(h,u)=>/kestrel\.idxhome\.com|ihfKestrel/.test(h)||u.hostname==="www.idxhome.com",extract:listingsFromKestrel},
+  {id:"agentfire-dsidx",matches:h=>/cbw-slider-listing|agentfire-listing-v3/.test(h),extract:(h,u)=>{const detail=listingFromDsidxDetail(h,u);return detail?[detail]:listingsFromCards(h,u);}},
+  { id: "idx-broker", matches: (h,u) => /\/idx\/(?:customshowcasejs\.php|details\/listing\/)/.test(u.pathname) || /idxwidgetsrc-|customshowcasejs\.php/.test(h),
+    extract: (h,u) => { const rows=listingsFromIdxShowcase(h,u); const detail=listingFromIdxDetail(h,u); return rows.length ? rows : detail ? [detail] : []; },
+    fragments: (h,u) => (h.match(/<script\b[^>]*>/gi) ?? []).flatMap(tag => { const url=absolutize(attr(tag,"src"),u);
+      return url && /\/idx\/customshowcasejs\.php$/.test(new URL(url).pathname) && /^\d+$/.test(new URL(url).searchParams.get("widgetid") ?? "") ? [url] : []; }) },
+  { id: "brivity", matches: (h,u) => /brivityidx\.com|FeaturedProperties-1R/.test(h) || /\/pages\/search\.php\/?$/.test(u.pathname),
+    extract: (h,u) => listingsFromBrivityResponse(h,u)?.listings ?? [], fragments: brivityInventoryFragments },
+  { id: "flexmls", matches: (h,u) => /(?:^|\.)flexmls\.com$/i.test(u.hostname), extract: listingsFromStructuredCards },
+  { id: "public-json", matches: h => /^[\s]*[\[{]/.test(h), extract: listingsFromPublicJson },
+  { id: "structured-property-data", matches: h => /application\/(?:ld\+json|json)/i.test(h),
+    extract: (h,u) => [...listingsFromJsonLd(h,u), ...listingsFromHydration(h,u)] },
+];
+
+export function detectListingInterfaces(html: string, base: URL): string[] {
+  return LISTING_INTERFACE_ADAPTERS.filter(a => a.matches(html,base)).map(a => a.id);
+}
+
+function extractAdapterListings(html: string, base: URL): DiscoveredListing[] {
+  for (const adapter of LISTING_INTERFACE_ADAPTERS) {
+    // Merge structured data and ordinary cards together in the generic reader below.
+    if (adapter.id === "structured-property-data" || !adapter.matches(html,base)) continue;
+    const rows = adapter.extract(html,base);
+    if (rows.length) return rows;
+  }
+  return [];
+}
+
+/** Recognize unsupported dynamic providers without pretending their data was read. */
+function dynamicInterfaceHint(html: string): string | undefined {
+  for (const [id, pattern] of [
+    ["ihomefinder", /ihomefinder|idxhome\.com|ihf-container|ihf-main-container/i],
+    ["showcase-idx", /showcaseidx|showcase-idx/i],
+    ["kvcore", /kvcore|kv-core/i],
+    ["realgeeks", /realgeeks|real-geeks/i],
+  ] as const) if (pattern.test(html)) return id;
+  return undefined;
+}
+
 /** Public fragments keep the exact agent/category/filter instead of broadening the search. */
 export function collectInventoryFragments(html: string, base: URL): string[] {
-  const out: string[] = [];
+  const out = LISTING_INTERFACE_ADAPTERS.filter(adapter => adapter.matches(html,base)).flatMap(adapter => adapter.fragments?.(html,base) ?? []);
   for (const tag of html.match(/<[^>]+\bdata-(?:listings|results|inventory)-(?:url|src)=["'][^>]+>/gi) ?? []) {
     const raw = attr(tag, "data-listings-url") || attr(tag, "data-results-url") || attr(tag, "data-inventory-url") ||
       attr(tag, "data-listings-src") || attr(tag, "data-results-src");
@@ -630,6 +934,12 @@ export function collectInventoryFragments(html: string, base: URL): string[] {
 
 function paginationLinks(html: string, base: URL): string[] {
   const out: string[] = [];
+  try {
+    const payload=JSON.parse(html), raw=payload.nextUrl ?? payload["@odata.nextLink"] ?? payload.links?.next ?? payload.pagination?.nextUrl;
+    const next=typeof raw === "string" ? new URL(raw,base) : null;
+    const scope=(url: URL) => [...url.searchParams].filter(([key]) => !/^(?:page|pageNumber|offset|limit|per_page|q_offset|cursor)$/i.test(key)).sort(([a],[b])=>a.localeCompare(b));
+    if (next && next.protocol === "https:" && sameSite(next,base) && next.pathname === base.pathname && JSON.stringify(scope(next)) === JSON.stringify(scope(base))) out.push(next.toString());
+  } catch { /* ordinary HTML pagination below */ }
   for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
     const tag = `<a ${m[1]}>`;
     if (!/\bnext\b/i.test(`${attr(tag, "rel")} ${attr(tag, "aria-label")} ${stripTags(m[2])}`)) continue;
@@ -653,7 +963,7 @@ function navigationCandidates(html: string, base: URL): NavigationCandidate[] {
 
 /** Enrich an already evidenced property without replacing its address with an agency title. */
 export function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
-  const detail = listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
+  const detail = listingFromDsidxDetail(html,base) ?? listingsFromMoxi(html,base).find(l=>l.sourceUrl===item.sourceUrl) ?? listingFromIdxDetail(html, base) ?? listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
   const meta = (name: string) => {
     for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
       if ((attr(tag, "property") || attr(tag, "name")) === name) return attr(tag, "content");
@@ -663,9 +973,9 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
   const description = detail?.description || meta("og:description") || meta("description");
   const cover = absolutize(meta("og:image"), base);
   const images = [...new Set([...(detail?.images ?? []), ...(cover && !looksLikeChrome(cover) ? [cover] : []), ...item.images])].slice(0, 12);
-  return { ...item, status: statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 1200) || item.description,
+  return { ...item, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 1200) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
-    neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
+    listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }
 
 /**
@@ -676,7 +986,9 @@ export async function discoverListings(
   seedUris: string[],
   fetchHtml: FetchHtml,
   options?: { maxDepth?: number; maxPages?: number; maxListings?: number; maxDurationMs?: number; maxDetailPages?: number; selectLinks?: SelectInventoryLinks;
-    normalizePage?: (html: string, base: URL) => Promise<DiscoveredListing[]> },
+    normalizePage?: (html: string, base: URL) => Promise<DiscoveredListing[]>;
+    /** Optional public browser renderer; absent renderers must report unsupported dynamic pages. */
+    renderPage?: FetchHtml },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
   const maxDepth = options?.maxDepth ?? 5;
   const maxPages = options?.maxPages ?? 20;
@@ -687,7 +999,12 @@ export async function discoverListings(
   const listings: DiscoveredListing[] = [];
   const listingKeys = new Set<string>();
   const failed: string[] = [];
+  const failureDetails:{url:string;reason:string}[]=[];
   const inventoryUrls = new Set<string>();
+  const interfaces = new Set<string>();
+  const publicDetails = new Map<string,{url:string;activationToken:string}>();
+  const issues: NonNullable<ListingDiscoveryMeta["issues"]> = [];
+  let limitedShowcase = false;
   const deadline = Date.now() + (options?.maxDurationMs ?? 45000);
   let aiRoutes = 0;
   let aiNormalizations = 0;
@@ -696,12 +1013,17 @@ export async function discoverListings(
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string };
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
 
   const pushListing = (item: DiscoveredListing) => {
-    const key = `${item.sourceUrl}|${item.title}`.toLowerCase();
-    if (listingKeys.has(key)) return;
+    const key = item.sourceUrl;
+    if (listingKeys.has(key)) {
+      const index=listings.findIndex(row=>row.sourceUrl===item.sourceUrl);
+      if(index>=0){const old=listings[index],images=[...new Set([...item.images,...old.images])].slice(0,12);
+        listings[index]={...old,description:item.description||old.description,price:item.price||old.price,beds:item.beds||old.beds,baths:item.baths||old.baths,sqft:item.sqft||old.sqft,status:item.status??old.status,image:images[0]||old.image,images,listingNumber:item.listingNumber||old.listingNumber};}
+      return;
+    }
     listingKeys.add(key);
     listings.push(item);
   };
@@ -725,16 +1047,18 @@ export async function discoverListings(
     let html: string;
     let finalUrl: URL;
     try {
-      const page = await fetchHtml(normalized, { fragment: next.fragment });
+      const page = await fetchHtml(normalized, { fragment: next.fragment, activationToken:next.activationToken });
       html = page.html;
       finalUrl = page.finalUrl;
       hops += 1;
       visitedSet.add(finalUrl.toString());
-    } catch {
+    } catch (error) {
+      failureDetails.push({url:normalized,reason:error instanceof Error ? error.message.slice(0,180) : "Unreadable public response"});
       failed.push(normalized);
       continue;
     }
 
+    for (const id of detectListingInterfaces(html, finalUrl)) interfaces.add(id);
     // A general market search is a navigation step, not evidence of the agent's inventory.
     const broad = next.broad && !/office_listing_categories|agent_listing_categories/.test(finalUrl.pathname);
     if (!broad) {
@@ -742,11 +1066,34 @@ export async function discoverListings(
       if (count) expectedCount = Math.max(expectedCount, Number(count));
       if (/data-has-next-page=["']true["']|\b(?:load more properties|load more listings|infinite-scroll)\b/i.test(html)) unresolvedPagination = true;
     }
-    let found = broad ? [] : extractListingsFromPage(html, finalUrl);
+    const publicResponse = broad ? null : listingsFromBrivityResponse(html, finalUrl);
+    if (publicResponse) expectedCount = Math.max(expectedCount, publicResponse.count);
+    try { const payload=JSON.parse(html), total=Number(payload.total ?? payload.totalCount ?? payload["@odata.count"]);
+      if (!broad && Number.isFinite(total) && total > 0) expectedCount=Math.max(expectedCount,total); } catch { /* HTML */ }
+    if(next.activationToken && finalUrl.hostname === "www.idxhome.com"){try{const rows=JSON.parse(html);if(Array.isArray(rows))for(const row of rows){if(row.featured===true && row.statusId==="active" && /^[a-z0-9_-]+$/i.test(row.id) && typeof row.listingPageUrl==="string") publicDetails.set(row.listingPageUrl,{url:"https://www.idxhome.com/api/kestrel/listing/"+row.id+".json?context=DETAIL",activationToken:next.activationToken});}}catch{/* other formats */}}
+    const showcase = broad ? [] : listingsFromIdxShowcase(html, finalUrl);
+    if (/cbw-slider-listing/.test(html) && next.depth===0) {limitedShowcase=true;issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"agentfire-dsidx"});}
+    if (showcase.length) { limitedShowcase = true; issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"idx-broker"}); }
+    const ownInventoryLinks = collectInventoryLinks(html,finalUrl,6).filter(c=>/\bmy\b/i.test(c.label)&&/\bactive\b/i.test(c.label)&&!DETAIL_PATH.test(new URL(c.url).pathname.replace("/listings/", "/inventory/")));
+    let found = broad || next.depth===0 && ownInventoryLinks.length ? [] : extractListingsFromPage(html, finalUrl);
+    const hint = !broad && !found.length ? dynamicInterfaceHint(html) : undefined;
+    if (hint) { interfaces.add(hint); inventoryUrls.add(finalUrl.toString()); }
     if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
       (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
       aiNormalizations++;
       try { found = await options.normalizePage(html, finalUrl); } catch { /* deterministic navigation continues */ }
+    }
+    if (hint && !found.length && !collectInventoryFragments(html,finalUrl).length && !kestrelInventoryRequests(html).length) {
+      if (options?.renderPage && Date.now() < deadline) {
+        try {
+          const rendered=await options.renderPage(finalUrl.toString());
+          if (sameSite(rendered.finalUrl,finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
+            html=rendered.html; finalUrl=rendered.finalUrl;
+            found=extractListingsFromPage(html,finalUrl);
+          }
+        } catch { /* preserve the source and explain the missing renderer/data */ }
+      }
+      if (!found.length) issues.push({code:"requires-rendering",url:finalUrl.toString(),interface:hint});
     }
     if (found.length && next.fragment && next.parent) {
       // Once the shell's inventory loads, discard its toolbar/search alternatives.
@@ -764,6 +1111,7 @@ export async function discoverListings(
 
     if (listings.length >= maxListings) continue;
     if (!broad) {
+      for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString()}); }
       for (const url of collectInventoryFragments(html, finalUrl)) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
       }
@@ -781,7 +1129,7 @@ export async function discoverListings(
     }
     if (next.depth >= maxDepth) continue;
 
-    const ctas = found.length ? [] : collectInventoryLinks(html, finalUrl, 6);
+    const ctas = found.length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
       if (queue.some((q) => q.url === cta.url)) continue;
@@ -822,17 +1170,21 @@ export async function discoverListings(
     visitedSet.add(item.sourceUrl);
     visited.push(item.sourceUrl);
     try {
-      const page = await fetchHtml(item.sourceUrl);
+      const request=publicDetails.get(item.sourceUrl);
+      const page = await fetchHtml(request?.url ?? item.sourceUrl,request ? {fragment:true,activationToken:request.activationToken} : undefined);
       hops++;
-      listings[i] = enrichListingFromPage(item, page.html, page.finalUrl);
+      if(request){const detail=listingsFromKestrel(page.html,page.finalUrl).find(row=>row.sourceUrl===item.sourceUrl);if(detail)listings[i]={...item,...detail};}
+      else listings[i] = enrichListingFromPage(item, page.html, page.finalUrl);
     } catch { failed.push(item.sourceUrl); }
   }
 
   return {
     listings: listings.slice(0, maxListings),
     meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
-      failed, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome: listings.length ?
-        (queue.length || failed.length || unresolvedPagination || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
+      interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
+      issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
+      failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome: listings.length ?
+        (queue.length || failed.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
   };
 }
 

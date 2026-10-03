@@ -1,0 +1,43 @@
+{
+  "observedOn": "2026-10-03",
+  "examples": [
+    {
+      "name": "Cindy Carlson",
+      "url": "https://cindycarlsonrealty.com/",
+      "interface": "flexmls",
+      "lastObservedActiveCount": 9
+    },
+    {
+      "name": "GetHomeNow",
+      "url": "https://www.gethomenow.com/",
+      "interface": "brivity",
+      "lastObservedActiveCount": 94
+    },
+    {
+      "name": "North Idaho Freedom",
+      "url": "https://northidahofreedom.com/",
+      "interface": "idx-broker",
+      "lastObservedActiveCount": 5,
+      "coverage": "showcase"
+    },
+    {
+      "name": "Christine Matheny",
+      "url": "https://christinematheny.com/",
+      "interface": "moxiworks",
+      "lastObservedActiveCount": 13
+    },
+    {
+      "name": "McKenzie Realty",
+      "url": "https://www.mckenzie-realty.com/",
+      "interface": "ihomefinder-kestrel",
+      "lastObservedActiveCount": 1
+    },
+    {
+      "name": "Greg Volland",
+      "url": "https://gregvolland.com/",
+      "interface": "agentfire-dsidx",
+      "lastObservedActiveCount": 10,
+      "coverage": "showcase"
+    }
+  ]
+}

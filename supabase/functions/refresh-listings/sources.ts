@@ -88,13 +88,14 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       } catch { /* disappearance or blocked pages cannot establish sold status */ }
     }
   }
+  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new Error("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.");
   if (!discovery.listings.length && !explicitEmpty) throw new Error("We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.");
   const now = Date.now();
   const source: ListingSource = { ...existing, id: existing?.id ?? `source-${hash(uri)}`, url: uri, submittedUrl: existing?.submittedUrl ?? submittedUrl,
-    kind: detectSourceKind(uri), inventoryUrls: [...new Set([...discovery.meta.inventoryUrls ?? [], ...existing?.inventoryUrls ?? []])].filter(u => !isPropertyUrl(u)),
+    kind: detectSourceKind(uri), inventoryUrls: [...new Set([...discovery.meta.inventoryUrls ?? [], ...existing?.inventoryUrls ?? []])].filter(u => !isPropertyUrl(u) && !(new URL(u).hostname === "www.idxhome.com" && new URL(u).pathname.startsWith("/api/kestrel/"))),
     connectedAt: existing?.connectedAt ?? now, lastCheckedAt: now, nextSyncAt: now + TWO_HOURS,
     state: "connected", error: undefined, failures: 0, listingCount: discovery.listings.length };
-  const complete = explicitEmpty || discovery.meta.outcome === "found" && discovery.listings.length < 100;
+  const complete = explicitEmpty || discovery.meta.coverage === "collection" && discovery.meta.outcome === "found" && discovery.listings.length < 100;
   if (complete) source.lastCompleteSyncAt = now;
   return { source, listings: discovery.listings, complete, meta: discovery.meta };
 }

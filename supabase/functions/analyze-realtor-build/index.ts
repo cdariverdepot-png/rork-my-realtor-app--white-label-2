@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { discoverListings, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
+import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
 
 type Source = {
@@ -108,13 +108,13 @@ async function publicHttps(raw: string): Promise<URL> {
 }
 
 /** Fetch one public HTML page, following up to 4 redirects (each re-checked). */
-async function fetchHtml(uri: string, options?: { fragment?: boolean }): Promise<{ html: string; finalUrl: URL }> {
+async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string }): Promise<{ html: string; finalUrl: URL }> {
   let current = await publicHttps(uri);
   for (let hop = 0; hop < 5; hop++) {
     const response = await fetch(current, {
       redirect: "manual",
       headers: { Accept: "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
-        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}) },
+        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}), ...publicListingRequestHeaders(current,options) },
       signal: AbortSignal.timeout(12000),
     });
     if (response.status >= 300 && response.status < 400) {
@@ -125,7 +125,10 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean }): Promise
       continue;
     }
     if (!response.ok) throw new Error(`The page returned ${response.status}.`);
-    if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "")) {
+    if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
+        !(options?.fragment && (/application\/json/i.test(response.headers.get("content-type") ?? "") ||
+          (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
+          (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
       throw new Error("The link is not a readable webpage.");
     }
     if (Number(response.headers.get("content-length") ?? 0) > 2_000_000) {
@@ -148,7 +151,7 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean }): Promise
     const joined = new Uint8Array(size);
     let offset = 0;
     for (const chunk of chunks) { joined.set(chunk, offset); offset += chunk.byteLength; }
-    return { html: new TextDecoder().decode(joined), finalUrl: current };
+    return { html: await decodePublicListingResponse(new TextDecoder().decode(joined),response.headers.get("content-type")??"",current,options), finalUrl: current };
   }
   throw new Error("The page redirected too many times.");
 }
@@ -531,6 +534,8 @@ Deno.serve(async (request) => {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
     }
+    discovery.listings = discovery.listings.filter(item => !item.status || item.status === "active");
+    discovery.meta.found = discovery.listings.length;
     const draft = {
       ...(build.draft && typeof build.draft === "object" ? build.draft : {}),
       discoveredListings: discovery.listings,
@@ -634,7 +639,8 @@ Deno.serve(async (request) => {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
         maxDepth: 5, maxPages: 20, maxListings: 100, maxDetailPages: 12, selectLinks: selectInventoryLinks,
       });
-      discoveredListings = discovery.listings;
+      discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
+      discovery.meta.found = discoveredListings.length;
       listingDiscovery = discovery.meta;
       console.log("[build] listing discovery", listingDiscovery);
     } catch (error) {

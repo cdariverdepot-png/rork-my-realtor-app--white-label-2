@@ -24,7 +24,7 @@ import {liveThemeDesign} from "@/constants/liveThemeDesigns";
 import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
 import ListingSourceImporter from "./ListingSourceImporter";
 import { connectListingSource } from "@/lib/listingSourceService";
-import { mergeDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
+import { mergeDiscoveredListings, saveDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseContacts";
@@ -53,7 +53,7 @@ const ASK_FOR_FIELD: Partial<Record<ConfirmField, AskId>> = {
 export default function InitialRealtorSetup() {
   const auth = useAuth();
   const { importMany } = useClients();
-  const { all: existingListings, update: updateListings } = useListings();
+  const { all: existingListings, saveListings, hydrated: listingsHydrated } = useListings();
   const { brand, saveBrand } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -130,15 +130,14 @@ export default function InitialRealtorSetup() {
   };
 
   /** Seamlessly fold multi-hop discoveries into the realtor's listing collection. */
-  const applyDiscoveredListings = (saved: SavedBuild) => {
+  const applyDiscoveredListings = async (saved: SavedBuild) => {
     const found = saved.draft.discoveredListings ?? [];
     if (!found.length) {
       setImportedListingCount(0);
       return 0;
     }
-    const merged = mergeDiscoveredListings(listingsSnapshot.current, found);
+    const merged = await saveDiscoveredListings(listingsSnapshot.current, found, saveListings);
     listingsSnapshot.current = merged;
-    updateListings(merged);
     setImportedListingCount(found.length);
     return found.length;
   };
@@ -146,6 +145,8 @@ export default function InitialRealtorSetup() {
   const loadSavedBuild = useCallback(async () => {
     const saved = await loadBuild();
     if (!saved) return;
+    // Restore the actual collection, not just the count displayed in the draft.
+    await applyDiscoveredListings(saved);
     // Historical onboarding URLs must not reopen a completed build. URL refresh
     // remains available in Studio and can still reuse this completed source.
     if (saved.status === 'complete') { router.dismissTo('/admin'); return; }
@@ -158,13 +159,13 @@ export default function InitialRealtorSetup() {
       const found = saved.draft.discoveredListings ?? [];
       setImportedListingCount(found.length);
     }
-  }, [brand, router]);
+  }, [brand, router, saveListings]);
 
   // Product model: real users sign up/in BEFORE /admin/build. Guest REALTOR codes
   // are owner-test only and use the local builder — never an account panel.
   // Wait for auth hydrate so guest sessions are not briefly treated as "need email".
   useEffect(() => {
-    if (!authHydrated) return;
+    if (!authHydrated || !listingsHydrated) return;
     let alive = true;
     void (async () => {
       try {
@@ -196,7 +197,7 @@ export default function InitialRealtorSetup() {
       }
     })();
     return () => { alive = false; };
-  }, [loadSavedBuild, isGuestAccess, authHydrated]);
+  }, [loadSavedBuild, isGuestAccess, authHydrated, listingsHydrated]);
 
   const progressDraft = useSetupDraft(
     "myrealtor.build-draft.v1:" + auth.realtorId,
@@ -336,7 +337,7 @@ export default function InitialRealtorSetup() {
       setActivity(saved.draft.discoveredListings?.length
         ? `Importing ${saved.draft.discoveredListings.length} listing${saved.draft.discoveredListings.length === 1 ? "" : "s"}…`
         : "Finishing your profile…");
-      applyDiscoveredListings(saved);
+      await applyDiscoveredListings(saved);
     } finally {
       setBuilding(false);
     }
@@ -389,6 +390,7 @@ export default function InitialRealtorSetup() {
     // Same rule set the rest of the app uses — REQUIRED_FIELDS is the only source of truth.
     const missing = requiredStatus(draft).missing;
     if (missing.length) throw new Error(`Please add: ${missing.map(item => item.label.toLowerCase()).join(", ")}.`);
+    if (result) await applyDiscoveredListings(result);
     // Guarantee the published brand uses the real themed canvas for the AI-picked layout.
     const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
       ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;

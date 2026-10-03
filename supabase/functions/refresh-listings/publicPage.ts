@@ -1,3 +1,4 @@
+import { publicListingRequestHeaders, decodePublicListingResponse } from "../analyze-realtor-build/listingDiscovery.ts";
 function publicAddress(address: string): boolean {
   if (address.includes(":")) {
     const ip = address.toLowerCase();
@@ -35,14 +36,14 @@ async function publicHttps(raw: string): Promise<URL> {
 }
 
 /** Fetch one public HTML page, following up to 4 redirects (each re-checked). */
-async function fetchPublicPage(uri: string, options?: { fragment?: boolean }, checkRedirect?: (url: URL) => Promise<void>): Promise<{ html: string; finalUrl: URL }> {
+async function fetchPublicPage(uri: string, options?: { fragment?: boolean; activationToken?: string }, checkRedirect?: (url: URL) => Promise<void>): Promise<{ html: string; finalUrl: URL }> {
   let current = await publicHttps(uri);
   const deadline = Date.now() + 12000;
   for (let hop = 0; hop < 5; hop++) {
     const response = await fetch(current, {
       redirect: "manual",
       headers: { Accept: "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
-        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}) },
+        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}), ...publicListingRequestHeaders(current,options) },
       signal: AbortSignal.timeout(Math.max(1, deadline - Date.now())),
     });
     if (response.status >= 300 && response.status < 400) {
@@ -54,7 +55,10 @@ async function fetchPublicPage(uri: string, options?: { fragment?: boolean }, ch
       continue;
     }
     if (!response.ok) throw new Error(`The page returned ${response.status}.`);
-    if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "")) {
+    if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
+        !(options?.fragment && (/application\/json/i.test(response.headers.get("content-type") ?? "") ||
+          (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
+          (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
       throw new Error("The link is not a readable webpage.");
     }
     if (Number(response.headers.get("content-length") ?? 0) > 2_000_000) {
@@ -77,7 +81,7 @@ async function fetchPublicPage(uri: string, options?: { fragment?: boolean }, ch
     const joined = new Uint8Array(size);
     let offset = 0;
     for (const chunk of chunks) { joined.set(chunk, offset); offset += chunk.byteLength; }
-    return { html: new TextDecoder().decode(joined), finalUrl: current };
+    return { html: await decodePublicListingResponse(new TextDecoder().decode(joined),response.headers.get("content-type")??"",current,options), finalUrl: current };
   }
   throw new Error("The page redirected too many times.");
 }
@@ -118,7 +122,7 @@ async function respectRobots(url: URL) {
   if (!robotsAllows(await cached.promise, url.pathname + url.search)) throw new Error("This website doesn't allow automatic access to that page. Paste another public listings or profile URL.");
 }
 
-export async function fetchHtml(uri: string, options?: { fragment?: boolean }) {
+export async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string }) {
   const url = await publicHttps(uri);
   await respectRobots(url);
   const page = await fetchPublicPage(uri, options, respectRobots);

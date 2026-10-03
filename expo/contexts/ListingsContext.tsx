@@ -298,6 +298,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     if (supabase) await kvSet(KV_KEY, { items: next }, rev, true);
     await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(next)], [REVISION_KEY, String(rev)]]);
     revRef.current = rev;
+    itemsRef.current = next;
     setItems(next);
     setRevision(rev);
     broadcast(next, rev);

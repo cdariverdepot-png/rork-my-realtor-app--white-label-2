@@ -1,0 +1,258 @@
+{
+  "checkedAt": "2026-10-03T17:17:45.523Z",
+  "results": [
+    {
+      "name": "Cindy Carlson",
+      "url": "https://cindycarlsonrealty.com/",
+      "historicalCount": 9,
+      "found": 9,
+      "priced": 9,
+      "photographed": 9,
+      "identifiedByMLS": 9,
+      "durationMs": 7143,
+      "meta": {
+        "visited": [
+          "https://cindycarlsonrealty.com/",
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260929165515552066000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260924182429858488000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260807005203244094000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260824234708903208000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260717035909119737000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260630223652399830000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260811212901519945000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260321144127533557000000?from_filter=false",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260226190717870344000000?from_filter=false"
+        ],
+        "hops": 13,
+        "found": 9,
+        "maxDepth": 2,
+        "interfaces": [
+          "structured-property-data",
+          "flexmls"
+        ],
+        "coverage": "collection",
+        "issues": [],
+        "failed": [],
+        "inventoryUrls": [
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24"
+        ],
+        "expectedCount": 9,
+        "outcome": "found"
+      }
+    },
+    {
+      "name": "GetHomeNow",
+      "url": "https://www.gethomenow.com/",
+      "historicalCount": 94,
+      "found": 94,
+      "priced": 94,
+      "photographed": 94,
+      "identifiedByMLS": 94,
+      "durationMs": 7870,
+      "meta": {
+        "visited": [
+          "https://www.gethomenow.com/",
+          "https://www.gethomenow.com/pages/search.php/?mlsId=435%7C567%7C210&q_prioritize=agents.0.id%3D618%2C11912%2C2754%7Coffice.id%3D1519%2Ckwr%2C370&q_include_all=0&status=1&q_sort=price-&q_include_total_count=false&q_photos_available=true&propertyType=Commercial+Sale%7CCondo%2FTownhome%7CFarm%2FRanch%7CManufactured+Home%7CMulti-Family%7CResidential%7CVacant+Land&price=10000%3A",
+          "https://www.gethomenow.com/homes-for-sale/ID/post-falls/83854/2675-n-sparrow-loop/bid-244-26-9455",
+          "https://www.gethomenow.com/homes-for-sale/ID/sandpoint/83864/614-telemark-rd/bid-244-26-8380",
+          "https://www.gethomenow.com/homes-for-sale/WA/spokane/99218/505-e-hawthorne-rd/bid-76-202619428",
+          "https://www.gethomenow.com/homes-for-sale/WA/liberty-lake/99019/22829-e-red-feather-ln/bid-76-202617258",
+          "https://www.gethomenow.com/homes-for-sale/ID/priest-river/83856/1791-pup-paw-trl/bid-365-20262135",
+          "https://www.gethomenow.com/homes-for-sale/ID/priest-river/83856/1791-pup-paw-trl/bid-365-20262134",
+          "https://www.gethomenow.com/homes-for-sale/WA/cusick/99119/22292-n-leclerc-rd/bid-76-202623823",
+          "https://www.gethomenow.com/homes-for-sale/WA/fruitland/99129/6472-enterprise-rd/bid-76-202624130",
+          "https://www.gethomenow.com/homes-for-sale/WA/greenacres/99016/2327-s-fairmont-estates-dr/bid-76-202624711",
+          "https://www.gethomenow.com/homes-for-sale/WA/colbert/99005/16111-n-yale-rd/bid-76-202625259",
+          "https://www.gethomenow.com/homes-for-sale/WA/cusick/99119/22292-n-leclerc-rd/bid-76-202624732",
+          "https://www.gethomenow.com/homes-for-sale/WA/newman-lake/99025/10208-n-west-newman-lake-dr/bid-76-202623202"
+        ],
+        "hops": 14,
+        "found": 94,
+        "maxDepth": 0,
+        "interfaces": [
+          "brivity",
+          "structured-property-data",
+          "public-json"
+        ],
+        "coverage": "collection",
+        "issues": [],
+        "failed": [],
+        "inventoryUrls": [
+          "https://www.gethomenow.com/pages/search.php/?mlsId=435%7C567%7C210&q_prioritize=agents.0.id%3D618%2C11912%2C2754%7Coffice.id%3D1519%2Ckwr%2C370&q_include_all=0&status=1&q_sort=price-&q_include_total_count=false&q_photos_available=true&propertyType=Commercial+Sale%7CCondo%2FTownhome%7CFarm%2FRanch%7CManufactured+Home%7CMulti-Family%7CResidential%7CVacant+Land&price=10000%3A"
+        ],
+        "expectedCount": 94,
+        "outcome": "found"
+      }
+    },
+    {
+      "name": "North Idaho Freedom",
+      "url": "https://northidahofreedom.com/",
+      "historicalCount": 5,
+      "found": 5,
+      "priced": 5,
+      "photographed": 5,
+      "identifiedByMLS": 5,
+      "durationMs": 3874,
+      "meta": {
+        "visited": [
+          "https://northidahofreedom.com/",
+          "https://homes.northidahofreedom.com/idx/customshowcasejs.php?widgetid=23132",
+          "https://homes.northidahofreedom.com/idx/details/listing/b254/26-9784/1724-Cleveland-Spokane-WA-99205",
+          "https://homes.northidahofreedom.com/idx/details/listing/b254/26-9675/2803-Sanson-Spokane-WA-99205",
+          "https://homes.northidahofreedom.com/idx/details/listing/b254/26-9287/5830-Bettis-Rathdrum-ID-83858",
+          "https://homes.northidahofreedom.com/idx/details/listing/b254/26-9064/3503-Dale-Spokane-WA-99212",
+          "https://homes.northidahofreedom.com/idx/details/listing/b254/26-8982/7040-15th-Dalton-Gardens-ID-83815"
+        ],
+        "hops": 7,
+        "found": 5,
+        "maxDepth": 0,
+        "interfaces": [
+          "idx-broker",
+          "structured-property-data"
+        ],
+        "coverage": "showcase",
+        "issues": [
+          {
+            "code": "limited-showcase",
+            "url": "https://homes.northidahofreedom.com/idx/customshowcasejs.php?widgetid=23132",
+            "interface": "idx-broker"
+          }
+        ],
+        "failed": [],
+        "inventoryUrls": [
+          "https://homes.northidahofreedom.com/idx/customshowcasejs.php?widgetid=23132"
+        ],
+        "outcome": "partial"
+      }
+    },
+    {
+      "name": "Christine Matheny",
+      "url": "https://christinematheny.com/",
+      "historicalCount": 13,
+      "found": 13,
+      "priced": 13,
+      "photographed": 13,
+      "identifiedByMLS": 13,
+      "durationMs": 1184,
+      "meta": {
+        "visited": [
+          "https://christinematheny.com/",
+          "https://christinematheny.com/listings/my-active-listings",
+          "https://christinematheny.com/listing/ID/Hauser/11776-N-Hauser-Lake-Rd-Spc-11-83854/233658190",
+          "https://christinematheny.com/listings/my-active-listings?page=2",
+          "https://christinematheny.com/listing/ID/Athol/9485-E-Howard-Rd-83801/234113855",
+          "https://christinematheny.com/listing/ID/Hayden/11925-N-Rocking-R-Rd-83835/232556710",
+          "https://christinematheny.com/listing/ID/Coeur-DAlene/7784-N-Sundance-Dr-83815/231028944",
+          "https://christinematheny.com/listing/ID/Post-Falls/5472-W-Citruswood-Dr-83854/233562261",
+          "https://christinematheny.com/listing/ID/Kingston/58-Whitetail-Loop-83839/232498275",
+          "https://christinematheny.com/listing/ID/Kingston/58-Whitetail-Loop-83839/232457575",
+          "https://christinematheny.com/listing/ID/Spirit-Lake/51-Bowers-Trl-83869/232823401",
+          "https://christinematheny.com/listing/ID/Hauser/17310-W-Santiago-Cir-83854/233459318",
+          "https://christinematheny.com/listing/ID/Coeur-DAlene/1624-W-Dartmouth-Cir-83815/227513418",
+          "https://christinematheny.com/listing/ID/Coeur-DAlene/1671-W-Essex-Ct-83815/231799467",
+          "https://christinematheny.com/listing/ID/Coeur-DAlene/2065-W-Windermere-Ave-83815/230950125"
+        ],
+        "hops": 15,
+        "found": 14,
+        "maxDepth": 1,
+        "interfaces": [
+          "moxiworks",
+          "structured-property-data"
+        ],
+        "coverage": "collection",
+        "issues": [],
+        "failed": [],
+        "inventoryUrls": [
+          "https://christinematheny.com/listings/my-active-listings",
+          "https://christinematheny.com/listing/ID/Hauser/11776-N-Hauser-Lake-Rd-Spc-11-83854/233658190",
+          "https://christinematheny.com/listings/my-active-listings?page=2"
+        ],
+        "outcome": "found"
+      }
+    },
+    {
+      "name": "McKenzie Realty",
+      "url": "https://www.mckenzie-realty.com/",
+      "historicalCount": 1,
+      "found": 1,
+      "priced": 1,
+      "photographed": 1,
+      "identifiedByMLS": 1,
+      "durationMs": 978,
+      "meta": {
+        "visited": [
+          "https://www.mckenzie-realty.com/",
+          "https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT&sort=pd",
+          "https://www.mckenzie-realty.com/homes-for-sale-details/NNA-HALF-ROUND-BAY-RD-HARRISON-ID-83833/26-4065/385/"
+        ],
+        "hops": 3,
+        "found": 1,
+        "maxDepth": 0,
+        "interfaces": [
+          "ihomefinder",
+          "structured-property-data",
+          "public-json"
+        ],
+        "coverage": "unknown",
+        "issues": [],
+        "failed": [],
+        "inventoryUrls": [
+          "https://www.mckenzie-realty.com/",
+          "https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT&sort=pd"
+        ],
+        "outcome": "found"
+      }
+    },
+    {
+      "name": "Greg Volland",
+      "url": "https://gregvolland.com/",
+      "historicalCount": 10,
+      "found": 10,
+      "priced": 10,
+      "photographed": 10,
+      "identifiedByMLS": 10,
+      "durationMs": 3997,
+      "meta": {
+        "visited": [
+          "https://gregvolland.com/",
+          "https://gregvolland.com/idx/mls-24-4849-1208_spitfire_st_sandpoint_id_83864",
+          "https://gregvolland.com/idx/mls-24-5735-526_roop_rd_cocolalla_id_83813",
+          "https://gregvolland.com/idx/mls-25-4398-28_olaf_ct_sandpoint_id_83864",
+          "https://gregvolland.com/idx/mls-25-4397-32_olaf_ct_sandpoint_id_83864",
+          "https://gregvolland.com/idx/mls-25-4395-42_olaf_ct_sandpoint_id_83864",
+          "https://gregvolland.com/idx/mls-25-4396-38_olaf_ct_sandpoint_id_83864",
+          "https://gregvolland.com/idx/mls-25-9002-4757_arrow_point_point_307_harrison_id_83833",
+          "https://gregvolland.com/idx/mls-25-11232-5939_burma_rd_harrison_id_83833",
+          "https://gregvolland.com/idx/mls-26-110-816_ponderesa_ranch_rd_44_acres_rd_sagle_id_83860",
+          "https://gregvolland.com/idx/mls-26-108-816_ponderesa_ranch_rd_rd_sagle_id_83860"
+        ],
+        "hops": 11,
+        "found": 10,
+        "maxDepth": 0,
+        "interfaces": [
+          "agentfire-dsidx",
+          "structured-property-data"
+        ],
+        "coverage": "showcase",
+        "issues": [
+          {
+            "code": "limited-showcase",
+            "url": "https://gregvolland.com/",
+            "interface": "agentfire-dsidx"
+          }
+        ],
+        "failed": [],
+        "inventoryUrls": [
+          "https://gregvolland.com/"
+        ],
+        "outcome": "partial"
+      }
+    }
+  ]
+}
+

@@ -96,3 +96,14 @@ export function mergeDiscoveredListings(
   });
   return next;
 }
+
+/** An import succeeds only after the collection is durably saved. */
+export async function saveDiscoveredListings(
+  current: ManagedListing[],
+  discovered: DiscoveredListing[],
+  save: (items: ManagedListing[]) => Promise<void>,
+): Promise<ManagedListing[]> {
+  const merged = mergeDiscoveredListings(current, discovered);
+  if (discovered.length) await save(merged);
+  return merged;
+}
