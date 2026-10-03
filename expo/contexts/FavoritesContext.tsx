@@ -87,7 +87,7 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
     });
     channelRef.current = ch;
     return () => { try { sb.removeChannel(ch); } catch (e) { console.log("[favorites] removeChannel", e); } channelRef.current = null; };
-  }, [hydrated, persist, retryTick, CHANNEL]);
+  }, [hydrated, persist, retryTick, CHANNEL, isAdmin]);
 
   useEffect(() => { return () => { if (retryTimerRef.current) { clearTimeout(retryTimerRef.current); retryTimerRef.current = null; } }; }, []);
 
@@ -97,7 +97,7 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
     if (channelRef.current) { channelRef.current.send({ type: "broadcast", event: "set", payload: { lists: next, rev } }).catch((e) => console.log("[favorites] broadcast", e)); }
   }, [persist, demoViewMode]);
 
-  useKvSync({ key:STORAGE_KEY, enabled:hydrated && !!realtorId && !!currentClientId && !demoViewMode, value:lists, rev:revision,
+  useKvSync({ key:STORAGE_KEY, enabled:hydrated && !!realtorId && !!currentClientId && !isAdmin && !demoViewMode, value:lists, rev:revision,
     onRemote:(row,meta)=>{if(Array.isArray(row.value) && (row.rev>revRef.current || meta.initial && revision===0)){revRef.current=row.rev;setRevision(row.rev);setLists(row.value);void persist(row.value,row.rev);}} });
   const createList = useCallback((name: string): Watchlist => { const list: Watchlist = { id: `wl_${Date.now()}`, name: name.trim() || "Untitled", listingIds: [], createdAt: Date.now() }; update([...lists, list]); return list; }, [lists, update]);
   const renameList = useCallback((id: string, name: string) => { update(lists.map((l) => (l.id === id ? { ...l, name } : l))); }, [lists, update]);

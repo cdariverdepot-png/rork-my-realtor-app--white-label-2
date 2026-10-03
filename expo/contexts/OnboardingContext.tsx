@@ -18,11 +18,11 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
     let alive = true;
     void AsyncStorage.getItem(key).then(raw => {
       const parsed = raw ? JSON.parse(raw) : {};
-      if (alive) setSnapshot({ key, state: {
+      if (alive) setSnapshot(previous => previous?.key === key ? previous : { key, state: {
         tourSeen: parsed.tourSeen === true, realtorTourSeen: parsed.realtorTourSeen === true,
         clientTourSeen: parsed.clientTourSeen === true,
       } });
-    }).catch(() => { if (alive) setSnapshot({ key, state: initialState }); });
+    }).catch(() => { if (alive) setSnapshot(previous => previous?.key === key ? previous : { key, state: initialState }); });
     return () => { alive = false; };
   }, [key]);
   const patch = useCallback((field: keyof OnboardingState, value: boolean) => {
@@ -39,7 +39,9 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
   const prepareNewClientTour = useCallback(() => {}, []);
   const completeInvitedClientTour = useCallback(async (realtorId: string, clientId: string) => {
     const target = ['myrealtor.onboarding.v4', 'client', realtorId, clientId].join(':');
-    const next = { ...initialState, clientTourSeen: true };
+    const stored = await AsyncStorage.getItem(target);
+    const prior = stored ? JSON.parse(stored) as Partial<OnboardingState> : {};
+    const next = { tourSeen: prior.tourSeen === true, realtorTourSeen: prior.realtorTourSeen === true, clientTourSeen: true };
     await AsyncStorage.setItem(target, JSON.stringify(next));
     setSnapshot({ key: target, state: next });
   }, []);
