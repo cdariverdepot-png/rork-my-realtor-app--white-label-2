@@ -10,7 +10,7 @@ function loadDiscovery() {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
   const moduleRef = { exports: {} };
-  new Function('module', 'exports', source)(moduleRef, moduleRef.exports);
+  new Function('require', 'module', 'exports', source)(require, moduleRef, moduleRef.exports);
   return moduleRef.exports;
 }
 
@@ -439,3 +439,4 @@ test('dsIDXpress detail reads explicit property fields instead of other cards or
  const row=listingFromDsidxDetail(h,new URL('https://agent.example/idx/mls-26-123-100_lake_st'));
  assert.equal(row.price,'$750,000');assert.equal(row.beds,5);assert.equal(row.baths,4.5);assert.equal(row.sqft,'3,200');assert.equal(row.status,'active');assert.equal(row.listingNumber,'26-123');
 });
+

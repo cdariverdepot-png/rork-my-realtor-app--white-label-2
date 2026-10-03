@@ -12,6 +12,14 @@ const moduleRef = { exports: {} };
 new Function('module', 'exports', source)(moduleRef, moduleRef.exports);
 const { resolveFacts } = moduleRef.exports;
 
+const discoverySource = ts.transpileModule(fs.readFileSync(path.resolve(__dirname,
+  '../../supabase/functions/analyze-realtor-build/listingDiscovery.ts'), 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText;
+const discoveryModule = { exports: {} };
+new Function('require', 'module', 'exports', discoverySource)(require, discoveryModule, discoveryModule.exports);
+const { publicListingRequestHeaders, decodePublicListingResponse } = discoveryModule.exports;
+
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
 async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input' } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
@@ -60,7 +68,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
     if (unreadable) return new Response('Unavailable',{status:503});
     return new Response(html ?? '<html><title>Cindy Carlson Realty</title><p>Full Service Agency in North Idaho.</p></html>',{headers:{'Content-Type':'text/html'}});
   };
-  new Function('Deno','createClient','fetch',code)({env:{get:()=> 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture);
+  new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse',code)({env:{get:()=> 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse);
   const response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
   return {status:response.status,result:await response.json(),aiBody,update,reads};
 }
@@ -292,3 +300,4 @@ test('completed guest drafts can refresh the same URL and retain saved content o
   await assert.rejects(mod.exports.analyzeBuild(),/Website unavailable/);
   assert.deepEqual(saved,original);
 });
+
