@@ -7,7 +7,7 @@ export function isPrivateClientPage(path: string): boolean {
   return ['/account', '/favorites', '/messages', '/message', '/calendar', '/documents', '/notifications', '/client-profile', '/menu'].includes(path) || path.startsWith('/watchlist/');
 }
 export function clientDestination(path: string, preview: boolean): string {
-  if (preview && ['/account', '/client-profile', '/client-recovery'].includes(path)) return '/menu';
+  if (preview && ['/client-profile', '/client-recovery'].includes(path)) return '/account';
   if (path === '/message') return '/messages';
   return path;
 }

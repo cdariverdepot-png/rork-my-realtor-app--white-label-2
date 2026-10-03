@@ -17,6 +17,8 @@ import { THEME_REFERENCES } from "@/constants/themeReferences";
 import { themePreview } from "@/constants/themeSamples";
 import { withSamplePortrait } from "@/constants/themeSamplePortraits";
 import { useWorkflowDrafts } from '@/contexts/WorkflowDraftContext';
+import { websiteCandidate, type WebsiteVariant } from '@/lib/websitePresentation';
+import OnboardingThemePreview from './OnboardingThemePreview';
 
 const tick = () => { if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {}); };
 
@@ -38,28 +40,32 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
   const carouselKey = demo ? 'carousel:demo' : compact ? 'carousel:theme' : 'carousel:content';
   const resumed = workflowDrafts.get(carouselKey) as { index: number; contentMode: "auto" | "sample" | "profile" } | undefined;
   const [containerWidth, setContainerWidth] = useState(windowWidth);
+  const websiteAvailable = !!draft.websiteDesign && !demo;
+  const order = useMemo(() => websiteAvailable ? ['website' as const, ...THEME_CAROUSEL_ORDER] : THEME_CAROUSEL_ORDER, [websiteAvailable]);
+  const [websiteVariant, setWebsiteVariant] = useState<WebsiteVariant>(draft.websiteVariant ?? 'original');
   const [initialIndex] = useState(() => resumed?.index ?? (draft.themeChosen && draft.layoutId
-    ? Math.max(0, THEME_CAROUSEL_ORDER.indexOf(draft.layoutId)) : 0));
+    ? draft.presentation === 'website' ? 0 : Math.max(0, order.indexOf(draft.layoutId)) : 0));
   const [index, setIndex] = useState(initialIndex);
   const stepRef = useRef<((delta: number) => void) | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [comparing, setComparing] = useState(false);
   const [positioning, setPositioning] = useState(false);
-  const [contentMode, setContentMode] = useState<"auto" | "sample" | "profile">(resumed?.contentMode ?? "sample");
+  const [contentMode, setContentMode] = useState<"auto" | "sample" | "profile">(resumed?.contentMode ?? (demo ? "sample" : "profile"));
   useEffect(() => { workflowDrafts.set(carouselKey, { index, contentMode }); }, [workflowDrafts, carouselKey, index, contentMode]);
   const [persisting, setPersisting] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const count = THEME_CAROUSEL_ORDER.length;
+  const count = order.length;
   // Arrows and the comparison view move the same fan the finger does.
   const step = (delta: number) => stepRef.current?.(delta);
-  const selectedId = THEME_CAROUSEL_ORDER[index];
-  const candidate = themeCandidate(draft, selectedId);
+  const selectedId = order[Math.min(index, count - 1)];
+  const website = selectedId === 'website';
+  const candidate = useMemo(() => selectedId === 'website' ? websiteCandidate(draft, websiteVariant) : themeCandidate(draft, selectedId), [draft, selectedId, websiteVariant]);
   // Stable across parent re-renders so expanded preview / comparison do not remount portraits.
   const preview = useMemo(
-    () => withSamplePortrait(themePreview(draft, listings, selectedId, demo, contentMode)),
-    [draft, listings, selectedId, demo, contentMode],
+    () => selectedId === 'website' ? { brand: candidate, listings, sample: false, portraitSource: undefined } : withSamplePortrait(themePreview(draft, listings, selectedId, demo, contentMode)),
+    [draft, listings, selectedId, demo, contentMode, candidate],
   );
-  const d = themeDesign(selectedId);
+  const d = selectedId === 'website' ? { ...themeDesign(draft.layoutId, candidate.theme), name: 'My Website' } : themeDesign(selectedId);
   // Compact: size the fan from width and remaining phone height so one screen fits
   // (top nav + fan + name/index + action row) with open air above/below the fan.
   const scale = compact
@@ -74,15 +80,16 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
   const cardWidth = 390 * scale;
   const gap = containerWidth > 650 ? Math.min(95, containerWidth / 10) : 46;
   // Faces render once per content change; dragging only moves them.
-  const cards = useMemo(() => THEME_CAROUSEL_ORDER.map(id => {
+  const cards = useMemo(() => order.map(id => {
+    if (id === 'website') return <View key={id} pointerEvents="none"><OnboardingThemePreview brand={websiteCandidate(draft, websiteVariant)} listings={listings} width={cardWidth} /></View>;
     const face = withSamplePortrait(themePreview(draft, listings, id, demo, contentMode));
     return <ThemeFace key={id} id={id} brand={face.brand} listings={face.listings} portraitSource={face.portraitSource} width={cardWidth} radius={24} />;
-  }), [draft, listings, demo, contentMode, cardWidth]);
-  const heights = useMemo(() => THEME_CAROUSEL_ORDER.map(id => themeCardHeight(id, cardWidth)), [cardWidth]);
+  }), [draft, listings, demo, contentMode, cardWidth, order, websiteVariant]);
+  const heights = useMemo(() => order.map(id => id === 'website' ? Math.min(780, cardWidth * 2.12) : themeCardHeight(id, cardWidth)), [cardWidth, order]);
   const comparisonWidth = Math.min(390, Math.max(160, (windowWidth - 44) / 2));
-  const reference = THEME_REFERENCES[selectedId];
-  const canPosition = !demo && !preview.sample && !!draft.portraitUrl?.trim();
-  const alreadyChosen = draft.layoutId === selectedId && draft.themeChosen;
+  const reference = THEME_REFERENCES[selectedId === 'website' ? (draft.layoutId ?? 'private-collection') : selectedId];
+  const canPosition = !website && !demo && !preview.sample && !!draft.portraitUrl?.trim();
+  const alreadyChosen = website ? draft.presentation === 'website' && draft.websiteVariant === websiteVariant : draft.presentation !== 'website' && draft.layoutId === selectedId && draft.themeChosen;
 
   const openPreview = () => { tick(); scrollY.setValue(0); setExpanded(true); };
 
@@ -104,7 +111,7 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
     : persisting
       ? "Saving…"
       : alreadyChosen && onPersist
-        ? "Saved · ready to share"
+        ? "Saved to draft"
         : alreadyChosen
           ? "Selected ✓"
           : onPersist
@@ -129,7 +136,10 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
         <Pressable onPress={() => step(1)} accessibilityRole="button" accessibilityLabel="Next theme" hitSlop={8}
           style={({ pressed }) => ({ padding: 10, opacity: pressed ? 0.6 : 1 })}><ChevronRight color="#E6CEAA" /></Pressable>
       </View>
-      {compact && !demo && (
+      {website && <View style={{ flexDirection: 'row', alignSelf: 'center', gap: 10, marginTop: 8 }}>
+        {(['original', 'optimized'] as const).map(variant => <Pressable key={variant} accessibilityRole="button" accessibilityState={{ selected: websiteVariant === variant }} onPress={() => { tick(); setWebsiteVariant(variant); }} style={{ padding: 12, borderRadius: 10, borderWidth: 1, borderColor: websiteVariant === variant ? '#D4B989' : '#686158' }}><Text style={{ color: '#F5EFE5' }}>{variant === 'original' ? 'Original' : 'Optimized'}</Text></Pressable>)}
+      </View>}
+      {compact && !demo && !website && (
         <View style={{ flexDirection: "row", justifyContent: "center", gap: 16, marginTop: 4 }}>
           <Pressable accessibilityRole="button" accessibilityState={{ selected: preview.sample }} onPress={() => { tick(); setContentMode("sample"); }} hitSlop={6}
             style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1, paddingVertical: 4 })}>
@@ -170,10 +180,10 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
         style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, padding: 12, opacity: pressed ? 0.6 : 1 })}>
         <Move size={15} color="#D4B989" /><Text style={{ color: "#D4B989" }}>Photo layout (or tap the preview)</Text></Pressable>}
       {!compact && <Text style={{ color: "#C5BDAF", textAlign: "center", fontSize: 12 }}>{demo ? "Demo selections are temporary and never change a real profile." : "Theme selection is a draft until you save below."}</Text>}
-      {!compact && <Pressable onPress={() => setComparing(true)} accessibilityRole="button" style={{ alignSelf: "center", padding: 14 }}><Text style={{ color: "#D4B989", textDecorationLine: "underline" }}>Compare with your original image</Text></Pressable>}
+      {!compact && !website && <Pressable onPress={() => setComparing(true)} accessibilityRole="button" style={{ alignSelf: "center", padding: 14 }}><Text style={{ color: "#D4B989", textDecorationLine: "underline" }}>Compare with your original image</Text></Pressable>}
       <PortraitPositioner visible={positioning} brand={candidate} onCancel={() => setPositioning(false)}
         onDone={next => { setPositioning(false); onChoose({ ...draft, theme: { ...draft.theme, imagePositions: next.theme.imagePositions, portraitFit: next.theme.portraitFit } }); }} />
-      <Modal visible={comparing} animationType="none" onRequestClose={() => setComparing(false)}>
+      <Modal visible={comparing && !website} animationType="none" onRequestClose={() => setComparing(false)}>
         <View style={{ flex: 1, backgroundColor: "#171A17", paddingTop: 24 }}>
           <View style={{ flexDirection: "row", padding: 16, alignItems: "center" }}><Text style={{ color: "#F5EFE5", flex: 1 }}>{d.name} · Reference comparison</Text><Pressable onPress={() => step(-1)} accessibilityRole="button" accessibilityLabel="Previous comparison theme" style={{ padding: 12 }}><ChevronLeft color="#F5EFE5" /></Pressable><Pressable onPress={() => step(1)} accessibilityRole="button" accessibilityLabel="Next comparison theme" style={{ padding: 12 }}><ChevronRight color="#F5EFE5" /></Pressable><Pressable onPress={() => setComparing(false)} accessibilityRole="button" accessibilityLabel="Close reference comparison" style={{ padding: 12 }}><X color="#F5EFE5" /></Pressable></View>
           <Text style={{ color: "#D4C9B8", textAlign: "center", paddingHorizontal: 16, paddingBottom: 14 }}>Original at left. {preview.sample ? "Sample profile at right, using the supplied placeholder portraits and illustrative property photos." : "Your profile at right."}</Text>
@@ -188,7 +198,7 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
       </Modal>
       <ThemePreviewModal visible={expanded} title={d.name}
         subtitle={preview.sample ? "Sample profile · illustrative photos" : "Your information · unsaved preview"}
-        note={demo ? "Read-only demo preview. Client actions are disabled; no profile changes are saved." : "Read-only layout preview. Client actions are disabled; nothing here is saved until you choose the theme and save your draft."}
+        note={demo ? "Demo preview. No real profile changes are saved." : "Preview activity stays here. Save your design draft, then publish when it is ready for clients."}
         brand={preview.brand} listings={preview.listings} portraitSource={preview.portraitSource} onClose={() => setExpanded(false)} />
     </>
   );
@@ -208,7 +218,7 @@ export default function ThemeCarousel({ draft, listings, onChoose, demo = false,
   return <View onLayout={e => setContainerWidth(e.nativeEvent.layout.width)} style={{ marginVertical: 22 }}>
     <Text style={{ color: "#F5EFE5", fontSize: 24, fontFamily: "PlayfairDisplay_500Medium", textAlign: "center" }}>Find your signature</Text>
     <Text style={{ color: "#C5BDAF", textAlign: "center", lineHeight: 20, padding: 16 }}>
-      {preview.sample ? "Sample profiles with supplied placeholder portraits and illustrative homes. Never saved to your account." : "Your profile and listings, shown across seven layouts. Browse without changing your saved app."}
+      {preview.sample ? "Sample profiles with supplied placeholder portraits and illustrative homes. Never saved to your account." : "Your website designs and optional premium themes, using your information and listings. Browse without changing your published app."}
     </Text>
     <View style={{ flexDirection: "row", justifyContent: "center", gap: 12, marginBottom: 16 }}>
       <Pressable accessibilityRole="button" accessibilityState={{ selected: preview.sample }} onPress={() => { tick(); setContentMode("sample"); }} style={{ padding: 12, borderWidth: 1, borderColor: preview.sample ? "#D4B989" : "#686158", borderRadius: 8 }}><Text style={{ color: "#F5EFE5" }}>Sample profiles</Text></Pressable>

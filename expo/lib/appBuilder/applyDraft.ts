@@ -2,6 +2,7 @@ import type { Brand } from "@/contexts/BrandContext";
 import type { BuildDraft } from "./buildService";
 import type { ResolvedFact } from "./sourceModel";
 import { CLIENT_LAYOUTS, isClientLayoutId } from "@/constants/clientLayouts";
+import { websiteCandidate } from '@/lib/websitePresentation';
 
 /** True when `name` is just the email local-part (legacy signup/DB habit), not a real display name. */
 export function isEmailLocalPartName(name: string, email: string): boolean {
@@ -73,6 +74,11 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
       portraitFit: next.theme?.portraitFit,
       presentationVersion: 2,
     };
+  }
+  if (copy.websiteDesign) {
+    next.websiteDesign = copy.websiteDesign;
+    if (!next.iconUrl && copy.websiteDesign.logoUrl) next.iconUrl = copy.websiteDesign.logoUrl;
+    return websiteCandidate(next, 'original');
   }
   return next;
 }

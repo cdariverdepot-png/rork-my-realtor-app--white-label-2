@@ -57,7 +57,10 @@ test('clientInviteLink falls back to deep link without EXPO_PUBLIC_APP_URL', () 
 test('admin dash no longer promotes public /welcome booking link', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'app/admin/index.tsx'), 'utf8');
   assert.match(src, /clientInviteLink/);
-  assert.match(src, /CLIENT INVITE/);
+  assert.match(src, /<InvitationTools\s*\/>/);
+  const invitations = fs.readFileSync(path.join(__dirname, '..', 'components/InvitationTools.tsx'), 'utf8');
+  assert.match(invitations, /clientInviteLink\(code\)/);
+  assert.match(invitations, /!isPublished/);
   assert.doesNotMatch(src, /PUBLIC BOOKING LINK/);
   assert.doesNotMatch(src, /bookingLink\(/);
   assert.doesNotMatch(src, /\/welcome\?ref=/);

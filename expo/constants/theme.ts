@@ -45,6 +45,7 @@ export type ThemeConfig = {
   /** Portrait framing per look: focal point (0–100 %) and zoom (1 = fill). */
   portraitFit?: "full" | "crop";
   imagePositions?: Record<string, { x: number; y: number; zoom?: number }>;
+  website?: { accent: string; background: string; ink: string; panel: string; muted: string; font: string };
   accent: ThemeAccent;
   displayFont: ThemeFont;
   surface: ThemeSurface;
@@ -459,6 +460,14 @@ export function resolveTheme(theme?: Partial<ThemeConfig>): ThemeTokens {
   const s = THEME_SURFACES[surfaceId] ?? THEME_SURFACES.alabaster;
   const bd = THEME_BANDS[accentId] ?? THEME_BANDS.pewter;
   const onText = BAND_TEXT[accentId] ?? BAND_TEXT_FALLBACK;
+  const w = theme?.website;
+  if (w && [w.accent, w.background, w.ink, w.panel, w.muted].every(c => /^#[\da-f]{6}$/i.test(c))) return {
+    accent: { base: w.accent, light: w.accent, deep: w.accent },
+    surface: { paper: w.background, panel: w.panel, hairline: w.ink + '22' },
+    band: { base: w.background, deep: w.background, hairline: w.ink + '22' },
+    onBand: { text: w.ink, muted: w.muted, dim: w.ink + '99', scrimSoft: w.background + 'BB', scrimStrong: w.background + 'EE', veil: w.background + '55', veilLine: w.ink + '44' },
+    display: w.font, displayBold: w.font, displayItalic: w.font, credentials: 'column',
+  };
   return {
     accent: { base: a.base, light: a.light, deep: a.deep },
     surface: { paper: s.paper, panel: s.panel, hairline: s.hairline },

@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
+import { extractWebsiteDesign, websiteStylesheetUrls, type WebsiteDesign } from "./websiteDesign.ts";
 
 type Source = {
   id: string;
@@ -108,12 +109,12 @@ async function publicHttps(raw: string): Promise<URL> {
 }
 
 /** Fetch one public HTML page, following up to 4 redirects (each re-checked). */
-async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string }): Promise<{ html: string; finalUrl: URL }> {
+async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string; stylesheet?: boolean }): Promise<{ html: string; finalUrl: URL }> {
   let current = await publicHttps(uri);
   for (let hop = 0; hop < 5; hop++) {
     const response = await fetch(current, {
       redirect: "manual",
-      headers: { Accept: "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
+      headers: { Accept: options?.stylesheet ? "text/css,text/plain" : "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
         ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}), ...publicListingRequestHeaders(current,options) },
       signal: AbortSignal.timeout(12000),
     });
@@ -125,7 +126,7 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
       continue;
     }
     if (!response.ok) throw new Error(`The page returned ${response.status}.`);
-    if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
+    if (!(options?.stylesheet && /text\/css/i.test(response.headers.get("content-type") ?? "")) && !/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
         !(options?.fragment && (/application\/json/i.test(response.headers.get("content-type") ?? "") ||
           (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
           (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
@@ -243,8 +244,9 @@ function clean(value: string, max: number): string {
 }
 
 /** Home page plus up to two about/contact pages on the same site. */
-async function readPage(uri: string): Promise<string> {
+async function readPage(uri: string, capture?: (html: string, url: string) => Promise<void>): Promise<string> {
   const { html, finalUrl } = await fetchHtml(uri);
+  if (capture) await capture(html, finalUrl.toString());
   const { details, subpages } = pageDetails(html, finalUrl);
   const parts = [`PAGE DETAILS (${finalUrl}):\n${details}`, `PAGE TEXT:\n${decodeEntities(pageText(html)).slice(0, 30000)}`];
   for (const sub of subpages) {
@@ -255,6 +257,14 @@ async function readPage(uri: string): Promise<string> {
     } catch { /* a missing about page shouldn't fail the whole source */ }
   }
   return parts.join("\n\n").slice(0, 50000);
+}
+
+async function analyzeWebsiteAppearance(html: string, url: string): Promise<WebsiteDesign> {
+  const results = await Promise.allSettled(websiteStylesheetUrls(html, url).map(async cssUrl => {
+    const page = await fetchHtml(cssUrl, { stylesheet: true });
+    return { url: page.finalUrl.toString(), css: page.html.slice(0, 500_000) };
+  }));
+  return extractWebsiteDesign(html, url, results.flatMap(r => r.status === 'fulfilled' ? [r.value] : []));
 }
 
 function encode(bytes: Uint8Array): string {
@@ -364,6 +374,15 @@ Deno.serve(async (request) => {
   } } : await admin.from("realtor_builds")
     .select("sources,evidence,draft,status").eq("auth_user_id", userId).single();
   if (!build) return reply({ error: "Start your app build first." }, 404);
+  if (input?.mode === "refresh-design") {
+    const source = (build.sources as Source[]).find(s => s.kind === 'url');
+    if (!source) return reply({ error: 'Add your website URL before refreshing its design.' }, 422);
+    try {
+      const page = await fetchHtml(source.uri);
+      const websiteDesign = await analyzeWebsiteAppearance(page.html, page.finalUrl.toString());
+      return reply({ websiteDesign });
+    } catch (e) { return reply({ error: e instanceof Error ? e.message : 'Could not refresh the website design.' }, 422); }
+  }
   if (input?.mode === "regenerate") {
     const target = input.target;
     if (!["heroMessage", "welcomeNote", "aboutParagraph"].includes(target) ||
@@ -579,6 +598,7 @@ Deno.serve(async (request) => {
     "portraitSourceId. Only set portraitSourceId when an uploaded image clearly shows this realtor's face; otherwise null.";
   const content: any[] = [];
   const processed: Source[] = [];
+  let websiteDesign: WebsiteDesign | undefined;
   let payloadBytes = 0;
   let pageChars = 0;
   for (const source of sources) {
@@ -590,7 +610,9 @@ Deno.serve(async (request) => {
     }
     try {
       if (source.kind === "url" || source.kind === "listing") {
-        const page = await readPage(source.uri);
+        const page = await readPage(source.uri, !websiteDesign && source.kind === 'url' ? async (html, url) => {
+          websiteDesign = await analyzeWebsiteAppearance(html, url);
+        } : undefined);
         pageChars += page.length;
         if (pageChars > 120_000) throw new Error("Too much webpage text. Remove a few links and retry.");
         content.push({ type: "input_text", text: `SOURCE ${source.id} (${source.label}, ${source.uri}):\n${page}` });
@@ -708,6 +730,7 @@ Deno.serve(async (request) => {
   }
   const draftWithListings = {
     ...result.draft,
+    websiteDesign,
     discoveredListings,
     listingDiscovery,
   };

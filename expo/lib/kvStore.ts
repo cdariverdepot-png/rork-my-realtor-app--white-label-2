@@ -236,7 +236,7 @@ export async function kvSet<T>(key: string, value: T, rev: number, requireSucces
     // blob stays tiny. Without this, legacy data persisted before the
     // Storage flow shipped causes every upsert to fail with HTTP 413
     // "request entity too large" — which is silent from the user's POV.
-    const { value: sanitized, replaced, skipped } = (/:(brand.v2|listings.v2)$/.test(key) ? await sanitizeInlineImages(value) : {value,replaced:0,skipped:0});
+    const { value: sanitized, replaced, skipped } = (/:(brand\.(?:v2|design-draft\.v1|previous-published\.v1)|listings.v2)$/.test(key) ? await sanitizeInlineImages(value) : {value,replaced:0,skipped:0});
     if (replaced > 0 || skipped > 0) {
       console.log(`[kv] sanitized "${key}": ${replaced} inline image(s) → Storage URL, ${skipped} kept inline`);
     }

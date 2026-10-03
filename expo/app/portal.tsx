@@ -4,6 +4,7 @@ import {
   Animated,
   Easing,
   KeyboardAvoidingView,
+  Modal,
   Linking,
   Platform,
   Pressable,
@@ -27,6 +28,8 @@ import AccessCodeContinue from "@/components/AccessCodeContinue";
 import PressableScale from "@/components/PressableScale";
 import { isClientAccessCode, isRealtorAccessCode } from "@/constants/access";
 import { useOnboarding } from "@/contexts/OnboardingContext";
+import OnboardingCarousel from '@/components/OnboardingCarousel';
+import InvitationInstall from '@/components/InvitationInstall';
 
 type Stage =
   | "entry"
@@ -59,7 +62,8 @@ export default function Portal() {
     enterGuestRealtor,
     lookupRealtorByCode,
   } = useAuth();
-  const { prepareNewClientTour, prepareNewRealtorTour } = useOnboarding();
+  const { prepareNewClientTour, prepareNewRealtorTour, completeInvitedClientTour } = useOnboarding();
+  const [inviteTourSeen, setInviteTourSeen] = useState(false);
 
   const { entry: entryRaw, invite, confirmed: confirmedParam, signin } = useLocalSearchParams<{ entry?: string | string[]; invite?: string; confirmed?: string; signin?: string }>();
   // Expo Router may hand back string[]; only an explicit single "client" opens the code stage.
@@ -111,6 +115,9 @@ export default function Portal() {
       setResolvedMonogram(record.monogram);
       await AsyncStorage.setItem("onboarding.pendingInvite.v1", JSON.stringify(accepted));
       setCode(accepted.code);
+      const tour = await AsyncStorage.getItem(`onboarding.inviteTour.v1:${record.id}`);
+      if (!mounted) return;
+      setInviteTourSeen(tour === 'seen');
       setStage(signin === "1" ? "client-signin" : "client-setup");
     })().catch(() => {});
     return () => { mounted = false; };
@@ -211,6 +218,7 @@ export default function Portal() {
       setResolvedRealtorName(record.name);
       setResolvedBrandName(record.brand_name || record.name.split(" ").pop()?.toUpperCase() || "");
       setResolvedMonogram(record.monogram || (record.name.split(" ")[0]?.charAt(0) ?? "") + (record.name.split(" ").pop()?.charAt(0) ?? ""));
+      setInviteTourSeen((await AsyncStorage.getItem(`onboarding.inviteTour.v1:${record.id}`)) === 'seen');
       transitionTo("client-setup");
       setEmail(""); setPassword(""); setName("");
     } catch {
@@ -246,13 +254,14 @@ export default function Portal() {
         //
         // Same path as guest access-code signup: 5-page walkthrough first, then
         // profile build ("How should we reach you?").
-        prepareNewClientTour();
+        await completeInvitedClientTour(resolvedRealtorId, res.clientId);
         success(); router.replace("/");
       } else if (stage === "client-signin") {
         if (!resolvedRealtorId) { setError("Please go back and enter your code first."); return; }
         const res = await clientLogin(email, password, resolvedRealtorId);
         if (res.atCapacity) { transitionTo("client-full"); return; }
         if (!res.ok) { setError(res.error ?? "Sign-in failed."); triggerShake(); return; }
+        if (res.clientId) await completeInvitedClientTour(resolvedRealtorId, res.clientId);
         success(); router.replace("/");
       }
     } catch {
@@ -335,6 +344,17 @@ export default function Portal() {
         <View style={styles.iconBtn} />
       </View>
 
+      <Modal visible={stage === 'client-setup' && !!resolvedRealtorId && !inviteTourSeen && !isAuthenticated} animationType="fade" onRequestClose={() => transitionTo('client-signin')}>
+        <View style={{ flex: 1, backgroundColor: '#080D12' }}>
+          <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 20, gap: 8, paddingBottom: 8 }}>
+            <Text style={{ color: '#F5EFE5', fontSize: 16 }}>{resolvedRealtorName} welcomes you</Text>
+            <Pressable accessibilityRole="button" onPress={() => transitionTo('client-signin')} style={{ paddingVertical: 12 }}><Text style={{ color: '#D4B989' }}>Already a client? Sign in</Text></Pressable>
+          </View>
+          <OnboardingCarousel audience="client" onFinish={() => {
+            void AsyncStorage.setItem(`onboarding.inviteTour.v1:${resolvedRealtorId}`, 'seen').then(() => setInviteTourSeen(true));
+          }} />
+        </View>
+      </Modal>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.kbd}>
         <ScrollView
           contentContainerStyle={[styles.scroll, { paddingBottom: Math.max(insets.bottom, 20) + 48 }]}
@@ -352,6 +372,7 @@ export default function Portal() {
             </View>
 
             <Animated.View style={{ opacity: stageFade, width: "100%" }}>
+              {resolvedRealtorId && <InvitationInstall code={code} realtorName={resolvedRealtorName} />}
               <Text style={styles.eyebrow}>{heroEyebrow}</Text>
               <Text style={styles.title}>{heroTitle}</Text>
               <Text style={styles.sub}>{heroSub}</Text>

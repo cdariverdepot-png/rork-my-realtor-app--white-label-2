@@ -54,7 +54,7 @@ export default function InitialRealtorSetup() {
   const auth = useAuth();
   const { importMany } = useClients();
   const { all: existingListings, saveListings, hydrated: listingsHydrated } = useListings();
-  const { brand, saveBrand } = useBrand();
+  const { brand, saveBrand, publishBrand, isPublished } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
@@ -394,7 +394,7 @@ export default function InitialRealtorSetup() {
     // Guarantee the published brand uses the real themed canvas for the AI-picked layout.
     const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
       ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
-    const publish = themeCandidate(draft, layoutId);
+    const publish = draft.presentation === 'website' ? draft : themeCandidate(draft, layoutId);
     if (!isGuestAccess && importedListingCount > 0 && !hasConnectedSource) {
       const listingSources = result?.sources.filter(source => source.kind === "listing" || source.kind === "url") ?? [];
       const candidate = listingSources.findLast(source => source.kind === "listing") ?? listingSources[0];
@@ -405,9 +405,10 @@ export default function InitialRealtorSetup() {
       }
     }
     await saveBrand(publish);
+    await publishBrand(publish);
     await markBuildComplete();
     await progressDraft.clear();
-    router.replace("/admin/ready");
+    router.replace(isPublished ? "/admin" : "/admin/ready");
   });
   const setProfile = (key: keyof Brand["realtor"], value: string) =>
     setDraft(current => current && ({ ...current, realtor: { ...current.realtor, [key]: value } }));
@@ -528,7 +529,7 @@ export default function InitialRealtorSetup() {
       {(() => {
         const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
           ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
-        const previewBrand = themeCandidate(draft, layoutId);
+        const previewBrand = draft.presentation === 'website' ? draft : themeCandidate(draft, layoutId);
         const design = liveThemeDesign(layoutId, previewBrand.theme);
         const width = Math.min(Math.max(260, windowWidth - 48), 360);
         return <>
@@ -557,7 +558,7 @@ export default function InitialRealtorSetup() {
       {(() => {
         const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
           ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
-        const design = liveThemeDesign(layoutId, themeCandidate(draft, layoutId).theme);
+        const design = liveThemeDesign(layoutId, draft.presentation === 'website' ? draft.theme : themeCandidate(draft, layoutId).theme);
         return <View style={{ marginTop: 18, padding: 16, borderRadius: 14, backgroundColor: design.panel, borderWidth: 1, borderColor: design.accent + "33" }}>
           <Text style={{ color: design.accent, fontSize: 12, fontWeight: "700", letterSpacing: 1.4 }}>YOUR INTRODUCTION</Text>
           <Text style={{ color: design.ink, marginTop: 8, lineHeight: 22, opacity: regenerating === "aboutParagraph" ? 0.4 : 1 }}>
@@ -640,7 +641,7 @@ export default function InitialRealtorSetup() {
         <View style={{ minHeight: 58, borderRadius: 14, backgroundColor: missingLabels.length ? "#3D444C" : "#C2A276",
           alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
           <Text style={{ color: missingLabels.length ? "#C8D0D0" : "#172027", fontSize: 17, fontWeight: "700" }}>
-            {busy ? "Saving…" : "Complete Setup"}
+            {busy ? "Publishing…" : isPublished ? "Publish Changes" : "Publish My App"}
           </Text>
         </View>
       </PressableScale>

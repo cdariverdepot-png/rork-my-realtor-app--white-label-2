@@ -11,11 +11,7 @@ export type ThemeRoute = '/' | '/listings' | '/favorites' | '/message' | '/calen
 export default function ThemeNavigation({ brand, onNavigate, pathname = '/', unread = 0, saved = 0, preview = false, miniature = false }: { brand: Brand; onNavigate?: (route: ThemeRoute) => void; pathname?: string; unread?: number; saved?: number; preview?: boolean; miniature?:boolean }) {
   const d = miniature ? themeDesign(brand.layoutId,brand.theme) : liveThemeDesign(brand.layoutId,brand.theme);
   const solid = useReducedTransparency();
-  const tabs: [string, ThemeRoute, typeof Home][] = d.composition === 'coastal' ? [['Home', '/', Home], ['Collection', '/listings', Layers], ['Saved', '/favorites', Heart], ['Profile', '/account', UserRound]] :
-    d.composition === 'discovery' ? [['Discover', '/', Home], ['Saved', '/favorites', Heart], ['Concierge', '/message', MessageCircle], ['Schedule', '/calendar', CalendarDays], ['Menu', '/menu', Menu]] :
-    d.composition === 'journal' ? [['Home', '/', Home], ['Collection', '/listings', Layers], ['Concierge', '/message', MessageCircle], ['Schedule', '/calendar', CalendarDays], ['Profile', '/account', UserRound]] :
-    d.composition === 'concierge' ? [['Home', '/', Home], ['Search', '/listings', Search], ['Saved', '/favorites', Heart], ['Messages', '/message', MessageCircle], ['More', '/menu', Ellipsis]] :
-    [['Home', '/', Home], [d.composition === 'minimal' ? 'Discover' : 'Search', '/listings', Search], ['Saved', '/favorites', Heart], ['Messages', '/message', MessageCircle], ['Profile', '/account', UserRound]];
+  const tabs: [string, ThemeRoute, typeof Home][] = [['Home', '/', Home], ['Listings', '/listings', Search], ['Saved', '/favorites', Heart], ['Chat', '/message', MessageCircle], ['Profile', '/account', UserRound]];
   const radius = d.composition === 'property' ? 23 : d.composition === 'minimal' ? 25 : 32;
   return <View pointerEvents="box-none" style={{ paddingHorizontal: 12, paddingTop: 8, paddingBottom: 10 }}>
     <View style={[styles.glass, { borderRadius: radius, borderColor: d.light ? '#FFFFFFCC' : '#FFFFFF24', backgroundColor: solid ? (d.light ? '#F8F5EE' : '#141815') : d.light ? '#F8F5EE72' : '#14181572' }]}>
@@ -24,10 +20,10 @@ export default function ThemeNavigation({ brand, onNavigate, pathname = '/', unr
       <View pointerEvents="none" style={[styles.rim, { backgroundColor: d.light ? '#FFFFFFE0' : '#FFFFFF30' }]} />
       <View style={styles.row}>
         {tabs.map(([originalLabel, originalRoute, OriginalIcon]) => {
-          const route = preview && originalRoute === '/account' ? '/menu' : originalRoute;
-          const label = preview && originalRoute === '/account' ? 'Menu' : originalLabel;
-          const Icon = preview && originalRoute === '/account' ? Menu : OriginalIcon;
-          const active = route === '/' ? pathname === '/' : route === '/menu' ? ['/menu', '/account', '/client-profile', '/documents', '/notifications', '/insights', '/legal', '/note'].includes(pathname) : route === '/account' ? pathname === '/account' || pathname === '/client-profile' : route === '/calendar' ? pathname === '/calendar' || pathname === '/book' : route === '/listings' ? pathname === '/listings' || pathname.startsWith('/listing/') : pathname.startsWith(route);
+          const route = originalRoute;
+          const label = originalLabel;
+          const Icon = OriginalIcon;
+          const active = route === '/' ? pathname === '/' : route === '/account' ? ['/account', '/client-profile', '/menu', '/documents', '/notifications', '/calendar', '/book', '/legal'].includes(pathname) : route === '/listings' ? pathname === '/listings' || pathname.startsWith('/listing/') : pathname.startsWith(route);
           const count = route === '/message' ? unread : route === '/favorites' ? saved : 0;
           return <TactilePressable key={route} disabled={!onNavigate} onPress={() => onNavigate?.(route)} accessibilityRole="button" accessibilityLabel={label}
             accessibilityState={{ selected: active }} hitSlop={0} style={[styles.tab, { borderRadius: radius - 8, backgroundColor: active ? d.accent + (d.light ? '20' : '25') : 'transparent', borderColor: active ? d.accent + '36' : 'transparent' }]}>

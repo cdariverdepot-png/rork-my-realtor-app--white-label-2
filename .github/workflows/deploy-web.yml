@@ -2,7 +2,7 @@ name: Build and deploy Expo web
 
 on:
   push:
-    branches: [main, codex/intelligent-listing-import]
+    branches: [main, codex/intelligent-listing-import, codex/website-to-app]
     paths:
       - 'expo/**'
       - '.github/workflows/deploy-web.yml'
@@ -104,6 +104,9 @@ jobs:
 
       - name: Run app tests
         run: pnpm test
+
+      - name: Type check app
+        run: pnpm exec tsc --noEmit
 
       - name: Export web app
         run: pnpm exec expo export --platform web --clear

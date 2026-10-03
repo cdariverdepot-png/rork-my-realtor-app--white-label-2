@@ -22,7 +22,7 @@ const DEFAULT_WATCHLISTS: Watchlist[] = [
 type SyncStatus = "idle" | "connecting" | "live" | "offline";
 
 export const [FavoritesProvider, useFavorites] = createContextHook(() => {
-  const { realtorId, demoViewMode, currentClientId } = useAuth();
+  const { realtorId, demoViewMode, currentClientId, isAdmin } = useAuth();
   // Each client keeps their own favorites. The realtor's preview gets its own
   // scope so trying the heart there never touches a real client's lists.
   const scope = !realtorId ? "demo" : currentClientId ? `${realtorId}:${currentClientId}` : `${realtorId}:preview`;
@@ -63,7 +63,7 @@ export const [FavoritesProvider, useFavorites] = createContextHook(() => {
   }, [STORAGE_KEY, REVISION_KEY]);
 
   useEffect(() => {
-    if (!supabase || !hydrated) return;
+    if (!supabase || !hydrated || isAdmin) return;
     setSyncStatus("connecting");
     const sb = supabase;
     const ch = sb.channel(CHANNEL, { config: { private: true, broadcast: { self: false, ack: false } } });

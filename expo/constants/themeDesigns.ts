@@ -2,6 +2,7 @@ import type { ClientLayoutId } from "@/constants/clientLayouts";
 import { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts";
 import type { Brand } from "@/contexts/BrandContext";
 import { THEME_ACCENTS, type ThemeConfig } from "@/constants/theme";
+import { rememberPresentation } from '@/lib/websitePresentation';
 
 export type ThemeDesign = {
   name: string; background: string; ink: string; muted: string; accent: string;
@@ -24,6 +25,7 @@ export const THEME_CAROUSEL_ORDER: ClientLayoutId[] = [
 export function themeDesign(layout?: ClientLayoutId, config?: ThemeConfig): ThemeDesign {
   const id = layout ?? DEFAULT_CLIENT_LAYOUT;
   const design = THEME_DESIGNS[id] ?? THEME_DESIGNS[DEFAULT_CLIENT_LAYOUT];
+  if (config?.website) return { ...design, ...config.website, name: 'My Website', light: !/^#(?:0|1|2|3)/i.test(config.website.background) };
   // Reference layouts own a coordinated palette; legacy controls apply only to legacy layouts.
   if (config?.presentationVersion === 2) return design;
   const preset = CLIENT_LAYOUTS.find(item => item.id === id);
@@ -35,8 +37,10 @@ export function themeDesign(layout?: ClientLayoutId, config?: ThemeConfig): Them
 export function themeCandidate(saved: Brand, layoutId: ClientLayoutId): Brand {
   const layout = CLIENT_LAYOUTS.find(item => item.id === layoutId);
   if (!layout) return saved;
-  if (saved.layoutId === layoutId && saved.theme.presentationVersion === 2) return { ...saved, themeChosen: true };
-  return { ...saved, layoutId, themeChosen: true, theme: {
-    ...layout.defaultTheme, imagePositions: saved.theme.imagePositions, portraitFit: saved.theme.portraitFit, presentationVersion: 2,
+  if (saved.presentation !== 'website' && saved.layoutId === layoutId && saved.theme.presentationVersion === 2) return { ...saved, presentation: 'premium', themeChosen: true };
+  const remembered = rememberPresentation(saved);
+  return { ...remembered, layoutId, presentation: 'premium', themeChosen: true, theme: {
+    ...(remembered.presentationStyles?.[layoutId] ?? layout.defaultTheme),
+    website: undefined, imagePositions: saved.theme.imagePositions, portraitFit: saved.theme.portraitFit, presentationVersion: 2,
   } };
 }

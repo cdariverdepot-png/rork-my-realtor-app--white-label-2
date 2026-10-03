@@ -14,6 +14,7 @@ import { withThemeSlots } from "@/constants/themeSlots";
 import ThemeHero from "../ThemeHero";
 import ThemeContentSection from "../ThemeContentSection";
 import LiveThemeHome from "./LiveThemeHome";
+import WebsiteHome from './WebsiteHome';
 import { SERIF, type HeroProps } from "./shared";
 
 export type ReferenceRoute = "/listings" | "/message" | "/favorites" | "/calendar" | "/insights" | "/notifications" | "/account" | "/book" | "/documents" | "/note";
@@ -23,6 +24,7 @@ export type ReferenceHomeProps = { brand: Brand; portraitSource?: number; listin
 type CardKind = "coastal" | "journal" | "discovery" | "burgundy" | "nora" | "mina" | "editorial";
 
 export default function ReferenceHome(p: ReferenceHomeProps) {
+  if (p.brand.presentation === 'website' && p.brand.websiteDesign) return <WebsiteHome {...p} />;
   return p.miniature ? <CarouselReferenceHome {...p} /> : <LiveThemeHome {...p} />;
 }
 

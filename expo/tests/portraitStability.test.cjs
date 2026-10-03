@@ -61,7 +61,7 @@ test('theme preview and client heroes route portraits through PortraitImage', ()
     if (file.endsWith('ThemeCarousel.tsx') || file.endsWith('ThemePreviewModal.tsx')) {
       // These host ReferenceHome/ThemeFace; they must memoize preview / scroll binding.
       if (file.endsWith('ThemeCarousel.tsx')) {
-        assert.match(src, /useMemo\(\s*\(\)\s*=>\s*withSamplePortrait/);
+        assert.match(src, /useMemo\(\s*\(\)\s*=>[\s\S]*?withSamplePortrait/);
       } else {
         assert.match(src, /onScroll=\{onScroll\}/);
         assert.match(src, /Animated\.event/);

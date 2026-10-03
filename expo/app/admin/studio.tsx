@@ -428,7 +428,7 @@ export default function StudioScreen() {
         ? `Saved · ${required.missing.length} still needed before clients see a finished app`
         : offline
           ? "Saved · will sync when you're back online"
-          : "Saved · your app is ready to preview and share when you choose"
+          : "Draft saved · preview, then publish from your dashboard"
     );
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
@@ -469,7 +469,7 @@ export default function StudioScreen() {
         ? `Saved · ${status.missing.length} still needed before clients see a finished app`
         : offline
           ? "Saved · will sync when you're back online"
-          : "Saved · your app is ready to preview and share when you choose"
+          : "Draft saved · preview, then publish from your dashboard"
     );
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
@@ -3010,7 +3010,7 @@ const styles = StyleSheet.create({
  * Edit Content's "Update URL": the Build Your App website field recreated here,
  * pre-filled with the saved website. It runs the existing import (replace the
  * primary website source → analyzeBuild → applyBuildDraft) into the editor
- * draft, so the refreshed information is reviewed here and published with Save.
+ * draft, so the refreshed information is reviewed here and saved as a draft for explicit publication.
  */
 function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Brand) => void }) {
   const { realtorId } = useAuth();
@@ -3074,7 +3074,7 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
       const saved = await analyzeBuild();
       setSources(saved.sources);
       const facts = resolveFacts(saved.evidence);
-      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft), layoutId: d.layoutId, theme: d.theme }));
+      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft), layoutId: d.layoutId, presentation: d.presentation, websiteVariant: d.websiteVariant, theme: d.theme }));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Please try again.");
     } finally {

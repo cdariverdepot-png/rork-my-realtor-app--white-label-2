@@ -12,7 +12,7 @@ function load(file, mocks = {}) {
 }
 const navigation = load('lib/clientNavigation.ts');
 test('preview account paths lead to a useful menu while signed-in clients keep their account', () => {
-  for (const route of ['/account', '/client-profile', '/client-recovery']) assert.equal(navigation.clientDestination(route, true), '/menu');
+  for (const route of ['/account', '/client-profile', '/client-recovery']) assert.equal(navigation.clientDestination(route, true), '/account');
   assert.equal(navigation.clientDestination('/account', false), '/account');
   assert.equal(navigation.clientDestination('/message', true), '/messages');
   assert.equal(navigation.clientDestination('/message', false), '/messages');
@@ -32,9 +32,8 @@ test('all seven footer designs have useful menu routes in preview and retain cli
     for (const preview of [false,true]) {
       const routes=[]; const tabs=buttons(component({brand:{layoutId:composition,theme:{}},preview,onNavigate:route=>routes.push(route)}));
       tabs.forEach(tab=>tab.props.onPress());
-      assert.equal(tabs.length, composition==='coastal'?4:5);
-      assert.ok(routes.includes(preview || ['discovery','concierge'].includes(composition) ? '/menu' : '/account'));
-      if (preview) assert.ok(!routes.includes('/account'));
+      assert.equal(tabs.length, 5);
+      assert.deepEqual(routes, ['/', '/listings', '/favorites', '/message', '/account']);
     }
   }
 });

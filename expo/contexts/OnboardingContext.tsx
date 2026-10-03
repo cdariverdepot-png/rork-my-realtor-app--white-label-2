@@ -37,11 +37,17 @@ export const [OnboardingProvider, useOnboarding] = createContextHook(() => {
   const replayTour = useCallback((audience: Audience) => patch(audience === "realtor" ? "realtorTourSeen" : "clientTourSeen", false), [patch]);
   // Each signup/guest identity has an untouched key; no cross-account reset needed.
   const prepareNewClientTour = useCallback(() => {}, []);
+  const completeInvitedClientTour = useCallback(async (realtorId: string, clientId: string) => {
+    const target = ['myrealtor.onboarding.v4', 'client', realtorId, clientId].join(':');
+    const next = { ...initialState, clientTourSeen: true };
+    await AsyncStorage.setItem(target, JSON.stringify(next));
+    setSnapshot({ key: target, state: next });
+  }, []);
   const prepareNewRealtorTour = useCallback(() => {}, []);
   const reopen = useCallback(() => patch("tourSeen", false), [patch]);
   const reset = useCallback(() => {
     setSnapshot({ key, state: initialState });
     void AsyncStorage.setItem(key, JSON.stringify(initialState)).catch(() => {});
   }, [key]);
-  return { hydrated, ...state, markSeen, markTourSeen, replayTour, prepareNewClientTour, prepareNewRealtorTour, reopen, reset };
+  return { hydrated, ...state, markSeen, markTourSeen, replayTour, prepareNewClientTour, completeInvitedClientTour, prepareNewRealtorTour, reopen, reset };
 });

@@ -12,6 +12,7 @@ import { requiredStatus } from '@/constants/sections';
 import { isClientPage, isPrivateClientPage, previewFeatures } from '@/lib/clientNavigation';
 import { leavePreviewToDashboard } from '@/lib/navIntent';
 import BottomNav from './BottomNav';
+import PreviewSandbox, { PreviewSandboxProvider, isSandboxPage } from './PreviewSandbox';
 
 /** Lives outside the route stack: the footer keeps its identity and theme on every page. */
 export default function ClientShell({ children }: { children: React.ReactNode }) {
@@ -22,7 +23,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     isClientPage(path) && requiredStatus(brand.brand).complete &&
     (preview || (auth.isClient && profile.myProfileShared && profile.myEssentialsMet));
   const d = themeDesign(brand.brand.layoutId, brand.brand.theme);
-  return <View style={{ flex: 1, backgroundColor: d.background }}>
+  return <PreviewSandboxProvider key={`${auth.realtorId}:${preview}`}><View style={{ flex: 1, backgroundColor: d.background }}>
     {visible && preview && path !== '/' ? <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 18, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
       <Pressable accessibilityRole="button" accessibilityLabel="Return to realtor dashboard" onPress={() => edit.guardExit(() => {
         brand.setDraftPreview(null);
@@ -32,13 +33,14 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     </View> : null}
     <View style={{ flex: 1, paddingBottom: visible && (['/messages', '/message', '/book', '/client-profile', '/note'].includes(path) || path.startsWith('/listing/')) ? 96 + insets.bottom : 0 }}>{children}</View>
     {visible ? <View pointerEvents="box-none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}><BottomNav embedded /></View> : null}
-  </View>;
+  </View></PreviewSandboxProvider>;
 }
 
 /** Do not mount account-only screens in a realtor preview: their effects can mutate live data. */
 export function ClientPreviewBoundary({ children }: { children: React.ReactNode }) {
-  const path = usePathname(), auth = useAuth();
+  const path = usePathname(), auth = useAuth(), router = useRouter(), { brand } = useBrand();
   if (!auth.isAuthenticated && isPrivateClientPage(path)) return null;
+  if (auth.isAdmin && auth.viewAsClient && !auth.demoViewMode && isSandboxPage(path)) return <ScrollView keyboardShouldPersistTaps="handled"><PreviewSandbox route={path} brand={brand} onNavigate={p => router.navigate(p as any)} /></ScrollView>;
   if (auth.isAdmin && ['/account', '/client-profile', '/client-recovery'].includes(path)) return null;
   const feature = auth.isAdmin && auth.viewAsClient && !auth.demoViewMode ? previewFeatures[path] : undefined;
   return feature ? <PreviewFeature {...feature} schedule={path === '/calendar'} /> : <>{children}</>;

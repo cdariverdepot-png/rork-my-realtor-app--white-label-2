@@ -12,6 +12,7 @@ import ThemeNavigation from "./ThemeNavigation";
 import ThemePreviewPage from './ThemePreviewPage';
 import { clientDestination } from '@/lib/clientNavigation';
 import { previewDestination, previousPreviewPage } from '@/lib/previewHistory';
+import { PreviewSandboxProvider } from './PreviewSandbox';
 
 /**
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
@@ -85,7 +86,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   }, [visible, brand.layoutId, scrollY, initialRoute]);
 
   return <Modal visible={visible} animationType="slide" transparent onRequestClose={back}>
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <PreviewSandboxProvider key={visible ? 'open' : 'closed'}><GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={swipeBack}>
         <Animated.View style={[{ flex: 1, backgroundColor: "#111713" }, sliding ? { transform: [{ translateX: dragX }] } : undefined]}>
           <View style={{ paddingTop: insets.top + 10, paddingHorizontal: 14, paddingBottom: 12, flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -124,6 +125,6 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
           <View pointerEvents="box-none" style={{ position: 'absolute', bottom: 0, width: "100%", maxWidth: 390, alignSelf: "center", paddingBottom: insets.bottom }}><ThemeNavigation brand={brand} preview pathname={page} onNavigate={navigate} saved={savedIds.length} /></View>
         </Animated.View>
       </GestureDetector>
-    </GestureHandlerRootView>
+    </GestureHandlerRootView></PreviewSandboxProvider>
   </Modal>;
 }

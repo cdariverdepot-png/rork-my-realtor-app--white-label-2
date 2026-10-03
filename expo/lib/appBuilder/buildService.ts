@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 import { ensureSupabaseSession, supabase } from "@/lib/supabase";
 import type { BuildSource, SourceEvidence } from "./sourceModel";
 import type { ClientLayoutId } from "@/constants/clientLayouts";
+import type { WebsiteDesign } from '@/lib/websitePresentation';
 
 export type DiscoveredListing = {
   title: string;
@@ -37,6 +38,7 @@ export type ListingDiscoveryMeta = {
 };
 
 export type BuildDraft = {
+  websiteDesign?: WebsiteDesign;
   heroMessage?: string;
   welcomeNote?: string;
   tagline?: string;
@@ -385,6 +387,20 @@ export async function analyzeBuild(): Promise<SavedBuild> {
   const saved = await loadBuild();
   if (!saved) throw new Error("The build result could not be loaded.");
   return saved;
+}
+
+export async function refreshWebsiteDesign(sourceUrl?: string): Promise<WebsiteDesign> {
+  const route = await resolveBuilderRoute();
+  const saved = await loadBuild();
+  const sources = sourceUrl ? [{ id: 'website-design', kind: 'url', label: 'Website', uri: sourceUrl, status: 'queued' }] : saved?.sources ?? [];
+  if (!sources.some(s => s.kind === 'url')) throw new Error('Add your website URL in Studio first.');
+  if (!supabase || !(await ensureSupabaseSession())) throw new Error('Connect to refresh your website design.');
+  const { data, error } = await supabase.functions.invoke('analyze-realtor-build', {
+    body: { mode: 'refresh-design', ...(route.kind === 'local' ? { guest: true, sources } : { sources }) },
+  });
+  if (error || data?.error) throw await functionError(error, data, 'Could not refresh the website design.');
+  if (!data?.websiteDesign?.original || !data?.websiteDesign?.optimized) throw new Error('The website did not return a usable design.');
+  return data.websiteDesign;
 }
 
 export async function regenerateBuildCopy(

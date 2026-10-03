@@ -78,5 +78,5 @@ export function themePreview(draft: Brand, listings: ManagedListing[], id: Clien
   // "My information" swaps content, never layout: before the realtor has any
   // listings, the preview keeps the theme's listing row with illustrative homes.
   const ownListings = listings.filter(item => !item.hidden);
-  return { ...(sample ? themeSample(id) : { brand: themeCandidate(draft, id), listings: ownListings.length ? listings : themeSampleListings(id) }), sample };
+  return { ...(sample ? themeSample(id) : { brand: themeCandidate(draft, id), listings }), sample };
 }

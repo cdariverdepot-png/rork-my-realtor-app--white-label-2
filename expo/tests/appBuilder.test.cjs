@@ -19,13 +19,23 @@ const discoverySource = ts.transpileModule(fs.readFileSync(path.resolve(__dirnam
 const discoveryModule = { exports: {} };
 new Function('require', 'module', 'exports', discoverySource)(require, discoveryModule, discoveryModule.exports);
 const { publicListingRequestHeaders, decodePublicListingResponse } = discoveryModule.exports;
+const designModule = { exports: {} };
+new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolve(__dirname,
+  '../../supabase/functions/analyze-realtor-build/websiteDesign.ts'), 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText)(designModule, designModule.exports);
+const presentationModule = { exports: {} };
+new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolve(__dirname,
+  '../lib/websitePresentation.ts'), 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText)(presentationModule, presentationModule.exports);
 
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
 async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input' } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
-  const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '');
+  const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml) {
@@ -68,7 +78,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
     if (unreadable) return new Response('Unavailable',{status:503});
     return new Response(html ?? '<html><title>Cindy Carlson Realty</title><p>Full Service Agency in North Idaho.</p></html>',{headers:{'Content-Type':'text/html'}});
   };
-  new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse',code)({env:{get:()=> 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse);
+  new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls',code)({env:{get:()=> 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls);
   const response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
   return {status:response.status,result:await response.json(),aiBody,update,reads};
 }
@@ -168,6 +178,7 @@ test('applyBuildDraft drops email-local-part names and prefers scraped identity'
   const originalLoad = Module._load;
   Module._load = function (request, parent, isMain) {
     if (request === '@/constants/clientLayouts') return layoutsStub;
+    if (request === '@/lib/websitePresentation') return presentationModule.exports;
     if (request === '@/contexts/BrandContext') return {};
     return originalLoad.apply(this, arguments);
   };
@@ -300,4 +311,3 @@ test('completed guest drafts can refresh the same URL and retain saved content o
   await assert.rejects(mod.exports.analyzeBuild(),/Website unavailable/);
   assert.deepEqual(saved,original);
 });
-

@@ -77,6 +77,7 @@ export const LIVE_THEME_MATERIALS = {
   },
 } as const;
 export function liveThemeDesign(id?: ClientLayoutId, config?: ThemeConfig) {
+  if (config?.website) return themeDesign(id, config);
   const key = id ?? "private-collection",
     base = themeDesign(key, config),
     m = LIVE_THEME_MATERIALS[key];

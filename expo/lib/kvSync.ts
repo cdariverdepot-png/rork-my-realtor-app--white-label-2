@@ -31,6 +31,7 @@ export function useKvSync<T>(args: {
   enabled: boolean;
   value: T;
   rev: number;
+  write?: boolean;
   onRemote: (row: KvRow<T>, meta: KvRemoteMeta) => void;
 }): { refresh: () => Promise<void> } {
   const { key, enabled, value, rev, onRemote } = args;
@@ -86,6 +87,7 @@ export function useKvSync<T>(args: {
   // a save didn't reach Supabase (sync is disabled, initial fetch hasn't
   // landed, rev is stale, etc.) — previously these were invisible.
   useEffect(() => {
+    if (args.write === false) return;
     if (!enabled) {
       if (rev > 0) {
         recordKvWrite({
@@ -116,7 +118,7 @@ export function useKvSync<T>(args: {
     if (rev <= lastPushedRevRef.current) return;
     lastPushedRevRef.current = rev;
     void kvSet<T>(key, value, rev);
-  }, [enabled, initialFetched, key, value, rev]);
+  }, [enabled, initialFetched, key, value, rev, args.write]);
 
   // Manual refetch — useful for pull-to-refresh and periodic polling when
   // the realtime channel hasn't delivered an update.

@@ -56,9 +56,9 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
       redirectTo = '/portal?entry=client';
     } else if (auth.isClient && path.startsWith('/admin')) {
       redirectTo = '/';
-    } else if (auth.isAdmin && ['/account', '/client-profile', '/client-recovery'].includes(path)) {
+    } else if (auth.isAdmin && !auth.viewAsClient && ['/account', '/client-profile', '/client-recovery'].includes(path)) {
       redirectTo = auth.viewAsClient ? '/menu' : '/admin';
-    } else if (!publicRoute && auth.isAdmin &&
+    } else if (!publicRoute && auth.isAdmin && !auth.viewAsClient &&
       // Walkthrough first (same as clients): do not force build until the tour ends.
       realtorTourSeen &&
       realtorSetupState(brand.savedBrand, auth.realtorRecord?.client_code_enabled === true) === "setup-incomplete" &&

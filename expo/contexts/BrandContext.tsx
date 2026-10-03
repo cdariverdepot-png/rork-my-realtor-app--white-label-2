@@ -2,7 +2,7 @@ import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { isKvEnabled, kvSet } from "@/lib/kvStore";
+import { isKvEnabled, kvGet, kvSet } from "@/lib/kvStore";
 import { shouldApplyRemoteRevision } from "@/lib/remoteRevision";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
@@ -20,6 +20,8 @@ import {
   type ThemeTokens,
 } from "@/constants/theme";
 import { DEFAULT_CLIENT_LAYOUT, type ClientLayoutId } from "@/constants/clientLayouts";
+import type { WebsiteDesign, WebsiteAppearance, WebsiteVariant } from '@/lib/websitePresentation';
+import { commitDesignPublication } from '@/lib/designPublication';
 
 export type RealtorProfile = {
   name: string;
@@ -120,6 +122,12 @@ export type ContentSectionState = "present" | "empty" | "hidden";
 export type Brand = {
   /** Presentation layout; profile and content remain shared across layouts. */
   layoutId?: ClientLayoutId;
+  presentation?: 'website' | 'premium';
+  websiteVariant?: WebsiteVariant;
+  websiteDesign?: WebsiteDesign;
+  previousWebsiteDesign?: WebsiteDesign;
+  websiteStyles?: Partial<Record<WebsiteVariant, WebsiteAppearance>>;
+  presentationStyles?: Record<string, ThemeConfig | undefined>;
   realtor: RealtorProfile;
   portraitUrl: string;
   /** Square mark used as the client app's icon and launch badge. */
@@ -144,6 +152,8 @@ export type Brand = {
   themeChosen?: boolean;
   copyright: string;
   updatedAt?: number;
+  /** Set only after the owner explicitly publishes. Legacy live profiles remain live. */
+  publishedAt?: number;
 };
 
 /** Empty credentials record — the band hides itself until something is added. */
@@ -608,8 +618,14 @@ const buildGuidedStarter = (current: Brand): Brand => {
 };
 
 export const [BrandProvider, useBrand] = createContextHook(() => {
-  const { realtorId, realtorRecord, demoViewMode, unlockSharingCredentials } = useAuth();
+  const { realtorId, realtorRecord, demoViewMode, isAdmin, unlockSharingCredentials } = useAuth();
   const [brand, setBrand] = useState<Brand>(() => buildSeed());
+  const [designDraft, setDesignDraft] = useState<Brand | null>(null);
+  const [previousPublished, setPreviousPublished] = useState<Brand | null>(null);
+  const [draftHydrated, setDraftHydrated] = useState(false);
+  const draftRef = useRef<Brand | null>(null);
+  const draftRevision = useRef(0);
+  const publishing = useRef(false);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [revision, setRevision] = useState<number>(0);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("idle");
@@ -634,6 +650,45 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   const REVISION_KEY = `${scope}:brand.rev.v2`;
   const CHANNEL = `${scope}:brand:v2`;
   const KV_KEY = `${scope}:brand.v2`;
+  // Privacy RPCs permit these keys only to the realtor owner. Never broadcast drafts.
+  const DRAFT_KEY = `${scope}:brand.design-draft.v1`;
+  const PREVIOUS_KEY = `${scope}:brand.previous-published.v1`;
+
+  useEffect(() => {
+    let active = true;
+    draftRef.current = null;
+    draftRevision.current = 0;
+    setDesignDraft(null);
+    setPreviousPublished(null);
+    setDraftPreview(null);
+    setDraftHydrated(!isAdmin);
+    if (!isAdmin) return;
+    void (async () => {
+      try {
+        const raw = await AsyncStorage.getItem(DRAFT_KEY);
+        if (!active) return;
+        if (raw) {
+          const local = JSON.parse(raw) as { value: Brand; rev: number };
+          draftRef.current = local.value;
+          draftRevision.current = local.rev;
+          setDesignDraft(local.value);
+        }
+        const [remote, previous] = await Promise.all([
+          kvGet<Brand>(DRAFT_KEY), kvGet<Brand>(PREVIOUS_KEY),
+        ]);
+        if (!active) return;
+        if (remote && remote.rev > draftRevision.current) {
+          draftRevision.current = remote.rev;
+          draftRef.current = remote.value;
+          setDesignDraft(remote.value);
+          await AsyncStorage.setItem(DRAFT_KEY, JSON.stringify(remote));
+        }
+        setPreviousPublished(previous?.value ?? null);
+      } catch (error) { console.log('[brand] draft hydrate', error); }
+      finally { if (active) setDraftHydrated(true); }
+    })();
+    return () => { active = false; };
+  }, [DRAFT_KEY, PREVIOUS_KEY, isAdmin]);
 
   // Real realtors get a neutral white-label brand seeded from their record;
   // only the demo realtor (and demo-view mode) gets the full Eliza Vance showcase.
@@ -836,6 +891,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
 
   const { refresh: refreshKv } = useKvSync<Brand>({
     key: KV_KEY,
+    write: false,
     enabled: hydrated && isKvEnabled(),
     value: brand,
     rev: revision,
@@ -857,37 +913,75 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   const update = useCallback(
     (mutator: (current: Brand) => Brand) => {
       // The Eliza Vance demo is a frozen, read-only showcase — never accept writes.
-      if (demoViewMode) return;
-      const next = { ...mutator(brandRef.current), updatedAt: Date.now() };
-      const rev = Math.max(revRef.current + 1, Date.now());
-      brandRef.current = next;
-      revRef.current = rev;
-      setRevision(rev);
-      setBrand(next);
-      void persist(next, rev);
-      broadcast(next, rev);
+      if (demoViewMode || !isAdmin) return;
+      const next = { ...mutator(draftRef.current ?? brandRef.current), updatedAt: Date.now() };
+      const rev = Math.max(draftRevision.current + 1, Date.now());
+      draftRef.current = next;
+      draftRevision.current = rev;
+      setDesignDraft(next);
+      void AsyncStorage.setItem(DRAFT_KEY, JSON.stringify({ value: next, rev }));
+      void kvSet(DRAFT_KEY, next, rev);
     },
-    [persist, broadcast, demoViewMode]
+    [DRAFT_KEY, demoViewMode, isAdmin]
   );
 
   const reset = useCallback(() => {
     update(() => seed);
   }, [update, seed]);
 
-  /** Save must finish local persistence before onboarding can advance. */
+  /** Save private working copy. Clients and invitations are unaffected. */
   const saveBrand = useCallback(async (next: Brand) => {
-    if (demoViewMode) throw new Error("The demo is read-only.");
+    if (demoViewMode || !isAdmin) throw new Error("Only the realtor can save a design draft.");
     const saved = { ...next, updatedAt: Date.now() };
-    const rev = Math.max(revRef.current + 1, Date.now());
+    const rev = Math.max(draftRevision.current + 1, Date.now());
+    if (supabase) await kvSet(DRAFT_KEY, saved, rev, true);
+    await AsyncStorage.setItem(DRAFT_KEY, JSON.stringify({ value: saved, rev }));
+    draftRef.current = saved;
+    draftRevision.current = rev;
+    setDesignDraft(saved);
+  }, [demoViewMode, isAdmin, DRAFT_KEY]);
+
+  /** The sole design publication boundary. No client or listing keys are written. */
+  const publishBrand = useCallback(async (next?: Brand) => {
+    if (demoViewMode || !isAdmin || !realtorId) throw new Error("Sign in as the realtor to publish.");
+    if (publishing.current) throw new Error("Publication is already in progress.");
+    const candidate = next ?? draftRef.current ?? brandRef.current;
+    if (!requiredStatus(candidate).complete) throw new Error("Complete the required business details before publishing.");
+    publishing.current = true;
+    try {
+    // Fetch the durable published copy, so revert retains the latest live appearance.
+    const current = supabase ? await kvGet<Brand>(KV_KEY, true) : null;
+    const previous = current?.value ?? brandRef.current;
+    const rev = Math.max(revRef.current + 1, current?.rev ? current.rev + 1 : 0, Date.now());
+    if (!supabase) throw new Error('Connect to publish your app.');
+    const saved = await commitDesignPublication({ owner: isAdmin, candidate, previous, revision: rev,
+      hasPrevious: !!previous.publishedAt || !!realtorRecord?.client_code_enabled,
+      saveDraft: saveBrand, savePrevious: (value, version) => kvSet(PREVIOUS_KEY, value, version, true),
+      writePublished: (value, version) => kvSet(KV_KEY, value, version, true),
+      readPublished: () => kvGet<Brand>(KV_KEY, true), enableInvitation: unlockSharingCredentials,
+    });
     await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(saved)], [REVISION_KEY, String(rev)]]);
-    if (supabase) await kvSet(KV_KEY, saved, rev, true);
-    if (requiredStatus(saved).complete) await unlockSharingCredentials();
+    if (previous.publishedAt || realtorRecord?.client_code_enabled) setPreviousPublished(previous);
+    draftRef.current = saved;
+    setDesignDraft(saved);
+    await AsyncStorage.setItem(DRAFT_KEY, JSON.stringify({ value: saved, rev }));
     brandRef.current = saved;
     revRef.current = rev;
     setBrand(saved);
     setRevision(rev);
     broadcast(saved, rev);
-  }, [demoViewMode, STORAGE_KEY, REVISION_KEY, KV_KEY, broadcast, unlockSharingCredentials]);
+    return saved;
+    } finally { publishing.current = false; }
+  }, [demoViewMode, isAdmin, realtorId, realtorRecord?.client_code_enabled, saveBrand, PREVIOUS_KEY, STORAGE_KEY, REVISION_KEY, KV_KEY, broadcast, unlockSharingCredentials]);
+
+  const restorePreviousPublished = useCallback(async () => {
+    if (!previousPublished) throw new Error("No previously published design is available.");
+    const current = draftRef.current ?? brandRef.current;
+    await saveBrand({ ...current, layoutId: previousPublished.layoutId, presentation: previousPublished.presentation,
+      websiteVariant: previousPublished.websiteVariant, websiteDesign: previousPublished.websiteDesign,
+      websiteStyles: previousPublished.websiteStyles, presentationStyles: previousPublished.presentationStyles,
+      theme: previousPublished.theme, themeChosen: previousPublished.themeChosen });
+  }, [previousPublished, saveBrand]);
 
   /**
    * Fills the empty template with generic starter copy for the "guided
@@ -903,7 +997,11 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   }, [update]);
 
   /** What the UI renders: the unpublished draft while previewing, else the published brand. */
-  const visibleBrand: Brand = draftPreview ?? brand;
+  const visibleBrand: Brand = isAdmin ? draftPreview ?? designDraft ?? brand : brand;
+  const isPublished = !!brand.publishedAt || !!realtorRecord?.client_code_enabled;
+  const hasUnpublishedChanges = isAdmin && !!designDraft && !sameJson(
+    { ...designDraft, updatedAt: 0, publishedAt: 0 }, { ...brand, updatedAt: 0, publishedAt: 0 }
+  );
   const themeTokens: ThemeTokens = useMemo(() => resolveTheme(visibleBrand.theme), [visibleBrand.theme]);
 
   // Frozen demo data source — its own dedicated, immutable Eliza Vance brand that
@@ -917,7 +1015,12 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       brand: demoViewMode ? demoBrand : visibleBrand,
       savedBrand: brand,
       theme: demoViewMode ? demoTheme : themeTokens,
-      hydrated: demoViewMode ? true : hydrated,
+      hydrated: demoViewMode ? true : hydrated && draftHydrated,
+      isPublished,
+      hasUnpublishedChanges,
+      previousPublished,
+      publishBrand,
+      restorePreviousPublished,
       revision,
       syncStatus: demoViewMode ? ("idle" as SyncStatus) : syncStatus,
       previewingDraft: !demoViewMode && draftPreview !== null,
@@ -928,7 +1031,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       seedPlaceholders,
       refresh,
     }),
-    [brand, demoViewMode, demoBrand, demoTheme, visibleBrand, draftPreview, themeTokens, hydrated, revision, syncStatus, update, saveBrand, reset, seedPlaceholders, refresh]
+    [brand, demoViewMode, demoBrand, demoTheme, visibleBrand, draftPreview, themeTokens, hydrated, draftHydrated, isPublished, hasUnpublishedChanges, previousPublished, publishBrand, restorePreviousPublished, revision, syncStatus, update, saveBrand, reset, seedPlaceholders, refresh]
   );
 
   return value;

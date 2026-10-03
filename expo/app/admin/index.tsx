@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clientInviteLink } from "@/lib/bookingLink";
+import DesignPublicationPanel from '@/components/DesignPublicationPanel';
+import InvitationTools from '@/components/InvitationTools';
 import {
   ActivityIndicator,
   BackHandler,
@@ -205,7 +207,7 @@ export default function AdminDashboard() {
   const { feeds } = useCalendarFeeds();
   const { curatedClientCount } = useClientFeed();
   const { digestCounts, engagement } = useEngagement();
-  const { brand: brandData, update: updateBrand } = useBrand();
+  const { brand: brandData, update: updateBrand, isPublished } = useBrand();
   // The theme carousel swipes horizontally; the dashboard's own swipe waits for it.
   const [showcaseSwipe, setShowcaseSwipe] = useState<GestureType | undefined>(undefined);
   const setupComplete = requiredStatus(brandData).complete;
@@ -570,6 +572,7 @@ export default function AdminDashboard() {
           {/* ═══════════════════════════════════════════════
               BRAND STUDIO — The Heart
               ═══════════════════════════════════════════════ */}
+          <DesignPublicationPanel />
           <View style={styles.studioSection}>
             <Text style={[styles.studioHeadline, { marginTop: 0, textAlign: "center" }]}>Make changes whenever you need.</Text>
 
@@ -872,105 +875,13 @@ export default function AdminDashboard() {
               </Pressable>
             ) : null}
 
-            {setupComplete && clientCodeEnabled && !!clientCode ? <View style={styles.inviteCard}>
-              {/* Large QR */}
-              <View style={styles.qrHero}>
-                <View style={styles.qrHeroFrame}>
-                  <Image
-                    source={{
-                      uri: `https://quickchart.io/qr?text=${encodeURIComponent(clientInviteUrl || `myrealtorapp://code/${inviteCode}`)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M`,
-                    }}
-                    style={styles.qrHeroImage}
-                    contentFit="contain"
-                    transition={200}
-                    accessibilityLabel="Client invite QR code"
-                  />
-                </View>
-                <Text style={styles.qrHeroHint}>Scan to open your client app</Text>
-              </View>
-
-              {/* Access code display */}
-              <View style={styles.inviteCodeRow}>
-                <View style={styles.inviteCodeLabelRow}>
-                  <KeyRound size={11} color={admin.goldLight} strokeWidth={1.8} />
-                  <Text style={styles.inviteCodeLabel}>ACCESS CODE{clientCodeEnabled ? " · REQUIRED" : ""}</Text>
-                </View>
-                <Pressable onPress={tap(copyClientCode)} hitSlop={6}>
-                  <Text style={styles.inviteCode} selectable numberOfLines={1}>
-                    {realtorRecord?.client_code ?? clientCode}
-                  </Text>
-                </Pressable>
-              </View>
-
-              {/* Actions */}
-              <View style={styles.inviteActions}>
-                <Pressable
-                  onPress={tap(copyClientCode)}
-                  style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]}
-                  hitSlop={6}
-                >
-                  <Copy size={14} color={admin.text} strokeWidth={1.6} />
-                  <Text style={styles.inviteGhostBtnText}>Copy code</Text>
-                </Pressable>
-                <Pressable
-                  onPress={tap(shareClientCode)}
-                  disabled={seatsFull}
-                  style={({ pressed }) => [
-                    styles.inviteGoldBtn,
-                    seatsFull && styles.inviteGoldBtnMuted,
-                    pressed && !seatsFull && { opacity: 0.94 },
-                  ]}
-                >
-                  <Send
-                    size={14}
-                    color={seatsFull ? admin.textDim : admin.bg}
-                    strokeWidth={2}
-                  />
-                  <Text
-                    style={[
-                      styles.inviteGoldBtnText,
-                      seatsFull && { color: admin.textDim },
-                    ]}
-                  >
-                    {seatsFull ? "NO PLACES LEFT" : "INVITE CLIENTS"}
-                  </Text>
-                </Pressable>
-              </View>
-
-              {/* Client invite — portal entry with access code (not guest /welcome booking). */}
-              {clientInviteUrl ? <View style={styles.inviteCodeRow}>
-                <View style={styles.inviteCodeLabelRow}>
-                  <UserPlus size={11} color={admin.goldLight} strokeWidth={1.8} />
-                  <Text style={styles.inviteCodeLabel}>CLIENT INVITE</Text>
-                </View>
-                <Text style={styles.bookingLinkHint}>
-                  Clients open this to download or log in to your app.
-                </Text>
-                {showInviteQr ? <View style={[styles.qrHeroFrame, { marginTop: 4 }]}>
-                  <Image
-                    source={{ uri: `https://quickchart.io/qr?text=${encodeURIComponent(clientInviteUrl)}&size=360&margin=1&dark=08090C&light=F1ECE2&ecLevel=M` }}
-                    style={styles.qrHeroImage}
-                    contentFit="contain"
-                    transition={200}
-                    accessibilityLabel="Client invite QR code"
-                  />
-                </View> : null}
-              </View> : null}
-              {clientInviteUrl ? <View style={styles.inviteActions}>
-                <Pressable onPress={tap(copyClientInviteLink)} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6} accessibilityLabel="Copy client invite link">
-                  <Copy size={14} color={admin.text} strokeWidth={1.6} />
-                  <Text style={styles.inviteGhostBtnText}>Copy</Text>
-                </Pressable>
-                <Pressable onPress={tap(() => setShowInviteQr(v => !v))} style={({ pressed }) => [styles.inviteGhostBtn, pressed && { opacity: 0.85 }]} hitSlop={6} accessibilityLabel="Toggle client invite QR">
-                  <QrCode size={14} color={admin.text} strokeWidth={1.6} />
-                  <Text style={styles.inviteGhostBtnText}>{showInviteQr ? "Hide QR" : "QR"}</Text>
-                </Pressable>
-              </View> : null}
+            {isPublished && clientCodeEnabled && !!clientCode ? <View style={styles.inviteCard}>
+              <InvitationTools />
             </View> : (
               <View style={[styles.inviteCard, { padding: 24 }]}>
                 <Lock size={22} color={admin.goldLight} strokeWidth={1.6} />
                 <Text style={[styles.inviteCodeLabel, { marginTop: 12 }]}>SETUP REQUIRED</Text>
-                <Text style={[styles.inviteSub, { marginTop: 8, marginBottom: 0 }]}>Complete and save your required setup fields before client access credentials become available.</Text>
+                <Text style={[styles.inviteSub, { marginTop: 8, marginBottom: 0 }]}>Publish your app to activate your permanent invitation and QR code.</Text>
                 <Pressable onPress={tap(() => router.push("/admin/build"))} style={[styles.inviteGoldBtn, { marginTop: 18 }]}>
                   <Pencil size={14} color={admin.bg} strokeWidth={2} />
                   <Text style={styles.inviteGoldBtnText}>CONTINUE SETUP</Text>

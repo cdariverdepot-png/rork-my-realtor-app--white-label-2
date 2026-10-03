@@ -31,7 +31,7 @@ test('carousel artwork and miniature renderer remain unchanged from the approved
   // Local verification only; CI can check the explicit miniature boundary below.
   const live = fs.readFileSync(path.resolve(__dirname,'../components/themes/ReferenceHome.tsx'),'utf8');
   assert.match(live,/p\.miniature \? <CarouselReferenceHome/);
-  if(fs.existsSync(git)) {
+  if(fs.existsSync(git) && fs.existsSync(path.resolve(__dirname, '../../.git'))) {
     const previous=cp.execFileSync(git,['-c','safe.directory=*','show','7dd9c83:expo/components/themes/ReferenceHome.tsx'],{cwd:path.resolve(__dirname,'../..'),encoding:'utf8'});
     assert.equal(live.split('function CarouselReferenceHome(p: ReferenceHomeProps) {')[1].replace(/\r\n/g,'\n'),previous.split('export default function ReferenceHome(p: ReferenceHomeProps) {')[1].replace(/\r\n/g,'\n'));
   }
