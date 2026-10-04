@@ -8,7 +8,7 @@ function load(name, client) {
   const source = ts.transpileModule(fs.readFileSync(path.join(__dirname, '..', name + '.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
   new Function('require', 'module', 'exports', source)(id => {
     if (id === 'react-native') return { Platform: { OS: 'web' } };
-    if (id === '@/lib/supabase') return { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {}, withEmailAuth: fn => fn() };
+    if (id === '@/lib/supabase' || id === './supabase') return { supabase: client, ensureSupabaseSession: async () => null, clearAnonymousSessionForEmailAuth: async () => {}, withEmailAuth: fn => fn() };
     if (id.startsWith('@/')) return load(id.slice(2), client);
     return require(id);
   }, module, module.exports);
@@ -64,6 +64,26 @@ test('missing database function yields safe actionable error', async () => {
 test('sign-in network exception returns controlled failure', async () => {
   const auth = load('lib/realtorAuth', { auth: { signInWithPassword: async () => { throw new Error('internal'); } } });
   assert.equal((await auth.signInRealtorWithAuth('person@example.com', 'password')).ok, false);
+});
+
+test('verified email login retains its owner session through the shared listings importer', async () => {
+  const user={id:'email-owner',email:'realtor@example.com',is_anonymous:false,email_confirmed_at:'2026-10-04'};
+  let session=null;const calls=[];
+  const client={auth:{
+    signInWithPassword:async args=>{calls.push(['login',args.email]);session={user};return {data:{session}};},
+    getUser:async()=>({data:{user:session?.user}}),
+    getSession:async()=>({data:{session}}),
+    signInAnonymously:()=>{throw Error('Email account must not be replaced');}
+  },rpc:async(name,args)=>{calls.push([name,args]);return {data:'email-realtor-id'};},
+  functions:{invoke:async(name,args)=>{calls.push([name,args]);return {data:{ok:true,imported:1,items:[{title:'12 Pine St',price:'$350,000',image:'https://public.example/photo.jpg'}]}};}}};
+  const auth=load('lib/realtorAuth',client);
+  const signedIn=await auth.signInRealtorWithAuth(' Realtor@Example.com ','test-password');
+  assert.deepEqual(signedIn,{ok:true,realtorId:'email-realtor-id'});
+  const service=load('lib/listingSourceService',client);
+  const result=await service.connectListingSource('https://third-party.example/property',signedIn.realtorId);
+  assert.equal(result.imported,1);assert.equal(session.user.id,'email-owner');
+  assert.equal(calls[0][1],'realtor@example.com');
+  assert.deepEqual(calls.at(-1),['refresh-listings',{body:{mode:'connect',url:'https://third-party.example/property',realtorId:'email-realtor-id'}}]);
 });
 test('password reset emails a recovery link with redirect, not OTP create', async () => {
   let request;
