@@ -2,7 +2,7 @@ name: Build and deploy Expo web
 
 on:
   push:
-    branches: [main, codex/intelligent-listing-import, codex/website-to-app]
+    branches: [main, codex/intelligent-listing-import, codex/website-to-app, codex/import-onboarding-fix]
     paths:
       - 'expo/**'
       - 'supabase/functions/analyze-realtor-build/**'

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
 import { connectListingSource } from "@/lib/listingSourceService";
+import { useAuth } from "@/contexts/AuthContext";
 import { useListings } from "@/contexts/ListingsContext";
 
 /** The same public URL flow is used during setup and when connecting another source. */
@@ -8,13 +9,15 @@ export default function ListingSourceImporter({ onImported, initialUrl = "" }: {
   const [url, setUrl] = useState(initialUrl), [busy, setBusy] = useState(false);
   const [message, setMessage] = useState(""), [error, setError] = useState("");
   const { refresh } = useListings();
+  const auth = useAuth();
   const submit = async () => {
     if (busy) return; setBusy(true); setError(""); setMessage("");
     try {
-      const result = await connectListingSource(url);
+      if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
+      const result = await connectListingSource(url, auth.realtorId);
       await refresh();
       const count = result.imported ?? 0;
-      setMessage(`${count} listing${count === 1 ? "" : "s"} connected. We’ll keep them updated automatically.`);
+      setMessage(`${count} listing${count === 1 ? "" : "s"} connected. We’ll keep them updated automatically.${result.warning ? ` ${result.warning}` : ""}`);
       onImported?.(count);
     } catch (e) { setError(e instanceof Error ? e.message : "We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown."); }
     finally { setBusy(false); }

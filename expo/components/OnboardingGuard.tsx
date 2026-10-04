@@ -66,7 +66,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
       // Content is fixed there (Studio says what's still needed) — it must not
       // throw a live realtor back into Build Your App.
       auth.realtorRecord?.client_code_enabled !== true &&
-      path !== "/admin/build") {
+      ! ["/admin/build", "/admin/add", "/admin/listings"].includes(path)) {
       redirectTo = "/admin/build";
     } else if (!publicRoute && auth.isClient &&
       // Walkthrough first: do not force profile until the 5-page tour is done.

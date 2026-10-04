@@ -23,6 +23,8 @@ export default function BuildUrlEntry({
   onExit,
   busy = false,
   error,
+  listingCount = 0,
+  onViewListings,
 }: {
   url: string;
   onChange: (value: string) => void;
@@ -30,6 +32,8 @@ export default function BuildUrlEntry({
   onExit: () => void;
   busy?: boolean;
   error?: string;
+  listingCount?: number;
+  onViewListings?: () => void;
 }) {
   const insets = useSafeAreaInsets();
   return (
@@ -226,6 +230,9 @@ export default function BuildUrlEntry({
             )}
           </Pressable>
         </View>
+        {listingCount > 0 && onViewListings ? <Pressable accessibilityRole="button" onPress={onViewListings} style={{ padding: 18, marginTop: 12 }}>
+          <Text style={{ color: "#E7E9E5", textAlign: "center" }}>{listingCount} listings already saved · View listings</Text>
+        </Pressable> : null}
         <View style={{ height: 42 }} />
       </ScrollView>
     </KeyboardAvoidingView>
