@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 23338)
-Total output lines: 2060
-
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clientInviteLink } from "@/lib/bookingLink";
 import DesignPublicationPanel from '@/components/DesignPublicationPanel';
@@ -881,7 +878,326 @@ export default function AdminDashboard() {
             {isPublished && clientCodeEnabled && !!clientCode ? <View style={styles.inviteCard}>
               <InvitationTools />
             </View> : (
-…3338 tokens truncated…ity: overlayAnim,
+              <View style={[styles.inviteCard, { padding: 24 }]}>
+                <Lock size={22} color={admin.goldLight} strokeWidth={1.6} />
+                <Text style={[styles.inviteCodeLabel, { marginTop: 12 }]}>SETUP REQUIRED</Text>
+                <Text style={[styles.inviteSub, { marginTop: 8, marginBottom: 0 }]}>Publish your app to activate your permanent invitation and QR code.</Text>
+                <Pressable onPress={tap(() => router.push("/admin/build"))} style={[styles.inviteGoldBtn, { marginTop: 18 }]}>
+                  <Pencil size={14} color={admin.bg} strokeWidth={2} />
+                  <Text style={styles.inviteGoldBtnText}>CONTINUE SETUP</Text>
+                </Pressable>
+              </View>
+            )}
+          </View>
+
+          {/* ═══════════════════════════════════════════════
+              SUPPORT & FOOTER
+              ═══════════════════════════════════════════════ */}
+          <View style={styles.supportRow}>
+            <Pressable onPress={tap(openSupportMail)} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
+              <LifeBuoy size={13} color={admin.textMuted} strokeWidth={1.6} />
+              <Text style={styles.supportText}>Support</Text>
+            </Pressable>
+            <View style={styles.supportDivider} />
+            <Pressable onPress={tap(() => router.push("/admin/plans"))} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
+              <Crown size={13} color={admin.goldLight} strokeWidth={1.6} />
+              <Text style={[styles.supportText, styles.supportTextGold]}>Plans</Text>
+            </Pressable>
+          </View>
+
+          <Pressable onPress={tap(openWebsite)} style={({ pressed }) => [styles.websiteLink, pressed && { opacity: 0.7 }]} hitSlop={8}>
+            <Globe size={12} color={admin.goldLight} strokeWidth={1.6} />
+            <Text style={styles.websiteText}>{WEBSITE_DISPLAY}</Text>
+          </Pressable>
+
+          <View style={styles.legalRow}>
+            <Pressable onPress={tap(() => router.push({ pathname: "/legal", params: { doc: "privacy" } }))} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
+              <ShieldCheck size={12} color={admin.textDim} strokeWidth={1.6} />
+              <Text style={styles.legalText}>Privacy</Text>
+            </Pressable>
+            <View style={styles.supportDivider} />
+            <Pressable onPress={tap(() => router.push({ pathname: "/legal", params: { doc: "terms" } }))} style={({ pressed }) => [styles.supportItem, pressed && { opacity: 0.7 }]}>
+              <ScrollText size={12} color={admin.textDim} strokeWidth={1.6} />
+              <Text style={styles.legalText}>Terms</Text>
+            </Pressable>
+          </View>
+
+          <Pressable
+            onPress={tap(confirmDeleteAccount)}
+            style={({ pressed }) => [styles.deleteAccountBtn, pressed && { opacity: 0.7 }]}
+            accessibilityRole="button"
+            accessibilityLabel="Delete my account"
+          >
+            <Trash2 size={11} color="rgba(224,110,90,0.8)" strokeWidth={1.6} />
+            <Text style={styles.deleteAccountText}>DELETE MY ACCOUNT</Text>
+          </Pressable>
+
+          <Text style={styles.signoff}>{brandName.replace(/_/g, " ")} · PRIVATE STUDIO</Text>
+        </Animated.ScrollView>
+      </SwipeToSwitch>
+    </View>
+  );
+}
+
+/* ─── Sub-components ─── */
+
+/**
+ * The quiet seat counter that sits under the invite headline.
+ *
+ * Deliberately understated: three small pips and one line of text. It is a
+ * fact about the account, not a nag, and it appears from the very first invite
+ * so hitting the limit is never a surprise.
+ */
+function SeatMeter({
+  used,
+  limit,
+  unlimited,
+}: {
+  used: number;
+  limit: number;
+  unlimited: boolean;
+}) {
+  const full = !unlimited && used >= limit;
+  const pips = unlimited ? [] : Array.from({ length: Math.max(0, limit) });
+  return (
+    <View style={styles.seatMeter}>
+      {pips.length > 0 ? (
+        <View style={styles.seatPips}>
+          {pips.map((_, i) => (
+            <View
+              key={`seat-${i}`}
+              style={[
+                styles.seatPip,
+                i < used && styles.seatPipFilled,
+                i < used && full && { backgroundColor: admin.amber, borderColor: admin.amber },
+              ]}
+            />
+          ))}
+        </View>
+      ) : null}
+      <Text style={styles.seatMeterText}>
+        {unlimited
+          ? "Unlimited client invitations"
+          : `${used} of ${limit} client invitation${limit === 1 ? "" : "s"} used`}
+      </Text>
+    </View>
+  );
+}
+
+/**
+ * Live, scaled-down rendering of the realtor's client-facing app inside a phone
+ * frame — real portrait, headline and accent colour — paired with go-live
+ * progress. Doubles as the primary entry point to Brand Studio.
+ */
+function AppPreviewCard({
+  brandData,
+  initial,
+  heroListing,
+  onOpenNext,
+  onOpenPreview,
+}: {
+  brandData: Brand;
+  initial: string;
+  heroListing?: ManagedListing;
+  onOpenNext: (href: string) => void;
+  onOpenPreview: () => void;
+}) {
+  const { percent, doneCount, totalCount, canPublish, nextItem, remaining } = useGoLive();
+  const theme = resolveTheme(brandData.theme);
+  const accent = theme.accent.base;
+  const accentLight = theme.accent.light;
+  const r = brandData.realtor;
+
+  const bar = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(bar, {
+      toValue: percent / 100,
+      duration: 1100,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start();
+  }, [percent, bar]);
+  const barWidth = bar.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] });
+
+  /** Preview is available as soon as required setup is complete. */
+  const handlePress = () => {
+    if (canPublish) onOpenPreview();
+    else if (nextItem) onOpenNext(nextItem.href);
+  };
+
+  return (
+    <Pressable onPress={handlePress} style={({ pressed }) => [styles.previewCard, pressed && { opacity: 0.95, transform: [{ scale: 0.995 }] }]}>
+      <BlurView intensity={Platform.OS === "android" ? 34 : 26} tint="dark" style={StyleSheet.absoluteFill} />
+      <View style={styles.previewTint} />
+
+      <View style={styles.previewRow}>
+        {/* ── Phone frame ── */}
+        <View style={styles.phoneFrame}>
+          <View style={styles.phoneScreen}>
+            {/* Client app hero */}
+            <View style={styles.miniHero}>
+              {brandData.portraitUrl.trim().length > 0 ? (
+                <PortraitImage uri={brandData.portraitUrl} style={StyleSheet.absoluteFill} contentFit="cover" priority="high" />
+              ) : (
+                <View style={styles.miniHeroFallback}>
+                  <Image source={avatarPlaceholder} style={StyleSheet.absoluteFill} contentFit="cover" />
+                  <View style={[StyleSheet.absoluteFill, { backgroundColor: hexToRgba(accent, 0.14) }]} />
+                </View>
+              )}
+              <LinearGradient colors={["rgba(0,0,0,0.30)", "transparent", "rgba(10,9,7,0.86)"]} locations={[0, 0.42, 1]} style={StyleSheet.absoluteFill} />
+              {brandData.iconUrl.trim().length > 0 ? (
+                <View style={styles.miniIcon}>
+                  <Image source={{ uri: brandData.iconUrl }} style={StyleSheet.absoluteFill} contentFit="cover" transition={200} />
+                </View>
+              ) : (
+                <Text style={[styles.miniBrandMark, { color: accentLight }]} numberOfLines={1}>
+                  {r.brandName.replace(/_/g, " ")}
+                </Text>
+              )}
+              <View style={styles.miniHeroText}>
+                <Text style={[styles.miniEyebrow, { color: accentLight }]} numberOfLines={1}>{r.heroEyebrow}</Text>
+                <Text style={styles.miniHeadline} numberOfLines={2}>{r.heroMessage.replace(/\n/g, " ")}</Text>
+              </View>
+            </View>
+
+            {/* Client app body */}
+            <View style={styles.miniBody}>
+              <View style={[styles.miniCta, { backgroundColor: accent }]}>
+                <Text style={styles.miniCtaText} numberOfLines={1}>{r.primaryCta}</Text>
+              </View>
+              <View style={styles.miniListingRow}>
+                <View style={styles.miniThumb}>
+                  {heroListing ? (
+                    <Image source={{ uri: heroListing.images[0] ?? heroListing.image }} style={StyleSheet.absoluteFill} contentFit="cover" transition={200} />
+                  ) : (
+                    <View style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(0,0,0,0.10)" }]} />
+                  )}
+                </View>
+                <View style={styles.miniLines}>
+                  <View style={[styles.miniLine, { width: "88%", backgroundColor: hexToRgba(accent, 0.55) }]} />
+                  <View style={[styles.miniLine, { width: "62%" }]} />
+                  <View style={[styles.miniLine, { width: "74%" }]} />
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.phoneNotch} />
+        </View>
+
+        {/* ── Setup progress, or the live-ready preview state ── */}
+        <View style={styles.previewSide}>
+          <Text style={styles.previewEyebrow}>{canPublish ? "READY TO PREVIEW" : "SETUP NEEDED"}</Text>
+          <Text style={styles.previewTitle}>
+            {canPublish ? "Your app is ready." : percent === 0 ? "Let's build your app." : "Finish your setup."}
+          </Text>
+
+          {canPublish ? (
+            <>
+              <View style={styles.previewLiveRow}>
+                <View style={styles.previewLiveDot}>
+                  <Check size={10} color={admin.green} strokeWidth={2.8} />
+                </View>
+                <Text style={styles.previewLiveText} numberOfLines={2}>
+                  Your required setup is complete. Take a look at what clients will see.
+                </Text>
+              </View>
+              <View style={[styles.previewButton, { backgroundColor: hexToRgba(accent, 0.16), borderColor: hexToRgba(accent, 0.42) }]}>
+                <Eye size={13} color={accentLight} strokeWidth={1.9} />
+                <Text style={[styles.previewButtonText, { color: accentLight }]} numberOfLines={1}>Preview client app</Text>
+                <ArrowUpRight size={13} color={accentLight} strokeWidth={2.2} />
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={styles.previewPctRow}>
+                <Text style={[styles.previewPct, { color: accentLight }]}>{percent}</Text>
+                <Text style={styles.previewPctSign}>%</Text>
+                <Text style={styles.previewPctLabel}>{doneCount} of {totalCount}</Text>
+              </View>
+              <View style={styles.previewTrack}>
+                <Animated.View style={[styles.previewFill, { width: barWidth, backgroundColor: accent }]} />
+              </View>
+
+              {remaining.slice(0, 2).map((item, i) => (
+                <View key={item.id} style={styles.previewStep}>
+                  <View style={[styles.previewStepDot, i === 0 && { borderColor: hexToRgba(accent, 0.6), backgroundColor: hexToRgba(accent, 0.16) }]} />
+                  <Text style={[styles.previewStepText, i === 0 && { color: admin.text }]} numberOfLines={1}>
+                    {item.label}
+                  </Text>
+                </View>
+              ))}
+
+              {nextItem ? (
+                <View style={[styles.previewButton, { backgroundColor: hexToRgba(accent, 0.14), borderColor: hexToRgba(accent, 0.38) }]}>
+                  <Text style={[styles.previewButtonText, { color: accentLight }]} numberOfLines={1}>{nextItem.cta}</Text>
+                  <ChevronRight size={13} color={accentLight} strokeWidth={2.2} />
+                </View>
+              ) : null}
+            </>
+          )}
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+
+function ActivityMetric({
+  icon: Icon,
+  value,
+  label,
+  accent,
+  suffix,
+}: {
+  icon: React.ComponentType<any>;
+  value: number;
+  label: string;
+  accent: string;
+  suffix?: string;
+}) {
+  return (
+    <View style={styles.activityMetric}>
+      <Icon size={14} color={accent} strokeWidth={1.7} />
+      <Text style={styles.activityMetricValue}>
+        {value}{suffix ?? ""}
+      </Text>
+      <Text style={styles.activityMetricLabel}>{label}</Text>
+    </View>
+  );
+}
+
+function MagazineHeroCard({
+  item,
+  refreshing,
+  onOpen,
+  onToggleHidden,
+  onDelete,
+  onRefresh,
+}: {
+  item: ManagedListing;
+  refreshing: boolean;
+  onOpen: () => void;
+  onToggleHidden: () => void;
+  onDelete: () => void;
+  onRefresh: () => void;
+}) {
+  const status: ListingStatus = item.status ?? "active";
+  const [showOverlay, setShowOverlay] = useState(false);
+  const overlayAnim = useRef(new Animated.Value(0)).current;
+
+  const toggleOverlay = () => {
+    if (Platform.OS !== "web") Haptics.selectionAsync();
+    const to = showOverlay ? 0 : 1;
+    setShowOverlay(!showOverlay);
+    Animated.spring(overlayAnim, {
+      toValue: to,
+      useNativeDriver: true,
+      damping: 18,
+      stiffness: 200,
+    }).start();
+  };
+
+  const overlayStyle = {
+    opacity: overlayAnim,
     transform: [{ scale: overlayAnim.interpolate({ inputRange: [0, 1], outputRange: [0.96, 1] }) }],
   };
 
@@ -1741,4 +2057,3 @@ const styles = StyleSheet.create({
   emptyTitle: { fontFamily: fonts.serif, color: admin.text, fontSize: 18, letterSpacing: -0.1 },
   emptySub: { fontFamily: fonts.sans, color: admin.textMuted, fontSize: 12, textAlign: "center", maxWidth: 260, lineHeight: 18 },
 });
-
