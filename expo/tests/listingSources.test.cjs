@@ -272,3 +272,52 @@ test('a Flexmls selected-property shell follows its public filtered photo collec
   const inventory=await sources.readSource(root,fetchPages({[root]:'<h3>Loading...</h3>',[fragment.toString()]:html(home())}));
   assert.equal(inventory.listings[0].price,'$350,000'); assert.equal(inventory.listings[0].image,'https://photos.example/12.jpg');
 });
+
+
+test('94-property inventories enrich every home within the shared source budget',async()=>{
+ const url='https://large.example/my-listings',records=Array.from({length:94},(_,i)=>({...home(i+1),url:'https://large.example/property/'+(i+1)}));
+ const pages={[url]:html(records)};
+ records.forEach((record,i)=>{pages[record.url]=html({...record,description:'Full property remarks '+i,image:['https://photos.example/'+i+'a.jpg','https://photos.example/'+i+'b.jpg']});});
+ const result=await sources.readSource(url,fetchPages(pages),undefined,async()=>[]);
+ assert.equal(result.listings.length,94);assert.ok(result.listings.every(l=>l.images.length===2&&l.description&&l.detailsComplete));
+});
+
+test('public listing pages with optional password forms and footer captcha remain readable',async()=>{
+ const rt=runtime({fetchFixture:async url=>new Response(String(url).endsWith('/robots.txt')?'User-agent: *\nAllow: /':'<title>Homes for sale</title><h1>12 Pine St</h1><footer><input type="password"><script src="recaptcha.js"></script></footer>',{headers:{'content-type':'text/html'}})});
+ assert.match((await rt.load('refresh-listings/publicPage.ts').fetchHtml('https://public.example/property/12')).html,/12 Pine/);
+});
+
+test('actual challenge pages and login routes remain blocked',async()=>{
+ const rt=runtime({fetchFixture:async url=>new Response(String(url).endsWith('/robots.txt')?'User-agent: *\nAllow: /':'<title>Just a moment...</title><form id="challenge-form"></form>',{headers:{'content-type':'text/html'}})});
+ await assert.rejects(()=>rt.load('refresh-listings/publicPage.ts').fetchHtml('https://challenge.example/property/12'),/blocks automatic access/);
+});
+
+test('Brivity component exposes full gallery, remarks, MLS and facts for its own property only',()=>{
+ const item=discovery.extractListingsFromPage(html(home()),new URL(source.url))[0];
+ const page=`<property-details street="12 Pine St" photos="['https://photos.example/front.jpg','https://photos.example/kitchen.jpg']" description="Complete &amp; factual remarks" price="420000" bedrooms="4" baths="3" yearBuilt="2006" mlsNum="MLS-12" mlsPropertyType="Residential"></property-details>`;
+ const result=discovery.enrichListingFromPage(item,page,new URL(item.sourceUrl));
+ assert.equal(result.images.length,2);assert.equal(result.description,'Complete & factual remarks');assert.equal(result.facts['Year Built'],'2006');assert.equal(result.price,'$420,000');assert.equal(result.beds,4);assert.equal(result.listingNumber,'MLS-12');
+ assert.deepEqual(discovery.enrichListingFromPage(item,page.replace('12 Pine St','25 Pine St'),new URL(item.sourceUrl)),item);
+});
+
+test('IDX galleries follow only the observed link for the same MLS and exclude site chrome',async()=>{
+ const item={...discovery.extractListingsFromPage(html(home()),new URL(source.url))[0],sourceUrl:'https://homes.example/idx/details/listing/b254/26-123'};
+ const base=new URL(item.sourceUrl),gallery='https://homes.example/idx/photogallery/b254/26-123';
+ const detail='<h1>12 Pine St</h1><a href="'+gallery+'">Photos</a><a href="/idx/photogallery/b254/OTHER">Other home</a>';
+ const photos='<img class="logo" src="https://photos.example/logo.jpg"><img class="IDX-detailsPrimaryImg" src="https://photos.example/front.jpg"><img class="IDX-detailsPrimaryImg" data-src=" https://photos.example/kitchen.jpg" src="/loading.gif">';
+ const result=await discovery.enrichPublicProperty(item,fetchPages({[gallery]:photos}),{html:detail,finalUrl:base});
+ assert.equal(result.images.length,2);assert.equal(result.detailsComplete,true);
+ assert.equal(discovery.propertyGalleryRequest(detail.replace(gallery,'https://evil.example/idx/photogallery/b254/26-123'),base,item),undefined);
+});
+
+test('dsIDX Juicebox reads public XML photo literals without executing page scripts',async()=>{
+ const item=discovery.extractListingsFromPage(html(home()),new URL(source.url))[0];
+ const detail=`<h1>12 Pine St</h1><script>var dsidxAjaxHandler={"ajaxurl":"https://agent.example/wp-admin/admin-ajax.php"};dsidx.details.pid=12345;new juicebox({configUrl:dsidx.details.GetConfigUrl()});</script>`;
+ const url=discovery.propertyGalleryRequest(detail,new URL(item.sourceUrl),item);
+ assert.equal(url,'https://agent.example/wp-admin/admin-ajax.php?action=dsidx_client_assist&dsidx_action=GetPhotosXML&pid=12345');
+ const result=await discovery.enrichPublicProperty(item,fetchPages({[url]:'<juiceboxgallery><image imageURL="https://photos.example/a.jpg"/><image imageURL="https://photos.example/b.jpg"/></juiceboxgallery>'}),{html:detail,finalUrl:new URL(item.sourceUrl)});
+ assert.equal(result.images.length,2);assert.equal(result.detailsComplete,true);
+ assert.equal(discovery.propertyGalleryRequest(detail.replace('https://agent.example/wp-admin','https://other.example/wp-admin'),new URL(item.sourceUrl),item),undefined);
+ const failed=await discovery.enrichPublicProperty(item,async()=>{throw Error('403')},{html:detail,finalUrl:new URL(item.sourceUrl)});
+ assert.equal(failed.detailsComplete,false);assert.deepEqual(failed.images,item.images);
+});

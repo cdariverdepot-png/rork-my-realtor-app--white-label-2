@@ -547,7 +547,7 @@ function extractPropertyRecords(html: string, base: URL): DiscoveredListing[] {
     seen.add(card.sourceUrl);
     merged.push(card);
   }
-  if (merged.length) return merged.slice(0, 24);
+  if (merged.length) return merged.slice(0, 500);
   const single = listingFromMeta(html, base);
   return single ? [single] : [];
 }
@@ -1092,6 +1092,16 @@ function enrichPropertyFacts(item:DiscoveredListing,html:string):DiscoveredListi
 function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
   const flex=flexmlsDetail(item,html,base);
   if(flex)return enrichPropertyFacts(flex,html);
+  const brivity=html.match(/<property-details\b[^>]*>/i)?.[0];
+  if(brivity&&attr(brivity,"street").trim().toLowerCase()===item.title.trim().toLowerCase()){
+    const images=distinctPropertyImages([...attr(brivity,"photos").matchAll(/(['"])(.*?)\1/g)].map(m=>absolutize(m[2],base)).filter((u:string|null):u is string=>!!u&&!looksLikeChrome(u)));
+    const facts={...item.facts};
+    for(const [key,label]of Object.entries({yearBuilt:"Year Built",lotSize:"Lot Size",garageCapacity:"Garage",zoning:"Zoning",roof:"Roof",water:"Water",sewer:"Sewer",basement:"Basement"}))if(attr(brivity,key))facts[label]=attr(brivity,key);
+    return {...item,description:attr(brivity,"description")||item.description,images:images.length?images:item.images,image:images[0]||item.image,
+      price:attr(brivity,"price")?priceFrom({price:attr(brivity,"price")}):item.price,
+      beds:Number(attr(brivity,"bedrooms"))||item.beds,baths:Number(attr(brivity,"baths"))||item.baths,
+      listingNumber:attr(brivity,"mlsNum")||item.listingNumber,propertyType:attr(brivity,"mlsPropertyType")||attr(brivity,"currentUse")||item.propertyType,facts,detailsComplete:images.length>0};
+  }
   const detail = listingFromDsidxDetail(html,base) ?? listingsFromMoxi(html,base).find(l=>l.sourceUrl===item.sourceUrl) ?? listingFromIdxDetail(html, base) ?? listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
   if(!detail&&!decodeEntities(stripTags(html)).toLowerCase().includes(item.title.toLowerCase()))return item;
   const meta = (name: string) => {
@@ -1124,7 +1134,53 @@ async function enrichPublicProperty(item:DiscoveredListing,fetchHtml:FetchHtml,
   let enriched=enrichListingFromPage(item,page.html,page.finalUrl);
   const factsUrl=propertyFactsRequest(page.html,page.finalUrl,item);
   if(factsUrl)try{const facts=await fetchHtml(factsUrl,{fragment:true});enriched=enrichPropertyFacts(enriched,facts.html);}catch{/* Gallery and remarks remain useful if the optional facts fragment is unavailable. */}
+  const galleryRequest=propertyGalleryRequest(page.html,page.finalUrl,item);
+  if(galleryRequest)enriched={...enriched,detailsComplete:false};
+  if(galleryRequest)try{
+    const gallery=await fetchHtml(galleryRequest,{fragment:true});
+    if(gallery.finalUrl.toString()===galleryRequest){
+      const images=propertyGalleryImages(gallery.html,gallery.finalUrl);
+      if(images.length)enriched={...enriched,images,image:images[0],detailsComplete:true};
+    }
+  }catch{/* Preserve available property data; incomplete details remain visible in source feedback. */}
   return enriched;
+}
+
+/** Public provider galleries are scoped to the exact property and same source origin. */
+function propertyGalleryRequest(html:string,base:URL,item:DiscoveredListing):string|undefined {
+  const source=new URL(item.sourceUrl);
+  const idx=source.pathname.match(/\/idx\/details\/listing\/([^/]+)\/([^/]+)/i);
+  if(idx&&base.origin===source.origin){
+    for(const tag of html.match(/<a\b[^>]*>/gi)??[]){
+      const raw=absolutize(attr(tag,"href"),base);if(!raw)continue;
+      const url=new URL(raw);
+      if(url.origin===source.origin&&url.pathname===`/idx/photogallery/${idx[1]}/${idx[2]}`)return raw;
+    }
+  }
+  // dsIDXpress publishes its Juicebox config via this read-only action. Parse literals, never execute scripts.
+  const pid=html.match(/dsidx\.details\.pid\s*=\s*(\d+)\s*;/)?.[1];
+  if(pid&&/configUrl\s*:\s*dsidx\.details\.GetConfigUrl\(\)/.test(html)&&base.origin===source.origin){
+    const config=html.match(/(?:var\s+)?dsidxAjaxHandler\s*=\s*(\{[^;]+\})\s*;/)?.[1];
+    try{
+      const raw=config?JSON.parse(config).ajaxurl:undefined;
+      const url=raw?new URL(raw,base):undefined;
+      if(url&&url.origin===base.origin&&url.pathname==="/wp-admin/admin-ajax.php"){
+        url.search="";url.searchParams.set("action","dsidx_client_assist");url.searchParams.set("dsidx_action","GetPhotosXML");url.searchParams.set("pid",pid);return url.toString();
+      }
+    }catch{/* Invalid configuration is not a gallery URL. */}
+  }
+}
+
+function propertyGalleryImages(html:string,base:URL):string[]{
+  const images:string[]=[];
+  for(const tag of html.match(/<(?:img|image)\b[^>]*>/gi)??[]){
+    const xml=/^<image\b/i.test(tag),cls=attr(tag,"class");
+    if(!xml&&!/IDX-detailsPrimaryImg/i.test(cls))continue;
+    const raw=xml?attr(tag,"imageURL"):attr(tag,"data-src")||attr(tag,"src");
+    const url=absolutize(raw.trim(),base);
+    if(url&&!looksLikeChrome(url))images.push(url);
+  }
+  return distinctPropertyImages(images);
 }
 
 /**
@@ -1332,13 +1388,14 @@ async function discoverListings(
     }
   }));
 
+  const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
   return {
     listings: listings.slice(0, maxListings),
     meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
       failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome: listings.length ?
-        (queue.length || failed.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
+        (unfinishedDetails || queue.length || failed.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
   };
 }
 
@@ -1775,7 +1832,7 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
     }
     if (!response.ok) throw new Error(`The page returned ${response.status}.`);
     if (!(options?.stylesheet && /text\/css/i.test(response.headers.get("content-type") ?? "")) && !/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
-        !(options?.fragment && (/application\/json/i.test(response.headers.get("content-type") ?? "") ||
+        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(response.headers.get("content-type") ?? "")) || /application\/json/i.test(response.headers.get("content-type") ?? "") ||
           (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
           (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
       throw new Error("The link is not a readable webpage.");
@@ -2196,7 +2253,7 @@ Deno.serve(async (request) => {
     if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks });
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -2307,7 +2364,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks,
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks,
       });
       discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
       discovery.meta.found = discoveredListings.length;

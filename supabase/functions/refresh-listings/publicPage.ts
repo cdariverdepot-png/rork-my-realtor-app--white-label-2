@@ -56,7 +56,7 @@ async function fetchPublicPage(uri: string, options?: { fragment?: boolean; acti
     }
     if (!response.ok) throw new Error(`The page returned ${response.status}.`);
     if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
-        !(options?.fragment && (/application\/json/i.test(response.headers.get("content-type") ?? "") ||
+        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(response.headers.get("content-type") ?? "")) || /application\/json/i.test(response.headers.get("content-type") ?? "") ||
           (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
           (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
       throw new Error("The link is not a readable webpage.");
@@ -126,7 +126,12 @@ export async function fetchHtml(uri: string, options?: { fragment?: boolean; act
   const url = await publicHttps(uri);
   await respectRobots(url);
   const page = await fetchPublicPage(uri, options, respectRobots);
-  if (/<input\b[^>]*type=["']password["']|\b(?:captcha|verify you are human|access denied)\b/i.test(page.html) ||
+  const heading=(page.html.match(/<(?:title|h1)\b[^>]*>([\s\S]*?)<\/(?:title|h1)>/i)?.[1]??"").replace(/<[^>]+>/g," ");
+  // Public sites commonly embed optional login forms and reCAPTCHA scripts in footers.
+  // Only an actual access/challenge page should block reading the public response.
+  if (/\b(?:verify you are human|access denied|just a moment|attention required|captcha)\b/i.test(heading) ||
+    /<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(page.html) ||
+    /^(?:\s*sign in|\s*log ?in)(?:\s*[|—-]|\s*$)/i.test(heading) && /<input\b[^>]*type=["']password["']/i.test(page.html) ||
     /\/(?:login|signin|sign-in)(?:\/|$)/i.test(page.finalUrl.pathname)) {
     throw new Error("That page needs sign-in or blocks automatic access. Paste a public listings or profile URL that opens without signing in.");
   }
