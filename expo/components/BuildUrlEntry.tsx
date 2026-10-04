@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -22,6 +22,7 @@ export default function BuildUrlEntry({
   onSubmit,
   onExit,
   busy = false,
+  preparing = false,
   error,
   listingCount = 0,
   onViewListings,
@@ -31,11 +32,29 @@ export default function BuildUrlEntry({
   onSubmit: () => void;
   onExit: () => void;
   busy?: boolean;
+  preparing?: boolean;
   error?: string;
   listingCount?: number;
   onViewListings?: () => void;
 }) {
   const insets = useSafeAreaInsets();
+  const inputRef = useRef<TextInput>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const submit = () => {
+    if (busy) return;
+    if (!url.trim()) {
+      setNotice("Enter a public listings page URL above to start your import.");
+      inputRef.current?.focus();
+      return;
+    }
+    if (preparing) {
+      setNotice("Your realtor session is still loading. Please try again in a moment.");
+      return;
+    }
+    setNotice(null);
+    onSubmit();
+  };
+  const feedback = error || notice;
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -99,7 +118,8 @@ export default function BuildUrlEntry({
         </View>
         <View
           style={{
-            flex: 1,
+            flexGrow: 1,
+            flexShrink: 0,
             minHeight: 160,
             justifyContent: "flex-end",
             paddingTop: 50,
@@ -148,6 +168,12 @@ export default function BuildUrlEntry({
             boxShadow: "0px 20px 50px rgba(0,0,0,0.22)",
           }}
         >
+          <Text style={{ color: "#F7F3E8", fontSize: 15, fontFamily: "Inter_600SemiBold", marginBottom: 8 }}>
+            Listings page URL
+          </Text>
+          <Text style={{ color: "#CBDAD1", fontSize: 14, lineHeight: 21, marginBottom: 12 }}>
+            Use your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.
+          </Text>
           <View
             style={{
               flexDirection: "row",
@@ -160,21 +186,21 @@ export default function BuildUrlEntry({
           >
             <Link2 size={21} color="#DBC5A1" />
             <TextInput
+              ref={inputRef}
               accessibilityLabel="Your listings URL"
               editable={!busy}
               value={url}
-              onChangeText={onChange}
-              placeholder="Website, Zillow, Realtor.com, IDX, public MLS…"
+              onChangeText={(value) => { setNotice(null); onChange(value); }}
+              placeholder="https://your-website.com"
               placeholderTextColor="#B4C0C6"
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="url"
               returnKeyType="go"
-              onSubmitEditing={() => {
-                if (url.trim() && !busy) onSubmit();
-              }}
+              onSubmitEditing={submit}
               style={{
                 flex: 1,
+                minWidth: 0,
                 minHeight: 48,
                 color: "#FFFFFF",
                 fontSize: 15,
@@ -182,7 +208,7 @@ export default function BuildUrlEntry({
               }}
             />
           </View>
-          {error ? (
+          {feedback ? (
             <View
               accessibilityRole="alert"
               style={{
@@ -193,15 +219,15 @@ export default function BuildUrlEntry({
               }}
             >
               <Text style={{ color: "#FFD6C4", fontSize: 14, lineHeight: 21 }}>
-                {error}
+                {feedback}
               </Text>
             </View>
           ) : null}
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Import my listings"
-            onPress={onSubmit}
-            disabled={!url.trim() || busy}
+            onPress={submit}
+            disabled={busy}
             style={{
               marginTop: 20,
               minHeight: 58,
@@ -211,7 +237,7 @@ export default function BuildUrlEntry({
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              opacity: !url.trim() || busy ? 0.55 : 1,
+              opacity: busy ? 0.55 : 1,
             }}
           >
             <Text
