@@ -13,6 +13,7 @@ import ThemePreviewPage from './ThemePreviewPage';
 import { clientDestination } from '@/lib/clientNavigation';
 import { previewDestination, previousPreviewPage } from '@/lib/previewHistory';
 import { PreviewSandboxProvider } from './PreviewSandbox';
+import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 
 /**
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
@@ -75,6 +76,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     .onFinalize((_e, success) => { if (!success) { dragX.setValue(0); setSliding(false); } }), [windowWidth, page, onClose]);
 
   const previewWidth = Math.min(windowWidth, 390);
+  const previewBackground = liveThemeDesign(brand.layoutId, brand.theme).background;
   // Create the scroll binding once — recreating Animated.event each render can thrash native bindings.
   const onScroll = useMemo(
     () => Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true,
@@ -114,7 +116,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
             contentContainerStyle={{ paddingBottom: 116 + insets.bottom }}
             style={Platform.OS === "web" ? ({ overscrollBehaviorY: "none" } as object) : undefined}
           >
-            <View style={{ maxWidth: 390, width: "100%", alignSelf: "center", overflow: "hidden" }}>
+            <View style={{ maxWidth: 390, width: "100%", alignSelf: "center", overflow: "hidden", backgroundColor: previewBackground, minHeight: 640 }}>
               {page === '/' ? <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} onNavigate={navigate}
                 onOpen={id => navigate(`/listing/${id}`)} onFavorite={toggleSaved} isFavorite={id => savedIds.includes(id)}
                 onCall={() => navigate('/message')} onContact={() => navigate('/message')} /> :
@@ -128,3 +130,4 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     </GestureHandlerRootView></PreviewSandboxProvider>
   </Modal>;
 }
+
