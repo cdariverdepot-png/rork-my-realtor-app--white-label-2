@@ -144,7 +144,8 @@ export const TERMS: LegalDoc = {
     {
       heading: "Paid plans",
       body: [
-        "Free accounts may connect a limited number of clients. Paid subscriptions are billed through the App Store, renew automatically unless cancelled at least 24 hours before the period ends, and are managed in your Apple ID settings. Refunds are handled by Apple under their policy, not by us.",
+        "Realtors receive full standard evaluation access for up to three connected client accounts, with no evaluation expiration or payment details required. Clients never pay. Monthly and annual standard subscriptions provide identical features and unlimited connected clients. Monthly pricing is $49/month. Annual pricing is $490/year, billed annually; the full annual amount is charged upfront. Subscriptions renew until canceled through the supported billing provider. Cancellation takes effect at the end of the paid period shown in account billing. Former subscribers do not regain evaluation access. Payment failures are handled separately through the billing provider's recovery process.",
+        "The custom app service costs $499 for setup plus a required $49/month or $490/year service subscription. Hosting, standard platform updates and bug fixes are included; additional custom design and features are separately quoted. Publication is directly through the realtor's own Apple Developer account, with membership fees paid separately. Store approval is subject to Apple review. Billing remains in test mode during implementation.",
       ],
     },
     {

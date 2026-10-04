@@ -37,7 +37,8 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
     if (returningFromDemo) void auth.exitDemoView();
   }, [returningFromDemo, auth.exitDemoView]);
 
-  const dataReady = auth.hydrated && onboardingHydrated && (!auth.isAuthenticated || (brand.hydrated && profile.hydrated));
+  const accountManagement = path === "/admin/plans";
+  const dataReady = auth.hydrated && (accountManagement || (onboardingHydrated && (!auth.isAuthenticated || (brand.hydrated && profile.hydrated))));
   // Show the spinner only until this screen has rendered once; afterwards a
   // data reload (e.g. right after sign-in) keeps the current page mounted.
   const shownOnce = useRef(false);
@@ -46,7 +47,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
   let redirectTo: string | null = null;
   let cover = false;
   if (dataReady) {
-    const publicRoute = ["/portal", "/login", "/reset-password", "/client-recovery", "/auth/callback", "/welcome", "/book", "/legal"].includes(path);
+    const publicRoute = accountManagement || ["/portal", "/login", "/reset-password", "/client-recovery", "/auth/callback", "/welcome", "/book", "/legal"].includes(path);
     if (auth.demoViewMode) {
       // Demo cannot expose authenticated administration through back navigation.
       if (returningFromDemo) cover = true;

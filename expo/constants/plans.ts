@@ -1,95 +1,18 @@
-/**
- * Plan tiers and the free-tier client seat limit.
- *
- * A "seat" is a connection — a distinct client account that can actually open
- * the realtor's app. Roster contacts are NOT seats: those are the realtor's own
- * address book and stay unlimited on every tier.
- *
- * The numbers here are a mirror of `seat_limit_for_plan()` in
- * supabase/sql/seats.sql. The server is what enforces the limit; this file only
- * exists so the UI can show the right count before the round trip lands.
- */
-
-export type PlanId = "free" | "pro" | "bespoke";
-
-/** Free accounts may connect this many distinct clients. */
-export const FREE_SEAT_LIMIT = 3;
-
-/** Sentinel returned by the server for tiers with no cap. */
+import { MONTHLY_PRICE, ANNUAL_PRICE, ANNUAL_EQUIVALENT, CUSTOM_MAINTENANCE } from "./subscriptionPricing";
+/** Display configuration only. The server owns all entitlements and prices. */
+export type PlanId = "evaluation" | "pro" | "bespoke";
+export const EVALUATION_SEAT_LIMIT = 3;
+export const FREE_SEAT_LIMIT = EVALUATION_SEAT_LIMIT;
 export const UNLIMITED = -1;
-
+export const CUSTOM_SETUP_PRICE = "$499";
+export const CUSTOM_INQUIRY_URL = "mailto:hello@myrealtorapp.com?subject=" + encodeURIComponent("Custom app — $499 setup plus required subscription") + "&body=" + encodeURIComponent("I'd like to discuss my own app name, icon and portrait, published directly through my own Apple Developer account. Please confirm the ongoing subscription price and the agreed update/support scope. I understand Apple membership is separate.");
 export function seatLimitForPlan(plan: PlanId | string | null | undefined): number {
-  return plan === "pro" || plan === "bespoke" ? UNLIMITED : FREE_SEAT_LIMIT;
+  return plan === "pro" || plan === "bespoke" ? UNLIMITED : EVALUATION_SEAT_LIMIT;
 }
-
-export function isUnlimited(limit: number): boolean {
-  return limit < 0;
-}
-
-export type PlanTier = {
-  id: PlanId;
-  name: string;
-  /** Short line under the name. */
-  tagline: string;
-  price: string;
-  priceNote: string;
-  /** Secondary billing option, e.g. the annual price. */
-  altPrice?: string;
-  features: string[];
-  /** The one we're steering people toward. */
-  featured: boolean;
-  ctaLabel: string;
-  /** Sold outside the app — not an in-app purchase. */
-  contactOnly?: boolean;
-};
-
+export function isUnlimited(limit: number): boolean { return limit < 0; }
+export type PlanTier = { id: PlanId; name: string; tagline: string; price: string; priceNote: string; altPrice?: string; features: string[]; featured: boolean; ctaLabel: string; contactOnly?: boolean };
 export const PLAN_TIERS: PlanTier[] = [
-  {
-    id: "free",
-    name: "Free",
-    tagline: "Everything you need to build it.",
-    price: "$0",
-    priceNote: "forever",
-    features: [
-      "The complete content editor and theme tools",
-      "Your photography, fonts and colours",
-      "Listings, documents and showings",
-      "3 client invitations",
-    ],
-    featured: false,
-    ctaLabel: "YOUR CURRENT PLAN",
-  },
-  {
-    id: "pro",
-    name: "Professional",
-    tagline: "For an agent with a real book of clients.",
-    price: "$49",
-    priceNote: "per month",
-    altPrice: "or $490 a year — two months free",
-    features: [
-      "Everything in Free",
-      "Unlimited client invitations",
-      "No cap as your roster grows",
-      "Priority support",
-    ],
-    featured: true,
-    ctaLabel: "UPGRADE",
-  },
-  {
-    id: "bespoke",
-    name: "Bespoke",
-    tagline: "Your name on the App Store, not ours.",
-    price: "From $3,000",
-    priceNote: "one-off build",
-    altPrice: "optional ongoing maintenance",
-    features: [
-      "Everything in Professional",
-      "Your own app, listed under your name",
-      "Your icon on your clients' home screens",
-      "Built with you, one to one",
-    ],
-    featured: false,
-    ctaLabel: "TALK TO US",
-    contactOnly: true,
-  },
+  { id: "evaluation", name: "Evaluation", tagline: "Build your app and connect your first clients.", price: "$0", priceNote: "no time limit", features: ["All standard features", "Up to 3 connected client accounts", "No payment details required", "Contacts and pending invitations do not count"], featured: false, ctaLabel: "YOUR CURRENT PLAN" },
+  { id: "pro", name: "Professional", tagline: "Your personalized experience in the shared My Realtor App.", price: MONTHLY_PRICE, priceNote: "or annual", altPrice: ANNUAL_PRICE + " · " + ANNUAL_EQUIVALENT, features: ["All standard features on either billing interval", "Unlimited connected client accounts", "Your clients never pay", "Clients install the shared app and use your invitation", "Upgrade without changing records or invitations"], featured: true, ctaLabel: "SUBSCRIBE" },
+  { id: "bespoke", name: "Custom app", tagline: "Your own app, published through your Apple account.", price: CUSTOM_SETUP_PRICE, priceNote: "one-time setup", altPrice: "Plus required " + MONTHLY_PRICE + " or " + ANNUAL_PRICE, features: ["Personalized app name, icon and portrait if desired", "Separate App Store listing", "Your own Apple Developer account from the start", "Apple membership is a separate cost", "Appropriate developer access for publication and updates", CUSTOM_MAINTENANCE, "Store approval is subject to Apple's review"], featured: false, ctaLabel: "DISCUSS YOUR APP", contactOnly: true },
 ];

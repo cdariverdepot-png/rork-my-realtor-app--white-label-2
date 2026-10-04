@@ -9,7 +9,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase,endPrivateSession } from "@/lib/supabase";
 import { hashPassword } from "@/lib/passwordHash";
 import { appendClientToRoster } from "@/lib/clientRoster";
-import { claimClientSeat } from "@/lib/seats";
 import { ensureRealtorAuthRecord, signInRealtorWithAuth, signUpRealtorWithAuth } from "@/lib/realtorAuth";
 import { setGuestBuilderAccess } from "@/lib/appBuilder/buildService";
 
@@ -501,8 +500,8 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
 
   /**
    * Client signup — scoped to a specific realtor, and gated by that realtor's
-   * available client seats. The seat is claimed on the server BEFORE the
-   * account is written locally, so a refused client never ends up half-created.
+   * available client seats. The server authenticates the saved account and
+   * atomically activates its relationship. A refused account can retry login.
    */
   const clientSignup = useCallback(
     async (input: {
@@ -536,22 +535,6 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       }
       const clientId = `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
-      // Seats are claimed server-side. A full house stops here — nothing is
-      // written, and the caller shows the soft "not accepting clients" card.
-      const seat = await claimClientSeat({
-        realtorId: input.realtorId,
-        email,
-        clientId,
-        name,
-      });
-      if (!seat.ok) {
-        return {
-          ok: false,
-          atCapacity: seat.reason === "limit",
-          error: "This agent isn't accepting new clients right now.",
-        };
-      }
-
       const account: ClientAccount = {
         email,
         pw: await hashPassword(email, password),
@@ -561,6 +544,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
         createdAt: Date.now(),
       };
       const registration = await registerClientAccount({ realtorId: input.realtorId, email, pwHash: account.pw, clientId, name });
+      if (!registration.ok && (registration.reason === "limit" || registration.reason === "inactive")) return { ok: false, atCapacity: true, error: "This agent's app is currently unavailable. Your account is saved; sign in again when your agent confirms access." };
       if (!registration.ok) return { ok: false, error: registration.reason === "existing"
         ? "An account already exists for this email. Sign in or reset your password."
         : "We couldn't save your account. Check your connection and try again." };
@@ -634,6 +618,7 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       // The server is authoritative: a cached password must not override a reset.
       const pwHash = await hashPassword(e, password);
       const remote = await verifyClientAccount(realtorId, e, pwHash);
+      if (remote.status === "limit" || remote.status === "inactive") return { ok: false, atCapacity: true, error: "This agent's app is currently unavailable. Please contact your agent." };
       if (remote.status === "bad_password") return { ok: false, error: "Incorrect password. Try again or reset your password." };
       if (remote.status === "locked") return { ok: false, error: "Too many attempts. Please wait 15 minutes and try again." };
       if (remote.status === "unavailable") return { ok: false, error: "We couldn't reach sign-in. Check your connection and try again." };
@@ -645,19 +630,6 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       realmAccounts = [account];
       try { await AsyncStorage.setItem(accKey, JSON.stringify(realmAccounts)); } catch {}
       const found = account as ClientAccount;
-      const seat = await claimClientSeat({
-        realtorId,
-        email: e,
-        clientId: found.clientId,
-        name: found.name,
-      });
-      if (!seat.ok) {
-        return {
-          ok: false,
-          atCapacity: seat.reason === "limit",
-          error: "This agent isn't accepting new clients right now.",
-        };
-      }
       const next: Session = {
         email: e,
         role: "client",

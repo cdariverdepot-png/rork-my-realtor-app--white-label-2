@@ -10,7 +10,7 @@ import { supabase, ensureSupabaseSession } from "@/lib/supabase";
  * the SQL hasn't been run or Supabase is unreachable these quietly report
  * "unavailable" and the app behaves exactly as before.
  */
-export type RegistrationResult = { ok: true } | { ok: false; reason: "existing" | "unavailable" };
+export type RegistrationResult = { ok: true } | { ok: false; reason: "existing" | "unavailable" | "limit" | "inactive"; accountCreated?: boolean };
 
 export async function registerClientAccount(input: {
   realtorId: string; email: string; pwHash: string; clientId: string; name: string;
@@ -22,6 +22,7 @@ export async function registerClientAccount(input: {
       p_realtor_id: input.realtorId, p_email: input.email, p_pw_hash: input.pwHash,
       p_client_id: input.clientId, p_name: input.name,
     });
+    if (!error && (data?.reason === "limit" || data?.reason === "inactive")) return { ok: false, reason: data.reason, accountCreated: data.account_created === true };
     if (error || data?.ok !== true) return { ok: false, reason: "unavailable" };
     return data.created === true ? { ok: true } : { ok: false, reason: "existing" };
   } catch {
@@ -31,7 +32,7 @@ export async function registerClientAccount(input: {
 
 export type VerifyResult =
   | { status: "ok"; clientId: string; name: string }
-  | { status: "not_found" | "bad_password" | "locked" | "unavailable" };
+  | { status: "not_found" | "bad_password" | "locked" | "unavailable" | "limit" | "inactive" };
 
 export async function verifyClientAccount(realtorId: string, email: string, pwHash: string): Promise<VerifyResult> {
   if (!supabase) return { status: "unavailable" };
@@ -45,6 +46,7 @@ export async function verifyClientAccount(realtorId: string, email: string, pwHa
     if (row.ok === true && typeof row.client_id === "string") {
       return { status: "ok", clientId: row.client_id, name: typeof row.name === "string" ? row.name : "" };
     }
+    if (row.reason === "limit" || row.reason === "inactive") return { status: row.reason };
     if (row.reason === "bad_password") return { status: "bad_password" };
     if (row.reason === "locked") return { status: "locked" };
     if (row.reason === "not_found") return { status: "not_found" };

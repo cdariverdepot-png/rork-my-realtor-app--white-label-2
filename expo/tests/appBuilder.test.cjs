@@ -31,7 +31,7 @@ new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolv
 }).outputText)(presentationModule, presentationModule.exports);
 
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
-async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input' } = {}) {
+async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', serviceActive = true } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
@@ -61,7 +61,8 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
   const build = { sources:[source], evidence:[], draft, status };
-  const admin = { auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:()=> {
+  const admin = { rpc:async()=>({data:serviceActive,error:null}), auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:table=> {
+    if(table==='realtors')return {select:()=>({eq:()=>({maybeSingle:async()=>({data:{id:'realtor'},error:null})})})};
     reads++;
     return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:async()=>{update=value;return {error:null};}}) };
   } };
@@ -92,6 +93,9 @@ test('guest testing-code builds read URL content and generate real copy without 
   assert.ok(r.aiBody.text.format.schema.required.includes('evidence'));
   assert.equal(r.result.evidence[0].value,'Cindy Carlson Realty');
   assert.equal(r.reads,0);
+});
+test('inactive account cannot bypass website service checks through a guest payload',async()=>{
+  for(const guest of [true,false]){const r=await runWebsiteBuild({guest,serviceActive:false});assert.equal(r.status,403);assert.equal(r.aiBody,undefined);assert.equal(r.update,undefined);}
 });
 
 test('retries reread URLs for existing drafts with zero facts and change only selected copy', async () => {

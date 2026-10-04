@@ -109,7 +109,7 @@ export default function AdminClients() {
     const body = `${c.name} will lose access to your app. They stay on your roster, and their place frees up straight away.`;
     const run = () => {
       void (async () => {
-        const ok = await disconnect(c.email);
+        const ok = await disconnect(c.id);
         if (!ok) {
           Alert.alert("Couldn't disconnect", "Check your connection and try again.");
           return;
@@ -304,7 +304,7 @@ export default function AdminClients() {
                   <Text style={styles.name} numberOfLines={1}>
                     {c.name}
                   </Text>
-                  {isConnected(c.email) ? (
+                  {isConnected(c.id) ? (
                     <View style={styles.connectedPill}>
                       <View style={styles.connectedDot} />
                       <Text style={styles.connectedText}>IN YOUR APP</Text>
@@ -361,7 +361,7 @@ export default function AdminClients() {
                     <IdCard size={13} color={ACCENT} strokeWidth={1.6} />
                   </Pressable>
                 ) : null}
-                {isConnected(c.email) ? (
+                {isConnected(c.id) ? (
                   <Pressable
                     onPress={() => confirmDisconnect(c)}
                     hitSlop={8}
