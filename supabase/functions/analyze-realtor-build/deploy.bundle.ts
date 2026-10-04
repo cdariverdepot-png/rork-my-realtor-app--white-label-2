@@ -1506,7 +1506,7 @@ function extractWebsiteDesign(html: string, sourceUrl: string, stylesheets: { ur
   const sections: WebsiteSection[] = [];
   for (const m of clean.matchAll(/<h([2-3])\b[^>]*>([\s\S]*?)<\/h\1>([\s\S]*?)(?=<h[1-3]\b|$)/gi)) {
     const title = text(m[2]).slice(0, 180), body = text(m[3]).slice(0, 900);
-    if (!title || /cookie|privacy|subscribe|login|sign in|menu|sidebar|skip to|footer/i.test(title) || (!body && !/<img\b/i.test(m[3])) || sections.some(s => s.title === title)) continue;
+    if (!title || /cookie|privacy|subscribe|login|sign in|menu|sidebar|skip to|footer/i.test(title) || sections.some(s => s.title === title)) continue;
     const kind: WebsiteSection['kind'] = /listing|propert|featured home|available home/i.test(title) ? 'listings' : /about|meet|welcome|story/i.test(title) ? 'about' : /testimonial|review|client.*say/i.test(title) ? 'testimonials' : /contact|connect|touch/i.test(title) ? 'contact' : /buy|sell|service|relocat/i.test(title) ? 'services' : 'content';
     const img = m[3].match(/<img\b[^>]*>/i)?.[0];
     sections.push({ kind, title, body, imageUrl: img ? websiteAsset(attr(img, 'data-src') || attr(img, 'src'), sourceUrl) : undefined });

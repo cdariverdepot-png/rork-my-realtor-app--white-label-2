@@ -5,6 +5,7 @@ on:
     branches: [main, codex/intelligent-listing-import, codex/website-to-app]
     paths:
       - 'expo/**'
+      - 'supabase/functions/analyze-realtor-build/**'
       - '.github/workflows/deploy-web.yml'
   workflow_dispatch:
     inputs:
