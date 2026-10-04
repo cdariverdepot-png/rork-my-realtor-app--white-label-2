@@ -54,7 +54,7 @@ test('useReducedMotion stays unresolved until AccessibilityInfo answers', () => 
 test('Preview my app path gates on brand+listings hydrate and locks reveal delays', () => {
   const ready = fs.readFileSync(path.join(root, 'app/admin/ready.tsx'), 'utf8');
   assert.match(ready, /enterViewAsClient/);
-  assert.match(ready, /Preview my app/);
+  assert.match(ready, /View My App/);
   assert.match(ready, /router\.replace\("\/"\)/);
 
   const home = fs.readFileSync(path.join(root, 'app/index.tsx'), 'utf8');

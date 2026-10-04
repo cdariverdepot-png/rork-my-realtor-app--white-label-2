@@ -20,6 +20,7 @@ import { themeCandidate } from "@/constants/themeDesigns";
 
 import BuildUrlEntry from "./BuildUrlEntry";
 import OnboardingThemePreview from "./OnboardingThemePreview";
+import SetupReviewActions from "./SetupReviewActions";
 import {liveThemeDesign} from "@/constants/liveThemeDesigns";
 import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
 import ListingSourceImporter from "./ListingSourceImporter";
@@ -544,7 +545,7 @@ export default function InitialRealtorSetup() {
     {loaded && phase === "review" && result && draft && <>
       <Text style={{ color: "white", fontSize: 24, fontWeight: "600", marginTop: 28 }}>Here’s your app</Text>
       <Text style={{ color: "#C8D0D0", lineHeight: 22, marginTop: 8 }}>
-        {draft.presentation === 'website' ? 'Your website’s branding and content are ready in a native app. You can compare Original and Optimized from Edit Theme.' : `We used ${CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? 'a starting layout'} for your style — you can switch later from Edit My App.`}
+        Your branding, content and listings are ready to review. Explore themes or preview your app before publishing.
       </Text>
 
       {/* Real themed canvas — never a flat brown/charcoal stub. The same full client renderer is used here and after publishing. */}
@@ -661,10 +662,12 @@ export default function InitialRealtorSetup() {
       {errorFor("review")}
       {missingLabels.length > 0 && error?.place !== "review"
         ? <Text style={{ color: "#D6BA91", marginTop: 16 }}>Still needed: {missingLabels.join(", ")}</Text> : null}
+      <SetupReviewActions draft={draft} listings={mergeDiscoveredListings(existingListings,result?.draft.discoveredListings??[])}
+        onChoose={setDraft} disabled={busy || !!regenerating}/>
       <PressableScale accessibilityRole="button" onPress={finish} disabled={busy || !!regenerating} haptic="medium" style={{ marginTop: 16 }}>
-        <View style={{ minHeight: 58, borderRadius: 14, backgroundColor: missingLabels.length ? "#3D444C" : "#C2A276",
+        <View style={{ minHeight: 58, borderRadius: 14, backgroundColor: "#171D22", borderWidth: 1, borderColor: "#646C70",
           alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
-          <Text style={{ color: missingLabels.length ? "#C8D0D0" : "#172027", fontSize: 17, fontWeight: "700" }}>
+          <Text style={{ color: "#E6E9EA", fontSize: 17, fontWeight: "700" }}>
             {busy ? "Publishing…" : isPublished ? "Publish Changes" : "Publish My App"}
           </Text>
         </View>
