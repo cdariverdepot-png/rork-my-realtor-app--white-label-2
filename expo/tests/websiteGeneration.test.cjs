@@ -16,6 +16,23 @@ const { commitDesignPublication } = load('../lib/designPublication.ts');
 const html = `<html><head><meta name="description" content="Homes around the lake"><link rel="stylesheet" href="/theme.css"></head><body><img class="site-logo" src="/logo.png"><h1>Life by the water</h1><div class="hero"><img class="hero-image" src="/lake.jpg"><button class="button">Browse homes</button></div><h2>Meet your guide</h2><p>Local knowledge and personal service.</p><h2>Featured properties</h2><div></div><h2>Contact us</h2><p>Talk about your move.</p></body></html>`;
 const css = ':root { --brand-primary: #246; } body { background: #f7f4ed; color: #252a30; font-family: "Montserrat", sans-serif; } h1 { font-family: "Lora", serif; font-size: 48px; } .hero { background-image: url(/lake-hero.jpg); position: relative; } .button { background-color: var(--brand-primary); border-radius: 3px; }';
 const design = styles.extractWebsiteDesign(html, 'https://example.com/', [{url:'https://example.com/theme.css',css}]);
+
+test('WordPress headings and body artwork do not import widget or footer chrome', () => {
+  const page = '<html><body><h1 class="site-title">Business name</h1><h1><span style="font-family: Georgia; font-size: 31px">Welcome to our valley</span></h1><img src="/office.jpg" width="498" height="335"><h2>Contact us</h2><p>&#xf0e0; Call our office</p><h2>Primary Sidebar</h2><p>Widgets</p><h2>Facebook Feed</h2><p>Copyright and WordPress comments</p></body></html>';
+  const result = styles.extractWebsiteDesign(page, 'https://example.com/');
+  assert.equal(result.heroTitle, 'Welcome to our valley');
+  assert.equal(result.heroImageUrl, 'https://example.com/office.jpg');
+  assert.equal(result.original.headingFontFamily, 'Georgia');
+  assert.equal(result.original.headingSize, 31);
+  assert.deepEqual(result.sections.map(x => x.title), ['Contact us']);
+  assert.equal(result.sections[0].body, 'Call our office');
+});
+
+test('JSONB key ordering cannot create a false unpublished change', () => {
+  const { sameJson } = load('../lib/sameJson.ts');
+  assert.equal(sameJson({ theme: { ink: '#111111', accent: '#991111' }, names: ['A', 'B'] }, { names: ['A', 'B'], theme: { accent: '#991111', ink: '#111111' } }), true);
+  assert.equal(sameJson({ names: ['A', 'B'] }, { names: ['B', 'A'] }), false);
+});
 test('native variants retain observed colors, typography, imagery and source section order', () => {
   assert.equal(design.original.accent, '#224466'); assert.equal(design.original.background, '#f7f4ed');
   assert.equal(design.original.headingFontFamily, 'Lora'); assert.equal(design.original.fontFamily, 'Montserrat');

@@ -931,18 +931,19 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
   }, [persistSession, session?.role]);
 
   /** Setup unlocks an invitation; it never sends one to a client. */
-  const unlockSharingCredentials = useCallback(async () => {
+  const unlockSharingCredentials = useCallback(async (identity?: { name: string; brandName: string; monogram: string }) => {
     if (session?.role !== "admin" || demoViewMode) throw new Error("Realtor setup is required.");
     const record = realtorCache.find(r => r.id === session.realtorId);
     if (!record) throw new Error("Your account is still loading.");
-    if (record.client_code_enabled) return;
+    if (record.client_code_enabled && !identity) return;
     const clientCode = record.client_code || Array.from(getRandomBytes(6), byte => String(byte % 10)).join("");
+    const publicIdentity = identity ? { name: identity.name.trim().slice(0, 180), brand_name: identity.brandName.trim().slice(0, 180), monogram: identity.monogram.trim().slice(0, 8) } : {};
     if (supabase) {
       const { error } = await supabase.from("realtors")
-        .update({ client_code: clientCode, client_code_enabled: true }).eq("id", record.id);
+        .update({ ...publicIdentity, client_code: clientCode, client_code_enabled: true }).eq("id", record.id);
       if (error) throw error;
     }
-    const next = realtorCache.map(r => r.id === record.id ? { ...r, client_code: clientCode, client_code_enabled: true } : r);
+    const next = realtorCache.map(r => r.id === record.id ? { ...r, ...publicIdentity, client_code: clientCode, client_code_enabled: true } : r);
     await AsyncStorage.setItem(REALTOR_CACHE_KEY, JSON.stringify(next));
     setRealtorCache(next);
   }, [session, demoViewMode, realtorCache]);

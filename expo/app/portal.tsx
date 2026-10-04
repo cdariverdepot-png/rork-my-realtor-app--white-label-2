@@ -51,6 +51,9 @@ export default function Portal() {
     hydrated: authHydrated,
     isAuthenticated,
     isAdmin,
+    realtorId,
+    currentClientId,
+    logout,
     isPreviewAdmin,
     authBypassEnabled,
     enterAuthBypass,
@@ -86,6 +89,7 @@ export default function Portal() {
   const [resolvedRealtorName, setResolvedRealtorName] = useState<string>("");
   const [resolvedBrandName, setResolvedBrandName] = useState<string>("");
   const [resolvedMonogram, setResolvedMonogram] = useState<string>("");
+  const [activeInviteMessage, setActiveInviteMessage] = useState('');
 
   /** Return to the welcome gateway and drop sticky ?entry=client so refresh cannot force the code screen. */
   const goWelcome = () => {
@@ -140,11 +144,23 @@ export default function Portal() {
   // Auto-route if already authenticated (normal login — not AUTH_BYPASS).
   useEffect(() => {
     if (!authHydrated || authBypassEnabled) return;
-    if (entryParam) return;
     if (!isAuthenticated) return;
     if (isPreviewAdmin) return;
+    if (entryParam === 'client' && invite) {
+      let active = true;
+      void lookupRealtorByCode(invite).then(async record => {
+        if (!active) return;
+        if (isAdmin) { setActiveInviteMessage('You are signed in as a realtor. Open this invitation in a separate browser session to view the client experience.'); return; }
+        if (!record || !record.client_code_enabled) { setActiveInviteMessage('This invitation is unavailable. Your existing client account is still available.'); return; }
+        if (record.id !== realtorId) { setActiveInviteMessage('This invitation belongs to a different realtor. Your current account stays connected to its realtor. Sign out to open the new invitation.'); return; }
+        if (currentClientId) await completeInvitedClientTour(record.id, currentClientId);
+        if (active) router.replace('/');
+      }).catch(() => { if (active) setActiveInviteMessage('Could not check this invitation. Your existing account is still available.'); });
+      return () => { active = false; };
+    }
+    if (entryParam && !(entryParam === 'client' && !isAdmin)) return;
     router.replace(isAdmin ? "/admin/" : "/");
-  }, [authHydrated, authBypassEnabled, entryParam, isAuthenticated, isAdmin, isPreviewAdmin, router]);
+  }, [authHydrated, authBypassEnabled, entryParam, invite, isAuthenticated, isAdmin, isPreviewAdmin, realtorId, currentClientId, lookupRealtorByCode, completeInvitedClientTour, router]);
 
   // Animations
   const entrance = useRef(new Animated.Value(0)).current;
@@ -344,6 +360,13 @@ export default function Portal() {
         <View style={styles.iconBtn} />
       </View>
 
+      <Modal visible={!!activeInviteMessage && isAuthenticated} animationType="fade" onRequestClose={() => router.replace(isAdmin ? '/admin' : '/')}>
+        <View style={{ flex: 1, backgroundColor: '#080D12', padding: 28, justifyContent: 'center', gap: 24 }}>
+          <Text style={{ color: '#F5EFE5', fontSize: 20, lineHeight: 30 }}>{activeInviteMessage}</Text>
+          <Pressable accessibilityRole="button" onPress={() => router.replace(isAdmin ? '/admin' : '/')} style={{ padding: 16, backgroundColor: '#D4B989', borderRadius: 12 }}><Text style={{ color: '#111820' }}>Return to my account</Text></Pressable>
+          {!isAdmin && <Pressable accessibilityRole="button" onPress={() => { void logout().then(() => setActiveInviteMessage('')); }} style={{ padding: 16 }}><Text style={{ color: '#D4B989' }}>Sign out and open this invitation</Text></Pressable>}
+        </View>
+      </Modal>
       <Modal visible={stage === 'client-setup' && !!resolvedRealtorId && !inviteTourSeen && !isAuthenticated} animationType="fade" onRequestClose={() => transitionTo('client-signin')}>
         <View style={{ flex: 1, backgroundColor: '#080D12' }}>
           <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 20, gap: 8, paddingBottom: 8 }}>

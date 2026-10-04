@@ -958,7 +958,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
       hasPrevious: !!previous.publishedAt || !!realtorRecord?.client_code_enabled,
       saveDraft: saveBrand, savePrevious: (value, version) => kvSet(PREVIOUS_KEY, value, version, true),
       writePublished: (value, version) => kvSet(KV_KEY, value, version, true),
-      readPublished: () => kvGet<Brand>(KV_KEY, true), enableInvitation: unlockSharingCredentials,
+      readPublished: () => kvGet<Brand>(KV_KEY, true), enableInvitation: () => unlockSharingCredentials({ name: candidate.realtor.name, brandName: candidate.realtor.brandName, monogram: candidate.realtor.monogram }),
     });
     await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(saved)], [REVISION_KEY, String(rev)]]);
     if (previous.publishedAt || realtorRecord?.client_code_enabled) setPreviousPublished(previous);

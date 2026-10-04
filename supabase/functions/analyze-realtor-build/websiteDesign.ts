@@ -18,7 +18,9 @@ export type WebsiteDesign = {
 };
 
 const entities = (s: string) => s.replace(/&amp;/gi, '&').replace(/&quot;/gi, '"').replace(/&#39;|&apos;/gi, "'").replace(/&nbsp;/gi, ' ')
-  .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
+  .replace(/&#x([\da-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(0x10ffff, parseInt(n, 16))))
+  .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(0x10ffff, Number(n))))
+  .replace(/[\uE000-\uF8FF]/g, '').replace(/&middot;/gi, '·').replace(/&copy;/gi, '©');
 const text = (s: string) => entities(s.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
 const attr = (tag: string, name: string) => entities(tag.match(new RegExp(`(?:^|\\s)${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, 'i'))?.[2] ?? '');
 export function websiteAsset(raw: string, base: string): string | undefined {
@@ -143,9 +145,15 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
   const fonts = [...new Set([...css.matchAll(/font-family\s*:\s*([^;}]+)/gi)].map(m => resolve(m[1]).split(',')[0].replace(/["']/g, '').trim()).filter(f => f && !/inherit|initial|var\(/.test(f)))];
   const bodyNode = nodes.find(n => n.tag === 'body');
   const bodyFont = (bodyNode && computed(bodyNode, 'font-family'))?.split(',')[0].replace(/["']/g, '').trim() ?? pick('font-family', /body|:root|\.site\b|p\b/i)?.split(',')[0].replace(/["']/g, '').trim() ?? 'Inter';
-  const headingFont = pick('font-family', /h[1-3]|heading|hero|banner/i)?.split(',')[0].replace(/["']/g, '').trim() ?? bodyFont;
+  let headingFont = pick('font-family', /h[1-3]|heading|hero|banner/i)?.split(',')[0].replace(/["']/g, '').trim() ?? bodyFont;
   const clean = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
-  const h1 = text(clean.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] ?? '');
+  const headings = [...clean.matchAll(/<h1\b([^>]*)>([\s\S]*?)<\/h1>/gi)];
+  const mainHeading = headings.find(h => !/site-title|logo|screen-reader/i.test(h[1]) && text(h[2])) ?? headings[0];
+  const h1 = text(mainHeading?.[2] ?? '');
+  const headingInline = [mainHeading?.[1] ?? '', ...(mainHeading?.[2].match(/<[^>]+>/g) ?? [])]
+    .map(tag => attr(' '+tag, 'style')).join(';');
+  const inlineFont = headingInline.match(/font-family\s*:\s*([^;]+)/i)?.[1];
+  if (inlineFont) headingFont = inlineFont.split(',')[0].replace(/["']/g, '').trim();
   const metaDescription = (html.match(/<meta\b[^>]*>/gi) ?? []).find(t => attr(t, 'name').toLowerCase() === 'description');
   const heroSubtitle = metaDescription ? attr(metaDescription, 'content').slice(0, 500) : '';
   const imgs = (clean.match(/<img\b[^>]*>/gi) ?? []).map(tag => ({ tag, url: websiteAsset(attr(tag, 'data-src') || attr(tag, 'data-lazy-src') || attr(tag, 'src'), sourceUrl) })).filter(i => !!i.url);
@@ -157,11 +165,12 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
   const overlayNode = nodes.find(n => /img-overlay|hero|masthead|banner|cover/i.test(n.classes.join(' ')) && /url\(/i.test(attr(n.markup, 'style')));
   const overlayImage = overlayNode && attr(overlayNode.markup, 'style').match(/url\(["']?([^)'"\s]+)["']?\)/)?.[1];
   const heroImageUrl = websiteAsset(overlayImage || backgroundImage || inlineBackground || '', sourceUrl) || imgs.find(i => i !== logo && /hero|banner|slider|landscape|lake|mountain|home-page/i.test(i.tag) && !/transparent|logo/i.test(i.tag))?.url ||
-    imgs.find(i => i !== logo && Number(attr(i.tag, 'width')) >= 700)?.url;
+    imgs.find(i => i !== logo && !/logo|equal.?housing|realtor|transparent/i.test(i.tag) && Number(attr(i.tag, 'width')) >= 700)?.url ||
+    imgs.find(i => i !== logo && !/logo|equal.?housing|realtor|transparent/i.test(i.tag) && Number(attr(i.tag, 'width')) >= 320 && Number(attr(i.tag, 'width')) / Number(attr(i.tag, 'height')) > 1.3)?.url;
   const sections: WebsiteSection[] = [];
   for (const m of clean.matchAll(/<h([2-3])\b[^>]*>([\s\S]*?)<\/h\1>([\s\S]*?)(?=<h[1-3]\b|$)/gi)) {
     const title = text(m[2]).slice(0, 180), body = text(m[3]).slice(0, 900);
-    if (!title || /cookie|privacy|subscribe|login|sign in|menu|sidebar|skip to|footer/i.test(title) || sections.some(s => s.title === title)) continue;
+    if (!title || /cookie|privacy|subscribe|login|sign in|menu|sidebar|skip to|footer|facebook feed|social feed|comments/i.test(title) || sections.some(s => s.title === title)) continue;
     const kind: WebsiteSection['kind'] = /listing|propert|featured home|available home/i.test(title) ? 'listings' : /about|meet|welcome|story/i.test(title) ? 'about' : /testimonial|review|client.*say/i.test(title) ? 'testimonials' : /contact|connect|touch/i.test(title) ? 'contact' : /buy|sell|service|relocat/i.test(title) ? 'services' : 'content';
     const img = m[3].match(/<img\b[^>]*>/i)?.[0];
     sections.push({ kind, title, body, imageUrl: img ? websiteAsset(attr(img, 'data-src') || attr(img, 'src'), sourceUrl) : undefined });
@@ -173,7 +182,7 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
     layout: /(?:hero|banner)[^{}]*\{[^}]*position\s*:\s*(?:absolute|relative)/i.test(css) && heroImageUrl ? 'image-overlay' : heroImageUrl ? 'image-first' : imgs.some(i => /portrait|headshot|agent/i.test(i.tag)) ? 'portrait-split' : 'text-first',
     spacing: Math.min(48, Math.max(16, numeric(pick('padding(?:-top)?', /section|container|hero/i), 24))),
     radius: Math.min(32, Math.max(0, numeric(pick('border-radius', /button|btn|card/i), 0))),
-    headingSize: Math.min(52, Math.max(28, numeric(pick('font-size', /h1|hero.*title|heading-title/i), 38))),
+    headingSize: Math.min(52, Math.max(28, numeric(headingInline.match(/font-size\s*:\s*([^;]+)/i)?.[1] ?? pick('font-size', /h1|hero.*title|heading-title/i), 38))),
     motion: /fade.?in/i.test(css) ? 'fade' : /slide.?up|translateY/i.test(css) ? 'rise' : 'none',
   };
   return { version: 1, sourceUrl, analyzedAt: Date.now(), logoUrl: logo?.url, headerImageUrl, backgroundImageUrl: bodyBackground, heroImageUrl, heroTitle: h1, heroSubtitle, sections,

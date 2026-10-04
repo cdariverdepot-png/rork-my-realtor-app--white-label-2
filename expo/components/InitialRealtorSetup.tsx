@@ -66,6 +66,7 @@ export default function InitialRealtorSetup() {
   const [result, setResult] = useState<SavedBuild | null>(null);
   const [draft, setDraft] = useState<Brand | null>(null);
   const [busy, setBusy] = useState(false);
+  const publicationInProgress = useRef(false);
   const [error, setError] = useState<{ place: ErrorPlace; message: string } | null>(null);
   const [loaded, setLoaded] = useState(false);
   /** null = still checking; false = need portal sign-in (never invent signup here); true = unlocked. */
@@ -143,7 +144,9 @@ export default function InitialRealtorSetup() {
   };
 
   const loadSavedBuild = useCallback(async () => {
+    if (publicationInProgress.current) return;
     const saved = await loadBuild();
+    if (publicationInProgress.current) return;
     if (!saved) return;
     // Restore the actual collection, not just the count displayed in the draft.
     await applyDiscoveredListings(saved);
@@ -386,6 +389,9 @@ export default function InitialRealtorSetup() {
 
   const missingLabels = draft ? requiredStatus(draft).missing.map(item => item.label) : [];
   const finish = () => void act("review", async () => {
+    publicationInProgress.current = true;
+    const firstPublication = !isPublished;
+    try {
     if (!draft) throw new Error("Build your app first.");
     // Same rule set the rest of the app uses — REQUIRED_FIELDS is the only source of truth.
     const missing = requiredStatus(draft).missing;
@@ -408,7 +414,8 @@ export default function InitialRealtorSetup() {
     await publishBrand(publish);
     await markBuildComplete();
     await progressDraft.clear();
-    router.replace(isPublished ? "/admin" : "/admin/ready");
+    router.replace(firstPublication ? "/admin/ready" : "/admin");
+    } catch (error) { publicationInProgress.current = false; throw error; }
   });
   const setProfile = (key: keyof Brand["realtor"], value: string) =>
     setDraft(current => current && ({ ...current, realtor: { ...current.realtor, [key]: value } }));
@@ -522,7 +529,7 @@ export default function InitialRealtorSetup() {
     {loaded && phase === "review" && result && draft && <>
       <Text style={{ color: "white", fontSize: 24, fontWeight: "600", marginTop: 28 }}>Here’s your app</Text>
       <Text style={{ color: "#C8D0D0", lineHeight: 22, marginTop: 8 }}>
-        We used {CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? "a starting layout"} for your style — you can switch later from Edit My App.
+        {draft.presentation === 'website' ? 'Your website’s branding and content are ready in a native app. You can compare Original and Optimized from Edit Theme.' : `We used ${CLIENT_LAYOUTS.find(layout => layout.id === draft.layoutId)?.name ?? 'a starting layout'} for your style — you can switch later from Edit My App.`}
       </Text>
 
       {/* Real themed canvas — never a flat brown/charcoal stub. The same full client renderer is used here and after publishing. */}

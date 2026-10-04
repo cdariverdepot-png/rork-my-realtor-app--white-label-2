@@ -43,7 +43,7 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
       {entries.slice(0, optimized ? 6 : 10).map(l => <View key={l.id} style={{ width: (optimized ? 285 : 310) * s, borderRadius: a.radius * s, overflow: 'hidden', borderColor: a.ink + '22', borderWidth: 1, backgroundColor: a.panel }}>
         <Pressable onPress={() => p.onOpen?.(l.id)} accessibilityRole="button" accessibilityLabel={l.title}>
           <Image source={{ uri: l.images?.[0] || l.image }} contentFit="cover" style={{ width: '100%', height: 205 * s }} />
-          <View style={{ padding: 18 * s, gap: 8 * s }}><Text style={{ color: a.ink, fontSize: 25 * s, fontFamily: headingFont }}>{l.price}</Text><Text style={{ color: a.ink, fontFamily: bodyFont, fontSize: 16 * s }}>{l.title}</Text><Text style={{ color: a.ink, fontSize: 13 * s }}>{l.beds} beds · {l.baths} baths · {l.sqft}</Text></View>
+          <View style={{ padding: 18 * s, gap: 8 * s }}><Text style={{ color: a.ink, fontSize: 25 * s, fontFamily: headingFont }}>{l.price}</Text><Text style={{ color: a.ink, fontFamily: bodyFont, fontSize: 16 * s }}>{l.title}</Text><Text style={{ color: a.ink, fontSize: 13 * s }}>{[l.beds > 0 ? `${l.beds} beds` : '', l.baths > 0 ? `${l.baths} baths` : '', l.sqft && l.sqft !== '0' ? l.sqft : ''].filter(Boolean).join(' · ') || l.neighborhood}</Text></View>
         </Pressable><Pressable accessibilityLabel={p.isFavorite?.(l.id) ? 'Remove saved home' : 'Save home'} accessibilityRole="button" onPress={() => p.onFavorite?.(l.id)} style={{ position: 'absolute', top: 12, right: 12, padding: 12, borderRadius: 24, backgroundColor: a.background }}><Heart size={22 * s} color={a.ink} fill={p.isFavorite?.(l.id) ? a.accent : 'transparent'} /></Pressable>
       </View>)}
     </ScrollView>}
