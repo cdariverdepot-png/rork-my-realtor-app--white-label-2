@@ -84,6 +84,7 @@ test('billing handler verifies owner, canonical events, duplicate checkout and d
  const deliver=async event=>{const raw=JSON.stringify(event);return handler(new Request('https://edge.example/billing',{method:'POST',headers:{'stripe-signature':await signature(raw)},body:raw}));};
  const event={id:'evt_old',livemode:false,type:'customer.subscription.updated',data:{object:{id:'sub_test',customer:'cus_test',status:'canceled'}}};
  assert.equal((await deliver(event)).status,200);assert.equal(state.status,'active');const revision=state.revision;await deliver(event);assert.equal(state.revision,revision);
+ const older={...event,id:'evt_oldsubscription',data:{object:{id:'sub_old',customer:'cus_test',status:'canceled'}}};assert.equal((await deliver(older)).status,200);assert.equal(state.provider_subscription_id,'sub_test');assert.equal(state.revision,revision);
  assert.equal((await deliver({...event,id:'evt_live',livemode:true})).status,400);assert.equal((await handler(new Request('https://edge.example/billing',{method:'POST',headers:{'stripe-signature':'invalid'},body:JSON.stringify(event)}))).status,400);
  await request('cancel');assert.equal(state.cancel_at_period_end,true);await request('resume');assert.equal(state.cancel_at_period_end,false);
 });

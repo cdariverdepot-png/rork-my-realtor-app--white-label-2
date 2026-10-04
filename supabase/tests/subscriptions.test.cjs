@@ -92,6 +92,7 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   await admin();assert.equal((await query('select client_code from public.realtors where id=$1',[R])).rows[0].client_code,'INVITE');
  });
  await t.test('cross-realtor access and client billing writes are rejected',async()=>{
+  await as(OWNER);assert.equal(await scalar('select private.kv_service_active($1) result',['global-setting']),false);assert.equal(await scalar('select private.kv_service_active($1) result',[R+':messages.v1']),true);
   await as(OWNER);await assert.rejects(query('select public.realtor_seat_state($1)',[OTHER]),/authorized/);await assert.rejects(query('select public.export_realtor_data($1)',[OTHER]),/authorized/);await assert.rejects(query('select public.disconnect_client($1,$2)',[OTHER,'c1']),/authorized/);
   await as(uid(1));await assert.rejects(query('select public.billing_snapshot($1)',[R]),/permission denied/);await assert.rejects(query('select * from private.billing_accounts'),/permission denied/);assert.equal(await scalar('select private.bound_client($1) result',[OTHER]),null);
   await as(OWNER);await assert.rejects(query('select public.billing_apply($1,$2,$3,$4)',[R,0,'evt_spoof',paid]),/permission denied/);

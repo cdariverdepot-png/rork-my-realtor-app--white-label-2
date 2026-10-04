@@ -45,6 +45,8 @@ Deno.serve(async(req:Request)=>{
    if(mapping.provider_subscription_id && subId!==mapping.provider_subscription_id){
     const current=await stripe(c,`subscriptions/${mapping.provider_subscription_id}`);
     if(!['canceled','incomplete_expired'].includes(current.status))return json(200,{received:true});
+    const candidate=await stripe(c,`subscriptions/${encodeURIComponent(subId)}`);
+    if(!Number.isFinite(current.created)||!Number.isFinite(candidate.created)||candidate.created<current.created)return json(200,{received:true});
    }
    await reconcile(mapping.realtor_id,subId,event.id);return json(200,{received:true});
   }

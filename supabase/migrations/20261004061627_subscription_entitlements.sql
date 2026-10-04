@@ -253,8 +253,14 @@ begin
 end; $$;
 create function public.billing_checkout(p_realtor_id uuid,p_customer_id text,p_session_id text,p_request_key uuid) returns jsonb language sql security invoker set search_path='' as $$ select private.billing_checkout(p_realtor_id,p_customer_id,p_session_id,p_request_key); $$;
 -- Owner-only direct table access must also honor inactivity; billing/export use narrow RPCs.
+create function private.kv_service_active(k text) returns boolean language sql stable set search_path='' as $$
+ select case when split_part(k,':',1) ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+ then private.service_active(split_part(k,':',1)::uuid) else false end;
+$$;
+revoke all on function private.kv_service_active(text) from public,anon;
+grant execute on function private.kv_service_active(text) to authenticated;
 create policy "kv service active" on public.app_kv as restrictive for all to authenticated
- using (private.service_active(split_part(key,':',1)::uuid)) with check (private.service_active(split_part(key,':',1)::uuid));
+ using (private.kv_service_active(key)) with check (private.kv_service_active(key));
 create policy "listing source service active" on public.listing_sources as restrictive for all to authenticated
  using(private.service_active(realtor_id)) with check(private.service_active(realtor_id));
 create policy "build service active" on public.realtor_builds as restrictive for all to authenticated
