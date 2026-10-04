@@ -25,7 +25,7 @@ interface Props {
 
 /**
  * Full-viewport launch splash using the branded loading animation video.
- * Plays through key/glow settle, holds ~1.25s, then fades when the app is ready.
+ * Plays the full animation at its encoded speed, then fades when the app is ready.
  * Black/#0a0a0a curtain prevents any peek of underlying UI.
  */
 export default function BootScreen({ ready = true, onFinish }: Props) {
@@ -227,3 +227,4 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 });
+
