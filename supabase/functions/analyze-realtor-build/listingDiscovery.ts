@@ -21,6 +21,9 @@ export type DiscoveredListing = {
   listingNumber?: string;
   propertyType?: string;
   importKey?: string;
+  /** True only when a property detail/gallery, rather than a collection card, was read. */
+  detailsComplete?: boolean;
+  facts?: Record<string, string>;
 };
 
 export type ListingDiscoveryMeta = {
@@ -251,14 +254,14 @@ function priceFrom(obj: Record<string, unknown>): string {
 }
 
 function imagesFrom(obj: Record<string, unknown>, base: URL): string[] {
-  const raw = obj.image ?? obj.photo ?? obj.thumbnailUrl;
+  const raw = obj.image ?? obj.photo ?? obj.associatedMedia ?? obj.thumbnailUrl;
   const list: string[] = [];
   const push = (v: unknown) => {
     if (typeof v === "string") {
       const a = absolutize(v, base);
       if (a && !looksLikeChrome(a)) list.push(a);
-    } else if (v && typeof v === "object" && typeof (v as { url?: string }).url === "string") {
-      const a = absolutize((v as { url: string }).url, base);
+    } else if (v && typeof v === "object") {
+      const a = absolutize(String((v as { contentUrl?: string; url?: string }).contentUrl ?? (v as {url?:string}).url ?? ""), base);
       if (a && !looksLikeChrome(a)) list.push(a);
     }
   };
@@ -329,7 +332,7 @@ function listingFromLd(obj: Record<string, unknown>, base: URL): DiscoveredListi
   const title = decodeEntities(name).replace(/\s+/g, " ").trim();
   if (!title || title.length < 3) return null;
   const description =
-    typeof obj.description === "string" ? decodeEntities(obj.description).replace(/\s+/g, " ").trim().slice(0, 1200) : "";
+    typeof obj.description === "string" ? decodeEntities(stripTags(obj.description)).trim().slice(0, 16000) : "";
   const price = priceFrom(obj);
   const images = imagesFrom(obj, base);
   const urlRaw =
@@ -352,7 +355,7 @@ function listingFromLd(obj: Record<string, unknown>, base: URL): DiscoveredListi
     sqft,
     neighborhood: neighborhoodFrom(obj),
     image: images[0] ?? "",
-    images: images.slice(0, 12),
+    images: images.slice(0, 500),
     sourceUrl,
     listingNumber: [obj.listingId, obj.listingNumber, obj.mlsNumber, typeof obj.identifier === "object" ? (obj.identifier as Record<string, unknown> | null)?.value : obj.identifier].filter(v => typeof v === "string" || typeof v === "number").map(String).find(Boolean)?.slice(0, 100) ?? "",
     propertyType: [obj.propertyType, obj.additionalType].filter(v => typeof v === "string").map(String).find(Boolean)?.slice(0, 100) ?? "",
@@ -469,7 +472,7 @@ export function listingFromMeta(html: string, base: URL): DiscoveredListing | nu
   if (/^(home|welcome|about)/i.test(title) && !price && !beds) return null;
   return {
     title: title.slice(0, 160),
-    description: description.slice(0, 1200),
+    description: description.slice(0, 16000),
     price,
     beds,
     baths,
@@ -482,6 +485,8 @@ export function listingFromMeta(html: string, base: URL): DiscoveredListing | nu
 }
 
 function extractPropertyRecords(html: string, base: URL): DiscoveredListing[] {
+  const flex=listingFromFlexmlsDetail(html,base);
+  if(flex)return [flex];
   const adapted = extractAdapterListings(html, base);
   if (adapted.length) return adapted;
   const structuredCards = listingsFromStructuredCards(html, base);
@@ -814,7 +819,7 @@ export function listingsFromKestrel(text: string, base: URL): DiscoveredListing[
     const images=(row.images??[]).map((img:{url?:string})=>absolutize(img.url??"",base)).filter((u:string|null)=>u&&!looksLikeChrome(u));
     return [{title,sourceUrl,price:priceFrom({price:row.listPrice}),description:String(row.description??""),beds:Number(row.bedrooms??0),
       baths:Number(row.fullBathrooms??0)+Number(row.partialBathrooms??0)*0.5,sqft:row.squareFeet?String(row.squareFeet):"",
-      neighborhood:[row.city,row.state].filter(Boolean).join(", "),image:images[0]??"",images:images.slice(0,12),status:"active" as const,
+      neighborhood:[row.city,row.state].filter(Boolean).join(", "),image:images[0]??"",images:images.slice(0,500),status:"active" as const,
       listingNumber:String(row.listingNumber??""),propertyType:String(row.propertyTypeLabel??"")}];
   });
 }
@@ -848,7 +853,7 @@ export function listingsFromMoxi(html: string, base: URL): DiscoveredListing[] {
     // Some Moxi detail payloads call this 'image' instead of 'images'.
     if(!images.length) for(const tag of html.match(/<img\b[^>]*>/gi)??[]){if(!/Property Photo:/i.test(attr(tag,"alt")))continue;const u=absolutize(attr(tag,"data-src")||attr(tag,"src"),base);if(u&&!images.includes(u))images.push(u);}
     const sourceUrl=absolutize("/listing"+String(data.url_slug),base);
-    if(sourceUrl)out.push({title:String(loc.address??""),description:String(data.comments??""),price:priceFrom({price:data.list_price}),beds:Number(data.bedrooms??0),baths:Number(data.bathrooms??0),sqft:String(data.sqr_footage??data.living_area??""),neighborhood:[loc.city,loc.state].filter(Boolean).join(", "),image:images[0]??"",images:images.slice(0,12),sourceUrl,status:normalizeListingStatus(data.status_name_for_view??data.status),listingNumber:String(data.mlsnumber??""),propertyType:String(data.property_type??"")});
+    if(sourceUrl)out.push({title:String(loc.address??""),description:String(data.comments??""),price:priceFrom({price:data.list_price}),beds:Number(data.bedrooms??0),baths:Number(data.bathrooms??0),sqft:String(data.sqr_footage??data.living_area??""),neighborhood:[loc.city,loc.state].filter(Boolean).join(", "),image:images[0]??"",images:images.slice(0,500),sourceUrl,status:normalizeListingStatus(data.status_name_for_view??data.status),listingNumber:String(data.mlsnumber??""),propertyType:String(data.property_type??"")});
     return out;
   }
   for(const m of html.matchAll(/<a\b[^>]*class=["'][^"']*linktooverlay[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)){
@@ -964,21 +969,116 @@ function navigationCandidates(html: string, base: URL): NavigationCandidate[] {
   return out.slice(0, 40);
 }
 
+/** Public Flexmls Turbo LDP route: keep the exact agent/office filter and property id. */
+export function propertyDetailRequest(raw: string): {url:string;fragment:boolean} {
+  const url=new URL(raw);
+  if (/(?:^|\.)flexmls\.com$/i.test(url.hostname) && /\/search\/(?:office|agent)_listing_categories\/[^/]+\/listings\/\d{20,32}$/.test(url.pathname)) {
+    url.pathname=url.pathname.replace(/\/listings\/(\d{20,32})$/, "/listing_detail/$1");
+    return {url:url.toString(),fragment:true};
+  }
+  return {url:raw,fragment:false};
+}
+
+/** Same photo at different Spark sizes is one photo; retain the first, preferred size. */
+export function distinctPropertyImages(images:string[]):string[] {
+  const seen=new Set<string>();
+  return images.filter(raw=>{let key=raw;try{const u=new URL(raw);if(/(?:^|\.)sparkplatform\.com$/i.test(u.hostname))key=u.pathname.match(/\d{20,32}(?=-(?:o|t)\.|\.)/)?.[0]??raw;}catch{/* already validated by extractor */}if(seen.has(key))return false;seen.add(key);return true;}).slice(0,500);
+}
+
+function flexmlsDetail(item:DiscoveredListing,html:string,base:URL):DiscoveredListing|undefined {
+  if(!/(?:^|\.)flexmls\.com$/i.test(base.hostname))return;
+  const tag=html.match(/<[^>]+\bdata-map--ldp-listing\s*=[\s\S]*?>/i)?.[0];
+  if(!tag)return;
+  try{
+    const data=JSON.parse(attr(tag,"data-map--ldp-listing"));
+    const id=new URL(item.sourceUrl).pathname.match(/\/(\d{20,32})$/)?.[1];
+    if(!id||data.ListingKey!==id)return; // Never attach another property's gallery.
+    const media=JSON.parse(attr(tag,"data-map--ldp-listing-native-media")||"{}");
+    const images=distinctPropertyImages((media.Photos??[]).filter((p:Record<string,unknown>)=>
+      (!p.CurrentPrivacy||p.CurrentPrivacy==="Public")&&(!p.Privacy||p.Privacy==="Public")).map((p:Record<string,unknown>)=>absolutize(String(p.Uri1280??p.UriLarge??p.Uri1024??p.Uri640??""),base)).filter((u: string|null):u is string=>!!u&&!looksLikeChrome(u)));
+    const remarks=html.match(/<div\b[^>]*class=["'][^"']*remarks-and-showing-info-clamped[^"']*["'][^>]*>([\s\S]*?)<\/div>/i)?.[1];
+    return {...item,description:remarks?decodeEntities(stripTags(remarks)).slice(0,16000):item.description,
+      price:priceFrom({price:data.CurrentPrice??data.ListPrice})||item.price,
+      beds:Number(data.BedsTotal)||item.beds,baths:Number(data.BathsTotal)||item.baths,
+      neighborhood:[data.City,data.StateOrProvince].filter(Boolean).join(", ")||item.neighborhood,
+      status:normalizeListingStatus(data.MlsStatus??data.StandardFields?.StandardStatus)??item.status,
+      listingNumber:data.ListingId||item.listingNumber,propertyType:data.StandardFields?.PropertyClass||item.propertyType,
+      images:images.length?images:item.images,image:images[0]||item.image,detailsComplete:images.length>0};
+  }catch{return;}
+}
+
+function listingFromFlexmlsDetail(html:string,base:URL):DiscoveredListing|undefined {
+  if(!/(?:^|\.)flexmls\.com$/i.test(base.hostname))return;
+  const tag=html.match(/<[^>]+\bdata-map--ldp-listing\s*=[\s\S]*?>/i)?.[0];
+  if(!tag)return;
+  try{
+    const data=JSON.parse(attr(tag,"data-map--ldp-listing"));
+    const source=new URL(base);source.pathname=source.pathname.replace('/listing_detail/','/listings/');
+    const item:DiscoveredListing={title:String(data.StreetAddress??""),sourceUrl:source.toString(),description:"",price:"",beds:0,baths:0,sqft:"",neighborhood:"",images:[],image:""};
+    if(!item.title)return;
+    return flexmlsDetail(item,html,base);
+  }catch{return;}
+}
+
+/** Follow only the public report link embedded in this exact LDP. */
+export function propertyFactsRequest(html:string,base:URL,item:DiscoveredListing):string|undefined {
+  if(!/(?:^|\.)flexmls\.com$/i.test(base.hostname))return;
+  const id=new URL(item.sourceUrl).pathname.match(/\/(\d{20,32})$/)?.[1];
+  if(!id)return;
+  for(const tag of html.match(/<[^>]+\bdata-fragment-path=[^>]*>/gi)??[]){
+    const raw=absolutize(attr(tag,"data-fragment-path"),base);
+    if(raw){const url=new URL(raw);if(url.origin===base.origin&&url.pathname.endsWith(`/listings/${id}/report/general`))return raw;}
+  }
+}
+
+export function enrichPropertyFacts(item:DiscoveredListing,html:string):DiscoveredListing {
+  const values:Record<string,string>={};
+  for(const m of html.matchAll(/<div\b[^>]*class=["'][^"']*listing-detail-field-label[^"']*["'][^>]*>([\s\S]*?)<\/div>([\s\S]*?)<\/div>/gi)){
+    const label=decodeEntities(stripTags(m[1])),value=decodeEntities(stripTags(m[2]));
+    if(value&&value.length<1000)values[label]=value;
+  }
+  const facts={...item.facts};
+  for(const [label,value]of Object.entries(values))if(/^(?:Year Built|Lot Acres|Lot Size|Garage.*|Heating|Cooling|Roof|Sewer|Water|View|Flooring|Zoning|Style|Levels|Construction|Exterior|Appliances|Basement|Waterfront|Subdivision)$/i.test(label))facts[label]=value;
+  return {...item,facts,sqft:values["Total SqFt."]||item.sqft,propertyType:values["Realtor.COM Type"]||values["Listing Type"]||item.propertyType};
+}
+
 /** Enrich an already evidenced property without replacing its address with an agency title. */
 export function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
+  const flex=flexmlsDetail(item,html,base);
+  if(flex)return enrichPropertyFacts(flex,html);
   const detail = listingFromDsidxDetail(html,base) ?? listingsFromMoxi(html,base).find(l=>l.sourceUrl===item.sourceUrl) ?? listingFromIdxDetail(html, base) ?? listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
+  if(!detail&&!decodeEntities(stripTags(html)).toLowerCase().includes(item.title.toLowerCase()))return item;
   const meta = (name: string) => {
     for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
       if ((attr(tag, "property") || attr(tag, "name")) === name) return attr(tag, "content");
     }
     return "";
   };
-  const description = detail?.description || meta("og:description") || meta("description");
+  const remarks=html.match(/<(?:div|section|p)\b[^>]*(?:id|class)=["'][^"']*(?:property-description|listing-description|ihf-description|dsidx-remarks)[^"']*["'][^>]*>([\s\S]*?)<\/(?:div|section|p)>/i)?.[1];
+  const description = detail?.description || (remarks?decodeEntities(stripTags(remarks)):"") || meta("og:description") || meta("description");
   const cover = absolutize(meta("og:image"), base);
-  const images = [...new Set([...(detail?.images ?? []), ...(cover && !looksLikeChrome(cover) ? [cover] : []), ...item.images])].slice(0, 12);
-  return { ...item, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 1200) || item.description,
+  // Explicit gallery images only; exclude related-home cards and site chrome.
+  const gallery:string[]=[];
+  for(const tag of html.match(/<img\b[^>]*>/gi)??[]){
+    if(!/rsImg|gallery|property-photo|listing-photo/i.test(attr(tag,"class"))&&!attr(tag,"data-full"))continue;
+    const url=absolutize(attr(tag,"data-full")||attr(tag,"data-src")||attr(tag,"src"),base);
+    if(url&&!looksLikeChrome(url))gallery.push(url);
+  }
+  const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
+  const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
+  return { ...item, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
+}
+
+export async function enrichPublicProperty(item:DiscoveredListing,fetchHtml:FetchHtml,
+  initial?:{html:string;finalUrl:URL}):Promise<DiscoveredListing>{
+  const request=propertyDetailRequest(item.sourceUrl);
+  const page=initial&&(initial.finalUrl.toString()===request.url||!request.fragment)?initial:await fetchHtml(request.url,{fragment:request.fragment});
+  let enriched=enrichListingFromPage(item,page.html,page.finalUrl);
+  const factsUrl=propertyFactsRequest(page.html,page.finalUrl,item);
+  if(factsUrl)try{const facts=await fetchHtml(factsUrl,{fragment:true});enriched=enrichPropertyFacts(enriched,facts.html);}catch{/* Gallery and remarks remain useful if the optional facts fragment is unavailable. */}
+  return enriched;
 }
 
 /**
@@ -1023,7 +1123,7 @@ export async function discoverListings(
     const key = item.sourceUrl;
     if (listingKeys.has(key)) {
       const index=listings.findIndex(row=>row.sourceUrl===item.sourceUrl);
-      if(index>=0){const old=listings[index],images=[...new Set([...item.images,...old.images])].slice(0,12);
+      if(index>=0){const old=listings[index],images=[...new Set([...item.images,...old.images])].slice(0,500);
         listings[index]={...old,description:item.description||old.description,price:item.price||old.price,beds:item.beds||old.beds,baths:item.baths||old.baths,sqft:item.sqft||old.sqft,status:item.status??old.status,image:images[0]||old.image,images,listingNumber:item.listingNumber||old.listingNumber};}
       return;
     }
@@ -1166,20 +1266,25 @@ export async function discoverListings(
   }
 
   // Detail enrichment shares the request/time budget and keeps collection provenance.
-  for (let i = 0; i < Math.min(listings.length, options?.maxDetailPages ?? 0); i++) {
-    if (visited.length >= maxPages || Date.now() >= deadline) break;
-    const item = listings[i];
-    if (item.description && item.images.length > 1 || visitedSet.has(item.sourceUrl)) continue;
-    visitedSet.add(item.sourceUrl);
-    visited.push(item.sourceUrl);
-    try {
-      const request=publicDetails.get(item.sourceUrl);
-      const page = await fetchHtml(request?.url ?? item.sourceUrl,request ? {fragment:true,activationToken:request.activationToken} : undefined);
-      hops++;
-      if(request){const detail=listingsFromKestrel(page.html,page.finalUrl).find(row=>row.sourceUrl===item.sourceUrl);if(detail)listings[i]={...item,...detail};}
-      else listings[i] = enrichListingFromPage(item, page.html, page.finalUrl);
-    } catch { failed.push(item.sourceUrl); }
-  }
+  let detailIndex=0;
+  const detailLimit=Math.min(listings.length,options?.maxDetailPages??0);
+  const detailFetch:FetchHtml=async (uri,opts)=>{
+    if(visited.length>=maxPages||Date.now()>=deadline)throw Error("Property detail request budget reached");
+    visited.push(uri);visitedSet.add(uri);
+    const page=await fetchHtml(uri,opts);hops++;return page;
+  };
+  // Small parallel batches give every property a turn without serial timeout starvation.
+  await Promise.all(Array.from({length:Math.min(3,detailLimit)},async()=>{
+    while(detailIndex<detailLimit&&visited.length<maxPages&&Date.now()<deadline){
+      const i=detailIndex++,item=listings[i];
+      if(item.detailsComplete)continue;
+      try{
+        const request=publicDetails.get(item.sourceUrl);
+        if(request){const page=await detailFetch(request.url,{fragment:true,activationToken:request.activationToken});const detail=listingsFromKestrel(page.html,page.finalUrl).find(row=>row.sourceUrl===item.sourceUrl);if(detail)listings[i]={...item,...detail,detailsComplete:true};}
+        else listings[i]=await enrichPublicProperty(item,detailFetch);
+      }catch(error){failed.push(item.sourceUrl);failureDetails.push({url:item.sourceUrl,reason:error instanceof Error?error.message.slice(0,180):"Property details unavailable"});}
+    }
+  }));
 
   return {
     listings: listings.slice(0, maxListings),

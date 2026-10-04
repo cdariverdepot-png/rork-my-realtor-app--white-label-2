@@ -31,7 +31,7 @@ import { useEngagement } from "@/contexts/EngagementContext";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 import { ListingDetailSkeleton } from "@/components/Skeleton";
-import { bustedUri } from "@/lib/imageUri";
+import ListingPhotoGallery from "@/components/ListingPhotoGallery";
 
 const { height: H } = Dimensions.get("window");
 
@@ -71,8 +71,7 @@ export default function ListingDetail() {
   return (
     <View style={styles.root}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={[styles.heroImg, { height: H * 0.62 }]}>
-          <Image source={{ uri: bustedUri(item.images?.[0] ?? item.image, item.updatedAt) }} style={StyleSheet.absoluteFill} contentFit="cover" />
+        <ListingPhotoGallery images={item.images} cover={item.image} title={item.title} updatedAt={item.updatedAt} height={H * 0.62}>
           <LinearGradient
             colors={["rgba(8,26,21,0.6)", "rgba(8,26,21,0)", "rgba(8,26,21,0.85)"]}
             locations={[0, 0.4, 1]}
@@ -114,7 +113,7 @@ export default function ListingDetail() {
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.price}>{item.price}</Text>
           </View>
-        </View>
+        </ListingPhotoGallery>
 
         <Reveal delay={60}>
         <View style={styles.specsRow}>
@@ -126,7 +125,12 @@ export default function ListingDetail() {
         </View>
         </Reveal>
 
-        <Reveal delay={140}>
+        {!!item.description && <View style={styles.descriptionBlock}>
+          <Text style={styles.detailsKicker}>ABOUT THIS PROPERTY</Text>
+          <Text style={styles.descriptionBody}>{item.description}</Text>
+        </View>}
+
+        {!!item.elizaTake?.trim() && <Reveal delay={140}>
         <View style={styles.takeCard}>
           <View style={styles.takeHead}>
             {b.portraitUrl ? (
@@ -143,7 +147,7 @@ export default function ListingDetail() {
           </View>
           <Text style={styles.takeBody}>{item.elizaTake}</Text>
         </View>
-        </Reveal>
+        </Reveal>}
 
         <Reveal delay={220}>
         <View style={styles.detailsBlock}>
@@ -154,6 +158,9 @@ export default function ListingDetail() {
           <Detail label="Bathrooms" value={String(item.baths)} />
           <Detail label="Interior" value={item.sqft} />
           <Detail label="Status" value={listingStatusLabel(item)} />
+          {!!item.listingNumber && <Detail label="MLS number" value={item.listingNumber} />}
+          {!!item.propertyType && <Detail label="Property type" value={item.propertyType} />}
+          {Object.entries(item.facts ?? {}).map(([label, value]) => <Detail key={label} label={label} value={value} />)}
           <Detail label="Showings" value="Private · by appointment" last />
         </View>
         </Reveal>
@@ -320,6 +327,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 8,
   },
+  descriptionBlock: { padding: 24 },
+  descriptionBody: { fontFamily: fonts.sans, fontSize: 15, lineHeight: 25, color: brand.ink },
   detailsKicker: {
     fontFamily: fonts.sansMedium,
     color: brand.goldDeep,
@@ -335,7 +344,7 @@ const styles = StyleSheet.create({
     borderBottomColor: brand.hairline,
   },
   detailLabel: { fontFamily: fonts.sans, color: brand.muted, fontSize: 13 },
-  detailValue: { fontFamily: fonts.serif, color: brand.ink, fontSize: 14 },
+  detailValue: { fontFamily: fonts.serif, color: brand.ink, fontSize: 14, flex: 1, textAlign: 'right', marginLeft: 16 },
   dock: {
     position: "absolute",
     left: 0,

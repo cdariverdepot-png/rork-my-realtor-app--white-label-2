@@ -1,4 +1,4 @@
-import { discoverListings, collectInventoryLinks, extractListingsFromPage, type DiscoveredListing, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
+import { discoverListings, collectInventoryLinks, extractListingsFromPage, enrichPublicProperty, type DiscoveredListing, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
 import { applyObservation, observeListing, type SyncListing } from "./sync.ts";
 import { normalizePublicPage, selectInventoryLinks } from "./normalizePage.ts";
 
@@ -37,7 +37,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
   const deadline = Date.now() + 45_000;
   const cachedFetch: FetchHtml = (uri, options) => { const cacheKey = `${uri}|${options?.fragment ?? false}`;
     if (!pages.has(cacheKey)) {
-      if (pages.size >= 24 || Date.now() > deadline) throw new Error("We could only check part of that source. We'll retry the rest later.");
+      if (pages.size >= 96 || Date.now() > deadline) throw new Error("We could only check part of that source. We'll retry the rest later.");
       pages.set(cacheKey, fetchHtml(uri, options));
     }
     return pages.get(cacheKey)!;
@@ -71,9 +71,9 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       }
     }
     if (associated) uri = associated;
-    else directProperty = original;
+    else directProperty = await Promise.all(original.map(async item=>{try{return await enrichPublicProperty(item,cachedFetch,page);}catch{return item;}}));
   }
-  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase" } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 20, maxListings: 100, maxDetailPages: 6, selectLinks, normalizePage: normalizePublicPage });
+  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase" } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks, normalizePage: normalizePublicPage });
   // Empty is trustworthy only when the known inventory explicitly reports zero properties.
   let explicitEmpty = false;
   if (existing && !discovery.listings.length && !discovery.meta.failed?.length) {

@@ -10,6 +10,7 @@ import { previewFeatures } from '@/lib/clientNavigation';
 import ThemeCollection from './ThemeCollection';
 import { Image } from 'expo-image';
 import PreviewSandbox, { isSandboxPage } from './PreviewSandbox';
+import ListingPhotoGallery from './ListingPhotoGallery';
 
 /** Local, read-only navigation inside a theme sample; never enters an authenticated account route. */
 export default function ThemePreviewPage({ route, brand, listings, onNavigate, savedIds = [], onFavorite }: { route: string; brand: Brand; listings: ManagedListing[]; onNavigate: (path: string) => void; savedIds?: string[]; onFavorite?: (id: string) => void }) {
@@ -27,12 +28,14 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
   const listing = route.startsWith('/listing/') ? listings.find(item => item.id === route.slice('/listing/'.length)) : undefined;
   if (listing) return <View style={{ padding: 24, gap: 18 }}>
     <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>PROPERTY PREVIEW</Text>
-    <Image source={{ uri: listing.images?.[0] || listing.image }} contentFit="cover" style={{ width: '100%', aspectRatio: 1.25, borderRadius: 20 }} />
+    <ListingPhotoGallery images={listing.images} cover={listing.image} title={listing.title} updatedAt={listing.updatedAt} />
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 32 }}>{listing.title}</Text>
     <Text style={{ color: d.accent, fontSize: 24 }}>{listing.price}</Text>
     <Text style={{ color: d.muted }}>{[listing.neighborhood, `${listing.beds} beds · ${listing.baths} baths`, listing.sqft].filter(Boolean).join('\n')}</Text>
     {!!listing.description && <Text style={{ color: d.ink, lineHeight: 24 }}>{listing.description}</Text>}
-    {(listing.images ?? []).slice(1).map(uri => <Image key={uri} source={{ uri }} contentFit="cover" style={{ width: '100%', aspectRatio: 1.4, borderRadius: 12 }} />)}
+    {!!listing.listingNumber && <Text style={{ color: d.muted }}>MLS number: {listing.listingNumber}</Text>}
+    {!!listing.propertyType && <Text style={{ color: d.muted }}>{listing.propertyType}</Text>}
+    {Object.entries(listing.facts ?? {}).map(([label,value]) => <Text key={label} style={{ color: d.muted }}>{label}: {value}</Text>)}
     <Pressable accessibilityRole="button" onPress={() => onFavorite?.(listing.id)} style={{ borderRadius: 16, padding: 16, backgroundColor: d.accent }}><Text style={{ color: d.background }}>{savedIds.includes(listing.id) ? 'Remove from saved homes' : 'Save this home'}</Text></Pressable>
     <Pressable accessibilityRole="button" onPress={() => onNavigate('/calendar')} style={{ padding: 16 }}><Text style={{ color: d.accent }}>Request a showing →</Text></Pressable>
     <Text style={{ color: d.muted, lineHeight: 22 }}>Layout preview only. Saved homes stay in this preview; no client data is changed.</Text>

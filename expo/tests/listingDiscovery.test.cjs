@@ -29,6 +29,30 @@ const {
   listingsFromPublicJson, listingsFromCards, listingsFromMoxi, listingFromDsidxDetail,
   kestrelInventoryRequests, listingsFromKestrel, publicListingRequestHeaders, decodePublicListingResponse,
 } = loadDiscovery();
+const {enrichListingFromPage,propertyDetailRequest,distinctPropertyImages}=loadDiscovery();
+
+test('Flexmls detail reads every public photo, full remarks and exact listing identity',()=>{
+  const id='20260929165515552066000000',url=`https://my.flexmls.com/TestAgent/search/office_listing_categories/Active/listings/${id}?from_filter=false`;
+  const item={title:'119 Pine St',sourceUrl:url,images:['https://cdn.resize.sparkplatform.com/cda/640x480/true/20260929174358219349000000-o.jpg'],image:'',description:'',price:'',beds:0,baths:0,sqft:'',neighborhood:''};
+  const photos=Array.from({length:36},(_,i)=>({Uri1280:`https://photos.example/${i}.jpg`,CurrentPrivacy:'Public'}));
+  photos.push({Uri1280:'https://photos.example/private.jpg',CurrentPrivacy:'Private'});
+  const esc=o=>JSON.stringify(o).replaceAll('"','&quot;');
+  const remarks='Full public remarks. '.repeat(100);
+  const html=`<div data-map--ldp-listing='${esc({ListingKey:id,ListingId:'26-9778',CurrentPrice:374000,BedsTotal:2,BathsTotal:1,MlsStatus:'Active',StandardFields:{PropertyClass:'Residential'}})}' data-map--ldp-listing-native-media='${esc({Photos:photos})}'><div class="remarks-and-showing-info-clamped"><p>${remarks}</p></div></div>`;
+  const result=enrichListingFromPage(item,html,new URL(propertyDetailRequest(url).url));
+  assert.equal(result.images.length,36);assert.equal(result.description,remarks.trim());assert.equal(result.listingNumber,'26-9778');assert.equal(result.detailsComplete,true);
+  assert.equal(result.price,'$374,000');assert.equal(result.beds,2);
+  assert.ok(propertyDetailRequest(url).url.includes(`/listing_detail/${id}?from_filter=false`));
+  assert.equal(enrichListingFromPage({...item,sourceUrl:url.replace(id,'20260929165515552066000001')},html,new URL(url)).images.length,1);
+  assert.equal(distinctPropertyImages(['https://cdn.resize.sparkplatform.com/cda/1280x1024/true/20260929174358219349000000-o.jpg',...item.images]).length,1);
+});
+
+test('structured galleries retain more than twelve images and contentUrl media objects',()=>{
+  const images=Array.from({length:30},(_,i)=>({contentUrl:`https://photos.example/gallery-${i}.jpg`}));
+  const page=`<script type="application/ld+json">${JSON.stringify({'@type':'RealEstateListing',name:'123 Lake Ave',price:500000,associatedMedia:images,description:'Long remarks. '.repeat(200)})}</script>`;
+  const [listing]=extractListingsFromPage(page,new URL('https://agent.example/property/123'));
+  assert.equal(listing.images.length,30);assert.ok(listing.description.length>1200);
+});
 
 const propertyPage = (title, url, price = 500000) => `<script type="application/ld+json">${JSON.stringify({
   '@type': 'RealEstateListing', name: title, price, url, image: 'https://photos.example/house.jpg',
@@ -108,7 +132,7 @@ test('reads hydration and follows pagination without duplicates', async () => {
 test('enriches evidenced properties without replacing addresses with agency metadata', async () => {
   const pages = {
     'https://agent.example/listings': propertyPage('12 Pine St', 'https://agent.example/property/12'),
-    'https://agent.example/property/12': '<meta property="og:title" content="Listing Office: Example Realty"><meta property="og:description" content="A sunny home beside the lake."><meta property="og:image" content="https://photos.example/full-size.jpg">',
+    'https://agent.example/property/12': '<h1>12 Pine St</h1><meta property="og:title" content="Listing Office: Example Realty"><meta property="og:description" content="A sunny home beside the lake."><meta property="og:image" content="https://photos.example/full-size.jpg">',
   };
   const result = await discoverListings(['https://agent.example/listings'], fixtureFetch(pages), { maxDetailPages: 12 });
   assert.equal(result.listings.length, 1);

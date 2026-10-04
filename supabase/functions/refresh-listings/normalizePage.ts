@@ -55,9 +55,9 @@ export function validateNormalizedRecords(records: unknown, html: string, base: 
     const images = (Array.isArray(r.images) ? r.images : []).map(value => observedUrl(value, e)).filter(Boolean);
     const sourceUrl = observedUrl(r.sourceUrl, e);
     if (!sourceUrl || !price) return []; // No invented detail URL or price-only agency record.
-    const item: DiscoveredListing = { title: r.title.slice(0, 160), price, description: field(r.description).slice(0, 1200),
+    const item: DiscoveredListing = { title: r.title.slice(0, 160), price, description: field(r.description).slice(0, 16000),
       beds: count(r.beds, "bedrooms?|bedroomsTotal|bedsTotal|beds?"), baths: count(r.baths, "bathrooms?|bathroomsTotal|bathsTotal|baths?"),
-      sqft: field(r.sqft), neighborhood: field(r.neighborhood), image: images[0] ?? "", images: images.slice(0, 12), sourceUrl,
+      sqft: field(r.sqft), neighborhood: field(r.neighborhood), image: images[0] ?? "", images: images.slice(0, 500), sourceUrl,
       listingNumber: field(r.listingNumber).slice(0, 100), propertyType: field(r.propertyType).slice(0, 100) };
     // Status still requires the deterministic property's own explicit label, never an AI guess.
     item.status = normalizeListingStatus(statusForProperty(e, item, base));

@@ -9,6 +9,16 @@ new Function('module', 'exports', ts.transpileModule(
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } },
 ).outputText)(mod, mod.exports);
 const { saveDiscoveredListings } = mod.exports;
+
+test('a card-only reimport preserves saved galleries, remarks, facts and personal notes',async()=>{
+  const rich={...property,images:Array.from({length:36},(_,i)=>`https://photos.example/${i}.jpg`),description:'Complete public remarks.',facts:{'Year Built':'1920'},detailsComplete:true};
+  const [saved]=await saveDiscoveredListings([], [rich],async()=>{});
+  saved.elizaTake='My own personal advice.';
+  const [again]=await saveDiscoveredListings([saved],[{...property,description:'',images:['https://photos.example/0.jpg']}],async()=>{});
+  assert.equal(again.images.length,36);assert.equal(again.description,rich.description);assert.deepEqual(again.facts,rich.facts);assert.equal(again.elizaTake,saved.elizaTake);
+  const [updated]=await saveDiscoveredListings([again],[{...rich,images:['https://photos.example/new.jpg'],description:'Updated remarks.'}],async()=>{});
+  assert.equal(updated.images.length,1);assert.equal(updated.description,'Updated remarks.');
+});
 const property = { title: '119 Pine St', price: '$374,000', beds: 2, baths: 1, sqft: '2,056',
   neighborhood: 'Wallace, ID', description: 'Public property description',
   sourceUrl: 'https://example.com/listings/26-9778', image: 'https://example.com/property.jpg',
