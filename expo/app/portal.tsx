@@ -567,7 +567,7 @@ function AtCapacity({ realtorName, realtorId, onBack }: { realtorName: string; r
         </Text>
       </View>
       {contact.email ? <Pressable onPress={() => void Linking.openURL(`mailto:${contact.email}`)} style={styles.forgotRow}><Text style={styles.switchLink}>{contact.email}</Text></Pressable> : null}
-      {contact.phone ? <Pressable onPress={() => void Linking.openURL(`tel:${contact.phone.replace(/[^+\d]/g,'')}`)} style={styles.forgotRow}><Text style={styles.switchLink}>{contact.phone}</Text></Pressable> : null}
+      {contact.phone ? <Pressable onPress={() => void Linking.openURL(`tel:${(contact.phone ?? '').replace(/[^+\d]/g,'')}`)} style={styles.forgotRow}><Text style={styles.switchLink}>{contact.phone}</Text></Pressable> : null}
       <PressableScale onPress={onBack} haptic="medium" scaleTo={0.97} hitSlop={12} style={styles.cta}>
         <Text style={styles.ctaText}>TRY SIGNING IN AGAIN</Text>
         <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />

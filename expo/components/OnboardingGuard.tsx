@@ -37,7 +37,7 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
     if (returningFromDemo) void auth.exitDemoView();
   }, [returningFromDemo, auth.exitDemoView]);
 
-  const accountManagement = path === "/admin/plans";
+  const accountManagement = ["/admin/plans", "/reset-password", "/legal"].includes(path);
   const dataReady = auth.hydrated && (accountManagement || (onboardingHydrated && (!auth.isAuthenticated || (brand.hydrated && profile.hydrated))));
   // Show the spinner only until this screen has rendered once; afterwards a
   // data reload (e.g. right after sign-in) keeps the current page mounted.

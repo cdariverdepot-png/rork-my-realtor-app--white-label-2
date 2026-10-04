@@ -72,7 +72,7 @@ export default function Plans() {
 
   const action = useCallback(async (kind: "checkout" | "refresh" | "cancel" | "resume" | "manage") => {
     if (!realtorId || busy || !tracked) return;
-    if (kind !== "refresh" && (Platform.OS !== "web" || !billing.configured)) return;
+    if (kind !== "refresh" && (Platform.OS !== "web" || !billing.configured || session?.guestAccess || session?.preview)) return;
     const rid = realtorId; setBusy(true); setMessage(null);
     try {
       if (billing.configured) {
@@ -83,7 +83,7 @@ export default function Plans() {
       await seats.refresh();
     } catch(e) { if (generation.current === rid) setMessage(e instanceof Error ? e.message : "Please retry."); }
     finally { if (generation.current === rid) setBusy(false); }
-  }, [realtorId, busy, tracked, billing.configured, interval, seats.refresh]);
+  }, [realtorId, busy, tracked, billing.configured, interval, seats.refresh, session?.guestAccess, session?.preview]);
   const onUpgrade = useCallback((tier: PlanTier) => {
     if (tier.contactOnly) {
       if (Platform.OS !== "web") void Haptics.selectionAsync();
@@ -177,7 +177,7 @@ export default function Plans() {
                 key={tier.id}
                 tier={tier}
                 current={tier.id === plan && seats.active}
-                disabled={!tier.contactOnly && (busy || !tracked || !billing.configured || Platform.OS !== "web" || (seats.everPaid && seats.active))}
+                disabled={!tier.contactOnly && (busy || !tracked || !billing.configured || Platform.OS !== "web" || session?.guestAccess === true || session?.preview === true || (seats.everPaid && seats.active))}
                 onPress={() => onUpgrade(tier)}
               />
             ))}
@@ -379,6 +379,7 @@ const styles = StyleSheet.create({
   },
   priceRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "baseline",
     gap: 8,
     marginTop: 18,

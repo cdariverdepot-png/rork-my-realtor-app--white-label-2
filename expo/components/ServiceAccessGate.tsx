@@ -32,7 +32,7 @@ export default function ServiceAccessGate({ children }: { children: React.ReactN
       <Text style={styles.body}>{seats.tracked ? "Manage your subscription, export your saved data, or refresh your account status." : `Please contact ${contact?.name || "your realtor"} about access.`}</Text>
       {seats.tracked ? <Pressable style={styles.button} onPress={() => router.push("/admin/plans")}><Text style={styles.link}>ACCOUNT & BILLING</Text></Pressable> : null}
       {contact?.email ? <Pressable style={styles.button} onPress={() => void Linking.openURL(`mailto:${contact.email}`)}><Text style={styles.link}>{contact.email}</Text></Pressable> : null}
-      {contact?.phone ? <Pressable style={styles.button} onPress={() => void Linking.openURL(`tel:${contact.phone.replace(/[^+\d]/g, "")}`)}><Text style={styles.link}>{contact.phone}</Text></Pressable> : null}
+      {contact?.phone ? <Pressable style={styles.button} onPress={() => void Linking.openURL(`tel:${(contact.phone ?? "").replace(/[^+\d]/g, "")}`)}><Text style={styles.link}>{contact.phone}</Text></Pressable> : null}
       <Pressable style={styles.button} onPress={() => void (seats.tracked ? seats.refresh() : check())}><Text style={styles.link}>TRY AGAIN</Text></Pressable>
       <Pressable style={styles.button} onPress={() => void auth.logout().then(() => router.replace("/welcome"))}><Text style={styles.link}>SIGN OUT</Text></Pressable>
     </>}
