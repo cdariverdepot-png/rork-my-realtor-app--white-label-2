@@ -23,7 +23,7 @@ import OnboardingThemePreview from "./OnboardingThemePreview";
 import {liveThemeDesign} from "@/constants/liveThemeDesigns";
 import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
 import ListingSourceImporter from "./ListingSourceImporter";
-import { connectListingSource } from "@/lib/listingSourceService";
+import { connectListingSource, ListingImportError } from "@/lib/listingSourceService";
 import { mergeDiscoveredListings, saveDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -331,11 +331,19 @@ export default function InitialRealtorSetup() {
     try {
       setActivity("Finding and saving your listings…");
       if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
-      const connected = await connectListingSource(websiteUri ?? current.find(source => source.kind === "url")!.uri, auth.realtorId);
-      setImportedListingCount(connected.imported ?? 0);
-      setHasConnectedSource(true);
-      await refreshListings();
-      setActivity("Listings saved. Building your profile…");
+      let listingWarning = "";
+      try {
+        const connected = await connectListingSource(websiteUri ?? current.find(source => source.kind === "url")!.uri, auth.realtorId);
+        setImportedListingCount(connected.imported ?? 0);
+        setHasConnectedSource(true);
+        await refreshListings();
+      } catch (error) {
+        // A site with no readable inventory can still build the existing profile.
+        // Account/session and save failures must stop the workflow.
+        if (!(error instanceof ListingImportError) || error.status !== 422) throw error;
+        listingWarning = error.message;
+      }
+      setActivity(listingWarning ? "Building your profile…" : "Listings saved. Building your profile…");
       const saved = await analyzeBuild();
       setSources(saved.sources);
       setResult(saved);
@@ -346,6 +354,7 @@ export default function InitialRealtorSetup() {
       setActivity(saved.draft.discoveredListings?.length
         ? `Importing ${saved.draft.discoveredListings.length} listing${saved.draft.discoveredListings.length === 1 ? "" : "s"}…`
         : "Finishing your profile…");
+      if (listingWarning) setError({ place: "listings", message: listingWarning });
       // The shared importer has already persisted the authoritative collection.
     } finally {
       setBuilding(false);
@@ -587,6 +596,8 @@ export default function InitialRealtorSetup() {
       <View style={{ marginTop: 26, padding: 18, borderRadius: 14, backgroundColor: "#171D22" }}>
         {importedListingCount>0 ? <View style={{flexDirection:"row",alignItems:"center",gap:12}}><Check size={20} color="#CDE1D9"/><Text style={{color:"#E8EFE9",fontSize:15,lineHeight:23}}>{importedListingCount} listings imported from your website.</Text></View> : <ListingSourceImporter initialUrl={url} onImported={count => { setImportedListingCount(count); setHasConnectedSource(true); }} />}
       </View>
+
+      {errorFor("listings")}
 
       {/* Portrait — recommended and prominent, never blocking. */}
       <View style={{ marginTop: 26, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: draft.portraitUrl ? "#2E3A40" : "#C2A276",
