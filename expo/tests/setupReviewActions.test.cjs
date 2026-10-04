@@ -10,6 +10,7 @@ function screen(disabled=false){
     if(id==='react')return React;
     if(id==='react-native')return {Modal:'Modal',ScrollView:'ScrollView',Text:'Text',View:'View'};
     if(id==='react-native-safe-area-context')return {useSafeAreaInsets:()=>({top:0,bottom:0})};
+    if(id==='react-native-gesture-handler')return {GestureHandlerRootView:'GestureHandlerRootView'};
     if(id.startsWith('./'))return id.slice(2);
     throw Error(id);
   },module,module.exports);

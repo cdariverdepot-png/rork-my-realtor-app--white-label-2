@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
 import Pressable from "./TactilePressable";
@@ -32,7 +33,7 @@ export default function SetupReviewActions({ draft, listings, onChoose, disabled
       </View>
     </View>
     <Modal visible={themes} animationType="slide" onRequestClose={() => setThemes(false)}>
-      <View style={{ flex: 1, backgroundColor: "#101419", paddingTop: insets.top }}>
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#101419", paddingTop: insets.top }}>
         <View style={{ padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text style={{ color: "white", fontSize: 20, fontWeight: "600" }}>Explore Themes</Text>
           <Pressable accessibilityRole="button" accessibilityLabel="Back to app review" onPress={() => setThemes(false)} style={{ padding: 12 }}>
@@ -42,7 +43,7 @@ export default function SetupReviewActions({ draft, listings, onChoose, disabled
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 16 }}>
           <ThemeCarousel compact draft={draft} listings={listings} onChoose={next => { onChoose(next); setThemes(false); }} />
         </ScrollView>
-      </View>
+      </GestureHandlerRootView>
     </Modal>
     <ThemePreviewModal visible={preview} title="Your client app" brand={draft} listings={listings} onClose={() => setPreview(false)} />
   </>;
