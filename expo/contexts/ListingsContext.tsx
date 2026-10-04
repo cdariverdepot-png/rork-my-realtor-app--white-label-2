@@ -31,6 +31,8 @@ export type ManagedListing = Omit<SeedListing, "tag"> & {
   sourceMissingAt?: number;
   listingNumber?: string;
   propertyType?: string;
+  detailsComplete?: boolean;
+  facts?: Record<string, string>;
   /** Optional long-form copy pulled in when a listing is imported/refreshed from a source URL. */
   description?: string;
 };

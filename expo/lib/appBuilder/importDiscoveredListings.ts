@@ -42,13 +42,15 @@ export function toManagedListing(item: DiscoveredListing, index: number): Manage
     image: cover,
     images,
     tag: "",
-    elizaTake: (item.description || "").slice(0, 280),
+    elizaTake: "",
     hidden: false,
     sourceUrl: item.sourceUrl,
     description: item.description || undefined,
     status: item.status,
     listingNumber: item.listingNumber,
     propertyType: item.propertyType,
+    detailsComplete: item.detailsComplete,
+    facts: item.facts,
     updatedAt: Date.now(),
   };
 }
@@ -81,6 +83,13 @@ export function mergeDiscoveredListings(
         hidden: existing.hidden,
         tag: existing.tag,
         status: managed.status ?? existing.status,
+        description: managed.description && (managed.detailsComplete || managed.description.length >= (existing.description?.length ?? 0)) ? managed.description : existing.description,
+        images: managed.images.length && (managed.detailsComplete || managed.images.length >= existing.images.length) ? managed.images : existing.images,
+        image: managed.images.length && (managed.detailsComplete || managed.images.length >= existing.images.length) ? managed.image : existing.image,
+        detailsComplete: managed.detailsComplete || existing.detailsComplete,
+        listingNumber: managed.listingNumber || existing.listingNumber,
+        propertyType: managed.propertyType || existing.propertyType,
+        facts: {...existing.facts,...managed.facts},
         elizaTake: existing.elizaTake?.trim() && existing.elizaTake !== "A note from me, coming soon."
           ? existing.elizaTake
           : managed.elizaTake,

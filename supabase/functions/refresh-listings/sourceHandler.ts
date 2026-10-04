@@ -78,6 +78,8 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     });
     return { ...value, items: reconcileInventory(enriched, inventory, now) };
   });
+  const incomplete=inventory.listings.filter(item=>!item.description||!item.images.length||!item.detailsComplete).length;
   return { body: { ok: true, source: inventory.source, imported: inventory.listings.length,
+    ...(incomplete?{warning:`${incomplete} listing${incomplete===1?" has":"s have"} incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.`}:{}),
     checked: inventory.listings.length, complete: inventory.complete, items: saved.items } };
 }

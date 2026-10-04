@@ -1,4 +1,4 @@
-import { extractListingsFromPage, statusForProperty, type DiscoveredListing } from "../analyze-realtor-build/listingDiscovery.ts";
+import { extractListingsFromPage, enrichListingFromPage, statusForProperty, type DiscoveredListing } from "../analyze-realtor-build/listingDiscovery.ts";
 
 export type SyncListing = {
   id: string; title: string; sourceUrl?: string; status?: DiscoveredListing["status"];
@@ -22,7 +22,7 @@ export function observeListing(item: SyncListing, html: string, finalUrl: URL, n
     (canonical(p.sourceUrl) === canonical(item.sourceUrl ?? "") || canonical(p.sourceUrl) === canonical(finalUrl.toString())));
   const status = property?.status ?? statusForProperty(html, { title: item.title, sourceUrl: item.sourceUrl ?? "" }, finalUrl);
   if (!property && !status) return { sourceUrl: item.sourceUrl!, checkedAt: now, error: "The source did not expose this property's details or status. We'll retry." };
-  return { sourceUrl: item.sourceUrl!, checkedAt: now, property, status };
+  return { sourceUrl: item.sourceUrl!, checkedAt: now, property:property?enrichListingFromPage(property,html,finalUrl):undefined, status };
 }
 
 /** Preserve the last known status on missing/blocked pages. Never infer sold from disappearance. */
@@ -36,8 +36,12 @@ export function applyObservation(item: SyncListing, result: Observation): SyncLi
   const p = result.property;
   const updated: SyncListing = { ...item,
     ...(p?.price ? { price: p.price } : {}),
-    ...(p?.description ? { description: p.description } : {}),
-    ...(p?.images.length ? { images: p.images, image: p.images[0] } : {}),
+    ...(p?.description && (p.detailsComplete || p.description.length >= (item.description?.length ?? 0)) ? { description: p.description } : {}),
+    ...(p?.images.length && (p.detailsComplete || p.images.length >= (item.images?.length ?? 0)) ? { images: p.images, image: p.images[0] } : {}),
+    ...(p?.detailsComplete ? {detailsComplete:true} : {}),
+    ...(p?.facts ? {facts:{...((item.facts as Record<string,string>)??{}),...p.facts}} : {}),
+    ...(p?.listingNumber ? {listingNumber:p.listingNumber} : {}),
+    ...(p?.propertyType ? {propertyType:p.propertyType} : {}),
     ...(p?.beds ? { beds: p.beds } : {}), ...(p?.baths ? { baths: p.baths } : {}),
     ...(p?.sqft ? { sqft: p.sqft } : {}), ...(p?.neighborhood ? { neighborhood: p.neighborhood } : {}),
     ...(result.status ? { status: result.status, lastStatusVerifiedAt: result.checkedAt } : {}),
@@ -45,7 +49,7 @@ export function applyObservation(item: SyncListing, result: Observation): SyncLi
     syncState: result.status ? "verified" : "status-unconfirmed", syncError: undefined,
     nextSyncAt: result.checkedAt + syncInterval(result.status ?? item.status),
   };
-  const fields = ["price", "description", "images", "image", "beds", "baths", "sqft", "neighborhood", "status"];
+  const fields = ["price", "description", "images", "image", "beds", "baths", "sqft", "neighborhood", "status", "facts", "listingNumber", "propertyType"];
   if (fields.some(key => JSON.stringify(updated[key]) !== JSON.stringify(item[key]))) updated.updatedAt = result.checkedAt;
   return updated;
 }

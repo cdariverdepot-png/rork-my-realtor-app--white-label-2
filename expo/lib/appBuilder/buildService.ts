@@ -21,6 +21,8 @@ export type DiscoveredListing = {
   status?: "active" | "pending" | "contingent" | "sold" | "off_market";
   listingNumber?: string;
   propertyType?: string;
+  detailsComplete?: boolean;
+  facts?: Record<string, string>;
   importKey?: string;
 };
 

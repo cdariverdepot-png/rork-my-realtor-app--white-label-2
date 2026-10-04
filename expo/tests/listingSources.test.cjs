@@ -33,6 +33,20 @@ const home = (n = 12, status = 'Active', price = 350000) => ({ '@type': 'RealEst
 const html = records => `<script type="application/ld+json">${JSON.stringify(records)}</script>`;
 const fetchPages = pages => async uri => { if (!(uri in pages)) throw Error('Cannot read page'); return { html: pages[uri], finalUrl: new URL(uri) }; };
 
+test('source imports enrich all nine properties rather than only the first six',async()=>{
+  const url='https://agent.example/my-listings',pages={[url]:html(Array.from({length:9},(_,i)=>home(i+1)))};
+  for(let i=1;i<=9;i++)pages[`https://agent.example/property/${i}`]=html({...home(i),description:`Complete remarks for home ${i}`,image:Array.from({length:20},(_,j)=>`https://photos.example/${i}-${j}.jpg`)});
+  const result=await sources.readSource(url,fetchPages(pages),undefined,async()=>[]);
+  assert.equal(result.listings.length,9);assert.ok(result.listings.every(l=>l.images.length===20&&l.description&&l.detailsComplete));
+});
+
+test('scheduled thin observations cannot downgrade a saved property gallery or remarks',()=>{
+  const item={id:'home',title:'12 Pine St',sourceUrl:'https://agent.example/property/12',images:['cover','kitchen','bedroom'],description:'Full remarks about this property.',facts:{'Year Built':'1920'}};
+  const thin={title:item.title,sourceUrl:item.sourceUrl,images:['cover'],description:'Short teaser',price:'$350,000'};
+  const merged=sync.applyObservation(item,{sourceUrl:item.sourceUrl,checkedAt:100,property:thin});
+  assert.deepEqual(merged.images,item.images);assert.equal(merged.description,item.description);assert.deepEqual(merged.facts,item.facts);
+});
+
 test('maps explicit MLS states without detecting sold from unrelated prose', () => {
   for (const [label, status] of [['Closed', 'sold'], ['Active Under Contract', 'contingent'], ['Pending', 'pending'], ['Expired', 'off_market'], ['Active', 'active']]) {
     assert.equal(discovery.normalizeListingStatus(label), status);

@@ -548,7 +548,7 @@ Deno.serve(async (request) => {
     if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 20, maxListings: 100, maxDetailPages: 12, selectLinks: selectInventoryLinks });
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -659,7 +659,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 20, maxListings: 100, maxDetailPages: 12, selectLinks: selectInventoryLinks,
+        maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks,
       });
       discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
       discovery.meta.found = discoveredListings.length;

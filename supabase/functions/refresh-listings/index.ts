@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { fetchHtml } from "./publicPage.ts";
 import { isDue, observeListing, mergeObservations, type SyncListing, type Observation } from "./sync.ts";
 import { runSourceSync } from "./sourceHandler.ts";
+import { propertyDetailRequest, enrichPublicProperty, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 
 const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-listing-sync-token" };
@@ -68,13 +69,15 @@ Deno.serve(async req => {
     if (!targets.length) return reply({ ok: true, refreshed: 0, checked: 0, message: "Already checked recently." });
     const results = new Map<string, Observation>();
     const pages = new Map<string, Promise<Awaited<ReturnType<typeof fetchHtml>>>>();
+    const cachedFetch:FetchHtml=(uri,options)=>{const cacheKey=uri+'|'+!!options?.fragment;if(!pages.has(cacheKey))pages.set(cacheKey,fetchHtml(uri,options));return pages.get(cacheKey)!;};
     for (const item of targets) {
       if (Date.now() - started > 45_000) break;
       try {
-        const uri = item.sourceUrl!;
-        if (!pages.has(uri)) pages.set(uri, fetchHtml(uri));
-        const page = await pages.get(uri)!;
-        results.set(item.id, observeListing(item, page.html, page.finalUrl, Date.now()));
+        const request=propertyDetailRequest(item.sourceUrl!);
+        const page = await cachedFetch(request.url,{fragment:request.fragment});
+        const observation=observeListing(item, page.html, page.finalUrl, Date.now());
+        if(observation.property)observation.property=await enrichPublicProperty(observation.property,cachedFetch,page);
+        results.set(item.id, observation);
       } catch (error) {
         results.set(item.id, { sourceUrl: item.sourceUrl!, checkedAt: Date.now(), error: error instanceof Error ? error.message : "Could not read the source. We'll retry." });
       }
