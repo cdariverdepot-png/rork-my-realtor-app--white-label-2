@@ -964,9 +964,12 @@ function collectInventoryFragments(html: string, base: URL): string[] {
     const url = absolutize(raw, base);
     if (url && sameSite(new URL(url), base)) out.push(url);
   }
-  if (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/listings\/?$/.test(base.pathname) &&
-      (/data-search-results-search-count|mapSupportData/.test(html) || /\/(?:office|agent)_listing_categories\/[^/]+\/listings\/?$/.test(base.pathname)) && !base.searchParams.has("list_view")) {
+  if (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/listings(?:\/\d{20,})?\/?$/.test(base.pathname) &&
+      (/data-search-results-search-count|mapSupportData/.test(html) || /\/(?:office|agent)_listing_categories\/[^/]+\/listings(?:\/\d{20,})?\/?$/.test(base.pathname)) && !base.searchParams.has("list_view")) {
     const url = new URL(base);
+    // A selected Flexmls property opens the same filtered public collection in
+    // the browser. Read that collection’s existing server-rendered photo view.
+    url.pathname = url.pathname.replace(/(\/listings)\/\d{20,}\/?$/, "$1");
     url.searchParams.set("list_view", "photo");
     url.searchParams.set("page", "1");
     url.searchParams.set("per_page", "24");

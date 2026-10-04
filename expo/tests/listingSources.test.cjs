@@ -248,3 +248,13 @@ test('failed extraction reports the page failure without changing the account in
   assert.equal(result.status,422); assert.match(result.result.error,/couldn.t find.*listings/i);
   assert.doesNotMatch(result.result.error,/sign in|realtor account/i); assert.deepEqual(result.rows[scope].value.items,items);
 });
+
+test('a Flexmls selected-property shell follows its public filtered photo collection', async () => {
+  const root='https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings/20260226190717870344000000?from_filter=false';
+  const fragments=discovery.collectInventoryFragments('<h3>Loading...</h3>',new URL(root));
+  assert.equal(fragments.length,1); const fragment=new URL(fragments[0]);
+  assert.equal(fragment.pathname,'/Agent/search/office_listing_categories/Active/listings');
+  assert.equal(fragment.searchParams.get('list_view'),'photo');
+  const inventory=await sources.readSource(root,fetchPages({[root]:'<h3>Loading...</h3>',[fragment.toString()]:html(home())}));
+  assert.equal(inventory.listings[0].price,'$350,000'); assert.equal(inventory.listings[0].image,'https://photos.example/12.jpg');
+});
