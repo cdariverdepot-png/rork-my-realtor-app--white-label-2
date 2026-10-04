@@ -65,12 +65,14 @@ test('detects providers automatically and resolves a property to an observed age
   const connected = await sources.readSource(home().url, fetchPages(pages));
   assert.equal(connected.source.url, 'https://agent.example/agents/cindy');
   assert.equal(connected.source.submittedUrl, home().url); assert.equal(connected.listings.length, 2);
-  await assert.rejects(sources.readSource(home().url, fetchPages({ [home().url]: html(home()) })), /one property.*all of your listings/);
+  const single = await sources.readSource(home().url, fetchPages({ [home().url]: html(home()) }));
+  assert.equal(single.listings.length, 1); assert.equal(single.source.url, home().url); assert.equal(single.complete, false);
 });
 
 test('generic property search cannot become a single-home associated source', async () => {
   const pages = { [home().url]: html(home()) + '<a href="/listings">All listings</a>', 'https://agent.example/listings': html([home(), home(25)]) };
-  await assert.rejects(sources.readSource(home().url, fetchPages(pages)), /one property/);
+  const single = await sources.readSource(home().url, fetchPages(pages));
+  assert.equal(single.listings.length, 1); assert.equal(single.source.url, home().url);
 });
 
 test('source reconciliation adds and updates silently while preserving manual notes and hidden state', () => {
@@ -129,9 +131,9 @@ test('robots rules prefer a specific crawler group and longest matching allow pa
   assert.equal(robotsAllows('User-agent: *\nDisallow: /\nUser-agent: MyRealtorAppBuilder\nAllow: /', '/listings'), true);
 });
 
-function fakeDatabase({ rows = {}, auth = true, conflict = false } = {}) {
+function fakeDatabase({ rows = {}, auth = true, conflict = false, owner = true } = {}) {
   const reads = [], writes = []; let conflictSeen = false;
-  const db = { auth: { getUser: async () => ({ data: { user: auth ? { id: 'user', email_confirmed_at: 'now' } : null } }) }, from: table => {
+  const db = { auth: { getUser: async () => ({ data: { user: auth === true ? { id: 'user', email_confirmed_at: 'now' } : auth || null } }) }, from: table => {
     let operation = 'select', payload, filters = {};
     const query = {
       select: () => query, eq: (name, value) => { filters[name] = value; return query; },
@@ -139,7 +141,7 @@ function fakeDatabase({ rows = {}, auth = true, conflict = false } = {}) {
       insert: value => { operation = 'insert'; payload = value; return query; },
       maybeSingle: async () => {
         reads.push({ table, filters: { ...filters } });
-        if (table === 'realtors') return { data: { id: '11111111-1111-1111-1111-111111111111' } };
+        if (table === 'realtors') return { data: owner ? { id: '11111111-1111-1111-1111-111111111111' } : null };
         return { data: rows[filters.key] ? structuredClone(rows[filters.key]) : null };
       },
       then: (resolve, reject) => Promise.resolve().then(() => {
@@ -160,8 +162,8 @@ function fakeDatabase({ rows = {}, auth = true, conflict = false } = {}) {
   return { db, rows, reads, writes };
 }
 
-async function endpoint({ body = {}, auth = true, headers = {}, pages = {}, rows = {}, conflict = false } = {}) {
-  const database = fakeDatabase({ rows, auth, conflict }); let fetched = 0;
+async function endpoint({ body = {}, auth = true, headers = {}, pages = {}, rows = {}, conflict = false, owner = true } = {}) {
+  const database = fakeDatabase({ rows, auth, conflict, owner }); let fetched = 0;
   const r = runtime({ database: database.db, env: { SUPABASE_URL: 'https://project.supabase.co', SUPABASE_SERVICE_ROLE_KEY: 'private', LISTING_SYNC_TOKEN: 'scheduler-secret' },
     fetchFixture: async uri => {
       fetched++; const url = String(uri);
@@ -185,7 +187,7 @@ test('real endpoint saves a scoped persistent source and listings using account 
   assert.ok(result.result.items.every(item => item.sourceId));
 });
 
-test('endpoint rejects invalid scheduler credentials, anonymous auth and foreign realtor scope before URL fetches', async () => {
+test('endpoint rejects invalid scheduler credentials, missing auth and foreign realtor scope before URL fetches', async () => {
   for (const args of [
     { headers: { 'x-listing-sync-token': 'wrong' } }, { auth: false },
     { body: { realtorId: '22222222-2222-2222-2222-222222222222' } },
@@ -215,4 +217,34 @@ test('a failed scheduled source preserves inventory and records an actionable re
   assert.equal(result.status, 422); assert.deepEqual(result.rows[scope + ':listings.v2'].value.items, items);
   const stored = result.rows[scope + ':listing-sources.v1'].value.sources[0];
   assert.equal(stored.state, 'unavailable'); assert.ok(stored.nextSyncAt > Date.now());
+});
+
+test('code-created anonymous owners import actual prices and images; client sessions cannot import', async () => {
+  const auth = { id: 'guest-owner', is_anonymous: true };
+  const args = { auth, body: { mode: 'connect', url: home().url, realtorId: '11111111-1111-1111-1111-111111111111' }, pages: { [home().url]: html(home()) } };
+  const saved = await endpoint(args);
+  assert.equal(saved.status, 200); assert.equal(saved.result.imported, 1);
+  const items = saved.rows['11111111-1111-1111-1111-111111111111:listings.v2'].value.items;
+  assert.equal(items[0].title, '12 Pine St'); assert.equal(items[0].price, '$350,000');
+  assert.equal(items[0].beds, 3); assert.equal(items[0].baths, 2);
+  assert.ok(items[0].images.includes('https://photos.example/12.jpg'));
+  assert.equal(saved.reads.find(r => r.table === 'realtors').filters.auth_user_id, 'guest-owner');
+  for (const deniedArgs of [{ ...args, owner: false }, { ...args, body: { ...args.body, realtorId: 'other-owner' } }, { ...args, auth: { id: 'unverified' } }]) {
+    const denied = await endpoint(deniedArgs); assert.ok([401,403].includes(denied.status));
+    assert.equal(denied.fetched, 0); assert.equal(denied.writes.length, 0);
+  }
+});
+
+test('a public IDX search is accepted as a source without website ownership restrictions', async () => {
+  const url='https://public-idx.example/search';
+  const result=await endpoint({body:{mode:'connect',url},pages:{[url]:'<h1>Search all homes</h1>'+html([home(),home(25)]),[home().url]:html(home()),[home(25).url]:html(home(25))}});
+  assert.equal(result.status,200); assert.equal(result.result.imported,2);
+});
+
+test('failed extraction reports the page failure without changing the account inventory', async () => {
+  const scope='11111111-1111-1111-1111-111111111111:listings.v2';
+  const items=[{id:'existing',title:'Existing home',price:'$200,000'}];
+  const result=await endpoint({body:{mode:'connect',url:'https://empty.example/'},pages:{'https://empty.example/':'<h1>Welcome</h1>'},rows:{[scope]:{rev:1,value:{items}}}});
+  assert.equal(result.status,422); assert.match(result.result.error,/couldn.t find.*listings/i);
+  assert.doesNotMatch(result.result.error,/sign in|realtor account/i); assert.deepEqual(result.rows[scope].value.items,items);
 });

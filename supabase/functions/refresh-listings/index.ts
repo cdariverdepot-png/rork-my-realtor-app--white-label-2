@@ -40,10 +40,10 @@ Deno.serve(async req => {
       const token = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
       if (!token) return reply({ ok: false, error: "Sign in to sync listings." }, 401);
       const { data: auth, error: authError } = await sb.auth.getUser(token);
-      if (authError || !auth?.user || auth.user.is_anonymous || !auth.user.email_confirmed_at) return reply({ ok: false, error: "A verified realtor account is required." }, 401);
+      if (authError || !auth?.user || (!auth.user.is_anonymous && !auth.user.email_confirmed_at)) return reply({ ok: false, error: "Your session has expired. Sign in again to import listings." }, 401);
       const { data, error } = await sb.from("realtors").select("id").eq("auth_user_id", auth.user.id).maybeSingle();
       if (error) throw error;
-      if (!data || data.id === DEMO || (body.realtorId && body.realtorId !== data.id)) return reply({ ok: false, error: "You can only sync your own listings." }, 403);
+      if (!data || data.id === DEMO || (body.realtorId && body.realtorId !== data.id)) return reply({ ok: false, error: "This session does not own the selected realtor account. Sign in to that account to import listings." }, 403);
       realtorId = data.id;
     }
     if (!body.listingId && body.mode !== "legacy") {

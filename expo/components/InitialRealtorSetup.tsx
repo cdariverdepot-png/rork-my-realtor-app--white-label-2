@@ -31,7 +31,7 @@ import { sniffContactFile, parseCsvContacts, parseVCard } from "@/lib/parseConta
 import { useClients } from "@/contexts/ClientsContext";
 import { useListings } from "@/contexts/ListingsContext";
 import PressableScale from "@/components/PressableScale";
-import { checkSite, useSiteCheck } from "@/lib/siteCheck";
+import { useSiteCheck } from "@/lib/siteCheck";
 
 type Phase = "collect" | "building" | "review";
 type ErrorPlace = "sources" | "review" | "hero" | "intro" | "listings";
@@ -53,7 +53,7 @@ const ASK_FOR_FIELD: Partial<Record<ConfirmField, AskId>> = {
 export default function InitialRealtorSetup() {
   const auth = useAuth();
   const { importMany } = useClients();
-  const { all: existingListings, saveListings, hydrated: listingsHydrated } = useListings();
+  const { all: existingListings, saveListings, refresh: refreshListings, hydrated: listingsHydrated } = useListings();
   const { brand, saveBrand, publishBrand, isPublished } = useBrand();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -149,7 +149,8 @@ export default function InitialRealtorSetup() {
     if (publicationInProgress.current) return;
     if (!saved) return;
     // Restore the actual collection, not just the count displayed in the draft.
-    await applyDiscoveredListings(saved);
+    if (!listingsSnapshot.current.length) await applyDiscoveredListings(saved);
+    else setImportedListingCount(listingsSnapshot.current.length);
     // Historical onboarding URLs must not reopen a completed build. URL refresh
     // remains available in Studio and can still reuse this completed source.
     if (saved.status === 'complete') { router.dismissTo('/admin'); return; }
@@ -318,7 +319,6 @@ export default function InitialRealtorSetup() {
     void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
-    if (websiteUri && await checkSite(websiteUri) === "missing") throw new Error("We couldn’t find that website. Check the address and try again.");
     // Lock in the website from the main field, replacing an older one if it changed.
     if (websiteUri && primarySource?.uri !== websiteUri) {
       const fresh = urlSource(websiteUri);
@@ -329,7 +329,13 @@ export default function InitialRealtorSetup() {
     setEditingSources(false);
     setBuilding(true);
     try {
-      setActivity("Reading your website and building your profile…");
+      setActivity("Finding and saving your listings…");
+      if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
+      const connected = await connectListingSource(websiteUri ?? current.find(source => source.kind === "url")!.uri, auth.realtorId);
+      setImportedListingCount(connected.imported ?? 0);
+      setHasConnectedSource(true);
+      await refreshListings();
+      setActivity("Listings saved. Building your profile…");
       const saved = await analyzeBuild();
       setSources(saved.sources);
       setResult(saved);
@@ -340,7 +346,7 @@ export default function InitialRealtorSetup() {
       setActivity(saved.draft.discoveredListings?.length
         ? `Importing ${saved.draft.discoveredListings.length} listing${saved.draft.discoveredListings.length === 1 ? "" : "s"}…`
         : "Finishing your profile…");
-      await applyDiscoveredListings(saved);
+      // The shared importer has already persisted the authoritative collection.
     } finally {
       setBuilding(false);
     }
@@ -396,7 +402,7 @@ export default function InitialRealtorSetup() {
     // Same rule set the rest of the app uses — REQUIRED_FIELDS is the only source of truth.
     const missing = requiredStatus(draft).missing;
     if (missing.length) throw new Error(`Please add: ${missing.map(item => item.label.toLowerCase()).join(", ")}.`);
-    if (result) await applyDiscoveredListings(result);
+    if (result && !hasConnectedSource) await applyDiscoveredListings(result);
     // Guarantee the published brand uses the real themed canvas for the AI-picked layout.
     const layoutId = draft.layoutId && CLIENT_LAYOUTS.some(l => l.id === draft.layoutId)
       ? draft.layoutId : DEFAULT_CLIENT_LAYOUT;
@@ -406,7 +412,7 @@ export default function InitialRealtorSetup() {
       const candidate = listingSources.findLast(source => source.kind === "listing") ?? listingSources[0];
       if (candidate) {
         setActivity("Connecting your listings for automatic updates…");
-        await connectListingSource(candidate.uri);
+        await connectListingSource(candidate.uri, auth.realtorId ?? undefined);
         setHasConnectedSource(true);
       }
     }
@@ -488,7 +494,7 @@ export default function InitialRealtorSetup() {
     </View>
   ) : null;
 
-  if (phase === 'collect') return <BuildUrlEntry url={url} onChange={setUrl} busy={!loaded || busy || builderReady===null || !authHydrated} onSubmit={needsBuilderAuth ? goPortalAuth : analyze} onExit={()=>void leaveBuild()} error={error?.place==='sources'?error.message:undefined}/>;
+  if (phase === 'collect') return <BuildUrlEntry listingCount={existingListings.length} onViewListings={() => router.push("/admin/listings")} url={url} onChange={setUrl} busy={!loaded || busy || builderReady===null || !authHydrated} onSubmit={needsBuilderAuth ? goPortalAuth : analyze} onExit={()=>void leaveBuild()} error={error?.place==='sources'?error.message:undefined}/>;
   return <View style={{ flex: 1 }}>
   {cropper}
   <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}

@@ -45,16 +45,12 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
   let uri = existing?.url ?? submittedUrl;
   const firstPage = await cachedFetch(uri);
   const firstUrl = firstPage.finalUrl;
-  if (/\/(?:realestateandhomes-search|homes\/for_sale|search)\/?$/i.test(firstUrl.pathname) &&
-    !/agent|office|profile|portal/i.test(firstUrl.search) && !/\/(?:agents?|profile|office_listing_categories|agent_listing_categories)\//i.test(firstUrl.pathname) &&
-    /\b(?:search all homes|all homes for sale|search properties|property search)\b/i.test(firstPage.html)) {
-    throw new Error("That page searches the whole market. Paste your public agent profile or the page showing your own active listings.");
-  }
   const firstProperties = extractListingsFromPage(firstPage.html, firstPage.finalUrl);
   const singleProperty = firstProperties.length === 1 && firstProperties[0].sourceUrl === firstPage.finalUrl.toString() &&
     [...firstPage.html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].some(m => key(m[1].replace(/<[^>]+>/g, " ")) === key(firstProperties[0].title)) &&
     /["']@type["']\s*:\s*["'](?:RealEstateListing|SingleFamilyResidence|Apartment|House)["']/i.test(firstPage.html);
-  if (!existing && (isPropertyUrl(firstPage.finalUrl.toString()) || singleProperty)) {
+  let directProperty: DiscoveredListing[] | undefined;
+  if (isPropertyUrl(firstPage.finalUrl.toString()) || singleProperty) {
     const page = firstPage;
     const original = extractListingsFromPage(page.html, page.finalUrl);
     const observed = collectInventoryLinks(page.html, page.finalUrl, 12);
@@ -74,10 +70,10 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
         associated = link.url; break;
       }
     }
-    if (!associated) throw new Error("That link shows one property. Paste your public profile or the page showing all of your listings so we can keep them updated.");
-    uri = associated;
+    if (associated) uri = associated;
+    else directProperty = original;
   }
-  const discovery = await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 20, maxListings: 100, maxDetailPages: 6, selectLinks, normalizePage: normalizePublicPage });
+  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase" } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 20, maxListings: 100, maxDetailPages: 6, selectLinks, normalizePage: normalizePublicPage });
   // Empty is trustworthy only when the known inventory explicitly reports zero properties.
   let explicitEmpty = false;
   if (existing && !discovery.listings.length && !discovery.meta.failed?.length) {

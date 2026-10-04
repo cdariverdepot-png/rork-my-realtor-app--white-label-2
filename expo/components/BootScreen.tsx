@@ -13,11 +13,8 @@ import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 const SPLASH_MODULE = require("@/assets/splash-loading.mp4");
 const POSTER = require("@/assets/splash-loading-poster.jpg");
 
-/**
- * Splash is ~6.04s. Key/glow motion settles ~4.4s; keep ~1.25s hold after that,
- * then fade (≈5.65s mark). Trim is duration minus that end point.
- */
-const SPLASH_END_SEC = 5.65;
+// Play the supplied animation through its ending before fading.
+const SPLASH_END_SEC = Number.POSITIVE_INFINITY;
 
 interface Props {
   /** True once auth has hydrated — curtain may fade after the video holds. */
