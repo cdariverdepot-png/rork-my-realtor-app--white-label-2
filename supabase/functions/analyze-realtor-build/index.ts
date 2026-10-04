@@ -127,7 +127,7 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
     }
     if (!response.ok) throw new Error(`The page returned ${response.status}.`);
     if (!(options?.stylesheet && /text\/css/i.test(response.headers.get("content-type") ?? "")) && !/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
-        !(options?.fragment && (/application\/json/i.test(response.headers.get("content-type") ?? "") ||
+        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(response.headers.get("content-type") ?? "")) || /application\/json/i.test(response.headers.get("content-type") ?? "") ||
           (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
           (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
       throw new Error("The link is not a readable webpage.");
@@ -548,7 +548,7 @@ Deno.serve(async (request) => {
     if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks });
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -659,7 +659,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 80, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks,
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks,
       });
       discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
       discovery.meta.found = discoveredListings.length;
