@@ -38,10 +38,10 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
     <Text style={{ color: d.muted, lineHeight: 22 }}>Layout preview only. Saved homes stay in this preview; no client data is changed.</Text>
   </View>;
   return <View style={{ padding: 24, gap: 22, minHeight: 640, overflow: 'hidden' }}>
-    <View pointerEvents="none" style={{ position: 'absolute', inset: 0 }}>
+    {brand.presentation !== 'website' && <View pointerEvents="none" style={{ position: 'absolute', inset: 0 }}>
       <Image source={material.photo} contentFit="cover" style={{ width: '100%', height: '100%' }} />
       <LinearGradient colors={[d.background + 'CC', d.background + 'BB', d.background]} style={{ position: 'absolute', inset: 0 }} />
-    </View>
+    </View>}
     <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>THEME PREVIEW</Text>
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 34 }}>{feature?.title || (route === '/listings' ? 'Your collection' : route === '/favorites' ? 'Saved homes' : 'App menu')}</Text>
     {route === '/listings' && !listings.some(item=>!item.hidden&&!item.sourceArchived) ? <Text style={{color:d.muted,lineHeight:24}}>There are no homes available here yet. Message your realtor to discuss what you’re looking for.</Text> : route === '/listings' || route === '/favorites' && savedIds.length ? <ThemeCollection brand={brand} listings={route === '/favorites' ? listings.filter(item => savedIds.includes(item.id)) : listings}

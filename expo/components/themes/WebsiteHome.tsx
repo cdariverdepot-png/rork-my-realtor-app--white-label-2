@@ -60,9 +60,12 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
   };
   const originalSections = source.sections;
   const sections = optimized ? [...originalSections.filter(x => x.kind === 'about').slice(0, 1), ...originalSections.filter(x => x.kind === 'services').slice(0, 1), ...originalSections.filter(x => x.kind === 'testimonials').slice(0, 1)] : originalSections;
-  return <Animated.View style={{ width, backgroundColor: a.background, opacity, transform: a.motion === 'rise' ? [{ translateY: opacity.interpolate({ inputRange: [0, 1], outputRange: [16, 0] }) }] : undefined }}>
+  const backdrop = !optimized && source.backgroundImageUrl;
+  return <View style={{ width, backgroundColor: a.background }}>
+    {!!backdrop && <Image source={{ uri: backdrop }} contentFit="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
+    <Animated.View style={{ marginHorizontal: backdrop ? 6 * s : 0, backgroundColor: a.background, opacity, transform: a.motion === 'rise' ? [{ translateY: opacity.interpolate({ inputRange: [0, 1], outputRange: [16, 0] }) }] : undefined }}>
     {!optimized && !!source.headerImageUrl && <Image source={{ uri: source.headerImageUrl }} contentFit="contain" style={{ width: '100%', height: 90 * s, marginTop: p.topInset ?? 0 }} accessibilityLabel={b.realtor.brandName || b.realtor.name} />}
-    <View style={{ paddingHorizontal: a.spacing * s, paddingTop: (source.headerImageUrl ? 0 : p.topInset ?? 0) + 18 * s, paddingBottom: 18 * s, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+    <View style={{ paddingHorizontal: a.spacing * s, paddingTop: (!optimized && source.headerImageUrl ? 0 : p.topInset ?? 0) + 18 * s, paddingBottom: 18 * s, flexDirection: 'row', alignItems: 'center', gap: 16 }}>
       {!!source.logoUrl ? <Image source={{ uri: source.logoUrl }} contentFit="contain" style={{ width: 190 * s, height: 60 * s }} accessibilityLabel={b.realtor.brandName || b.realtor.name} /> : <Text style={{ flex: 1, color: a.ink, fontFamily: headingFont, fontSize: 23 * s }}>{b.realtor.brandName || b.realtor.name}</Text>}
       <Pressable accessibilityLabel="Chat" onPress={() => navigate('/message')} style={{ marginLeft: 'auto', padding: 12 }}><MessageCircle color={a.accent} size={24 * s} /></Pressable>
     </View>
@@ -75,7 +78,7 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
     {(optimized || !sections.some(x => x.kind === 'listings')) && collection()}
     {sections.map(section)}
     <View style={{ padding: a.spacing * s, gap: 16 * s }}>{button('Contact ' + b.realtor.name, '/message')}<Text style={{ color: a.ink, fontFamily: bodyFont, lineHeight: 23 * s }}>{[b.realtor.phone, b.realtor.email, b.credentials.license.brokerage, b.credentials.license.number].filter(Boolean).join('\n')}</Text></View>
-  </Animated.View>;
+  </Animated.View></View>;
 }
 function contrast(hex: string) {
   const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
