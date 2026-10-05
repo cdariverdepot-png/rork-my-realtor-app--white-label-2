@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id": "ihomefinder-featured-kestrel",
+  "capturedAt": "2026-10-05T15:49:20.540Z",
+  "provenance": "synthetic-contract",
+  "rationale": "An iHomeFinder Kestrel widget publishes a featured active search. The decoded public result keeps that featured row and drops nothing into a market search.",
+  "seeds": [
+    "https://agent.example/"
+  ],
+  "options": {
+    "maxPages": 6,
+    "maxListings": 10,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://agent.example/\",false,false]",
+      "url": "https://agent.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://agent.example/",
+      "html": "<script src=\"https://kestrel.idxhome.com/ihf-kestrel.js\"></script><script>ihfKestrel.config={\"activationToken\":\"00000000-0000-0000-0000-000000000000\",\"platform\":\"wordpress\"};ihfKestrel.render({\"component\":\"gallerySliderWidget\"});</script>"
+    },
+    {
+      "key": "[\"https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT\",true,false]",
+      "url": "https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT",
+      "fragment": true,
+      "rendering": false,
+      "finalUrl": "https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT",
+      "html": "[{\"context\":\"RESULT\",\"featured\":true,\"statusId\":\"active\",\"address\":\"100 Lake St\\n Town, ID\",\"listingPageUrl\":\"https://agent.example/homes-for-sale-details/100-LAKE/MLS1/1/\",\"listPrice\":400000,\"bedrooms\":3,\"fullBathrooms\":2,\"partialBathrooms\":1,\"squareFeet\":2100,\"images\":[{\"url\":\"https://photos.example/a.jpg\"}],\"listingNumber\":\"MLS1\"}]"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "100 Lake St",
+        "sourceUrl": "https://agent.example/homes-for-sale-details/100-LAKE/MLS1/1/",
+        "price": "$400,000",
+        "description": "",
+        "beds": 3,
+        "baths": 2.5,
+        "sqft": "2100",
+        "neighborhood": "",
+        "image": "https://photos.example/a.jpg",
+        "images": [
+          "https://photos.example/a.jpg"
+        ],
+        "status": "active",
+        "listingNumber": "MLS1",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "ihomefinder"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://agent.example/",
+        "rendering": "response",
+        "interfaces": [
+          "ihomefinder"
+        ],
+        "navigation": [
+          "featured-widget-api"
+        ],
+        "attempts": [
+          {
+            "id": "ihomefinder",
+            "version": 1,
+            "evidence": "Kestrel widget configuration or public idxhome response",
+            "outcome": "empty",
+            "records": 0
+          }
+        ],
+        "resolution": "navigation-only"
+      },
+      {
+        "url": "https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT",
+        "rendering": "response",
+        "interfaces": [
+          "ihomefinder",
+          "public-json"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "ihomefinder",
+            "version": 1,
+            "evidence": "Kestrel widget configuration or public idxhome response",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://agent.example"
+}
