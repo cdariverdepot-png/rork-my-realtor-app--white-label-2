@@ -1,5 +1,5 @@
 app = "cdariver-listing-renderer"
-primary_region = "sea"
+primary_region = "sjc"
 
 [build]
 
