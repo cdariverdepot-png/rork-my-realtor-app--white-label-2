@@ -570,6 +570,36 @@ test('a script gate that does not unlock is not a needs-strategy miss', async ()
   assert.ok(r.meta.issues.some(x => x.interface === 'script-gate'));
   assert.ok(!r.meta.compatibility.pages.some(p => p.resolution === 'needs-strategy'));
 });
+test('a managed challenge interstitial is not an empty inventory', async () => {
+  const html = '<html><head><title>Just a moment...</title></head><body><script>window._cf_chl_opt={}</script></body></html>';
+  const denied = '<html><head><title>Access to this page has been denied</title></head><body><div id="px-captcha"></div></body></html>';
+  const moment = await discoverListings(['https://challenge.example/featured-listings/'], async () => ({ html, finalUrl: new URL('https://challenge.example/featured-listings/') }), { maxPages: 2, maxDetailPages: 0 });
+  assert.equal(moment.listings.length, 0);
+  assert.notEqual(moment.meta.outcome, 'found');
+  assert.ok(moment.meta.obstacles.some(row => row.code === 'requires_rendering'));
+  assert.equal(moment.meta.compatibility.pages[0].resolution, 'requires-rendering');
+  const captcha = await discoverListings(['https://profile.example/agent'], async () => ({ html: denied, finalUrl: new URL('https://profile.example/agent') }), { maxPages: 2, maxDetailPages: 0 });
+  assert.equal(captcha.listings.length, 0);
+  assert.ok(captcha.meta.obstacles.some(row => row.code === 'captcha_required'));
+  assert.ok(captcha.meta.resume.pending.includes('https://profile.example/agent'));
+  let renders = 0;
+  const cleared = await discoverListings(['https://challenge.example/featured-listings/'], async () => ({ html, finalUrl: new URL('https://challenge.example/featured-listings/') }), {
+    maxPages: 3, maxDetailPages: 0, maxRenders: 1,
+    renderPage: async () => { renders++; return { html: '<a href="/property/12-pine">12 Pine St $350,000</a>', finalUrl: new URL('https://challenge.example/featured-listings/') }; },
+  });
+  assert.equal(renders, 1);
+  assert.equal(cleared.listings.length, 1);
+  assert.ok(cleared.meta.stages.includes('browser_render_escalated'));
+  assert.notEqual(cleared.meta.outcome, 'not-found');
+  let captchaRenders = 0;
+  const skipped = await discoverListings(['https://profile.example/agent'], async () => ({ html: denied, finalUrl: new URL('https://profile.example/agent') }), {
+    maxPages: 2, maxDetailPages: 0,
+    renderPage: async () => { captchaRenders++; throw new Error('captcha must not render'); },
+  });
+  assert.equal(captchaRenders, 0);
+  assert.equal(skipped.listings.length, 0);
+  assert.ok(skipped.meta.obstacles.some(row => row.code === 'captcha_required'));
+});
 
 const engine = loadDiscovery();
 
@@ -580,6 +610,11 @@ test('architecture candidates rank lofty chime from markers, not from the hostna
   assert.equal(engine.architectureCandidates('<div id="root"></div>', new URL('https://brendaburk.com/')).some(row => row.id === 'lofty_chime'), false);
   assert.equal(engine.classifyObstacle('<html><head><title>Robot Validate</title></head><body>Verify your are human</body></html>'), 'captcha_required');
   assert.equal(engine.classifyObstacle('<title>Just a moment...</title><form id="challenge-form"></form>'), 'requires_rendering');
+  assert.equal(engine.classifyObstacle('<title>Just a moment...</title><script>window._cf_chl_opt={}</script>', 403), 'requires_rendering');
+  assert.equal(engine.classifyObstacle('<title>Attention Required! | Cloudflare</title>', 403), 'requires_rendering');
+  assert.equal(engine.classifyObstacle('<title>Access to this page has been denied</title><div id="px-captcha"></div>', 403), 'captcha_required');
+  assert.equal(engine.classifyObstacle('<title>403 Forbidden</title><h1>Forbidden</h1>', 403), 'access_denied');
+  assert.equal(engine.isRobotChallenge('<title>12 Pine St</title><p>Just a moment while photos load</p>'), false);
   assert.equal(engine.classifyObstacle('<script>window.awsWafCookieDomainList=[];window.gokuProps={}</script>'), 'requires_rendering');
   assert.equal(engine.classifyObstacle(scriptGate()), 'script_gate');
   const detail = engine.listingFromChimeDetail('<script>window.sitePageJSON={"modules":[{"data":{"listingDetail":{"info":{"streetAddress":"10 Pine St","detailUrl":"/10-pine","price":250000,"bedrooms":3,"bathrooms":2,"sqft":1800,"detailsDescribe":"Actual public remarks about this specific property.","listingPictures":"https://photos.example/a.jpg|https://photos.example/b.jpg","mlsListingId":"MLS1","listingStatus":"Active","city":"Town","state":"ID"}}}}]}</script>', new URL('https://agent.example/10-pine'));
@@ -727,7 +762,7 @@ test('production bundle discovery matches the source engine on a chime collectio
   const start = bundle.indexOf('const { publicListingRequestHeaders');
   const end = bundle.indexOf('const { parseListingCsv');
   const slice = bundle.slice(start, end).replace(
-    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate } =',
+    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv } =',
     'const exported =');
   const compiled = ts.transpileModule(slice + '\nmodule.exports = exported;\n', { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const moduleRef = { exports: {} };
@@ -749,6 +784,32 @@ test('production bundle discovery matches the source engine on a chime collectio
   assert.equal(fromBundle.meta.candidates[0].id, 'lofty_chime');
   assert.ok(fromBundle.listings[0].price);
   assert.equal(search.includes('featureListingName=Custom-Example1'), true);
+});
+
+test('a frameset with one document is the site, and two frames are not followed', async () => {
+  const origin = 'https://forward.example';
+  const seen = [];
+  const framed = await discoverListings([origin + '/'], async (url, options) => {
+    seen.push(url);
+    if (url === origin + '/') return { html: '<html><head><title>Agent</title></head><frameset rows="100%,*"><frame src="https://inventory.example/"></frame></frameset></html>', finalUrl: new URL(url) };
+    if (url.includes('/api-site/search/realTimeListings')) return { html: chimeJson, finalUrl: new URL(url) };
+    if (!options?.cookie) return { html: scriptGate(), finalUrl: new URL(url) };
+    return { html: chimeShell, finalUrl: new URL(url) };
+  }, { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(framed.listings.length, 1);
+  assert.equal(framed.listings[0].title, '1018 Mogul Hill Rd');
+  assert.equal(framed.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(framed.meta.stages.includes('frame_document'));
+  assert.equal(seen[0], origin + '/');
+  assert.equal(seen[1], 'https://inventory.example/');
+  let extra = 0;
+  const split = await discoverListings([origin + '/split'], async () => {
+    extra++;
+    return { html: '<frameset><frame src="https://a.example/"></frame><frame src="https://b.example/"></frame></frameset>', finalUrl: new URL(origin + '/split') };
+  }, { maxPages: 4, maxDetailPages: 0 });
+  assert.equal(extra, 1);
+  assert.equal(split.listings.length, 0);
+  assert.equal(split.meta.stages.includes('frame_document'), false);
 });
 
 test('paused verification resumes only pending pages and does not store the session', async () => {
@@ -785,6 +846,189 @@ test('paused verification resumes only pending pages and does not store the sess
   assert.equal(idle.listings.length, 2);
   assert.equal(idle.meta.resume.stage, 'verification_required');
   assert.equal(idle.meta.obstacles[0].code, 'captcha_required');
+});
+
+const card = (title, slug, price = '$350,000') => `<a href="/property/${slug}">${title} ${price}</a>`;
+
+test('collection boundaries prove exhaustion without treating bare cards as complete', async () => {
+  const origin = 'https://unfamiliar-broker.example';
+  const pages = {
+    [origin + '/listings']: `<nav class="pagination"><a href="?page=2">2</a><a rel="next" href="?page=2">Next</a></nav>${card('12 Pine St', '12-pine')}`,
+    [origin + '/listings?page=2']: `<nav class="pagination"><a href="?page=1">1</a></nav>${card('14 Oak St', '14-oak', '$400,000')}`,
+  };
+  const numbered = await discoverListings([origin + '/listings'], fixtureFetch(pages), { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(numbered.listings.length, 2);
+  assert.ok(numbered.listings.every(row => /Pine|Oak/.test(row.title)));
+  assert.equal(numbered.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(numbered.meta.completenessEvidence.includes('pagination_exhausted'));
+  assert.equal(numbered.meta.collectionBoundary.continuationRequests, 1);
+
+  const cursorPages = {
+    [origin + '/feed']: JSON.stringify({ listings: [{ streetAddress: '12 Pine St', listPrice: 350000, detailUrl: origin + '/property/12-pine' }], hasNextPage: true, nextUrl: origin + '/feed?cursor=abc' }),
+    [origin + '/feed?cursor=abc']: JSON.stringify({ listings: [{ streetAddress: '14 Oak St', listPrice: 400000, detailUrl: origin + '/property/14-oak' }], hasNextPage: false, nextCursor: null }),
+  };
+  const cursor = await discoverListings([origin + '/feed'], fixtureFetch(cursorPages), { maxPages: 4, maxDetailPages: 0 });
+  assert.equal(cursor.listings.length, 2);
+  assert.equal(cursor.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(cursor.meta.completenessEvidence.includes('cursor_exhausted'));
+
+  const onePage = await discoverListings([origin + '/only'], async () => ({ html: card('12 Pine St', '12-pine') + '<section data-has-next-page="false"></section>', finalUrl: new URL(origin + '/only') }), { maxDetailPages: 0 });
+  assert.equal(onePage.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(onePage.meta.completenessEvidence.includes('single_page_collection_confirmed'));
+
+  const hidden = await discoverListings([origin + '/more'], async () => ({ html: card('12 Pine St', '12-pine') + '<button>Load more listings</button>', finalUrl: new URL(origin + '/more') }), { maxDetailPages: 0 });
+  assert.equal(hidden.listings.length, 1);
+  assert.equal(hidden.meta.inventoryStatus, 'inventory_partial');
+  assert.deepEqual(hidden.meta.completenessEvidence, ['collection_boundary_unknown']);
+
+  const loadMorePages = {
+    [origin + '/sale']: card('12 Pine St', '12-pine') + '<button data-url="' + origin + '/sale?page=2">Load more listings</button>',
+    [origin + '/sale?page=2']: card('14 Oak St', '14-oak', '$400,000') + '<div data-has-next-page="false"></div>',
+  };
+  const loaded = await discoverListings([origin + '/sale'], fixtureFetch(loadMorePages), { maxPages: 4, maxDetailPages: 0 });
+  assert.equal(loaded.listings.length, 2);
+  assert.equal(loaded.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(loaded.meta.collectionBoundary.mechanism, 'load-more');
+
+  let repeatedFetches = 0;
+  const repeated = await discoverListings([origin + '/loop'], async () => {
+    repeatedFetches++;
+    return { html: JSON.stringify({ listings: [{ streetAddress: '12 Pine St', listPrice: 350000, detailUrl: origin + '/property/12-pine' }], hasNextPage: true, nextUrl: origin + '/loop' }), finalUrl: new URL(origin + '/loop') };
+  }, { maxPages: 4, maxDetailPages: 0 });
+  assert.equal(repeatedFetches, 1);
+  assert.equal(repeated.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(repeated.meta.completenessEvidence.includes('cursor_exhausted'), false);
+
+  const nearby = await discoverListings([origin + '/primary'], async () => ({
+    html: '<section data-has-next-page="false">' + card('12 Pine St', '12-pine') + '</section><aside class="nearby-homes">' + card('Far Away', 'far-away', '$100,000') + '</aside>',
+    finalUrl: new URL(origin + '/primary'),
+  }), { maxDetailPages: 0 });
+  assert.equal(nearby.listings.length, 1);
+  assert.match(nearby.listings[0].title, /Pine/);
+  assert.equal(nearby.listings.some(row => /Far Away/.test(row.title)), false);
+  assert.equal(nearby.meta.inventoryStatus, 'inventory_complete');
+
+  const unknown = await discoverListings([origin + '/cards'], async () => ({ html: card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'), finalUrl: new URL(origin + '/cards') }), { maxDetailPages: 0 });
+  assert.equal(unknown.listings.length, 2);
+  assert.equal(unknown.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(unknown.meta.outcome, 'found');
+  assert.deepEqual(unknown.meta.completenessEvidence, ['collection_boundary_unknown']);
+
+  const agreed = '<a href="' + origin + '/property/12-pine">12 Pine St $350,000</a><script type="application/ld+json">' + JSON.stringify({ '@type': 'RealEstateListing', name: '12 Pine St', price: 350000, url: origin + '/property/12-pine' }) + '</script>';
+  const cross = await discoverListings([origin + '/cross'], async () => ({ html: agreed, finalUrl: new URL(origin + '/cross') }), { maxDetailPages: 0 });
+  assert.equal(cross.listings.length, 1);
+  assert.equal(cross.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(cross.meta.completenessEvidence.includes('single_page_collection_confirmed') || cross.meta.completenessEvidence.includes('structured_group_exhausted'));
+
+  const query = 'query Properties($limit: Int, $offset: Int) { properties(limit: $limit, offset: $offset) { id } propertiesCount { count } }';
+  const scoped = { pageSize: '1', useRouterApi: false, query, variables: { limit: 1, offset: 0, featuredListing: true, statusId: '{{variables.statusId}}' } };
+  const market = { pageSize: '50', useRouterApi: false, query, variables: { limit: 50, offset: 0, globalProperty: true } };
+  const embed = blob => 'JSON.parse(' + JSON.stringify(JSON.stringify(blob)) + ')';
+  const page = '<script>window.site={apiGatewayUrl:\'/api-gw\',routerUrl:\'/api-nv\'};' + embed(scoped) + ';' + embed(market) + ';</script>'
+    + '<a href="/properties/12-pine">12 Pine St $350,000</a>'
+    + '<a href="{{#if fromMLS}}/home-search/listings/{{id}}{{^}}/properties/{{slug}}{{/if}}">template</a>';
+  const graphqlCalls = [];
+  const offsetResult = await discoverListings([origin + '/sale'], async url => {
+    const parsed = new URL(url);
+    if (!parsed.pathname.endsWith('/graphql')) return { html: page, finalUrl: new URL(origin + '/sale') };
+    const variables = JSON.parse(parsed.searchParams.get('variables'));
+    graphqlCalls.push(variables.offset);
+    assert.equal(variables.featuredListing, true);
+    assert.equal(variables.globalProperty, undefined);
+    assert.equal(variables.statusId, undefined);
+    const rows = variables.offset === 0
+      ? [{ slug: '12-pine', name: '12 Pine St', salesPrice: 350000, status: 'FOR_SALE', media: [{ largeUrl: origin + '/a.jpg' }] }]
+      : [{ slug: '14-oak', fullAddress: '14 Oak St', salesPrice: 400000, status: 'FOR_SALE', bedroomCount: 3, livingSpaceSize: 1800 }];
+    return { html: JSON.stringify({ data: { properties: rows, propertiesCount: { count: 2 } } }), finalUrl: parsed };
+  }, { maxPages: 6, maxDetailPages: 0 });
+  assert.deepEqual(graphqlCalls, [0, 1]);
+  assert.equal(offsetResult.listings.length, 2);
+  assert.equal(offsetResult.meta.expectedCount, 2);
+  assert.equal(offsetResult.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(offsetResult.meta.completenessEvidence.includes('api_total_match'));
+  assert.ok(offsetResult.meta.completenessEvidence.includes('pagination_exhausted'));
+  assert.equal(offsetResult.listings.some(row => row.sourceUrl === origin + '/properties/14-oak'), true);
+  assert.equal(offsetResult.meta.collectionBoundary.mechanism, 'offset-query');
+
+  const short = { ...scoped, variables: { ...scoped.variables } };
+  const shortPage = '<script>window.site={apiGatewayUrl:\'/api-gw\'};' + embed(short) + ';</script>' + '<a href="/properties/12-pine">12 Pine St $350,000</a>'
+    + '<a href="{{#if fromMLS}}/listings/{{id}}{{^}}/properties/{{slug}}{{/if}}">template</a>';
+  const partial = await discoverListings([origin + '/short'], async url => {
+    const parsed = new URL(url);
+    if (!parsed.pathname.endsWith('/graphql')) return { html: shortPage, finalUrl: new URL(origin + '/short') };
+    const offset = JSON.parse(parsed.searchParams.get('variables')).offset;
+    const rows = offset === 0
+      ? [{ slug: '12-pine', fullAddress: '12 Pine St', salesPrice: 350000, status: 'FOR_SALE' }]
+      : [{ slug: 'hidden', name: 'Call for price', status: 'FOR_SALE' }];
+    return { html: JSON.stringify({ data: { properties: rows, propertiesCount: { count: 2 } } }), finalUrl: parsed };
+  }, { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(partial.listings.length, 1);
+  assert.equal(partial.meta.expectedCount, 2);
+  assert.equal(partial.meta.inventoryStatus, 'inventory_partial');
+  assert.ok(partial.meta.completenessEvidence.includes('pagination_exhausted'));
+  assert.equal(partial.meta.completenessEvidence.includes('api_total_match'), false);
+});
+
+test('production renderer is one bounded interface and is wired into onboarding and refresh', async () => {
+  assert.equal(engine.createListingRenderer(null), undefined);
+  assert.equal(engine.listingRenderBackendFromEnv(() => undefined), null);
+  assert.equal(engine.listingRenderBackendFromEnv(() => 'http://render.example/run'), null);
+  let calls = 0;
+  const renderPage = engine.createListingRenderer(async ({ url }) => {
+    calls++;
+    return { html: '<div id="root"></div><script src="/app.js"></script>', finalUrl: url, network: [] };
+  }, { maxRenders: 1 });
+  await assert.rejects(renderPage('https://agent.example/a').then(() => renderPage('https://agent.example/b')), /browser budget/);
+  assert.equal(calls, 1);
+  const shell = '<div id="root"></div><script src="/app.js"></script>';
+  const failed = await discoverListings(['https://render-fail.example/listings'], async () => ({ html: shell, finalUrl: new URL('https://render-fail.example/listings') }), {
+    maxPages: 2, maxDetailPages: 0, renderPage: async () => { throw new Error('browser crashed'); },
+  });
+  assert.equal(failed.listings.length, 0);
+  assert.notEqual(failed.meta.outcome, 'found');
+  assert.ok(failed.meta.obstacles.some(row => row.code === 'render_failed'));
+  const onboarding = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8');
+  assert.equal(onboarding.split('renderPage: productionRenderPage()').length - 1, 3);
+  const refresh = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/refresh-listings/sourceHandler.ts'), 'utf8');
+  assert.match(refresh, /createListingRenderer\(listingRenderBackendFromEnv/);
+  const sources = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/refresh-listings/sources.ts'), 'utf8');
+  assert.match(sources, /renderPage/);
+  const originalFetch = globalThis.fetch;
+  try {
+    let posted = null;
+    globalThis.fetch = async (url, options) => {
+      posted = { url: String(url), options };
+      const payload = JSON.parse(options.body);
+      assert.equal(payload.url, 'https://agent.example/listings');
+      if (payload.cookie) assert.equal(payload.cookie, 'session-secret-value');
+      return new Response(JSON.stringify({
+        html: '<html><a href="/property/12-pine">12 Pine St $350,000</a></html>',
+        finalUrl: 'https://agent.example/listings',
+        network: Array.from({ length: 40 }, (_, i) => ({ url: `https://agent.example/api/search?n=${i}`, html: '{"ok":true}' })),
+      }), { status: 200, headers: { 'content-type': 'application/json' } });
+    };
+    const backend = engine.listingRenderBackendFromEnv(name => name === 'LISTING_RENDER_URL' ? 'https://render.example/run' : name === 'LISTING_RENDER_TOKEN' ? 'render-token' : undefined);
+    const renderPage = engine.createListingRenderer(backend, { maxRenders: 2, timeoutMs: 1000 });
+    const challenge = '<html><head><title>Just a moment...</title></head><body>checking</body></html>';
+    const rendered = await discoverListings(['https://agent.example/listings'], async () => ({ html: challenge, finalUrl: new URL('https://agent.example/listings') }), {
+      maxPages: 2, maxDetailPages: 0, sessionCookie: 'session-secret-value', renderPage,
+    });
+    assert.equal(posted.options.headers.authorization, 'Bearer render-token');
+    assert.equal(JSON.parse(posted.options.body).cookie, 'session-secret-value');
+    assert.equal(JSON.stringify(rendered).includes('session-secret-value'), false);
+    assert.ok(rendered.meta.stages.includes('browser_render_escalated'));
+    assert.equal(rendered.listings.length, 1);
+    const bounded = await renderPage('https://agent.example/listings');
+    assert.equal(bounded.network.length, 30);
+    globalThis.fetch = async () => new Response('nope', { status: 502 });
+    await assert.rejects(backend({ url: 'https://agent.example/other' }), /Renderer returned 502/);
+    globalThis.fetch = async () => new Response(JSON.stringify({ html: '' }), { status: 200, headers: { 'content-type': 'application/json' } });
+    await assert.rejects(engine.createListingRenderer(backend)('https://agent.example/empty'), /empty document/);
+    globalThis.fetch = () => new Promise(() => {});
+    await assert.rejects(engine.createListingRenderer(backend, { timeoutMs: 30 })('https://other.example/slow'), /Render timed out/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 

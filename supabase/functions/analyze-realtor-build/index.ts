@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
+import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, type WebsiteDesign } from "./websiteDesign.ts";
 
@@ -164,6 +164,10 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
   throw new Error("The page redirected too many times.");
 }
 
+/** Same renderer contract as refresh and resume. Unconfigured environments pass nothing and do not pretend a browser ran. */
+function productionRenderPage() {
+  return createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name)));
+}
 const decodeEntities = (value: string) => value
   .replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'")
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
@@ -549,7 +553,7 @@ Deno.serve(async (request) => {
       listings: Array.isArray(resume.listings) ? resume.listings.slice(0, 100) : [],
       obstacle: typeof resume.obstacle === "string" ? resume.obstacle.slice(0, 80) : undefined,
       stage: "verification_required",
-    }, sessionCookie, fetchHtml);
+    }, sessionCookie, fetchHtml, { renderPage: productionRenderPage() });
     return reply({ discoveredListings: discovery.listings, listingDiscovery: discovery.meta, status: discovery.meta.resume ? "verification_required" : "ok" });
   }
   // Soft-prompt path: realtor pasted a URL that goes straight to their listings.
@@ -568,7 +572,7 @@ Deno.serve(async (request) => {
     if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks });
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -679,7 +683,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks,
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
       discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
       discovery.meta.found = discoveredListings.length;

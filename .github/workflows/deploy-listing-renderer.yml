@@ -1,0 +1,73 @@
+name: Deploy listing renderer
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'services/listing-renderer/**'
+      - '.github/workflows/deploy-listing-renderer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF || 'xdcqjaodcvnlawqcunrr' }}
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require a browser host credential
+        id: host
+        run: |
+          if [ -n "$FLY_API_TOKEN" ]; then echo "target=fly" >> "$GITHUB_OUTPUT"
+          elif [ -n "$RAILWAY_TOKEN" ]; then echo "target=railway" >> "$GITHUB_OUTPUT"
+          elif [ -n "$RENDER_API_KEY" ]; then echo "target=render" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Supabase Edge Functions cannot run Chromium. Add repository secret FLY_API_TOKEN (Fly.io org token) so this workflow can deploy services/listing-renderer and set LISTING_RENDER_URL. RAILWAY_TOKEN or RENDER_API_KEY are also accepted. SUPABASE_ACCESS_TOKEN is already used to publish the secret and does not host a browser."
+            exit 1
+          fi
+
+      - name: Only Fly.io is wired for this service
+        if: steps.host.outputs.target != 'fly'
+        run: |
+          echo "::error::A ${{ steps.host.outputs.target }} token is present, but this workflow can deploy the Chromium renderer only with FLY_API_TOKEN."
+          exit 1
+
+      - name: Deploy to Fly.io
+        if: steps.host.outputs.target == 'fly'
+        id: fly
+        working-directory: services/listing-renderer
+        run: |
+          curl -fsSL https://fly.io/install.sh | sh
+          export PATH="$HOME/.fly/bin:$PATH"
+          fly apps create cdariver-listing-renderer --json || true
+          TOKEN=$(openssl rand -hex 24)
+          echo "::add-mask::$TOKEN"
+          fly secrets set LISTING_RENDER_TOKEN="$TOKEN" --app cdariver-listing-renderer --stage
+          fly deploy --app cdariver-listing-renderer --ha=false --remote-only
+          echo "url=https://cdariver-listing-renderer.fly.dev" >> "$GITHUB_OUTPUT"
+          echo "LISTING_RENDER_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+
+      - name: Publish renderer endpoint to the importer
+        if: steps.host.outputs.target == 'fly'
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Set LISTING_RENDER_URL
+        if: steps.host.outputs.target == 'fly'
+        run: |
+          test -n "$SUPABASE_ACCESS_TOKEN" || { echo "::error::SUPABASE_ACCESS_TOKEN is missing, so the deployed renderer URL cannot be given to the importer."; exit 1; }
+          supabase secrets set \
+            LISTING_RENDER_URL="${{ steps.fly.outputs.url }}" \
+            LISTING_RENDER_TOKEN="$LISTING_RENDER_TOKEN" \
+            --project-ref "$SUPABASE_PROJECT_REF"
+          echo "Importer secret LISTING_RENDER_URL is set. The token value was not printed."

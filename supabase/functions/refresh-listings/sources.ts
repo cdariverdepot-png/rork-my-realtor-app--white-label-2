@@ -31,7 +31,7 @@ export function isPropertyUrl(raw: string) {
 
 /** Connect the inventory behind an observed public URL, rather than bookmarking one home. */
 export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: ListingSource,
-  selectLinks: SelectInventoryLinks = selectInventoryLinks): Promise<SourceInventory> {
+  selectLinks: SelectInventoryLinks = selectInventoryLinks, renderPage?: FetchHtml): Promise<SourceInventory> {
   const submittedUrl = normalizedUrl(raw);
   const pages = new Map<string, Promise<Awaited<ReturnType<FetchHtml>>>>();
   const deadline = Date.now() + 45_000;
@@ -66,7 +66,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       /\bmy\b|\bour\b|listing agent|profile|\/(?:agents?|realtors?|profile)\/|(?:office|agent)_listing_categories|[?&](?:agent|office)(?:id)?=/i.test(link.label + " " + link.url));
     let associated: string | undefined;
     for (const link of links.slice(0, 3)) {
-      const candidate = await discoverListings([link.url], cachedFetch, { maxPages: 12, maxListings: 100, maxDetailPages: 0, selectLinks });
+      const candidate = await discoverListings([link.url], cachedFetch, { maxPages: 12, maxListings: 100, maxDetailPages: 0, selectLinks, renderPage });
       if (candidate.listings.some(item => normalizedUrl(item.sourceUrl) === submittedUrl ||
         original.some(home => key(home.title) === key(item.title) && key(home.neighborhood) === key(item.neighborhood)))) {
         associated = link.url; break;
@@ -75,7 +75,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     if (associated) uri = associated;
     else directProperty = await Promise.all(original.map(async item=>{try{return await enrichPublicProperty(item,cachedFetch,page);}catch{return item;}}));
   }
-  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks, normalizePage: normalizePublicPage });
+  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks, normalizePage: normalizePublicPage, renderPage });
   // Empty is trustworthy only when the known inventory explicitly reports zero properties.
   let explicitEmpty = false;
   if (existing && !discovery.listings.length && !discovery.meta.failed?.length) {

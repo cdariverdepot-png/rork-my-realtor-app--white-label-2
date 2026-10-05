@@ -44,6 +44,9 @@ export type ListingDiscoveryMeta = {
   issues?: { code: "requires-rendering" | "limited-showcase" | "missing-photos"; url: string; interface?: string }[];
   /** Inventory completeness, independent of optional detail enrichment. */
   inventoryStatus?: "inventory_complete" | "inventory_partial" | "inventory_empty" | "inventory_blocked";
+  /** Why inventory is complete, or collection_boundary_unknown when it is not proven. */
+  completenessEvidence?: string[];
+  collectionBoundary?: { mechanism?: string; terminal?: string; continuationRequests?: number };
   enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number };
   /** Machine-readable obstacles. Never a substitute for extracted listings. */
   obstacles?: { code: string; url?: string; detail?: string }[];
@@ -394,6 +397,7 @@ export function listingsFromJsonLd(html: string, base: URL): DiscoveredListing[]
  * whose surrounding markup mentions a dollar price.
  */
 export function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredListing[] {
+  html = html.replace(/<(aside|section)\b[^>]*\b(?:class|id)=["'][^"']*\b(?:nearby|recommended|similar)(?:[-_](?:homes|listings|properties|results))?\b[^"']*["'][^>]*>[\s\S]*?<\/\1>/gi, " ");
   const found: DiscoveredListing[] = [];
   const seen = new Set<string>();
   const hrefs = [...html.matchAll(/<a\b([^>]*)href\s*=\s*["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi)];
@@ -810,11 +814,15 @@ export async function publishedScriptGateCookie(html: string): Promise<string | 
 
 /** A robot or challenge document, not an empty listing collection. Footer widgets are not this page. */
 export function isRobotChallenge(html: string): boolean {
-  const title = stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "");
-  if (/^robot validate$/i.test(title.trim())) return true;
+  const title = stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "").trim();
+  if (/^robot validate$/i.test(title)) return true;
+  if (/^just a moment\.\.\.$/i.test(title)) return true;
+  if (/^attention required\b/i.test(title)) return true;
   const heading = stripTags(html.match(/<h[12][^>]*>([\s\S]*?)<\/h[12]>/i)?.[1] ?? "");
   if (/\baccess denied\b/i.test(heading) && /recaptcha|verify your are human|verify you are human/i.test(html)) return true;
   if (/<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(html)) return true;
+  const head = html.slice(0, 12000);
+  if (/px-captcha/i.test(head) && /access to this page has been denied/i.test(title)) return true;
   return false;
 }
 
@@ -825,6 +833,8 @@ export function classifyObstacle(html: string, status?: number): string | null {
   const head = html.slice(0, 12000);
   if (/^robot validate$/i.test(title.trim())) return "captcha_required";
   if (/recaptcha|hcaptcha|cf-turnstile|challenges\.cloudflare\.com/i.test(head) && /verify you are human|verify your are human|security check|human verification|access denied/i.test(head)) return "captcha_required";
+  if (/px-captcha/i.test(head) && /access to this page has been denied/i.test(title)) return "captcha_required";
+  if (/^just a moment\.\.\.$/i.test(title.trim()) || /^attention required\b/i.test(title.trim())) return "requires_rendering";
   if (status === 429 || /\btoo many requests\b/i.test(title)) return "rate_limited";
   if (status === 401) return "authentication_required";
   if (status === 403 && !isRobotChallenge(html)) return "access_denied";
@@ -1308,6 +1318,302 @@ export function collectInventoryFragments(html: string, base: URL): string[] {
   return [...new Set(out)];
 }
 
+function visibleDocument(html: string): string {
+  return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ");
+}
+
+function sameCollectionQuery(next: URL, base: URL): boolean {
+  const scope = (url: URL) => [...url.searchParams].filter(([key]) => !/^(?:page|pageNumber|offset|limit|per_page|q_offset|cursor|after)$/i.test(key)).sort(([a], [b]) => a.localeCompare(b));
+  return next.protocol === "https:" && sameSite(next, base) && next.pathname === base.pathname && JSON.stringify(scope(next)) === JSON.stringify(scope(base));
+}
+
+function continuationUrl(raw: string, base: URL): string | null {
+  const url = absolutize(raw, base);
+  if (!url) return null;
+  try {
+    const next = new URL(url);
+    return sameCollectionQuery(next, base) || sameSite(next, base) ? url : null;
+  } catch { return null; }
+}
+
+/** Continuation and terminal signals for one document. Absence of a next button is not proof. */
+export function inspectCollectionDocument(html: string, base: URL, found: DiscoveredListing[]): {
+  continuations: string[]; open: boolean; mechanism: string; structuredClosed: boolean; singlePageConfirmed: boolean;
+  cursorTerminal: boolean; providerTerminal: boolean; repeatedCursor: boolean; publishedCount?: number; publishedKind?: "api" | "page";
+} {
+  const continuations: string[] = [];
+  const seen = new Set<string>();
+  const add = (raw: string | null | undefined) => {
+    if (!raw) return;
+    const url = continuationUrl(raw, base);
+    if (!url || seen.has(url)) return;
+    seen.add(url);
+    continuations.push(url);
+  };
+  let open = false;
+  let mechanism = "none";
+  let cursorTerminal = false;
+  let providerTerminal = false;
+  let repeatedCursor = false;
+  let publishedCount: number | undefined;
+  let publishedKind: "api" | "page" | undefined;
+  const notePublished = (value: number, kind: "api" | "page") => {
+    if (Number.isFinite(value) && value > 0) { publishedCount = Math.max(publishedCount ?? 0, value); publishedKind = publishedKind === "api" ? "api" : kind; }
+  };
+  const readBag = (payload: Record<string, unknown>) => {
+    const bags = [payload, payload.pagination, payload.pageInfo].filter((item): item is Record<string, unknown> => !!item && typeof item === "object" && !Array.isArray(item));
+    for (const bag of bags) {
+      const scoped = bag === payload ? bag : bag;
+      if (scoped.hasNextPage === true || scoped.has_next_page === true || scoped.hasMore === true) open = true;
+      if (scoped.hasNextPage === false || scoped.has_next_page === false || scoped.hasMore === false) { cursorTerminal = scoped.hasNextPage === false || scoped.has_next_page === false; providerTerminal = scoped.hasMore === false || providerTerminal; }
+      for (const key of ["nextUrl", "next", "nextPage", "@odata.nextLink"]) {
+        if (!Object.prototype.hasOwnProperty.call(scoped, key)) continue;
+        const value = scoped[key];
+        if (value == null) cursorTerminal = true;
+        else if (typeof value === "string" && value && (key !== "next" || bag !== payload || /^https?:\/\//i.test(value))) add(value);
+      }
+      for (const key of ["nextCursor", "next_cursor", "endCursor"]) {
+        if (!Object.prototype.hasOwnProperty.call(scoped, key)) continue;
+        const value = scoped[key];
+        if (value == null) cursorTerminal = true;
+        else if (typeof value === "string" && /^https:\/\//i.test(value)) add(value);
+        else if (typeof value === "string" && value) open = true;
+      }
+      const pageNum = Number(scoped.page ?? scoped.currentPage ?? base.searchParams.get("page"));
+      const totalPage = Number(scoped.totalPage ?? scoped.totalPages ?? scoped.pageCount);
+      if (Number.isInteger(pageNum) && Number.isInteger(totalPage) && pageNum < totalPage && pageNum > 0 && pageNum < 30 && base.searchParams.has("page")) {
+        const following = new URL(base);
+        following.searchParams.set("page", String(pageNum + 1));
+        add(following.toString());
+      }
+    }
+  };
+  try { readBag(JSON.parse(html) as Record<string, unknown>); } catch { /* HTML document */ }
+  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/(?:ld\+)?json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { readBag(JSON.parse(match[1]) as Record<string, unknown>); } catch { /* malformed script */ }
+  }
+  const visible = visibleDocument(html);
+  for (const url of paginationLinks(visible, base)) add(url);
+  for (const tag of visible.match(/<link\b[^>]*>/gi) ?? []) {
+    if (/\bnext\b/i.test(attr(tag, "rel"))) add(attr(tag, "href"));
+  }
+  for (const match of visible.matchAll(/<(?:a|button)\b([^>]*)>([\s\S]*?)<\/(?:a|button)>/gi)) {
+    const tag = `<a ${match[1]}>`;
+    const label = `${attr(tag, "aria-label")} ${attr(tag, "title")} ${stripTags(match[2])}`;
+    const href = attr(tag, "href") || attr(tag, "data-url") || attr(tag, "data-href") || attr(tag, "data-next-url");
+    if (/\b(?:load|show) more\b/i.test(label)) {
+      if (href) add(href); else open = true;
+      mechanism = "load-more";
+    }
+  }
+  for (const tag of visible.match(/<[^>]+\bdata-next-(?:url|href)=["'][^"']+["'][^>]*>/gi) ?? []) add(attr(tag, "data-next-url") || attr(tag, "data-next-href"));
+  if (/data-has-next-page=["']true["']/i.test(visible)) open = true;
+  const explicitEnd = /data-has-next-page=["']false["']/i.test(visible) || /data-pagination-complete=["']true["']/i.test(visible);
+  const currentPage = Number(base.searchParams.get("page") || base.searchParams.get("pageNumber") || 1);
+  let numberedNext: string | null = null;
+  let sawPager = false;
+  let highestPage = 0;
+  for (const match of visible.matchAll(/<(?:nav|div|ul)\b[^>]*(?:class|id)=["'][^"']*pagination[^"']*["'][^>]*>[\s\S]*?<\/(?:nav|div|ul)>/gi)) {
+    sawPager = true;
+    for (const link of match[0].matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+      const tag = `<a ${link[1]}>`;
+      const label = stripTags(link[2]);
+      const pageNo = Number(label);
+      const href = attr(tag, "href");
+      if (Number.isInteger(pageNo) && pageNo > 0) highestPage = Math.max(highestPage, pageNo);
+      if (pageNo === currentPage + 1 && href) numberedNext = href;
+    }
+  }
+  if (numberedNext) add(numberedNext);
+  const text = stripTags(visible).slice(0, 20000);
+  const range = text.match(/\b(\d+)\s*[-–]\s*(\d+)\s+of\s+(\d+)\s+(?:listings|properties|homes|results)\b/i);
+  const showingAll = text.match(/\bshowing all\s+(\d+)\s+(?:listings|properties|homes|results)\b/i);
+  if (range && Number(range[1]) === 1 && Number(range[2]) === Number(range[3])) notePublished(Number(range[3]), "page");
+  else if (showingAll) notePublished(Number(showingAll[1]), "page");
+  if (continuations.length > 0 && continuations.every(url => url === base.toString())) repeatedCursor = true;
+  if (continuations.some(url => url !== base.toString())) { open = false; mechanism = mechanism === "load-more" ? "load-more" : numberedNext || sawPager ? "numbered-pagination" : cursorTerminal || /cursor|after=/i.test(continuations.find(url => url !== base.toString()) ?? "") ? "cursor" : "next-link"; }
+  else if (open) mechanism = mechanism === "load-more" ? "load-more" : "hidden";
+  const structured = [...listingsFromJsonLd(html, base), ...listingsFromHydration(html, base), ...listingsFromPublicJson(html, base)];
+  const cards = listingsFromCards(visible, base);
+  const sameIds = (left: DiscoveredListing[], right: DiscoveredListing[]) => {
+    const a = new Set(left.map(item => item.sourceUrl));
+    const b = new Set(right.map(item => item.sourceUrl));
+    return a.size > 0 && a.size === b.size && [...a].every(url => b.has(url));
+  };
+  const structuredClosed = !open && !continuations.length && found.length > 0 && sameIds(structured, found);
+  const crossCheck = !open && !continuations.length && found.length > 0 && cards.length > 0 && structured.length > 0 && sameIds(cards, structured) && sameIds(structured, found);
+  const pagerExhausted = sawPager && !continuations.length && !open && found.length > 0 && highestPage > 0 && highestPage <= Math.max(currentPage, 1);
+  const countMatchesPage = !!publishedCount && publishedCount === found.length;
+  const singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
+  if (/\binfinite-scroll\b|data-infinite/i.test(visible) && !continuations.length) open = true;
+  return {
+    continuations: continuations.filter(url => url !== base.toString()), open: open || repeatedCursor, mechanism, structuredClosed, singlePageConfirmed,
+    cursorTerminal: cursorTerminal && !open, providerTerminal: providerTerminal && !open && !continuations.length, repeatedCursor,
+    publishedCount, publishedKind,
+  };
+}
+
+type PublishedUrlTemplate = { flag: string; whenTrue: string; trueField: string; whenFalse: string; falseField: string };
+
+/** Same-origin GraphQL roots the page itself publishes. Customer hostnames are not part of the contract. */
+function publishedGraphqlEndpoints(html: string, base: URL): { gateway?: string; router?: string } {
+  const out: { gateway?: string; router?: string } = {};
+  for (const match of html.matchAll(/\b(apiGatewayUrl|routerUrl)\s*[:=]\s*["']([^"']+)["']/g)) {
+    const abs = absolutize(match[2], base);
+    if (!abs) continue;
+    let url: URL;
+    try { url = new URL(abs); } catch { continue; }
+    if (url.protocol !== "https:" || !sameSite(url, base)) continue;
+    if (!/\/graphql$/i.test(url.pathname)) url.pathname = url.pathname.replace(/\/$/, "") + "/graphql";
+    url.search = "";
+    url.hash = "";
+    if (match[1] === "routerUrl") out.router = url.toString();
+    else out.gateway = url.toString();
+  }
+  return out;
+}
+
+function cleanPublishedVariables(value: unknown): unknown {
+  if (typeof value === "string") return /\{\{.*\}\}/.test(value) ? undefined : value;
+  if (typeof value === "number" || typeof value === "boolean" || value == null) return value;
+  if (Array.isArray(value)) return value.map(cleanPublishedVariables).filter(item => item !== undefined);
+  if (typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(value)) {
+      const cleaned = cleanPublishedVariables(child);
+      if (cleaned !== undefined) out[key] = cleaned;
+    }
+    return out;
+  }
+  return undefined;
+}
+
+function scopedCollectionVariables(variables: Record<string, unknown>): boolean {
+  if (variables.globalProperty === true || variables.network === true) return false;
+  if (variables.featuredListing === true) return true;
+  for (const key of ["agentIds", "teamIds", "officeIds", "propertyIds"]) {
+    if (Array.isArray(variables[key]) && variables[key].length > 0) return true;
+  }
+  return false;
+}
+
+/** Published offset collection queries. Unscoped market queries are not followed. */
+export function publishedCollectionRequests(html: string, base: URL): string[] {
+  const endpoints = publishedGraphqlEndpoints(html, base);
+  if (!endpoints.gateway && !endpoints.router) return [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const match of html.matchAll(/JSON\.parse\(\s*"((?:\\.|[^"\\])*)"\s*\)/g)) {
+    let blob: Record<string, unknown>;
+    try { blob = JSON.parse(JSON.parse('"' + match[1] + '"')); } catch { continue; }
+    if (!blob || typeof blob.query !== "string" || !/^\s*query\s+[A-Za-z]/m.test(blob.query) || !/\bcount\b/.test(blob.query)) continue;
+    const variables = cleanPublishedVariables(blob.variables);
+    if (!variables || typeof variables !== "object" || Array.isArray(variables)) continue;
+    const record = variables as Record<string, unknown>;
+    const pageSize = Number(blob.pageSize ?? record.limit);
+    if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > 100 || !scopedCollectionVariables(record)) continue;
+    record.limit = pageSize;
+    if (record.offset == null) record.offset = 0;
+    const root = blob.useRouterApi === true ? endpoints.router : endpoints.gateway;
+    if (!root) continue;
+    const url = new URL(root);
+    url.searchParams.set("query", blob.query);
+    url.searchParams.set("variables", JSON.stringify(record));
+    const href = url.toString();
+    if (href.length > 12000 || seen.has(href)) continue;
+    seen.add(href);
+    out.push(href);
+    if (out.length >= 2) break;
+  }
+  return out;
+}
+
+/** Href template the collection page publishes for its own records. Paths are not invented. */
+function publishedListingUrlTemplate(html: string): PublishedUrlTemplate | null {
+  const match = html.match(/\{\{#if\s+([A-Za-z_][A-Za-z0-9_]*)\}\}(\/[A-Za-z0-9_./~-]{1,80})\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}\{\{\^\}\}(\/[A-Za-z0-9_./~-]{1,80})\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}\{\{\/if\}\}/);
+  if (!match) return null;
+  const fields = new Set(["id", "slug"]);
+  if (!fields.has(match[3]) || !fields.has(match[5])) return null;
+  return { flag: match[1], whenTrue: match[2], trueField: match[3], whenFalse: match[4], falseField: match[5] };
+}
+
+function applyPublishedListingUrls(text: string, template: PublishedUrlTemplate | null): string {
+  if (!template) return text;
+  let payload: unknown;
+  try { payload = JSON.parse(text); } catch { return text; }
+  const root = payload && typeof payload === "object" ? payload as Record<string, unknown> : null;
+  const data = root?.data && typeof root.data === "object" && !Array.isArray(root.data) ? root.data as Record<string, unknown> : root;
+  if (!data) return text;
+  let changed = false;
+  for (const value of Object.values(data)) {
+    if (!Array.isArray(value)) continue;
+    for (const row of value) {
+      if (!row || typeof row !== "object") continue;
+      const record = row as Record<string, unknown>;
+      if (typeof record.url !== "string") {
+        const flag = Boolean(record[template.flag]);
+        const token = record[flag ? template.trueField : template.falseField];
+        const prefix = flag ? template.whenTrue : template.whenFalse;
+        if (typeof token === "string" && /^[A-Za-z0-9._~-]{1,180}$/.test(token)) {
+          record.url = prefix + token;
+          changed = true;
+        }
+      }
+      if (typeof record.streetAddress !== "string") {
+        const address = typeof record.fullAddress === "string" && record.fullAddress.trim() ? record.fullAddress : typeof record.name === "string" && /\d/.test(record.name) ? record.name : "";
+        if (address) { record.streetAddress = address; changed = true; }
+      }
+      if (record.price == null && (typeof record.salesPrice === "number" || typeof record.salesPrice === "string")) { record.price = record.salesPrice; changed = true; }
+      if (record.bedrooms == null && record.bedroomCount != null) { record.bedrooms = record.bedroomCount; changed = true; }
+      if (record.bathrooms == null && record.bathCount != null) { record.bathrooms = record.bathCount; changed = true; }
+      if ((record.sqft == null && record.livingSpaceSize != null)) { record.sqft = record.livingSpaceSize; changed = true; }
+      if (!record.image && Array.isArray(record.media)) {
+        const images = record.media.flatMap(media => {
+          if (!media || typeof media !== "object") return [];
+          const source = media as Record<string, unknown>;
+          const raw = source.largeUrl ?? source.mediumUrl ?? source.url;
+          return typeof raw === "string" ? [raw] : [];
+        });
+        if (images.length) { record.image = images; changed = true; }
+      }
+    }
+  }
+  return changed ? JSON.stringify(payload) : text;
+}
+
+/** Numeric total published beside a result array, including GraphQL *Count.count. */
+function publishedCollectionTotal(payload: unknown): { total?: number; rows: number } {
+  if (!payload || typeof payload !== "object") return { rows: 0 };
+  const root = payload as Record<string, unknown>;
+  const data = root.data && typeof root.data === "object" && !Array.isArray(root.data) ? root.data as Record<string, unknown> : root;
+  for (const [key, value] of Object.entries(data)) {
+    if (!Array.isArray(value)) continue;
+    const countNode = data[key + "Count"];
+    const count = countNode && typeof countNode === "object" ? Number((countNode as Record<string, unknown>).count) : NaN;
+    if (Number.isFinite(count) && count > 0) return { total: count, rows: value.length };
+  }
+  const direct = Number(root.total ?? root.totalCount ?? root["@odata.count"]);
+  return { total: Number.isFinite(direct) && direct > 0 ? direct : undefined, rows: 0 };
+}
+
+function nextPublishedOffsetUrl(current: URL, total: number, rows: number): string | null {
+  if (!/\/graphql$/i.test(current.pathname) || rows <= 0) return null;
+  const raw = current.searchParams.get("variables");
+  const query = current.searchParams.get("query");
+  if (!raw || !query) return null;
+  let variables: Record<string, unknown>;
+  try { variables = JSON.parse(raw); } catch { return null; }
+  const limit = Number(variables.limit);
+  const offset = Number(variables.offset ?? 0);
+  if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isInteger(offset) || offset < 0) return null;
+  if (rows < limit || offset + rows >= total) return null;
+  const nextOffset = offset + limit;
+  if (nextOffset > 400) return null;
+  const url = new URL(current);
+  url.searchParams.set("variables", JSON.stringify({ ...variables, offset: nextOffset, limit }));
+  return url.toString();
+}
+
 function paginationLinks(html: string, base: URL): string[] {
   const out: string[] = [];
   try {
@@ -1569,6 +1875,21 @@ export function propertyGalleryImages(html:string,base:URL):string[]{
   return distinctPropertyImages(images);
 }
 
+/** A frameset whose only document is one HTTPS frame. Widgets and multi-frame pages are not this. */
+function soleFrameDocument(html: string, base: URL): string | null {
+  if (!/<frameset\b/i.test(html)) return null;
+  const frames = [...html.matchAll(/<frame\b([^>]*)>/gi)];
+  if (frames.length !== 1) return null;
+  const src = absolutize(attr(`<frame ${frames[0][1]}>`, "src"), base);
+  if (!src) return null;
+  try {
+    const next = new URL(src);
+    if (next.protocol !== "https:" || next.username || next.password || LOGIN_PATH.test(next.pathname)) return null;
+    next.hash = "";
+    return next.toString();
+  } catch { return null; }
+}
+
 /**
  * Walk seed URLs → inventory CTAs → optional detail pages.
  * Caps pages and depth so the builder stays snappy.
@@ -1580,6 +1901,8 @@ export async function discoverListings(
     normalizePage?: (html: string, base: URL) => Promise<DiscoveredListing[]>;
     /** Optional public browser renderer; absent renderers must report unsupported dynamic pages. */
     renderPage?: FetchHtml;
+    /** Per-import render attempts. Ordinary static imports never render. */
+    maxRenders?: number;
     /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
     enrichAll?: boolean;
     /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
@@ -1625,10 +1948,25 @@ export async function discoverListings(
   let aiNormalizations = 0;
   let expectedCount = 0;
   let unresolvedPagination = false;
+  let openContinuation = false;
+  let continuationRequests = 0;
+  let collectionPages = 0;
+  let structuredPages = 0;
+  let singlePagePages = 0;
+  let cursorTerminalPages = 0;
+  let providerTerminalPages = 0;
+  let sawContinuation = false;
+  let continuationMechanism = "";
+  let apiCount = false;
+  let rendersUsed = 0;
+  let collectionRowsFetched = 0;
+  let offsetQueryTotal = 0;
+  const listingUrlTemplates = new Map<string, PublishedUrlTemplate>();
+  const maxRenders = options?.maxRenders ?? 4;
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number };
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
 
   const pushListing = (item: DiscoveredListing) => {
@@ -1661,12 +1999,14 @@ export async function discoverListings(
 
     let html: string;
     let finalUrl: URL;
+    let pendingRenderNetwork: { url: string; html: string }[] | null = null;
     try {
       const page = await fetchHtml(normalized, requestOptions(normalized, { fragment: next.fragment, activationToken: next.activationToken, cookie: cookieFor(normalized, next.cookie) }));
       html = page.html;
       finalUrl = page.finalUrl;
       hops += 1;
       visitedSet.add(finalUrl.toString());
+      if (next.continuation) continuationRequests++;
     } catch (error) {
       const reason = error instanceof Error ? error.message.slice(0, 180) : "Unreadable public response";
       const rateLimited = /\b429\b|too many requests|rate[- ]limited/i.test(reason);
@@ -1685,9 +2025,18 @@ export async function discoverListings(
         continue;
       }
       if (rateLimited || transient) obstacles.push({ code: rateLimited ? "rate_limited" : "temporarily_unavailable", url: normalized, detail: "exhausted" });
+      if (next.continuation) openContinuation = true;
       failureDetails.push({url:normalized,reason});
       failed.push(normalized);
       continue;
+    }
+    if (!listings.length && !next.fragment && !next.continuation) {
+      const framed = soleFrameDocument(html, finalUrl);
+      if (framed && framed !== finalUrl.toString() && !visitedSet.has(framed) && !queue.some(item => item.url === framed)) {
+        stages.push("frame_document");
+        queue.unshift({ url: framed, depth: next.depth, priority: 250, parent: finalUrl.toString() });
+        continue;
+      }
     }
     if (isPublishedScriptGate(html)) {
       const solved = await publishedScriptGateCookie(html);
@@ -1711,13 +2060,18 @@ export async function discoverListings(
     if (!broad) {
       const count = html.match(/data-(?:search-results-search-count|listings-count|results-count)\s*=\s*["']?(\d+)/i)?.[1];
       if (count) expectedCount = Math.max(expectedCount, Number(count));
-      if (/data-has-next-page=["']true["']|\b(?:load more properties|load more listings|infinite-scroll)\b/i.test(html)) unresolvedPagination = true;
     }
     const publicResponse = broad ? null : listingsFromBrivityResponse(html, finalUrl);
-    if (publicResponse) expectedCount = Math.max(expectedCount, publicResponse.count);
+    if (publicResponse) { expectedCount = Math.max(expectedCount, publicResponse.count); apiCount = true; }
     try { const payload=JSON.parse(html); const counts=payload.counts;
-      const total=Number(payload.total ?? payload.totalCount ?? payload["@odata.count"] ?? (typeof counts === "number" ? counts : counts && typeof counts === "object" ? counts.total ?? counts.all ?? counts.active : undefined));
-      if (!broad && Number.isFinite(total) && total > 0) expectedCount=Math.max(expectedCount,total); } catch { /* HTML */ }
+      const accounted = publishedCollectionTotal(payload);
+      const total=Number(payload.total ?? payload.totalCount ?? payload["@odata.count"] ?? accounted.total ?? (typeof counts === "number" ? counts : counts && typeof counts === "object" ? counts.total ?? counts.all ?? counts.active : undefined));
+      if (!broad && Number.isFinite(total) && total > 0) { expectedCount=Math.max(expectedCount,total); apiCount = true; }
+      if (!broad && accounted.total && /\/graphql$/i.test(finalUrl.pathname)) {
+        collectionRowsFetched += accounted.rows;
+        offsetQueryTotal = Math.max(offsetQueryTotal, accounted.total);
+      }
+    } catch { /* HTML */ }
     if(next.activationToken && finalUrl.hostname === "www.idxhome.com"){try{const rows=JSON.parse(html);if(Array.isArray(rows))for(const row of rows){if(row.featured===true && row.statusId==="active" && /^[a-z0-9_-]+$/i.test(row.id) && typeof row.listingPageUrl==="string") publicDetails.set(row.listingPageUrl,{url:"https://www.idxhome.com/api/kestrel/listing/"+row.id+".json?context=DETAIL",activationToken:next.activationToken});}}catch{/* other formats */}}
     const showcase = broad ? [] : listingsFromIdxShowcase(html, finalUrl);
     if (/cbw-slider-listing/.test(html) && next.depth===0) {limitedShowcase=true;issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"agentfire-dsidx"});}
@@ -1733,7 +2087,8 @@ export async function discoverListings(
     let observation = describeListingArchitecture(html, finalUrl);
     compatibilityPages.push(observation);
     if (isPublishedScriptGate(html)) {
-      if (options?.renderPage && Date.now() < deadline) {
+      if (options?.renderPage && Date.now() < deadline && rendersUsed < maxRenders) {
+        rendersUsed++;
         try {
           const gate = cookieFor(finalUrl.toString());
           const rendered = await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
@@ -1760,24 +2115,47 @@ export async function discoverListings(
       }
     }
     if (isRobotChallenge(html)) {
-      const iface = /\/api-site\/search\/(?:realTimeListings|searchListListing|searchMapListing)\b/.test(finalUrl.pathname) ? "chime-site-search" : "robot-validate";
-      interfaces.add(iface);
-      inventoryUrls.add(finalUrl.toString());
-      issues.push({ code: "requires-rendering", url: finalUrl.toString(), interface: iface });
-      observation.resolution = "requires-rendering";
-      observation.interfaces = [...new Set([...observation.interfaces, iface])];
-      if (iface === "chime-site-search" && next.parent) {
-        for (let i = queue.length - 1; i >= 0; i--) {
-          if (queue[i].parent === next.parent && !/\/api-site\/search\//.test(new URL(queue[i].url).pathname)) queue.splice(i, 1);
+      let obstacle = classifyObstacle(html) ?? "captcha_required";
+      let carriedNetwork: { url: string; html: string }[] | null = null;
+      if (obstacle === "requires_rendering" && options?.renderPage && Date.now() < deadline && rendersUsed < maxRenders) {
+        rendersUsed++;
+        stages.push("browser_render_escalated");
+        try {
+          const gate = cookieFor(finalUrl.toString());
+          const rendered = await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
+          if (sameSite(rendered.finalUrl, finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
+            html = rendered.html;
+            finalUrl = rendered.finalUrl;
+            carriedNetwork = rendered.network ?? [];
+            if (isRobotChallenge(html)) obstacle = classifyObstacle(html) ?? obstacle;
+          }
+        } catch (error) {
+          obstacles.push({ code: "render_failed", url: finalUrl.toString(), detail: error instanceof Error ? error.message.slice(0, 120) : "renderer unavailable" });
         }
       }
-      const obstacle = classifyObstacle(html) ?? "captcha_required";
-      obstacles.push({ code: obstacle, url: finalUrl.toString() });
-      if (obstacle === "captcha_required" || obstacle === "authentication_required") stages.push("user_action_required");
-      continue;
+      if (isRobotChallenge(html)) {
+        const iface = /\/api-site\/search\/(?:realTimeListings|searchListListing|searchMapListing)\b/.test(finalUrl.pathname) ? "chime-site-search" : obstacle === "requires_rendering" ? "managed-challenge" : "robot-validate";
+        interfaces.add(iface);
+        inventoryUrls.add(finalUrl.toString());
+        issues.push({ code: "requires-rendering", url: finalUrl.toString(), interface: iface });
+        observation.resolution = "requires-rendering";
+        observation.interfaces = [...new Set([...observation.interfaces, iface])];
+        if (iface === "chime-site-search" && next.parent) {
+          for (let i = queue.length - 1; i >= 0; i--) {
+            if (queue[i].parent === next.parent && !/\/api-site\/search\//.test(new URL(queue[i].url).pathname)) queue.splice(i, 1);
+          }
+        }
+        if (!obstacles.some(row => row.url === finalUrl.toString() && row.code === obstacle)) obstacles.push({ code: obstacle, url: finalUrl.toString(), detail: options?.renderPage ? undefined : "No browser renderer is configured" });
+        if (obstacle === "captcha_required" || obstacle === "authentication_required") stages.push("user_action_required");
+        continue;
+      }
+      pendingRenderNetwork = carriedNetwork;
     }
     const excluded = broad || next.depth===0 && ownInventoryLinks.length > 0;
     if (excluded) observation.resolution = broad ? "excluded-market" : "navigation-only";
+    const listingTemplate = publishedListingUrlTemplate(html);
+    if (listingTemplate) listingUrlTemplates.set(finalUrl.origin, listingTemplate);
+    if (/\/graphql$/i.test(finalUrl.pathname)) html = applyPublishedListingUrls(html, listingUrlTemplates.get(finalUrl.origin) ?? null);
     let found = excluded ? [] : extractListingsFromPage(html, finalUrl, observation.attempts);
     if (found.length) observation.resolution = "known-pattern";
     const hint = !broad && !found.length ? dynamicInterfaceHint(html) : undefined;
@@ -1788,46 +2166,52 @@ export async function discoverListings(
       try { found = await options.normalizePage(html, finalUrl); if (found.length) observation.resolution = "external-normalizer"; } catch { /* deterministic navigation continues */ }
     }
     if (hint && !found.length && !collectInventoryFragments(html,finalUrl).length && !kestrelInventoryRequests(html).length) {
-      let renderedNetwork: { url: string; html: string }[] = [];
-      if (options?.renderPage && Date.now() < deadline) {
-        stages.push("browser_render_escalated");
+      let renderedNetwork: { url: string; html: string }[] = pendingRenderNetwork ?? [];
+      if ((!pendingRenderNetwork && options?.renderPage && Date.now() < deadline && rendersUsed < maxRenders) || pendingRenderNetwork) {
+        if (!pendingRenderNetwork) {
+          rendersUsed++;
+          stages.push("browser_render_escalated");
+        }
         try {
-          const gate = cookieFor(finalUrl.toString());
-          const rendered=await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
-          if (sameSite(rendered.finalUrl,finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
-            html=rendered.html; finalUrl=rendered.finalUrl;
-            renderedNetwork = rendered.network ?? [];
-            observation = describeListingArchitecture(html, finalUrl, "rendered-dom");
-            compatibilityPages.push(observation);
-            for (const id of observation.interfaces) interfaces.add(id);
-            for (const candidate of architectureCandidates(html, finalUrl)) {
-              const prior = candidateMap.get(candidate.id);
-              if (!prior || candidate.confidence > prior.confidence) candidateMap.set(candidate.id, candidate);
-            }
-            found=extractListingsFromPage(html,finalUrl,observation.attempts);
-            if (found.length) observation.resolution = "known-pattern";
-            for (const entry of renderedNetwork) {
-              let entryUrl: URL;
-              try { entryUrl = new URL(entry.url); } catch { continue; }
-              if (!entry.html || !sameSite(entryUrl, finalUrl)) continue;
-              const networkObservation = describeListingArchitecture(entry.html, entryUrl, "rendered-dom");
-              const rows = extractListingsFromPage(entry.html, entryUrl, networkObservation.attempts);
-              if (rows.length) {
-                networkObservation.resolution = "known-pattern";
-                compatibilityPages.push(networkObservation);
-                let scoped: DiscoveredListing[] = [];
-                try { scoped = completeSearchGroups(JSON.parse(entry.html), entryUrl); } catch { scoped = []; }
-                if (scoped.length && scoped.length === rows.length) {
-                  found = rows;
-                  expectedCount = Math.max(expectedCount, scoped.length);
-                } else found.push(...rows);
-                visitedSet.add(entry.url);
-                stages.push("api_discovered");
-                observation.resolution = "known-pattern";
-              } else if (/\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
-                queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString() });
-                stages.push("api_discovered");
+          if (!pendingRenderNetwork && options?.renderPage) {
+            const gate = cookieFor(finalUrl.toString());
+            const rendered=await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
+            if (sameSite(rendered.finalUrl,finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
+              html=rendered.html; finalUrl=rendered.finalUrl;
+              renderedNetwork = rendered.network ?? [];
+              observation = describeListingArchitecture(html, finalUrl, "rendered-dom");
+              compatibilityPages.push(observation);
+              for (const id of observation.interfaces) interfaces.add(id);
+              for (const candidate of architectureCandidates(html, finalUrl)) {
+                const prior = candidateMap.get(candidate.id);
+                if (!prior || candidate.confidence > prior.confidence) candidateMap.set(candidate.id, candidate);
               }
+              found=extractListingsFromPage(html,finalUrl,observation.attempts);
+              if (found.length) observation.resolution = "known-pattern";
+            }
+          }
+          for (const entry of renderedNetwork) {
+            let entryUrl: URL;
+            try { entryUrl = new URL(entry.url); } catch { continue; }
+            if (!entry.html || !sameSite(entryUrl, finalUrl)) continue;
+            const networkObservation = describeListingArchitecture(entry.html, entryUrl, "rendered-dom");
+            const rows = extractListingsFromPage(entry.html, entryUrl, networkObservation.attempts);
+            if (rows.length) {
+              networkObservation.resolution = "known-pattern";
+              compatibilityPages.push(networkObservation);
+              let scoped: DiscoveredListing[] = [];
+              try { scoped = completeSearchGroups(JSON.parse(entry.html), entryUrl); } catch { scoped = []; }
+              if (scoped.length && scoped.length === rows.length) {
+                found = rows;
+                expectedCount = Math.max(expectedCount, scoped.length);
+                apiCount = true;
+              } else found.push(...rows);
+              visitedSet.add(entry.url);
+              stages.push("api_discovered");
+              observation.resolution = "known-pattern";
+            } else if (/\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
+              queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString() });
+              stages.push("api_discovered");
             }
           }
         } catch (error) {
@@ -1865,16 +2249,58 @@ export async function discoverListings(
       for (const url of collectInventoryFragments(html, finalUrl)) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
       }
+      for (const url of publishedCollectionRequests(html, finalUrl)) {
+        if (!visitedSet.has(url) && !queue.some(q => q.url === url)) {
+          sawContinuation = true;
+          continuationMechanism = continuationMechanism || "offset-query";
+          queue.push({ url, depth: next.depth, priority: 205, fragment: true, parent: finalUrl.toString(), continuation: true });
+        }
+      }
       if (found.length) {
-        for (const url of paginationLinks(html, finalUrl)) {
-          if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment });
+        const boundary = inspectCollectionDocument(html, finalUrl, found);
+        const collectionPage = found.length > 1 || found.some(item => item.sourceUrl !== finalUrl.toString());
+        if (collectionPage) {
+          collectionPages++;
+          if (boundary.publishedCount) {
+            expectedCount = Math.max(expectedCount, boundary.publishedCount);
+            if (boundary.publishedKind === "api") apiCount = true;
+          }
+          if (boundary.continuations.length) { sawContinuation = true; continuationMechanism = continuationMechanism || boundary.mechanism; }
+          if (boundary.open) openContinuation = true;
+          if (boundary.repeatedCursor) openContinuation = true;
+          if (!boundary.open && !boundary.continuations.length && boundary.structuredClosed) structuredPages++;
+          if (!boundary.open && !boundary.continuations.length && boundary.singlePageConfirmed) singlePagePages++;
+          if (!boundary.open && boundary.cursorTerminal) cursorTerminalPages++;
+          if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
+          for (const url of boundary.continuations) {
+            if (url === finalUrl.toString()) { openContinuation = true; continue; }
+            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true });
+          }
         }
         // Flexmls uses public paged fragments without a Next anchor.
         if (next.fragment && finalUrl.searchParams.get("list_view") === "photo" && found.length === 24) {
           const url = new URL(finalUrl);
           url.searchParams.set("page", String(Number(url.searchParams.get("page") ?? 1) + 1));
-          if (!visitedSet.has(url.toString())) queue.push({ url: url.toString(), depth: next.depth, priority: 180, fragment: true });
+          const nextUrl = url.toString();
+          if (!visitedSet.has(nextUrl) && !queue.some(q => q.url === nextUrl)) {
+            sawContinuation = true;
+            continuationMechanism = continuationMechanism || "numbered-pagination";
+            queue.push({ url: nextUrl, depth: next.depth, priority: 180, fragment: true, continuation: true });
+          }
+        } else if (next.fragment && finalUrl.searchParams.get("list_view") === "photo" && found.length > 0 && found.length < 24) {
+          providerTerminalPages++;
         }
+      }
+      if (/\/graphql$/i.test(finalUrl.pathname)) {
+        try {
+          const accounted = publishedCollectionTotal(JSON.parse(html));
+          const nextUrl = accounted.total ? nextPublishedOffsetUrl(finalUrl, accounted.total, accounted.rows) : null;
+          if (nextUrl && !visitedSet.has(nextUrl) && !queue.some(q => q.url === nextUrl)) {
+            sawContinuation = true;
+            continuationMechanism = continuationMechanism || "offset-query";
+            queue.push({ url: nextUrl, depth: next.depth, priority: 190, fragment: true, continuation: true });
+          }
+        } catch { /* not a collection payload */ }
       }
     }
     if (next.depth >= maxDepth) continue;
@@ -1970,7 +2396,20 @@ export async function discoverListings(
   }));
 
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
-  const inventoryShort = !!(listings.length >= maxListings || queue.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length);
+  if (queue.some(item => item.continuation)) openContinuation = true;
+  unresolvedPagination = unresolvedPagination || openContinuation;
+  const proving = new Set<string>();
+  const boundaryBlocked = !listings.length || listings.length >= maxListings || queue.length > 0 || unresolvedPagination || limitedShowcase || (expectedCount > 0 && expectedCount !== listings.length);
+  if (!boundaryBlocked && expectedCount > 0 && expectedCount === listings.length) proving.add(apiCount ? "api_total_match" : "published_count_match");
+  if (!boundaryBlocked && sawContinuation && continuationRequests > 0 && continuationMechanism === "cursor") proving.add("cursor_exhausted");
+  else if (!boundaryBlocked && sawContinuation && continuationRequests > 0) proving.add("pagination_exhausted");
+  if (!boundaryBlocked && !sawContinuation && cursorTerminalPages > 0) proving.add("cursor_exhausted");
+  if (!boundaryBlocked && providerTerminalPages > 0 && collectionPages > 0 && providerTerminalPages >= collectionPages) proving.add("provider_terminal_state");
+  if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && structuredPages === collectionPages) proving.add("structured_group_exhausted");
+  if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && singlePagePages === collectionPages) proving.add("single_page_collection_confirmed");
+  if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && listings.length < maxListings) proving.add("pagination_exhausted");
+  const completenessEvidence = proving.size ? [...proving] : (listings.length ? ["collection_boundary_unknown"] : []);
+  const inventoryShort = !!(listings.length && (boundaryBlocked || !proving.size));
   const blocked = !listings.length && (failed.length > 0 || issues.some(issue => issue.code === "requires-rendering") || obstacles.length > 0);
   const inventoryStatus = !listings.length ? (blocked ? "inventory_blocked" as const : "inventory_empty" as const) : (inventoryShort ? "inventory_partial" as const : "inventory_complete" as const);
   const enrichmentStatus = detailLimit === 0 ? "enrichment_not_requested" as const
@@ -1981,7 +2420,7 @@ export async function discoverListings(
   if (detailLimit > 0) stages.push(enrichmentStatus === "enrichment_complete" ? "detail_enrichment_completed" : "detail_enrichment_partial");
   if (visited.some(url => /[?&]featureListingName=/.test(url))) stages.push("collection_scoped");
   const outcome = listings.length ?
-        ((enrichAll ? false : unfinishedDetails) || queue.length || failed.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found";
+        ((enrichAll ? false : unfinishedDetails) || queue.length || failed.length || unresolvedPagination || limitedShowcase || (expectedCount > 0 && expectedCount !== listings.length) ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found";
   const verificationPending = obstacles.filter(row => (row.code === "captcha_required" || row.code === "authentication_required" || row.code === "user_action_required") && row.url).map(row => row.url!);
   const resumePending = [...new Set([...verificationPending, ...queue.map(item => item.url)])].slice(0, 40);
   const resumeObstacle = obstacles.find(row => row.code === "captcha_required" || row.code === "authentication_required")?.code ?? obstacles[0]?.code;
@@ -1993,7 +2432,7 @@ export async function discoverListings(
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
       failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome,
-      inventoryStatus, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
+      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests }, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
       resume: (!listings.length || verificationPending.length) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : "discovery_blocked" } : undefined },
   };
@@ -2010,7 +2449,7 @@ export async function continueAfterVerification(
   saved: { seeds?: string[]; pending?: string[]; listings?: DiscoveredListing[]; stage?: string; obstacle?: string },
   sessionCookie: string,
   fetchHtml: FetchHtml,
-  options?: { maxDurationMs?: number },
+  options?: { maxDurationMs?: number; renderPage?: FetchHtml },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
   const listings = (saved.listings ?? []).map(item => ({ ...item, images: [...item.images] }));
   const pending = [...new Set((saved.pending ?? []).filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 40);
@@ -2054,7 +2493,7 @@ export async function continueAfterVerification(
         listings[index] = await enrichPublicProperty(listings[index], withSession, { html: page.html, finalUrl: page.finalUrl });
         if (listings[index].detailsComplete) enriched++; else failed++;
       } else if (!listings.length) {
-        const discovered = await discoverListings([url], withSession, { maxPages: 20, maxListings: 100, enrichAll: true, maxDurationMs: Math.max(1000, deadline - Date.now()), sessionCookie: cookie });
+        const discovered = await discoverListings([url], withSession, { maxPages: 20, maxListings: 100, enrichAll: true, maxDurationMs: Math.max(1000, deadline - Date.now()), sessionCookie: cookie, renderPage: options?.renderPage });
         for (const item of discovered.listings) if (!listings.some(row => row.sourceUrl === item.sourceUrl)) listings.push(item);
         enriched += discovered.meta.enrichment?.enriched ?? discovered.listings.length;
         const stillBlocked = discovered.meta.obstacles?.filter(row => row.code === "captcha_required" || row.code === "authentication_required") ?? [];
@@ -2085,7 +2524,7 @@ export async function resumePausedImport(
   saved: { seeds?: string[]; pending?: string[]; listings?: DiscoveredListing[]; stage?: string; obstacle?: string },
   fetchHtml: FetchHtml,
   openVerificationSession: (target: { url: string; obstacle?: string }) => Promise<{ cookie?: string } | null>,
-  options?: { maxDurationMs?: number },
+  options?: { maxDurationMs?: number; renderPage?: FetchHtml },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
   const url = saved.pending?.find(item => item.startsWith("https://")) || saved.seeds?.find(item => item.startsWith("https://")) || "";
   let cookie = "";
@@ -2094,5 +2533,90 @@ export async function resumePausedImport(
     cookie = typeof opened?.cookie === "string" ? opened.cookie : "";
   } catch { cookie = ""; }
   return continueAfterVerification(saved, cookie, fetchHtml, options);
+}
+
+const RENDER_HTML_CAP = 1_500_000;
+const RENDER_NETWORK_CAP = 30;
+
+/** One renderer for onboarding, refresh, resume and tests. No backend means rendering is not configured. */
+export function createListingRenderer(
+  backend: ((request: { url: string; cookie?: string }) => Promise<{ html: string; finalUrl: string; network?: { url: string; html: string }[] }>) | null | undefined,
+  limits?: { maxRenders?: number; timeoutMs?: number },
+): FetchHtml | undefined {
+  if (!backend) return undefined;
+  let used = 0;
+  const maxRenders = limits?.maxRenders ?? 4;
+  const timeoutMs = limits?.timeoutMs ?? 12000;
+  const lanes = new Map<string, Promise<unknown>>();
+  return async (uri, options) => {
+    if (used >= maxRenders) throw new Error("Per-import browser budget reached");
+    used++;
+    let host = "";
+    try { host = new URL(uri).hostname; } catch { throw new Error("Renderer URL is not public HTTPS"); }
+    const previous = lanes.get(host) ?? Promise.resolve();
+    let release: () => void = () => {};
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    const tail = previous.then(() => gate, () => gate);
+    lanes.set(host, tail);
+    await previous.catch(() => {});
+    const timer = new AbortController();
+    const timeout = setTimeout(() => timer.abort(), timeoutMs);
+    try {
+      const rendered = await Promise.race([
+        backend({ url: uri, cookie: options?.cookie }),
+        new Promise<never>((_resolve, reject) => { timer.signal.addEventListener("abort", () => reject(new Error("Render timed out"))); }),
+      ]);
+      const finalUrl = new URL(rendered.finalUrl || uri);
+      if (finalUrl.protocol !== "https:") throw new Error("Renderer returned a non-public URL");
+      const html = String(rendered.html ?? "").slice(0, RENDER_HTML_CAP);
+      if (!html.trim()) throw new Error("Renderer returned an empty document");
+      const network = (rendered.network ?? []).slice(0, RENDER_NETWORK_CAP).flatMap(entry => {
+        try {
+          const url = new URL(entry.url);
+          if (url.protocol !== "https:") return [];
+          return [{ url: url.toString(), html: String(entry.html ?? "").slice(0, RENDER_HTML_CAP) }];
+        } catch { return []; }
+      });
+      return { html, finalUrl, network };
+    } finally {
+      clearTimeout(timeout);
+      release();
+    }
+  };
+}
+
+/** Production backend is an explicit HTTPS render service. Edge functions do not launch a browser themselves. */
+export function listingRenderBackendFromEnv(readEnv: (name: string) => string | undefined): ((request: { url: string; cookie?: string }) => Promise<{ html: string; finalUrl: string; network?: { url: string; html: string }[] }>) | null {
+  const configured = readEnv("LISTING_RENDER_URL");
+  if (!configured) return null;
+  let endpoint: URL;
+  try { endpoint = new URL(configured); } catch { return null; }
+  if (endpoint.protocol !== "https:") return null;
+  return async request => {
+    let target: URL;
+    try { target = new URL(request.url); } catch { throw new Error("Renderer URL is not public HTTPS"); }
+    if (target.protocol !== "https:") throw new Error("Renderer URL is not public HTTPS");
+    const token = readEnv("LISTING_RENDER_TOKEN");
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+        ...(token ? { authorization: "Bearer " + token } : {}),
+      },
+      body: JSON.stringify({ url: target.toString(), cookie: request.cookie }),
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new Error("Renderer returned " + response.status);
+    }
+    const body = await response.json() as { html?: unknown; finalUrl?: unknown; network?: { url?: unknown; html?: unknown }[] };
+    return {
+      html: typeof body.html === "string" ? body.html : "",
+      finalUrl: typeof body.finalUrl === "string" ? body.finalUrl : target.toString(),
+      network: Array.isArray(body.network) ? body.network.flatMap(entry => typeof entry?.url === "string" ? [{ url: entry.url, html: typeof entry.html === "string" ? entry.html : "" }] : []) : [],
+    };
+  };
 }
 
