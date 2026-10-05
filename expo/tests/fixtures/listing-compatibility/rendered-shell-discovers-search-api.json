@@ -54,7 +54,8 @@
         "sourceUrl": "https://portable.example/1018-mogul-hill-rd",
         "listingNumber": "MLS9",
         "propertyType": "",
-        "status": "active"
+        "status": "active",
+        "sourceStatus": "active"
       }
     ],
     "coverage": "unknown",

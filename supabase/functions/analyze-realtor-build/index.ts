@@ -577,8 +577,9 @@ Deno.serve(async (request) => {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
     }
-    discovery.listings = discovery.listings.filter(item => !item.status || item.status === "active");
+    discovery.listings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
     discovery.meta.found = discovery.listings.length;
+    if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discovery.listings.length;
     const draft = {
       ...(build.draft && typeof build.draft === "object" ? build.draft : {}),
       discoveredListings: discovery.listings,
@@ -685,8 +686,9 @@ Deno.serve(async (request) => {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
         maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
-      discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
+      discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;
+      if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discoveredListings.length;
       listingDiscovery = discovery.meta;
       console.log("[build] listing discovery", listingDiscovery);
     } catch (error) {

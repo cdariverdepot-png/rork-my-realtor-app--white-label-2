@@ -72,12 +72,15 @@ function failureClass(record) {
 }
 
 function strictComplete(record) {
+  const evidence = new Set(record.completenessEvidence ?? []);
+  const provenBoundary = ['pagination_exhausted', 'cursor_exhausted', 'structured_group_exhausted', 'single_page_collection_confirmed', 'provider_terminal_state', 'published_count_match', 'api_total_match', 'published_collection_total_reconciled'].some(code => evidence.has(code));
   const countMatches = Number.isFinite(record.expectedCount) && record.expectedCount === record.importedCount && record.importedCount > 0 && record.importedCount < 100;
   return record.inventoryStatus === 'inventory_complete'
-    && record.coverage === 'collection'
+    && record.collectionScope !== 'showcase'
     && record.outcome === 'found'
-    && countMatches
-    && !(record.expectedCount >= 200);
+    && (countMatches || provenBoundary)
+    && !(record.expectedCount >= 200)
+    && !evidence.has('collection_boundary_unknown');
 }
 
 function createFetcher(engine, counters) {
@@ -151,7 +154,8 @@ function createFetcher(engine, counters) {
 
 function summarize(target, result, counters, elapsedMs, error) {
   const meta = result?.meta ?? {};
-  const listings = (result?.listings ?? []).filter(row => !row.status || row.status === 'active');
+  const engineListings = result?.listings ?? [];
+  const listings = engineListings.filter(row => row.status !== 'sold' && row.status !== 'off_market' && row.sourceStatus !== 'unknown');
   const strategy = strategiesFrom(meta);
   const record = {
     id: target.id,
@@ -167,9 +171,12 @@ function summarize(target, result, counters, elapsedMs, error) {
     renderEscalation: (meta.stages ?? []).includes('browser_render_escalated'),
     structuredSourceDiscovered: (meta.stages ?? []).includes('api_discovered') || strategy.extracted.some(id => /json|api|reso|bootstrap|json-ld|public-json/i.test(id)),
     collectionScope: meta.coverage ?? null,
-    expectedCount: meta.expectedCount ?? null,
+    accounting: meta.accounting ?? null,
+    completenessEvidence: meta.completenessEvidence ?? [],
+    collectionBoundary: meta.collectionBoundary ?? null,
     discoveredCount: listings.length,
     importedCount: listings.length,
+    engineCount: engineListings.length,
     enrichmentScheduled: meta.enrichment?.scheduled ?? 0,
     enrichmentAttempted: meta.enrichment?.attempted ?? 0,
     enrichmentSucceeded: meta.enrichment?.enriched ?? 0,
@@ -197,6 +204,7 @@ function summarize(target, result, counters, elapsedMs, error) {
   record.controlChecks = {};
   if (target.id === 'control_brenda') {
     record.controlChecks.inventory21 = listings.length === 21 && record.inventoryStatus === 'inventory_complete';
+    record.controlChecks.classifiedObstacle = (record.obstacles ?? []).some(row => /captcha_required|script_gate|requires_rendering|authentication_required/.test(row.code));
   }
   if (target.id === 'control_compass') {
     record.controlChecks.scopedFour = listings.length === 4 && record.expectedCount === 4 && !(record.expectedCount > 100);
@@ -206,7 +214,9 @@ function summarize(target, result, counters, elapsedMs, error) {
     record.controlChecks.classifiedObstacle = (record.obstacles ?? []).some(row => /captcha_required|script_gate|requires_rendering/.test(row.code)) || (record.issues ?? []).some(issue => issue.code === 'requires-rendering');
     record.controlChecks.emptySuccess = record.outcome === 'found' && listings.length === 0;
   }
-  record.falseComplete = !!record.weakComplete || !!record.controlChecks.absorbedMarket || (record.engineInventoryComplete && Number.isFinite(record.expectedCount) && record.expectedCount !== record.importedCount);
+  record.falseComplete = !!record.weakComplete || !!record.controlChecks.absorbedMarket || (record.engineInventoryComplete && Number.isFinite(record.expectedCount) && record.expectedCount !== engineListings.length && !(meta.accounting?.sourceCollectionExhausted && meta.accounting?.sourceSeen === record.expectedCount));
+  record.sourceCountReconciled = !!(meta.accounting?.sourceCollectionExhausted && (meta.accounting.sourceTotal == null || meta.accounting.sourceSeen === meta.accounting.sourceTotal));
+  record.eligibleCountReconciled = !!meta.accounting?.eligibleImportComplete;
   record.falseEmpty = (target.id === 'control_brenda' && listings.length === 0 && !record.controlChecks.classifiedObstacle)
     || (record.inventoryStatus === 'inventory_empty' && record.outcome === 'not-found' && !(record.obstacles ?? []).length && !(meta.failed ?? []).length && counters.requests > 0 && target.controlOrDiscovery === 'control');
   return record;
@@ -248,6 +258,8 @@ function scoreboard(results) {
     unsupported: bucket(row => row.failureClass === 'unsupported' || row.failureClass === 'platform_unknown'),
     falseComplete: results.filter(row => row.falseComplete).map(row => row.id),
     falseEmpty: results.filter(row => row.falseEmpty).map(row => row.id),
+    sourceCountReconciled: results.filter(row => row.sourceCountReconciled).length,
+    eligibleCountReconciled: results.filter(row => row.eligibleCountReconciled).length,
     automaticCompleteRate: discovery.length ? Number((completeAutomatic.length / discovery.length).toFixed(4)) : 0,
     medianRequests: median(results.map(row => row.requestCount)),
     medianRenderCount: 0,

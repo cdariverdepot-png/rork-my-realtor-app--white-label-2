@@ -339,7 +339,7 @@ test('IDX showcase follows only its published widget URL on arbitrary realtor do
   assert.equal(scoreInventoryLink('https://homes.agent.example/idx/userlogin', 'My Listings', base), 0);
 });
 
-test('IDX showcase reads literal facts without running scripts and excludes pending homes', () => {
+test('IDX showcase reads literal facts without running scripts and keeps pending homes', () => {
   const card = status => `aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake?widgetReferer=true" class="IDX-showcaseLink"></a>');
   imgUrl = decodeURIComponent("https%3A%2F%2Fphotos.example%2Fhouse.jpg");
   idx('<div />').attr('class','IDX-showcaseAddress IDX-showcaseAddressElement').html('123 Lake');
@@ -350,9 +350,11 @@ test('IDX showcase reads literal facts without running scripts and excludes pend
   idx('<div />').attr('class','IDX-showcaseBaths').html('2.5 Total Baths');
   idx('<div />').attr('class','IDX-showcaseListingID').html('MLS1');
   idx('<div />').attr('class','IDX-showcaseStatus').html('${status}');`;
-  const result = listingsFromIdxShowcase(card('Active')+card('Pending')+'throw new Error("never execute");', new URL('https://homes.agent.example/idx/customshowcasejs.php?widgetid=42'));
-  assert.equal(result.length,1); assert.equal(result[0].price,'$500,000'); assert.equal(result[0].baths,2.5);
-  assert.equal(result[0].status,'active'); assert.equal(result[0].images[0],'https://photos.example/house.jpg');
+  const result = listingsFromIdxShowcase(card('Active')+card('Pending')+card('Sold')+'throw new Error("never execute");', new URL('https://homes.agent.example/idx/customshowcasejs.php?widgetid=42'));
+  assert.equal(result.length,2);
+  assert.equal(result[0].price,'$500,000'); assert.equal(result[0].baths,2.5);
+  assert.equal(result[0].status,'active'); assert.equal(result[1].status,'pending');
+  assert.equal(result[0].images[0],'https://photos.example/house.jpg');
   assert.equal(new URL(result[0].sourceUrl).searchParams.has('widgetReferer'),false);
 });
 
@@ -959,12 +961,18 @@ test('collection boundaries prove exhaustion without treating bare cards as comp
     const offset = JSON.parse(parsed.searchParams.get('variables')).offset;
     const rows = offset === 0
       ? [{ slug: '12-pine', fullAddress: '12 Pine St', salesPrice: 350000, status: 'FOR_SALE' }]
-      : [{ slug: 'hidden', name: 'Call for price', status: 'FOR_SALE' }];
+      : [{ name: 'Call for price', status: 'FOR_SALE' }];
     return { html: JSON.stringify({ data: { properties: rows, propertiesCount: { count: 2 } } }), finalUrl: parsed };
   }, { maxPages: 6, maxDetailPages: 0 });
   assert.equal(partial.listings.length, 1);
   assert.equal(partial.meta.expectedCount, 2);
-  assert.equal(partial.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(partial.meta.accounting.sourceSeen, 2);
+  assert.equal(partial.meta.accounting.excludedTotal, 1);
+  assert.equal(partial.meta.accounting.exclusions[0].reason, 'excluded_missing_required_fields');
+  assert.equal(partial.meta.accounting.eligibleTotal, 1);
+  assert.equal(partial.meta.accounting.eligibleImportComplete, true);
+  assert.equal(partial.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(partial.meta.completenessEvidence.includes('published_collection_total_reconciled'));
   assert.ok(partial.meta.completenessEvidence.includes('pagination_exhausted'));
   assert.equal(partial.meta.completenessEvidence.includes('api_total_match'), false);
 });
@@ -1014,6 +1022,35 @@ test('an open numbered page at the safety cap is collection_limit_reached', asyn
   assert.ok(capped.meta.completenessEvidence.includes('collection_limit_reached'));
   assert.equal(capped.meta.completenessEvidence.includes('pagination_exhausted'), false);
   assert.notEqual(capped.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(capped.meta.collectionBoundary.continuationAvailable, true);
+  assert.equal(capped.meta.resume.stage, 'collection_continuation');
+  assert.equal(capped.meta.resume.obstacle, 'collection_limit_reached');
+  assert.ok(capped.meta.resume.pending.some(url => url.includes('page=2')));
+  assert.equal(capped.meta.accounting.eligibleImportComplete, false);
+});
+
+test('source totals keep pending inventory and account for sold and unknown', async () => {
+  const origin = 'https://status.example';
+  const row = (id, status) => ({ streetAddress: id + ' Pine St', listPrice: 100000, detailUrl: origin + '/property/' + id, StandardStatus: status });
+  const result = await discoverListings([origin + '/feed'], async () => ({
+    html: JSON.stringify({ total: 4, listings: [row('1', 'Active'), row('2', 'Pending'), row('3', 'Sold'), row('4', 'Mystery')] }),
+    finalUrl: new URL(origin + '/feed'),
+  }), { maxDetailPages: 0 });
+  assert.equal(result.listings.length, 4);
+  assert.equal(result.listings.find(item => item.sourceUrl.endsWith('/1')).status, 'active');
+  assert.equal(result.listings.find(item => item.sourceUrl.endsWith('/2')).status, 'pending');
+  assert.equal(result.listings.find(item => item.sourceUrl.endsWith('/2')).sourceStatus, 'pending');
+  assert.equal(result.listings.find(item => item.sourceUrl.endsWith('/3')).status, 'sold');
+  assert.equal(result.listings.find(item => item.sourceUrl.endsWith('/4')).status, undefined);
+  assert.equal(result.listings.find(item => item.sourceUrl.endsWith('/4')).sourceStatus, 'unknown');
+  assert.equal(result.meta.accounting.sourceTotal, 4);
+  assert.equal(result.meta.accounting.sourceSeen, 4);
+  assert.equal(result.meta.accounting.eligibleTotal, 2);
+  assert.equal(result.meta.accounting.excludedTotal, 2);
+  assert.equal(result.meta.accounting.sourceCollectionExhausted, true);
+  assert.equal(result.meta.accounting.eligibleImportComplete, true);
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(result.meta.completenessEvidence.includes('api_total_match'));
 });
 
 test('site-scoped published queries are followed and unscoped market queries are not', async () => {
@@ -1072,13 +1109,16 @@ test('site-scoped published queries are followed and unscoped market queries are
     return { html: JSON.stringify({ data: { properties: rows, propertiesCount: { count: 2 } } }), finalUrl: parsed };
   }, { maxPages: 6, maxDetailPages: 0 });
   assert.deepEqual(offsets, [0, 1]);
-  assert.equal(zimmermanResult.listings.length, 1);
-  assert.equal(zimmermanResult.listings[0].sourceUrl, origin + '/properties/oak-house');
-  assert.equal(zimmermanResult.listings[0].title, 'Private Address');
-  assert.equal(zimmermanResult.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(zimmermanResult.listings.length, 2);
+  assert.equal(zimmermanResult.listings.some(row => row.sourceUrl === origin + '/properties/oak-house' && row.title === 'Private Address'), true);
+  assert.equal(zimmermanResult.listings.some(row => row.sourceUrl === origin + '/properties/hidden' && row.title === 'Call for price'), true);
+  assert.equal(zimmermanResult.meta.inventoryStatus, 'inventory_complete');
   assert.equal(zimmermanResult.meta.expectedCount, 2);
+  assert.equal(zimmermanResult.meta.accounting.sourceSeen, 2);
+  assert.equal(zimmermanResult.meta.accounting.eligibleTotal, 2);
+  assert.equal(zimmermanResult.meta.accounting.eligibleImportComplete, true);
   assert.ok(zimmermanResult.meta.completenessEvidence.includes('pagination_exhausted'));
-  assert.equal(zimmermanResult.meta.completenessEvidence.includes('api_total_match'), false);
+  assert.ok(zimmermanResult.meta.completenessEvidence.includes('api_total_match'));
 
   let marketCalls = 0;
   const loose = { pageSize: 4, resource: 'properties', variables: { statusIds: [1], offset: 0 } };

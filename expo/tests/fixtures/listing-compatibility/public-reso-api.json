@@ -39,7 +39,8 @@
         "sourceUrl": "https://portable.example/property/12",
         "listingNumber": "",
         "propertyType": "",
-        "status": "active"
+        "status": "active",
+        "sourceStatus": "active"
       }
     ],
     "coverage": "unknown",

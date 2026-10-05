@@ -64,6 +64,8 @@ type DiscoveredListing = {
   images: string[];
   sourceUrl: string;
   status?: "active" | "pending" | "contingent" | "sold" | "off_market";
+  /** Provider status before product mapping. Unknown is never coerced to active. */
+  sourceStatus?: "active" | "coming_soon" | "pending" | "contingent" | "under_contract" | "backup" | "sold" | "closed" | "off_market" | "expired" | "withdrawn" | "cancelled" | "private" | "unknown" | "unspecified";
   listingNumber?: string;
   propertyType?: string;
   importKey?: string;
@@ -92,7 +94,19 @@ type ListingDiscoveryMeta = {
   inventoryStatus?: "inventory_complete" | "inventory_partial" | "inventory_empty" | "inventory_blocked";
   /** Why inventory is complete, or collection_boundary_unknown when it is not proven. */
   completenessEvidence?: string[];
-  collectionBoundary?: { mechanism?: string; terminal?: string; continuationRequests?: number };
+  collectionBoundary?: { mechanism?: string; terminal?: string; continuationRequests?: number; continuationAvailable?: boolean };
+  /** Source collection versus the listings the product actually keeps. */
+  accounting?: {
+    sourceTotal?: number;
+    sourceSeen: number;
+    sourceClassified: number;
+    sourceCollectionExhausted: boolean;
+    excludedTotal: number;
+    exclusions: { reason: string; count: number }[];
+    eligibleTotal: number;
+    importedEligible: number;
+    eligibleImportComplete: boolean;
+  };
   enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number };
   /** Machine-readable obstacles. Never a substitute for extracted listings. */
   obstacles?: { code: string; url?: string; detail?: string }[];
@@ -623,16 +637,50 @@ function extractPropertyRecords(html: string, base: URL, attempts?: StrategyAtte
   return merged.slice(0, 500);
 }
 
-/** Normalize explicit MLS status values, never prose such as 'sold by our team'. */
-function normalizeListingStatus(value: unknown): DiscoveredListing["status"] {
-  if (typeof value !== "string") return undefined;
+/** Provider-independent status. A published value that does not match stays unknown. */
+function sourceListingStatus(value: unknown): NonNullable<DiscoveredListing["sourceStatus"]> {
+  if (typeof value !== "string" || !value.trim()) return "unspecified";
   const label = value.trim().replace(/^https?:\/\/schema\.org\//i, "").toLowerCase().replace(/[_-]/g, " ").replace(/\s+/g, " ");
-  if (/^(sold|closed|just sold)$/.test(label)) return "sold";
-  if (/^(pending|pending continue to show|pending taking backups|under contract)$/.test(label)) return "pending";
-  if (/^(contingent|active contingent|active under contract|active with contingency|active kick out)$/.test(label)) return "contingent";
-  if (/^(off market|withdrawn|cancelled|canceled|expired|temporarily off market)$/.test(label)) return "off_market";
   if (/^(active|for sale|new|back on market)$/.test(label)) return "active";
+  if (/^coming soon$/.test(label)) return "coming_soon";
+  if (/^(pending|pending continue to show|pending taking backups)$/.test(label)) return "pending";
+  if (/^under contract$/.test(label)) return "under_contract";
+  if (/^(contingent|active contingent|active under contract|active with contingency|active kick out)$/.test(label)) return "contingent";
+  if (/^(backup|backup offer)$/.test(label)) return "backup";
+  if (/^(sold|just sold)$/.test(label)) return "sold";
+  if (/^closed$/.test(label)) return "closed";
+  if (/^(off market|temporarily off market)$/.test(label)) return "off_market";
+  if (/^expired$/.test(label)) return "expired";
+  if (/^withdrawn$/.test(label)) return "withdrawn";
+  if (/^(cancelled|canceled)$/.test(label)) return "cancelled";
+  if (/^(private|exclusive|pocket|pocket listing)$/.test(label)) return "private";
+  return "unknown";
+}
+
+/** Product status. Pending, contingent, and coming soon stay in the realtor's inventory. */
+function normalizeListingStatus(value: unknown): DiscoveredListing["status"] {
+  const source = sourceListingStatus(value);
+  if (source === "active" || source === "coming_soon") return "active";
+  if (source === "pending" || source === "under_contract" || source === "backup") return "pending";
+  if (source === "contingent") return "contingent";
+  if (source === "sold" || source === "closed") return "sold";
+  if (source === "off_market" || source === "expired" || source === "withdrawn" || source === "cancelled") return "off_market";
   return undefined;
+}
+
+/** Sold, off-market, and unrecognized published statuses are exclusions, not active inventory. */
+function exclusionReason(item: Pick<DiscoveredListing, "status" | "sourceStatus">): string | null {
+  const source = item.sourceStatus;
+  if (source === "unknown") return "excluded_status_unknown";
+  if (source === "sold" || source === "closed" || (!source && item.status === "sold")) return "excluded_status_sold";
+  if (source === "expired") return "excluded_status_expired";
+  if (source === "withdrawn" || source === "cancelled") return "excluded_status_withdrawn";
+  if (source === "off_market" || (!source && item.status === "off_market")) return "excluded_status_off_market";
+  return null;
+}
+
+function isProductEligible(item: Pick<DiscoveredListing, "status" | "sourceStatus">): boolean {
+  return !exclusionReason(item);
 }
 
 const propertyIdentity = (value: unknown) => typeof value === "string" ? value.toLowerCase().replace(/[^a-z0-9]/g, "") : "";
@@ -796,7 +844,7 @@ function listingsFromBrivityResponse(html: string, base: URL): { listings: Disco
       if (!row || row.permissions?.displayListing === false || row.permissions?.displayAddress === false ||
           !row.address?.street || !row.blossorId || !/^[\w-]+$/.test(String(row.blossorId))) continue;
       const status = normalizeListingStatus(row.statusText || row.mlsStatus);
-      if (status !== "active") continue;
+      if (status === "sold" || status === "off_market") continue;
       const a = row.address;
       const url = new URL(`/homes-for-sale/${String(a.state || "").toUpperCase()}/${slug(String(a.city || ""))}/${slug(String(a.zip || ""))}/${slug(a.street)}/bid-${row.blossorId}`, base).toString();
       const item = listingFromLd({ "@type": "RealEstateListing", name: a.street, price: row.price,
@@ -823,7 +871,7 @@ function listingsFromIdxShowcase(script: string, base: URL): DiscoveredListing[]
     const field = (name: string) => literal(block.match(new RegExp(`['"]IDX-showcase${name}(?:[^'"]*)['"]\\)\\s*\\.html\\(\\s*'((?:\\\\.|[^'\\\\])*)'`))?.[1] ?? "").trim();
     const title = field("Address");
     const status = normalizeListingStatus(field("Status"));
-    if (status && status !== "active") return;
+    if (status === "sold" || status === "off_market") return;
     let image = "";
     try { image = decodeURIComponent(block.match(/imgUrl\s*=\s*decodeURIComponent\(\s*["']([^"']+)/)?.[1] ?? ""); } catch { /* invalid image */ }
     const url = new URL(sourceUrl); url.searchParams.delete("widgetReferer");
@@ -1145,6 +1193,14 @@ function listingsFromPublicJson(text: string, base: URL): DiscoveredListing[] {
         addressRegion: row.StateOrProvince ?? row.state ?? address.state ?? address.addressRegion },
       listingNumber: row.ListingId ?? row.MLSNumber ?? row.mlsNumber ?? row.mlsListingId ?? row.mlsid ?? row.listingNumber,
       propertyType: row.PropertyType ?? row.propertyType }, base);
+    const rawStatus = row.StandardStatus ?? row.statusText ?? row.listingStatusText ?? row.listingStatus ?? row.mlsStatus ?? row.statusOrigin ?? row.status;
+    const sourceStatus = sourceListingStatus(rawStatus);
+    const identified = row.ListingId ?? row.MLSNumber ?? row.mlsNumber ?? row.mlsListingId ?? row.mlsid ?? row.listingNumber ?? row.slug ?? row.id;
+    if (!item && typeof street === "string" && street.trim() && typeof rawUrl === "string" && identified) {
+      const sourceUrl = canonicalListingUrl(absolutize(rawUrl, base) ?? "");
+      if (sourceUrl) out.push({ title: street.trim().slice(0, 160), description: "", price: "", beds: 0, baths: 0, sqft: "", neighborhood: "", image: "", images: [], sourceUrl, status: normalizeListingStatus(rawStatus), ...(sourceStatus !== "unspecified" ? { sourceStatus } : {}) });
+      return;
+    }
     if (item) {
       const facts = { ...item.facts };
       if (typeof row.agentName === "string" && row.agentName.trim()) facts["Listing Agent"] = row.agentName.trim().slice(0, 200);
@@ -1160,7 +1216,7 @@ function listingsFromPublicJson(text: string, base: URL): DiscoveredListing[] {
       const year = Number(row.builtYear ?? row.yearBuilt ?? row.YearBuilt);
       if (year >= 1700 && year <= 2100) facts["Year Built"] = String(year);
       if (Array.isArray(row.openHouseScheduleList) && row.openHouseScheduleList.length) facts["Open House"] = JSON.stringify(row.openHouseScheduleList).slice(0, 400);
-      out.push({ ...item, facts, status: normalizeListingStatus(row.StandardStatus ?? row.statusText ?? row.listingStatusText ?? row.listingStatus ?? row.mlsStatus ?? row.statusOrigin ?? row.status) });
+      out.push({ ...item, facts, status: normalizeListingStatus(rawStatus), ...(sourceStatus !== "unspecified" ? { sourceStatus } : {}) });
     }
   });
   // JSON-LD APIs may identify a property with name/type instead of streetAddress.
@@ -1686,7 +1742,8 @@ function applyPublishedListingUrls(text: string, template: PublishedUrlTemplate 
       if (typeof record.streetAddress !== "string") {
         const priced = record.salesPrice != null && record.salesPrice !== "" && record.salesPrice !== 0;
         const named = typeof record.name === "string" ? record.name.trim() : "";
-        const address = typeof record.fullAddress === "string" && record.fullAddress.trim() ? record.fullAddress : named && (/\d/.test(named) || priced) ? named : "";
+        const identified = (typeof record.slug === "string" && record.slug.trim()) || (typeof record.id === "string" && record.id.trim());
+        const address = typeof record.fullAddress === "string" && record.fullAddress.trim() ? record.fullAddress : named && (/\d/.test(named) || priced || identified) ? named : "";
         if (address) { record.streetAddress = address; changed = true; }
       }
       if (record.price == null && (typeof record.salesPrice === "number" || typeof record.salesPrice === "string")) { record.price = record.salesPrice; changed = true; }
@@ -2088,6 +2145,9 @@ async function discoverListings(
   let collectionRowsFetched = 0;
   let offsetQueryTotal = 0;
   let hitSafetyCap = false;
+  let omissionTotal = 0;
+  const omissionReasons = new Map<string, number>();
+  const pendingContinuations = new Set<string>();
   const listingUrlTemplates = new Map<string, PublishedUrlTemplate>();
   const maxRenders = options?.maxRenders ?? 4;
   let hops = 0;
@@ -2109,6 +2169,7 @@ async function discoverListings(
         price: old.price || normalized.price, beds: old.beds || normalized.beds, baths: old.baths || normalized.baths, sqft: old.sqft || normalized.sqft,
         status: old.status ?? normalized.status, image: images[0] || old.image, images,
         listingNumber: old.listingNumber || normalized.listingNumber, neighborhood: old.neighborhood || normalized.neighborhood,
+        sourceStatus: old.sourceStatus && old.sourceStatus !== "unspecified" ? old.sourceStatus : normalized.sourceStatus,
         sourceUrl: canonicalListingUrl(old.sourceUrl) };
       return;
     }
@@ -2370,6 +2431,17 @@ async function discoverListings(
         if (queue[i].parent === next.parent && !queue[i].fragment) queue.splice(i, 1);
       }
     }
+    if (!broad && /\/graphql$/i.test(finalUrl.pathname)) {
+      try {
+        const payload = JSON.parse(html);
+        const { rows } = publishedCollectionTotal(payload);
+        if (rows > found.length) {
+          const gap = rows - found.length;
+          omissionTotal += gap;
+          omissionReasons.set("excluded_missing_required_fields", (omissionReasons.get("excluded_missing_required_fields") ?? 0) + gap);
+        }
+      } catch { /* a rendered document is not a counted collection payload */ }
+    }
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
     const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
     // A page that publishes a scoped, counted query is not itself the inventory. Shell cards can be sold, nearby, or unscoped.
@@ -2385,6 +2457,7 @@ async function discoverListings(
       if (!broad) {
         const boundary = inspectCollectionDocument(html, finalUrl, found);
         if (boundary.open || boundary.continuations.length) openContinuation = true;
+        for (const url of boundary.continuations) pendingContinuations.add(url);
         if (boundary.publishedCount && boundary.publishedCount > listings.length) expectedCount = Math.max(expectedCount, boundary.publishedCount);
       }
       continue;
@@ -2542,10 +2615,14 @@ async function discoverListings(
 
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
   if (queue.some(item => item.continuation)) openContinuation = true;
+  for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
   unresolvedPagination = unresolvedPagination || openContinuation;
   const proving = new Set<string>();
-  const boundaryBlocked = !listings.length || listings.length >= maxListings || queue.length > 0 || unresolvedPagination || limitedShowcase || (expectedCount > 0 && expectedCount !== listings.length);
+  const sourceSeen = listings.length + omissionTotal;
+  const countMismatch = expectedCount > 0 && expectedCount !== sourceSeen;
+  const boundaryBlocked = (!listings.length && !omissionTotal) || listings.length >= maxListings || queue.length > 0 || unresolvedPagination || limitedShowcase || countMismatch;
   if (!boundaryBlocked && expectedCount > 0 && expectedCount === listings.length) proving.add(apiCount ? "api_total_match" : "published_count_match");
+  else if (!boundaryBlocked && expectedCount > 0 && expectedCount === sourceSeen) proving.add("published_collection_total_reconciled");
   if (!boundaryBlocked && sawContinuation && continuationRequests > 0 && continuationMechanism === "cursor") proving.add("cursor_exhausted");
   else if (!boundaryBlocked && sawContinuation && continuationRequests > 0) proving.add("pagination_exhausted");
   if (!boundaryBlocked && !sawContinuation && cursorTerminalPages > 0) proving.add("cursor_exhausted");
@@ -2553,7 +2630,7 @@ async function discoverListings(
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && structuredPages === collectionPages) proving.add("structured_group_exhausted");
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && singlePagePages === collectionPages) proving.add("single_page_collection_confirmed");
   if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && listings.length < maxListings) proving.add("pagination_exhausted");
-  if (hitSafetyCap && listings.length >= maxListings && (openContinuation || expectedCount > listings.length)) proving.add("collection_limit_reached");
+  if (hitSafetyCap && listings.length >= maxListings && (openContinuation || pendingContinuations.size > 0 || expectedCount > listings.length)) proving.add("collection_limit_reached");
   const completenessEvidence = proving.size ? [...proving] : (listings.length ? ["collection_boundary_unknown"] : []);
   const inventoryShort = !!(listings.length && (boundaryBlocked || !proving.size));
   const blocked = !listings.length && (failed.length > 0 || issues.some(issue => issue.code === "requires-rendering") || obstacles.length > 0);
@@ -2566,11 +2643,36 @@ async function discoverListings(
   if (detailLimit > 0) stages.push(enrichmentStatus === "enrichment_complete" ? "detail_enrichment_completed" : "detail_enrichment_partial");
   if (visited.some(url => /[?&]featureListingName=/.test(url))) stages.push("collection_scoped");
   const outcome = listings.length ?
-        ((enrichAll ? false : unfinishedDetails) || queue.length || failed.length || unresolvedPagination || limitedShowcase || (expectedCount > 0 && expectedCount !== listings.length) ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found";
+        ((enrichAll ? false : unfinishedDetails) || queue.length || failed.length || unresolvedPagination || limitedShowcase || countMismatch ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found";
   const verificationPending = obstacles.filter(row => (row.code === "captcha_required" || row.code === "authentication_required" || row.code === "user_action_required") && row.url).map(row => row.url!);
-  const resumePending = [...new Set([...verificationPending, ...queue.map(item => item.url)])].slice(0, 40);
-  const resumeObstacle = obstacles.find(row => row.code === "captcha_required" || row.code === "authentication_required")?.code ?? obstacles[0]?.code;
+  const continuationAvailable = inventoryStatus !== "inventory_complete" && pendingContinuations.size > 0 && (hitSafetyCap || Date.now() >= deadline || (openContinuation && listings.length >= maxListings));
+  const resumePending = [...new Set([...verificationPending, ...pendingContinuations])].slice(0, 40);
+  const resumeObstacle = verificationPending.length
+    ? (obstacles.find(row => row.code === "captcha_required" || row.code === "authentication_required")?.code ?? obstacles[0]?.code)
+    : (hitSafetyCap ? "collection_limit_reached" : "import_deadline");
   if (verificationPending.length) stages.push("verification_required");
+  if (continuationAvailable && !verificationPending.length) stages.push("collection_continuation");
+  const exclusionCounts = new Map<string, number>(omissionReasons);
+  let eligibleTotal = 0;
+  for (const item of listings) {
+    const reason = exclusionReason(item);
+    if (reason) exclusionCounts.set(reason, (exclusionCounts.get(reason) ?? 0) + 1);
+    else eligibleTotal++;
+  }
+  const exclusions = [...exclusionCounts.entries()].map(([reason, count]) => ({ reason, count })).sort((a, b) => a.reason.localeCompare(b.reason));
+  const excludedTotal = exclusions.reduce((sum, row) => sum + row.count, 0);
+  const sourceCollectionExhausted = inventoryStatus === "inventory_complete";
+  const accounting = {
+    sourceTotal: expectedCount || undefined,
+    sourceSeen,
+    sourceClassified: sourceSeen,
+    sourceCollectionExhausted,
+    excludedTotal,
+    exclusions,
+    eligibleTotal,
+    importedEligible: eligibleTotal,
+    eligibleImportComplete: sourceCollectionExhausted,
+  };
   return {
     listings: listings.slice(0, maxListings),
     meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
@@ -2578,9 +2680,9 @@ async function discoverListings(
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
       failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome,
-      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests }, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
+      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests, continuationAvailable }, accounting, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
-      resume: (!listings.length || verificationPending.length) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : "discovery_blocked" } : undefined },
+      resume: (!listings.length || verificationPending.length || continuationAvailable) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : continuationAvailable ? "collection_continuation" : "discovery_blocked" } : undefined },
   };
 }
 
@@ -3652,8 +3754,9 @@ Deno.serve(async (request) => {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
     }
-    discovery.listings = discovery.listings.filter(item => !item.status || item.status === "active");
+    discovery.listings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
     discovery.meta.found = discovery.listings.length;
+    if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discovery.listings.length;
     const draft = {
       ...(build.draft && typeof build.draft === "object" ? build.draft : {}),
       discoveredListings: discovery.listings,
@@ -3760,8 +3863,9 @@ Deno.serve(async (request) => {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
         maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
-      discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
+      discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;
+      if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discoveredListings.length;
       listingDiscovery = discovery.meta;
       console.log("[build] listing discovery", listingDiscovery);
     } catch (error) {
