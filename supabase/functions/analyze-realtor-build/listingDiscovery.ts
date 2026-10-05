@@ -1054,6 +1054,18 @@ function structuredPropertyFacts(obj:Record<string,unknown>):Record<string,strin
   return facts;
 }
 
+function structuredFactsForAddress(html:string,item:DiscoveredListing):Record<string,string>{
+  const facts:Record<string,string>={},key=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
+  walkLd(jsonLdBlocks(html),row=>{
+    if(!/House|Residence|Apartment|RealEstateListing/i.test(String(row["@type"]??"")))return;
+    const address=row.address as Record<string,unknown>|undefined;
+    if(!address||typeof address.streetAddress!=="string")return;
+    const full=[address.streetAddress,address.addressLocality,address.addressRegion,address.postalCode].filter(Boolean).join(" ");
+    if(key(address.streetAddress)===key(item.title)||key(full)===key(item.title))Object.assign(facts,structuredPropertyFacts(row));
+  });
+  return facts;
+}
+
 function providerPropertyFacts(html:string,base:URL):Record<string,string>{
   const facts:Record<string,string>={};
   if(/\/idx\/details\/listing\//.test(base.pathname)){
@@ -1110,7 +1122,7 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
   }
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
-  return { ...item, facts:{...item.facts,...structured?.facts,...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
+  return { ...item, facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }

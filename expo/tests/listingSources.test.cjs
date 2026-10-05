@@ -336,3 +336,10 @@ test('structured year built and dsIDX tables enrich facts without taking related
  const page='<h1>12 Pine St</h1><table id="dsidx-additional-details"><tr><th>WATER</th><td>Private &amp; Well</td></tr><tr><th>HEAT</th><td>Forced Air</td></tr></table><table id="related-home"><tr><th>WATER</th><td>Unrelated</td></tr></table>';
  const result=discovery.enrichListingFromPage(detail,page,new URL(detail.sourceUrl));assert.equal(result.facts.Water,'Private & Well');assert.equal(result.facts.Heating,'Forced Air');
 });
+
+test('split structured house records retain facts only for the matching property address',()=>{
+ const item=discovery.extractListingsFromPage(html(home()),new URL(source.url))[0];
+ const page='<h1>12 Pine St</h1>'+html({'@graph':[{'@type':'House',address:{streetAddress:'12 Pine St'},yearBuilt:1986},{'@type':'House',address:{streetAddress:'25 Pine St'},yearBuilt:2020}]});
+ const result=discovery.enrichListingFromPage(item,page,new URL(item.sourceUrl));
+ assert.equal(result.facts['Year Built'],'1986');
+});
