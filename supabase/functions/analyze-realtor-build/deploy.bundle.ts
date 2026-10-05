@@ -992,12 +992,19 @@ function completeSearchGroups(payload: unknown, base: URL): DiscoveredListing[] 
           const coords = geo && (typeof geo.latitude === "string" || typeof geo.latitude === "number") && (typeof geo.longitude === "string" || typeof geo.longitude === "number")
             ? `${geo.latitude}, ${geo.longitude}`.slice(0, 80) : "";
           if (row) {
-            const facts = coords ? { ...row.facts, Coordinates: coords } : row.facts;
+            const facts = coords ? { ...(row.facts ?? {}), Coordinates: coords } : { ...(row.facts ?? {}) };
             if (!built) built = { ...row, facts };
-            else built = { ...built, title: built.title.length >= row.title.length ? built.title : row.title, price: built.price || row.price,
-              description: built.description.length >= row.description.length ? built.description : row.description,
-              neighborhood: built.neighborhood || row.neighborhood, facts: { ...facts, ...built.facts } };
-          } else if (coords && built) built = { ...built, facts: { ...built.facts, Coordinates: built.facts.Coordinates || coords }, neighborhood: built.neighborhood || neighborhoodFrom(schema) };
+            else {
+              const current: DiscoveredListing = built;
+              built = { ...current, title: current.title.length >= row.title.length ? current.title : row.title, price: current.price || row.price,
+                description: current.description.length >= row.description.length ? current.description : row.description,
+                neighborhood: current.neighborhood || row.neighborhood, facts: { ...facts, ...(current.facts ?? {}) } };
+            }
+          } else if (coords && built) {
+            const current: DiscoveredListing = built;
+            const currentFacts = current.facts ?? {};
+            built = { ...current, facts: { ...currentFacts, Coordinates: currentFacts.Coordinates || coords }, neighborhood: current.neighborhood || neighborhoodFrom(schema) };
+          }
         }
         const subtitle = Array.isArray(record.subtitles) ? record.subtitles.find((value): value is string => typeof value === "string" && /[A-Za-z]/.test(value)) : undefined;
         const link = typeof record.pageLink === "string" ? record.pageLink : typeof record.navigationPageLink === "string" ? record.navigationPageLink : "";
