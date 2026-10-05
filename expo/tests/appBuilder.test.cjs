@@ -18,7 +18,7 @@ const discoverySource = ts.transpileModule(fs.readFileSync(path.resolve(__dirnam
 }).outputText;
 const discoveryModule = { exports: {} };
 new Function('require', 'module', 'exports', discoverySource)(require, discoveryModule, discoveryModule.exports);
-const { publicListingRequestHeaders, decodePublicListingResponse } = discoveryModule.exports;
+const { publicListingRequestHeaders, decodePublicListingResponse, createListingRenderer, listingRenderBackendFromEnv, isRobotChallenge, isPublishedScriptGate, continueAfterVerification } = discoveryModule.exports;
 const designModule = { exports: {} };
 new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolve(__dirname,
   '../../supabase/functions/analyze-realtor-build/websiteDesign.ts'), 'utf8'), {
@@ -31,16 +31,26 @@ new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolv
 }).outputText)(presentationModule, presentationModule.exports);
 
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
-async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input' } = {}) {
+async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', invokeRenderer = false } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
   const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
-    async function discoverListings(seeds, fetchHtml) {
+    async function discoverListings(seeds, fetchHtml, options) {
       const visited = [];
       const listings = [];
+      let rendered = false;
+      if (options && typeof options.renderPage === 'function') {
+        const page = await options.renderPage(seeds[0]);
+        rendered = !!(page && page.html);
+        const price = page && page.html ? (page.html.match(/\\$[\\d,]+/) || [])[0] : '';
+        if (price) {
+          listings.push({ title: 'Rendered inventory', description: '', price, beds: 0, baths: 0, sqft: '',
+            neighborhood: '', image: '', images: [], sourceUrl: page.finalUrl.toString() });
+        }
+      }
       for (const uri of seeds.slice(0, 2)) {
         try {
           const page = await fetchHtml(uri);
@@ -53,11 +63,12 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
           }
         } catch {}
       }
-      return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0 } };
+      return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0, rendered } };
     }
   `;
   const code = ts.transpileModule(discoveryStub + '\n' + edgeWithoutFiles, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   let handler, aiBody, update, reads = 0;
+  const rendererPosts = [];
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
   const build = { sources:[source], evidence:[], draft, status };
@@ -66,6 +77,14 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
     return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:async()=>{update=value;return {error:null};}}) };
   } };
   const fetchFixture = async (url, options) => {
+    if (String(url) === 'https://render.example/run') {
+      rendererPosts.push({ headers: options.headers, body: JSON.parse(options.body) });
+      return Response.json({
+        html: '<html><title>Rendered inventory</title><p>$350,000</p></html>',
+        finalUrl: 'https://cindycarlsonrealty.com/',
+        network: [{ url: 'https://cindycarlsonrealty.com/api/search', html: '{"listings":[1]}' }],
+      });
+    }
     if (String(url).startsWith('https://api.openai.com/')) {
       aiBody=JSON.parse(options.body);
       const generated = mode === 'regenerate' ? {value:'Cindy Carlson Realty: your North Idaho guide.'} : {
@@ -78,9 +97,16 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
     if (unreadable) return new Response('Unavailable',{status:503});
     return new Response(html ?? '<html><title>Cindy Carlson Realty</title><p>Full Service Agency in North Idaho.</p></html>',{headers:{'Content-Type':'text/html'}});
   };
-  new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls',code)({env:{get:()=> 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls);
-  const response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
-  return {status:response.status,result:await response.json(),aiBody,update,reads};
+  const previousFetch = globalThis.fetch;
+  if (invokeRenderer) globalThis.fetch = fetchFixture;
+  let response;
+  try {
+    new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls','createListingRenderer','listingRenderBackendFromEnv','isRobotChallenge','isPublishedScriptGate','continueAfterVerification',code)({env:{get:name => invokeRenderer && name === 'LISTING_RENDER_URL' ? 'https://render.example/run' : invokeRenderer && name === 'LISTING_RENDER_TOKEN' ? 'render-token' : name === 'LISTING_RENDER_URL' || name === 'LISTING_RENDER_TOKEN' ? undefined : 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls,createListingRenderer,listingRenderBackendFromEnv,isRobotChallenge,isPublishedScriptGate,continueAfterVerification);
+    response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+  return {status:response.status,result:await response.json(),aiBody,update,reads,rendererPosts};
 }
 
 test('guest testing-code builds read URL content and generate real copy without account writes', async () => {
@@ -92,6 +118,17 @@ test('guest testing-code builds read URL content and generate real copy without 
   assert.ok(r.aiBody.text.format.schema.required.includes('evidence'));
   assert.equal(r.result.evidence[0].value,'Cindy Carlson Realty');
   assert.equal(r.reads,0);
+  assert.equal(r.rendererPosts.length,0);
+});
+
+test('production onboarding invokes the configured renderer and continues discovery', async () => {
+  const r = await runWebsiteBuild({ guest: true, invokeRenderer: true });
+  assert.equal(r.status, 200);
+  assert.equal(r.rendererPosts.length, 1);
+  assert.equal(r.rendererPosts[0].body.url, 'https://cindycarlsonrealty.com/');
+  assert.equal(r.rendererPosts[0].headers.authorization, 'Bearer render-token');
+  assert.equal(r.result.listingDiscovery.rendered, true);
+  assert.ok(r.result.discoveredListings.some(item => item.price === '$350,000'));
 });
 
 test('retries reread URLs for existing drafts with zero facts and change only selected copy', async () => {
