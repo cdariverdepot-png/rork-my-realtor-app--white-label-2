@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: supabase-functions-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -49,9 +53,15 @@ jobs:
           curl -fsSL https://fly.io/install.sh | sh
           export PATH="$HOME/.fly/bin:$PATH"
           fly apps create cdariver-listing-renderer --json || true
-          TOKEN=$(openssl rand -hex 24)
-          echo "::add-mask::$TOKEN"
-          fly secrets set LISTING_RENDER_TOKEN="$TOKEN" --app cdariver-listing-renderer --stage
+          raw=$(fly ssh console --app cdariver-listing-renderer -C "printenv LISTING_RENDER_TOKEN" </dev/null 2>/tmp/fly-ssh.err || true)
+          TOKEN=$(printf '%s\n' "$raw" | tr -d '\r' | grep -E '^[0-9a-f]{48}$' | tail -n 1 || true)
+          if [ -z "$TOKEN" ]; then
+            TOKEN=$(openssl rand -hex 24)
+            echo "::add-mask::$TOKEN"
+            fly secrets set LISTING_RENDER_TOKEN="$TOKEN" --app cdariver-listing-renderer --stage
+          else
+            echo "::add-mask::$TOKEN"
+          fi
           fly deploy --app cdariver-listing-renderer --ha=false --remote-only
           echo "url=https://cdariver-listing-renderer.fly.dev" >> "$GITHUB_OUTPUT"
           echo "LISTING_RENDER_TOKEN=$TOKEN" >> "$GITHUB_ENV"
@@ -63,7 +73,8 @@ jobs:
           version: latest
 
       - name: Set LISTING_RENDER_URL
-        if: steps.host.outputs.target == 'fly'
+        id: secrets
+        continue-on-error: true
         run: |
           test -n "$SUPABASE_ACCESS_TOKEN" || { echo "::error::SUPABASE_ACCESS_TOKEN is missing, so the deployed renderer URL cannot be given to the importer."; exit 1; }
           supabase secrets set \
@@ -71,3 +82,13 @@ jobs:
             LISTING_RENDER_TOKEN="$LISTING_RENDER_TOKEN" \
             --project-ref "$SUPABASE_PROJECT_REF"
           echo "Importer secret LISTING_RENDER_URL is set. The token value was not printed."
+
+      - name: Deploy importer functions with the same renderer values
+        run: |
+          test -n "$LISTING_RENDER_TOKEN"
+          LISTING_RENDER_URL="${{ steps.fly.outputs.url }}" python3 scripts/bake-listing-render-env.py
+          supabase functions deploy analyze-realtor-build --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
+          supabase functions deploy refresh-listings --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
+          if [ "${{ steps.secrets.outcome }}" != "success" ]; then
+            echo "::warning::Supabase token lacks edge_functions_secrets_write. The importer was deployed with the same renderer URL and token through listingRenderEnv, which Deno.env overrides when the secret exists."
+          fi

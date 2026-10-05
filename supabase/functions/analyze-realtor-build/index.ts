@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { listingRenderEnv } from "./listingRenderEnv.ts";
 import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, type WebsiteDesign } from "./websiteDesign.ts";
@@ -166,7 +167,7 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
 
 /** Same renderer contract as refresh and resume. Unconfigured environments pass nothing and do not pretend a browser ran. */
 function productionRenderPage() {
-  return createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name)));
+  return createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name) || listingRenderEnv(name)));
 }
 const decodeEntities = (value: string) => value
   .replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'")

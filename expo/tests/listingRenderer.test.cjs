@@ -1,7 +1,15 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const http = require('node:http');
+const path = require('node:path');
 const test = require('node:test');
 const { publicRenderTarget, selectCapturedResponses, isPrivateAddress, NETWORK_CAP } = require('../../services/listing-renderer/renderContract.cjs');
+
+test('committed renderer fallback stores no endpoint or token', () => {
+  const source = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingRenderEnv.ts'), 'utf8');
+  assert.match(source, /return undefined/);
+  assert.doesNotMatch(source, /fly\.dev|https:\/\/|Bearer|[0-9a-f]{32}/);
+});
 
 test('renderer rejects private networks, metadata hosts and non-HTTPS targets', () => {
   for (const raw of [
