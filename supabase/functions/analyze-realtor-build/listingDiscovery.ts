@@ -356,6 +356,7 @@ function listingFromLd(obj: Record<string, unknown>, base: URL): DiscoveredListi
     neighborhood: neighborhoodFrom(obj),
     image: images[0] ?? "",
     images: images.slice(0, 500),
+    facts: structuredPropertyFacts(obj),
     sourceUrl,
     listingNumber: [obj.listingId, obj.listingNumber, obj.mlsNumber, typeof obj.identifier === "object" ? (obj.identifier as Record<string, unknown> | null)?.value : obj.identifier].filter(v => typeof v === "string" || typeof v === "number").map(String).find(Boolean)?.slice(0, 100) ?? "",
     propertyType: [obj.propertyType, obj.additionalType].filter(v => typeof v === "string").map(String).find(Boolean)?.slice(0, 100) ?? "",
@@ -729,6 +730,7 @@ export function listingFromIdxDetail(html: string, base: URL): DiscoveredListing
     bedrooms: field("IDX-summaryField-bedrooms-data"), bathrooms: field("IDX-summaryField-totalBaths-data"),
     floorSize: {value: field("IDX-summaryField-sqFt-data")}, image: imageTag ? attr(imageTag, "src") : "",
     description: field("IDX-detailsDescription"), address: { addressLocality: part("City"), addressRegion: part("StateAbrv") },
+    propertyType: field("IDX-field-propType").replace(/^Property Type:\s*/i,""),
     listingNumber: base.pathname.match(/\/listing\/[^/]+\/([^/]+)/)?.[1] }, base);
   return item ? { ...item, status: normalizeListingStatus(field("IDX-summaryField-propStatus-data")) } : null;
 }
@@ -1042,6 +1044,49 @@ export function enrichPropertyFacts(item:DiscoveredListing,html:string):Discover
   return {...item,facts,sqft:values["Total SqFt."]||item.sqft,propertyType:values["Realtor.COM Type"]||values["Listing Type"]||item.propertyType};
 }
 
+/** Only factual fields from the property record or provider-scoped detail blocks. */
+function structuredPropertyFacts(obj:Record<string,unknown>):Record<string,string>{
+  const facts:Record<string,string>={};
+  for(const [key,label]of Object.entries({yearBuilt:"Year Built",YearBuilt:"Year Built",lotSize:"Lot Size",LotSizeAcres:"Lot Acres",garageSpaces:"Garage Spaces",heating:"Heating",cooling:"Cooling",roof:"Roof",waterSource:"Water",sewer:"Sewer",zoning:"Zoning"})){
+    const raw=obj[key],value=raw&&typeof raw==="object"?(raw as Record<string,unknown>).value:raw;
+    if((typeof value==="string"||typeof value==="number")&&String(value).trim())facts[label]=decodeEntities(stripTags(String(value))).slice(0,1000);
+  }
+  return facts;
+}
+
+function structuredFactsForAddress(html:string,item:DiscoveredListing):Record<string,string>{
+  const facts:Record<string,string>={},key=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
+  walkLd(jsonLdBlocks(html),row=>{
+    if(!/House|Residence|Apartment|RealEstateListing/i.test(String(row["@type"]??"")))return;
+    const address=row.address as Record<string,unknown>|undefined;
+    if(!address||typeof address.streetAddress!=="string")return;
+    const full=[address.streetAddress,address.addressLocality,address.addressRegion,address.postalCode].filter(Boolean).join(" ");
+    if(key(address.streetAddress)===key(item.title)||key(full)===key(item.title))Object.assign(facts,structuredPropertyFacts(row));
+  });
+  return facts;
+}
+
+function providerPropertyFacts(html:string,base:URL):Record<string,string>{
+  const facts:Record<string,string>={};
+  if(/\/idx\/details\/listing\//.test(base.pathname)){
+    for(const [key,label]of Object.entries({yearBuilt:"Year Built",acres:"Lot Acres",subdivision:"Subdivision",heating:"Heating",cooling:"Cooling",roof:"Roof",waterSource:"Water",sewer:"Sewer",generalPropertyDescriptionGarageStall2:"Garage",lotSizeArea:"Lot Size",zoning:"Zoning"})){
+      const block=html.match(new RegExp(`id=["']IDX-field-${key}["'][^>]*>([\\s\\S]*?)<\\/div>`,"i"))?.[1];
+      const summary=html.match(new RegExp(`id=["']IDX-summaryField-${key}-data["'][^>]*>([\\s\\S]*?)<\\/span>`,"i"))?.[1];
+      const value=decodeEntities(stripTags(summary??block?.replace(/<strong\b[^>]*>[\s\S]*?<\/strong>/i,"")??""));
+      if(value&&value.length<1000)facts[label]=value;
+    }
+  }
+  if(/\/idx\/mls-/.test(base.pathname)){
+    const labels:Record<string,string>={"LOT SIZE":"Lot Size",LOT:"Lot Size",APPLIANCES:"Appliances",BASEMENT:"Basement",CONSTRUCTION:"Construction",HEAT:"Heating",COOLING:"Cooling",ROOF:"Roof",SUBDIVISION:"Subdivision",WATER:"Water",SEWER:"Sewer","VIEW DESCRIPTION":"View",GARAGE:"Garage","YEAR BUILT":"Year Built"};
+    for(const table of html.match(/<table\b[^>]*id=["']dsidx-(?:primary-data|secondary-data|additional-details)["'][^>]*>[\s\S]*?<\/table>/gi)??[])
+      for(const row of table.matchAll(/<tr\b[^>]*>\s*<th\b[^>]*>([\s\S]*?)<\/th>\s*<td\b[^>]*>([\s\S]*?)<\/td>/gi)){
+        const label=labels[decodeEntities(stripTags(row[1])).toUpperCase()],value=decodeEntities(stripTags(row[2]));
+        if(label&&value&&value.length<1000)facts[label]=value;
+      }
+  }
+  return facts;
+}
+
 /** Enrich an already evidenced property without replacing its address with an agency title. */
 export function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
   const flex=flexmlsDetail(item,html,base);
@@ -1056,6 +1101,7 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
       beds:Number(attr(brivity,"bedrooms"))||item.beds,baths:Number(attr(brivity,"baths"))||item.baths,
       listingNumber:attr(brivity,"mlsNum")||item.listingNumber,propertyType:attr(brivity,"mlsPropertyType")||attr(brivity,"currentUse")||item.propertyType,facts,detailsComplete:images.length>0};
   }
+  const structured=listingsFromJsonLd(html,base).find(l=>l.sourceUrl===item.sourceUrl||l.title.toLowerCase()===item.title.toLowerCase());
   const detail = listingFromDsidxDetail(html,base) ?? listingsFromMoxi(html,base).find(l=>l.sourceUrl===item.sourceUrl) ?? listingFromIdxDetail(html, base) ?? listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
   if(!detail&&!decodeEntities(stripTags(html)).toLowerCase().includes(item.title.toLowerCase()))return item;
   const meta = (name: string) => {
@@ -1076,7 +1122,7 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
   }
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
-  return { ...item, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
+  return { ...item, facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }
