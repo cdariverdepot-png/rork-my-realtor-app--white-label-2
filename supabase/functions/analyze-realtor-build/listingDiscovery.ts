@@ -2546,7 +2546,7 @@ export function createListingRenderer(
   if (!backend) return undefined;
   let used = 0;
   const maxRenders = limits?.maxRenders ?? 4;
-  const timeoutMs = limits?.timeoutMs ?? 12000;
+  const timeoutMs = limits?.timeoutMs ?? 30000;
   const lanes = new Map<string, Promise<unknown>>();
   return async (uri, options) => {
     if (used >= maxRenders) throw new Error("Per-import browser budget reached");
@@ -2605,7 +2605,7 @@ export function listingRenderBackendFromEnv(readEnv: (name: string) => string | 
         ...(token ? { authorization: "Bearer " + token } : {}),
       },
       body: JSON.stringify({ url: target.toString(), cookie: request.cookie }),
-      signal: AbortSignal.timeout(12000),
+      signal: AbortSignal.timeout(30000),
     });
     if (!response.ok) {
       const text = await response.text();

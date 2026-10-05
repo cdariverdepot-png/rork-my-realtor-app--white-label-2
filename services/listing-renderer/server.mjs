@@ -122,12 +122,28 @@ async function main() {
     process.exit(1);
   }
   const { chromium } = await import("playwright");
-  const browser = await chromium.launch({ headless: true });
+  let browserPromise = null;
+  const browser = {
+    newContext(options) {
+      if (!browserPromise) {
+        browserPromise = chromium.launch({ headless: true }).catch(error => {
+          browserPromise = null;
+          throw error;
+        });
+      }
+      return browserPromise.then(launched => launched.newContext(options));
+    },
+    async close() {
+      const pending = browserPromise;
+      browserPromise = null;
+      if (pending) await pending.then(launched => launched.close()).catch(() => {});
+    },
+  };
   const port = Number(process.env.PORT || 8080);
   const server = createListingRenderServer({ browser, token });
   const close = async () => {
     server.close();
-    await browser.close().catch(() => {});
+    await browser.close();
     process.exit(0);
   };
   process.on("SIGTERM", close);
