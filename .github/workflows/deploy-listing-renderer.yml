@@ -75,21 +75,19 @@ jobs:
 
       - name: Set LISTING_RENDER_URL
         id: secrets
-        continue-on-error: true
         run: |
           test -n "$SUPABASE_ACCESS_TOKEN" || { echo "::error::SUPABASE_ACCESS_TOKEN is missing, so the deployed renderer URL cannot be given to the importer."; exit 1; }
           supabase secrets set \
             LISTING_RENDER_URL="${{ steps.fly.outputs.url }}" \
             LISTING_RENDER_TOKEN="$LISTING_RENDER_TOKEN" \
             --project-ref "$SUPABASE_PROJECT_REF"
-          echo "Importer secret LISTING_RENDER_URL is set. The token value was not printed."
+          python3 scripts/confirm-listing-render-secrets.py
+          echo "Importer secrets LISTING_RENDER_URL and LISTING_RENDER_TOKEN are set. Values were not printed."
 
-      - name: Deploy importer functions with the same renderer values
+      - name: Deploy importer functions from Supabase secrets
         run: |
-          test -n "$LISTING_RENDER_TOKEN"
-          LISTING_RENDER_URL="${{ steps.fly.outputs.url }}" python3 scripts/bake-listing-render-env.py
           supabase functions deploy analyze-realtor-build --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
           supabase functions deploy refresh-listings --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
-          if [ "${{ steps.secrets.outcome }}" != "success" ]; then
-            echo "::warning::Supabase token lacks edge_functions_secrets_write. The importer was deployed with the same renderer URL and token through listingRenderEnv, which Deno.env overrides when the secret exists."
-          fi
+          curl -fsS --retry 8 --retry-all-errors --retry-delay 5 --max-time 25 https://cdariver-listing-renderer.fly.dev/health
+          echo
+          echo "Renderer health checked. Importer reads LISTING_RENDER_* from Supabase secrets only."

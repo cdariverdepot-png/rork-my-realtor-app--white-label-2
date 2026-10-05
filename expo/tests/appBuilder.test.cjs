@@ -34,8 +34,7 @@ new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolv
 async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', invokeRenderer = false } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
-    .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '')
-    .replace(/^import .*listingRenderEnv\.ts";\r?\n/m, '');
+    .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
   const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
@@ -102,7 +101,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   if (invokeRenderer) globalThis.fetch = fetchFixture;
   let response;
   try {
-    new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls','createListingRenderer','listingRenderBackendFromEnv','isRobotChallenge','isPublishedScriptGate','continueAfterVerification','listingRenderEnv',code)({env:{get:name => invokeRenderer && name === 'LISTING_RENDER_URL' ? 'https://render.example/run' : invokeRenderer && name === 'LISTING_RENDER_TOKEN' ? 'render-token' : name === 'LISTING_RENDER_URL' || name === 'LISTING_RENDER_TOKEN' ? undefined : 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls,createListingRenderer,listingRenderBackendFromEnv,isRobotChallenge,isPublishedScriptGate,continueAfterVerification,() => undefined);
+    new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls','createListingRenderer','listingRenderBackendFromEnv','isRobotChallenge','isPublishedScriptGate','continueAfterVerification',code)({env:{get:name => invokeRenderer && name === 'LISTING_RENDER_URL' ? 'https://render.example/run' : invokeRenderer && name === 'LISTING_RENDER_TOKEN' ? 'render-token' : name === 'LISTING_RENDER_URL' || name === 'LISTING_RENDER_TOKEN' ? undefined : 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls,createListingRenderer,listingRenderBackendFromEnv,isRobotChallenge,isPublishedScriptGate,continueAfterVerification);
     response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
   } finally {
     globalThis.fetch = previousFetch;

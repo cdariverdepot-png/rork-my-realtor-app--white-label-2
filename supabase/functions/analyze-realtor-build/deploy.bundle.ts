@@ -3140,12 +3140,8 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
   throw new Error("The page redirected too many times.");
 }
 
-function listingRenderEnv(_name: string): string | undefined {
-  return undefined;
-}
-
 function productionRenderPage() {
-  return createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name) || listingRenderEnv(name)));
+  return createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name)));
 }
 
 const decodeEntities = (value: string) => value

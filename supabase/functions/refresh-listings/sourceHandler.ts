@@ -1,6 +1,5 @@
 import { readSource, reconcileInventory, verifyMissing, type ListingSource, type SourceInventory } from "./sources.ts";
 import type { SyncListing } from "./sync.ts";
-import { listingRenderEnv } from "../analyze-realtor-build/listingRenderEnv.ts";
 import { createListingRenderer, listingRenderBackendFromEnv, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
@@ -43,7 +42,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   if (connecting && sources.length >= 5 && !target) return { body: { ok: false, error: "You already have five connected sources. Use one of your connected pages." }, status: 400 };
   let inventory: SourceInventory;
   try {
-    inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name) || listingRenderEnv(name))));
+    inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))));
   } catch (error) {
     const message = error instanceof Error ? error.message : "We couldn’t find your listings on that page. Try the page showing all of your active listings.";
     if (target) await save(sourceKey, value => ({ ...value, sources: (Array.isArray(value.sources) ? value.sources : []).map(source => {

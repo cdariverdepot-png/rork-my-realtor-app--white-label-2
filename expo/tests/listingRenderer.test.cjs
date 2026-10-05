@@ -5,10 +5,25 @@ const path = require('node:path');
 const test = require('node:test');
 const { publicRenderTarget, selectCapturedResponses, isPrivateAddress, NETWORK_CAP } = require('../../services/listing-renderer/renderContract.cjs');
 
-test('committed renderer fallback stores no endpoint or token', () => {
-  const source = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingRenderEnv.ts'), 'utf8');
-  assert.match(source, /return undefined/);
-  assert.doesNotMatch(source, /fly\.dev|https:\/\/|Bearer|[0-9a-f]{32}/);
+test('importer reads the renderer only from Deno.env', () => {
+  const root = path.resolve(__dirname, '../..');
+  assert.equal(fs.existsSync(path.join(root, 'supabase/functions/analyze-realtor-build/listingRenderEnv.ts')), false);
+  assert.equal(fs.existsSync(path.join(root, 'scripts/bake-listing-render-env.py')), false);
+  const files = [
+    'supabase/functions/analyze-realtor-build/index.ts',
+    'supabase/functions/analyze-realtor-build/deploy.bundle.ts',
+    'supabase/functions/refresh-listings/sourceHandler.ts',
+    '.github/workflows/deploy-listing-renderer.yml',
+    '.github/workflows/deploy-functions.yml',
+  ].map(file => fs.readFileSync(path.join(root, file), 'utf8'));
+  const joined = files.join('\n');
+  assert.doesNotMatch(joined, /listingRenderEnv|bake-listing-render-env/);
+  assert.match(files[0], /listingRenderBackendFromEnv\(name => Deno\.env\.get\(name\)\)/);
+  assert.match(files[1], /listingRenderBackendFromEnv\(name => Deno\.env\.get\(name\)\)/);
+  assert.match(files[2], /listingRenderBackendFromEnv\(name => Deno\.env\.get\(name\)\)/);
+  assert.match(files[3], /supabase secrets set/);
+  assert.match(files[4], /confirm-listing-render-secrets\.py/);
+  assert.doesNotMatch(files.slice(0, 3).join('\n'), /fly\.dev|[0-9a-f]{32}/);
 });
 
 test('renderer rejects private networks, metadata hosts and non-HTTPS targets', () => {
