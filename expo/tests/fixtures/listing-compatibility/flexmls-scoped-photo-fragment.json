@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "id": "flexmls-scoped-photo-fragment",
+  "capturedAt": "2026-10-05T15:47:59.702Z",
+  "provenance": "synthetic-contract",
+  "rationale": "A Flexmls office-category shell loads its own photo fragment and does not follow toolbar market searches.",
+  "seeds": [
+    "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings"
+  ],
+  "options": {
+    "maxPages": 8,
+    "maxListings": 24,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings\",false,false]",
+      "url": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings",
+      "html": "<body data-search-results-search-count=\"1\"><a href=\"/SomeAgent/search/new\">Search</a></body>"
+    },
+    {
+      "key": "[\"https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24\",true,false]",
+      "url": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+      "fragment": true,
+      "rendering": false,
+      "finalUrl": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+      "html": "<div class=\"summary-card listingListItem\" data-action=\"click->list#open\" data-href=\"https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings/123\" data-current-price=\"350000\"><a data-listing=\"{&quot;StreetAddress&quot;:&quot;12 Pine St&quot;,&quot;BedsTotal&quot;:3,&quot;BathsTotal&quot;:2}\"></a><img src=\"https://photos.example/12.jpg\"><div class=\"line-one\">12 Pine St</div></div>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "price": "$350,000",
+        "description": "",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "sourceUrl": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings/123",
+        "listingNumber": "",
+        "propertyType": "",
+        "status": "active"
+      }
+    ],
+    "coverage": "collection",
+    "outcome": "found",
+    "expectedCount": 1,
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "flexmls"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings",
+        "rendering": "response",
+        "interfaces": [
+          "flexmls"
+        ],
+        "navigation": [
+          "inventory-links",
+          "public-fragment"
+        ],
+        "attempts": [
+          {
+            "id": "flexmls",
+            "version": 1,
+            "evidence": "Public Flexmls server-rendered listing cards",
+            "outcome": "empty",
+            "records": 0
+          },
+          {
+            "id": "property-cards",
+            "version": 1,
+            "evidence": "HTML anchors or property card containers",
+            "outcome": "empty",
+            "records": 0
+          }
+        ],
+        "resolution": "navigation-only"
+      },
+      {
+        "url": "https://my.flexmls.com/SomeAgent/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+        "rendering": "response",
+        "interfaces": [
+          "flexmls"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "flexmls",
+            "version": 1,
+            "evidence": "Public Flexmls server-rendered listing cards",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  }
+}

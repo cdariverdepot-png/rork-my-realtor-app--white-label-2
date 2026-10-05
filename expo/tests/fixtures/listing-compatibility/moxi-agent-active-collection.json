@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "moxi-agent-active-collection",
+  "capturedAt": "2026-10-05T15:46:26.224Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Moxi markup on any host prefers the agent active collection and its observed next page, and does not import the office preview card.",
+  "seeds": [
+    "https://agent.example/"
+  ],
+  "options": {
+    "maxPages": 8,
+    "maxListings": 24,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://agent.example/\",false,false]",
+      "url": "https://agent.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://agent.example/",
+      "html": "moxiworks <a class=\"linktooverlay\" href=\"/listing/WRONG\"><div data-bg=\"https://photos.example/WRONG.jpg\"></div><div class=\"single-listing-img-price\">$450,000</div><div class=\"single-listing-address\"><h3>Office preview</h3></div><div class=\"bed_bath_sqft\"><div>4 Bed</div><div>3.5 Baths</div><div>2400 sqft</div></div><span class=\"status-label\">Active</span><div class=\"single-listing-mlsnumber\">MLS# WRONG</div></a><a href=\"/listings/my-active-listings\">My Active Listings</a>"
+    },
+    {
+      "key": "[\"https://agent.example/listings/my-active-listings\",false,false]",
+      "url": "https://agent.example/listings/my-active-listings",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://agent.example/listings/my-active-listings",
+      "html": "<a class=\"linktooverlay\" href=\"/listing/A\"><div data-bg=\"https://photos.example/A.jpg\"></div><div class=\"single-listing-img-price\">$450,000</div><div class=\"single-listing-address\"><h3>100 Lake St</h3></div><div class=\"bed_bath_sqft\"><div>4 Bed</div><div>3.5 Baths</div><div>2400 sqft</div></div><span class=\"status-label\">Active</span><div class=\"single-listing-mlsnumber\">MLS# A</div></a><a rel=\"next\" href=\"?page=2\">Next</a>"
+    },
+    {
+      "key": "[\"https://agent.example/listings/my-active-listings?page=2\",false,false]",
+      "url": "https://agent.example/listings/my-active-listings?page=2",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://agent.example/listings/my-active-listings?page=2",
+      "html": "<a class=\"linktooverlay\" href=\"/listing/B\"><div data-bg=\"https://photos.example/B.jpg\"></div><div class=\"single-listing-img-price\">$450,000</div><div class=\"single-listing-address\"><h3>200 Lake St</h3></div><div class=\"bed_bath_sqft\"><div>4 Bed</div><div>3.5 Baths</div><div>2400 sqft</div></div><span class=\"status-label\">Active</span><div class=\"single-listing-mlsnumber\">MLS# B</div></a>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "100 Lake St",
+        "sourceUrl": "https://agent.example/listing/A",
+        "price": "$450,000",
+        "description": "",
+        "beds": 4,
+        "baths": 3.5,
+        "sqft": "2,400",
+        "neighborhood": "",
+        "image": "https://photos.example/A.jpg",
+        "images": [
+          "https://photos.example/A.jpg"
+        ],
+        "status": "active",
+        "listingNumber": "A"
+      },
+      {
+        "title": "200 Lake St",
+        "sourceUrl": "https://agent.example/listing/B",
+        "price": "$450,000",
+        "description": "",
+        "beds": 4,
+        "baths": 3.5,
+        "sqft": "2,400",
+        "neighborhood": "",
+        "image": "https://photos.example/B.jpg",
+        "images": [
+          "https://photos.example/B.jpg"
+        ],
+        "status": "active",
+        "listingNumber": "B"
+      }
+    ],
+    "coverage": "collection",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "moxiworks"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://agent.example/",
+        "rendering": "response",
+        "interfaces": [
+          "moxiworks"
+        ],
+        "navigation": [
+          "inventory-links"
+        ],
+        "attempts": [],
+        "resolution": "navigation-only"
+      },
+      {
+        "url": "https://agent.example/listings/my-active-listings",
+        "rendering": "response",
+        "interfaces": [
+          "moxiworks"
+        ],
+        "navigation": [
+          "inventory-links",
+          "observed-pagination"
+        ],
+        "attempts": [
+          {
+            "id": "moxiworks",
+            "version": 1,
+            "evidence": "Moxi listing_detail literals or linktooverlay cards",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      },
+      {
+        "url": "https://agent.example/listings/my-active-listings?page=2",
+        "rendering": "response",
+        "interfaces": [
+          "moxiworks"
+        ],
+        "navigation": [
+          "inventory-links"
+        ],
+        "attempts": [
+          {
+            "id": "moxiworks",
+            "version": 1,
+            "evidence": "Moxi listing_detail literals or linktooverlay cards",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://agent.example"
+}

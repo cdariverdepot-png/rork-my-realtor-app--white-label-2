@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "brivity-scoped-agent-search",
+  "capturedAt": "2026-10-05T15:47:59.707Z",
+  "provenance": "synthetic-contract",
+  "rationale": "A Brivity widget publishes its own agent and office ids. The search fragment stays on that scope and drops inactive rows.",
+  "seeds": [
+    "https://agent.example/"
+  ],
+  "options": {
+    "maxPages": 8,
+    "maxListings": 24,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://agent.example/\",false,false]",
+      "url": "https://agent.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://agent.example/",
+      "html": "<script src=\"https://cdn1.brivityidx.com/assets/js/FeaturedProperties-1R-index.min.js\"></script><section data-settings=\"{&quot;mlsData&quot;:{&quot;mls_ids&quot;:[{&quot;id&quot;:&quot;12&quot;}],&quot;mls_agent_ids&quot;:[&quot;a1&quot;],&quot;mls_office_ids&quot;:[&quot;o1&quot;],&quot;agent_office_listings_only&quot;:1}}\"></section>"
+    },
+    {
+      "key": "[\"https://agent.example/pages/search.php/?mlsId=12&q_prioritize=agents.0.id%3Da1%7Coffice.id%3Do1&q_include_all=0&status=1&q_sort=price-&q_include_total_count=false&q_photos_available=true\",true,false]",
+      "url": "https://agent.example/pages/search.php/?mlsId=12&q_prioritize=agents.0.id%3Da1%7Coffice.id%3Do1&q_include_all=0&status=1&q_sort=price-&q_include_total_count=false&q_photos_available=true",
+      "fragment": true,
+      "rendering": false,
+      "finalUrl": "https://agent.example/pages/search.php/?mlsId=12&q_prioritize=agents.0.id%3Da1%7Coffice.id%3Do1&q_include_all=0&status=1&q_sort=price-&q_include_total_count=false&q_photos_available=true",
+      "html": "{\"count\":1,\"data\":[{\"blossorId\":\"12-abc\",\"address\":{\"street\":\"123 Lake Rd\",\"city\":\"Town\",\"state\":\"ID\",\"zip\":\"83814\"},\"price\":500000,\"bedrooms\":3,\"totalBaths\":2.5,\"sqFeet\":2100,\"mlsNum\":\"abc\",\"statusText\":\"Active\",\"photos\":[\"https://photos.example/a.jpg\"],\"permissions\":{\"displayListing\":true,\"displayAddress\":true}}]}"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "123 Lake Rd",
+        "description": "",
+        "price": "$500,000",
+        "beds": 3,
+        "baths": 2.5,
+        "sqft": "2,100",
+        "neighborhood": "Town, ID",
+        "image": "https://photos.example/a.jpg",
+        "images": [
+          "https://photos.example/a.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://agent.example/homes-for-sale/ID/town/83814/123-lake-rd/bid-12-abc",
+        "listingNumber": "abc",
+        "propertyType": "",
+        "status": "active"
+      }
+    ],
+    "coverage": "collection",
+    "outcome": "found",
+    "expectedCount": 1,
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "brivity"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://agent.example/",
+        "rendering": "response",
+        "interfaces": [
+          "brivity"
+        ],
+        "navigation": [
+          "public-fragment"
+        ],
+        "attempts": [
+          {
+            "id": "brivity",
+            "version": 1,
+            "evidence": "Brivity featured widget or scoped search response",
+            "outcome": "empty",
+            "records": 0
+          }
+        ],
+        "resolution": "navigation-only"
+      },
+      {
+        "url": "https://agent.example/pages/search.php/?mlsId=12&q_prioritize=agents.0.id%3Da1%7Coffice.id%3Do1&q_include_all=0&status=1&q_sort=price-&q_include_total_count=false&q_photos_available=true",
+        "rendering": "response",
+        "interfaces": [
+          "brivity",
+          "public-json"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "brivity",
+            "version": 1,
+            "evidence": "Brivity featured widget or scoped search response",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://agent.example"
+}
