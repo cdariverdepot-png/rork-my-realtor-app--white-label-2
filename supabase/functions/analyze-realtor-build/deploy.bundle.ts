@@ -382,6 +382,46 @@ function specsFrom(obj: Record<string, unknown>, textFallback = ""): { beds: num
   return { beds, baths, sqft };
 }
 
+const TRACKING_QUERY = /^(?:utm_[a-z0-9_]+|fbclid|gclid|gbraid|wbraid|mc_[a-z]+|ref|referrer|source|timestamp|listingsort|timezone|featurelistingname|requestid)$/i;
+
+function providerListingId(url: URL): string {
+  return url.pathname.split("/").find(part => /^\d{8,16}$/.test(part)) ?? "";
+}
+
+function canonicalListingUrl(raw: string): string {
+  let url: URL;
+  try { url = new URL(raw); } catch { return raw; }
+  url.hash = "";
+  const id = providerListingId(url);
+  for (const key of [...url.searchParams.keys()]) {
+    if (TRACKING_QUERY.test(key) || (id && /^(?:page|pagesize|siteid|pagenumber)$/i.test(key))) url.searchParams.delete(key);
+  }
+  const entries = [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));
+  url.search = "";
+  for (const [key, value] of entries) url.searchParams.append(key, value);
+  return url.toString();
+}
+
+function listingIdentityKey(item: Pick<DiscoveredListing, "sourceUrl" | "listingNumber">): string {
+  let origin = "";
+  let id = (item.listingNumber ?? "").trim();
+  try {
+    const url = new URL(item.sourceUrl);
+    origin = url.origin;
+    if (!id) id = providerListingId(url);
+  } catch { /* a listing number can still identify the record */ }
+  if (id) return `${origin}|id:${id.toLowerCase()}`;
+  return `url:${canonicalListingUrl(item.sourceUrl)}`;
+}
+
+function preferTitle(current: string, incoming: string): string {
+  const weak = /^(?:new|active|pending|sold|featured|just listed|for sale)$/i;
+  if (weak.test(current) && incoming && !weak.test(incoming)) return incoming;
+  if (weak.test(incoming) && current && !weak.test(current)) return current;
+  if (current && incoming && /\d/.test(incoming) && !/\d/.test(current)) return incoming;
+  return current.length >= incoming.length ? current : incoming;
+}
+
 function listingFromLd(obj: Record<string, unknown>, base: URL): DiscoveredListing | null {
   const types = typeOf(obj);
   const isListing =
@@ -401,7 +441,7 @@ function listingFromLd(obj: Record<string, unknown>, base: URL): DiscoveredListi
       : typeof obj["@id"] === "string" && /^https?:/i.test(obj["@id"])
         ? obj["@id"]
         : base.toString();
-  const sourceUrl = absolutize(urlRaw, base) ?? base.toString();
+  const sourceUrl = canonicalListingUrl(absolutize(urlRaw, base) ?? base.toString());
   const { beds, baths, sqft } = specsFrom(obj, `${title} ${description}`);
   // Require a price or beds so we don't treat the whole agency as a "listing".
   if (!price && !beds) return null;
@@ -448,7 +488,7 @@ function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredList
   const seen = new Set<string>();
   const hrefs = [...html.matchAll(/<a\b([^>]*)href\s*=\s*["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi)];
   for (const match of hrefs) {
-    const href = absolutize(decodeEntities(match[2]).trim(), base);
+    const href = canonicalListingUrl(absolutize(decodeEntities(match[2]).trim(), base) ?? "");
     if (!href || seen.has(href)) continue;
     let link: URL;
     try {
@@ -544,7 +584,7 @@ function listingFromMeta(html: string, base: URL): DiscoveredListing | null {
     neighborhood: "",
     image,
     images: image ? [image] : [],
-    sourceUrl: base.toString(),
+    sourceUrl: canonicalListingUrl(base.toString()),
   };
 }
 
@@ -561,10 +601,23 @@ function extractPropertyRecords(html: string, base: URL, attempts?: StrategyAtte
       outcome: rows.length ? "extracted" : "empty", records: rows.length });
     // Platform readers preserve scope/status exclusions; generic fallbacks run only if they found nothing.
     if (rows.length && strategy.phase === "specialized") return rows;
-    // Structured records can share a collection URL while identifying distinct homes.
-    // Only suppress card duplicates here; downstream identity normalization handles structured records.
-    for (const row of rows) if (strategy.id !== "property-cards" || !seen.has(row.sourceUrl)) {
-      seen.add(row.sourceUrl); merged.push(row);
+    // Same provider id or canonical URL is one listing. Tracking parameters are not a second home.
+    for (const row of rows) {
+      const sourceUrl = canonicalListingUrl(row.sourceUrl);
+      const normalized = sourceUrl === row.sourceUrl ? row : { ...row, sourceUrl };
+      const key = listingIdentityKey(normalized);
+      const index = merged.findIndex(existing => listingIdentityKey(existing) === key);
+      if (index >= 0) {
+        const old = merged[index];
+        const images = [...new Set([...normalized.images, ...old.images])].slice(0, 500);
+        merged[index] = { ...old, title: preferTitle(old.title, normalized.title), description: normalized.description.length > old.description.length ? normalized.description : old.description,
+          price: old.price || normalized.price, beds: old.beds || normalized.beds, baths: old.baths || normalized.baths, sqft: old.sqft || normalized.sqft,
+          listingNumber: old.listingNumber || normalized.listingNumber, neighborhood: old.neighborhood || normalized.neighborhood,
+          image: images[0] || old.image, images, sourceUrl: canonicalListingUrl(old.sourceUrl) };
+        continue;
+      }
+      seen.add(key);
+      merged.push(normalized);
     }
   }
   return merged.slice(0, 500);
@@ -1540,30 +1593,55 @@ function scopedCollectionVariables(variables: Record<string, unknown>): boolean 
   for (const key of ["agentIds", "teamIds", "officeIds", "propertyIds"]) {
     if (Array.isArray(variables[key]) && variables[key].length > 0) return true;
   }
-  return false;
+  const company = typeof variables.companyId === "string" && variables.companyId.trim().length > 0;
+  const website = typeof variables.websiteId === "string" && variables.websiteId.trim().length > 0;
+  return company && website;
 }
 
 /** Published offset collection queries. Unscoped market queries are not followed. */
+function publishedPropertiesQuery(html: string): string | null {
+  const found = new Set<string>();
+  for (const match of html.matchAll(/"properties"\s*:\s*"((?:\\.|[^"\\])*)"/g)) {
+    let query = "";
+    try { query = JSON.parse('"' + match[1] + '"'); } catch { continue; }
+    if (typeof query !== "string") continue;
+    const text = query.trim();
+    if (/^\s*query\s+Properties\b/m.test(text) && /\bcount\b/.test(text) && text.length < 20000) found.add(text);
+  }
+  return found.size === 1 ? [...found][0] : null;
+}
+
 function publishedCollectionRequests(html: string, base: URL): string[] {
   const endpoints = publishedGraphqlEndpoints(html, base);
   if (!endpoints.gateway && !endpoints.router) return [];
-  const out: string[] = [];
-  const seen = new Set<string>();
+  const sharedQuery = publishedPropertiesQuery(html);
+  const candidates: { query: string; record: Record<string, unknown>; pageSize: number; embedded: boolean; useRouter: boolean }[] = [];
   for (const match of html.matchAll(/JSON\.parse\(\s*"((?:\\.|[^"\\])*)"\s*\)/g)) {
     let blob: Record<string, unknown>;
     try { blob = JSON.parse(JSON.parse('"' + match[1] + '"')); } catch { continue; }
-    if (!blob || typeof blob.query !== "string" || !/^\s*query\s+[A-Za-z]/m.test(blob.query) || !/\bcount\b/.test(blob.query)) continue;
+    if (!blob) continue;
     const variables = cleanPublishedVariables(blob.variables);
     if (!variables || typeof variables !== "object" || Array.isArray(variables)) continue;
-    const record = variables as Record<string, unknown>;
+    const record = { ...(variables as Record<string, unknown>) };
     const pageSize = Number(blob.pageSize ?? record.limit);
     if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > 100 || !scopedCollectionVariables(record)) continue;
-    record.limit = pageSize;
+    const ownQuery = typeof blob.query === "string" ? blob.query.trim() : "";
+    const embedded = /^\s*query\s+Properties\b/m.test(ownQuery) && /\bcount\b/.test(ownQuery);
+    const query = embedded ? ownQuery : sharedQuery && blob.resource === "properties" ? sharedQuery : "";
+    if (!query) continue;
+    candidates.push({ query, record, pageSize, embedded, useRouter: blob.useRouterApi === true });
+  }
+  const chosen = candidates.some(row => row.embedded) ? candidates.filter(row => row.embedded) : candidates;
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const item of chosen) {
+    const record = item.record;
+    record.limit = item.pageSize;
     if (record.offset == null) record.offset = 0;
-    const root = blob.useRouterApi === true ? endpoints.router : endpoints.gateway;
+    const root = item.useRouter ? endpoints.router : endpoints.gateway;
     if (!root) continue;
     const url = new URL(root);
-    url.searchParams.set("query", blob.query);
+    url.searchParams.set("query", item.query);
     url.searchParams.set("variables", JSON.stringify(record));
     const href = url.toString();
     if (href.length > 12000 || seen.has(href)) continue;
@@ -1576,7 +1654,7 @@ function publishedCollectionRequests(html: string, base: URL): string[] {
 
 /** Href template the collection page publishes for its own records. Paths are not invented. */
 function publishedListingUrlTemplate(html: string): PublishedUrlTemplate | null {
-  const match = html.match(/\{\{#if\s+([A-Za-z_][A-Za-z0-9_]*)\}\}(\/[A-Za-z0-9_./~-]{1,80})\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}\{\{\^\}\}(\/[A-Za-z0-9_./~-]{1,80})\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}\{\{\/if\}\}/);
+  const match = html.match(/\{\{#if\s+([A-Za-z_][A-Za-z0-9_]*)\}\}(?:href\s*=\s*["'])?(\/[A-Za-z0-9_./~-]{1,80})\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}["']?\s*\{\{(?:\^|else)\}\}(?:href\s*=\s*["'])?(\/[A-Za-z0-9_./~-]{1,80})\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}/);
   if (!match) return null;
   const fields = new Set(["id", "slug"]);
   if (!fields.has(match[3]) || !fields.has(match[5])) return null;
@@ -1606,7 +1684,9 @@ function applyPublishedListingUrls(text: string, template: PublishedUrlTemplate 
         }
       }
       if (typeof record.streetAddress !== "string") {
-        const address = typeof record.fullAddress === "string" && record.fullAddress.trim() ? record.fullAddress : typeof record.name === "string" && /\d/.test(record.name) ? record.name : "";
+        const priced = record.salesPrice != null && record.salesPrice !== "" && record.salesPrice !== 0;
+        const named = typeof record.name === "string" ? record.name.trim() : "";
+        const address = typeof record.fullAddress === "string" && record.fullAddress.trim() ? record.fullAddress : named && (/\d/.test(named) || priced) ? named : "";
         if (address) { record.streetAddress = address; changed = true; }
       }
       if (record.price == null && (typeof record.salesPrice === "number" || typeof record.salesPrice === "string")) { record.price = record.salesPrice; changed = true; }
@@ -2007,6 +2087,7 @@ async function discoverListings(
   let rendersUsed = 0;
   let collectionRowsFetched = 0;
   let offsetQueryTotal = 0;
+  let hitSafetyCap = false;
   const listingUrlTemplates = new Map<string, PublishedUrlTemplate>();
   const maxRenders = options?.maxRenders ?? 4;
   let hops = 0;
@@ -2016,15 +2097,23 @@ async function discoverListings(
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
 
   const pushListing = (item: DiscoveredListing) => {
-    const key = item.sourceUrl;
-    if (listingKeys.has(key)) {
-      const index=listings.findIndex(row=>row.sourceUrl===item.sourceUrl);
-      if(index>=0){const old=listings[index],images=[...new Set([...item.images,...old.images])].slice(0,500);
-        listings[index]={...old,description:item.description||old.description,price:item.price||old.price,beds:item.beds||old.beds,baths:item.baths||old.baths,sqft:item.sqft||old.sqft,status:item.status??old.status,image:images[0]||old.image,images,listingNumber:item.listingNumber||old.listingNumber};}
+    const sourceUrl = canonicalListingUrl(item.sourceUrl);
+    const normalized = sourceUrl === item.sourceUrl ? item : { ...item, sourceUrl };
+    const key = listingIdentityKey(normalized);
+    const index = listings.findIndex(row => listingIdentityKey(row) === key);
+    if (index >= 0) {
+      const old = listings[index];
+      const images = [...new Set([...normalized.images, ...old.images])].slice(0, 500);
+      listings[index] = { ...old, title: preferTitle(old.title, normalized.title),
+        description: normalized.description.length > old.description.length ? normalized.description : old.description,
+        price: old.price || normalized.price, beds: old.beds || normalized.beds, baths: old.baths || normalized.baths, sqft: old.sqft || normalized.sqft,
+        status: old.status ?? normalized.status, image: images[0] || old.image, images,
+        listingNumber: old.listingNumber || normalized.listingNumber, neighborhood: old.neighborhood || normalized.neighborhood,
+        sourceUrl: canonicalListingUrl(old.sourceUrl) };
       return;
     }
     listingKeys.add(key);
-    listings.push(item);
+    listings.push(normalized);
   };
 
   while (queue.length && visited.length < maxPages && listings.length < maxListings && Date.now() < deadline) {
@@ -2289,7 +2378,15 @@ async function discoverListings(
       if (listings.length >= maxListings) break;
     }
 
-    if (listings.length >= maxListings) continue;
+    if (listings.length >= maxListings) {
+      hitSafetyCap = true;
+      if (!broad) {
+        const boundary = inspectCollectionDocument(html, finalUrl, found);
+        if (boundary.open || boundary.continuations.length) openContinuation = true;
+        if (boundary.publishedCount && boundary.publishedCount > listings.length) expectedCount = Math.max(expectedCount, boundary.publishedCount);
+      }
+      continue;
+    }
     if (!broad) {
       for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString()}); }
       for (const url of collectInventoryFragments(html, finalUrl)) {
@@ -2454,6 +2551,7 @@ async function discoverListings(
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && structuredPages === collectionPages) proving.add("structured_group_exhausted");
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && singlePagePages === collectionPages) proving.add("single_page_collection_confirmed");
   if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && listings.length < maxListings) proving.add("pagination_exhausted");
+  if (hitSafetyCap && listings.length >= maxListings && (openContinuation || expectedCount > listings.length)) proving.add("collection_limit_reached");
   const completenessEvidence = proving.size ? [...proving] : (listings.length ? ["collection_boundary_unknown"] : []);
   const inventoryShort = !!(listings.length && (boundaryBlocked || !proving.size));
   const blocked = !listings.length && (failed.length > 0 || issues.some(issue => issue.code === "requires-rendering") || obstacles.length > 0);
@@ -2670,7 +2768,6 @@ function listingRenderBackendFromEnv(readEnv: (name: string) => string | undefin
     };
   };
 }
-
 return { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv };
 })();
 

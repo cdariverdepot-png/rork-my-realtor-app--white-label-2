@@ -969,6 +969,127 @@ test('collection boundaries prove exhaustion without treating bare cards as comp
   assert.equal(partial.meta.completenessEvidence.includes('api_total_match'), false);
 });
 
+test('tracking parameters are not a second home, and distinct provider ids stay separate', async () => {
+  const origin = 'https://identity.example';
+  const haydenA = '1180161142';
+  const haydenB = '1181281776';
+  const cheyenne = '1190220569';
+  const ld = (id, title, price) => ({ '@type': 'RealEstateListing', name: title, price, url: `${origin}/listing-detail/${id}/${title.replace(/\s+/g, '-')}` });
+  const html = '<script type="application/ld+json">' + JSON.stringify([
+    ld(haydenA, '10 Hayden Lake Rd', 585000),
+    ld(haydenB, '10 Hayden Lake Rd', 585000),
+    ld(cheyenne, '232 Cheyenne Dr', 775000),
+  ]) + '</script>'
+    + `<a href="/listing-detail/${cheyenne}/232-Cheyenne-Dr?source=feature_listing&timeStamp=1791223041347&listingSort=RELEVANCE&timezone=GMT%2B0000&featureListingName=Custom-Example&pageSize=40&siteId=8188&page=1&requestId=1169033149">New</a> $775,000`
+    + '<a href="/listing/salmlsfull/214909/1280-broad">1280 Broad Street $100,000</a>'
+    + '<a href="/listing/wgmls/558764/1280-broad">1280 Broad Street $100,000</a>';
+  const result = await discoverListings([origin + '/listings'], async () => ({ html, finalUrl: new URL(origin + '/listings') }), { maxDetailPages: 0 });
+  assert.equal(result.listings.length, 5);
+  const sameAddress = result.listings.filter(row => row.title === '10 Hayden Lake Rd');
+  assert.equal(sameAddress.length, 2);
+  assert.equal(new Set(sameAddress.map(row => row.sourceUrl)).size, 2);
+  const featured = result.listings.find(row => row.sourceUrl.includes(cheyenne));
+  assert.equal(featured.title, '232 Cheyenne Dr');
+  assert.equal(featured.sourceUrl.includes('?'), false);
+  assert.equal(featured.sourceUrl.includes('featureListingName'), false);
+  assert.equal(result.listings.filter(row => row.sourceUrl.includes('/1280-broad')).length, 2);
+  assert.equal(result.listings.some(row => row.title === 'New'), false);
+});
+
+test('an open numbered page at the safety cap is collection_limit_reached', async () => {
+  const origin = 'https://paged.example';
+  const pages = {
+    [origin + '/listings']: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
+    [origin + '/listings?page=2']: card('16 Elm St', '16-elm', '$500,000'),
+  };
+  const seen = [];
+  const capped = await discoverListings([origin + '/listings'], async uri => {
+    seen.push(uri);
+    if (!pages[uri]) throw new Error('unreadable page');
+    return { html: pages[uri], finalUrl: new URL(uri) };
+  }, { maxPages: 6, maxListings: 2, maxDetailPages: 0 });
+  assert.deepEqual(seen, [origin + '/listings']);
+  assert.equal(capped.listings.length, 2);
+  assert.equal(capped.meta.inventoryStatus, 'inventory_partial');
+  assert.ok(capped.meta.completenessEvidence.includes('collection_limit_reached'));
+  assert.equal(capped.meta.completenessEvidence.includes('pagination_exhausted'), false);
+  assert.notEqual(capped.meta.inventoryStatus, 'inventory_complete');
+});
+
+test('site-scoped published queries are followed and unscoped market queries are not', async () => {
+  const origin = 'https://published.example';
+  const company = '11111111-1111-1111-1111-111111111111';
+  const website = '22222222-2222-2222-2222-222222222222';
+  const query = 'query Properties($limit: Int, $offset: Int) { properties(limit: $limit, offset: $offset) { id slug name } propertiesCount { count } }';
+  const embed = blob => 'JSON.parse(' + JSON.stringify(JSON.stringify(blob)) + ')';
+  const scoped = { pageSize: '2', useRouterApi: false, query, variables: { limit: '2', offset: 0, companyId: company, websiteId: website, statusIds: [1] } };
+  const backfill = { pageSize: 9, resource: 'properties', variables: { companyId: company, websiteId: website, displayMLSListings: 'false' } };
+  const market = { pageSize: '50', useRouterApi: false, query, variables: { limit: 50, offset: 0, globalProperty: true, companyId: company, websiteId: website } };
+  const cameron = '<script>window.site={apiGatewayUrl:\'/api-gw\',routerUrl:\'/api-nv\'};' + embed(scoped) + ';' + embed(backfill) + ';' + embed(market) + ';</script>'
+    + '<a href="{{#if fromMLS}}/home-search/listings/{{id}}{{^}}/properties/{{slug}}{{/if}}">template</a>';
+  const calls = [];
+  const cameronResult = await discoverListings([origin + '/properties'], async url => {
+    const parsed = new URL(url);
+    if (!parsed.pathname.endsWith('/graphql')) return { html: cameron, finalUrl: new URL(origin + '/properties') };
+    const variables = JSON.parse(parsed.searchParams.get('variables'));
+    calls.push(variables);
+    assert.equal(typeof variables.limit, 'number');
+    assert.equal(variables.companyId, company);
+    assert.equal(variables.websiteId, website);
+    assert.equal(variables.globalProperty, undefined);
+    assert.equal(variables.displayMLSListings, undefined);
+    assert.equal(variables.featuredListing, undefined);
+    return { html: JSON.stringify({ data: { properties: [
+      { slug: '12-pine', name: '12 Pine St', salesPrice: 350000, status: 'FOR_SALE' },
+      { slug: 'private-house', name: 'Private Address', salesPrice: 35000000, status: 'FOR_SALE' },
+    ], propertiesCount: { count: 2 } } }), finalUrl: parsed };
+  }, { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].limit, 2);
+  assert.equal(cameronResult.listings.length, 2);
+  assert.equal(cameronResult.listings.some(row => row.title === 'Private Address' && row.sourceUrl === origin + '/properties/private-house'), true);
+  assert.equal(cameronResult.meta.expectedCount, 2);
+  assert.equal(cameronResult.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(cameronResult.meta.completenessEvidence.includes('api_total_match'));
+  assert.ok(cameronResult.meta.completenessEvidence.includes('pagination_exhausted'));
+
+  const rawQuery = ' query Properties($limit: Int, $offset: Int) { properties(limit: $limit, offset: $offset) { id slug } propertiesCount { count } }';
+  const zimmermanBlob = { pageSize: 1, resource: 'properties', variables: { companyId: company, websiteId: website, propertyIds: ['one-id'], prioritizeIds: true } };
+  const zimmerman = '<script>window.site={apiGatewayUrl:\'/api-gw\'};window.gql=' + JSON.stringify({ properties: rawQuery }) + ';' + embed(zimmermanBlob) + ';var template=\'{{#if fromMLS}}href="/home-search/listings/{{id}}"{{else}}href="/properties/{{slug}}"{{/if}}\';</script>';
+  const offsets = [];
+  const zimmermanResult = await discoverListings([origin + '/sale'], async url => {
+    const parsed = new URL(url);
+    if (!parsed.pathname.endsWith('/graphql')) return { html: zimmerman, finalUrl: new URL(origin + '/sale') };
+    const variables = JSON.parse(parsed.searchParams.get('variables'));
+    offsets.push(variables.offset);
+    assert.equal(parsed.searchParams.get('query').includes('propertiesCount'), true);
+    assert.deepEqual(variables.propertyIds, ['one-id']);
+    const rows = variables.offset === 0
+      ? [{ slug: 'oak-house', name: 'Private Address', salesPrice: 35000000, fromMLS: false, status: 'FOR_SALE' }]
+      : [{ slug: 'hidden', name: 'Call for price', status: 'FOR_SALE' }];
+    return { html: JSON.stringify({ data: { properties: rows, propertiesCount: { count: 2 } } }), finalUrl: parsed };
+  }, { maxPages: 6, maxDetailPages: 0 });
+  assert.deepEqual(offsets, [0, 1]);
+  assert.equal(zimmermanResult.listings.length, 1);
+  assert.equal(zimmermanResult.listings[0].sourceUrl, origin + '/properties/oak-house');
+  assert.equal(zimmermanResult.listings[0].title, 'Private Address');
+  assert.equal(zimmermanResult.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(zimmermanResult.meta.expectedCount, 2);
+  assert.ok(zimmermanResult.meta.completenessEvidence.includes('pagination_exhausted'));
+  assert.equal(zimmermanResult.meta.completenessEvidence.includes('api_total_match'), false);
+
+  let marketCalls = 0;
+  const loose = { pageSize: 4, resource: 'properties', variables: { statusIds: [1], offset: 0 } };
+  const rejected = '<script>window.site={apiGatewayUrl:\'/api-gw\'};window.gql=' + JSON.stringify({ properties: rawQuery }) + ';' + embed(market) + ';' + embed(loose) + ';</script>';
+  const rejectedResult = await discoverListings([origin + '/market'], async url => {
+    const parsed = new URL(url);
+    if (parsed.pathname.endsWith('/graphql')) marketCalls++;
+    return { html: rejected, finalUrl: new URL(origin + '/market') };
+  }, { maxPages: 4, maxDetailPages: 0 });
+  assert.equal(marketCalls, 0);
+  assert.equal(rejectedResult.listings.length, 0);
+});
+
 test('production renderer is one bounded interface and is wired into onboarding and refresh', async () => {
   assert.equal(engine.createListingRenderer(null), undefined);
   assert.equal(engine.listingRenderBackendFromEnv(() => undefined), null);
