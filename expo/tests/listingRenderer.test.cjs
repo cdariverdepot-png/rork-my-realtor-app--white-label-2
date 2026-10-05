@@ -65,6 +65,7 @@ test('listing render server enforces auth, SSRF, failure cleanup and a bounded d
               });
             },
             async goto() {},
+            async waitForLoadState() {},
             url: () => 'https://example.com/listings',
             async content() { return '<html><title>Example Listings</title><body>homes</body></html>'; },
             async waitForTimeout() {},
@@ -82,6 +83,7 @@ test('listing render server enforces auth, SSRF, failure cleanup and a bounded d
           return {
             on() {},
             async goto() { throw new Error('Timeout 10000ms exceeded'); },
+            async waitForLoadState() {},
             url: () => 'https://example.com/',
             async content() { return ''; },
             async waitForTimeout() {},
