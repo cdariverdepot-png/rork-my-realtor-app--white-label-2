@@ -29,22 +29,26 @@ async function assertPublicResolution(url) {
 
 async function renderWithBrowser(browser, target, cookie) {
   const context = await browser.newContext({
-    userAgent: "Mozilla/5.0 (compatible; ListingRenderer/1.0)",
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
     ignoreHTTPSErrors: false,
   });
   const captured = [];
-  let hops = 0;
   try {
     if (cookie) await context.setExtraHTTPHeaders({ cookie: String(cookie).slice(0, 4000) });
     const page = await context.newPage();
-    page.on("framenavigated", frame => { if (frame === page.mainFrame()) hops += 1; });
     page.on("response", response => {
       if (captured.length >= 40) return;
       const type = response.headers()["content-type"] || "";
       captured.push(response.text().then(html => ({ url: response.url(), contentType: type, html })).catch(() => null));
     });
-    await page.goto(target.toString(), { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
-    if (hops > 6) throw Object.assign(new Error("Renderer stopped a redirect loop"), { status: 502 });
+    const response = await page.goto(target.toString(), { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
+    let redirects = 0;
+    let request = response && response.request();
+    while (request && request.redirectedFrom()) {
+      redirects += 1;
+      request = request.redirectedFrom();
+      if (redirects > 6) throw Object.assign(new Error("Renderer stopped a redirect loop"), { status: 502 });
+    }
     await page.waitForTimeout(1200);
     const finalUrl = page.url();
     const checked = publicRenderTarget(finalUrl);
@@ -97,8 +101,11 @@ function createListingRenderServer(options) {
           const rendered = await renderWithBrowser(options.browser, target.url, typeof body.cookie === "string" ? body.cookie : "");
           send(200, rendered);
         } catch (error) {
-          const status = error && error.status ? error.status : /timeout/i.test(error?.message || "") ? 504 : 502;
-          send(status, { error: status === 504 ? "Render timed out" : "Render failed" });
+          const message = String(error && error.message || "");
+          const known = error && error.status && /^(Renderer |Render )/.test(message);
+          const status = error && error.status ? error.status : /timeout/i.test(message) ? 504 : 502;
+          if (status === 502 && !known) console.error("render failed", message.slice(0, 300));
+          send(status, { error: status === 504 ? "Render timed out" : known ? message : "Render failed" });
         } finally {
           release();
         }

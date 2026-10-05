@@ -2654,8 +2654,13 @@ function listingRenderBackendFromEnv(readEnv: (name: string) => string | undefin
       signal: AbortSignal.timeout(12000),
     });
     if (!response.ok) {
-      await response.body?.cancel();
-      throw new Error("Renderer returned " + response.status);
+      const text = await response.text();
+      let detail = "";
+      try {
+        const failure = JSON.parse(text) as { error?: unknown };
+        if (typeof failure.error === "string") detail = failure.error.replace(/[\r\n]/g, " ").slice(0, 120);
+      } catch { /* non-JSON failure */ }
+      throw new Error(detail ? "Renderer returned " + response.status + ": " + detail : "Renderer returned " + response.status);
     }
     const body = await response.json() as { html?: unknown; finalUrl?: unknown; network?: { url?: unknown; html?: unknown }[] };
     return {

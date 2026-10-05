@@ -53,6 +53,7 @@ jobs:
           curl -fsSL https://fly.io/install.sh | sh
           export PATH="$HOME/.fly/bin:$PATH"
           fly apps create cdariver-listing-renderer --json || true
+          timeout 20 fly logs --app cdariver-listing-renderer --no-tail || true
           raw=$(fly ssh console --app cdariver-listing-renderer -C "printenv LISTING_RENDER_TOKEN" </dev/null 2>/tmp/fly-ssh.err || true)
           TOKEN=$(printf '%s\n' "$raw" | tr -d '\r' | grep -E '^[0-9a-f]{48}$' | tail -n 1 || true)
           if [ -z "$TOKEN" ]; then
