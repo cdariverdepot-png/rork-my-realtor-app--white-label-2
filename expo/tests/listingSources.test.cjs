@@ -321,3 +321,18 @@ test('dsIDX Juicebox reads public XML photo literals without executing page scri
  const failed=await discovery.enrichPublicProperty(item,async()=>{throw Error('403')},{html:detail,finalUrl:new URL(item.sourceUrl)});
  assert.equal(failed.detailsComplete,false);assert.deepEqual(failed.images,item.images);
 });
+
+
+test('provider facts carry public year, acreage and property type without label text',()=>{
+ const item={...discovery.extractListingsFromPage(html(home()),new URL(source.url))[0],sourceUrl:'https://homes.example/idx/details/listing/b254/26-123'};
+ const page='<h1>12 Pine St</h1><span id="IDX-summaryField-yearBuilt-data">1920</span><div id="IDX-field-heating"><strong>Heating:</strong><span>Forced Air</span></div><div id="IDX-field-propType"><strong>Property Type:</strong><span>Residential</span></div><span class="IDX-detailsAddressNumber">12</span><span class="IDX-detailsAddressName">Pine St</span><span id="IDX-detailsPrice">$350,000</span>';
+ const result=discovery.enrichListingFromPage(item,page,new URL(item.sourceUrl));
+ assert.equal(result.facts['Year Built'],'1920');assert.equal(result.facts.Heating,'Forced Air');assert.equal(result.propertyType,'Residential');
+});
+
+test('structured year built and dsIDX tables enrich facts without taking related-page data',()=>{
+ const item=discovery.extractListingsFromPage(html({...home(),yearBuilt:1986}),new URL(source.url))[0];assert.equal(item.facts['Year Built'],'1986');
+ const detail={...item,sourceUrl:'https://agent.example/idx/mls-26-123-12_pine_st'};
+ const page='<h1>12 Pine St</h1><table id="dsidx-additional-details"><tr><th>WATER</th><td>Private &amp; Well</td></tr><tr><th>HEAT</th><td>Forced Air</td></tr></table><table id="related-home"><tr><th>WATER</th><td>Unrelated</td></tr></table>';
+ const result=discovery.enrichListingFromPage(detail,page,new URL(detail.sourceUrl));assert.equal(result.facts.Water,'Private & Well');assert.equal(result.facts.Heating,'Forced Air');
+});
