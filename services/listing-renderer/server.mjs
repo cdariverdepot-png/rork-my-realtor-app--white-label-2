@@ -49,11 +49,22 @@ async function renderWithBrowser(browser, target, cookie) {
       request = request.redirectedFrom();
       if (redirects > 6) throw Object.assign(new Error("Renderer stopped a redirect loop"), { status: 502 });
     }
-    await page.waitForTimeout(1200);
+    await page.waitForTimeout(800);
+    await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
     const finalUrl = page.url();
     const checked = publicRenderTarget(finalUrl);
     if (checked.error) throw Object.assign(new Error(checked.error), { status: 400 });
-    const html = boundDocument(await page.content(), cookie);
+    let html = "";
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        html = await page.content();
+        break;
+      } catch (error) {
+        if (!/navigating/i.test(String(error && error.message || "")) || attempt === 3) throw error;
+        await page.waitForTimeout(400);
+      }
+    }
+    html = boundDocument(html, cookie);
     if (!html.trim()) throw Object.assign(new Error("Renderer returned an empty document"), { status: 502 });
     const network = selectCapturedResponses((await Promise.all(captured)).filter(Boolean), finalUrl, cookie);
     return { html, finalUrl, network };
