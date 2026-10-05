@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "bounded-property-cards",
+  "capturedAt": "2026-10-05T05:07:12.392Z",
+  "provenance": "synthetic-contract",
+  "rationale": "A bounded property anchor associates facts and image with its own identity.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<a href=\"https://portable.example/property/12\"><img src=\"https://photos.example/12.jpg\"><div class=\"listing-address\">12 Pine St</div> $400,000 3 beds 2 baths 1,800 sqft</a>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "description": "",
+        "price": "$400,000",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,800",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "sourceUrl": "https://portable.example/property/12"
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "property-cards"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "property-cards",
+            "version": 1,
+            "evidence": "HTML anchors or property card containers",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

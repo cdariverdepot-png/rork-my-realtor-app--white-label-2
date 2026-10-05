@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "flexmls-identity-detail",
+  "capturedAt": "2026-10-05T05:07:12.415Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Only matching listing keys may attach public detail galleries.",
+  "seeds": [
+    "https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings/20260929165515552066000000"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings/20260929165515552066000000\",false,false]",
+      "url": "https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings/20260929165515552066000000",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings/20260929165515552066000000",
+      "html": "<div data-map--ldp-listing=\"{&quot;ListingKey&quot;:&quot;20260929165515552066000000&quot;,&quot;StreetAddress&quot;:&quot;12 Pine St&quot;,&quot;CurrentPrice&quot;:400000}\" data-map--ldp-listing-native-media=\"{&quot;Photos&quot;:[{&quot;Uri1280&quot;:&quot;https://photos.example/12.jpg&quot;,&quot;CurrentPrivacy&quot;:&quot;Public&quot;}]}\"></div>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "sourceUrl": "https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings/20260929165515552066000000",
+        "description": "",
+        "price": "$400,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "image": "https://photos.example/12.jpg",
+        "status": "active",
+        "detailsComplete": true
+      }
+    ],
+    "coverage": "collection",
+    "outcome": "partial",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "flexmls-detail"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://my.flexmls.com/PublicAgent/search/office_listing_categories/Active/listings/20260929165515552066000000",
+        "rendering": "response",
+        "interfaces": [
+          "flexmls"
+        ],
+        "navigation": [
+          "public-fragment"
+        ],
+        "attempts": [
+          {
+            "id": "flexmls-detail",
+            "version": 1,
+            "evidence": "data-map--ldp-listing payload on public Flexmls",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  }
+}

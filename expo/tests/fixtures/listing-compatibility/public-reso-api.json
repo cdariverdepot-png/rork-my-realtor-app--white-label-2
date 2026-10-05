@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "public-reso-api",
+  "capturedAt": "2026-10-05T05:07:12.402Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Public RESO-style fields normalize independently of vendor.",
+  "seeds": [
+    "https://portable.example/api?agent=abc"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/api?agent=abc\",false,false]",
+      "url": "https://portable.example/api?agent=abc",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/api?agent=abc",
+      "html": "{\"value\":[{\"UnparsedAddress\":\"12 Pine St\",\"ListPrice\":400000,\"url\":\"https://portable.example/property/12\",\"Media\":[{\"MediaURL\":\"https://photos.example/12.jpg\"}],\"StandardStatus\":\"Active\"}]}"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "description": "",
+        "price": "$400,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/12",
+        "listingNumber": "",
+        "propertyType": "",
+        "status": "active"
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "public-json"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/api?agent=abc",
+        "rendering": "response",
+        "interfaces": [
+          "public-json"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "public-json",
+            "version": 1,
+            "evidence": "JSON object/array containing evidenced property records",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

@@ -1,4 +1,4 @@
-import { discoverListings, collectInventoryLinks, extractListingsFromPage, enrichPublicProperty, type DiscoveredListing, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
+import { discoverListings, describeListingArchitecture, collectInventoryLinks, extractListingsFromPage, enrichPublicProperty, type DiscoveredListing, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
 import { applyObservation, observeListing, type SyncListing } from "./sync.ts";
 import { normalizePublicPage, selectInventoryLinks } from "./normalizePage.ts";
 
@@ -45,7 +45,9 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
   let uri = existing?.url ?? submittedUrl;
   const firstPage = await cachedFetch(uri);
   const firstUrl = firstPage.finalUrl;
-  const firstProperties = extractListingsFromPage(firstPage.html, firstPage.finalUrl);
+  const firstArchitecture = describeListingArchitecture(firstPage.html, firstPage.finalUrl);
+  const firstProperties = extractListingsFromPage(firstPage.html, firstPage.finalUrl, firstArchitecture.attempts);
+  if (firstProperties.length) firstArchitecture.resolution = "known-pattern";
   const singleProperty = firstProperties.length === 1 && firstProperties[0].sourceUrl === firstPage.finalUrl.toString() &&
     [...firstPage.html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].some(m => key(m[1].replace(/<[^>]+>/g, " ")) === key(firstProperties[0].title)) &&
     /["']@type["']\s*:\s*["'](?:RealEstateListing|SingleFamilyResidence|Apartment|House)["']/i.test(firstPage.html);
@@ -73,7 +75,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     if (associated) uri = associated;
     else directProperty = await Promise.all(original.map(async item=>{try{return await enrichPublicProperty(item,cachedFetch,page);}catch{return item;}}));
   }
-  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase" } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks, normalizePage: normalizePublicPage });
+  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks, normalizePage: normalizePublicPage });
   // Empty is trustworthy only when the known inventory explicitly reports zero properties.
   let explicitEmpty = false;
   if (existing && !discovery.listings.length && !discovery.meta.failed?.length) {
@@ -91,7 +93,8 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     kind: detectSourceKind(uri), inventoryUrls: [...new Set([...discovery.meta.inventoryUrls ?? [], ...existing?.inventoryUrls ?? []])].filter(u => !isPropertyUrl(u) && !(new URL(u).hostname === "www.idxhome.com" && new URL(u).pathname.startsWith("/api/kestrel/"))),
     connectedAt: existing?.connectedAt ?? now, lastCheckedAt: now, nextSyncAt: now + TWO_HOURS,
     state: "connected", error: undefined, failures: 0, listingCount: discovery.listings.length };
-  const complete = explicitEmpty || discovery.meta.coverage === "collection" && discovery.meta.outcome === "found" && discovery.listings.length < 100;
+  const inventoryComplete = discovery.meta.inventoryStatus === "inventory_complete" || (!discovery.meta.inventoryStatus && discovery.meta.outcome === "found");
+  const complete = explicitEmpty || discovery.meta.coverage === "collection" && inventoryComplete && discovery.listings.length < 100;
   if (complete) source.lastCompleteSyncAt = now;
   return { source, listings: discovery.listings, complete, meta: discovery.meta };
 }

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "rendered-shell-app",
+  "capturedAt": "2026-10-05T05:09:59.483Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Empty application roots with external scripts require DOM rendering, then reuse the same structured property reader.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {},
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<div id=\"app\"></div><script src=\"/app.js\"></script>"
+    },
+    {
+      "key": "[\"https://portable.example/\",false,true]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": true,
+      "finalUrl": "https://portable.example/",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"12 Pine St\",\"price\":400000,\"url\":\"https://portable.example/property/12\",\"image\":\"https://photos.example/12.jpg\"}</script>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "description": "",
+        "price": "$400,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/12",
+        "listingNumber": "",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "json-ld"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "property-cards",
+            "version": 1,
+            "evidence": "HTML anchors or property card containers",
+            "outcome": "empty",
+            "records": 0
+          }
+        ],
+        "resolution": "needs-strategy"
+      },
+      {
+        "url": "https://portable.example/",
+        "rendering": "rendered-dom",
+        "interfaces": [
+          "structured-property-data"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "json-ld",
+            "version": 1,
+            "evidence": "application/ld+json script",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

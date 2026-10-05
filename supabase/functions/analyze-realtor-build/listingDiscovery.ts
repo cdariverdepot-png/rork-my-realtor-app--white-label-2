@@ -27,6 +27,8 @@ export type DiscoveredListing = {
 };
 
 export type ListingDiscoveryMeta = {
+  /** Versioned architectural evidence, including failed/empty attempts, never widget credentials. */
+  compatibility?: { version: 1; pages: CompatibilityPage[] };
   visited: string[];
   hops: number;
   found: number;
@@ -40,9 +42,18 @@ export type ListingDiscoveryMeta = {
   interfaces?: string[];
   coverage?: "collection" | "showcase" | "unknown";
   issues?: { code: "requires-rendering" | "limited-showcase" | "missing-photos"; url: string; interface?: string }[];
+  /** Inventory completeness, independent of optional detail enrichment. */
+  inventoryStatus?: "inventory_complete" | "inventory_partial" | "inventory_empty" | "inventory_blocked";
+  enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number };
+  /** Machine-readable obstacles. Never a substitute for extracted listings. */
+  obstacles?: { code: string; url?: string; detail?: string }[];
+  stages?: string[];
+  candidates?: { id: string; confidence: number; evidence: string }[];
+  /** Preserved when an obstacle stops the import. Never includes cookies, tokens, or credentials. */
+  resume?: { seeds: string[]; pending: string[]; obstacle?: string; stage?: string };
 };
 
-export type FetchHtml = (uri: string, options?: { fragment?: boolean; activationToken?: string }) => Promise<{ html: string; finalUrl: URL }>;
+export type FetchHtml = (uri: string, options?: { fragment?: boolean; activationToken?: string; cookie?: string; csrfToken?: string }) => Promise<{ html: string; finalUrl: URL; network?: { url: string; html: string }[] }>;
 export type NavigationCandidate = { url: string; label: string };
 export type SelectInventoryLinks = (page: string, candidates: NavigationCandidate[]) => Promise<string[]>;
 
@@ -288,20 +299,20 @@ function specsFrom(obj: Record<string, unknown>, textFallback = ""): { beds: num
   let sqft = "";
   const b = obj.numberOfBedrooms ?? obj.numberOfRooms ?? obj.bedrooms;
   if (typeof b === "number" || typeof b === "string") {
-    const n = parseFloat(String(b));
-    if (Number.isFinite(n)) beds = Math.round(n);
+    const n = parseFloat(String(b).replace(/,/g, ""));
+    if (Number.isFinite(n) && n > 0) beds = Math.round(n);
   }
   const ba = obj.numberOfBathroomsTotal ?? obj.numberOfBathrooms ?? obj.bathrooms;
   if (typeof ba === "number" || typeof ba === "string") {
-    const n = parseFloat(String(ba));
-    if (Number.isFinite(n)) baths = n;
+    const n = parseFloat(String(ba).replace(/,/g, ""));
+    if (Number.isFinite(n) && n > 0) baths = n;
   }
   const fs = obj.floorSize;
   if (fs && typeof fs === "object") {
     const v = (fs as Record<string, unknown>).value;
     if (typeof v === "number" || typeof v === "string") {
-      const n = parseInt(String(v).replace(/[^0-9]/g, ""), 10);
-      if (Number.isFinite(n) && n > 0) sqft = n.toLocaleString();
+      const n = typeof v === "number" ? v : parseFloat(String(v).replace(/,/g, ""));
+      if (Number.isFinite(n) && n > 0) sqft = Math.round(n).toLocaleString();
     }
   }
   if (!beds) {
@@ -382,7 +393,7 @@ export function listingsFromJsonLd(html: string, base: URL): DiscoveredListing[]
  * Heuristic card scrape: anchors whose URL looks like a property detail and
  * whose surrounding markup mentions a dollar price.
  */
-export function listingsFromCards(html: string, base: URL, limit = 24): DiscoveredListing[] {
+export function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredListing[] {
   const found: DiscoveredListing[] = [];
   const seen = new Set<string>();
   const hrefs = [...html.matchAll(/<a\b([^>]*)href\s*=\s*["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi)];
@@ -397,6 +408,8 @@ export function listingsFromCards(html: string, base: URL, limit = 24): Discover
     }
     const label = stripTags(match[4]).slice(0, 200);
     const pathOk = DETAIL_PATH.test(link.pathname) || /listing|property|home|mls|pin|id=/i.test(link.pathname + link.search);
+    // Price-bucket navigation is a filter, not a property, on any host.
+    if (/\/\d+k-price\/?$/i.test(link.pathname) || /homes for sale under\b/i.test(label)) continue;
     if (!pathOk && !sameSite(link, base)) continue;
     if (!pathOk && label.length < 8) continue;
     // Peek at a window of HTML around the match for price / beds.
@@ -485,26 +498,26 @@ export function listingFromMeta(html: string, base: URL): DiscoveredListing | nu
   };
 }
 
-function extractPropertyRecords(html: string, base: URL): DiscoveredListing[] {
-  const flex=listingFromFlexmlsDetail(html,base);
-  if(flex)return [flex];
-  const adapted = extractAdapterListings(html, base);
-  if (adapted.length) return adapted;
-  const structuredCards = listingsFromStructuredCards(html, base);
-  if (structuredCards.length) return structuredCards;
-  const hydrated = listingsFromHydration(html, base);
-  const fromLd = listingsFromJsonLd(html, base);
-  const fromCards = listingsFromCards(html, base);
-  const merged = [...fromLd, ...hydrated];
-  const seen = new Set(fromLd.map((l) => l.sourceUrl));
-  for (const card of fromCards) {
-    if (seen.has(card.sourceUrl)) continue;
-    seen.add(card.sourceUrl);
-    merged.push(card);
+function extractPropertyRecords(html: string, base: URL, attempts?: StrategyAttempt[]): DiscoveredListing[] {
+  const merged: DiscoveredListing[] = [];
+  const seen = new Set<string>();
+  for (const strategy of LISTING_EXTRACTION_STRATEGIES) {
+    if (strategy.phase === "fallback" && merged.length) break;
+    if (!strategy.matches(html, base)) continue;
+    let rows: DiscoveredListing[];
+    try { rows = strategy.extract(html, base); }
+    catch { attempts?.push({ id: strategy.id, version: strategy.version, evidence: strategy.evidence, outcome: "error", records: 0 }); continue; }
+    attempts?.push({ id: strategy.id, version: strategy.version, evidence: strategy.evidence,
+      outcome: rows.length ? "extracted" : "empty", records: rows.length });
+    // Platform readers preserve scope/status exclusions; generic fallbacks run only if they found nothing.
+    if (rows.length && strategy.phase === "specialized") return rows;
+    // Structured records can share a collection URL while identifying distinct homes.
+    // Only suppress card duplicates here; downstream identity normalization handles structured records.
+    for (const row of rows) if (strategy.id !== "property-cards" || !seen.has(row.sourceUrl)) {
+      seen.add(row.sourceUrl); merged.push(row);
+    }
   }
-  if (merged.length) return merged.slice(0, 500);
-  const single = listingFromMeta(html, base);
-  return single ? [single] : [];
+  return merged.slice(0, 500);
 }
 
 /** Normalize explicit MLS status values, never prose such as 'sold by our team'. */
@@ -572,8 +585,8 @@ export function statusForProperty(html: string, item: Pick<DiscoveredListing, "t
   return undefined;
 }
 
-export function extractListingsFromPage(html: string, base: URL): DiscoveredListing[] {
-  return extractPropertyRecords(html, base).map(item => ({ ...item, status: item.status ?? statusForProperty(html, item, base) ??
+export function extractListingsFromPage(html: string, base: URL, attempts?: StrategyAttempt[]): DiscoveredListing[] {
+  return extractPropertyRecords(html, base, attempts).map(item => ({ ...item, status: item.status ?? statusForProperty(html, item, base) ??
     // Flexmls's explicitly filtered collection establishes active membership.
     (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/(?:office|agent)_listing_categories\/Active\/listings/.test(base.pathname) ? "active" : undefined) }));
 }
@@ -736,32 +749,303 @@ export function listingFromIdxDetail(html: string, base: URL): DiscoveredListing
 }
 
 
+/** Prefer a multi-photo gallery over a single preview when both are published. */
+function listingMedia(row: Record<string, unknown>): unknown {
+  const pictures = row.listingPictures;
+  if (typeof pictures === "string" && pictures.includes("|")) {
+    const parts = pictures.split("|").map(part => part.trim()).filter(Boolean);
+    if (parts.length > 1) return parts;
+  }
+  const media = row.images ?? row.photos ?? row.image ?? row.previewPicture ?? row.picture ?? row.previewPictures ?? pictures ?? row.Media;
+  if (typeof media === "string" && media.includes("|")) return media.split("|").map(part => part.trim()).filter(Boolean);
+  return media;
+}
+
+/** Decode \\xNN escapes published in interstitial scripts. Do not execute the script. */
+function decodeScriptLiterals(html: string): string {
+  return html.replace(/\\x([0-9a-fA-F]{2})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+}
+
+/** Published SHA-1 cookie interstitial. Structural match only — not a hostname and not a CAPTCHA. */
+export function isPublishedScriptGate(html: string): boolean {
+  if (html.length > 20000 && /sitePageJSON|pageJsonAndGlobalData|application\/ld\+json/i.test(html)) return false;
+  const decoded = decodeScriptLiterals(html);
+  return /subtle\.digest\(\s*['"]SHA-1['"]/i.test(decoded)
+    && /\bnonce\s*=\s*['"][0-9a-f]{8,64}['"]/i.test(decoded)
+    && /\bdifficulty\s*=\s*[1-9]\d?\b/.test(decoded)
+    && /cf_pow/.test(decoded)
+    && /cf_pass/.test(decoded);
+}
+
+/** Solve the page's own published proof once. Difficulty above 5 is left for a real browser. */
+export async function publishedScriptGateCookie(html: string): Promise<string | null> {
+  if (!isPublishedScriptGate(html)) return null;
+  const decoded = decodeScriptLiterals(html);
+  const nonce = decoded.match(/\bnonce\s*=\s*['"]([0-9a-f]{8,64})['"]/i)?.[1];
+  const difficulty = Number(decoded.match(/\bdifficulty\s*=\s*(\d+)/)?.[1]);
+  if (!nonce || !Number.isInteger(difficulty) || difficulty < 1 || difficulty > 5) return null;
+  const expression = decoded.match(/cf_pass['"]?\s*\+\s*['"]=['"]\s*\+\s*\(([^)]+)\)/i)?.[1]
+    ?? decoded.match(/cf_pass['"]?\s*\+\s*['"]=['"]\s*\+\s*['"]([^'"]+)['"]/i)?.[1];
+  if (!expression) return null;
+  const parts = expression.split("+").map(part => {
+    const token = part.trim();
+    const literal = token.match(/^['"]([^'"]*)['"]$/);
+    if (literal) return literal[1];
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(token)) return "";
+    return decoded.match(new RegExp(`\\b${token}\\s*=\\s*['"]([^'"]*)['"]`))?.[1] ?? "";
+  });
+  if (parts.some(part => !part)) return null;
+  const pass = parts.join("");
+  if (!/^[A-Za-z0-9._-]{8,200}$/.test(pass)) return null;
+  const { createHash } = await import("node:crypto");
+  const target = "7".repeat(difficulty);
+  const limit = Math.min(16 ** difficulty * 8, 2_000_000);
+  let solved: number | null = null;
+  for (let x = 0; x < limit; x++) {
+    if (createHash("sha1").update(nonce + String(x)).digest("hex").startsWith(target)) { solved = x; break; }
+  }
+  if (solved == null) return null;
+  return `cf_pow=${solved}; cf_time=1; cf_pass=${pass}`;
+}
+
+/** A robot or challenge document, not an empty listing collection. Footer widgets are not this page. */
+export function isRobotChallenge(html: string): boolean {
+  const title = stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "");
+  if (/^robot validate$/i.test(title.trim())) return true;
+  const heading = stripTags(html.match(/<h[12][^>]*>([\s\S]*?)<\/h[12]>/i)?.[1] ?? "");
+  if (/\baccess denied\b/i.test(heading) && /recaptcha|verify your are human|verify you are human/i.test(html)) return true;
+  if (/<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(html)) return true;
+  return false;
+}
+
+/** Machine-readable obstacle. A footer widget or optional login form is not an obstacle. */
+export function classifyObstacle(html: string, status?: number): string | null {
+  if (isPublishedScriptGate(html)) return "script_gate";
+  const title = stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "");
+  const head = html.slice(0, 12000);
+  if (/^robot validate$/i.test(title.trim())) return "captcha_required";
+  if (/recaptcha|hcaptcha|cf-turnstile|challenges\.cloudflare\.com/i.test(head) && /verify you are human|verify your are human|security check|human verification|access denied/i.test(head)) return "captcha_required";
+  if (status === 429 || /\btoo many requests\b/i.test(title)) return "rate_limited";
+  if (status === 401) return "authentication_required";
+  if (status === 403 && !isRobotChallenge(html)) return "access_denied";
+  if (typeof status === "number" && status >= 500 && status <= 599) return "temporarily_unavailable";
+  if (/<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(html)) return "requires_rendering";
+  if (/awsWafCookieDomainList|window\.gokuProps\b/.test(html)) return "requires_rendering";
+  if (/^(?:\s*sign in|\s*log ?in)(?:\s*[|—-]|\s*$)/i.test(title) && /<input\b[^>]*type=["']password["']/i.test(head)) return "authentication_required";
+  return null;
+}
+
+/** Public CSRF tokens only. Ignore short or secret-looking values that are not page-published. */
+export function csrfTokenFromHtml(html: string): string | undefined {
+  const tag = html.match(/<meta\b[^>]*(?:name|id)=["'](?:csrf-token|_csrf)["'][^>]*>/i)?.[0];
+  if (!tag) return;
+  const token = attr(tag, "content");
+  if (!/^[A-Za-z0-9._~+/-]{16,200}$/.test(token)) return;
+  return token;
+}
+
+/**
+ * Rank platform families from structural evidence. Customer hostnames are not signals.
+ * Several candidates may stay until a strategy actually extracts records.
+ */
+export function architectureCandidates(html: string, base?: URL): { id: string; confidence: number; evidence: string }[] {
+  const text = html.slice(0, 200_000);
+  const host = base?.hostname ?? "";
+  const hits: { id: string; confidence: number; evidence: string }[] = [];
+  const add = (id: string, confidence: number, evidence: string) => {
+    const found = hits.find(row => row.id === id);
+    const score = Math.round(Math.min(0.99, confidence) * 100) / 100;
+    if (!found) hits.push({ id, confidence: score, evidence });
+    else if (score > found.confidence) { found.confidence = score; found.evidence = evidence; }
+  };
+  const loftyHost = /static\.chimeroi\.com|cdn\.chime\.me/i.test(text);
+  const loftyState = /sitePageJSON|pageJsonAndGlobalData/i.test(text);
+  const loftySource = /listingSource["']?\s*[:=]/i.test(text);
+  if (loftyHost || loftyState || loftySource) add("lofty_chime", (loftyHost ? 0.56 : 0) + (loftyState ? 0.28 : 0) + (loftySource ? 0.16 : 0), [loftyHost && "chime-asset-host", loftyState && "site-page-json", loftySource && "listing-source"].filter(Boolean).join(","));
+  if (/wp-content\/|wp-includes\/|\/wp-json\/|name=["']generator["'][^>]*content=["']WordPress/i.test(text)) add("wordpress", 0.9, "wordpress-assets");
+  if (/squarespace\.com|squarespace-cdn|static1\.squarespace/i.test(text)) add("squarespace", 0.9, "squarespace-assets");
+  if (/wixstatic\.com|static\.parastorage\.com/i.test(text)) add("wix", 0.88, "wix-assets");
+  if (/data-wf-site|website-files\.com/i.test(text)) add("webflow", 0.9, "webflow-marker");
+  if (/static\.dune\.|data-dune-site|dune-embed/i.test(text)) add("dune", 0.8, "dune-marker");
+  if (/idxbroker|idx-broker|customshowcasejs\.php|idxwidgetsrc-/i.test(text)) add("idx_broker", 0.9, "idx-broker-widget");
+  if (/ihomefinder|idxhome\.com|ihfKestrel|ihf-main-container/i.test(text) || host === "www.idxhome.com") add("ihomefinder", 0.9, "ihomefinder-widget");
+  if (/showcaseidx|showcase-idx/i.test(text)) add("showcase_idx", 0.88, "showcase-idx");
+  if (/realtyna|\/plugins\/realtyna|wpl-listing/i.test(text)) add("realtyna", 0.86, "realtyna-plugin");
+  if (/(?:^|\.)flexmls\.com$/i.test(host) || /flexmls\.com/i.test(text)) add("flexmls", 0.93, "flexmls-transport");
+  if (/brivityidx|FeaturedProperties-1R/i.test(text)) add("brivity", 0.9, "brivity-widget");
+  if (/kvcore|kvcorecdn/i.test(text)) add("kvcore", 0.86, "kvcore");
+  if (/boomtownroi|bt-idx/i.test(text)) add("boomtown", 0.84, "boomtown");
+  if (/realgeeks|real-geeks/i.test(text)) add("real_geeks", 0.86, "realgeeks");
+  if (/__NEXT_DATA__|_next\/static/i.test(text)) add("next", 0.92, "next-hydration");
+  if (/__NUXT__|_nuxt\//i.test(text)) add("nuxt", 0.92, "nuxt-state");
+  if (/data-reactroot|react-dom/i.test(text)) add("generic_react", 0.62, "react-runtime");
+  if (/data-v-app|vue\.runtime/i.test(text)) add("generic_vue", 0.6, "vue-runtime");
+  if (/customElements\.define|shadowrootmode/i.test(text)) add("generic_web_component", 0.48, "web-component");
+  if (!/<script\b[^>]*\bsrc\s*=/i.test(text) && /<(?:article|a)\b/i.test(text)) add("static_html", 0.35, "server-rendered-html");
+  return hits.filter(row => row.confidence >= 0.35).sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id));
+}
+
+/** Lofty/Chime public search transport. listingSource is the published inventory scope.
+ * The same markers apply on any customer domain that ships this shell.
+ * featureListingName and listingType are the client's own split of that scope.
+ * An unscoped "all listings" source is the market, not the agent's collection.
+ */
+export function chimeListingSearchRequests(html: string, base: URL): string[] {
+  if (!/static\.chimeroi\.com|cdn\.chime\.me|sitePageJSON|pageJsonAndGlobalData/i.test(html)) return [];
+  const sources = new Set<string>();
+  for (const match of decodeScriptLiterals(html).matchAll(/listingSource["']?\s*[:=]\s*["']([^"']+)["']/g)) {
+    const source = match[1].trim();
+    if (/^(?:\d+\+[A-Za-z0-9_+-]+|sold listings|only my listings|only team listings|single property promotion)$/i.test(source)) sources.add(source);
+  }
+  return [...sources].flatMap(source => {
+    const lower = source.toLowerCase();
+    if (lower === "all listings") return [];
+    const url = new URL("/api-site/search/realTimeListings", base.origin);
+    url.searchParams.set("listingSource", source);
+    const named = !["sold listings", "single property promotion"].includes(lower);
+    const featureListingName = named ? source.replace(/^\d\+/, "").replace(/\+/g, " ").trim() : "";
+    if (featureListingName) url.searchParams.set("featureListingName", featureListingName);
+    const listingType = lower === "sold listings" ? "sold-listing" : lower === "single property promotion" ? "single-property-promotion" : "featured-listing";
+    url.searchParams.set("listingType", listingType);
+    url.searchParams.set("page", "1");
+    url.searchParams.set("pageSize", "100");
+    return [url.toString()];
+  });
+}
+
 /** Common public data transport, including RESO-style property fields.
  * URLs must be present in the record; never manufacture provider endpoints or detail URLs.
  */
+/** A search payload's own result group, not a nearby or recommended market. */
+function completeSearchGroups(payload: unknown, base: URL): DiscoveredListing[] {
+  const nearby = /^(?:nearby|recommended|similar|related|discover)/i;
+  const groups: DiscoveredListing[][] = [];
+  const walk = (node: unknown, key: string) => {
+    if (!node || typeof node !== "object" || Array.isArray(node) || nearby.test(key)) return;
+    const obj = node as Record<string, unknown>;
+    if (Array.isArray(obj.data) && typeof obj.totalItems === "number") {
+      const rows: DiscoveredListing[] = [];
+      for (const item of obj.data) {
+        if (!item || typeof item !== "object") continue;
+        const listing = (item as Record<string, unknown>).listing;
+        if (!listing || typeof listing !== "object") continue;
+        const record = listing as Record<string, unknown>;
+        const schemas: Record<string, unknown>[] = [];
+        const structured = record.structuredData && typeof record.structuredData === "object" ? record.structuredData as Record<string, unknown> : record;
+        for (const value of Object.values(structured)) {
+          if (typeof value !== "string" || !value.includes('"@type"')) continue;
+          try {
+            const parsed = JSON.parse(value);
+            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) schemas.push(parsed as Record<string, unknown>);
+          } catch { /* not an embedded schema record */ }
+        }
+        let built: DiscoveredListing | null = null;
+        for (const schema of schemas) {
+          const row = listingFromLd(schema, base);
+          const geo = schema.geo && typeof schema.geo === "object" ? schema.geo as Record<string, unknown> : undefined;
+          const coords = geo && (typeof geo.latitude === "string" || typeof geo.latitude === "number") && (typeof geo.longitude === "string" || typeof geo.longitude === "number")
+            ? `${geo.latitude}, ${geo.longitude}`.slice(0, 80) : "";
+          if (row) {
+            const facts = coords ? { ...row.facts, Coordinates: coords } : row.facts;
+            if (!built) built = { ...row, facts };
+            else built = { ...built, title: built.title.length >= row.title.length ? built.title : row.title, price: built.price || row.price,
+              description: built.description.length >= row.description.length ? built.description : row.description,
+              neighborhood: built.neighborhood || row.neighborhood, facts: { ...facts, ...built.facts } };
+          } else if (coords && built) built = { ...built, facts: { ...built.facts, Coordinates: built.facts.Coordinates || coords }, neighborhood: built.neighborhood || neighborhoodFrom(schema) };
+        }
+        const subtitle = Array.isArray(record.subtitles) ? record.subtitles.find((value): value is string => typeof value === "string" && /[A-Za-z]/.test(value)) : undefined;
+        const link = typeof record.pageLink === "string" ? record.pageLink : typeof record.navigationPageLink === "string" ? record.navigationPageLink : "";
+        if (!built && subtitle && link && typeof record.title === "string" && /\$\s?\d/.test(record.title)) {
+          built = listingFromLd({ "@type": "RealEstateListing", name: subtitle.split(",")[0], url: link, price: record.title }, base);
+        }
+        if (!built) continue;
+        const abs = link ? absolutize(link, base) : null;
+        if (abs) built = { ...built, sourceUrl: abs };
+        if (subtitle) {
+          const street = subtitle.split(",")[0].trim();
+          const rest = subtitle.split(",").slice(1).join(",").trim();
+          if (street) built = { ...built, title: street.slice(0, 160), neighborhood: built.neighborhood || rest.slice(0, 120) };
+        }
+        if (Array.isArray(record.media)) {
+          const images = distinctPropertyImages(record.media.flatMap(media => {
+            if (!media || typeof media !== "object") return [];
+            const raw = (media as Record<string, unknown>).originalUrl ?? (media as Record<string, unknown>).url;
+            const image = typeof raw === "string" ? absolutize(raw, base) : null;
+            return image && !looksLikeChrome(image) ? [image] : [];
+          }));
+          if (images.length) built = { ...built, images, image: images[0] };
+        }
+        if (Array.isArray(record.subStats)) {
+          const specs: Record<string, unknown> = {};
+          let acres = "";
+          for (const stat of record.subStats) {
+            if (!stat || typeof stat !== "object") continue;
+            const label = String((stat as Record<string, unknown>).title ?? "").toLowerCase();
+            const value = String((stat as Record<string, unknown>).subtitle ?? "");
+            if (!/\d/.test(value) || value.trim() === "-") continue;
+            if (label === "beds") specs.bedrooms = value;
+            if (label === "baths") specs.bathrooms = value;
+            if (label === "sqft") specs.floorSize = { value };
+            if (label === "acres") acres = value.replace(/[^\d.]/g, "");
+          }
+          const parsed = specsFrom(specs);
+          built = { ...built, beds: parsed.beds || built.beds, baths: parsed.baths || built.baths, sqft: parsed.sqft || built.sqft,
+            facts: acres ? { ...built.facts, "Lot Acres": acres } : built.facts };
+        }
+        if (/\/\d+k-price\/?$/i.test(new URL(built.sourceUrl).pathname) || /homes for sale under\b/i.test(built.title)) continue;
+        if (built.price || built.beds) rows.push(built);
+      }
+      if (rows.length && rows.length === obj.totalItems) groups.push(rows);
+    }
+    for (const [childKey, child] of Object.entries(obj)) if (child && typeof child === "object") walk(child, childKey);
+  };
+  walk(payload, "");
+  const seen = new Set<string>();
+  return groups.flat().filter(row => seen.has(row.sourceUrl) ? false : (seen.add(row.sourceUrl), true));
+}
+
 export function listingsFromPublicJson(text: string, base: URL): DiscoveredListing[] {
   let payload: unknown;
   try { payload = JSON.parse(text); } catch { return []; }
+  const scoped = completeSearchGroups(payload, base);
+  if (scoped.length) return scoped;
   const out: DiscoveredListing[] = [];
   walkLd([payload], row => {
     const address = row.address && typeof row.address === "object" ? row.address as Record<string, unknown> : {};
-    const street = row.UnparsedAddress ?? row.streetAddress ?? row.StreetAddress ?? row.addressLine1 ?? address.streetAddress;
-    const rawUrl = row.detailUrl ?? row.listingUrl ?? row.url ?? row.URL;
+    const street = row.UnparsedAddress ?? row.streetAddress ?? row.StreetAddress ?? row.addressLine1 ??
+      (typeof row.address === "string" ? row.address : address.streetAddress);
+    const rawUrl = row.detailUrl ?? row.detailLink ?? row.listingUrl ?? row.url ?? row.URL;
     if (typeof street !== "string" || typeof rawUrl !== "string" || !street.trim()) return;
-    const media = row.images ?? row.photos ?? row.image ?? row.Media;
+    const media = listingMedia(row);
     const images = Array.isArray(media) ? media.map(value => typeof value === "object" && value ?
       (value as Record<string, unknown>).MediaURL ?? (value as Record<string, unknown>).url : value) : media;
     const item = listingFromLd({ "@type": "RealEstateListing", name: street,
       price: row.ListPrice ?? row.listPrice ?? row.CurrentPrice ?? row.price, url: rawUrl,
-      description: row.PublicRemarks ?? row.description ?? row.remarks ?? "",
-      bedrooms: row.BedroomsTotal ?? row.BedsTotal ?? row.bedrooms,
-      bathrooms: row.BathroomsTotalInteger ?? row.BathsTotal ?? row.totalBaths ?? row.bathrooms,
-      floorSize: {value: row.LivingArea ?? row.sqFeet ?? row.sqft}, image: images,
-      address: { addressLocality: row.City ?? address.city ?? address.addressLocality,
-        addressRegion: row.StateOrProvince ?? address.state ?? address.addressRegion },
-      listingNumber: row.ListingId ?? row.MLSNumber ?? row.mlsNumber ?? row.listingNumber,
+      description: row.PublicRemarks ?? row.description ?? row.remarks ?? row.detailsDescribe ?? "",
+      bedrooms: row.BedroomsTotal ?? row.BedsTotal ?? row.bedrooms ?? row.beds,
+      bathrooms: row.BathroomsTotalInteger ?? row.BathsTotal ?? row.totalBaths ?? row.bathrooms ?? row.baths,
+      floorSize: {value: row.LivingArea ?? row.sqFeet ?? row.sqft ?? row.squareFeet}, image: images,
+      address: { addressLocality: row.City ?? row.city ?? address.city ?? address.addressLocality,
+        addressRegion: row.StateOrProvince ?? row.state ?? address.state ?? address.addressRegion },
+      listingNumber: row.ListingId ?? row.MLSNumber ?? row.mlsNumber ?? row.mlsListingId ?? row.mlsid ?? row.listingNumber,
       propertyType: row.PropertyType ?? row.propertyType }, base);
-    if (item) out.push({ ...item, status: normalizeListingStatus(row.StandardStatus ?? row.statusText ?? row.listingStatus ?? row.status) });
+    if (item) {
+      const facts = { ...item.facts };
+      if (typeof row.agentName === "string" && row.agentName.trim()) facts["Listing Agent"] = row.agentName.trim().slice(0, 200);
+      if (typeof row.agentOrganizationName === "string" && row.agentOrganizationName.trim()) facts["Brokerage"] = row.agentOrganizationName.trim().slice(0, 200);
+      const acres = row.lotSizeAcres ?? row.totalAvailableAcres;
+      if (typeof acres === "number" || typeof acres === "string") {
+        const n = typeof acres === "number" ? acres : parseFloat(acres);
+        // Some listing payloads publish lot area in square feet under an acres label.
+        // Integers at or above a tenth-acre in square feet match that shape; smaller numbers stay acres.
+        if (Number.isFinite(n) && n > 0) facts["Lot Acres"] = String(Math.round((n >= 4000 ? n / 43560 : n) * 100) / 100);
+      }
+      if ((typeof row.latitude === "number" || typeof row.latitude === "string") && (typeof row.longitude === "number" || typeof row.longitude === "string")) facts["Coordinates"] = `${row.latitude}, ${row.longitude}`.slice(0, 80);
+      const year = Number(row.builtYear ?? row.yearBuilt ?? row.YearBuilt);
+      if (year >= 1700 && year <= 2100) facts["Year Built"] = String(year);
+      if (Array.isArray(row.openHouseScheduleList) && row.openHouseScheduleList.length) facts["Open House"] = JSON.stringify(row.openHouseScheduleList).slice(0, 400);
+      out.push({ ...item, facts, status: normalizeListingStatus(row.StandardStatus ?? row.statusText ?? row.listingStatusText ?? row.listingStatus ?? row.mlsStatus ?? row.statusOrigin ?? row.status) });
+    }
   });
   // JSON-LD APIs may identify a property with name/type instead of streetAddress.
   if (!out.length) return listingsFromJsonLd('<script type="application/ld+json">'+text+'</script>', base);
@@ -835,6 +1119,21 @@ function jsonObjectAfter(html: string, marker: RegExp): Record<string,unknown> |
   return null;
 }
 
+/** Primary listing embedded in a Lofty/Chime page assignment. Not recommended-card neighbors. */
+export function listingFromChimeDetail(html: string, base: URL): DiscoveredListing | null {
+  if (!/sitePageJSON\s*=\s*\{/.test(html)) return null;
+  const data = jsonObjectAfter(html, /sitePageJSON\s*=\s*\{/);
+  const modules = data && Array.isArray(data.modules) ? data.modules as Record<string, unknown>[] : [];
+  for (const entry of modules) {
+    const dataRecord = entry.data && typeof entry.data === "object" ? entry.data as Record<string, unknown> : undefined;
+    const listingDetail = dataRecord?.listingDetail && typeof dataRecord.listingDetail === "object" ? dataRecord.listingDetail as Record<string, unknown> : undefined;
+    const info = listingDetail?.info;
+    if (!info || typeof info !== "object") continue;
+    return listingsFromPublicJson(JSON.stringify(info), base)[0] ?? null;
+  }
+  return null;
+}
+
 
 /** dsIDXpress detail fields are property-scoped, unlike recommendation cards or prose. */
 export function listingFromDsidxDetail(html:string,base:URL):DiscoveredListing|null{
@@ -881,7 +1180,7 @@ export type ListingInterfaceAdapter = {
 export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
   {id:"moxiworks",matches:h=>/moxiworks|listing_detail\s*:|linktooverlay/.test(h),extract:listingsFromMoxi},
   {id:"ihomefinder",matches:(h,u)=>/kestrel\.idxhome\.com|ihfKestrel/.test(h)||u.hostname==="www.idxhome.com",extract:listingsFromKestrel},
-  {id:"agentfire-dsidx",matches:h=>/cbw-slider-listing|agentfire-listing-v3/.test(h),extract:(h,u)=>{const detail=listingFromDsidxDetail(h,u);return detail?[detail]:listingsFromCards(h,u);}},
+  {id:"agentfire-dsidx",matches:h=>/cbw-slider-listing|agentfire-listing-v3|data-dsidx\s*=|id=["']dsidx-primary-data/.test(h),extract:(h,u)=>{const detail=listingFromDsidxDetail(h,u);return detail?[detail]:listingsFromCards(h,u);}},
   { id: "idx-broker", matches: (h,u) => /\/idx\/(?:customshowcasejs\.php|details\/listing\/)/.test(u.pathname) || /idxwidgetsrc-|customshowcasejs\.php/.test(h),
     extract: (h,u) => { const rows=listingsFromIdxShowcase(h,u); const detail=listingFromIdxDetail(h,u); return rows.length ? rows : detail ? [detail] : []; },
     fragments: (h,u) => (h.match(/<script\b[^>]*>/gi) ?? []).flatMap(tag => { const url=absolutize(attr(tag,"src"),u);
@@ -898,30 +1197,90 @@ export function detectListingInterfaces(html: string, base: URL): string[] {
   return LISTING_INTERFACE_ADAPTERS.filter(a => a.matches(html,base)).map(a => a.id);
 }
 
-function extractAdapterListings(html: string, base: URL): DiscoveredListing[] {
-  for (const adapter of LISTING_INTERFACE_ADAPTERS) {
-    // Merge structured data and ordinary cards together in the generic reader below.
-    if (adapter.id === "structured-property-data" || !adapter.matches(html,base)) continue;
-    const rows = adapter.extract(html,base);
-    if (rows.length) return rows;
-  }
-  return [];
+export type StrategyAttempt = {
+  id: string; version: number; evidence: string; outcome: "extracted" | "empty" | "error"; records: number;
+};
+export type CompatibilityPage = {
+  url: string; rendering: "response" | "rendered-dom"; interfaces: string[];
+  navigation: string[]; attempts: StrategyAttempt[];
+  resolution: "known-pattern" | "navigation-only" | "needs-strategy" | "excluded-market" | "external-normalizer" | "requires-rendering";
+};
+export type ExtractionStrategy = {
+  id: string; version: number; phase: "specialized" | "merge" | "fallback";
+  /** Observable contract, not a realtor name or a successful URL. */
+  evidence: string; rationale: string;
+  matches: ListingInterfaceAdapter["matches"]; extract: ListingInterfaceAdapter["extract"];
+};
+
+const PLATFORM_CONTRACTS: Record<string, [string, string]> = {
+  moxiworks: ["Moxi listing_detail literals or linktooverlay cards", "Read scoped cards and lazy photos; prefer the published active collection."],
+  ihomefinder: ["Kestrel widget configuration or public idxhome response", "Use published featured filters and public transport; reject market and inactive records."],
+  "agentfire-dsidx": ["AgentFire cards or dsIDXpress explicit property fields", "Property-local fields preserve identity and avoid neighboring cards and price history."],
+  "idx-broker": ["IDX showcase script or IDX detail route", "Parse literal widget facts without executing JavaScript; showcase is partial inventory."],
+  brivity: ["Brivity featured widget or scoped search response", "Retain published agent/office filters and display permissions."],
+  flexmls: ["Public Flexmls server-rendered listing cards", "Preserve collection scope and per-card payloads through public fragments."],
+  "public-json": ["JSON object/array containing evidenced property records", "Normalize RESO and common property fields independent of CMS or framework."],
+};
+
+/** Ordered, versioned executable library. Add contracts and replay cases together. */
+export const LISTING_EXTRACTION_STRATEGIES: ExtractionStrategy[] = [
+  { id: "flexmls-detail", version: 1, phase: "specialized", evidence: "data-map--ldp-listing payload on public Flexmls",
+    rationale: "Match the exact listing key before attaching public photos and remarks.",
+    matches: (h,u) => /(?:^|\.)flexmls\.com$/i.test(u.hostname) && /data-map--ldp-listing/.test(h),
+    extract: (h,u) => { const row = listingFromFlexmlsDetail(h,u); return row ? [row] : []; } },
+  ...LISTING_INTERFACE_ADAPTERS.filter(a => a.id !== "structured-property-data").map(a => ({
+    id: a.id, version: 1, phase: "specialized" as const,
+    evidence: PLATFORM_CONTRACTS[a.id][0], rationale: PLATFORM_CONTRACTS[a.id][1], matches: a.matches, extract: a.extract,
+  })),
+  { id: "structured-cards", version: 1, phase: "specialized", evidence: "data-href listing/property cards",
+    rationale: "Per-card payload boundaries work across server-rendered frameworks.",
+    matches: h => /data-href/i.test(h), extract: listingsFromStructuredCards },
+  { id: "json-ld", version: 1, phase: "merge", evidence: "application/ld+json script",
+    rationale: "Schema property records are portable across CMSs; merge complementary card evidence.",
+    matches: h => /application\/ld\+json/i.test(h), extract: listingsFromJsonLd },
+  { id: "json-hydration", version: 1, phase: "merge", evidence: "application/json script",
+    rationale: "Read inert property data regardless of Next.js, Nuxt or custom framework branding.",
+    matches: h => /application\/json/i.test(h), extract: listingsFromHydration },
+  { id: "property-cards", version: 1, phase: "merge", evidence: "HTML anchors or property card containers",
+    rationale: "Bound each extraction to its property, preventing facts from leaking between cards.",
+    matches: h => /<(?:a|div|article|li)\b/i.test(h), extract: listingsFromCards },
+  { id: "property-meta", version: 1, phase: "fallback", evidence: "Property detail metadata",
+    rationale: "Use metadata only when stronger readers found no records and the page evidences a property.",
+    matches: h => /<meta\b/i.test(h), extract: (h,u) => { const row = listingFromMeta(h,u); return row ? [row] : []; } },
+];
+
+export function describeListingArchitecture(html: string, base: URL, rendering: CompatibilityPage["rendering"] = "response"): CompatibilityPage {
+  const navigation: string[] = [];
+  if (collectInventoryLinks(html, base).length) navigation.push("inventory-links");
+  if (/<(?:iframe|embed|turbo-frame)\b/i.test(html)) navigation.push("embedded-page");
+  if (/<form\b/i.test(html)) navigation.push("form-navigation");
+  if (collectInventoryFragments(html, base).length) navigation.push("public-fragment");
+  if (kestrelInventoryRequests(html).length) navigation.push("featured-widget-api");
+  if (paginationLinks(html, base).length) navigation.push("observed-pagination");
+  return { url: base.toString(), rendering, interfaces: detectListingInterfaces(html, base), navigation,
+    attempts: [], resolution: navigation.length ? "navigation-only" : "needs-strategy" };
 }
 
 /** Recognize unsupported dynamic providers without pretending their data was read. */
 function dynamicInterfaceHint(html: string): string | undefined {
+  if (/static\.chimeroi\.com|cdn\.chime\.me|sitePageJSON|pageJsonAndGlobalData/i.test(html)) return "chime-site-search";
   for (const [id, pattern] of [
     ["ihomefinder", /ihomefinder|idxhome\.com|ihf-container|ihf-main-container/i],
     ["showcase-idx", /showcaseidx|showcase-idx/i],
     ["kvcore", /kvcore|kv-core/i],
     ["realgeeks", /realgeeks|real-geeks/i],
   ] as const) if (pattern.test(html)) return id;
+  if (/awsWafCookieDomainList|window\.gokuProps\b/.test(html)) return "waf-challenge";
+  // Empty application roots are a rendering architecture, independent of IDX vendor or customer domain.
+  if (/<(?:div|main)\b[^>]*\bid=["'](?:root|app|__next)["'][^>]*>\s*<\/(?:div|main)>/i.test(html) &&
+      /<script\b[^>]*\bsrc\s*=/i.test(html)) return "javascript-shell";
   return undefined;
 }
 
 /** Public fragments keep the exact agent/category/filter instead of broadening the search. */
 export function collectInventoryFragments(html: string, base: URL): string[] {
   const out = LISTING_INTERFACE_ADAPTERS.filter(adapter => adapter.matches(html,base)).flatMap(adapter => adapter.fragments?.(html,base) ?? []);
+  for (const url of chimeListingSearchRequests(html, base)) out.push(url);
   for (const tag of html.match(/<[^>]+\bdata-(?:listings|results|inventory)-(?:url|src)=["'][^>]+>/gi) ?? []) {
     const raw = attr(tag, "data-listings-url") || attr(tag, "data-results-url") || attr(tag, "data-inventory-url") ||
       attr(tag, "data-listings-src") || attr(tag, "data-results-src");
@@ -949,6 +1308,14 @@ function paginationLinks(html: string, base: URL): string[] {
     const next=typeof raw === "string" ? new URL(raw,base) : null;
     const scope=(url: URL) => [...url.searchParams].filter(([key]) => !/^(?:page|pageNumber|offset|limit|per_page|q_offset|cursor)$/i.test(key)).sort(([a],[b])=>a.localeCompare(b));
     if (next && next.protocol === "https:" && sameSite(next,base) && next.pathname === base.pathname && JSON.stringify(scope(next)) === JSON.stringify(scope(base))) out.push(next.toString());
+    const pageNum = Number(payload.page ?? payload.currentPage ?? base.searchParams.get("page"));
+    const totalPage = Number(payload.totalPage ?? payload.totalPages);
+    const rows = payload.listings ?? payload.value;
+    if (!out.length && Array.isArray(rows) && rows.length && Number.isInteger(pageNum) && pageNum > 0 && Number.isInteger(totalPage) && pageNum < totalPage && pageNum < 30 && base.searchParams.has("page")) {
+      const following = new URL(base);
+      following.searchParams.set("page", String(pageNum + 1));
+      if (sameSite(following, base)) out.push(following.toString());
+    }
   } catch { /* ordinary HTML pagination below */ }
   for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
     const tag = `<a ${m[1]}>`;
@@ -1089,6 +1456,18 @@ function providerPropertyFacts(html:string,base:URL):Record<string,string>{
 
 /** Enrich an already evidenced property without replacing its address with an agency title. */
 export function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
+  if (isRobotChallenge(html)) throw new Error("Detail page requires human verification");
+  if (isPublishedScriptGate(html)) throw new Error("Detail page script gate did not unlock");
+  const chime = listingFromChimeDetail(html, base);
+  if (chime && (chime.sourceUrl === item.sourceUrl || (!!chime.listingNumber && chime.listingNumber === item.listingNumber) || chime.title.toLowerCase() === item.title.toLowerCase())) {
+    const images = chime.images.length ? chime.images : item.images;
+    const description = (chime.description || item.description).slice(0, 16000);
+    return { ...item, description, price: chime.price || item.price, beds: chime.beds || item.beds, baths: chime.baths || item.baths,
+      sqft: chime.sqft || item.sqft, status: chime.status ?? item.status, listingNumber: chime.listingNumber || item.listingNumber,
+      propertyType: chime.propertyType || item.propertyType, neighborhood: chime.neighborhood || item.neighborhood,
+      image: images[0] || item.image, images, facts: { ...item.facts, ...chime.facts },
+      detailsComplete: images.length > 0 && (description.length > 40 || chime.images.length > 0) };
+  }
   const flex=flexmlsDetail(item,html,base);
   if(flex)return enrichPropertyFacts(flex,html);
   const brivity=html.match(/<property-details\b[^>]*>/i)?.[0];
@@ -1193,7 +1572,11 @@ export async function discoverListings(
   options?: { maxDepth?: number; maxPages?: number; maxListings?: number; maxDurationMs?: number; maxDetailPages?: number; selectLinks?: SelectInventoryLinks;
     normalizePage?: (html: string, base: URL) => Promise<DiscoveredListing[]>;
     /** Optional public browser renderer; absent renderers must report unsupported dynamic pages. */
-    renderPage?: FetchHtml },
+    renderPage?: FetchHtml;
+    /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
+    enrichAll?: boolean;
+    /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
+    sessionCookie?: string },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
   const maxDepth = options?.maxDepth ?? 5;
   const maxPages = options?.maxPages ?? 20;
@@ -1207,7 +1590,27 @@ export async function discoverListings(
   const failureDetails:{url:string;reason:string}[]=[];
   const inventoryUrls = new Set<string>();
   const interfaces = new Set<string>();
+  const compatibilityPages: CompatibilityPage[] = [];
   const publicDetails = new Map<string,{url:string;activationToken:string}>();
+  const gateCookies = new Map<string, string>();
+  const csrfTokens = new Map<string, string>();
+  const candidateMap = new Map<string, { id: string; confidence: number; evidence: string }>();
+  const obstacles: NonNullable<ListingDiscoveryMeta["obstacles"]> = [];
+  const stages: string[] = [];
+  if (options?.sessionCookie) stages.push("session_initialized");
+  const cookieFor = (url: string, explicit?: string) => {
+    if (explicit) return explicit;
+    let gate: string | undefined;
+    try { gate = gateCookies.get(new URL(url).origin); } catch { gate = undefined; }
+    const session = options?.sessionCookie;
+    if (gate && session) return `${gate}; ${session}`;
+    return gate || session;
+  };
+  const csrfFor = (url: string) => { try { return csrfTokens.get(new URL(url).origin); } catch { return undefined; } };
+  const requestOptions = (url: string, extra?: { fragment?: boolean; activationToken?: string; cookie?: string }) => {
+    const csrf = csrfFor(url);
+    return { fragment: extra?.fragment, activationToken: extra?.activationToken, cookie: extra?.cookie ?? cookieFor(url), ...(csrf ? { csrfToken: csrf } : {}) };
+  };
   const issues: NonNullable<ListingDiscoveryMeta["issues"]> = [];
   let limitedShowcase = false;
   const deadline = Date.now() + (options?.maxDurationMs ?? 45000);
@@ -1218,7 +1621,7 @@ export async function discoverListings(
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string };
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
 
   const pushListing = (item: DiscoveredListing) => {
@@ -1252,15 +1655,47 @@ export async function discoverListings(
     let html: string;
     let finalUrl: URL;
     try {
-      const page = await fetchHtml(normalized, { fragment: next.fragment, activationToken:next.activationToken });
+      const page = await fetchHtml(normalized, requestOptions(normalized, { fragment: next.fragment, activationToken: next.activationToken, cookie: cookieFor(normalized, next.cookie) }));
       html = page.html;
       finalUrl = page.finalUrl;
       hops += 1;
       visitedSet.add(finalUrl.toString());
     } catch (error) {
-      failureDetails.push({url:normalized,reason:error instanceof Error ? error.message.slice(0,180) : "Unreadable public response"});
+      const reason = error instanceof Error ? error.message.slice(0, 180) : "Unreadable public response";
+      const rateLimited = /\b429\b|too many requests|rate[- ]limited/i.test(reason);
+      const transient = /\b(?:502|503|504)\b|temporarily unavailable/i.test(reason);
+      const attempts = next.retries ?? 0;
+      if ((rateLimited || transient) && attempts < 2 && Date.now() < deadline) {
+        visited.pop();
+        visitedSet.delete(normalized);
+        const code = rateLimited ? "rate_limited" : "temporarily_unavailable";
+        if (!obstacles.some(row => row.code === code && row.url === normalized)) obstacles.push({ code, url: normalized, detail: "retrying" });
+        stages.push(rateLimited ? "rate_limit_retry" : "transient_retry");
+        const retryAfter = Number(reason.match(/retry-after\s*[:=]?\s*(\d+(?:\.\d+)?)/i)?.[1]);
+        const delay = Number.isFinite(retryAfter) && retryAfter >= 0 ? Math.min(retryAfter * 1000, 1500) : Math.min(40 * 2 ** attempts, 400);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        queue.unshift({ ...next, retries: attempts + 1, priority: next.priority + 1 });
+        continue;
+      }
+      if (rateLimited || transient) obstacles.push({ code: rateLimited ? "rate_limited" : "temporarily_unavailable", url: normalized, detail: "exhausted" });
+      failureDetails.push({url:normalized,reason});
       failed.push(normalized);
       continue;
+    }
+    if (isPublishedScriptGate(html)) {
+      const solved = await publishedScriptGateCookie(html);
+      if (solved) {
+        gateCookies.set(finalUrl.origin, solved);
+        try {
+          const unlocked = await fetchHtml(finalUrl.toString(), requestOptions(finalUrl.toString(), { fragment: next.fragment, activationToken: next.activationToken, cookie: solved }));
+          hops += 1;
+          if (!isPublishedScriptGate(unlocked.html)) {
+            html = unlocked.html;
+            finalUrl = unlocked.finalUrl;
+            visitedSet.add(finalUrl.toString());
+          }
+        } catch { /* The published puzzle did not unlock; classified below. */ }
+      }
     }
 
     for (const id of detectListingInterfaces(html, finalUrl)) interfaces.add(id);
@@ -1273,32 +1708,135 @@ export async function discoverListings(
     }
     const publicResponse = broad ? null : listingsFromBrivityResponse(html, finalUrl);
     if (publicResponse) expectedCount = Math.max(expectedCount, publicResponse.count);
-    try { const payload=JSON.parse(html), total=Number(payload.total ?? payload.totalCount ?? payload["@odata.count"]);
+    try { const payload=JSON.parse(html); const counts=payload.counts;
+      const total=Number(payload.total ?? payload.totalCount ?? payload["@odata.count"] ?? (typeof counts === "number" ? counts : counts && typeof counts === "object" ? counts.total ?? counts.all ?? counts.active : undefined));
       if (!broad && Number.isFinite(total) && total > 0) expectedCount=Math.max(expectedCount,total); } catch { /* HTML */ }
     if(next.activationToken && finalUrl.hostname === "www.idxhome.com"){try{const rows=JSON.parse(html);if(Array.isArray(rows))for(const row of rows){if(row.featured===true && row.statusId==="active" && /^[a-z0-9_-]+$/i.test(row.id) && typeof row.listingPageUrl==="string") publicDetails.set(row.listingPageUrl,{url:"https://www.idxhome.com/api/kestrel/listing/"+row.id+".json?context=DETAIL",activationToken:next.activationToken});}}catch{/* other formats */}}
     const showcase = broad ? [] : listingsFromIdxShowcase(html, finalUrl);
     if (/cbw-slider-listing/.test(html) && next.depth===0) {limitedShowcase=true;issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"agentfire-dsidx"});}
     if (showcase.length) { limitedShowcase = true; issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"idx-broker"}); }
+    for (const candidate of architectureCandidates(html, finalUrl)) {
+      const prior = candidateMap.get(candidate.id);
+      if (!prior || candidate.confidence > prior.confidence) candidateMap.set(candidate.id, candidate);
+    }
+    const publishedCsrf = csrfTokenFromHtml(html);
+    if (publishedCsrf) csrfTokens.set(finalUrl.origin, publishedCsrf);
+    if (!stages.includes("architecture_detected")) stages.push("architecture_detected");
     const ownInventoryLinks = collectInventoryLinks(html,finalUrl,6).filter(c=>/\bmy\b/i.test(c.label)&&/\bactive\b/i.test(c.label)&&!DETAIL_PATH.test(new URL(c.url).pathname.replace("/listings/", "/inventory/")));
-    let found = broad || next.depth===0 && ownInventoryLinks.length ? [] : extractListingsFromPage(html, finalUrl);
+    let observation = describeListingArchitecture(html, finalUrl);
+    compatibilityPages.push(observation);
+    if (isPublishedScriptGate(html)) {
+      if (options?.renderPage && Date.now() < deadline) {
+        try {
+          const gate = cookieFor(finalUrl.toString());
+          const rendered = await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
+          if (sameSite(rendered.finalUrl, finalUrl) && !isPublishedScriptGate(rendered.html) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
+            html = rendered.html;
+            finalUrl = rendered.finalUrl;
+            stages.push("browser_render_escalated");
+            observation = describeListingArchitecture(html, finalUrl, "rendered-dom");
+            compatibilityPages.push(observation);
+          }
+        } catch (error) {
+          obstacles.push({ code: "render_failed", url: finalUrl.toString(), detail: error instanceof Error ? error.message.slice(0, 120) : "renderer unavailable" });
+        }
+      }
+      if (isPublishedScriptGate(html)) {
+        interfaces.add("script-gate");
+        inventoryUrls.add(finalUrl.toString());
+        issues.push({ code: "requires-rendering", url: finalUrl.toString(), interface: "script-gate" });
+        observation.resolution = "requires-rendering";
+        observation.interfaces = [...new Set([...observation.interfaces, "script-gate"])];
+        obstacles.push({ code: "script_gate", url: finalUrl.toString(), detail: "Published cookie puzzle did not unlock" });
+        stages.push("user_action_required");
+        continue;
+      }
+    }
+    if (isRobotChallenge(html)) {
+      const iface = /\/api-site\/search\/(?:realTimeListings|searchListListing|searchMapListing)\b/.test(finalUrl.pathname) ? "chime-site-search" : "robot-validate";
+      interfaces.add(iface);
+      inventoryUrls.add(finalUrl.toString());
+      issues.push({ code: "requires-rendering", url: finalUrl.toString(), interface: iface });
+      observation.resolution = "requires-rendering";
+      observation.interfaces = [...new Set([...observation.interfaces, iface])];
+      if (iface === "chime-site-search" && next.parent) {
+        for (let i = queue.length - 1; i >= 0; i--) {
+          if (queue[i].parent === next.parent && !/\/api-site\/search\//.test(new URL(queue[i].url).pathname)) queue.splice(i, 1);
+        }
+      }
+      const obstacle = classifyObstacle(html) ?? "captcha_required";
+      obstacles.push({ code: obstacle, url: finalUrl.toString() });
+      if (obstacle === "captcha_required" || obstacle === "authentication_required") stages.push("user_action_required");
+      continue;
+    }
+    const excluded = broad || next.depth===0 && ownInventoryLinks.length > 0;
+    if (excluded) observation.resolution = broad ? "excluded-market" : "navigation-only";
+    let found = excluded ? [] : extractListingsFromPage(html, finalUrl, observation.attempts);
+    if (found.length) observation.resolution = "known-pattern";
     const hint = !broad && !found.length ? dynamicInterfaceHint(html) : undefined;
     if (hint) { interfaces.add(hint); inventoryUrls.add(finalUrl.toString()); }
     if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
       (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
       aiNormalizations++;
-      try { found = await options.normalizePage(html, finalUrl); } catch { /* deterministic navigation continues */ }
+      try { found = await options.normalizePage(html, finalUrl); if (found.length) observation.resolution = "external-normalizer"; } catch { /* deterministic navigation continues */ }
     }
     if (hint && !found.length && !collectInventoryFragments(html,finalUrl).length && !kestrelInventoryRequests(html).length) {
+      let renderedNetwork: { url: string; html: string }[] = [];
       if (options?.renderPage && Date.now() < deadline) {
+        stages.push("browser_render_escalated");
         try {
-          const rendered=await options.renderPage(finalUrl.toString());
+          const gate = cookieFor(finalUrl.toString());
+          const rendered=await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
           if (sameSite(rendered.finalUrl,finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
             html=rendered.html; finalUrl=rendered.finalUrl;
-            found=extractListingsFromPage(html,finalUrl);
+            renderedNetwork = rendered.network ?? [];
+            observation = describeListingArchitecture(html, finalUrl, "rendered-dom");
+            compatibilityPages.push(observation);
+            for (const id of observation.interfaces) interfaces.add(id);
+            for (const candidate of architectureCandidates(html, finalUrl)) {
+              const prior = candidateMap.get(candidate.id);
+              if (!prior || candidate.confidence > prior.confidence) candidateMap.set(candidate.id, candidate);
+            }
+            found=extractListingsFromPage(html,finalUrl,observation.attempts);
+            if (found.length) observation.resolution = "known-pattern";
+            for (const entry of renderedNetwork) {
+              let entryUrl: URL;
+              try { entryUrl = new URL(entry.url); } catch { continue; }
+              if (!entry.html || !sameSite(entryUrl, finalUrl)) continue;
+              const networkObservation = describeListingArchitecture(entry.html, entryUrl, "rendered-dom");
+              const rows = extractListingsFromPage(entry.html, entryUrl, networkObservation.attempts);
+              if (rows.length) {
+                networkObservation.resolution = "known-pattern";
+                compatibilityPages.push(networkObservation);
+                let scoped: DiscoveredListing[] = [];
+                try { scoped = completeSearchGroups(JSON.parse(entry.html), entryUrl); } catch { scoped = []; }
+                if (scoped.length && scoped.length === rows.length) {
+                  found = rows;
+                  expectedCount = Math.max(expectedCount, scoped.length);
+                } else found.push(...rows);
+                visitedSet.add(entry.url);
+                stages.push("api_discovered");
+                observation.resolution = "known-pattern";
+              } else if (/\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
+                queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString() });
+                stages.push("api_discovered");
+              }
+            }
           }
-        } catch { /* preserve the source and explain the missing renderer/data */ }
+        } catch (error) {
+          obstacles.push({ code: "render_failed", url: finalUrl.toString(), detail: error instanceof Error ? error.message.slice(0, 120) : "renderer unavailable" });
+        }
       }
-      if (!found.length) issues.push({code:"requires-rendering",url:finalUrl.toString(),interface:hint});
+      const structuredNext = collectInventoryFragments(html, finalUrl).length || kestrelInventoryRequests(html).length;
+      if (!found.length && !structuredNext) {
+        issues.push({code:"requires-rendering",url:finalUrl.toString(),interface:hint});
+        observation.resolution = "requires-rendering";
+        const code = classifyObstacle(html) ?? "requires_rendering";
+        if (!obstacles.some(row => row.url === finalUrl.toString() && row.code === code)) obstacles.push({ code, url: finalUrl.toString(), detail: options?.renderPage ? undefined : "No browser renderer is configured" });
+      } else if (!found.length && structuredNext) {
+        stages.push("api_discovered");
+        if (observation.resolution !== "known-pattern") observation.resolution = "navigation-only";
+      }
     }
     if (found.length && next.fragment && next.parent) {
       // Once the shell's inventory loads, discard its toolbar/search alternatives.
@@ -1334,7 +1872,7 @@ export async function discoverListings(
     }
     if (next.depth >= maxDepth) continue;
 
-    const ctas = found.length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
+    const ctas = found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
       if (queue.some((q) => q.url === cta.url)) continue;
@@ -1367,35 +1905,187 @@ export async function discoverListings(
     }
   }
 
-  // Detail enrichment shares the request/time budget and keeps collection provenance.
+  // Detail enrichment keeps collection provenance. enrichAll does not spend the collection page budget.
+  const enrichAll = options?.enrichAll === true;
   let detailIndex=0;
-  const detailLimit=Math.min(listings.length,options?.maxDetailPages??0);
+  const detailLimit = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
+  let enrichmentAttempted = 0, enrichmentEnriched = 0, enrichmentFailed = 0;
   const detailFetch:FetchHtml=async (uri,opts)=>{
-    if(visited.length>=maxPages||Date.now()>=deadline)throw Error("Property detail request budget reached");
+    if((!enrichAll && visited.length>=maxPages)||Date.now()>=deadline)throw Error("Property detail request budget reached");
     visited.push(uri);visitedSet.add(uri);
-    const page=await fetchHtml(uri,opts);hops++;return page;
+    let lastError: unknown;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const csrf = csrfFor(uri);
+        const page=await fetchHtml(uri,{...opts, cookie: opts?.cookie || cookieFor(uri), ...(csrf ? { csrfToken: csrf } : {})});
+        hops++;
+        return page;
+      } catch (error) {
+        lastError = error;
+        const reason = error instanceof Error ? error.message : "";
+        if (attempt === 2 || Date.now() >= deadline || !/\b429\b|too many requests|rate[- ]limited|\b(?:502|503|504)\b/i.test(reason)) break;
+        visited.pop(); visitedSet.delete(uri);
+        obstacles.push({ code: /\b429\b|rate[- ]limited|too many requests/i.test(reason) ? "rate_limited" : "temporarily_unavailable", url: uri, detail: "retrying" });
+        stages.push("rate_limit_retry");
+        await new Promise(resolve => setTimeout(resolve, Math.min(40 * 2 ** attempt, 400)));
+        visited.push(uri); visitedSet.add(uri);
+      }
+    }
+    throw lastError;
   };
   // Small parallel batches give every property a turn without serial timeout starvation.
+  if (detailLimit > 0) stages.push("detail_enrichment_scheduled");
   await Promise.all(Array.from({length:Math.min(3,detailLimit)},async()=>{
-    while(detailIndex<detailLimit&&visited.length<maxPages&&Date.now()<deadline){
+    while(detailIndex<detailLimit&&(enrichAll || visited.length<maxPages)&&Date.now()<deadline){
       const i=detailIndex++,item=listings[i];
-      if(item.detailsComplete)continue;
+      if(!item || item.detailsComplete){ if(item?.detailsComplete) enrichmentEnriched++; continue; }
+      if (enrichAll && item.listingNumber && listings.some((other, j) => j < i && other.listingNumber === item.listingNumber && other.detailsComplete)) {
+        listings[i] = { ...item, detailsComplete: true, description: item.description || listings.find(other => other.listingNumber === item.listingNumber)?.description || item.description };
+        enrichmentEnriched++;
+        continue;
+      }
+      enrichmentAttempted++;
       try{
         const request=publicDetails.get(item.sourceUrl);
         if(request){const page=await detailFetch(request.url,{fragment:true,activationToken:request.activationToken});const detail=listingsFromKestrel(page.html,page.finalUrl).find(row=>row.sourceUrl===item.sourceUrl);if(detail)listings[i]={...item,...detail,detailsComplete:true};}
         else listings[i]=await enrichPublicProperty(item,detailFetch);
-      }catch(error){failed.push(item.sourceUrl);failureDetails.push({url:item.sourceUrl,reason:error instanceof Error?error.message.slice(0,180):"Property details unavailable"});}
+        if (listings[i]?.detailsComplete) enrichmentEnriched++;
+        else { enrichmentFailed++; if (enrichAll) failureDetails.push({ url: item.sourceUrl, reason: "Detail page did not publish a gallery and description" }); }
+      }catch(error){
+        enrichmentFailed++;
+        const reason = error instanceof Error ? error.message.slice(0, 180) : "Property details unavailable";
+        if (/human verification/i.test(reason) && !obstacles.some(row => row.code === "captcha_required" && row.url === item.sourceUrl)) obstacles.push({ code: "captcha_required", url: item.sourceUrl, detail: "detail enrichment" });
+        else if (/script gate/i.test(reason)) obstacles.push({ code: "script_gate", url: item.sourceUrl, detail: "detail enrichment" });
+        if (!enrichAll) failed.push(item.sourceUrl);
+        failureDetails.push({url:item.sourceUrl,reason});
+      }
     }
   }));
 
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
+  const inventoryShort = !!(listings.length >= maxListings || queue.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length);
+  const blocked = !listings.length && (failed.length > 0 || issues.some(issue => issue.code === "requires-rendering") || obstacles.length > 0);
+  const inventoryStatus = !listings.length ? (blocked ? "inventory_blocked" as const : "inventory_empty" as const) : (inventoryShort ? "inventory_partial" as const : "inventory_complete" as const);
+  const enrichmentStatus = detailLimit === 0 ? "enrichment_not_requested" as const
+    : enrichmentFailed === 0 && enrichmentEnriched >= detailLimit ? "enrichment_complete" as const
+    : enrichmentEnriched === 0 && enrichmentFailed > 0 ? "enrichment_unavailable" as const
+    : "enrichment_partial" as const;
+  if (listings.length) stages.push("inventory_discovered");
+  if (detailLimit > 0) stages.push(enrichmentStatus === "enrichment_complete" ? "detail_enrichment_completed" : "detail_enrichment_partial");
+  if (visited.some(url => /[?&]featureListingName=/.test(url))) stages.push("collection_scoped");
+  const outcome = listings.length ?
+        ((enrichAll ? false : unfinishedDetails) || queue.length || failed.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found";
+  const verificationPending = obstacles.filter(row => (row.code === "captcha_required" || row.code === "authentication_required" || row.code === "user_action_required") && row.url).map(row => row.url!);
+  const resumePending = [...new Set([...verificationPending, ...queue.map(item => item.url)])].slice(0, 40);
+  const resumeObstacle = obstacles.find(row => row.code === "captcha_required" || row.code === "authentication_required")?.code ?? obstacles[0]?.code;
+  if (verificationPending.length) stages.push("verification_required");
   return {
     listings: listings.slice(0, maxListings),
     meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
+      compatibility: { version: 1, pages: compatibilityPages },
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
-      failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome: listings.length ?
-        (unfinishedDetails || queue.length || failed.length || unresolvedPagination || limitedShowcase || expectedCount > listings.length ? "partial" : "found") : inventoryUrls.size || failed.length ? "unreadable" : "not-found" },
+      failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome,
+      inventoryStatus, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
+      obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
+      resume: (!listings.length || verificationPending.length) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : "discovery_blocked" } : undefined },
   };
+}
+
+const scrubSecret = (text: string, secret: string) => secret.length >= 8 ? text.split(secret).join("[session]") : text;
+
+/**
+ * Resume a paused import after the user completes verification.
+ * Retries only the pending URLs with the authorized session. Does not rediscover completed inventory.
+ * The session cookie is never copied into the report, logs, or resume state.
+ */
+export async function continueAfterVerification(
+  saved: { seeds?: string[]; pending?: string[]; listings?: DiscoveredListing[]; stage?: string; obstacle?: string },
+  sessionCookie: string,
+  fetchHtml: FetchHtml,
+  options?: { maxDurationMs?: number },
+): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
+  const listings = (saved.listings ?? []).map(item => ({ ...item, images: [...item.images] }));
+  const pending = [...new Set((saved.pending ?? []).filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 40);
+  const seeds = [...new Set((saved.seeds ?? []).filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 8);
+  const cookie = typeof sessionCookie === "string" ? sessionCookie.slice(0, 4000) : "";
+  const paused = (remaining: string[], obstacles: ListingDiscoveryMeta["obstacles"], enrichment: ListingDiscoveryMeta["enrichment"], failureDetails: { url: string; reason: string }[] = []): { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } => ({
+    listings,
+    meta: {
+      visited: remaining, hops: 0, found: listings.length, maxDepth: 0,
+      outcome: listings.length ? "found" : "unreadable",
+      inventoryStatus: listings.length ? (listings.length >= 100 ? "inventory_partial" : "inventory_complete") : "inventory_blocked",
+      enrichment, obstacles, stages: ["verification_required"], failed: [], failureDetails,
+      resume: { seeds, pending: remaining, obstacle: obstacles?.[0]?.code ?? saved.obstacle ?? "captcha_required", stage: "verification_required" },
+    },
+  });
+  if (!cookie || !pending.length) return paused(pending, [{ code: saved.obstacle ?? "captcha_required", detail: "Authorized session was not provided" }], { status: "enrichment_not_requested", scheduled: pending.length, attempted: 0, enriched: 0, failed: 0 });
+  const deadline = Date.now() + (options?.maxDurationMs ?? 45000);
+  const withSession: FetchHtml = (uri, opts) => fetchHtml(uri, { ...opts, cookie: opts?.cookie || cookie });
+  let enriched = 0, failed = 0, attempted = 0;
+  const remaining: string[] = [];
+  const obstacles: NonNullable<ListingDiscoveryMeta["obstacles"]> = [];
+  const failureDetails: { url: string; reason: string }[] = [];
+  const seen = new Set<string>();
+  for (const url of pending) {
+    if (seen.has(url)) continue;
+    seen.add(url);
+    if (Date.now() >= deadline) { remaining.push(url); continue; }
+    const index = listings.findIndex(item => item.sourceUrl === url);
+    if (index >= 0 && listings[index].detailsComplete) continue;
+    attempted++;
+    try {
+      const page = await withSession(url);
+      const obstacle = classifyObstacle(page.html) ?? (isRobotChallenge(page.html) ? "captcha_required" : null);
+      if (obstacle === "captcha_required" || obstacle === "authentication_required" || obstacle === "script_gate") {
+        failed++;
+        remaining.push(url);
+        obstacles.push({ code: obstacle === "script_gate" ? "script_gate" : obstacle, url, detail: "verification still required" });
+        continue;
+      }
+      if (index >= 0) {
+        listings[index] = await enrichPublicProperty(listings[index], withSession, { html: page.html, finalUrl: page.finalUrl });
+        if (listings[index].detailsComplete) enriched++; else failed++;
+      } else if (!listings.length) {
+        const discovered = await discoverListings([url], withSession, { maxPages: 20, maxListings: 100, enrichAll: true, maxDurationMs: Math.max(1000, deadline - Date.now()), sessionCookie: cookie });
+        for (const item of discovered.listings) if (!listings.some(row => row.sourceUrl === item.sourceUrl)) listings.push(item);
+        enriched += discovered.meta.enrichment?.enriched ?? discovered.listings.length;
+        const stillBlocked = discovered.meta.obstacles?.filter(row => row.code === "captcha_required" || row.code === "authentication_required") ?? [];
+        if (!discovered.listings.length && stillBlocked.length) { failed++; remaining.push(url); obstacles.push(...stillBlocked); }
+      } else failed++;
+    } catch (error) {
+      failed++;
+      remaining.push(url);
+      const reason = scrubSecret(error instanceof Error ? error.message.slice(0, 180) : "Pending page unavailable", cookie);
+      failureDetails.push({ url, reason });
+    }
+  }
+  const enrichment = { status: failed === 0 && enriched >= attempted && attempted > 0 ? "enrichment_complete" as const : enriched === 0 && failed > 0 ? "enrichment_unavailable" as const : "enrichment_partial" as const, scheduled: pending.length, attempted, enriched, failed };
+  if (remaining.length) return paused(remaining, obstacles.length ? obstacles : [{ code: "captcha_required", detail: "Some pending pages still require verification" }], enrichment, failureDetails);
+  return {
+    listings,
+    meta: {
+      visited: pending, hops: attempted, found: listings.length, maxDepth: 0, outcome: listings.length ? "found" : "not-found",
+      inventoryStatus: listings.length ? (listings.length >= 100 ? "inventory_partial" : "inventory_complete") : "inventory_empty",
+      enrichment, obstacles, stages: ["session_initialized", enrichment.status === "enrichment_complete" ? "detail_enrichment_completed" : "detail_enrichment_partial"],
+      failed: [], failureDetails,
+    },
+  };
+}
+
+/** Hand the blocked URL to an interactive session, then resume only the pending work. */
+export async function resumePausedImport(
+  saved: { seeds?: string[]; pending?: string[]; listings?: DiscoveredListing[]; stage?: string; obstacle?: string },
+  fetchHtml: FetchHtml,
+  openVerificationSession: (target: { url: string; obstacle?: string }) => Promise<{ cookie?: string } | null>,
+  options?: { maxDurationMs?: number },
+): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
+  const url = saved.pending?.find(item => item.startsWith("https://")) || saved.seeds?.find(item => item.startsWith("https://")) || "";
+  let cookie = "";
+  try {
+    const opened = url ? await openVerificationSession({ url, obstacle: saved.obstacle }) : null;
+    cookie = typeof opened?.cookie === "string" ? opened.cookie : "";
+  } catch { cookie = ""; }
+  return continueAfterVerification(saved, cookie, fetchHtml, options);
 }
 

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "next-inert-hydration",
+  "capturedAt": "2026-10-05T05:06:45.935Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Next-style inert JSON exposes property records without a browser.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<script id=\"__NEXT_DATA__\" type=\"application/json\">{\"props\":{\"listings\":[{\"streetAddress\":\"12 Pine St\",\"listPrice\":400000,\"detailUrl\":\"https://portable.example/property/12\",\"images\":[\"https://photos.example/12.jpg\"]}]}}</script>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "description": "",
+        "price": "$400,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/12",
+        "listingNumber": "",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "json-hydration"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [
+          "structured-property-data"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "json-hydration",
+            "version": 1,
+            "evidence": "application/json script",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

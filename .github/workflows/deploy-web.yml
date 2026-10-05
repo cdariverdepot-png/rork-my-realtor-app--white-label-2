@@ -30,7 +30,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  importer-regression:
+    uses: ./.github/workflows/listing-compatibility.yml
   web:
+    needs: importer-regression
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:

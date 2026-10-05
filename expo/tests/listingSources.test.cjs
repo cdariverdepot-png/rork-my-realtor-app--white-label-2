@@ -33,6 +33,15 @@ const home = (n = 12, status = 'Active', price = 350000) => ({ '@type': 'RealEst
 const html = records => `<script type="application/ld+json">${JSON.stringify(records)}</script>`;
 const fetchPages = pages => async uri => { if (!(uri in pages)) throw Error('Cannot read page'); return { html: pages[uri], finalUrl: new URL(uri) }; };
 
+test('direct property source imports retain architectural strategy evidence', async () => {
+  const uri = home().url;
+  const result = await sources.readSource(uri, fetchPages({ [uri]: html(home()) }), undefined, async () => []);
+  assert.equal(result.listings.length, 1);
+  assert.equal(result.meta.compatibility.pages[0].resolution, 'known-pattern');
+  assert.ok(result.meta.compatibility.pages[0].attempts.some(a => a.id === 'json-ld' && a.outcome === 'extracted'));
+  assert.equal(result.complete, false, 'A single property cannot establish complete inventory');
+});
+
 test('source imports enrich all nine properties rather than only the first six',async()=>{
   const url='https://agent.example/my-listings',pages={[url]:html(Array.from({length:9},(_,i)=>home(i+1)))};
   for(let i=1;i<=9;i++)pages[`https://agent.example/property/${i}`]=html({...home(i),description:`Complete remarks for home ${i}`,image:Array.from({length:20},(_,j)=>`https://photos.example/${i}-${j}.jpg`)});

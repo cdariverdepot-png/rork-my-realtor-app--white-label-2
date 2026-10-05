@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "published-script-gate-search",
+  "capturedAt": "2026-10-05T06:30:37.669Z",
+  "provenance": "synthetic-contract",
+  "rationale": "A published SHA-1 cookie interstitial unlocks a Lofty/Chime shell. Inventory is the same-origin search scoped by listingSource, featureListingName and listingType, read as public JSON. The markers are script hosts and payload shape, not a customer domain. An unscoped all-listings source is not this collection.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 4,
+    "maxListings": 10,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<html><body><script>\n(function(){\n  var nonce = \"aabbccdd11223344\";\n  var difficulty = 1;\n  function _wc(x, elapsed) {\n    var _a = \"11111111\", _b = \"22222222\", _c = \"33333333\";\n    window[\"\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74\"][\"\\x63\\x6f\\x6f\\x6b\\x69\\x65\"] = \"\\x63\\x66\\x5f\\x70\\x6f\\x77\" + \"=\" + x;\n    window[\"\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74\"][\"\\x63\\x6f\\x6f\\x6b\\x69\\x65\"] = \"\\x63\\x66\\x5f\\x74\\x69\\x6d\\x65\" + \"=\" + elapsed;\n    window[\"\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74\"][\"\\x63\\x6f\\x6f\\x6b\\x69\\x65\"] = \"\\x63\\x66\\x5f\\x70\\x61\\x73\\x73\" + \"=\" + (_a + _b + _c);\n  }\n  window.crypto.subtle.digest(\"SHA-1\", nonce).then(function(){ _wc(0, 1); });\n})();\n</script></body></html>"
+    },
+    {
+      "key": "[\"https://portable.example/\",false,false,\"gate\"]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<link rel=\"dns-prefetch\" href=\"//static.chimeroi.com\"><link rel=\"dns-prefetch\" href=\"//cdn.chime.me\"><script src=\"/pageJsonAndGlobalData.js?siteId=1\"></script><script>window.sitePageJSON={\"page\":\"listing\",\"modules\":[{\"name\":\"md-search\",\"listingSource\":\"0+Custom-Example1\"}]}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/api-site/search/realTimeListings?listingSource=0%2BCustom-Example1&featureListingName=Custom-Example1&listingType=featured-listing&page=1&pageSize=100\",true,false,\"gate\"]",
+      "url": "https://portable.example/api-site/search/realTimeListings?listingSource=0%2BCustom-Example1&featureListingName=Custom-Example1&listingType=featured-listing&page=1&pageSize=100",
+      "fragment": true,
+      "rendering": false,
+      "finalUrl": "https://portable.example/api-site/search/realTimeListings?listingSource=0%2BCustom-Example1&featureListingName=Custom-Example1&listingType=featured-listing&page=1&pageSize=100",
+      "html": "{\"counts\":1,\"totalPage\":1,\"page\":1,\"listings\":[{\"streetAddress\":\"1018 Mogul Hill Rd\",\"detailUrl\":\"/1018-mogul-hill-rd\",\"price\":450000,\"bedrooms\":3,\"bathrooms\":2,\"sqft\":1800,\"previewPicture\":\"https://photos.example/mogul.jpg\",\"listingStatus\":\"Active\",\"mlsListingId\":\"MLS9\"}]}"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "1018 Mogul Hill Rd",
+        "description": "",
+        "price": "$450,000",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,800",
+        "neighborhood": "",
+        "image": "https://photos.example/mogul.jpg",
+        "images": [
+          "https://photos.example/mogul.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/1018-mogul-hill-rd",
+        "listingNumber": "MLS9",
+        "propertyType": "",
+        "status": "active"
+      }
+    ],
+    "coverage": "collection",
+    "outcome": "found",
+    "expectedCount": 1,
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "public-json"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [
+          "public-fragment"
+        ],
+        "attempts": [],
+        "resolution": "navigation-only"
+      },
+      {
+        "url": "https://portable.example/api-site/search/realTimeListings?listingSource=0%2BCustom-Example1&featureListingName=Custom-Example1&listingType=featured-listing&page=1&pageSize=100",
+        "rendering": "response",
+        "interfaces": [
+          "public-json"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "public-json",
+            "version": 1,
+            "evidence": "JSON object/array containing evidenced property records",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

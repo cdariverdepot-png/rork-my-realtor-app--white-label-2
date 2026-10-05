@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
+import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, type WebsiteDesign } from "./websiteDesign.ts";
 
@@ -109,13 +109,16 @@ async function publicHttps(raw: string): Promise<URL> {
 }
 
 /** Fetch one public HTML page, following up to 4 redirects (each re-checked). */
-async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string; stylesheet?: boolean }): Promise<{ html: string; finalUrl: URL }> {
+async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string; stylesheet?: boolean; cookie?: string; csrfToken?: string }): Promise<{ html: string; finalUrl: URL }> {
   let current = await publicHttps(uri);
   for (let hop = 0; hop < 5; hop++) {
     const response = await fetch(current, {
       redirect: "manual",
-      headers: { Accept: options?.stylesheet ? "text/css,text/plain" : "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
-        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}), ...publicListingRequestHeaders(current,options) },
+      headers: { Accept: options?.stylesheet ? "text/css,text/plain" : options?.fragment ? "application/json,text/html,text/plain" : "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
+        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}),
+        ...(options?.cookie ? { Cookie: options.cookie } : {}),
+        ...(options?.csrfToken ? { "X-CSRF-Token": options.csrfToken } : {}),
+        ...publicListingRequestHeaders(current,options) },
       signal: AbortSignal.timeout(12000),
     });
     if (response.status >= 300 && response.status < 400) {
@@ -125,11 +128,13 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
       current = await publicHttps(new URL(location, current).toString());
       continue;
     }
-    if (!response.ok) throw new Error(`The page returned ${response.status}.`);
-    if (!(options?.stylesheet && /text\/css/i.test(response.headers.get("content-type") ?? "")) && !/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
-        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(response.headers.get("content-type") ?? "")) || /application\/json/i.test(response.headers.get("content-type") ?? "") ||
-          (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
-          (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
+    const contentType = response.headers.get("content-type") ?? "";
+    const challengeCandidate = /text\/html|text\/plain|application\/json/i.test(contentType);
+    if (!response.ok && !challengeCandidate) throw new Error(`The page returned ${response.status}.`);
+    if (response.ok && !(options?.stylesheet && /text\/css/i.test(contentType)) && !/text\/(html|plain)/i.test(contentType) &&
+        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(contentType)) || /application\/json/i.test(contentType) ||
+          (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(contentType)) ||
+          (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(contentType))))) {
       throw new Error("The link is not a readable webpage.");
     }
     if (Number(response.headers.get("content-length") ?? 0) > 2_000_000) {
@@ -152,7 +157,9 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
     const joined = new Uint8Array(size);
     let offset = 0;
     for (const chunk of chunks) { joined.set(chunk, offset); offset += chunk.byteLength; }
-    return { html: await decodePublicListingResponse(new TextDecoder().decode(joined),response.headers.get("content-type")??"",current,options), finalUrl: current };
+    const html = await decodePublicListingResponse(new TextDecoder().decode(joined), contentType, current, options);
+    if (!response.ok && !isRobotChallenge(html) && !isPublishedScriptGate(html)) throw new Error(`The page returned ${response.status}.`);
+    return { html, finalUrl: current };
   }
   throw new Error("The page redirected too many times.");
 }
@@ -532,6 +539,19 @@ Deno.serve(async (request) => {
     if (error) return reply({ error: "The listings were read but could not be saved. Your files are saved; please retry." }, 503);
     return reply({ draft, importedCount: imported.length, warnings });
   }
+  if (input?.mode === "continue-import") {
+    const sessionCookie = typeof input.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : "";
+    const resume = input.resume && typeof input.resume === "object" ? input.resume : {};
+    const httpsOnly = (value: unknown, limit: number) => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && item.startsWith("https://")).slice(0, limit) : [];
+    const discovery = await continueAfterVerification({
+      seeds: httpsOnly(resume.seeds, 8),
+      pending: httpsOnly(resume.pending, 40),
+      listings: Array.isArray(resume.listings) ? resume.listings.slice(0, 100) : [],
+      obstacle: typeof resume.obstacle === "string" ? resume.obstacle.slice(0, 80) : undefined,
+      stage: "verification_required",
+    }, sessionCookie, fetchHtml);
+    return reply({ discoveredListings: discovery.listings, listingDiscovery: discovery.meta, status: discovery.meta.resume ? "verification_required" : "ok" });
+  }
   // Soft-prompt path: realtor pasted a URL that goes straight to their listings.
   // Re-crawl only — do not re-run profile AI.
   if (input?.mode === "discover-listings") {
@@ -548,7 +568,7 @@ Deno.serve(async (request) => {
     if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks });
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -659,7 +679,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, selectLinks: selectInventoryLinks,
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks,
       });
       discoveredListings = discovery.listings.filter(item => !item.status || item.status === "active");
       discovery.meta.found = discoveredListings.length;

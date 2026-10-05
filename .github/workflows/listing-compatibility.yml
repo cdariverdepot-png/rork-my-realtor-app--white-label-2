@@ -1,0 +1,25 @@
+name: Importer regression suite
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install isolated test compiler
+        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0
+      - name: Check shared extraction engine types
+        run: node "$RUNNER_TEMP/import-tests/node_modules/typescript/bin/tsc" --noEmit --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom,dom.iterable --skipLibCheck --types node --typeRoots "$RUNNER_TEMP/import-tests/node_modules/@types" supabase/functions/analyze-realtor-build/listingDiscovery.ts
+      - name: Run all app and offline compatibility regressions
+        working-directory: expo
+        run: NODE_PATH="$RUNNER_TEMP/import-tests/node_modules" node --test tests/*.test.cjs

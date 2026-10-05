@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "property-detail-metadata",
+  "capturedAt": "2026-10-05T05:07:12.397Z",
+  "provenance": "synthetic-contract",
+  "rationale": "A detail route plus visible price evidences a real property before metadata fallback.",
+  "seeds": [
+    "https://portable.example/property/12"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/property/12\",false,false]",
+      "url": "https://portable.example/property/12",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/12",
+      "html": "<meta property=\"og:title\" content=\"12 Pine St\"><meta property=\"og:image\" content=\"https://photos.example/12.jpg\"><p>$400,000 3 beds 2 baths</p>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "description": "",
+        "price": "$400,000",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "sourceUrl": "https://portable.example/property/12"
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "property-meta"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/property/12",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "property-meta",
+            "version": 1,
+            "evidence": "Property detail metadata",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

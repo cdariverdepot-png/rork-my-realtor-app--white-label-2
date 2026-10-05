@@ -1,4 +1,4 @@
-import { publicListingRequestHeaders, decodePublicListingResponse } from "../analyze-realtor-build/listingDiscovery.ts";
+import { publicListingRequestHeaders, decodePublicListingResponse, isRobotChallenge, isPublishedScriptGate } from "../analyze-realtor-build/listingDiscovery.ts";
 function publicAddress(address: string): boolean {
   if (address.includes(":")) {
     const ip = address.toLowerCase();
@@ -36,14 +36,17 @@ async function publicHttps(raw: string): Promise<URL> {
 }
 
 /** Fetch one public HTML page, following up to 4 redirects (each re-checked). */
-async function fetchPublicPage(uri: string, options?: { fragment?: boolean; activationToken?: string }, checkRedirect?: (url: URL) => Promise<void>): Promise<{ html: string; finalUrl: URL }> {
+async function fetchPublicPage(uri: string, options?: { fragment?: boolean; activationToken?: string; cookie?: string; csrfToken?: string }, checkRedirect?: (url: URL) => Promise<void>): Promise<{ html: string; finalUrl: URL }> {
   let current = await publicHttps(uri);
   const deadline = Date.now() + 12000;
   for (let hop = 0; hop < 5; hop++) {
     const response = await fetch(current, {
       redirect: "manual",
-      headers: { Accept: "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
-        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}), ...publicListingRequestHeaders(current,options) },
+      headers: { Accept: options?.fragment ? "application/json,text/html,text/plain" : "text/html,text/plain", "User-Agent": "MyRealtorAppBuilder/1.0",
+        ...(options?.fragment ? { "X-Requested-With": "XMLHttpRequest" } : {}),
+        ...(options?.cookie ? { Cookie: options.cookie } : {}),
+        ...(options?.csrfToken ? { "X-CSRF-Token": options.csrfToken } : {}),
+        ...publicListingRequestHeaders(current,options) },
       signal: AbortSignal.timeout(Math.max(1, deadline - Date.now())),
     });
     if (response.status >= 300 && response.status < 400) {
@@ -54,11 +57,13 @@ async function fetchPublicPage(uri: string, options?: { fragment?: boolean; acti
       await checkRedirect?.(current);
       continue;
     }
-    if (!response.ok) throw new Error(`The page returned ${response.status}.`);
-    if (!/text\/(html|plain)/i.test(response.headers.get("content-type") ?? "") &&
-        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(response.headers.get("content-type") ?? "")) || /application\/json/i.test(response.headers.get("content-type") ?? "") ||
-          (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(response.headers.get("content-type") ?? "")) ||
-          (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(response.headers.get("content-type") ?? ""))))) {
+    const contentType = response.headers.get("content-type") ?? "";
+    const challengeCandidate = /text\/html|text\/plain|application\/json/i.test(contentType);
+    if (!response.ok && !challengeCandidate) throw new Error(`The page returned ${response.status}.`);
+    if (response.ok && !/text\/(html|plain)/i.test(contentType) &&
+        !(options?.fragment && ((current.pathname === "/wp-admin/admin-ajax.php" && current.searchParams.get("action") === "dsidx_client_assist" && current.searchParams.get("dsidx_action") === "GetPhotosXML" && /^(?:text|application)\/xml/i.test(contentType)) || /application\/json/i.test(contentType) ||
+          (options.activationToken && current.hostname === "www.idxhome.com" && /^application\/base64/i.test(contentType)) ||
+          (/\/idx\/customshowcasejs\.php$/.test(current.pathname) && /(?:text|application)\/(?:java|ecma)script/i.test(contentType))))) {
       throw new Error("The link is not a readable webpage.");
     }
     if (Number(response.headers.get("content-length") ?? 0) > 2_000_000) {
@@ -81,7 +86,9 @@ async function fetchPublicPage(uri: string, options?: { fragment?: boolean; acti
     const joined = new Uint8Array(size);
     let offset = 0;
     for (const chunk of chunks) { joined.set(chunk, offset); offset += chunk.byteLength; }
-    return { html: await decodePublicListingResponse(new TextDecoder().decode(joined),response.headers.get("content-type")??"",current,options), finalUrl: current };
+    const html = await decodePublicListingResponse(new TextDecoder().decode(joined), contentType, current, options);
+    if (!response.ok && !isRobotChallenge(html) && !isPublishedScriptGate(html)) throw new Error(`The page returned ${response.status}.`);
+    return { html, finalUrl: current };
   }
   throw new Error("The page redirected too many times.");
 }
@@ -122,13 +129,15 @@ async function respectRobots(url: URL) {
   if (!robotsAllows(await cached.promise, url.pathname + url.search)) throw new Error("This website doesn't allow automatic access to that page. Paste another public listings or profile URL.");
 }
 
-export async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string }) {
+export async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string; cookie?: string; csrfToken?: string }) {
   const url = await publicHttps(uri);
   await respectRobots(url);
   const page = await fetchPublicPage(uri, options, respectRobots);
   const heading=(page.html.match(/<(?:title|h1)\b[^>]*>([\s\S]*?)<\/(?:title|h1)>/i)?.[1]??"").replace(/<[^>]+>/g," ");
   // Public sites commonly embed optional login forms and reCAPTCHA scripts in footers.
   // Only an actual access/challenge page should block reading the public response.
+  // Lofty robot-validate and published script-gate documents do not match this heading,
+  // so discovery can classify them instead of treating the collection as empty.
   if (/\b(?:verify you are human|access denied|just a moment|attention required|captcha)\b/i.test(heading) ||
     /<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(page.html) ||
     /^(?:\s*sign in|\s*log ?in)(?:\s*[|—-]|\s*$)/i.test(heading) && /<input\b[^>]*type=["']password["']/i.test(page.html) ||

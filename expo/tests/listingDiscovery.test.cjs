@@ -464,3 +464,327 @@ test('dsIDXpress detail reads explicit property fields instead of other cards or
  assert.equal(row.price,'$750,000');assert.equal(row.beds,5);assert.equal(row.baths,4.5);assert.equal(row.sqft,'3,200');assert.equal(row.status,'active');assert.equal(row.listingNumber,'26-123');
 });
 
+const { isPublishedScriptGate, publishedScriptGateCookie, chimeListingSearchRequests } = loadDiscovery();
+const scriptGate = (difficulty = 1) => `<html><body><script>
+(function(){
+  var nonce = 'aabbccdd11223344';
+  var difficulty = ${difficulty};
+  function _wc(x, elapsed) {
+    var _a = '11111111', _b = '22222222', _c = '33333333';
+    window['\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74']['\\x63\\x6f\\x6f\\x6b\\x69\\x65'] = '\\x63\\x66\\x5f\\x70\\x6f\\x77' + '=' + x;
+    window['\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74']['\\x63\\x6f\\x6f\\x6b\\x69\\x65'] = '\\x63\\x66\\x5f\\x74\\x69\\x6d\\x65' + '=' + elapsed;
+    window['\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74']['\\x63\\x6f\\x6f\\x6b\\x69\\x65'] = '\\x63\\x66\\x5f\\x70\\x61\\x73\\x73' + '=' + (_a + _b + _c);
+  }
+  window.crypto.subtle.digest('SHA-1', nonce).then(function(){ _wc(0, 1); });
+})();
+</script></body></html>`;
+const chimeShell = '<link rel="dns-prefetch" href="//static.chimeroi.com"><link rel="dns-prefetch" href="//cdn.chime.me"><script src="/pageJsonAndGlobalData.js?siteId=1"></script><script>window.sitePageJSON={"page":"listing","modules":[{"name":"md-search","listingSource":"0+Custom-Example1"}]}</script>';
+const chimeJson = JSON.stringify({ counts: 1, totalPage: 1, page: 1, listings: [{
+  streetAddress: '1018 Mogul Hill Rd', detailUrl: '/1018-mogul-hill-rd', price: 450000, bedrooms: 3, bathrooms: 2, sqft: 1800,
+  previewPicture: 'https://photos.example/mogul.jpg', listingStatus: 'Active', mlsListingId: 'MLS9' }] });
+
+test('published script gate cookie satisfies the page SHA-1 prefix without executing it', async () => {
+  const cookie = await publishedScriptGateCookie(scriptGate(1));
+  const x = cookie.match(/cf_pow=(\d+)/)[1];
+  const { createHash } = require('node:crypto');
+  assert.equal(createHash('sha1').update('aabbccdd11223344' + x).digest('hex')[0], '7');
+  assert.match(cookie, /^cf_pow=\d+; cf_time=1; cf_pass=111111112222222233333333$/);
+  assert.equal(await publishedScriptGateCookie(scriptGate(9)), null);
+  assert.equal(isPublishedScriptGate('<main>nonce difficulty</main>'), false);
+});
+test('public JSON reads string addresses, pipe-delimited galleries and chime status fields', () => {
+  const rows = listingsFromPublicJson(JSON.stringify({ listings: [{
+    address: '10 Pine St', detailLink: '/10-pine', price: 250000, beds: 2, baths: 1,
+    listingPictures: 'https://photos.example/a.jpg|https://photos.example/b.jpg',
+    listingStatusText: 'Pending', mlsListingId: 'ZZ' }] }), new URL('https://agent.example/api'));
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].title, '10 Pine St');
+  assert.equal(rows[0].status, 'pending');
+  assert.equal(rows[0].listingNumber, 'ZZ');
+  assert.deepEqual(rows[0].images, ['https://photos.example/a.jpg', 'https://photos.example/b.jpg']);
+  const land = listingsFromPublicJson(JSON.stringify({ listings: [{
+    streetAddress: 'NNA Road', detailUrl: '/land', price: 100000, bedrooms: -1, bathrooms: -1, sqft: -1,
+    totalAvailableAcres: 871200, city: 'Kingston', state: 'ID', listingStatus: 'Active' }] }), new URL('https://agent.example/api'));
+  assert.equal(land[0].beds, 0);
+  assert.equal(land[0].baths, 0);
+  assert.equal(land[0].sqft, '');
+  assert.equal(land[0].facts['Lot Acres'], '20');
+  assert.equal(land[0].neighborhood, 'Kingston, ID');
+});
+test('script gate then chime search extracts priced photos on an unfamiliar host', async () => {
+  const origin = 'https://unfamiliar-broker.example';
+  const search = chimeListingSearchRequests(chimeShell, new URL(origin + '/'))[0];
+  assert.equal(new URL(search).searchParams.get('listingSource'), '0+Custom-Example1');
+  assert.equal(new URL(search).searchParams.get('featureListingName'), 'Custom-Example1');
+  assert.equal(new URL(search).searchParams.get('listingType'), 'featured-listing');
+  const market = chimeShell.replace('0+Custom-Example1', 'all listings');
+  assert.equal(chimeListingSearchRequests(market, new URL(origin + '/')).length, 0);
+  assert.equal(chimeListingSearchRequests(chimeShell, new URL('https://other-agent.example/')).length, 1);
+  const fetchHtml = async (url, options) => {
+    if (url.includes('/api-site/search/realTimeListings')) {
+      assert.match(options.cookie, /cf_pass=111111112222222233333333/);
+      return { html: chimeJson, finalUrl: new URL(url) };
+    }
+    if (!options?.cookie) return { html: scriptGate(), finalUrl: new URL(url) };
+    return { html: chimeShell, finalUrl: new URL(url) };
+  };
+  const r = await discoverListings([origin + '/'], fetchHtml, { maxPages: 4, maxListings: 10, maxDetailPages: 0 });
+  assert.equal(r.listings.length, 1);
+  assert.equal(r.listings[0].title, '1018 Mogul Hill Rd');
+  assert.equal(r.listings[0].price, '$450,000');
+  assert.equal(r.listings[0].beds, 3);
+  assert.equal(r.listings[0].baths, 2);
+  assert.equal(r.listings[0].sqft, '1,800');
+  assert.equal(r.listings[0].status, 'active');
+  assert.equal(r.listings[0].listingNumber, 'MLS9');
+  assert.equal(r.listings[0].image, 'https://photos.example/mogul.jpg');
+  assert.equal(r.listings[0].sourceUrl, origin + '/1018-mogul-hill-rd');
+  assert.equal(r.meta.outcome, 'found');
+  assert.equal(r.meta.expectedCount, 1);
+  assert.ok(r.meta.interfaces.includes('chime-site-search'));
+  assert.ok(r.meta.compatibility.pages.some(p => p.attempts.some(a => a.id === 'public-json' && a.outcome === 'extracted')));
+  assert.ok(!r.meta.issues.some(x => x.code === 'requires-rendering'));
+  assert.ok(r.meta.visited.includes(search));
+});
+test('chime search robot wall is requires-rendering and invents no listings', async () => {
+  const origin = 'https://another-broker.example';
+  const robot = '<html><head><title>Robot Validate</title></head><body><h2>Error Access denied</h2><p>Verify your are human</p><div id="recaptcha-wrap"></div></body></html>';
+  const fetchHtml = async (url, options) => {
+    if (url.includes('/api-site/search/')) return { html: robot, finalUrl: new URL(url) };
+    if (!options?.cookie) return { html: scriptGate(), finalUrl: new URL(url) };
+    return { html: chimeShell, finalUrl: new URL(url) };
+  };
+  const r = await discoverListings([origin + '/featured-listings'], fetchHtml, { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(r.listings.length, 0);
+  assert.equal(r.meta.outcome, 'unreadable');
+  assert.ok(r.meta.issues.some(x => x.code === 'requires-rendering' && x.interface === 'chime-site-search'));
+  assert.ok(r.meta.compatibility.pages.some(p => p.resolution === 'requires-rendering' && p.interfaces.includes('chime-site-search')));
+  assert.ok(!r.meta.compatibility.pages.some(p => p.resolution === 'needs-strategy'));
+});
+test('a script gate that does not unlock is not a needs-strategy miss', async () => {
+  const html = scriptGate();
+  const r = await discoverListings(['https://gated.example/'], async () => ({ html, finalUrl: new URL('https://gated.example/') }), { maxPages: 2, maxDetailPages: 0 });
+  assert.equal(r.listings.length, 0);
+  assert.equal(r.meta.outcome, 'unreadable');
+  assert.equal(r.meta.compatibility.pages[0].resolution, 'requires-rendering');
+  assert.ok(r.meta.issues.some(x => x.interface === 'script-gate'));
+  assert.ok(!r.meta.compatibility.pages.some(p => p.resolution === 'needs-strategy'));
+});
+
+const engine = loadDiscovery();
+
+test('architecture candidates rank lofty chime from markers, not from the hostname', () => {
+  const rows = engine.architectureCandidates(chimeShell, new URL('https://unfamiliar-broker.example/'));
+  assert.equal(rows[0].id, 'lofty_chime');
+  assert.ok(rows[0].confidence >= 0.9);
+  assert.equal(engine.architectureCandidates('<div id="root"></div>', new URL('https://brendaburk.com/')).some(row => row.id === 'lofty_chime'), false);
+  assert.equal(engine.classifyObstacle('<html><head><title>Robot Validate</title></head><body>Verify your are human</body></html>'), 'captcha_required');
+  assert.equal(engine.classifyObstacle('<title>Just a moment...</title><form id="challenge-form"></form>'), 'requires_rendering');
+  assert.equal(engine.classifyObstacle('<script>window.awsWafCookieDomainList=[];window.gokuProps={}</script>'), 'requires_rendering');
+  assert.equal(engine.classifyObstacle(scriptGate()), 'script_gate');
+  const detail = engine.listingFromChimeDetail('<script>window.sitePageJSON={"modules":[{"data":{"listingDetail":{"info":{"streetAddress":"10 Pine St","detailUrl":"/10-pine","price":250000,"bedrooms":3,"bathrooms":2,"sqft":1800,"detailsDescribe":"Actual public remarks about this specific property.","listingPictures":"https://photos.example/a.jpg|https://photos.example/b.jpg","mlsListingId":"MLS1","listingStatus":"Active","city":"Town","state":"ID"}}}}]}</script>', new URL('https://agent.example/10-pine'));
+  assert.equal(detail.title, '10 Pine St');
+  assert.equal(detail.images.length, 2);
+  assert.match(detail.description, /Actual public remarks/);
+  assert.equal(detail.listingNumber, 'MLS1');
+});
+
+test('enrichAll schedules every listing when the collection page budget is already spent', async () => {
+  const records = Array.from({ length: 13 }, (_, i) => ({ '@type': 'RealEstateListing', name: `${i + 1} Pine St`, url: `https://agent.example/property/${i + 1}`, price: 300000 + i, image: `https://photos.example/${i + 1}.jpg` }));
+  const pages = { 'https://agent.example/inventory': `<script type="application/ld+json">${JSON.stringify(records)}</script>` };
+  for (let i = 1; i <= 13; i++) pages[`https://agent.example/property/${i}`] = `<script type="application/ld+json">${JSON.stringify({ ...records[i - 1], description: `Remarks ${i}`, image: [`https://photos.example/${i}-a.jpg`, `https://photos.example/${i}-b.jpg`] })}</script>`;
+  const seen = [];
+  const fetchHtml = async uri => { seen.push(uri); if (!pages[uri]) throw Error('unreadable page'); return { html: pages[uri], finalUrl: new URL(uri) }; };
+  const capped = await discoverListings(['https://agent.example/inventory'], fetchHtml, { maxPages: 2, maxListings: 20, maxDetailPages: 12 });
+  assert.equal(capped.listings.length, 13);
+  assert.ok(capped.listings.filter(row => row.detailsComplete).length <= 1, 'collection budget must still limit the legacy detail path');
+  const full = await discoverListings(['https://agent.example/inventory'], fetchHtml, { maxPages: 2, maxListings: 20, enrichAll: true });
+  assert.equal(full.listings.length, 13);
+  assert.equal(full.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(full.meta.enrichment.scheduled, 13);
+  assert.equal(full.meta.enrichment.enriched, 13);
+  assert.equal(full.meta.enrichment.failed, 0);
+  assert.equal(full.meta.enrichment.status, 'enrichment_complete');
+  assert.equal(full.meta.outcome, 'found');
+  assert.ok(full.listings.every(row => row.detailsComplete && row.description.startsWith('Remarks') && row.images.length === 2));
+});
+
+test('a detail failure keeps the discovered listing and does not mark inventory partial', async () => {
+  const page = `<script type="application/ld+json">${JSON.stringify([{ '@type': 'RealEstateListing', name: '9 Oak St', url: 'https://agent.example/property/9', price: 250000, image: 'https://photos.example/9.jpg' }])}</script>`;
+  const fetchHtml = async uri => {
+    if (uri.endsWith('/property/9')) throw Error('detail timed out');
+    return { html: page, finalUrl: new URL(uri) };
+  };
+  const result = await discoverListings(['https://agent.example/inventory'], fetchHtml, { maxPages: 2, enrichAll: true });
+  assert.equal(result.listings.length, 1);
+  assert.equal(result.listings[0].title, '9 Oak St');
+  assert.equal(result.listings[0].detailsComplete, undefined);
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.outcome, 'found');
+  assert.equal(result.meta.enrichment.status, 'enrichment_unavailable');
+  assert.equal(result.meta.enrichment.failed, 1);
+  assert.deepEqual(result.meta.failed, []);
+});
+
+test('HTTP 429 is retried and is not an empty inventory', async () => {
+  let hits = 0;
+  const page = `<script type="application/ld+json">${JSON.stringify({ '@type': 'RealEstateListing', name: '4 Elm St', price: 410000, url: 'https://agent.example/property/4', image: 'https://photos.example/4.jpg' })}</script>`;
+  const fetchHtml = async () => {
+    hits++;
+    if (hits === 1) throw Error('HTTP 429 retry-after 0');
+    return { html: page, finalUrl: new URL('https://agent.example/') };
+  };
+  const result = await discoverListings(['https://agent.example/'], fetchHtml, { maxPages: 3, maxDetailPages: 0 });
+  assert.equal(hits, 2);
+  assert.equal(result.listings.length, 1);
+  assert.equal(result.meta.outcome, 'found');
+  assert.ok(result.meta.obstacles.some(row => row.code === 'rate_limited'));
+  assert.ok(result.meta.stages.includes('rate_limit_retry'));
+});
+
+test('a rendered search group keeps its own complete collection and drops nearby rows and price filters', async () => {
+  const origin = 'https://rendered-search.example';
+  const shell = '<html><script>window.gokuProps={}</script><script src="/challenge.js"></script></html>';
+  const search = origin + '/homes-for-sale/search/index/';
+  const primary = (title, street, price, acres) => ({
+    listing: {
+      title: price, subtitles: [street], pageLink: '/homedetails/' + title,
+      structuredData: {
+        product: JSON.stringify({ '@context': 'https://schema.org', '@type': 'Product', name: title, url: origin + '/homedetails/' + title, offers: { price: price.replace(/\D/g, '') }, image: 'https://photos.example/' + title + '.jpg' }),
+        residence: JSON.stringify({ '@context': 'https://schema.org', '@type': 'SingleFamilyResidence', address: { streetAddress: title, addressLocality: 'Index', addressRegion: 'WA' }, geo: { latitude: '47.82', longitude: '-121.55' } }),
+      },
+      media: [{ originalUrl: 'https://photos.example/' + title + '-full.jpg' }, { originalUrl: 'https://photos.example/' + title + '-2.jpg' }],
+      subStats: [{ title: 'beds', subtitle: '3' }, { title: 'baths', subtitle: '2' }, { title: 'acres', subtitle: acres }],
+    },
+  });
+  const body = JSON.stringify({
+    lolResults: { totalItems: 2, data: [primary('10 River Road', '10 River Road, Index, WA', '$695,000', '1.2'), primary('20 Pine Lane', '20 Pine Lane, Index, WA', '$450,000', '0.4')] },
+    nearbyResults: { totalItems: 900, data: [primary('Far Away', 'Far Away, Other, WA', '$100,000', '9')] },
+  });
+  const rendered = `<a href="${origin}/homes-for-sale/index/100k-price/">Homes for Sale under $100K</a>`
+    + `<script type="application/ld+json">${JSON.stringify({ '@type': 'RealEstateListing', name: 'Far Away', price: 100000, url: origin + '/homedetails/Far%20Away', image: 'https://photos.example/far.jpg' })}</script>`;
+  const fetchHtml = async () => ({ html: shell, finalUrl: new URL(origin + '/') });
+  const renderPage = async () => ({ html: rendered, finalUrl: new URL(origin + '/'), network: [{ url: search, html: body }] });
+  const result = await discoverListings([origin + '/'], fetchHtml, { maxPages: 4, maxListings: 20, maxDetailPages: 0, renderPage });
+  assert.deepEqual(result.listings.map(row => row.title).sort(), ['10 River Road', '20 Pine Lane']);
+  assert.equal(result.listings.every(row => row.price && row.images.length === 2 && row.beds === 3), true);
+  assert.equal(result.listings.find(row => row.title === '10 River Road').facts['Lot Acres'], '1.2');
+  assert.equal(result.listings.find(row => row.title === '10 River Road').facts.Coordinates, '47.82, -121.55');
+  assert.equal(result.meta.outcome, 'found');
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.expectedCount, 2);
+  assert.equal(result.meta.coverage, 'collection');
+  assert.ok(result.meta.stages.includes('browser_render_escalated'));
+  assert.ok(result.meta.stages.includes('api_discovered'));
+  assert.equal(result.listings.some(row => /k-price|Far Away/.test(row.sourceUrl + row.title)), false);
+});
+
+test('rendering a shell discovers the structured search instead of stopping', async () => {
+  const origin = 'https://rendered.example';
+  const shell = '<div id="root"></div><script src="/app.js"></script>';
+  const search = engine.chimeListingSearchRequests(chimeShell, new URL(origin + '/'))[0];
+  const fetchHtml = async url => {
+    if (url === search) return { html: chimeJson, finalUrl: new URL(url) };
+    return { html: shell, finalUrl: new URL(url) };
+  };
+  const renderPage = async () => ({ html: chimeShell, finalUrl: new URL(origin + '/'), network: [{ url: search, html: chimeJson }] });
+  const result = await discoverListings([origin + '/'], fetchHtml, { maxPages: 4, maxDetailPages: 0, renderPage });
+  assert.equal(result.listings.length, 1);
+  assert.equal(result.listings[0].title, '1018 Mogul Hill Rd');
+  assert.equal(result.meta.outcome, 'found');
+  assert.ok(!result.meta.issues.some(row => row.code === 'requires-rendering'));
+  assert.ok(result.meta.stages.includes('browser_render_escalated'));
+  assert.ok(result.meta.stages.includes('api_discovered'));
+  assert.equal(result.meta.candidates[0].id, 'lofty_chime');
+});
+
+test('captcha and failed script gates preserve a resumable state and invent no listings', async () => {
+  const robot = '<html><head><title>Robot Validate</title></head><body><h2>Error Access denied</h2><div id="recaptcha-wrap"></div></body></html>';
+  const blocked = await discoverListings(['https://blocked.example/listings'], async () => ({ html: robot, finalUrl: new URL('https://blocked.example/listings') }), { maxPages: 2, maxDetailPages: 0 });
+  assert.equal(blocked.listings.length, 0);
+  assert.equal(blocked.meta.inventoryStatus, 'inventory_blocked');
+  assert.ok(blocked.meta.obstacles.some(row => row.code === 'captcha_required'));
+  assert.equal(blocked.meta.resume.obstacle, 'captcha_required');
+  assert.deepEqual(blocked.meta.resume.seeds, ['https://blocked.example/listings']);
+  const gated = await discoverListings(['https://gated.example/'], async () => ({ html: scriptGate(), finalUrl: new URL('https://gated.example/') }), { maxPages: 2, maxDetailPages: 0 });
+  assert.equal(gated.meta.inventoryStatus, 'inventory_blocked');
+  assert.ok(gated.meta.obstacles.some(row => row.code === 'script_gate'));
+  assert.equal(gated.meta.resume.seeds[0], 'https://gated.example/');
+});
+
+test('deployment bundle contains the authoritative discovery engine', () => {
+  const source = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingDiscovery.ts'), 'utf8').replace(/^export /gm, '').replace(/\s+$/, '\n');
+  const bundle = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/deploy.bundle.ts'), 'utf8');
+  assert.ok(bundle.includes(source), 'production bundle drifted from listingDiscovery.ts');
+  assert.match(bundle, /enrichAll: true/);
+  assert.match(source, /function classifyObstacle/);
+  assert.match(source, /function architectureCandidates/);
+  assert.match(source, /enrichAll \? listings\.length/);
+});
+
+test('production bundle discovery matches the source engine on a chime collection', async () => {
+  const bundle = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/deploy.bundle.ts'), 'utf8');
+  const start = bundle.indexOf('const { publicListingRequestHeaders');
+  const end = bundle.indexOf('const { parseListingCsv');
+  const slice = bundle.slice(start, end).replace(
+    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate } =',
+    'const exported =');
+  const compiled = ts.transpileModule(slice + '\nmodule.exports = exported;\n', { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const moduleRef = { exports: {} };
+  new Function('require', 'module', 'exports', compiled)(require, moduleRef, moduleRef.exports);
+  const origin = 'https://bundle-check.example';
+  const search = engine.chimeListingSearchRequests(chimeShell, new URL(origin + '/'))[0];
+  const fetchHtml = async (url, options) => {
+    if (url.includes('/api-site/search/realTimeListings')) return { html: chimeJson, finalUrl: new URL(url) };
+    if (!options?.cookie) return { html: scriptGate(), finalUrl: new URL(url) };
+    return { html: chimeShell, finalUrl: new URL(url) };
+  };
+  const options = { maxPages: 4, maxListings: 10, maxDetailPages: 0 };
+  const fromSource = await discoverListings([origin + '/'], fetchHtml, options);
+  const fromBundle = await moduleRef.exports.discoverListings([origin + '/'], fetchHtml, options);
+  assert.deepEqual(fromBundle.listings, fromSource.listings);
+  assert.equal(fromBundle.meta.outcome, fromSource.meta.outcome);
+  assert.equal(fromBundle.meta.inventoryStatus, fromSource.meta.inventoryStatus);
+  assert.deepEqual(fromBundle.meta.enrichment, fromSource.meta.enrichment);
+  assert.equal(fromBundle.meta.candidates[0].id, 'lofty_chime');
+  assert.ok(fromBundle.listings[0].price);
+  assert.equal(search.includes('featureListingName=Custom-Example1'), true);
+});
+
+test('paused verification resumes only pending pages and does not store the session', async () => {
+  const secret = 'session-secret-value-not-logged';
+  const kept = { title: '10 Pine St', description: 'Already complete remarks about this home.', price: '$250,000', beds: 3, baths: 2, sqft: '1,100', neighborhood: 'Town', image: 'https://photos.example/a.jpg', images: ['https://photos.example/a.jpg'], sourceUrl: 'https://agent.example/property/1', detailsComplete: true };
+  const waiting = { title: '12 Pine St', description: '', price: '$350,000', beds: 4, baths: 2, sqft: '1,800', neighborhood: 'Town', image: 'https://photos.example/b.jpg', images: ['https://photos.example/b.jpg'], sourceUrl: 'https://agent.example/property/2', detailsComplete: false };
+  const seen = [];
+  const detail = url => `<script type="application/ld+json">${JSON.stringify({ '@type': 'RealEstateListing', name: '12 Pine St', price: 350000, url, description: 'Full public remarks for this property. '.repeat(4), image: ['https://photos.example/b.jpg', 'https://photos.example/c.jpg'] })}</script>`;
+  const resumed = await engine.resumePausedImport(
+    { seeds: ['https://agent.example/'], pending: [waiting.sourceUrl, kept.sourceUrl], listings: [kept, waiting], obstacle: 'captcha_required', stage: 'verification_required' },
+    async (url, options) => { seen.push(url); assert.equal(options.cookie, secret); return { html: detail(url), finalUrl: new URL(url) }; },
+    async () => ({ cookie: secret }));
+  assert.deepEqual(seen, [waiting.sourceUrl]);
+  assert.equal(resumed.listings.length, 2);
+  assert.equal(resumed.listings[0].detailsComplete, true);
+  assert.equal(resumed.listings[1].detailsComplete, true);
+  assert.equal(resumed.listings[1].description.includes('Full public remarks'), true);
+  assert.equal(resumed.meta.resume, undefined);
+  assert.equal(JSON.stringify(resumed).includes(secret), false);
+  const blocked = await engine.continueAfterVerification(
+    { seeds: ['https://agent.example/'], pending: [waiting.sourceUrl], listings: [kept, { ...waiting }], obstacle: 'captcha_required' },
+    secret,
+    async url => ({ html: '<title>Robot Validate</title><div id="recaptcha-wrap"></div>', finalUrl: new URL(url) }));
+  assert.equal(blocked.listings.length, 2);
+  assert.equal(blocked.listings[1].detailsComplete, false);
+  assert.equal(blocked.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(blocked.meta.resume.stage, 'verification_required');
+  assert.deepEqual(blocked.meta.resume.pending, [waiting.sourceUrl]);
+  assert.equal(JSON.stringify(blocked).includes(secret), false);
+  const idle = await engine.resumePausedImport(
+    { seeds: ['https://walled.example/'], pending: ['https://walled.example/property/2'], listings: [kept, waiting], obstacle: 'captcha_required' },
+    async () => { throw new Error('should not fetch'); },
+    async () => null);
+  assert.equal(idle.listings.length, 2);
+  assert.equal(idle.meta.resume.stage, 'verification_required');
+  assert.equal(idle.meta.obstacles[0].code, 'captcha_required');
+});
+
+

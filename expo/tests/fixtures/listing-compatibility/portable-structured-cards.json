@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "portable-structured-cards",
+  "capturedAt": "2026-10-05T05:06:45.944Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Server-rendered per-card payloads do not require Flexmls hosting.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<div class=\"listing-card\" data-href=\"https://portable.example/property/12\" data-current-price=\"400000\"><div class=\"line-one\">12 Pine St</div><img src=\"https://photos.example/12.jpg\"></div>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "price": "$400,000",
+        "description": "",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "sourceUrl": "https://portable.example/property/12",
+        "listingNumber": "",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "structured-cards"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "structured-cards",
+            "version": 1,
+            "evidence": "data-href listing/property cards",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

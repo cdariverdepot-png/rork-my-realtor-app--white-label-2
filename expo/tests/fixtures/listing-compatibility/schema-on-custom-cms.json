@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "schema-on-custom-cms",
+  "capturedAt": "2026-10-05T05:06:45.929Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Schema.org property records provide portable facts independent of the CMS.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"12 Pine St\",\"price\":400000,\"url\":\"https://portable.example/property/12\",\"image\":\"https://photos.example/12.jpg\"}</script>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "description": "",
+        "price": "$400,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/12",
+        "listingNumber": "",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "json-ld"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [
+          "structured-property-data"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "json-ld",
+            "version": 1,
+            "evidence": "application/ld+json script",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

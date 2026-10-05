@@ -16,7 +16,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  importer-regression:
+    uses: ./.github/workflows/listing-compatibility.yml
   deploy:
+    needs: importer-regression
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:

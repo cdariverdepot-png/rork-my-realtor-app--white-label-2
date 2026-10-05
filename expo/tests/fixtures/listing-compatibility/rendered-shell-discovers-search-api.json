@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "rendered-shell-discovers-search-api",
+  "capturedAt": "2026-10-05T07:01:57.091Z",
+  "provenance": "synthetic-contract",
+  "rationale": "An empty application shell has no inventory in the static response. Browser rendering reveals a Lofty/Chime listingSource, and the same-origin search JSON is preferred over card scraping. Markers are script hosts and payload shape, not a customer domain. Synthetic contract.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 4,
+    "maxListings": 10,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<div id=\"root\"></div><script src=\"/app.js\"></script>"
+    },
+    {
+      "key": "[\"https://portable.example/\",false,true]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": true,
+      "finalUrl": "https://portable.example/",
+      "html": "<link rel=\"dns-prefetch\" href=\"//static.chimeroi.com\"><link rel=\"dns-prefetch\" href=\"//cdn.chime.me\"><script src=\"/pageJsonAndGlobalData.js?siteId=1\"></script><script>window.sitePageJSON={\"page\":\"listing\",\"modules\":[{\"name\":\"md-search\",\"listingSource\":\"0+Custom-Example1\"}]}</script>",
+      "network": [
+        {
+          "url": "https://portable.example/api-site/search/realTimeListings?listingSource=0%2BCustom-Example1&featureListingName=Custom-Example1&listingType=featured-listing&page=1&pageSize=100",
+          "html": "{\"counts\":1,\"totalPage\":1,\"page\":1,\"listings\":[{\"streetAddress\":\"1018 Mogul Hill Rd\",\"detailUrl\":\"/1018-mogul-hill-rd\",\"price\":450000,\"bedrooms\":3,\"bathrooms\":2,\"sqft\":1800,\"previewPicture\":\"https://photos.example/mogul.jpg\",\"listingStatus\":\"Active\",\"mlsListingId\":\"MLS9\"}]}"
+        }
+      ]
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "1018 Mogul Hill Rd",
+        "description": "",
+        "price": "$450,000",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,800",
+        "neighborhood": "",
+        "image": "https://photos.example/mogul.jpg",
+        "images": [
+          "https://photos.example/mogul.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/1018-mogul-hill-rd",
+        "listingNumber": "MLS9",
+        "propertyType": "",
+        "status": "active"
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "public-json"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "property-cards",
+            "version": 1,
+            "evidence": "HTML anchors or property card containers",
+            "outcome": "empty",
+            "records": 0
+          }
+        ],
+        "resolution": "needs-strategy"
+      },
+      {
+        "url": "https://portable.example/",
+        "rendering": "rendered-dom",
+        "interfaces": [],
+        "navigation": [
+          "public-fragment"
+        ],
+        "attempts": [],
+        "resolution": "known-pattern"
+      },
+      {
+        "url": "https://portable.example/api-site/search/realTimeListings?listingSource=0%2BCustom-Example1&featureListingName=Custom-Example1&listingType=featured-listing&page=1&pageSize=100",
+        "rendering": "rendered-dom",
+        "interfaces": [
+          "public-json"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "public-json",
+            "version": 1,
+            "evidence": "JSON object/array containing evidenced property records",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

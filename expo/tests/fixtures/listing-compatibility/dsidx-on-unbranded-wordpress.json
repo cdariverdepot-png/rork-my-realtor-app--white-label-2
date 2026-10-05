@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "dsidx-on-unbranded-wordpress",
+  "capturedAt": "2026-10-05T05:07:12.408Z",
+  "provenance": "synthetic-contract",
+  "rationale": "dsIDXpress fields work without AgentFire branding: the widget contract is what matters.",
+  "seeds": [
+    "https://portable.example/idx/mls-26-123-12_pine_st"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/idx/mls-26-123-12_pine_st\",false,false]",
+      "url": "https://portable.example/idx/mls-26-123-12_pine_st",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/idx/mls-26-123-12_pine_st",
+      "html": "<title>12 Pine St</title><meta property=\"og:image\" content=\"https://photos.example/12.jpg\"><table id=\"dsidx-primary-data\"><span data-dsidx=\"Price\">$400,000</span><span data-dsidx=\"Beds\">3</span><span data-dsidx=\"Status\">Active</span></table>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "12 Pine St",
+        "price": "$400,000",
+        "description": "",
+        "beds": 3,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12.jpg",
+        "images": [
+          "https://photos.example/12.jpg"
+        ],
+        "sourceUrl": "https://portable.example/idx/mls-26-123-12_pine_st",
+        "status": "active",
+        "listingNumber": "26-123",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "agentfire-dsidx"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/idx/mls-26-123-12_pine_st",
+        "rendering": "response",
+        "interfaces": [
+          "agentfire-dsidx"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "agentfire-dsidx",
+            "version": 1,
+            "evidence": "AgentFire cards or dsIDXpress explicit property fields",
+            "outcome": "extracted",
+            "records": 1
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

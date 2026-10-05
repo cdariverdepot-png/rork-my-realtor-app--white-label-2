@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "id": "rendered-search-group-keeps-scope",
+  "capturedAt": "2026-10-05T07:34:59.808Z",
+  "provenance": "synthetic-contract",
+  "rationale": "A static WAF shell has no inventory. Browser execution reveals a same-origin search payload. The primary result group whose totalItems matches its data length is the collection; nearby groups and price-bucket links are not. Synthetic contract.",
+  "seeds": [
+    "https://portable.example/"
+  ],
+  "options": {
+    "maxPages": 4,
+    "maxListings": 10,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/\",false,false]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/",
+      "html": "<html><script>window.gokuProps={}</script><script src=\"/challenge.js\"></script></html>"
+    },
+    {
+      "key": "[\"https://portable.example/\",false,true]",
+      "url": "https://portable.example/",
+      "fragment": false,
+      "rendering": true,
+      "finalUrl": "https://portable.example/",
+      "html": "<a href=\"https://portable.example/homes-for-sale/index/100k-price/\">Homes for Sale under $100K</a><script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"Far Away\",\"price\":100000,\"url\":\"https://portable.example/homedetails/Far%20Away\",\"image\":\"https://photos.example/far.jpg\"}</script>",
+      "network": [
+        {
+          "url": "https://portable.example/homes-for-sale/search/index/",
+          "html": "{\"lolResults\":{\"totalItems\":2,\"data\":[{\"listing\":{\"title\":\"$695,000\",\"subtitles\":[\"10 River Road, Index, WA\"],\"pageLink\":\"/homedetails/10%20River%20Road\",\"structuredData\":{\"product\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Product\\\",\\\"name\\\":\\\"10 River Road\\\",\\\"url\\\":\\\"https://portable.example/homedetails/10%20River%20Road\\\",\\\"offers\\\":{\\\"price\\\":\\\"695000\\\"},\\\"image\\\":\\\"https://photos.example/10%20River%20Road.jpg\\\"}\",\"residence\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"SingleFamilyResidence\\\",\\\"address\\\":{\\\"streetAddress\\\":\\\"10 River Road\\\",\\\"addressLocality\\\":\\\"Index\\\",\\\"addressRegion\\\":\\\"WA\\\"},\\\"geo\\\":{\\\"latitude\\\":\\\"47.82\\\",\\\"longitude\\\":\\\"-121.55\\\"}}\"},\"media\":[{\"originalUrl\":\"https://photos.example/10%20River%20Road-full.jpg\"}],\"subStats\":[{\"title\":\"beds\",\"subtitle\":\"3\"},{\"title\":\"baths\",\"subtitle\":\"2\"},{\"title\":\"acres\",\"subtitle\":\"1.2\"}]}},{\"listing\":{\"title\":\"$450,000\",\"subtitles\":[\"20 Pine Lane, Index, WA\"],\"pageLink\":\"/homedetails/20%20Pine%20Lane\",\"structuredData\":{\"product\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Product\\\",\\\"name\\\":\\\"20 Pine Lane\\\",\\\"url\\\":\\\"https://portable.example/homedetails/20%20Pine%20Lane\\\",\\\"offers\\\":{\\\"price\\\":\\\"450000\\\"},\\\"image\\\":\\\"https://photos.example/20%20Pine%20Lane.jpg\\\"}\",\"residence\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"SingleFamilyResidence\\\",\\\"address\\\":{\\\"streetAddress\\\":\\\"20 Pine Lane\\\",\\\"addressLocality\\\":\\\"Index\\\",\\\"addressRegion\\\":\\\"WA\\\"},\\\"geo\\\":{\\\"latitude\\\":\\\"47.82\\\",\\\"longitude\\\":\\\"-121.55\\\"}}\"},\"media\":[{\"originalUrl\":\"https://photos.example/20%20Pine%20Lane-full.jpg\"}],\"subStats\":[{\"title\":\"beds\",\"subtitle\":\"3\"},{\"title\":\"baths\",\"subtitle\":\"2\"},{\"title\":\"acres\",\"subtitle\":\"0.4\"}]}}]},\"nearbyResults\":{\"totalItems\":900,\"data\":[{\"listing\":{\"title\":\"$100,000\",\"subtitles\":[\"Far Away, Other, WA\"],\"pageLink\":\"/homedetails/Far%20Away\",\"structuredData\":{\"product\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Product\\\",\\\"name\\\":\\\"Far Away\\\",\\\"url\\\":\\\"https://portable.example/homedetails/Far%20Away\\\",\\\"offers\\\":{\\\"price\\\":\\\"100000\\\"},\\\"image\\\":\\\"https://photos.example/Far%20Away.jpg\\\"}\",\"residence\":\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"SingleFamilyResidence\\\",\\\"address\\\":{\\\"streetAddress\\\":\\\"Far Away\\\",\\\"addressLocality\\\":\\\"Index\\\",\\\"addressRegion\\\":\\\"WA\\\"},\\\"geo\\\":{\\\"latitude\\\":\\\"47.82\\\",\\\"longitude\\\":\\\"-121.55\\\"}}\"},\"media\":[{\"originalUrl\":\"https://photos.example/Far%20Away-full.jpg\"}],\"subStats\":[{\"title\":\"beds\",\"subtitle\":\"3\"},{\"title\":\"baths\",\"subtitle\":\"2\"},{\"title\":\"acres\",\"subtitle\":\"9\"}]}}]}}"
+        }
+      ]
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "10 River Road",
+        "description": "",
+        "price": "$695,000",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "",
+        "neighborhood": "Index, WA",
+        "image": "https://photos.example/10%20River%20Road-full.jpg",
+        "images": [
+          "https://photos.example/10%20River%20Road-full.jpg"
+        ],
+        "facts": {
+          "Coordinates": "47.82, -121.55",
+          "Lot Acres": "1.2"
+        },
+        "sourceUrl": "https://portable.example/homedetails/10%20River%20Road",
+        "listingNumber": "",
+        "propertyType": ""
+      },
+      {
+        "title": "20 Pine Lane",
+        "description": "",
+        "price": "$450,000",
+        "beds": 3,
+        "baths": 2,
+        "sqft": "",
+        "neighborhood": "Index, WA",
+        "image": "https://photos.example/20%20Pine%20Lane-full.jpg",
+        "images": [
+          "https://photos.example/20%20Pine%20Lane-full.jpg"
+        ],
+        "facts": {
+          "Coordinates": "47.82, -121.55",
+          "Lot Acres": "0.4"
+        },
+        "sourceUrl": "https://portable.example/homedetails/20%20Pine%20Lane",
+        "listingNumber": "",
+        "propertyType": ""
+      }
+    ],
+    "coverage": "collection",
+    "outcome": "found",
+    "expectedCount": 2,
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "json-ld",
+      "public-json"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [],
+        "resolution": "needs-strategy"
+      },
+      {
+        "url": "https://portable.example/",
+        "rendering": "rendered-dom",
+        "interfaces": [
+          "structured-property-data"
+        ],
+        "navigation": [
+          "inventory-links"
+        ],
+        "attempts": [
+          {
+            "id": "json-ld",
+            "version": 1,
+            "evidence": "application/ld+json script",
+            "outcome": "extracted",
+            "records": 1
+          },
+          {
+            "id": "property-cards",
+            "version": 1,
+            "evidence": "HTML anchors or property card containers",
+            "outcome": "empty",
+            "records": 0
+          }
+        ],
+        "resolution": "known-pattern"
+      },
+      {
+        "url": "https://portable.example/homes-for-sale/search/index/",
+        "rendering": "rendered-dom",
+        "interfaces": [
+          "public-json"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "public-json",
+            "version": 1,
+            "evidence": "JSON object/array containing evidenced property records",
+            "outcome": "extracted",
+            "records": 2
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}

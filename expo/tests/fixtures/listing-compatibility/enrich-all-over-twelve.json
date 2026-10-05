@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 1,
+  "id": "enrich-all-over-twelve",
+  "capturedAt": "2026-10-05T07:01:35.780Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Collections larger than twelve schedule every eligible detail URL when enrichAll is set. Detail requests do not consume the collection page budget. Synthetic contract, not a live capture.",
+  "seeds": [
+    "https://portable.example/inventory"
+  ],
+  "options": {
+    "maxPages": 2,
+    "maxListings": 20,
+    "enrichAll": true
+  },
+  "pages": [
+    {
+      "key": "[\"https://portable.example/inventory\",false,false]",
+      "url": "https://portable.example/inventory",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/inventory",
+      "html": "<script type=\"application/ld+json\">[{\"@type\":\"RealEstateListing\",\"name\":\"1 Pine St\",\"url\":\"https://portable.example/property/1\",\"price\":300000,\"image\":\"https://photos.example/1.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"2 Pine St\",\"url\":\"https://portable.example/property/2\",\"price\":300001,\"image\":\"https://photos.example/2.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"3 Pine St\",\"url\":\"https://portable.example/property/3\",\"price\":300002,\"image\":\"https://photos.example/3.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"4 Pine St\",\"url\":\"https://portable.example/property/4\",\"price\":300003,\"image\":\"https://photos.example/4.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"5 Pine St\",\"url\":\"https://portable.example/property/5\",\"price\":300004,\"image\":\"https://photos.example/5.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"6 Pine St\",\"url\":\"https://portable.example/property/6\",\"price\":300005,\"image\":\"https://photos.example/6.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"7 Pine St\",\"url\":\"https://portable.example/property/7\",\"price\":300006,\"image\":\"https://photos.example/7.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"8 Pine St\",\"url\":\"https://portable.example/property/8\",\"price\":300007,\"image\":\"https://photos.example/8.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"9 Pine St\",\"url\":\"https://portable.example/property/9\",\"price\":300008,\"image\":\"https://photos.example/9.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"10 Pine St\",\"url\":\"https://portable.example/property/10\",\"price\":300009,\"image\":\"https://photos.example/10.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"11 Pine St\",\"url\":\"https://portable.example/property/11\",\"price\":300010,\"image\":\"https://photos.example/11.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"12 Pine St\",\"url\":\"https://portable.example/property/12\",\"price\":300011,\"image\":\"https://photos.example/12.jpg\"},{\"@type\":\"RealEstateListing\",\"name\":\"13 Pine St\",\"url\":\"https://portable.example/property/13\",\"price\":300012,\"image\":\"https://photos.example/13.jpg\"}]</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/13\",false,false]",
+      "url": "https://portable.example/property/13",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/13",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"13 Pine St\",\"url\":\"https://portable.example/property/13\",\"price\":300012,\"image\":[\"https://photos.example/13-a.jpg\",\"https://photos.example/13-b.jpg\"],\"description\":\"Remarks 13\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/12\",false,false]",
+      "url": "https://portable.example/property/12",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/12",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"12 Pine St\",\"url\":\"https://portable.example/property/12\",\"price\":300011,\"image\":[\"https://photos.example/12-a.jpg\",\"https://photos.example/12-b.jpg\"],\"description\":\"Remarks 12\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/11\",false,false]",
+      "url": "https://portable.example/property/11",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/11",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"11 Pine St\",\"url\":\"https://portable.example/property/11\",\"price\":300010,\"image\":[\"https://photos.example/11-a.jpg\",\"https://photos.example/11-b.jpg\"],\"description\":\"Remarks 11\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/10\",false,false]",
+      "url": "https://portable.example/property/10",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/10",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"10 Pine St\",\"url\":\"https://portable.example/property/10\",\"price\":300009,\"image\":[\"https://photos.example/10-a.jpg\",\"https://photos.example/10-b.jpg\"],\"description\":\"Remarks 10\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/9\",false,false]",
+      "url": "https://portable.example/property/9",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/9",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"9 Pine St\",\"url\":\"https://portable.example/property/9\",\"price\":300008,\"image\":[\"https://photos.example/9-a.jpg\",\"https://photos.example/9-b.jpg\"],\"description\":\"Remarks 9\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/8\",false,false]",
+      "url": "https://portable.example/property/8",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/8",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"8 Pine St\",\"url\":\"https://portable.example/property/8\",\"price\":300007,\"image\":[\"https://photos.example/8-a.jpg\",\"https://photos.example/8-b.jpg\"],\"description\":\"Remarks 8\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/7\",false,false]",
+      "url": "https://portable.example/property/7",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/7",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"7 Pine St\",\"url\":\"https://portable.example/property/7\",\"price\":300006,\"image\":[\"https://photos.example/7-a.jpg\",\"https://photos.example/7-b.jpg\"],\"description\":\"Remarks 7\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/6\",false,false]",
+      "url": "https://portable.example/property/6",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/6",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"6 Pine St\",\"url\":\"https://portable.example/property/6\",\"price\":300005,\"image\":[\"https://photos.example/6-a.jpg\",\"https://photos.example/6-b.jpg\"],\"description\":\"Remarks 6\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/5\",false,false]",
+      "url": "https://portable.example/property/5",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/5",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"5 Pine St\",\"url\":\"https://portable.example/property/5\",\"price\":300004,\"image\":[\"https://photos.example/5-a.jpg\",\"https://photos.example/5-b.jpg\"],\"description\":\"Remarks 5\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/4\",false,false]",
+      "url": "https://portable.example/property/4",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/4",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"4 Pine St\",\"url\":\"https://portable.example/property/4\",\"price\":300003,\"image\":[\"https://photos.example/4-a.jpg\",\"https://photos.example/4-b.jpg\"],\"description\":\"Remarks 4\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/3\",false,false]",
+      "url": "https://portable.example/property/3",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/3",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"3 Pine St\",\"url\":\"https://portable.example/property/3\",\"price\":300002,\"image\":[\"https://photos.example/3-a.jpg\",\"https://photos.example/3-b.jpg\"],\"description\":\"Remarks 3\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/2\",false,false]",
+      "url": "https://portable.example/property/2",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/2",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"2 Pine St\",\"url\":\"https://portable.example/property/2\",\"price\":300001,\"image\":[\"https://photos.example/2-a.jpg\",\"https://photos.example/2-b.jpg\"],\"description\":\"Remarks 2\"}</script>"
+    },
+    {
+      "key": "[\"https://portable.example/property/1\",false,false]",
+      "url": "https://portable.example/property/1",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://portable.example/property/1",
+      "html": "<script type=\"application/ld+json\">{\"@type\":\"RealEstateListing\",\"name\":\"1 Pine St\",\"url\":\"https://portable.example/property/1\",\"price\":300000,\"image\":[\"https://photos.example/1-a.jpg\",\"https://photos.example/1-b.jpg\"],\"description\":\"Remarks 1\"}</script>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "1 Pine St",
+        "description": "Remarks 1",
+        "price": "$300,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/1-a.jpg",
+        "images": [
+          "https://photos.example/1-a.jpg",
+          "https://photos.example/1-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/1",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "10 Pine St",
+        "description": "Remarks 10",
+        "price": "$300,009",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/10-a.jpg",
+        "images": [
+          "https://photos.example/10-a.jpg",
+          "https://photos.example/10-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/10",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "11 Pine St",
+        "description": "Remarks 11",
+        "price": "$300,010",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/11-a.jpg",
+        "images": [
+          "https://photos.example/11-a.jpg",
+          "https://photos.example/11-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/11",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "12 Pine St",
+        "description": "Remarks 12",
+        "price": "$300,011",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/12-a.jpg",
+        "images": [
+          "https://photos.example/12-a.jpg",
+          "https://photos.example/12-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/12",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "13 Pine St",
+        "description": "Remarks 13",
+        "price": "$300,012",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/13-a.jpg",
+        "images": [
+          "https://photos.example/13-a.jpg",
+          "https://photos.example/13-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/13",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "2 Pine St",
+        "description": "Remarks 2",
+        "price": "$300,001",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/2-a.jpg",
+        "images": [
+          "https://photos.example/2-a.jpg",
+          "https://photos.example/2-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/2",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "3 Pine St",
+        "description": "Remarks 3",
+        "price": "$300,002",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/3-a.jpg",
+        "images": [
+          "https://photos.example/3-a.jpg",
+          "https://photos.example/3-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/3",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "4 Pine St",
+        "description": "Remarks 4",
+        "price": "$300,003",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/4-a.jpg",
+        "images": [
+          "https://photos.example/4-a.jpg",
+          "https://photos.example/4-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/4",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "5 Pine St",
+        "description": "Remarks 5",
+        "price": "$300,004",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/5-a.jpg",
+        "images": [
+          "https://photos.example/5-a.jpg",
+          "https://photos.example/5-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/5",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "6 Pine St",
+        "description": "Remarks 6",
+        "price": "$300,005",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/6-a.jpg",
+        "images": [
+          "https://photos.example/6-a.jpg",
+          "https://photos.example/6-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/6",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "7 Pine St",
+        "description": "Remarks 7",
+        "price": "$300,006",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/7-a.jpg",
+        "images": [
+          "https://photos.example/7-a.jpg",
+          "https://photos.example/7-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/7",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "8 Pine St",
+        "description": "Remarks 8",
+        "price": "$300,007",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/8-a.jpg",
+        "images": [
+          "https://photos.example/8-a.jpg",
+          "https://photos.example/8-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/8",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      },
+      {
+        "title": "9 Pine St",
+        "description": "Remarks 9",
+        "price": "$300,008",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "https://photos.example/9-a.jpg",
+        "images": [
+          "https://photos.example/9-a.jpg",
+          "https://photos.example/9-b.jpg"
+        ],
+        "facts": {},
+        "sourceUrl": "https://portable.example/property/9",
+        "listingNumber": "",
+        "propertyType": "",
+        "detailsComplete": true
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "json-ld"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://portable.example/inventory",
+        "rendering": "response",
+        "interfaces": [
+          "structured-property-data"
+        ],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "json-ld",
+            "version": 1,
+            "evidence": "application/ld+json script",
+            "outcome": "extracted",
+            "records": 13
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://portable.example"
+}
