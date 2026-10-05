@@ -1026,7 +1026,8 @@ test('site-scoped published queries are followed and unscoped market queries are
   const backfill = { pageSize: 9, resource: 'properties', variables: { companyId: company, websiteId: website, displayMLSListings: 'false' } };
   const market = { pageSize: '50', useRouterApi: false, query, variables: { limit: 50, offset: 0, globalProperty: true, companyId: company, websiteId: website } };
   const cameron = '<script>window.site={apiGatewayUrl:\'/api-gw\',routerUrl:\'/api-nv\'};' + embed(scoped) + ';' + embed(backfill) + ';' + embed(market) + ';</script>'
-    + '<a href="{{#if fromMLS}}/home-search/listings/{{id}}{{^}}/properties/{{slug}}{{/if}}">template</a>';
+    + '<a href="{{#if fromMLS}}/home-search/listings/{{id}}{{^}}/properties/{{slug}}{{/if}}">template</a>'
+    + '<a href="/properties/far-market">Far Market $100,000</a>';
   const calls = [];
   const cameronResult = await discoverListings([origin + '/properties'], async url => {
     const parsed = new URL(url);
@@ -1048,6 +1049,7 @@ test('site-scoped published queries are followed and unscoped market queries are
   assert.equal(calls[0].limit, 2);
   assert.equal(cameronResult.listings.length, 2);
   assert.equal(cameronResult.listings.some(row => row.title === 'Private Address' && row.sourceUrl === origin + '/properties/private-house'), true);
+  assert.equal(cameronResult.listings.some(row => /Far Market/.test(row.title)), false);
   assert.equal(cameronResult.meta.expectedCount, 2);
   assert.equal(cameronResult.meta.inventoryStatus, 'inventory_complete');
   assert.ok(cameronResult.meta.completenessEvidence.includes('api_total_match'));

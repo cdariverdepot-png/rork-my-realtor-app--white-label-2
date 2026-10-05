@@ -93,7 +93,7 @@ function publicAddress(address: string): boolean {
 async function publicHttps(raw: string): Promise<URL> {
   const url = new URL(raw);
   const host = url.hostname.toLowerCase().replace(/\.$/, "");
-  if (raw.length > 2048 || url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443") ||
+  if (raw.length > 12000 || url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443") ||
       host === "localhost" || host.endsWith(".local") || host.endsWith(".internal") ||
       /^\d+\.\d+\.\d+\.\d+$/.test(host) || host.includes(":")) {
     throw new Error("Use a public HTTPS page.");

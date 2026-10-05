@@ -2325,8 +2325,10 @@ export async function discoverListings(
       }
     }
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
-    // On a seed/landing page a single meta "listing" is often the agency itself — ignore unless it has a price.
+    const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
+    // A page that publishes a scoped, counted query is not itself the inventory. Shell cards can be sold, nearby, or unscoped.
     for (const item of found) {
+      if (publishedQueries.length) break;
       if (next.depth === 0 && found.length === 1 && !item.price && item.sourceUrl === finalUrl.toString()) continue;
       pushListing(item);
       if (listings.length >= maxListings) break;
@@ -2346,7 +2348,7 @@ export async function discoverListings(
       for (const url of collectInventoryFragments(html, finalUrl)) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
       }
-      for (const url of publishedCollectionRequests(html, finalUrl)) {
+      for (const url of publishedQueries) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) {
           sawContinuation = true;
           continuationMechanism = continuationMechanism || "offset-query";

@@ -2371,8 +2371,10 @@ async function discoverListings(
       }
     }
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
-    // On a seed/landing page a single meta "listing" is often the agency itself — ignore unless it has a price.
+    const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
+    // A page that publishes a scoped, counted query is not itself the inventory. Shell cards can be sold, nearby, or unscoped.
     for (const item of found) {
+      if (publishedQueries.length) break;
       if (next.depth === 0 && found.length === 1 && !item.price && item.sourceUrl === finalUrl.toString()) continue;
       pushListing(item);
       if (listings.length >= maxListings) break;
@@ -2392,7 +2394,7 @@ async function discoverListings(
       for (const url of collectInventoryFragments(html, finalUrl)) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
       }
-      for (const url of publishedCollectionRequests(html, finalUrl)) {
+      for (const url of publishedQueries) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) {
           sawContinuation = true;
           continuationMechanism = continuationMechanism || "offset-query";
@@ -3166,7 +3168,7 @@ function publicAddress(address: string): boolean {
 async function publicHttps(raw: string): Promise<URL> {
   const url = new URL(raw);
   const host = url.hostname.toLowerCase().replace(/\.$/, "");
-  if (raw.length > 2048 || url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443") ||
+  if (raw.length > 12000 || url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443") ||
       host === "localhost" || host.endsWith(".local") || host.endsWith(".internal") ||
       /^\d+\.\d+\.\d+\.\d+$/.test(host) || host.includes(":")) {
     throw new Error("Use a public HTTPS page.");
