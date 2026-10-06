@@ -408,15 +408,66 @@ test('optional renderer reads real DOM property facts and rejects unrelated redi
 });
 
 
-test('a finite showcase cannot establish complete portfolio coverage', async () => {
+test('an IDX showcase without a listing agent id is not the brokerage inventory', async () => {
   const widget='https://homes.agent.example/idx/customshowcasejs.php?widgetid=42';
-  const script=`aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake" class="IDX-showcaseLink"></a>');
+  const script=`var agentHeaderID = null;
+  aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake" class="IDX-showcaseLink"></a>');
+  idx('<div />').attr('class','IDX-showcaseAddress').html('123 Lake');
+  idx('<div />').attr('class','IDX-showcasePrice').html('$500,000');
+  idx('<div />').attr('class','IDX-showcaseStatus').html('Active');`;
+  const seen = [];
+  const r=await discoverListings(['https://agent.example/'],async (url) => { seen.push(url); return { html: url === widget ? script : '<script src="'+widget+'"></script>', finalUrl: new URL(url) }; });
+  assert.equal(r.listings.length,0);
+  assert.equal(r.meta.inventoryStatus,'inventory_blocked');
+  assert.ok(r.meta.obstacles.some(row => row.code === 'scope_not_established'));
+  assert.ok(r.meta.completenessEvidence.includes('scope_not_established'));
+  assert.ok(!seen.some(url => /[?&]paged=2|start=\d+/.test(url)));
+});
+
+test('an IDX showcase with a published agent id stays partial without a collection total', async () => {
+  const widget='https://homes.agent.example/idx/customshowcasejs.php?widgetid=42';
+  const script=`var agentHeaderID = 481;
+  aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake" class="IDX-showcaseLink"></a>');
   idx('<div />').attr('class','IDX-showcaseAddress').html('123 Lake');
   idx('<div />').attr('class','IDX-showcasePrice').html('$500,000');
   idx('<div />').attr('class','IDX-showcaseStatus').html('Active');`;
   const r=await discoverListings(['https://agent.example/'],fixtureFetch({'https://agent.example/':'<script src="'+widget+'"></script>',[widget]:script}));
-  assert.equal(r.listings.length,1); assert.equal(r.meta.coverage,'showcase'); assert.equal(r.meta.outcome,'partial');
+  assert.equal(r.listings.length,1);
+  assert.equal(r.meta.coverage,'showcase');
+  assert.equal(r.meta.outcome,'partial');
+  assert.equal(r.meta.inventoryStatus,'inventory_partial');
+  assert.equal(r.meta.expectedCount ?? null, null);
   assert.ok(r.meta.issues.some(x=>x.code==='limited-showcase'));
+});
+
+test('IDX price-bucket result links are a market search, not listings', async () => {
+  const seed='https://agent.example/penthouses';
+  const market='https://agent.example/idx/results/listings?idxID=001&city%5B%5D=29920&lp=500000&hp=1000000&aw_remarksConcat=Penthouse';
+  const rows=listingsFromCards('<a href="'+market+'">Penthouses $500,000 to $1,000,000</a>', new URL(seed));
+  assert.equal(rows.length,0);
+  const seen=[];
+  const r=await discoverListings([seed], async (url) => { seen.push(url); return { html: '<a href="'+market+'">Penthouses $500,000</a><a href="/idx/search/advanced">Search homes</a>', finalUrl: new URL(url) }; }, { maxPages: 6 });
+  assert.equal(r.listings.length,0);
+  assert.equal(r.meta.inventoryStatus,'inventory_blocked');
+  assert.ok(r.meta.obstacles.some(row => row.code === 'scope_not_established'));
+  assert.ok(!seen.includes(market));
+});
+
+test('a scoped IDX results page can complete only when the published count matches the rows', async () => {
+  const page='https://homes.agent.example/idx/results/listings?a_listingAgentID=77';
+  const card=(id,addr)=>'<a href="https://homes.agent.example/idx/details/listing/b004/'+id+'/'+addr+'">'+addr.replace(/-/g,' ')+' $500,000</a>';
+  const html='<span class="IDX-resultsCount">2</span>'+card('A','11-Lake')+card('B','22-Oak');
+  const r=await discoverListings([page],fixtureFetch({[page]:html}),{maxPages:4,maxDetailPages:0});
+  assert.equal(r.listings.length,2);
+  assert.equal(r.meta.expectedCount,2);
+  assert.equal(r.meta.inventoryStatus,'inventory_complete');
+  assert.ok(r.meta.completenessEvidence.includes('published_count_match'));
+  const open='https://homes.agent.example/idx/results/listings?a_listingOfficeID=9';
+  const partial=await discoverListings([open],fixtureFetch({[open]:'<span class="IDX-resultsCount">40</span>'+card('A','11-Lake')}),{maxPages:4,maxDetailPages:0});
+  assert.equal(partial.listings.length,1);
+  assert.equal(partial.meta.expectedCount,40);
+  assert.equal(partial.meta.inventoryStatus,'inventory_partial');
+  assert.ok(!partial.meta.visited.some(url => /[?&]start=/.test(url)));
 });
 
 

@@ -195,6 +195,10 @@ function scoreInventoryLink(href: string, label: string, seed: URL): number {
   }
   if (link.protocol !== "https:" || LOGIN_PATH.test(link.pathname) ||
       /\/(?:emissary|shares|carts)\//i.test(link.pathname) || /^(?:log\s*in|sign\s*in|save|share|hide|unhide|print|contact)(?:\s|$)/i.test(label.trim())) return 0;
+  // IDX results, search, and saved links are market navigation unless the query names the listing agent or office.
+  if (/\/idx\/(?:results|search|map|featured|soldpending)(?:\/|$)/i.test(link.pathname) && !idxOwnerParams(link).length) return 0;
+  if (/\/idx\/details\/listing\//i.test(link.pathname) && !idxOwnerParams(link).length) return 0;
+  if (/(?:^|\.)idxbroker\.com$/i.test(link.hostname) && /^\/i\/[^/]+\/?$/i.test(link.pathname) && !idxOwnerParams(link).length) return 0;
   if (/\b(?:privacy|terms|cookie|copyright|training|support)\b/i.test(label) ||
       /(?:^|\.)(?:facebook|instagram|twitter|x|linkedin|youtube)\.com$/i.test(link.hostname) ||
       /^(?:www\.)?flexmls\.com$/i.test(link.hostname)) return 0;
@@ -514,6 +518,8 @@ function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredList
     const pathOk = DETAIL_PATH.test(link.pathname) || /listing|property|home|mls|pin|id=/i.test(link.pathname + link.search);
     // Price-bucket navigation is a filter, not a property, on any host.
     if (/\/\d+k-price\/?$/i.test(link.pathname) || /homes for sale under\b/i.test(label)) continue;
+    // An IDX Broker results URL is a market search, even when the label is a dollar range.
+    if (/\/idx\/results(?:\/|$)/i.test(link.pathname)) continue;
     if (!pathOk && !sameSite(link, base)) continue;
     if (!pathOk && label.length < 8) continue;
     // Peek at a window of HTML around the match for price / beds.
@@ -857,6 +863,48 @@ function listingsFromBrivityResponse(html: string, base: URL): { listings: Disco
   } catch { return null; }
 }
 
+
+const IDX_OWNER_PARAM = /^(?:a_listingagentid|a_listingofficeid|a_listingteamid|agentheaderid)$/i;
+
+/** Listing agent or office on an IDX Broker URL. Widget id, MLS idxID, city, and price are not ownership. */
+function idxOwnerParams(url: URL): string[] {
+  const found: string[] = [];
+  const seen = new Set<string>();
+  for (const [key, value] of url.searchParams) {
+    if (!IDX_OWNER_PARAM.test(key)) continue;
+    const trimmed = value.trim();
+    if (!trimmed || /^(?:null|undefined|0|all|-1)$/i.test(trimmed)) continue;
+    const id = `${key.toLowerCase()}=${trimmed.toLowerCase()}`;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    found.push(id);
+  }
+  return found;
+}
+
+/** A showcase widget id is not the agent. Only a published non-empty agentHeaderID is. */
+function idxShowcaseOwner(script: string): string | null {
+  const match = script.match(/\bagentHeaderID\s*=\s*(null|undefined|\d+|(['"])([\s\S]*?)\2)/);
+  if (!match || match[1] === "null" || match[1] === "undefined") return null;
+  const value = (match[3] ?? match[1]).trim();
+  if (!value || /^(?:null|undefined|0|all|-1)$/i.test(value)) return null;
+  return value;
+}
+
+function idxBrokerSurface(html: string, url: URL): boolean {
+  if (/\/idx\/details\/listing\//i.test(url.pathname)) return false;
+  if (/\/idx\/(?:customshowcasejs\.php|results(?:\/|$)|widgets\/|search(?:\/|$)|map(?:\/|$)|featured(?:\/|$))/i.test(url.pathname)) return true;
+  if (/(?:^|\.)idxbroker\.com$/i.test(url.hostname)) return true;
+  return /idxwidgetsrc-|customshowcasejs\.php|\/idx\/widgets\/|\/idx\/results\/listings/i.test(html);
+}
+
+function idxCollectedUrl(raw: string): boolean {
+  try {
+    return /\/idx\/(?:results(?:\/|$)|details\/listing\/)/i.test(new URL(raw).pathname);
+  } catch {
+    return false;
+  }
+}
 
 /** Read the public IDX Broker showcase's literal property fields without executing JavaScript. */
 function listingsFromIdxShowcase(script: string, base: URL): DiscoveredListing[] {
@@ -1585,7 +1633,7 @@ const PLATFORM_CONTRACTS: Record<string, [string, string]> = {
   moxiworks: ["Moxi listing_detail literals or linktooverlay cards", "Read scoped cards and lazy photos; prefer the published active collection."],
   ihomefinder: ["Kestrel widget configuration or public idxhome response", "Use published featured filters and public transport; reject market and inactive records."],
   "agentfire-dsidx": ["AgentFire cards or dsIDXpress explicit property fields", "Property-local fields preserve identity and avoid neighboring cards and price history."],
-  "idx-broker": ["IDX showcase script or IDX detail route", "Parse literal widget facts without executing JavaScript; showcase is partial inventory."],
+  "idx-broker": ["IDX showcase script or IDX detail route", "Import only a feed that publishes a listing agent or office id. A widget id, MLS board, city, or price bucket is not ownership, and a showcase is not a complete collection."],
   brivity: ["Brivity featured widget or scoped search response", "Retain published agent/office filters and display permissions."],
   realgeeks: ["Real Geeks property cards and public saved-search criteria", "Follow only a saved search that publishes an agent, office, or team id, and reconcile its published total."],
   flexmls: ["Public Flexmls server-rendered listing cards", "Preserve collection scope and per-card payloads through public fragments."],
@@ -2516,7 +2564,7 @@ async function discoverListings(
     if(next.activationToken && finalUrl.hostname === "www.idxhome.com"){try{const rows=JSON.parse(html);if(Array.isArray(rows))for(const row of rows){if(row.featured===true && row.statusId==="active" && /^[a-z0-9_-]+$/i.test(row.id) && typeof row.listingPageUrl==="string") publicDetails.set(row.listingPageUrl,{url:"https://www.idxhome.com/api/kestrel/listing/"+row.id+".json?context=DETAIL",activationToken:next.activationToken});}}catch{/* other formats */}}
     const showcase = broad ? [] : listingsFromIdxShowcase(html, finalUrl);
     if (/cbw-slider-listing/.test(html) && next.depth===0) {limitedShowcase=true;issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"agentfire-dsidx"});}
-    if (showcase.length) { limitedShowcase = true; issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"idx-broker"}); }
+    if (showcase.length && idxShowcaseOwner(html)) { limitedShowcase = true; issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"idx-broker"}); }
     for (const candidate of architectureCandidates(html, finalUrl)) {
       const prior = candidateMap.get(candidate.id);
       if (!prior || candidate.confidence > prior.confidence) candidateMap.set(candidate.id, candidate);
@@ -2761,6 +2809,40 @@ async function discoverListings(
         issues.push({ code: "requires-rendering", url: finalUrl.toString() });
         inventoryUrls.add(finalUrl.toString());
       }
+    }
+    const idxOwners = !broad && (idxOwnerParams(finalUrl).length > 0 || !!idxShowcaseOwner(html));
+    if (!broad && !idxOwners && idxBrokerSurface(html, finalUrl)) {
+      const idxRows = found.filter(item => idxCollectedUrl(item.sourceUrl));
+      if (idxRows.length) {
+        omissionTotal += idxRows.length;
+        omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + idxRows.length);
+        found = found.filter(item => !idxCollectedUrl(item.sourceUrl));
+      }
+      const showcasePending = collectInventoryFragments(html, finalUrl).some(url => /\/idx\/customshowcasejs\.php$/i.test(new URL(url).pathname) && url !== finalUrl.toString());
+      const otherInventory = collectInventoryLinks(html, finalUrl, 8).some(link => {
+        try {
+          const linked = new URL(link.url);
+          return !idxCollectedUrl(link.url) && !/\/idx\/(?:results|search|map|featured|soldpending)(?:\/|$)/i.test(linked.pathname) && !((/(?:^|\.)idxbroker\.com$/i.test(linked.hostname) && /^\/i\/[^/]+\/?$/i.test(linked.pathname)));
+        } catch { return false; }
+      });
+      const collectionDocument = /\/idx\/(?:customshowcasejs\.php|results(?:\/|$)|widgets\/)/i.test(finalUrl.pathname) || (/(?:^|\.)idxbroker\.com$/i.test(finalUrl.hostname) && !/\/idx\/details\/listing\//i.test(finalUrl.pathname));
+      const marketShell = collectionDocument || idxRows.length > 0 || /customshowcasejs\.php|idxwidgetsrc-|\/idx\/results\/listings|\/idx\/widgets\//i.test(html);
+      if (!showcasePending && marketShell && !found.length) {
+        unscopedMarket = true;
+        if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
+          obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "IDX Broker feed has no listing agent or office id. A widget id, MLS board, city, or price bucket is not the brokerage inventory." });
+        }
+        stages.push("scope_not_established");
+        observation.resolution = "excluded-market";
+        if (idxRows.length || collectionDocument || PATH_INVENTORY.test(finalUrl.pathname) || /\/idx\/results\/listings/i.test(html)) inventoryUrls.add(finalUrl.toString());
+        if (!otherInventory) continue;
+      }
+    }
+    if (!broad && idxOwnerParams(finalUrl).length) {
+      const published = html.match(/<span\b[^>]*class=["'][^"']*\bIDX-resultsCount\b[^"']*["'][^>]*>\s*([\d,]+)\s*</i)?.[1];
+      const total = Number((published ?? "").replace(/,/g, ""));
+      if (Number.isFinite(total) && total > 0) expectedCount = Math.max(expectedCount, total);
+      stages.push("collection_scoped");
     }
     const unscopedMlsArchive = !broad && found.length >= 2 && found.every(item => mlsBoardPermalink(item.sourceUrl)) && !hasOwnerScope(finalUrl, html);
     if (unscopedMlsArchive) {

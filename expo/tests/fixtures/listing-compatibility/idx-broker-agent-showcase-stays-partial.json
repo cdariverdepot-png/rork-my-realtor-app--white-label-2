@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "idx-broker-showcase-stays-partial",
-  "capturedAt": "2026-10-05T15:47:59.692Z",
+  "id": "idx-broker-agent-showcase-stays-partial",
+  "capturedAt": "2026-10-06T22:40:00.000Z",
   "provenance": "synthetic-contract",
-  "rationale": "An IDX Broker showcase with no agentHeaderID is an unscoped widget, not the brokerage inventory. Widget id is not ownership.",
+  "rationale": "A showcase that publishes agentHeaderID is scoped to that agent, but the widget does not publish a collection total, so it stays partial.",
   "seeds": [
     "https://agent.example/"
   ],
@@ -27,14 +27,41 @@
       "fragment": true,
       "rendering": false,
       "finalUrl": "https://homes.agent.example/idx/customshowcasejs.php?widgetid=42",
-      "html": "aLink = idx('<a href=\"https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake\" class=\"IDX-showcaseLink\"></a>');\n  idx('<div />').attr('class','IDX-showcaseAddress').html('123 Lake');\n  idx('<div />').attr('class','IDX-showcasePrice').html('$500,000');\n  idx('<div />').attr('class','IDX-showcaseStatus').html('Active');"
+      "html": "var agentHeaderID = 481;\naLink = idx('<a href=\"https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake\" class=\"IDX-showcaseLink\"></a>');\n  idx('<div />').attr('class','IDX-showcaseAddress').html('123 Lake');\n  idx('<div />').attr('class','IDX-showcasePrice').html('$500,000');\n  idx('<div />').attr('class','IDX-showcaseStatus').html('Active');"
     }
   ],
   "expected": {
-    "listings": [],
-    "coverage": "unknown",
-    "outcome": "unreadable",
-    "issues": [],
+    "listings": [
+      {
+        "title": "123 Lake",
+        "description": "",
+        "price": "$500,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "",
+        "image": "",
+        "images": [],
+        "facts": {},
+        "sourceUrl": "https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake",
+        "listingNumber": "",
+        "propertyType": "",
+        "status": "active"
+      }
+    ],
+    "coverage": "showcase",
+    "outcome": "partial",
+    "issues": [
+      {
+        "code": "limited-showcase",
+        "url": "https://homes.agent.example/idx/customshowcasejs.php?widgetid=42",
+        "interface": "idx-broker"
+      },
+      {
+        "code": "missing-photos",
+        "url": "https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake"
+      }
+    ],
     "failed": [],
     "strategies": [
       "idx-broker"
@@ -69,9 +96,7 @@
         "interfaces": [
           "idx-broker"
         ],
-        "navigation": [
-          "inventory-links"
-        ],
+        "navigation": [],
         "attempts": [
           {
             "id": "idx-broker",
