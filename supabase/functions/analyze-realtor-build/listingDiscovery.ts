@@ -1295,6 +1295,97 @@ export function listingsFromMoxi(html: string, base: URL): DiscoveredListing[] {
   return out;
 }
 
+/** Real Geeks publishes a saved search as `/search/results/{id}/` and its filters at `/api/search/criteria/`.
+ * Geography, price, and property type are the market. Only an agent, office, or team id is the site owner's collection.
+ */
+export function realGeeksDocument(html: string): boolean {
+  return /cdn\.realgeeks\.com|property-images\.realgeeks\.com|name=["']rg-static-dist|realgeeks\.member/i.test(html);
+}
+
+const REAL_GEEKS_OWNER_KEY = /^(?:agent_id|office_id|team_id|listing_agent_id|listing_office_id|list_agent_id|list_office_id|mls_agent_id|mls_office_id)$/i;
+
+export function realGeeksSearchId(url: URL): string {
+  const id = url.pathname.match(/\/search\/results\/([A-Za-z0-9]{1,16})\/?$/)?.[1] ?? "";
+  return id && !/^(?:advanced_search|landing|mls_search|zip_code_search|address_search|condo_search|market_report_search)$/i.test(id) ? id : "";
+}
+
+export function realGeeksCriteriaUrl(base: URL, searchId: string): string {
+  const url = new URL("/api/search/criteria/", base.origin);
+  url.searchParams.set("search_id", searchId);
+  url.searchParams.set("format", "json");
+  return url.toString();
+}
+
+export function realGeeksCriteriaRequests(html: string, base: URL): string[] {
+  if (!realGeeksDocument(html) && !realGeeksSearchId(base)) return [];
+  const ids = new Set<string>();
+  const own = realGeeksSearchId(base);
+  if (own) ids.add(own);
+  for (const match of html.matchAll(/\/search\/results\/([A-Za-z0-9]{1,16})\//g)) {
+    if (!/^(?:advanced_search|landing)$/i.test(match[1])) ids.add(match[1]);
+  }
+  return [...ids].slice(0, 12).map(id => realGeeksCriteriaUrl(base, id));
+}
+
+export function realGeeksOwnerScope(payload: unknown): boolean {
+  const record = payload && typeof payload === "object" && !Array.isArray(payload) ? payload as Record<string, unknown> : null;
+  const data = record && record.data && typeof record.data === "object" && !Array.isArray(record.data) ? record.data as Record<string, unknown> : record;
+  if (!data) return false;
+  for (const [key, value] of Object.entries(data)) {
+    if (!REAL_GEEKS_OWNER_KEY.test(key)) continue;
+    const values = Array.isArray(value) ? value : [value];
+    if (values.some(item => String(item ?? "").trim() && !/^all$/i.test(String(item)))) return true;
+  }
+  return false;
+}
+
+export function realGeeksCriteriaDecision(html: string, url: URL): { searchId: string; scoped: boolean } | null {
+  if (!/\/api\/search\/criteria\/?$/i.test(url.pathname)) return null;
+  const searchId = url.searchParams.get("search_id") ?? "";
+  if (!searchId || searchId.startsWith("#")) return null;
+  try { return { searchId, scoped: realGeeksOwnerScope(JSON.parse(html)) }; }
+  catch { return { searchId, scoped: false }; }
+}
+
+/** Cards are bounded by `row property`. A positional `/search/details/{search}/{index}/` URL is not an identity. */
+export function listingsFromRealGeeks(html: string, base: URL): DiscoveredListing[] {
+  if (!realGeeksDocument(html) || !/class=["'][^"']*\bproperty\b[^"']*\b(?:featured|results)\b/i.test(html)) return [];
+  const blocks = html.split(/class=["'][^"']*\brow\s+property\b/i).slice(1);
+  const found: DiscoveredListing[] = [];
+  const seen = new Set<string>();
+  for (const block of blocks) {
+    const href = absolutize(decodeEntities(block.match(/href=["']([^"']+)["']/i)?.[1] ?? ""), base);
+    if (!href) continue;
+    const fields = new Map<string, string>();
+    for (const li of block.matchAll(/<li\b[^>]*class=["'][^"']*\bdetail\b[^"']*["'][^>]*>[\s\S]*?<span\b[^>]*class=["'][^"']*\bnumber\b[^"']*["'][^>]*>([\s\S]*?)<\/span>[\s\S]*?<span\b[^>]*class=["'][^"']*\bdetail-title\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi)) {
+      fields.set(stripTags(li[2]).toLowerCase(), decodeEntities(stripTags(li[1])).replace(/\s+/g, " ").trim());
+    }
+    const mls = fields.get("mls") || "";
+    let source = href;
+    try {
+      if (/\/search\/details\//i.test(new URL(href).pathname) && mls) source = new URL(`/property/${encodeURIComponent(mls)}/`, base.origin).toString();
+    } catch { /* keep the published href */ }
+    const key = (mls || source).toLowerCase();
+    if (seen.has(key)) continue;
+    const address = decodeEntities(stripTags(block.match(/class=["'][^"']*\baddress\b[^"']*["'][^>]*>([\s\S]*?)<\/a>/i)?.[1] ?? "")).replace(/\s+/g, " ").trim();
+    const price = (block.match(/class=["'][^"']*\bprice\b[^"']*["'][^>]*>[\s\S]*?(\$\s?[\d,]+)/i)?.[1] ?? "").replace(/\s+/g, "");
+    if (!address || !price) continue;
+    seen.add(key);
+    const image = absolutize(decodeEntities(block.match(/<img\b[^>]*\bsrc=["']([^"']+)["']/i)?.[1] ?? ""), base) ?? "";
+    const beds = Number(fields.get("beds") || 0);
+    const baths = Number(fields.get("baths") || 0);
+    const sqft = (fields.get("sqft.") || fields.get("sqft") || "").replace(/,/g, "");
+    const description = decodeEntities(stripTags(block.match(/class=["'][^"']*property-description[^"']*["'][^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? "")).replace(/\s+/g, " ").trim();
+    found.push({
+      title: address.slice(0, 160), description: description.slice(0, 16000), price,
+      beds: Number.isFinite(beds) ? beds : 0, baths: Number.isFinite(baths) ? baths : 0, sqft,
+      neighborhood: "", image: image && !looksLikeChrome(image) ? image : "", images: image && !looksLikeChrome(image) ? [image] : [],
+      sourceUrl: source, ...(mls ? { listingNumber: mls } : {}),
+    });
+  }
+  return found;
+}
+
 export type ListingInterfaceAdapter = {
   id: string;
   matches: (html: string, url: URL) => boolean;
@@ -1313,6 +1404,8 @@ export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
       return url && /\/idx\/customshowcasejs\.php$/.test(new URL(url).pathname) && /^\d+$/.test(new URL(url).searchParams.get("widgetid") ?? "") ? [url] : []; }) },
   { id: "brivity", matches: (h,u) => /brivityidx\.com|FeaturedProperties-1R/.test(h) || /\/pages\/search\.php\/?$/.test(u.pathname),
     extract: (h,u) => listingsFromBrivityResponse(h,u)?.listings ?? [], fragments: brivityInventoryFragments },
+  { id: "realgeeks", matches: (h,u) => realGeeksDocument(h) || !!realGeeksSearchId(u),
+    extract: listingsFromRealGeeks, fragments: realGeeksCriteriaRequests },
   { id: "flexmls", matches: (h,u) => /(?:^|\.)flexmls\.com$/i.test(u.hostname), extract: listingsFromStructuredCards },
   { id: "public-json", matches: h => /^[\s]*[\[{]/.test(h), extract: listingsFromPublicJson },
   { id: "structured-property-data", matches: h => /application\/(?:ld\+json|json)/i.test(h),
@@ -1344,6 +1437,7 @@ const PLATFORM_CONTRACTS: Record<string, [string, string]> = {
   "agentfire-dsidx": ["AgentFire cards or dsIDXpress explicit property fields", "Property-local fields preserve identity and avoid neighboring cards and price history."],
   "idx-broker": ["IDX showcase script or IDX detail route", "Parse literal widget facts without executing JavaScript; showcase is partial inventory."],
   brivity: ["Brivity featured widget or scoped search response", "Retain published agent/office filters and display permissions."],
+  realgeeks: ["Real Geeks property cards and public saved-search criteria", "Follow only a saved search that publishes an agent, office, or team id, and reconcile its published total."],
   flexmls: ["Public Flexmls server-rendered listing cards", "Preserve collection scope and per-card payloads through public fragments."],
   "public-json": ["JSON object/array containing evidenced property records", "Normalize RESO and common property fields independent of CMS or framework."],
 };
@@ -1539,6 +1633,15 @@ export function inspectCollectionDocument(html: string, base: URL, found: Discov
   const showingAll = text.match(/\bshowing all\s+(\d+)\s+(?:listings|properties|homes|results)\b/i);
   if (range && Number(range[1]) === 1 && Number(range[2]) === Number(range[3])) notePublished(Number(range[3]), "page");
   else if (showingAll) notePublished(Number(showingAll[1]), "page");
+  const realGeeksPage = /cdn\.realgeeks\.com|property-images\.realgeeks\.com|name=["']rg-static-dist/i.test(html);
+  if (realGeeksPage) {
+    const meta = html.match(/<meta\b[^>]*name=["']description["'][^>]*>/i)?.[0] ?? "";
+    const raw = html.match(/properties-found[\s\S]{0,180}?(\d[\d,]*)\s+Properties/i)?.[1]
+      ?? meta.match(/content=["'](\d[\d,]*)\s+Homes for Sale/i)?.[1]
+      ?? html.match(/<meta\b[^>]*content=["'](\d[\d,]*)\s+Homes for Sale["'][^>]*>/i)?.[1];
+    const count = Number((raw ?? "").replace(/,/g, ""));
+    if (count > 0) notePublished(count, "page");
+  }
   if (continuations.length > 0 && continuations.every(url => url === base.toString())) repeatedCursor = true;
   if (continuations.some(url => url !== base.toString())) { open = false; mechanism = mechanism === "load-more" ? "load-more" : numberedNext || sawPager ? "numbered-pagination" : cursorTerminal || /cursor|after=/i.test(continuations.find(url => url !== base.toString()) ?? "") ? "cursor" : "next-link"; }
   else if (open) mechanism = mechanism === "load-more" ? "load-more" : "hidden";
@@ -1553,7 +1656,9 @@ export function inspectCollectionDocument(html: string, base: URL, found: Discov
   const crossCheck = !open && !continuations.length && found.length > 0 && cards.length > 0 && structured.length > 0 && sameIds(cards, structured) && sameIds(structured, found);
   const pagerExhausted = sawPager && !continuations.length && !open && found.length > 0 && highestPage > 0 && highestPage <= Math.max(currentPage, 1);
   const countMatchesPage = !!publishedCount && publishedCount === found.length;
-  const singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
+  let singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
+  // A Real Geeks pager that simply stops is not proof the collection ended.
+  if (realGeeksPage && !countMatchesPage) singlePageConfirmed = false;
   if (/\binfinite-scroll\b|data-infinite/i.test(visible) && !continuations.length) open = true;
   return {
     continuations: continuations.filter(url => url !== base.toString()), open: open || repeatedCursor, mechanism, structuredClosed, singlePageConfirmed,
@@ -2124,6 +2229,7 @@ export async function discoverListings(
   let offsetQueryTotal = 0;
   let hitSafetyCap = false;
   let unscopedMarket = false;
+  let rejectedRealGeeksMarket = false;
   let listingCeiling = maxListings;
   let omissionTotal = 0;
   const omissionReasons = new Map<string, number>();
@@ -2133,7 +2239,7 @@ export async function discoverListings(
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean; ownerScoped?: boolean };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i, ...(options?.continuationSeeds ? { continuation: true } : {}) }));
 
   const pushListing = (item: DiscoveredListing) => {
@@ -2432,6 +2538,40 @@ export async function discoverListings(
     }
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
     const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
+    const criteriaDecision = broad ? null : realGeeksCriteriaDecision(html, finalUrl);
+    if (criteriaDecision) {
+      const target = new URL(`/search/results/${criteriaDecision.searchId}/`, finalUrl.origin).toString();
+      for (let i = queue.length - 1; i >= 0; i--) {
+        try {
+          if (!queue[i].ownerScoped && realGeeksSearchId(new URL(queue[i].url)) === criteriaDecision.searchId) queue.splice(i, 1);
+        } catch { /* ignore a malformed queued url */ }
+      }
+      if (criteriaDecision.scoped) {
+        if (!visitedSet.has(target) && !queue.some(item => item.url === target)) {
+          queue.push({ url: target, depth: next.depth, priority: 215, parent: finalUrl.toString(), ownerScoped: true });
+        }
+        stages.push("collection_scoped");
+      } else {
+        rejectedRealGeeksMarket = true;
+        if (!obstacles.some(row => row.code === "scope_not_established" && row.url === target)) {
+          obstacles.push({ code: "scope_not_established", url: target, detail: "Real Geeks saved search has no agent, office, or team id. A market search is not the site owner's inventory." });
+        }
+        stages.push("scope_not_established");
+      }
+      continue;
+    }
+    const realGeeksSearch = realGeeksSearchId(finalUrl);
+    if (!broad && realGeeksSearch && !next.ownerScoped && (realGeeksDocument(html) || /class=["'][^"']*\bproperty\b[^"']*\bresults\b/i.test(html))) {
+      rejectedRealGeeksMarket = true;
+      if (visited[visited.length - 1] === normalized) visited.pop();
+      visitedSet.delete(normalized);
+      visitedSet.delete(finalUrl.toString());
+      const criteria = realGeeksCriteriaUrl(finalUrl, realGeeksSearch);
+      if (!visitedSet.has(criteria) && !queue.some(item => item.url === criteria)) {
+        queue.push({ url: criteria, depth: next.depth, priority: 240, fragment: true, parent: finalUrl.toString() });
+      }
+      continue;
+    }
     const unscopedMlsArchive = !broad && found.length >= 2 && found.every(item => mlsBoardPermalink(item.sourceUrl)) && !hasOwnerScope(finalUrl, html);
     if (unscopedMlsArchive) {
       unscopedMarket = true;
@@ -2514,7 +2654,7 @@ export async function discoverListings(
           if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
           for (const url of boundary.continuations) {
             if (url === finalUrl.toString()) { openContinuation = true; continue; }
-            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true });
+            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, ownerScoped: next.ownerScoped });
           }
         }
         // Flexmls uses public paged fragments without a Next anchor.
@@ -2640,6 +2780,7 @@ export async function discoverListings(
   for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
   for (const url of [...pendingContinuations]) if (visitedSet.has(url)) pendingContinuations.delete(url);
   unresolvedPagination = unresolvedPagination || openContinuation;
+  if (rejectedRealGeeksMarket && !listings.length) unscopedMarket = true;
   if (unscopedMarket && !listings.length) {
     pendingContinuations.clear();
     openContinuation = false;

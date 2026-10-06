@@ -1200,6 +1200,46 @@ test('an MLS-board archive without an owner constraint is not imported or pagina
   assert.equal(flagged.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
 });
 
+test('a Real Geeks market search is not inventory, and an owner-scoped search completes only when its published total matches', async () => {
+  const origin = 'https://rg.example';
+  const shell = '<script src="https://cdn.realgeeks.com/static/CACHE/js/output.js"></script>';
+  const card = (kind, address, mls, price, href) => `<div class="row property ${kind} collapse"><a href="${href}" class="address">${address}</a><a class="price">${price}</a><img src="https://property-images.realgeeks.com/board/${mls}.jpg"><ul><li class="detail"><span class="number">3</span><span class="detail-title">Beds</span></li><li class="detail"><span class="number">${mls}</span><span class="detail-title">MLS</span></li></ul></div>`;
+  const seen = [];
+  const market = await discoverListings([origin + '/'], async uri => {
+    seen.push(uri);
+    if (uri.includes('/api/search/criteria/')) return { html: JSON.stringify({ data: { city: ['Boca Raton'], list_price_min: ['1000000'] } }), finalUrl: new URL(uri) };
+    if (uri.includes('/search/results/')) throw new Error('market search was fetched');
+    return { html: shell + card('featured', '21733 Old Bridge Trail', 'B26084971', '$2,250,000', '/property/B26084971/') + '<a href="/search/results/mkt/">Waterfront</a>', finalUrl: new URL(uri) };
+  }, { maxPages: 8, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(seen.some(uri => uri.includes('/search/results/')), false);
+  assert.equal(seen.some(uri => uri.includes('/api/search/criteria/') && uri.includes('search_id=mkt')), true);
+  assert.equal(market.listings.length, 1);
+  assert.equal(market.listings[0].listingNumber, 'B26084971');
+  assert.notEqual(market.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(market.meta.obstacles.some(row => row.code === 'scope_not_established'));
+  const search = (ids, next) => shell + '<meta name="description" content="4 Homes for Sale"><div class="properties-found"><span>4 Properties</span></div>'
+    + (next ? `<a href="/search/results/own/?page=${next}" rel="next">Next</a>` : '')
+    + ids.map((id, index) => card('results', id + ' Main', id, '$800,000', `/search/details/own/${index}/`)).join('');
+  const owned = await discoverListings([origin + '/office/'], async uri => {
+    seen.push(uri);
+    if (uri.includes('/api/search/criteria/')) return { html: JSON.stringify({ data: { agent_id: ['A1'], city: ['Boca Raton'] } }), finalUrl: new URL(uri) };
+    if (uri.includes('page=2')) return { html: search(['RG3', 'RG4'], 0), finalUrl: new URL(uri) };
+    if (uri.includes('/search/results/own')) return { html: search(['RG1', 'RG2'], 2), finalUrl: new URL(uri) };
+    return { html: shell + '<a href="/search/results/own/">Our listings</a>', finalUrl: new URL(uri) };
+  }, { maxPages: 8, maxListings: 2, maxDetailPages: 0 });
+  assert.equal(owned.listings.length, 4);
+  assert.deepEqual(owned.listings.map(item => item.listingNumber).sort(), ['RG1', 'RG2', 'RG3', 'RG4']);
+  assert.equal(owned.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(owned.meta.completenessEvidence.includes('published_count_match'));
+  const short = await discoverListings([origin + '/search/results/own/'], async uri => {
+    if (uri.includes('/api/search/criteria/')) return { html: JSON.stringify({ data: { office_id: ['O1'] } }), finalUrl: new URL(uri) };
+    return { html: search(['RG1', 'RG2'], 0), finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 10, maxDetailPages: 0 });
+  assert.equal(short.listings.length, 2);
+  assert.notEqual(short.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(short.meta.expectedCount, 4);
+});
+
 test('source totals keep pending inventory and account for sold and unknown', async () => {
   const origin = 'https://status.example';
   const row = (id, status) => ({ streetAddress: id + ' Pine St', listPrice: 100000, detailUrl: origin + '/property/' + id, StandardStatus: status });
