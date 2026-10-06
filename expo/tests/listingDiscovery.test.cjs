@@ -1200,6 +1200,31 @@ test('an MLS-board archive without an owner constraint is not imported or pagina
   assert.equal(flagged.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
 });
 
+test('an AgentFire search page of MLS-board listings is not a closed collection', async () => {
+  const origin = 'https://agent.example';
+  const card = (board, id, street, price) => `<div class="sp-listings__item"><a class="sp-listing" href="/listing/${board}/${id}/Town/${street}/"><span class="sp-listing__price">${price}</span><span class="sp-listing__street">${street}</span></a></div>`;
+  const html = '<body class="page page-id-1968 page-search-page"><article class="afe-content afe-content--searchpage_single"><section class="sp-listings"><div class="sp-listings__items">'
+    + card('salmlsfull', '212533', '11446-S-County-Road-33', '$1,548,000')
+    + card('wgmls', '556534', '4010-County-Road-708', '$1,099,000')
+    + '</div></section><div class="sp-listings__bottom"><a class="btn btn-spark" href="/properties/city-Town/?priceMin=1000000&status=Active">View More</a></div></article>'
+    + '<script>AgentFire_Settings.dsidx_disclaimer = false; var afxAccountData = {"wpUserId":"0","listingId":"","isSearchPage":""};</script>'
+    + '<img src="https://listing-images.homejunction.com/salmlsfull/photo_1.jpg">';
+  const seen = [];
+  const result = await discoverListings([origin + '/luxury/'], async uri => {
+    seen.push(uri);
+    return { html, finalUrl: new URL(uri) };
+  }, { maxPages: 6, maxListings: 30, maxDetailPages: 0 });
+  assert.deepEqual(seen, [origin + '/luxury/']);
+  assert.equal(result.listings.length, 0);
+  assert.equal(result.meta.inventoryStatus, 'inventory_blocked');
+  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.expectedCount ?? null, null);
+  assert.ok(result.meta.completenessEvidence.includes('scope_not_established'));
+  assert.equal(result.meta.accounting.importedEligible, 0);
+  assert.ok(result.meta.accounting.exclusions.some(row => row.reason === 'excluded_unscoped_market' && row.count === 2));
+  assert.equal(result.meta.obstacles.some(row => row.code === 'scope_not_established'), true);
+});
+
 test('a Real Geeks market search is not inventory, and an owner-scoped search completes only when its published total matches', async () => {
   const origin = 'https://rg.example';
   const shell = '<script src="https://cdn.realgeeks.com/static/CACHE/js/output.js"></script>';
