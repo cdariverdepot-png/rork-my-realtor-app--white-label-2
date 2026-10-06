@@ -754,6 +754,7 @@ test('continuation requests stay pending-only and each batch returns before the 
   const client = fs.readFileSync(path.resolve(__dirname, '../lib/appBuilder/buildService.ts'), 'utf8');
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8');
   assert.equal(client.includes('resume: { pending: resume.pending }'), true);
+  assert.equal(client.includes('batch < 40'), true);
   assert.equal(/body = \{ \.\.\.baseBody, resume \}/.test(client), false);
   assert.equal(client.includes('listings: Array.isArray(listings)'), false);
   assert.equal(edge.includes('maxDurationMs: 22000'), true);

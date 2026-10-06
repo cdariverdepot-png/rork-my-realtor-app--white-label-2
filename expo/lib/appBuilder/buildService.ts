@@ -498,7 +498,7 @@ async function walkListingBatches(baseBody: Record<string, unknown>, initial?: a
   if (data) mergeDiscovered(listings, data.discoveredListings ?? data.draft?.discoveredListings);
   const seen = new Set<string>();
   let body: Record<string, unknown> | null = data ? null : baseBody;
-  for (let batch = 0; batch < 8; batch++) {
+  for (let batch = 0; batch < 40; batch++) {
     if (data) {
       const resume = collectionResume(data);
       const key = resume?.pending.join("|") ?? "";
