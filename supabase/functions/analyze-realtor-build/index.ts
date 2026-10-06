@@ -374,16 +374,20 @@ Deno.serve(async (request) => {
     return reply({ error: "A verified realtor account is required." }, 401);
   }
   const userId = auth.user.id;
-  // Testing-code builds have a valid anonymous session, keep their drafts on
-  // the device, and may submit public URLs only. Never read/write an account
-  // build for this path or accept uploaded storage paths from its payload.
+  const continuingListings = input?.mode === "discover-listings"
+    && !!input.resume && typeof input.resume === "object"
+    && Array.isArray(input.resume.pending)
+    && input.resume.pending.some((item: unknown) => typeof item === "string" && item.startsWith("https://"));
+  if (continuingListings && input.draft && typeof input.draft === "object") delete input.draft.discoveredListings;
+  const guestDraft = input.draft && typeof input.draft === "object" ? { ...input.draft } : {};
+  // A continuation must not parse the next page while the previous inventory is live in the isolate.
   const { data: build } = guest ? { data: {
     sources: (Array.isArray(input.sources) ? input.sources : []).filter((source: any) =>
       source && (source.kind === "url" || source.kind === "listing")),
     evidence: Array.isArray(input.evidence) ? input.evidence : [],
-    draft: input.draft && typeof input.draft === "object" ? input.draft : {}, status: "collecting",
+    draft: guestDraft, status: "collecting",
   } } : await admin.from("realtor_builds")
-    .select("sources,evidence,draft,status").eq("auth_user_id", userId).single();
+    .select(continuingListings ? "sources,evidence,status" : "sources,evidence,draft,status").eq("auth_user_id", userId).single();
   if (!build) return reply({ error: "Start your app build first." }, 404);
   if (input?.mode === "refresh-design") {
     const source = (build.sources as Source[]).find(s => s.kind === 'url');
@@ -572,19 +576,41 @@ Deno.serve(async (request) => {
     if (!seeds.length && !(input.resume && Array.isArray(input.resume.pending) && input.resume.pending.length)) return reply({ error: "Add a link to your property listings first." }, 400);
     const resumeInput = input.resume && typeof input.resume === "object" ? input.resume : null;
     const resumePending = Array.isArray(resumeInput?.pending) ? resumeInput.pending.filter((item: unknown): item is string => typeof item === "string" && item.startsWith("https://")).slice(0, 8) : [];
-    const priorListings = Array.isArray(resumeInput?.listings) ? resumeInput.listings.filter((item: unknown): item is DiscoveredListing => !!item && typeof item === "object" && typeof (item as DiscoveredListing).sourceUrl === "string").slice(0, 400) : [];
     let discovery;
     try {
-      discovery = await discoverListingsAcrossBatches(resumePending.length ? resumePending : seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 30000, enrichAll: true, continuationSeeds: resumePending.length > 0, priorListings, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
+      discovery = await discoverListingsAcrossBatches(resumePending.length ? resumePending : seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 22000, enrichAll: !resumePending.length, continuationSeeds: resumePending.length > 0, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
     }
+    const postedListings = Array.isArray(resumeInput?.listings) ? resumeInput.listings.filter((item: unknown): item is DiscoveredListing => !!item && typeof item === "object" && typeof (item as DiscoveredListing).sourceUrl === "string").slice(0, 400) : [];
+    let draftBase: Record<string, unknown> = build.draft && typeof build.draft === "object" ? build.draft as Record<string, unknown> : {};
+    let carriedListings = postedListings;
+    if (resumePending.length && !guest) {
+      const { data: row, error: draftError } = await admin.from("realtor_builds").select("draft").eq("auth_user_id", userId).single();
+      if (draftError || !row) return reply({ error: "The next listing page was read but the saved draft could not be loaded. Please retry." }, 503);
+      draftBase = row.draft && typeof row.draft === "object" ? row.draft as Record<string, unknown> : {};
+      if (!carriedListings.length && Array.isArray((draftBase as { discoveredListings?: unknown }).discoveredListings)) {
+        carriedListings = ((draftBase as { discoveredListings: DiscoveredListing[] }).discoveredListings).filter(item => !!item && typeof item.sourceUrl === "string").slice(0, 400);
+      }
+    }
+    if (carriedListings.length) {
+      const seen = new Set(discovery.listings.map(item => item.listingNumber ? `id:${item.listingNumber}` : `url:${item.sourceUrl}`));
+      const kept = carriedListings.filter(item => !seen.has(item.listingNumber ? `id:${item.listingNumber}` : `url:${item.sourceUrl}`));
+      discovery.listings = [...kept, ...discovery.listings];
+    }
     discovery.listings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
     discovery.meta.found = discovery.listings.length;
-    if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discovery.listings.length;
+    if (discovery.meta.accounting) {
+      discovery.meta.accounting.importedEligible = discovery.listings.length;
+      if (carriedListings.length) {
+        discovery.meta.accounting.sourceSeen = discovery.listings.length;
+        discovery.meta.accounting.sourceClassified = discovery.listings.length;
+        discovery.meta.accounting.eligibleTotal = discovery.listings.length;
+      }
+    }
     const draft = {
-      ...(build.draft && typeof build.draft === "object" ? build.draft : {}),
+      ...draftBase,
       discoveredListings: discovery.listings,
       listingDiscovery: discovery.meta,
     };
@@ -687,7 +713,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListingsAcrossBatches(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 30000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 22000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
       discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;

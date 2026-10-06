@@ -2762,7 +2762,7 @@ export async function discoverListingsAcrossBatches(
       continuationSeeds: batch > 0 || options?.continuationSeeds === true,
       enrichAll: false,
       maxDetailPages: 0,
-      maxDurationMs: Math.max(1000, Math.min(20000, remaining)),
+      maxDurationMs: Math.max(1000, Math.min(15000, remaining)),
     });
     merged = merged ? mergeCollectionPasses(merged, pass) : pass;
     const resume = pass.meta.resume;
@@ -2775,7 +2775,9 @@ export async function discoverListingsAcrossBatches(
   const priorKeys = new Set((options?.priorListings ?? []).map(item => listingIdentityKey(item)));
   const continuing = priorKeys.size > 0;
   const enrichTargets = merged.listings.filter(item => !item.detailsComplete && (!continuing || !priorKeys.has(listingIdentityKey(item)))).slice(0, continuing ? 24 : 80);
-  if (options?.enrichAll && enrichTargets.length && merged.meta.inventoryStatus !== "inventory_blocked" && Date.now() < wall - 1000) {
+  const openResume = merged.meta.resume;
+  const stillPaging = openResume?.stage === "collection_continuation" && BATCH_OBSTACLE.has(openResume.obstacle ?? "");
+  if (options?.enrichAll && !stillPaging && enrichTargets.length && merged.meta.inventoryStatus !== "inventory_blocked" && Date.now() < wall - 1000) {
     const enriched = await discoverListings([], fetchHtml, {
       ...options,
       priorListings: enrichTargets,

@@ -750,6 +750,17 @@ test('captcha and failed script gates preserve a resumable state and invent no l
   assert.equal(gated.meta.resume.seeds[0], 'https://gated.example/');
 });
 
+test('continuation requests stay pending-only and each batch returns before the isolate deadline', () => {
+  const client = fs.readFileSync(path.resolve(__dirname, '../lib/appBuilder/buildService.ts'), 'utf8');
+  const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8');
+  assert.equal(client.includes('resume: { pending: resume.pending }'), true);
+  assert.equal(/body = \{ \.\.\.baseBody, resume \}/.test(client), false);
+  assert.equal(client.includes('listings: Array.isArray(listings)'), false);
+  assert.equal(edge.includes('maxDurationMs: 22000'), true);
+  assert.equal(edge.includes('priorListings,'), false);
+  assert.equal(edge.includes('select(continuingListings ? "sources,evidence,status"'), true);
+});
+
 test('deployment bundle contains the authoritative discovery engine', () => {
   const source = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingDiscovery.ts'), 'utf8').replace(/^export /gm, '').replace(/\s+$/, '\n');
   const bundle = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/deploy.bundle.ts'), 'utf8');
@@ -1089,6 +1100,22 @@ test('subsequent batches resume after a page budget until the collection is exha
   assert.equal(result.meta.inventoryStatus, 'inventory_complete');
   assert.equal(result.meta.resume, undefined);
   assert.equal(result.meta.accounting.eligibleImportComplete, true);
+});
+
+test('a continuation deadline does not enrich before the next page is collected', async () => {
+  const origin = 'https://paged.example';
+  const first = origin + '/listings';
+  const seen = [];
+  const html = '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000');
+  const result = await discoverListingsAcrossBatches([first], async uri => {
+    seen.push(uri);
+    return { html, finalUrl: new URL(uri) };
+  }, { maxPages: 1, maxListings: 2, maxBatches: 1, enrichAll: true, maxDurationMs: 15000, maxDetailPages: 20 });
+  assert.deepEqual(seen, [first]);
+  assert.equal(result.listings.length, 2);
+  assert.equal(result.meta.resume.stage, 'collection_continuation');
+  assert.equal(result.meta.enrichment?.enriched ?? 0, 0);
+  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
 });
 
 test('a captcha on the next page stops automatic batches', async () => {

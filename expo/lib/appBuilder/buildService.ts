@@ -196,9 +196,21 @@ async function generateLocal(realtorId: string, target?: "heroMessage" | "welcom
   if (!data?.draft || !(target ? data.draft[target] : data.draft.heroMessage)?.trim()) {
     throw new Error("No website-based copy came back. Your current draft is still saved.");
   }
+  let discoveredListings = data.discoveredListings ?? data.draft?.discoveredListings ?? [];
+  let listingDiscovery = data.listingDiscovery ?? data.draft?.listingDiscovery;
+  if (!target && collectionResume(data)) {
+    const walked = await walkListingBatches({
+      guest: true,
+      sources,
+      draft: draftWithoutInventory(data.draft),
+      evidence: saved.evidence ?? [],
+    }, data);
+    if (walked.listings.length) discoveredListings = walked.listings;
+    listingDiscovery = walked.data?.listingDiscovery ?? walked.data?.draft?.listingDiscovery ?? listingDiscovery;
+  }
   const next: SavedBuild = target ? { ...saved, draft: data.draft } : {
     ...saved, sources: saved.sources.map(source => data.sources?.find((item: BuildSource) => item.id === source.id) ?? source),
-    evidence: data.evidence, draft: data.draft, selected_layout: data.draft.layoutId, status: "needs-input",
+    evidence: data.evidence, draft: { ...data.draft, discoveredListings, listingDiscovery }, selected_layout: data.draft.layoutId, status: "needs-input",
   };
   await writeLocalBuild(realtorId, next);
   return next;
@@ -386,6 +398,7 @@ export async function analyzeBuild(): Promise<SavedBuild> {
 
   const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", { body: {} });
   if (error || data?.error) throw await functionError(error, data, "Analysis could not finish.");
+  if (collectionResume(data)) await walkListingBatches({ mode: "discover-listings" }, data);
   const saved = await loadBuild();
   if (!saved) throw new Error("The build result could not be loaded.");
   return saved;
@@ -451,15 +464,69 @@ export async function markBuildComplete(): Promise<void> {
 const collectionBatchObstacles = new Set(["collection_limit_reached", "import_deadline"]);
 const collectionHardStops = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited"]);
 
-function collectionResume(data: { discoveredListings?: unknown; draft?: { discoveredListings?: unknown }; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } } | null | undefined) {
-  const meta = data?.listingDiscovery;
+function collectionResume(data: { discoveredListings?: unknown; draft?: { discoveredListings?: unknown; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } }; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } } | null | undefined) {
+  const meta = data?.listingDiscovery ?? data?.draft?.listingDiscovery;
   const resume = meta?.resume;
   if (!resume || resume.stage !== "collection_continuation" || !collectionBatchObstacles.has(resume.obstacle ?? "")) return null;
-  if ((meta.obstacles ?? []).some(row => collectionHardStops.has(row.code ?? ""))) return null;
+  if ((meta?.obstacles ?? []).some(row => collectionHardStops.has(row.code ?? ""))) return null;
   const pending = Array.isArray(resume.pending) ? resume.pending.filter((url): url is string => typeof url === "string" && url.startsWith("https://")).slice(0, 8) : [];
   if (!pending.length) return null;
-  const listings = data?.discoveredListings ?? data?.draft?.discoveredListings;
-  return { pending, listings: Array.isArray(listings) ? listings.slice(0, 400) : [] };
+  return { pending };
+}
+
+function mergeDiscovered(collected: DiscoveredListing[], incoming: unknown) {
+  if (!Array.isArray(incoming)) return;
+  for (const item of incoming) {
+    if (!item || typeof item.sourceUrl !== "string") continue;
+    const index = collected.findIndex(row => row.sourceUrl === item.sourceUrl || (item.listingNumber && row.listingNumber === item.listingNumber));
+    if (index < 0) collected.push(item);
+    else collected[index] = { ...collected[index], ...item, images: Array.isArray(item.images) && item.images.length ? item.images : collected[index].images };
+  }
+}
+
+function draftWithoutInventory(draft: BuildDraft | undefined): BuildDraft {
+  if (!draft) return {};
+  const next = { ...draft };
+  delete next.discoveredListings;
+  return next;
+}
+
+/** Follow continuation pages without posting the inventory already collected. */
+async function walkListingBatches(baseBody: Record<string, unknown>, initial?: any): Promise<{ data: any; listings: DiscoveredListing[] }> {
+  let data = initial ?? null;
+  const listings: DiscoveredListing[] = [];
+  if (data) mergeDiscovered(listings, data.discoveredListings ?? data.draft?.discoveredListings);
+  const seen = new Set<string>();
+  let body: Record<string, unknown> | null = data ? null : baseBody;
+  for (let batch = 0; batch < 8; batch++) {
+    if (data) {
+      const resume = collectionResume(data);
+      const key = resume?.pending.join("|") ?? "";
+      if (!resume || seen.has(key)) break;
+      seen.add(key);
+      body = { ...baseBody, mode: "discover-listings", resume: { pending: resume.pending } };
+    }
+    if (!body) break;
+    const { data: next, error } = await supabase!.functions.invoke("analyze-realtor-build", { body });
+    if (error || next?.error) {
+      if (data) break;
+      throw await functionError(error, next, "Those listing pages could not be read. Please retry.");
+    }
+    data = next;
+    mergeDiscovered(listings, next.discoveredListings ?? next.draft?.discoveredListings);
+  }
+  const listingDiscovery = data?.listingDiscovery ?? data?.draft?.listingDiscovery;
+  if (listingDiscovery && listings.length) {
+    listingDiscovery.found = Math.max(listingDiscovery.found ?? 0, listings.length);
+    const accounting = listingDiscovery.accounting;
+    if (accounting && listings.length > (accounting.sourceSeen ?? 0)) {
+      accounting.sourceSeen = listings.length;
+      accounting.sourceClassified = listings.length;
+      accounting.importedEligible = listings.length;
+      accounting.eligibleTotal = listings.length;
+    }
+  }
+  return { data, listings };
 }
 
 export async function discoverListingsBuild(listingsUrl?: string): Promise<SavedBuild> {
@@ -469,58 +536,27 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     if (!supabase || !(await ensureSupabaseSession())) {
       throw new Error("Could not connect to the app builder. Please retry.");
     }
-    const baseBody = {
+    const walked = await walkListingBatches({
       guest: true,
       mode: "discover-listings",
       sources: saved.sources,
-      draft: saved.draft,
+      draft: draftWithoutInventory(saved.draft),
       evidence: saved.evidence ?? [],
       ...(listingsUrl ? { listingsUrl } : {}),
-    };
-    let body: Record<string, unknown> = baseBody;
-    let data: any = null;
-    const seen = new Set<string>();
-    for (let batch = 0; batch < 6; batch++) {
-      const { data: next, error } = await supabase.functions.invoke("analyze-realtor-build", { body });
-      if (error || next?.error) {
-        if (data) break;
-        throw await functionError(error, next, "Those listing pages could not be read. Please retry.");
-      }
-      data = next;
-      const resume = collectionResume(data);
-      const key = resume?.pending.join("|") ?? "";
-      if (!resume || seen.has(key)) break;
-      seen.add(key);
-      body = { ...baseBody, resume };
-    }
+    });
     const draft = {
       ...saved.draft,
-      ...(data.draft ?? {}),
-      discoveredListings: data.discoveredListings ?? data.draft?.discoveredListings ?? [],
-      listingDiscovery: data.listingDiscovery ?? data.draft?.listingDiscovery,
+      ...(walked.data?.draft ?? {}),
+      discoveredListings: walked.listings.length ? walked.listings : (walked.data?.discoveredListings ?? walked.data?.draft?.discoveredListings ?? []),
+      listingDiscovery: walked.data?.listingDiscovery ?? walked.data?.draft?.listingDiscovery,
     };
     const next: SavedBuild = { ...saved, draft };
     await writeLocalBuild(route.realtorId, next);
     return next;
   }
 
-  const baseBody = { mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) };
-  let body: Record<string, unknown> = baseBody;
-  let data: any = null;
-  const seen = new Set<string>();
-  for (let batch = 0; batch < 6; batch++) {
-    const { data: next, error } = await supabase!.functions.invoke("analyze-realtor-build", { body });
-    if (error || next?.error) {
-      if (data) break;
-      throw await functionError(error, next, "Those listing pages could not be read. Please retry.");
-    }
-    data = next;
-    const resume = collectionResume(data);
-    const key = resume?.pending.join("|") ?? "";
-    if (!resume || seen.has(key)) break;
-    seen.add(key);
-    body = { ...baseBody, resume };
-  }
+  const walked = await walkListingBatches({ mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) });
+  if (!walked.data) throw new Error("Those listing pages could not be read. Please retry.");
   const saved = await loadBuild();
   if (!saved) throw new Error("The listing import result could not be loaded.");
   return saved;
