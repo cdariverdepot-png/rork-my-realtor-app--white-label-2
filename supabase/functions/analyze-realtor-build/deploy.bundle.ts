@@ -1455,6 +1455,51 @@ function sierraUnscopedFeed(html: string, url: URL, found: { sourceUrl: string }
   return feedPath || widget || boardCards;
 }
 
+const PLACESTER_NOT_OWNER = /^(?:origin_ids|import_id|region|filter_zips|filter_zip|filter_city_names|county|search_num_results|featuredids|featured_ids|oname|aname|sort_field|sort_direction|request_type|valhalla|id_requirement|purchase_types|property_type|zip|city|status)$/i;
+const PLACESTER_OWNER = /^(?:oid|aid|office_id|officeid|agent_id|agentid|listing_agent|listing_office)$/i;
+
+/** Placester Valhalla widgets and the classic search plugin. `origin_ids` is the IDX feed, not the brokerage. */
+function placesterDocument(html: string): boolean {
+  return /queryserviceb?\.placester\.net|plugins\/placester|_placester\.searchAppConfig|myrealestateplatform\.com\/Valhalla/i.test(html)
+    || (/uploads-cf\.cdn\.placester\.net/i.test(html) && /data-query\s*=/i.test(html));
+}
+
+function placesterDecodedJson(raw: string): unknown {
+  const text = raw.replace(/"/g, '"').replace(/&#0*34;/g, '"').replace(/&/g, "&").replace(/\\\//g, "/");
+  try { return JSON.parse(text); }
+  catch { return null; }
+}
+
+/** Owner filters published on the page. ZIP, county, origin, region, page size, and curated ids are not owners. */
+function placesterOwnerFilters(html: string): { key: string; value: string }[] {
+  const found: { key: string; value: string }[] = [];
+  const seen = new Set<string>();
+  const consider = (obj: unknown) => {
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) return;
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      if (!PLACESTER_OWNER.test(key) || typeof value !== "string") continue;
+      const trimmed = value.trim();
+      if (!trimmed || /^(?:all|-1|0)$/i.test(trimmed) || /^(?:agent|office)\s+(?:id|name)$/i.test(trimmed)) continue;
+      const id = `${key.toLowerCase()}=${trimmed.toLowerCase()}`;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      found.push({ key, value: trimmed });
+    }
+  };
+  for (const match of html.matchAll(/\bdata-query\s*=\s*(["'])([\s\S]*?)\1/gi)) consider(placesterDecodedJson(match[2]));
+  for (const name of ["globalFilters", "filters"]) {
+    const re = new RegExp(`"${name}"\\s*:\\s*(\\{[^{}]{0,800}\\})`, "g");
+    for (const match of html.matchAll(re)) consider(placesterDecodedJson(match[1]));
+  }
+  return found;
+}
+
+/** A Placester shell whose public filters do not name an office or agent. Curated featured ids are still not ownership. */
+function placesterUnscopedFeed(html: string, url: URL): boolean {
+  if (!placesterDocument(html) || /\/property\//i.test(url.pathname)) return false;
+  return placesterOwnerFilters(html).length === 0;
+}
+
 type ListingInterfaceAdapter = {
   id: string;
   matches: (html: string, url: URL) => boolean;
@@ -1703,6 +1748,7 @@ function inspectCollectionDocument(html: string, base: URL, found: DiscoveredLis
   if (range && Number(range[1]) === 1 && Number(range[2]) === Number(range[3])) notePublished(Number(range[3]), "page");
   else if (showingAll) notePublished(Number(showingAll[1]), "page");
   const realGeeksPage = /cdn\.realgeeks\.com|property-images\.realgeeks\.com|name=["']rg-static-dist/i.test(html);
+  const placesterPage = placesterDocument(html);
   if (realGeeksPage) {
     const meta = html.match(/<meta\b[^>]*name=["']description["'][^>]*>/i)?.[0] ?? "";
     const raw = html.match(/properties-found[\s\S]{0,180}?(\d[\d,]*)\s+Properties/i)?.[1]
@@ -1726,8 +1772,8 @@ function inspectCollectionDocument(html: string, base: URL, found: DiscoveredLis
   const pagerExhausted = sawPager && !continuations.length && !open && found.length > 0 && highestPage > 0 && highestPage <= Math.max(currentPage, 1);
   const countMatchesPage = !!publishedCount && publishedCount === found.length;
   let singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
-  // A Real Geeks pager that simply stops is not proof the collection ended.
-  if (realGeeksPage && !countMatchesPage) singlePageConfirmed = false;
+  // A pager that simply stops is not proof the collection ended. Placester search_num_results is a page size.
+  if ((realGeeksPage || placesterPage) && !countMatchesPage) singlePageConfirmed = false;
   if (/\binfinite-scroll\b|data-infinite/i.test(visible) && !continuations.length) open = true;
   return {
     continuations: continuations.filter(url => url !== base.toString()), open: open || repeatedCursor, mechanism, structuredClosed, singlePageConfirmed,
@@ -2655,6 +2701,29 @@ async function discoverListings(
       if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
       continue;
     }
+    if (!broad && placesterUnscopedFeed(html, finalUrl)) {
+      unscopedMarket = true;
+      if (found.length) {
+        omissionTotal += found.length;
+        omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + found.length);
+      }
+      if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
+        obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "Placester query has no office or agent id. A ZIP, county, IDX origin, or curated featured set is not the brokerage inventory." });
+      }
+      stages.push("scope_not_established");
+      observation.resolution = "excluded-market";
+      if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
+      continue;
+    }
+    const placesterOwners = !broad && placesterDocument(html) ? placesterOwnerFilters(html) : [];
+    if (placesterOwners.length) {
+      stages.push("collection_scoped");
+      if (!found.length && !obstacles.some(row => row.code === "requires_rendering" && row.url === finalUrl.toString())) {
+        obstacles.push({ code: "requires_rendering", url: finalUrl.toString(), detail: "Placester office or agent filter is published, but this document has no listing rows and no collection total." });
+        issues.push({ code: "requires-rendering", url: finalUrl.toString() });
+        inventoryUrls.add(finalUrl.toString());
+      }
+    }
     const unscopedMlsArchive = !broad && found.length >= 2 && found.every(item => mlsBoardPermalink(item.sourceUrl)) && !hasOwnerScope(finalUrl, html);
     if (unscopedMlsArchive) {
       unscopedMarket = true;
@@ -2728,16 +2797,20 @@ async function discoverListings(
             expectedCount = Math.max(expectedCount, boundary.publishedCount);
             if (boundary.publishedKind === "api") apiCount = true;
           }
-          if (boundary.continuations.length) { sawContinuation = true; continuationMechanism = continuationMechanism || boundary.mechanism; }
-          if (boundary.open) openContinuation = true;
+          // An office or agent id scopes the widget. Without a published total, another page is not a proven boundary.
+          const placesterOpenWithoutTotal = placesterOwners.length > 0 && !boundary.publishedCount;
+          if (!placesterOpenWithoutTotal && boundary.continuations.length) { sawContinuation = true; continuationMechanism = continuationMechanism || boundary.mechanism; }
+          if (!placesterOpenWithoutTotal && boundary.open) openContinuation = true;
           if (boundary.repeatedCursor) openContinuation = true;
           if (!boundary.open && !boundary.continuations.length && boundary.structuredClosed) structuredPages++;
           if (!boundary.open && !boundary.continuations.length && boundary.singlePageConfirmed) singlePagePages++;
           if (!boundary.open && boundary.cursorTerminal) cursorTerminalPages++;
           if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
-          for (const url of boundary.continuations) {
-            if (url === finalUrl.toString()) { openContinuation = true; continue; }
-            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, ownerScoped: next.ownerScoped });
+          if (!placesterOpenWithoutTotal) {
+            for (const url of boundary.continuations) {
+              if (url === finalUrl.toString()) { openContinuation = true; continue; }
+              if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, ownerScoped: next.ownerScoped || placesterOwners.length > 0 });
+            }
           }
         }
         // Flexmls uses public paged fragments without a Next anchor.
@@ -2768,7 +2841,7 @@ async function discoverListings(
     }
     if (next.depth >= maxDepth) continue;
 
-    const ctas = found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
+    const ctas = placesterOwners.length || found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
       if (queue.some((q) => q.url === cta.url)) continue;
@@ -2777,7 +2850,7 @@ async function discoverListings(
       queue.push({ url: cta.url, depth: next.depth + 1, priority: cta.score, broad, parent: finalUrl.toString() });
     }
 
-    if (!listings.length && !queue.length && options?.selectLinks && aiRoutes < 2 && Date.now() < deadline) {
+    if (!placesterOwners.length && !listings.length && !queue.length && options?.selectLinks && aiRoutes < 2 && Date.now() < deadline) {
       const candidates = navigationCandidates(html, finalUrl).filter(c => !visitedSet.has(c.url));
       if (candidates.length) {
         aiRoutes++;
@@ -3274,7 +3347,6 @@ function listingRenderBackendFromEnv(readEnv: (name: string) => string | undefin
     };
   };
 }
-
 return { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, discoverListingsAcrossBatches, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv };
 })();
 

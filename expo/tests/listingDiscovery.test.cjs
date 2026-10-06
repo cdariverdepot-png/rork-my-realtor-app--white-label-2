@@ -1266,6 +1266,51 @@ test('a Sierra MLS-region feed is not the site owner inventory', async () => {
   assert.ok(agentSite.meta.obstacles.some(row => row.code === 'scope_not_established'));
 });
 
+test('a Placester feed without an office or agent id is not inventory, and an office widget is partial without a published total', async () => {
+  const origin = 'https://placester.example';
+  const platform = '<script src="https://static.myrealestateplatform.com/Valhalla/theme.js"></script>';
+  const card = (street, price) => `<a href="/property/st/00000/town/-/${street.replace(/\s+/g, '-').toLowerCase()}/abc/">${street}</a><span>${price}</span>`;
+  const seen = [];
+  const zips = await discoverListings([origin + '/'], async uri => {
+    seen.push(uri);
+    return { html: platform + '<div data-query="{"search_num_results":6,"filter_zips":"73401,73430","origin_ids":[]}"></div>'
+      + card('1 Zip Lane', '$210,000') + card('2 Zip Lane', '$220,000')
+      + '<a href="/?paged=2">Next</a>', finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(zips.listings.length, 0);
+  assert.equal(zips.meta.inventoryStatus, 'inventory_blocked');
+  assert.ok(zips.meta.completenessEvidence.includes('scope_not_established'));
+  assert.equal(seen.some(uri => uri.includes('paged=2')), false);
+  const curated = await discoverListings([origin + '/featured/'], async uri => ({
+    html: '<script>var _placester={}; _placester.searchAppConfig={"globalFilters":[],"config":{"search_url":"https://queryserviceb.placester.net/search"}};</script>'
+      + '<script>{"featured_listings":{"filters":{"search_num_results":9},"featuredIds":["abc123"]}}</script>'
+      + '<a href="/listings/50-000-100-000/">$50,000-$100,000</a>' + card('3 Menu Road', '$75,000'),
+    finalUrl: new URL(uri),
+  }), { maxPages: 3, maxListings: 10, maxDetailPages: 0 });
+  assert.equal(curated.listings.length, 0);
+  assert.equal(curated.meta.inventoryStatus, 'inventory_blocked');
+  const office = await discoverListings([origin + '/featured-listings/'], async uri => {
+    seen.push(uri);
+    return { html: platform + '<div data-query=\'{"origin_ids":["feed"],"search_num_results":12,"oid":"OFF1,OFF2","oname":"Example Group"}\'></div>'
+      + '<div class="pagination-family"><span class="page-numbers current">1</span><a class="page-numbers" href="/featured-listings/?paged=2">2</a><a class="next page-numbers" href="/featured-listings/?paged=2">Next</a></div>'
+      + card('18 Office Way', '$410,000') + card('20 Office Drive', '$390,000'), finalUrl: new URL(uri) };
+  }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(office.listings.length, 2);
+  assert.equal(office.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(office.meta.expectedCount ?? null, null);
+  assert.ok(office.meta.completenessEvidence.includes('collection_boundary_unknown'));
+  assert.equal(seen.some(uri => uri.includes('paged=2')), false);
+  assert.equal(office.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
+  const hidden = await discoverListings([origin + '/agent/'], async uri => {
+    seen.push(uri);
+    return { html: platform + '<div data-query=\'{"search_num_results":9,"oid":"OFF9"}\'></div><a href="/listings-search/">Search homes</a>', finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 10, maxDetailPages: 0 });
+  assert.equal(hidden.listings.length, 0);
+  assert.equal(hidden.meta.inventoryStatus, 'inventory_blocked');
+  assert.equal(seen.some(uri => uri.includes('listings-search')), false);
+  assert.ok(hidden.meta.stages.includes('collection_scoped'));
+});
+
 test('source totals keep pending inventory and account for sold and unknown', async () => {
   const origin = 'https://status.example';
   const row = (id, status) => ({ streetAddress: id + ' Pine St', listPrice: 100000, detailUrl: origin + '/property/' + id, StandardStatus: status });
