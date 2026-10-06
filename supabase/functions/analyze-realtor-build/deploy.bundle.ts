@@ -2788,7 +2788,15 @@ async function discoverListingsAcrossBatches(
   const wall = Date.now() + (options?.maxDurationMs ?? 90000);
   const attempted = new Set<string>();
   let seeds = [...new Set(seedUris.filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 8);
-  let merged: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } | null = null;
+  let merged: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } | null = options?.priorListings?.length ? {
+    listings: options.priorListings.map(item => ({ ...item, images: [...(item.images ?? [])] })),
+    meta: {
+      visited: [], hops: 0, found: options.priorListings.length, maxDepth: 0,
+      inventoryStatus: "inventory_partial", outcome: "partial",
+      completenessEvidence: ["collection_boundary_unknown"], stages: ["collection_continuation"],
+      accounting: accountMergedListings(options.priorListings, undefined, false),
+    },
+  } : null;
   for (let batch = 0; batch < maxBatches && seeds.length && Date.now() < wall; batch++) {
     const fresh = seeds.filter(url => !attempted.has(url));
     if (!fresh.length) break;
@@ -2797,10 +2805,10 @@ async function discoverListingsAcrossBatches(
     const pass = await discoverListings(fresh, fetchHtml, {
       ...options,
       priorListings: undefined,
-      continuationSeeds: batch > 0,
+      continuationSeeds: batch > 0 || options?.continuationSeeds === true,
       enrichAll: false,
       maxDetailPages: 0,
-      maxDurationMs: Math.max(1000, Math.min(45000, remaining)),
+      maxDurationMs: Math.max(1000, Math.min(20000, remaining)),
     });
     merged = merged ? mergeCollectionPasses(merged, pass) : pass;
     const resume = pass.meta.resume;
@@ -3901,10 +3909,13 @@ Deno.serve(async (request) => {
         return reply({ error: error instanceof Error ? error.message : "That listings link could not be used." }, 400);
       }
     }
-    if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
+    if (!seeds.length && !(input.resume && Array.isArray(input.resume.pending) && input.resume.pending.length)) return reply({ error: "Add a link to your property listings first." }, 400);
+    const resumeInput = input.resume && typeof input.resume === "object" ? input.resume : null;
+    const resumePending = Array.isArray(resumeInput?.pending) ? resumeInput.pending.filter(item => typeof item === "string" && item.startsWith("https://")).slice(0, 8) : [];
+    const priorListings = Array.isArray(resumeInput?.listings) ? resumeInput.listings.filter(item => !!item && typeof item === "object" && typeof item.sourceUrl === "string").slice(0, 400) : [];
     let discovery;
     try {
-      discovery = await discoverListingsAcrossBatches(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 90000, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks , renderPage: productionRenderPage() });
+      discovery = await discoverListingsAcrossBatches(resumePending.length ? resumePending : seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 30000, enrichAll: true, continuationSeeds: resumePending.length > 0, priorListings, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks , renderPage: productionRenderPage() });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -4016,7 +4027,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListingsAcrossBatches(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 90000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 30000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
       discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;

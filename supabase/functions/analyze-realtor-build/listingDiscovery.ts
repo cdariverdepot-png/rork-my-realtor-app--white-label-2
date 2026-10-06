@@ -2742,7 +2742,15 @@ export async function discoverListingsAcrossBatches(
   const wall = Date.now() + (options?.maxDurationMs ?? 90000);
   const attempted = new Set<string>();
   let seeds = [...new Set(seedUris.filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 8);
-  let merged: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } | null = null;
+  let merged: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } | null = options?.priorListings?.length ? {
+    listings: options.priorListings.map(item => ({ ...item, images: [...(item.images ?? [])] })),
+    meta: {
+      visited: [], hops: 0, found: options.priorListings.length, maxDepth: 0,
+      inventoryStatus: "inventory_partial", outcome: "partial",
+      completenessEvidence: ["collection_boundary_unknown"], stages: ["collection_continuation"],
+      accounting: accountMergedListings(options.priorListings, undefined, false),
+    },
+  } : null;
   for (let batch = 0; batch < maxBatches && seeds.length && Date.now() < wall; batch++) {
     const fresh = seeds.filter(url => !attempted.has(url));
     if (!fresh.length) break;
@@ -2751,10 +2759,10 @@ export async function discoverListingsAcrossBatches(
     const pass = await discoverListings(fresh, fetchHtml, {
       ...options,
       priorListings: undefined,
-      continuationSeeds: batch > 0,
+      continuationSeeds: batch > 0 || options?.continuationSeeds === true,
       enrichAll: false,
       maxDetailPages: 0,
-      maxDurationMs: Math.max(1000, Math.min(45000, remaining)),
+      maxDurationMs: Math.max(1000, Math.min(20000, remaining)),
     });
     merged = merged ? mergeCollectionPasses(merged, pass) : pass;
     const resume = pass.meta.resume;

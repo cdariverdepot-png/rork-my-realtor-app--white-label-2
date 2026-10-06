@@ -445,7 +445,23 @@ export async function markBuildComplete(): Promise<void> {
 /**
  * Soft-prompt follow-up: crawl a listings URL (and existing sources) without
  * re-running profile AI. Used when the first website scrape found zero homes.
+ * A 100-listing batch is not the end of the import. Continuation pages are
+ * requested again until the collection is exhausted or a real blocker stops it.
  */
+const collectionBatchObstacles = new Set(["collection_limit_reached", "import_deadline"]);
+const collectionHardStops = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited"]);
+
+function collectionResume(data: { discoveredListings?: unknown; draft?: { discoveredListings?: unknown }; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } } | null | undefined) {
+  const meta = data?.listingDiscovery;
+  const resume = meta?.resume;
+  if (!resume || resume.stage !== "collection_continuation" || !collectionBatchObstacles.has(resume.obstacle ?? "")) return null;
+  if ((meta.obstacles ?? []).some(row => collectionHardStops.has(row.code ?? ""))) return null;
+  const pending = Array.isArray(resume.pending) ? resume.pending.filter((url): url is string => typeof url === "string" && url.startsWith("https://")).slice(0, 8) : [];
+  if (!pending.length) return null;
+  const listings = data?.discoveredListings ?? data?.draft?.discoveredListings;
+  return { pending, listings: Array.isArray(listings) ? listings.slice(0, 400) : [] };
+}
+
 export async function discoverListingsBuild(listingsUrl?: string): Promise<SavedBuild> {
   const route = await resolveBuilderRoute();
   if (route.kind === "local") {
@@ -453,18 +469,29 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     if (!supabase || !(await ensureSupabaseSession())) {
       throw new Error("Could not connect to the app builder. Please retry.");
     }
-    const { data, error } = await supabase.functions.invoke("analyze-realtor-build", {
-      body: {
-        guest: true,
-        mode: "discover-listings",
-        sources: saved.sources,
-        draft: saved.draft,
-        evidence: saved.evidence ?? [],
-        ...(listingsUrl ? { listingsUrl } : {}),
-      },
-    });
-    if (error || data?.error) {
-      throw await functionError(error, data, "Those listing pages could not be read. Please retry.");
+    const baseBody = {
+      guest: true,
+      mode: "discover-listings",
+      sources: saved.sources,
+      draft: saved.draft,
+      evidence: saved.evidence ?? [],
+      ...(listingsUrl ? { listingsUrl } : {}),
+    };
+    let body: Record<string, unknown> = baseBody;
+    let data: any = null;
+    const seen = new Set<string>();
+    for (let batch = 0; batch < 6; batch++) {
+      const { data: next, error } = await supabase.functions.invoke("analyze-realtor-build", { body });
+      if (error || next?.error) {
+        if (data) break;
+        throw await functionError(error, next, "Those listing pages could not be read. Please retry.");
+      }
+      data = next;
+      const resume = collectionResume(data);
+      const key = resume?.pending.join("|") ?? "";
+      if (!resume || seen.has(key)) break;
+      seen.add(key);
+      body = { ...baseBody, resume };
     }
     const draft = {
       ...saved.draft,
@@ -477,11 +504,22 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     return next;
   }
 
-  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
-    body: { mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) },
-  });
-  if (error || data?.error) {
-    throw await functionError(error, data, "Those listing pages could not be read. Please retry.");
+  const baseBody = { mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) };
+  let body: Record<string, unknown> = baseBody;
+  let data: any = null;
+  const seen = new Set<string>();
+  for (let batch = 0; batch < 6; batch++) {
+    const { data: next, error } = await supabase!.functions.invoke("analyze-realtor-build", { body });
+    if (error || next?.error) {
+      if (data) break;
+      throw await functionError(error, next, "Those listing pages could not be read. Please retry.");
+    }
+    data = next;
+    const resume = collectionResume(data);
+    const key = resume?.pending.join("|") ?? "";
+    if (!resume || seen.has(key)) break;
+    seen.add(key);
+    body = { ...baseBody, resume };
   }
   const saved = await loadBuild();
   if (!saved) throw new Error("The listing import result could not be loaded.");

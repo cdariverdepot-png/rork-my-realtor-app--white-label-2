@@ -569,10 +569,13 @@ Deno.serve(async (request) => {
         return reply({ error: error instanceof Error ? error.message : "That listings link could not be used." }, 400);
       }
     }
-    if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
+    if (!seeds.length && !(input.resume && Array.isArray(input.resume.pending) && input.resume.pending.length)) return reply({ error: "Add a link to your property listings first." }, 400);
+    const resumeInput = input.resume && typeof input.resume === "object" ? input.resume : null;
+    const resumePending = Array.isArray(resumeInput?.pending) ? resumeInput.pending.filter((item: unknown): item is string => typeof item === "string" && item.startsWith("https://")).slice(0, 8) : [];
+    const priorListings = Array.isArray(resumeInput?.listings) ? resumeInput.listings.filter((item: unknown): item is DiscoveredListing => !!item && typeof item === "object" && typeof (item as DiscoveredListing).sourceUrl === "string").slice(0, 400) : [];
     let discovery;
     try {
-      discovery = await discoverListingsAcrossBatches(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 90000, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
+      discovery = await discoverListingsAcrossBatches(resumePending.length ? resumePending : seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 30000, enrichAll: true, continuationSeeds: resumePending.length > 0, priorListings, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -684,7 +687,7 @@ Deno.serve(async (request) => {
   if (listingSeeds.length) {
     try {
       const discovery = await discoverListingsAcrossBatches(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 90000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 30000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
       discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;
