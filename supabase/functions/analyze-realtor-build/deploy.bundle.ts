@@ -1737,6 +1737,31 @@ function continuationUrl(raw: string, base: URL): string | null {
   } catch { return null; }
 }
 
+/** A structured group is the collection only when the document says so. Visible cards that agree with each other are not that proof. */
+function authoritativeStructuredGroup(html: string, base: URL, structured: DiscoveredListing[]): boolean {
+  const scoped = hasOwnerScope(base, html) || idxOwnerParams(base).length > 0;
+  let total: number | undefined;
+  let terminal = false;
+  try {
+    const payload = JSON.parse(html) as Record<string, unknown>;
+    const accounted = publishedCollectionTotal(payload);
+    const counts = payload.counts;
+    const parsed = Number(payload.total ?? payload.totalCount ?? payload["@odata.count"] ?? accounted.total ?? (typeof counts === "number" ? counts : counts && typeof counts === "object" ? (counts as Record<string, unknown>).total ?? (counts as Record<string, unknown>).all : undefined));
+    if (Number.isFinite(parsed) && parsed > 0) total = parsed;
+    const totalPage = Number(payload.totalPage ?? payload.totalPages ?? payload.pageCount);
+    const pageNum = Number(payload.page ?? payload.currentPage ?? base.searchParams.get("page") ?? 1);
+    if (Number.isInteger(totalPage) && totalPage > 0 && Number.isInteger(pageNum) && pageNum >= totalPage) terminal = true;
+    if (payload.hasNextPage === false || payload.hasMore === false) terminal = true;
+  } catch { /* a marketing document is not a provider collection payload */ }
+  if (scoped && total != null && total === structured.length) return true;
+  if (scoped && terminal && (total == null || total === structured.length)) return true;
+  if (/"@type"\s*:\s*"CollectionPage"/.test(html)) {
+    const numberOfItems = Number(html.match(/"numberOfItems"\s*:\s*(\d+)/)?.[1]);
+    if (numberOfItems > 0 && numberOfItems === structured.length) return true;
+  }
+  return false;
+}
+
 /** Continuation and terminal signals for one document. Absence of a next button is not proof. */
 function inspectCollectionDocument(html: string, base: URL, found: DiscoveredListing[]): {
   continuations: string[]; open: boolean; mechanism: string; structuredClosed: boolean; singlePageConfirmed: boolean;
@@ -1851,8 +1876,11 @@ function inspectCollectionDocument(html: string, base: URL, found: DiscoveredLis
     const b = new Set(right.map(item => item.sourceUrl));
     return a.size > 0 && a.size === b.size && [...a].every(url => b.has(url));
   };
-  const structuredClosed = !open && !continuations.length && found.length > 0 && sameIds(structured, found);
-  const crossCheck = !open && !continuations.length && found.length > 0 && cards.length > 0 && structured.length > 0 && sameIds(cards, structured) && sameIds(structured, found);
+  const idsAgree = !open && !continuations.length && found.length > 0 && sameIds(structured, found);
+  // Matching every card on the page is not proof that the page is the collection.
+  const authoritative = idsAgree && authoritativeStructuredGroup(html, base, structured);
+  const structuredClosed = authoritative;
+  const crossCheck = authoritative && cards.length > 0 && structured.length > 0 && sameIds(cards, structured);
   const pagerExhausted = sawPager && !continuations.length && !open && found.length > 0 && highestPage > 0 && highestPage <= Math.max(currentPage, 1);
   const countMatchesPage = !!publishedCount && publishedCount === found.length;
   let singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
@@ -2819,15 +2847,15 @@ async function discoverListings(
         found = found.filter(item => !idxCollectedUrl(item.sourceUrl));
       }
       const showcasePending = collectInventoryFragments(html, finalUrl).some(url => /\/idx\/customshowcasejs\.php$/i.test(new URL(url).pathname) && url !== finalUrl.toString());
-      const otherInventory = collectInventoryLinks(html, finalUrl, 8).some(link => {
+      const scopeLead = publishedQueries.length > 0 || chimeListingSearchRequests(html, finalUrl).length > 0 || collectInventoryLinks(html, finalUrl, 8).some(link => {
         try {
           const linked = new URL(link.url);
-          return !idxCollectedUrl(link.url) && !/\/idx\/(?:results|search|map|featured|soldpending)(?:\/|$)/i.test(linked.pathname) && !((/(?:^|\.)idxbroker\.com$/i.test(linked.hostname) && /^\/i\/[^/]+\/?$/i.test(linked.pathname)));
+          return hasOwnerScope(linked, "") || idxOwnerParams(linked).length > 0 || /\/(?:office|agent)_listing_categories\//i.test(linked.pathname);
         } catch { return false; }
       });
       const collectionDocument = /\/idx\/(?:customshowcasejs\.php|results(?:\/|$)|widgets\/)/i.test(finalUrl.pathname) || (/(?:^|\.)idxbroker\.com$/i.test(finalUrl.hostname) && !/\/idx\/details\/listing\//i.test(finalUrl.pathname));
       const marketShell = collectionDocument || idxRows.length > 0 || /customshowcasejs\.php|idxwidgetsrc-|\/idx\/results\/listings|\/idx\/widgets\//i.test(html);
-      if (!showcasePending && marketShell && !found.length) {
+      if (!showcasePending && !scopeLead && marketShell && !found.length) {
         unscopedMarket = true;
         if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
           obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "IDX Broker feed has no listing agent or office id. A widget id, MLS board, city, or price bucket is not the brokerage inventory." });
@@ -2835,7 +2863,7 @@ async function discoverListings(
         stages.push("scope_not_established");
         observation.resolution = "excluded-market";
         if (idxRows.length || collectionDocument || PATH_INVENTORY.test(finalUrl.pathname) || /\/idx\/results\/listings/i.test(html)) inventoryUrls.add(finalUrl.toString());
-        if (!otherInventory) continue;
+        continue;
       }
     }
     if (!broad && idxOwnerParams(finalUrl).length) {

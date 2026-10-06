@@ -689,7 +689,8 @@ test('enrichAll schedules every listing when the collection page budget is alrea
   assert.ok(capped.listings.filter(row => row.detailsComplete).length <= 1, 'collection budget must still limit the legacy detail path');
   const full = await discoverListings(['https://agent.example/inventory'], fetchHtml, { maxPages: 2, maxListings: 20, enrichAll: true });
   assert.equal(full.listings.length, 13);
-  assert.equal(full.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(full.meta.inventoryStatus, 'inventory_partial');
+  assert.deepEqual(full.meta.completenessEvidence, ['collection_boundary_unknown']);
   assert.equal(full.meta.enrichment.scheduled, 13);
   assert.equal(full.meta.enrichment.enriched, 13);
   assert.equal(full.meta.enrichment.failed, 0);
@@ -708,7 +709,8 @@ test('a detail failure keeps the discovered listing and does not mark inventory 
   assert.equal(result.listings.length, 1);
   assert.equal(result.listings[0].title, '9 Oak St');
   assert.equal(result.listings[0].detailsComplete, undefined);
-  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.inventoryStatus, 'inventory_partial');
+  assert.deepEqual(result.meta.completenessEvidence, ['collection_boundary_unknown']);
   assert.equal(result.meta.outcome, 'found');
   assert.equal(result.meta.enrichment.status, 'enrichment_unavailable');
   assert.equal(result.meta.enrichment.failed, 1);
@@ -986,8 +988,9 @@ test('collection boundaries prove exhaustion without treating bare cards as comp
   const agreed = '<a href="' + origin + '/property/12-pine">12 Pine St $350,000</a><script type="application/ld+json">' + JSON.stringify({ '@type': 'RealEstateListing', name: '12 Pine St', price: 350000, url: origin + '/property/12-pine' }) + '</script>';
   const cross = await discoverListings([origin + '/cross'], async () => ({ html: agreed, finalUrl: new URL(origin + '/cross') }), { maxDetailPages: 0 });
   assert.equal(cross.listings.length, 1);
-  assert.equal(cross.meta.inventoryStatus, 'inventory_complete');
-  assert.ok(cross.meta.completenessEvidence.includes('single_page_collection_confirmed') || cross.meta.completenessEvidence.includes('structured_group_exhausted'));
+  assert.equal(cross.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(cross.meta.completenessEvidence.includes('structured_group_exhausted'), false);
+  assert.deepEqual(cross.meta.completenessEvidence, ['collection_boundary_unknown']);
 
   const query = 'query Properties($limit: Int, $offset: Int) { properties(limit: $limit, offset: $offset) { id } propertiesCount { count } }';
   const scoped = { pageSize: '1', useRouterApi: false, query, variables: { limit: 1, offset: 0, featuredListing: true, statusId: '{{variables.statusId}}' } };
@@ -1042,6 +1045,45 @@ test('collection boundaries prove exhaustion without treating bare cards as comp
   assert.ok(partial.meta.completenessEvidence.includes('published_collection_total_reconciled'));
   assert.ok(partial.meta.completenessEvidence.includes('pagination_exhausted'));
   assert.equal(partial.meta.completenessEvidence.includes('api_total_match'), false);
+});
+
+test('a finite visible group is not a complete collection without authority', async () => {
+  const origin = 'https://crane.example';
+  const rows = [1, 2, 3, 4, 5, 6].map(id => ({ '@type': 'RealEstateListing', name: id + ' Abundance St', price: 250000, url: origin + '/listing-detail/' + id + '/' + id + '-Abundance-St' }));
+  const html = rows.map(row => '<a href="' + row.url + '">' + row.name + ' $250,000</a>').join('') + '<script type="application/ld+json">' + JSON.stringify(rows) + '</script>';
+  const result = await discoverListings([origin + '/'], async () => ({ html, finalUrl: new URL(origin + '/') }), { maxDetailPages: 0 });
+  assert.equal(result.listings.length, 6);
+  assert.equal(result.meta.expectedCount ?? null, null);
+  assert.equal(result.meta.inventoryStatus, 'inventory_partial');
+  assert.equal(result.meta.completenessEvidence.includes('structured_group_exhausted'), false);
+  assert.deepEqual(result.meta.completenessEvidence, ['collection_boundary_unknown']);
+});
+
+test('an owner-scoped featured search stays complete when its published count matches the structured group', async () => {
+  const origin = 'https://brenda.example';
+  const url = origin + '/api-site/search/realTimeListings?listingSource=0%2BCustom-Example&featureListingName=Custom-Example&listingType=featured-listing&page=1&pageSize=100';
+  const listings = [1, 2].map(id => ({ id, streetAddress: id + ' Hayden Lake Rd', listPrice: 500000, detailUrl: origin + '/listing-detail/' + id + '/hayden' }));
+  const html = JSON.stringify({ listings, counts: 2, totalPage: 1, listingType: 'featured-listing' });
+  const result = await discoverListings([url], async () => ({ html, finalUrl: new URL(url) }), { maxDetailPages: 0 });
+  assert.equal(result.listings.length, 2);
+  assert.equal(result.meta.expectedCount, 2);
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(result.meta.completenessEvidence.includes('structured_group_exhausted'));
+  assert.ok(result.meta.completenessEvidence.includes('api_total_match'));
+});
+
+test('an unscoped IDX shell does not crawl unrelated site links', async () => {
+  const origin = 'https://zane.example';
+  const html = '<a href="/idx/search/homes">Search homes</a><script src="/idx/widgets/5729"></script><a href="/search-by-city.html">Search By City</a><a href="/about">About our team</a><a href="/neighborhoods/greensboro">Greensboro homes</a>';
+  const seen = [];
+  const result = await discoverListings([origin + '/'], async (uri) => {
+    seen.push(uri);
+    return { html: uri === origin + '/' ? html : '<main>unrelated</main>', finalUrl: new URL(uri) };
+  }, { maxPages: 20, maxDetailPages: 0 });
+  assert.equal(result.listings.length, 0);
+  assert.equal(result.meta.inventoryStatus, 'inventory_blocked');
+  assert.ok(result.meta.completenessEvidence.includes('scope_not_established'));
+  assert.deepEqual(seen, [origin + '/']);
 });
 
 test('tracking parameters are not a second home, and distinct provider ids stay separate', async () => {
