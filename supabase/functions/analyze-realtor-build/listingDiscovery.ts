@@ -1454,6 +1454,42 @@ export function placesterUnscopedFeed(html: string, url: URL): boolean {
   return placesterOwnerFilters(html).length === 0;
 }
 
+/** Valhalla tiles publish data-address and data-price. They count only after an office or agent filter is proven. */
+export function listingsFromPlacesterTiles(html: string, base: URL): DiscoveredListing[] {
+  const found: DiscoveredListing[] = [];
+  const seen = new Set<string>();
+  for (const match of html.matchAll(/<div\b([^>]*\bdata-address\s*=\s*["'][^"']+["'][^>]*)>/gi)) {
+    const tag = `<div ${match[1]}>`;
+    const address = decodeEntities(attr(tag, "data-address")).replace(/\s+/g, " ").trim();
+    const amount = Number(attr(tag, "data-price").replace(/[^0-9.]/g, ""));
+    if (!address || !Number.isFinite(amount) || amount <= 0) continue;
+    const block = html.slice(match.index ?? 0, (match.index ?? 0) + 4000);
+    const href = absolutize(decodeEntities(block.match(/<a\b[^>]*href\s*=\s*["']([^"']+)["']/i)?.[1] ?? ""), base);
+    if (!href) continue;
+    let source = "";
+    try {
+      const link = new URL(href);
+      if (!/\/property\//i.test(link.pathname)) continue;
+      link.search = "";
+      link.hash = "";
+      source = canonicalListingUrl(link.toString());
+    } catch { continue; }
+    if (seen.has(source)) continue;
+    seen.add(source);
+    const imageRaw = block.match(/<img\b[^>]*(?:data-src|src)\s*=\s*["']([^"']+)["']/i)?.[1] ?? "";
+    const image = absolutize(decodeEntities(imageRaw), base) ?? "";
+    const photo = image && !looksLikeChrome(image) ? image : "";
+    found.push({
+      title: address.slice(0, 160), description: "",
+      price: "$" + String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+      beds: 0, baths: 0, sqft: "",
+      neighborhood: [attr(tag, "data-locality"), attr(tag, "data-region")].filter(Boolean).join(", "),
+      image: photo, images: photo ? [photo] : [], sourceUrl: source,
+    });
+  }
+  return found;
+}
+
 export type ListingInterfaceAdapter = {
   id: string;
   matches: (html: string, url: URL) => boolean;
@@ -2671,6 +2707,8 @@ export async function discoverListings(
     }
     const placesterOwners = !broad && placesterDocument(html) ? placesterOwnerFilters(html) : [];
     if (placesterOwners.length) {
+      const tiles = listingsFromPlacesterTiles(html, finalUrl);
+      if (tiles.length) found = tiles;
       stages.push("collection_scoped");
       if (!found.length && !obstacles.some(row => row.code === "requires_rendering" && row.url === finalUrl.toString())) {
         obstacles.push({ code: "requires_rendering", url: finalUrl.toString(), detail: "Placester office or agent filter is published, but this document has no listing rows and no collection total." });

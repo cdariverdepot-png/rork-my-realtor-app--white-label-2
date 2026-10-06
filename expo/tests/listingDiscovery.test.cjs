@@ -1293,9 +1293,13 @@ test('a Placester feed without an office or agent id is not inventory, and an of
     seen.push(uri);
     return { html: platform + '<div data-query=\'{"origin_ids":["feed"],"search_num_results":12,"oid":"OFF1,OFF2","oname":"Example Group"}\'></div>'
       + '<div class="pagination-family"><span class="page-numbers current">1</span><a class="page-numbers" href="/featured-listings/?paged=2">2</a><a class="next page-numbers" href="/featured-listings/?paged=2">Next</a></div>'
-      + card('18 Office Way', '$410,000') + card('20 Office Drive', '$390,000'), finalUrl: new URL(uri) };
+      + '<div data-address="18 Office Way" data-price="410000" data-locality="Town" data-region="ST"><a href="/property/st/00000/town/-/18-office-way/abc/?filters=oid">photo</a></div>'
+      + '<div data-address="20 Office Drive" data-price="390000"><a href="/property/st/00000/town/-/20-office-drive/def/">photo</a></div>', finalUrl: new URL(uri) };
   }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
   assert.equal(office.listings.length, 2);
+  assert.equal(office.listings[0].price, '$410,000');
+  assert.equal(office.listings[0].title, '18 Office Way');
+  assert.equal(office.listings[0].sourceUrl.includes('filters='), false);
   assert.equal(office.meta.inventoryStatus, 'inventory_partial');
   assert.equal(office.meta.expectedCount ?? null, null);
   assert.ok(office.meta.completenessEvidence.includes('collection_boundary_unknown'));
