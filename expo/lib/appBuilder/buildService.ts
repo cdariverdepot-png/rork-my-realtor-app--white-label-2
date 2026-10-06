@@ -466,8 +466,13 @@ export async function markBuildComplete(): Promise<void> {
 const collectionBatchObstacles = new Set(["collection_limit_reached", "import_deadline"]);
 const collectionHardStops = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited", "scope_not_established"]);
 
-function collectionResume(data: { discoveredListings?: unknown; draft?: { discoveredListings?: unknown; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } }; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } } | null | undefined) {
-  const meta = data?.listingDiscovery ?? data?.draft?.listingDiscovery;
+function collectionResume(data: unknown) {
+  const record = data && typeof data === "object" ? data as {
+    discoveredListings?: unknown;
+    draft?: { discoveredListings?: unknown; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } };
+    listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] };
+  } : undefined;
+  const meta = record?.listingDiscovery ?? record?.draft?.listingDiscovery;
   const resume = meta?.resume;
   if (!resume || resume.stage !== "collection_continuation" || !collectionBatchObstacles.has(resume.obstacle ?? "")) return null;
   if ((meta?.obstacles ?? []).some(row => collectionHardStops.has(row.code ?? ""))) return null;
