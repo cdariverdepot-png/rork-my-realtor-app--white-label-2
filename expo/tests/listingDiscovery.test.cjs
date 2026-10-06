@@ -28,6 +28,7 @@ const {
   detectListingInterfaces,
   listingsFromPublicJson, listingsFromCards, listingsFromMoxi, listingFromDsidxDetail,
   kestrelInventoryRequests, listingsFromKestrel, publicListingRequestHeaders, decodePublicListingResponse,
+  discoverListingsAcrossBatches,
 } = loadDiscovery();
 const {enrichListingFromPage,propertyDetailRequest,distinctPropertyImages}=loadDiscovery();
 
@@ -764,7 +765,7 @@ test('production bundle discovery matches the source engine on a chime collectio
   const start = bundle.indexOf('const { publicListingRequestHeaders');
   const end = bundle.indexOf('const { parseListingCsv');
   const slice = bundle.slice(start, end).replace(
-    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv } =',
+    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, discoverListingsAcrossBatches, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv } =',
     'const exported =');
   const compiled = ts.transpileModule(slice + '\nmodule.exports = exported;\n', { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const moduleRef = { exports: {} };
@@ -1004,7 +1005,29 @@ test('tracking parameters are not a second home, and distinct provider ids stay 
   assert.equal(result.listings.some(row => row.title === 'New'), false);
 });
 
-test('an open numbered page at the safety cap is collection_limit_reached', async () => {
+test('a batch limit continues into the next page while time and page budget remain', async () => {
+  const origin = 'https://paged.example';
+  const pages = {
+    [origin + '/listings']: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
+    [origin + '/listings?page=2']: card('16 Elm St', '16-elm', '$500,000'),
+  };
+  const seen = [];
+  const finished = await discoverListings([origin + '/listings'], async uri => {
+    seen.push(uri);
+    if (!pages[uri]) throw new Error('unreadable page');
+    return { html: pages[uri], finalUrl: new URL(uri) };
+  }, { maxPages: 6, maxListings: 2, maxDetailPages: 0 });
+  assert.deepEqual(seen, [origin + '/listings', origin + '/listings?page=2']);
+  assert.equal(finished.listings.length, 3);
+  assert.equal(finished.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(finished.meta.completenessEvidence.includes('collection_limit_reached'), false);
+  assert.ok(finished.meta.completenessEvidence.includes('pagination_exhausted'));
+  assert.equal(finished.meta.collectionBoundary.continuationAvailable, false);
+  assert.equal(finished.meta.resume, undefined);
+  assert.equal(finished.meta.accounting.eligibleImportComplete, true);
+});
+
+test('a batch limit stays partial when the page budget blocks the next page', async () => {
   const origin = 'https://paged.example';
   const pages = {
     [origin + '/listings']: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
@@ -1015,18 +1038,90 @@ test('an open numbered page at the safety cap is collection_limit_reached', asyn
     seen.push(uri);
     if (!pages[uri]) throw new Error('unreadable page');
     return { html: pages[uri], finalUrl: new URL(uri) };
-  }, { maxPages: 6, maxListings: 2, maxDetailPages: 0 });
+  }, { maxPages: 1, maxListings: 2, maxDetailPages: 0 });
   assert.deepEqual(seen, [origin + '/listings']);
   assert.equal(capped.listings.length, 2);
   assert.equal(capped.meta.inventoryStatus, 'inventory_partial');
   assert.ok(capped.meta.completenessEvidence.includes('collection_limit_reached'));
   assert.equal(capped.meta.completenessEvidence.includes('pagination_exhausted'), false);
-  assert.notEqual(capped.meta.inventoryStatus, 'inventory_complete');
   assert.equal(capped.meta.collectionBoundary.continuationAvailable, true);
   assert.equal(capped.meta.resume.stage, 'collection_continuation');
   assert.equal(capped.meta.resume.obstacle, 'collection_limit_reached');
   assert.ok(capped.meta.resume.pending.some(url => url.includes('page=2')));
   assert.equal(capped.meta.accounting.eligibleImportComplete, false);
+});
+
+test('a batch limit walks every later page while time and page budget remain', async () => {
+  const origin = 'https://paged.example';
+  const pages = {};
+  for (let page = 1; page <= 5; page++) {
+    const url = page === 1 ? origin + '/listings' : origin + '/listings?page=' + page;
+    const next = page < 5 ? `<nav class="pagination"><a rel="next" href="?page=${page + 1}">Next</a></nav>` : '<nav class="pagination"><span>5</span></nav>';
+    pages[url] = next + card(page + ' Pine St', 'pine-' + page);
+  }
+  const seen = [];
+  const result = await discoverListings([origin + '/listings'], async uri => {
+    seen.push(uri);
+    if (!pages[uri]) throw new Error('unreadable page');
+    return { html: pages[uri], finalUrl: new URL(uri) };
+  }, { maxPages: 10, maxListings: 2, maxDetailPages: 0 });
+  assert.equal(seen.length, 5);
+  assert.equal(result.listings.length, 5);
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.completenessEvidence.includes('collection_limit_reached'), false);
+  assert.ok(result.meta.completenessEvidence.includes('pagination_exhausted'));
+  assert.equal(result.meta.resume, undefined);
+});
+
+test('subsequent batches resume after a page budget until the collection is exhausted', async () => {
+  const origin = 'https://paged.example';
+  const pages = {};
+  for (let page = 1; page <= 3; page++) {
+    const url = page === 1 ? origin + '/listings' : origin + '/listings?page=' + page;
+    const next = page < 3 ? `<nav class="pagination"><a rel="next" href="?page=${page + 1}">Next</a></nav>` : '<nav class="pagination"><span>3</span></nav>';
+    pages[url] = next + card(page + ' A St', 'a-' + page) + card(page + ' B St', 'b-' + page, '$400,000');
+  }
+  const result = await discoverListingsAcrossBatches([origin + '/listings'], async uri => {
+    if (!pages[uri]) throw new Error('unreadable page');
+    return { html: pages[uri], finalUrl: new URL(uri) };
+  }, { maxPages: 1, maxListings: 2, maxDetailPages: 0, maxDurationMs: 15000 });
+  assert.equal(result.listings.length, 6);
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.resume, undefined);
+  assert.equal(result.meta.accounting.eligibleImportComplete, true);
+});
+
+test('a captcha on the next page stops automatic batches', async () => {
+  const origin = 'https://paged.example';
+  const robot = '<html><head><title>Robot Validate</title></head><body><h2>Error Access denied</h2><div id="recaptcha-wrap"></div></body></html>';
+  const first = origin + '/listings';
+  const second = origin + '/listings?page=2';
+  const pages = {
+    [first]: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
+    [second]: robot,
+  };
+  const result = await discoverListingsAcrossBatches([first], async uri => ({ html: pages[uri] ?? robot, finalUrl: new URL(uri) }), { maxPages: 1, maxListings: 2, maxDetailPages: 0, maxDurationMs: 15000 });
+  assert.equal(result.listings.length, 2);
+  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(result.meta.obstacles.some(row => row.code === 'captcha_required'));
+  assert.equal(result.meta.accounting.eligibleImportComplete, false);
+});
+
+test('an Eureka client id without a featured Kestrel widget is not a scoped collection', async () => {
+  const origin = 'https://agent.example';
+  const seen = [];
+  const html = '<script src="https://www.idxhome.com/eureka/ihf-eureka.js"></script>'
+    + '<div data-ihf-client-id="178012"></div>'
+    + card('12 Pine St', '12-pine')
+    + '<a href="/homes-for-sale-featured/">Featured homes</a>';
+  const result = await discoverListings([origin + '/'], async uri => {
+    seen.push(uri);
+    return { html, finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(seen.some(uri => /idxhome\.com\/api\/(?:site\/\d+\/listings|kestrel\/listings)\.json/.test(uri)), false);
+  assert.equal(kestrelInventoryRequests(html).length, 0);
+  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
+  assert.equal(result.meta.accounting?.eligibleImportComplete, false);
 });
 
 test('source totals keep pending inventory and account for sold and unknown', async () => {

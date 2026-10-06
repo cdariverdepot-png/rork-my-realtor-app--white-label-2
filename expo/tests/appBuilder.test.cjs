@@ -65,6 +65,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
       }
       return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0, rendered } };
     }
+    const discoverListingsAcrossBatches = discoverListings;
   `;
   const code = ts.transpileModule(discoveryStub + '\n' + edgeWithoutFiles, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   let handler, aiBody, update, reads = 0;

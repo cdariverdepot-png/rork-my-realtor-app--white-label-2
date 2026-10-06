@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
+import { publicListingRequestHeaders, decodePublicListingResponse, discoverListingsAcrossBatches, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, type WebsiteDesign } from "./websiteDesign.ts";
 
@@ -572,7 +572,7 @@ Deno.serve(async (request) => {
     if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
+      discovery = await discoverListingsAcrossBatches(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 90000, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
@@ -683,8 +683,8 @@ Deno.serve(async (request) => {
     .map((source) => source.uri);
   if (listingSeeds.length) {
     try {
-      const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
+      const discovery = await discoverListingsAcrossBatches(listingSeeds.slice(0, 4), fetchHtml, {
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 90000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
       });
       discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;

@@ -2042,6 +2042,10 @@ export async function discoverListings(
     maxRenders?: number;
     /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
     enrichAll?: boolean;
+    /** Listings already collected by an earlier batch. Used to enrich without crawling again. */
+    priorListings?: DiscoveredListing[];
+    /** Pending continuation URLs, not a new discovery seed. */
+    continuationSeeds?: boolean;
     /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
     sessionCookie?: string },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
@@ -2099,6 +2103,7 @@ export async function discoverListings(
   let collectionRowsFetched = 0;
   let offsetQueryTotal = 0;
   let hitSafetyCap = false;
+  let listingCeiling = maxListings;
   let omissionTotal = 0;
   const omissionReasons = new Map<string, number>();
   const pendingContinuations = new Set<string>();
@@ -2108,7 +2113,7 @@ export async function discoverListings(
   let maxDepthReached = 0;
 
   type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
-  const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
+  const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i, ...(options?.continuationSeeds ? { continuation: true } : {}) }));
 
   const pushListing = (item: DiscoveredListing) => {
     const sourceUrl = canonicalListingUrl(item.sourceUrl);
@@ -2130,8 +2135,16 @@ export async function discoverListings(
     listingKeys.add(key);
     listings.push(normalized);
   };
+  for (const item of options?.priorListings ?? []) pushListing(item);
 
-  while (queue.length && visited.length < maxPages && listings.length < maxListings && Date.now() < deadline) {
+  while (queue.length && visited.length < maxPages && Date.now() < deadline) {
+    if (listings.length >= listingCeiling) {
+      // The batch size is not a product stop. Only a queued continuation page extends it.
+      const continuationWaiting = queue.some(item => item.continuation && !visitedSet.has(item.url));
+      if (!continuationWaiting) break;
+      listingCeiling += maxListings;
+      hitSafetyCap = false;
+    }
     queue.sort((a, b) => b.priority - a.priority);
     const next = queue.shift()!;
     let normalized = next.url;
@@ -2156,7 +2169,7 @@ export async function discoverListings(
       finalUrl = page.finalUrl;
       hops += 1;
       visitedSet.add(finalUrl.toString());
-      if (next.continuation) continuationRequests++;
+      if (next.continuation) { continuationRequests++; sawContinuation = true; }
     } catch (error) {
       const reason = error instanceof Error ? error.message.slice(0, 180) : "Unreadable public response";
       const rateLimited = /\b429\b|too many requests|rate[- ]limited/i.test(reason);
@@ -2399,23 +2412,33 @@ export async function discoverListings(
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
     const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
     // A page that publishes a scoped, counted query is not itself the inventory. Shell cards can be sold, nearby, or unscoped.
+    const held: DiscoveredListing[] = [];
     for (const item of found) {
       if (publishedQueries.length) break;
       if (next.depth === 0 && found.length === 1 && !item.price && item.sourceUrl === finalUrl.toString()) continue;
+      if (listings.length >= listingCeiling) { held.push(item); continue; }
       pushListing(item);
-      if (listings.length >= maxListings) break;
     }
 
-    if (listings.length >= maxListings) {
-      hitSafetyCap = true;
-      if (!broad) {
-        const boundary = inspectCollectionDocument(html, finalUrl, found);
-        if (boundary.open || boundary.continuations.length) openContinuation = true;
-        for (const url of boundary.continuations) pendingContinuations.add(url);
-        if (boundary.publishedCount && boundary.publishedCount > listings.length) expectedCount = Math.max(expectedCount, boundary.publishedCount);
+    if (listings.length >= listingCeiling) {
+      const boundary = broad ? null : inspectCollectionDocument(html, finalUrl, found);
+      const nextUrls = boundary?.continuations ?? [];
+      for (const url of nextUrls) pendingContinuations.add(url);
+      if (boundary?.publishedCount && boundary.publishedCount > listings.length) expectedCount = Math.max(expectedCount, boundary.publishedCount);
+      const budgetRemains = () => Date.now() < deadline && visited.length < maxPages;
+      while (held.length && listings.length >= listingCeiling && budgetRemains()) {
+        listingCeiling += maxListings;
+        while (held.length && listings.length < listingCeiling) pushListing(held.shift()!);
       }
-      continue;
+      if (held.length === 0 && nextUrls.length > 0 && budgetRemains()) {
+        if (listings.length >= listingCeiling) listingCeiling += maxListings;
+        hitSafetyCap = false;
+      } else if (held.length > 0 || nextUrls.length > 0 || boundary?.open) {
+        hitSafetyCap = true;
+        openContinuation = true;
+      }
     }
+    if (hitSafetyCap && listings.length >= listingCeiling) continue;
     if (!broad) {
       for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString()}); }
       for (const url of collectInventoryFragments(html, finalUrl)) {
@@ -2570,11 +2593,12 @@ export async function discoverListings(
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
   if (queue.some(item => item.continuation)) openContinuation = true;
   for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
+  for (const url of [...pendingContinuations]) if (visitedSet.has(url)) pendingContinuations.delete(url);
   unresolvedPagination = unresolvedPagination || openContinuation;
   const proving = new Set<string>();
   const sourceSeen = listings.length + omissionTotal;
   const countMismatch = expectedCount > 0 && expectedCount !== sourceSeen;
-  const boundaryBlocked = (!listings.length && !omissionTotal) || listings.length >= maxListings || queue.length > 0 || unresolvedPagination || limitedShowcase || countMismatch;
+  const boundaryBlocked = (!listings.length && !omissionTotal) || hitSafetyCap || queue.length > 0 || unresolvedPagination || limitedShowcase || countMismatch;
   if (!boundaryBlocked && expectedCount > 0 && expectedCount === listings.length) proving.add(apiCount ? "api_total_match" : "published_count_match");
   else if (!boundaryBlocked && expectedCount > 0 && expectedCount === sourceSeen) proving.add("published_collection_total_reconciled");
   if (!boundaryBlocked && sawContinuation && continuationRequests > 0 && continuationMechanism === "cursor") proving.add("cursor_exhausted");
@@ -2583,7 +2607,7 @@ export async function discoverListings(
   if (!boundaryBlocked && providerTerminalPages > 0 && collectionPages > 0 && providerTerminalPages >= collectionPages) proving.add("provider_terminal_state");
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && structuredPages === collectionPages) proving.add("structured_group_exhausted");
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && singlePagePages === collectionPages) proving.add("single_page_collection_confirmed");
-  if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && listings.length < maxListings) proving.add("pagination_exhausted");
+  if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && !hitSafetyCap) proving.add("pagination_exhausted");
   if (hitSafetyCap && listings.length >= maxListings && (openContinuation || pendingContinuations.size > 0 || expectedCount > listings.length)) proving.add("collection_limit_reached");
   const completenessEvidence = proving.size ? [...proving] : (listings.length ? ["collection_boundary_unknown"] : []);
   const inventoryShort = !!(listings.length && (boundaryBlocked || !proving.size));
@@ -2628,8 +2652,8 @@ export async function discoverListings(
     eligibleImportComplete: sourceCollectionExhausted,
   };
   return {
-    listings: listings.slice(0, maxListings),
-    meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
+    listings,
+    meta: { visited, hops, found: listings.length, maxDepth: maxDepthReached,
       compatibility: { version: 1, pages: compatibilityPages },
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
@@ -2638,6 +2662,136 @@ export async function discoverListings(
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
       resume: (!listings.length || verificationPending.length || continuationAvailable) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : continuationAvailable ? "collection_continuation" : "discovery_blocked" } : undefined },
   };
+}
+
+const BATCH_OBSTACLE = new Set(["collection_limit_reached", "import_deadline"]);
+const HARD_OBSTACLE = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited"]);
+
+function accountMergedListings(listings: DiscoveredListing[], sourceTotal: number | undefined, exhausted: boolean): NonNullable<ListingDiscoveryMeta["accounting"]> {
+  const exclusionCounts = new Map<string, number>();
+  let eligibleTotal = 0;
+  for (const item of listings) {
+    const reason = exclusionReason(item);
+    if (reason) exclusionCounts.set(reason, (exclusionCounts.get(reason) ?? 0) + 1);
+    else eligibleTotal++;
+  }
+  const exclusions = [...exclusionCounts.entries()].map(([reason, count]) => ({ reason, count })).sort((a, b) => a.reason.localeCompare(b.reason));
+  return {
+    sourceTotal, sourceSeen: listings.length, sourceClassified: listings.length, sourceCollectionExhausted: exhausted,
+    excludedTotal: exclusions.reduce((sum, row) => sum + row.count, 0), exclusions,
+    eligibleTotal, importedEligible: eligibleTotal, eligibleImportComplete: exhausted,
+  };
+}
+
+function mergeCollectionPasses(
+  earlier: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta },
+  later: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta },
+): { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } {
+  const listings: DiscoveredListing[] = [];
+  const absorb = (item: DiscoveredListing) => {
+    const index = listings.findIndex(row => listingIdentityKey(row) === listingIdentityKey(item));
+    if (index < 0) { listings.push({ ...item, images: [...item.images] }); return; }
+    const old = listings[index];
+    const images = [...new Set([...item.images, ...old.images])].slice(0, 500);
+    const preferIncoming = (!!item.detailsComplete && !old.detailsComplete) || item.description.length > old.description.length;
+    listings[index] = preferIncoming
+      ? { ...old, ...item, images, image: images[0] || item.image || old.image }
+      : { ...item, ...old, images, image: images[0] || old.image || item.image };
+  };
+  for (const item of earlier.listings) absorb(item);
+  for (const item of later.listings) absorb(item);
+  const complete = later.meta.inventoryStatus === "inventory_complete" && !later.meta.resume;
+  const inventoryStatus = complete ? "inventory_complete" as const : listings.length ? "inventory_partial" as const : (later.meta.inventoryStatus ?? "inventory_empty");
+  const expectedCount = Math.max(earlier.meta.expectedCount ?? 0, later.meta.expectedCount ?? 0) || undefined;
+  const sourceTotal = Math.max(earlier.meta.accounting?.sourceTotal ?? 0, later.meta.accounting?.sourceTotal ?? 0) || expectedCount;
+  return {
+    listings,
+    meta: {
+      ...later.meta,
+      visited: [...new Set([...(earlier.meta.visited ?? []), ...(later.meta.visited ?? [])])],
+      hops: (earlier.meta.hops ?? 0) + (later.meta.hops ?? 0),
+      found: listings.length,
+      maxDepth: Math.max(earlier.meta.maxDepth ?? 0, later.meta.maxDepth ?? 0),
+      expectedCount, inventoryStatus,
+      outcome: complete ? "found" : listings.length ? "partial" : later.meta.outcome,
+      completenessEvidence: complete ? (later.meta.completenessEvidence ?? []) : (later.meta.completenessEvidence?.length ? later.meta.completenessEvidence : ["collection_boundary_unknown"]),
+      accounting: accountMergedListings(listings, sourceTotal, complete),
+      resume: complete ? undefined : later.meta.resume ?? earlier.meta.resume,
+      stages: [...new Set([...(earlier.meta.stages ?? []), ...(later.meta.stages ?? [])])],
+      obstacles: [...(earlier.meta.obstacles ?? []), ...(later.meta.obstacles ?? [])],
+      failed: [...new Set([...(earlier.meta.failed ?? []), ...(later.meta.failed ?? [])])],
+      failureDetails: [...(earlier.meta.failureDetails ?? []), ...(later.meta.failureDetails ?? [])],
+      inventoryUrls: [...new Set([...(earlier.meta.inventoryUrls ?? []), ...(later.meta.inventoryUrls ?? [])])],
+      interfaces: [...new Set([...(earlier.meta.interfaces ?? []), ...(later.meta.interfaces ?? [])])],
+      collectionBoundary: {
+        ...(later.meta.collectionBoundary ?? {}),
+        continuationAvailable: complete ? false : later.meta.collectionBoundary?.continuationAvailable ?? earlier.meta.collectionBoundary?.continuationAvailable,
+        continuationRequests: (earlier.meta.collectionBoundary?.continuationRequests ?? 0) + (later.meta.collectionBoundary?.continuationRequests ?? 0),
+      },
+    },
+  };
+}
+
+/** Keep walking continuation pages after an internal batch or deadline. Captcha, auth, and render failures stop. */
+export async function discoverListingsAcrossBatches(
+  seedUris: string[],
+  fetchHtml: FetchHtml,
+  options?: Parameters<typeof discoverListings>[2] & { maxBatches?: number },
+): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
+  const maxBatches = options?.maxBatches ?? 8;
+  const wall = Date.now() + (options?.maxDurationMs ?? 90000);
+  const attempted = new Set<string>();
+  let seeds = [...new Set(seedUris.filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 8);
+  let merged: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } | null = null;
+  for (let batch = 0; batch < maxBatches && seeds.length && Date.now() < wall; batch++) {
+    const fresh = seeds.filter(url => !attempted.has(url));
+    if (!fresh.length) break;
+    for (const url of fresh) attempted.add(url);
+    const remaining = wall - Date.now();
+    const pass = await discoverListings(fresh, fetchHtml, {
+      ...options,
+      priorListings: undefined,
+      continuationSeeds: batch > 0,
+      enrichAll: false,
+      maxDetailPages: 0,
+      maxDurationMs: Math.max(1000, Math.min(45000, remaining)),
+    });
+    merged = merged ? mergeCollectionPasses(merged, pass) : pass;
+    const resume = pass.meta.resume;
+    const hard = (pass.meta.obstacles ?? []).some(row => HARD_OBSTACLE.has(row.code) && row.detail !== "retrying");
+    const continuable = !hard && resume?.stage === "collection_continuation" && BATCH_OBSTACLE.has(resume.obstacle ?? "");
+    if (!continuable) break;
+    seeds = [...new Set(resume?.pending ?? [])].filter(url => url.startsWith("https://") && !attempted.has(url)).slice(0, 8);
+  }
+  if (!merged) return discoverListings(seedUris, fetchHtml, options);
+  if (options?.enrichAll && merged.listings.length && merged.meta.inventoryStatus !== "inventory_blocked" && Date.now() < wall) {
+    const enriched = await discoverListings([], fetchHtml, {
+      ...options,
+      priorListings: merged.listings,
+      continuationSeeds: false,
+      enrichAll: true,
+      maxPages: 0,
+      maxDurationMs: Math.max(1000, wall - Date.now()),
+    });
+    const kept = enriched.listings.length ? enriched.listings : merged.listings;
+    const enrichmentStages = (enriched.meta.stages ?? []).filter(stage => /enrichment|rate_limit/.test(stage));
+    merged = {
+      listings: kept,
+      meta: {
+        ...merged.meta,
+        found: kept.length,
+        enrichment: enriched.meta.enrichment,
+        stages: [...new Set([...(merged.meta.stages ?? []), ...enrichmentStages])],
+        obstacles: [...(merged.meta.obstacles ?? []), ...(enriched.meta.obstacles ?? [])],
+        failureDetails: [...(merged.meta.failureDetails ?? []), ...(enriched.meta.failureDetails ?? [])],
+        issues: [
+          ...(merged.meta.issues ?? []).filter(issue => issue.code !== "missing-photos"),
+          ...(enriched.meta.issues ?? []).filter(issue => issue.code === "missing-photos"),
+        ],
+      },
+    };
+  }
+  return merged;
 }
 
 const scrubSecret = (text: string, secret: string) => secret.length >= 8 ? text.split(secret).join("[session]") : text;
