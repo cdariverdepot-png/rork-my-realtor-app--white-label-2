@@ -760,6 +760,9 @@ test('continuation requests stay pending-only and each batch returns before the 
   assert.equal(edge.includes('maxDurationMs: 22000'), true);
   assert.equal(edge.includes('priorListings,'), false);
   assert.equal(edge.includes('select(continuingListings ? "sources,evidence,status"'), true);
+  assert.equal(client.includes('batch < 40'), true);
+  assert.equal(client.includes('savedResume'), true);
+  assert.equal(client.includes('scope_not_established'), true);
 });
 
 test('deployment bundle contains the authoritative discovery engine', () => {
@@ -1150,6 +1153,51 @@ test('an Eureka client id without a featured Kestrel widget is not a scoped coll
   assert.equal(kestrelInventoryRequests(html).length, 0);
   assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
   assert.equal(result.meta.accounting?.eligibleImportComplete, false);
+});
+
+test('an MLS-board archive without an owner constraint is not imported or paginated', async () => {
+  const origin = 'https://market.example';
+  const seen = [];
+  const page = (id) => '<nav class="pagination"><a rel="next" href="/properties/2/?listingType=Residential">Next</a></nav>'
+    + `<a href="/our-listings/">Our Listings</a>`
+    + `<a href="/listing/crmls/${id}100/Torrance/1-main/">1 Main Torrance $900,000</a>`
+    + `<a href="/listing/crmls/${id}200/Oroville/2-main/">2 Main Oroville $700,000</a>`;
+  const result = await discoverListings([origin + '/properties/'], async uri => {
+    seen.push(uri);
+    if (uri === origin + '/our-listings/') {
+      return { html: '<a href="/listing/crmls/OC1/Newport-Beach/3-main/">3 Main $1,000,000</a><a href="/listing/crmls/SN2/Beverly-Hills/4-main/">4 Main $2,000,000</a>', finalUrl: new URL(uri) };
+    }
+    return { html: page('SB'), finalUrl: new URL(uri) };
+  }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
+  assert.deepEqual(seen, [origin + '/properties/', origin + '/our-listings/']);
+  assert.equal(result.listings.length, 0);
+  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
+  assert.notEqual(result.meta.inventoryStatus, 'inventory_empty');
+  assert.ok(result.meta.completenessEvidence.includes('scope_not_established'));
+  assert.equal(result.meta.accounting.importedEligible, 0);
+  assert.ok(result.meta.accounting.exclusions.some(row => row.reason === 'excluded_unscoped_market' && row.count === 4));
+  assert.notEqual(result.meta.resume && result.meta.resume.stage, 'collection_continuation');
+  const scoped = await discoverListings([origin + '/properties/?officeId=office-1'], async uri => {
+    seen.push(uri);
+    const second = uri.includes('page=2');
+    const next = second ? '' : '<nav class="pagination"><a rel="next" href="/properties/?officeId=office-1&page=2">Next</a></nav>';
+    const first = second ? 'SB3' : 'SB1';
+    const other = second ? 'SB4' : 'SB2';
+    return { html: next + `<a href="/listing/crmls/${first}/Torrance/1-main/">${first} $900,000</a><a href="/listing/crmls/${other}/Torrance/2-main/">${other} $800,000</a>`, finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 2, maxDetailPages: 0 });
+  assert.equal(scoped.listings.length, 4);
+  assert.equal(scoped.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
+  const chrome = await discoverListings([origin + '/market/'], async uri => {
+    return { html: '<div data-agent-id="chrome-agent"></div>' + page('OC'), finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(chrome.listings.length, 0);
+  assert.ok(chrome.meta.completenessEvidence.includes('scope_not_established'));
+  const flagged = await discoverListings([origin + '/book/'], async uri => ({
+    html: page('LA') + '<section data-settings="{"agent_office_listings_only":1}"></section>',
+    finalUrl: new URL(uri),
+  }), { maxPages: 2, maxListings: 10, maxDetailPages: 0 });
+  assert.ok(flagged.listings.length >= 2);
+  assert.equal(flagged.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
 });
 
 test('source totals keep pending inventory and account for sold and unknown', async () => {

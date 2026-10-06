@@ -2073,6 +2073,26 @@ function soleFrameDocument(html: string, base: URL): string | null {
   } catch { return null; }
 }
 
+function mlsBoardPermalink(value: string): boolean {
+  try {
+    return /\/listing\/[a-z]{2,12}\/[a-z0-9-]*\d[a-z0-9-]*\//i.test(new URL(value).pathname);
+  } catch {
+    return false;
+  }
+}
+
+const OWNER_SCOPE_KEYS = /^(?:agent|agentid|agentids|agent_id|office|officeid|officeids|office_id|team|teamid|teamids|brokerage|brokerageid|listingoffice|mlsofficeid|mlsagentid|companyid|websiteid|searchprofileid|featurelistingname|collectionid)$/i;
+
+/** Same-domain is not ownership. Scope is a published office, agent, team, brokerage, or collection constraint — not site chrome. */
+function hasOwnerScope(url: URL, html: string): boolean {
+  if (/\/(?:office|agent)_listing_categories\//i.test(url.pathname)) return true;
+  for (const [key, value] of url.searchParams) {
+    if (OWNER_SCOPE_KEYS.test(key) && value.trim()) return true;
+  }
+  if (/(?:"|")agent_office_listings_only(?:"|")\s*:\s*1\b/.test(html)) return true;
+  return false;
+}
+
 /**
  * Walk seed URLs → inventory CTAs → optional detail pages.
  * Caps pages and depth so the builder stays snappy.
@@ -2149,6 +2169,7 @@ async function discoverListings(
   let collectionRowsFetched = 0;
   let offsetQueryTotal = 0;
   let hitSafetyCap = false;
+  let unscopedMarket = false;
   let listingCeiling = maxListings;
   let omissionTotal = 0;
   const omissionReasons = new Map<string, number>();
@@ -2457,6 +2478,30 @@ async function discoverListings(
     }
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
     const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
+    const unscopedMlsArchive = !broad && found.length >= 2 && found.every(item => mlsBoardPermalink(item.sourceUrl)) && !hasOwnerScope(finalUrl, html);
+    if (unscopedMlsArchive) {
+      unscopedMarket = true;
+      omissionTotal += found.length;
+      omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + found.length);
+      if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
+        obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "No office, agent, team, or brokerage constraint. MLS-board pages are not the site owner's inventory." });
+      }
+      stages.push("scope_not_established");
+      if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
+      for (const match of html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
+          const label = stripTags(match[2]);
+          const href = absolutize(decodeEntities(match[1]), finalUrl);
+          if (!href) continue;
+          let linked: URL;
+          try { linked = new URL(href); } catch { continue; }
+          const own = /\b(?:our|my)\s+(?:active\s+)?(?:listings|properties|homes)\b/i.test(label) || /\/(?:our|my)-(?:listings|properties|homes)\/?$/i.test(linked.pathname);
+          if (!own || !sameSite(linked, finalUrl)) continue;
+          const target = linked.toString();
+          if (!visitedSet.has(target) && !queue.some(item => item.url === target)) queue.push({ url: target, depth: next.depth + 1, priority: 160, parent: finalUrl.toString() });
+          break;
+      }
+      continue;
+    }
     // A page that publishes a scoped, counted query is not itself the inventory. Shell cards can be sold, nearby, or unscoped.
     const held: DiscoveredListing[] = [];
     for (const item of found) {
@@ -2641,6 +2686,11 @@ async function discoverListings(
   for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
   for (const url of [...pendingContinuations]) if (visitedSet.has(url)) pendingContinuations.delete(url);
   unresolvedPagination = unresolvedPagination || openContinuation;
+  if (unscopedMarket && !listings.length) {
+    pendingContinuations.clear();
+    openContinuation = false;
+    hitSafetyCap = false;
+  }
   const proving = new Set<string>();
   const sourceSeen = listings.length + omissionTotal;
   const countMismatch = expectedCount > 0 && expectedCount !== sourceSeen;
@@ -2655,6 +2705,10 @@ async function discoverListings(
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && singlePagePages === collectionPages) proving.add("single_page_collection_confirmed");
   if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && !hitSafetyCap) proving.add("pagination_exhausted");
   if (hitSafetyCap && listings.length >= maxListings && (openContinuation || pendingContinuations.size > 0 || expectedCount > listings.length)) proving.add("collection_limit_reached");
+  if (unscopedMarket && !listings.length) {
+    proving.clear();
+    proving.add("scope_not_established");
+  }
   const completenessEvidence = proving.size ? [...proving] : (listings.length ? ["collection_boundary_unknown"] : []);
   const inventoryShort = !!(listings.length && (boundaryBlocked || !proving.size));
   const blocked = !listings.length && (failed.length > 0 || issues.some(issue => issue.code === "requires-rendering") || obstacles.length > 0);
@@ -2671,7 +2725,9 @@ async function discoverListings(
   const verificationPending = obstacles.filter(row => (row.code === "captcha_required" || row.code === "authentication_required" || row.code === "user_action_required") && row.url).map(row => row.url!);
   const continuationAvailable = inventoryStatus !== "inventory_complete" && pendingContinuations.size > 0 && (hitSafetyCap || Date.now() >= deadline || (openContinuation && listings.length >= maxListings));
   const resumePending = [...new Set([...verificationPending, ...pendingContinuations])].slice(0, 40);
-  const resumeObstacle = verificationPending.length
+  const resumeObstacle = unscopedMarket && !listings.length
+    ? "scope_not_established"
+    : verificationPending.length
     ? (obstacles.find(row => row.code === "captcha_required" || row.code === "authentication_required")?.code ?? obstacles[0]?.code)
     : (hitSafetyCap ? "collection_limit_reached" : "import_deadline");
   if (verificationPending.length) stages.push("verification_required");
@@ -3040,7 +3096,6 @@ function listingRenderBackendFromEnv(readEnv: (name: string) => string | undefin
     };
   };
 }
-
 return { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, discoverListingsAcrossBatches, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv };
 })();
 

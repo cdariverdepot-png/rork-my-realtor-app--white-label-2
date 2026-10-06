@@ -458,11 +458,13 @@ export async function markBuildComplete(): Promise<void> {
 /**
  * Soft-prompt follow-up: crawl a listings URL (and existing sources) without
  * re-running profile AI. Used when the first website scrape found zero homes.
- * A 100-listing batch is not the end of the import. Continuation pages are
+ * A batch size is not the end of the import. Scoped continuation pages are
  * requested again until the collection is exhausted or a real blocker stops it.
+ * Forty batches is only a guard for one execution. A proven collection keeps
+ * its resume and the next execution continues it.
  */
 const collectionBatchObstacles = new Set(["collection_limit_reached", "import_deadline"]);
-const collectionHardStops = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited"]);
+const collectionHardStops = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited", "scope_not_established"]);
 
 function collectionResume(data: { discoveredListings?: unknown; draft?: { discoveredListings?: unknown; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } }; listingDiscovery?: { resume?: { stage?: string; obstacle?: string; pending?: unknown }; obstacles?: { code?: string }[] } } | null | undefined) {
   const meta = data?.listingDiscovery ?? data?.draft?.listingDiscovery;
@@ -536,6 +538,7 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     if (!supabase || !(await ensureSupabaseSession())) {
       throw new Error("Could not connect to the app builder. Please retry.");
     }
+    const savedResume = listingsUrl ? null : collectionResume({ listingDiscovery: saved.draft?.listingDiscovery, discoveredListings: saved.draft?.discoveredListings });
     const walked = await walkListingBatches({
       guest: true,
       mode: "discover-listings",
@@ -543,7 +546,7 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
       draft: draftWithoutInventory(saved.draft),
       evidence: saved.evidence ?? [],
       ...(listingsUrl ? { listingsUrl } : {}),
-    });
+    }, savedResume ? { listingDiscovery: saved.draft.listingDiscovery, discoveredListings: saved.draft.discoveredListings } : undefined);
     const draft = {
       ...saved.draft,
       ...(walked.data?.draft ?? {}),
@@ -555,9 +558,14 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     return next;
   }
 
-  const walked = await walkListingBatches({ mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) });
-  if (!walked.data) throw new Error("Those listing pages could not be read. Please retry.");
   const saved = await loadBuild();
-  if (!saved) throw new Error("The listing import result could not be loaded.");
-  return saved;
+  const savedResume = listingsUrl || !saved ? null : collectionResume(saved);
+  const walked = await walkListingBatches(
+    { mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) },
+    savedResume ? saved : undefined,
+  );
+  if (!walked.data) throw new Error("Those listing pages could not be read. Please retry.");
+  const refreshed = await loadBuild();
+  if (!refreshed) throw new Error("The listing import result could not be loaded.");
+  return refreshed;
 }
