@@ -2772,16 +2772,20 @@ export async function discoverListingsAcrossBatches(
     seeds = [...new Set(resume?.pending ?? [])].filter(url => url.startsWith("https://") && !attempted.has(url)).slice(0, 8);
   }
   if (!merged) return discoverListings(seedUris, fetchHtml, options);
-  if (options?.enrichAll && merged.listings.length && merged.meta.inventoryStatus !== "inventory_blocked" && Date.now() < wall) {
+  const priorKeys = new Set((options?.priorListings ?? []).map(item => listingIdentityKey(item)));
+  const continuing = priorKeys.size > 0;
+  const enrichTargets = merged.listings.filter(item => !item.detailsComplete && (!continuing || !priorKeys.has(listingIdentityKey(item)))).slice(0, continuing ? 24 : 80);
+  if (options?.enrichAll && enrichTargets.length && merged.meta.inventoryStatus !== "inventory_blocked" && Date.now() < wall - 1000) {
     const enriched = await discoverListings([], fetchHtml, {
       ...options,
-      priorListings: merged.listings,
+      priorListings: enrichTargets,
       continuationSeeds: false,
       enrichAll: true,
       maxPages: 0,
-      maxDurationMs: Math.max(1000, wall - Date.now()),
+      maxDurationMs: Math.max(1000, Math.min(continuing ? 8000 : 15000, wall - Date.now())),
     });
-    const kept = enriched.listings.length ? enriched.listings : merged.listings;
+    const updates = new Map(enriched.listings.map(item => [listingIdentityKey(item), item]));
+    const kept = merged.listings.map(item => updates.get(listingIdentityKey(item)) ?? item);
     const enrichmentStages = (enriched.meta.stages ?? []).filter(stage => /enrichment|rate_limit/.test(stage));
     merged = {
       listings: kept,
