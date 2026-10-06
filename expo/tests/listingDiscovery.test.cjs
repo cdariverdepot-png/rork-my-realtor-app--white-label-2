@@ -1240,6 +1240,32 @@ test('a Real Geeks market search is not inventory, and an owner-scoped search co
   assert.equal(short.meta.expectedCount, 4);
 });
 
+test('a Sierra MLS-region feed is not the site owner inventory', async () => {
+  const origin = 'https://sierra.example';
+  const feed = (agentSiteId) => `<script>var siteData = { source: 0, siteid: '100', parentsiteid: -1, agentsiteid: ${agentSiteId}, defaultMLSRegion: '69', siteSearchToolsRootDirectory: 'property-search' };</script>`
+    + '<div class="js-lw-container" data-searchid="107365"><input type="hidden" name="searchid" value="107365"><input type="hidden" name="sortby" value="m.DateListed DESC"></div>'
+    + '<div class="si-listing"><a href="/property-search/detail/69/2589046/1-main-st/">1 Main St</a><span class="si-listing__photo-price">$400,000</span> Listed by Other Agent</div>'
+    + '<div class="si-listing"><a href="/property-search/detail/69/2590893/2-main-st/">2 Main St</a><span class="si-listing__photo-price">$500,000</span> Listed by Someone Else</div>'
+    + '<a href="/featured-listings/?pg=2">Next</a><a href="/property-search/results/?searchid=107365">Newest</a>'
+    + '<img src="https://cdn.listingphotos.sierrastatic.com/large/v1/69/69_2589046_01.jpg">';
+  const seen = [];
+  const market = await discoverListings([origin + '/featured-listings/'], async uri => {
+    seen.push(uri);
+    return { html: feed(-1), finalUrl: new URL(uri) };
+  }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(market.listings.length, 0);
+  assert.equal(market.meta.inventoryStatus, 'inventory_blocked');
+  assert.ok(market.meta.completenessEvidence.includes('scope_not_established'));
+  assert.equal(seen.some(uri => uri.includes('pg=2') || uri.includes('searchid=')), false);
+  const agentSite = await discoverListings([origin + '/la-puente/'], async uri => {
+    seen.push(uri);
+    return { html: feed(42), finalUrl: new URL(uri) };
+  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
+  assert.equal(agentSite.listings.length, 0);
+  assert.equal(agentSite.meta.inventoryStatus, 'inventory_blocked');
+  assert.ok(agentSite.meta.obstacles.some(row => row.code === 'scope_not_established'));
+});
+
 test('source totals keep pending inventory and account for sold and unknown', async () => {
   const origin = 'https://status.example';
   const row = (id, status) => ({ streetAddress: id + ' Pine St', listPrice: 100000, detailUrl: origin + '/property/' + id, StandardStatus: status });

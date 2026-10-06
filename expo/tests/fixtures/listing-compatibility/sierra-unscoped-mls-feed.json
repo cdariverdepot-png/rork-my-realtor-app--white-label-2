@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "sierra-unscoped-mls-feed",
+  "capturedAt": "2026-10-06T21:20:00.000Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Sierra siteData identifies the website and MLS region. A saved search id and featured widget are the board feed, not the listing agent, so the cards are not inventory.",
+  "rehostOrigin": "https://agent.example",
+  "seeds": [
+    "https://agent.example/featured-listings/"
+  ],
+  "options": {
+    "maxPages": 4,
+    "maxListings": 10,
+    "maxDetailPages": 0
+  },
+  "pages": [
+    {
+      "key": "[\"https://agent.example/featured-listings/\",false,false]",
+      "url": "https://agent.example/featured-listings/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://agent.example/featured-listings/",
+      "html": "<script>var siteData = { source: 0, siteid: '100', parentsiteid: -1, agentsiteid: -1, defaultMLSRegion: '69', siteSearchToolsRootDirectory: 'property-search' };</script><div class=\"js-lw-container\" data-searchid=\"107365\"></div><div class=\"si-listing\"><a href=\"/property-search/detail/69/1001/1-main-st/\">1 Main St</a><span class=\"si-listing__photo-price\">$400,000</span></div><a href=\"/featured-listings/?pg=2\">Next</a>"
+    }
+  ],
+  "expected": {
+    "listings": [],
+    "coverage": "unknown",
+    "outcome": "unreadable",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "property-cards"
+    ]
+  }
+}

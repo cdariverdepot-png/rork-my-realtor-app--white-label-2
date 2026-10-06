@@ -1386,6 +1386,29 @@ export function listingsFromRealGeeks(html: string, base: URL): DiscoveredListin
   return found;
 }
 
+/** Sierra Interactive publishes `siteData` on the page. `siteid` is the website, `agentsiteid` -1 is not an agent,
+ * and `searchid` / `searchtype` are saved MLS-region queries. None of those is the listing agent or office.
+ */
+export function sierraDocument(html: string): boolean {
+  return /listingphotos\.sierrastatic\.com|\/sist_ajax\/|siteSearchToolsRootDirectory/i.test(html)
+    || /var\s+siteData\s*=\s*\{[^}]{0,500}\bagentsiteid\s*:/i.test(html)
+    || (/\bjs-lw-(?:container|panel)\b/i.test(html) && /\bdata-searchid\s*=/i.test(html));
+}
+
+export function sierraBoardDetail(url: string): boolean {
+  try { return /\/property-search\/detail\/\d+\/[^/]+\//i.test(new URL(url).pathname); }
+  catch { return false; }
+}
+
+/** A Sierra results, featured, or listing widget is the MLS feed unless a later contract proves a listing-agent query. */
+export function sierraUnscopedFeed(html: string, url: URL, found: { sourceUrl: string }[]): boolean {
+  if (!sierraDocument(html) || /\/property-search\/detail\//i.test(url.pathname)) return false;
+  const feedPath = /\/(?:featured-listings|property-search)(?:\/|$)/i.test(url.pathname);
+  const widget = /\bjs-lw-(?:container|panel)\b|data-searchid\s*=|class=["'][^"']*\bsi-listing\b/i.test(html);
+  const boardCards = found.length >= 2 && found.every(item => sierraBoardDetail(item.sourceUrl));
+  return feedPath || widget || boardCards;
+}
+
 export type ListingInterfaceAdapter = {
   id: string;
   matches: (html: string, url: URL) => boolean;
@@ -2570,6 +2593,20 @@ export async function discoverListings(
       if (!visitedSet.has(criteria) && !queue.some(item => item.url === criteria)) {
         queue.push({ url: criteria, depth: next.depth, priority: 240, fragment: true, parent: finalUrl.toString() });
       }
+      continue;
+    }
+    if (!broad && sierraUnscopedFeed(html, finalUrl, found)) {
+      unscopedMarket = true;
+      if (found.length) {
+        omissionTotal += found.length;
+        omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + found.length);
+      }
+      if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
+        obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "Sierra search is an MLS-region feed. A site id, agent-site id, or saved search id is not the listing agent or office." });
+      }
+      stages.push("scope_not_established");
+      observation.resolution = "excluded-market";
+      if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
       continue;
     }
     const unscopedMlsArchive = !broad && found.length >= 2 && found.every(item => mlsBoardPermalink(item.sourceUrl)) && !hasOwnerScope(finalUrl, html);
