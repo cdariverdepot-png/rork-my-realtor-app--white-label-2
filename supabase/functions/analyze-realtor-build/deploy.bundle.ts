@@ -12,6 +12,8 @@ type DiscoveredListing = {
   images: string[];
   sourceUrl: string;
   status?: "active" | "pending" | "contingent" | "sold" | "off_market";
+  /** Provider status before product mapping. Unknown is never coerced to active. */
+  sourceStatus?: "active" | "coming_soon" | "pending" | "contingent" | "under_contract" | "backup" | "sold" | "closed" | "off_market" | "expired" | "withdrawn" | "cancelled" | "private" | "unknown" | "unspecified";
   listingNumber?: string;
   propertyType?: string;
   importKey?: string;
@@ -19,29 +21,70 @@ type DiscoveredListing = {
   detailsComplete?: boolean;
   facts?: Record<string, string>;
 };
-type ListingDiscoveryMeta = {
-  visited: string[];
-  hops: number;
-  found: number;
-  /** Highest hop depth reached while looking for inventory. */
-  maxDepth: number;
-  failed?: string[];
-  failureDetails?: {url:string;reason:string}[];
-  inventoryUrls?: string[];
-  outcome?: "found" | "unreadable" | "not-found" | "partial";
-  expectedCount?: number;
-  interfaces?: string[];
-  coverage?: "collection" | "showcase" | "unknown";
-  issues?: { code: "requires-rendering" | "limited-showcase" | "missing-photos"; url: string; interface?: string }[];
-};
-type FetchHtml = (uri: string, options?: { fragment?: boolean; activationToken?: string; cookie?: string }) => Promise<{ html: string; finalUrl: URL }>;
 type NavigationCandidate = { url: string; label: string };
-type SelectInventoryLinks = (page: string, candidates: NavigationCandidate[]) => Promise<string[]>;
-type ListingInterfaceAdapter = {
-  id: string;
-  matches: (html: string, url: URL) => boolean;
-  extract: (html: string, url: URL) => DiscoveredListing[];
-  fragments?: (html: string, url: URL) => string[];
+type WebsitePalette = { accent: string; background: string; ink: string; panel: string; muted: string };
+type WebsiteAppearance = WebsitePalette & {
+  fontFamily: string; headingFontFamily: string;
+  layout: 'image-overlay' | 'image-first' | 'portrait-split' | 'text-first';
+  spacing: number; radius: number; headingSize: number;
+  motion: 'none' | 'fade' | 'rise';
+};
+type WebsiteIntent = 'listings' | 'saved' | 'contact' | 'profile' | 'area' | 'services' | 'testimonials' | 'content';
+type WebsiteSection = {
+  kind: 'about' | 'listings' | 'services' | 'testimonials' | 'contact' | 'content';
+  title: string;
+  body: string;
+  imageUrl?: string;
+  imageFit?: 'contain' | 'cover';
+  imageRole?: ImageRole;
+  imageWidth?: number;
+  imageHeight?: number;
+  /** What the heading is trying to do, independent of the source button label. */
+  intent?: WebsiteIntent;
+  /** native = existing app destination. unique = show this copy once. omit = no page. */
+  destination?: 'native' | 'unique' | 'omit';
+  native?: 'listings' | 'saved' | 'chat' | 'profile';
+};
+type SupportingImage = { url: string; fit: 'contain' | 'cover'; role: ImageRole; width?: number; height?: number };
+type WebsiteDesign = {
+  version: 1; sourceUrl: string; analyzedAt: number;
+  /** Image the source places with the main heading/intro copy (never promoted to hero or portrait). */
+  introImage?: SupportingImage;
+  logoUrl?: string; heroImageUrl?: string; portraitImageUrl?: string; heroTitle: string; heroSubtitle: string;
+  headerImageUrl?: string; backgroundImageUrl?: string;
+  imagery?: { logo?: ImageDiagnostic; portrait?: ImageDiagnostic; hero?: ImageDiagnostic; images: ImageDiagnostic[] };
+  sections: WebsiteSection[];
+  original: WebsiteAppearance; optimized: WebsiteAppearance;
+  evidence: { stylesheets: string[]; colors: string[]; fonts: string[]; warnings: string[]; routing?: WebsiteRoute[] };
+};
+type WebsiteRoute = {
+  /** The label or heading that was classified. */
+  source: string;
+  intent: string;
+  /** listings, profile, chat, saved, card:<intent>, or omit. */
+  canonical: string;
+  render: 'card' | 'native' | 'omit';
+};
+type ImageRole = 'logo' | 'portrait' | 'hero' | 'listing' | 'article' | 'icon' | 'background';
+type ImageFit = 'contain' | 'cover';
+type ImageCrop = 'none' | 'modest' | 'rejected';
+type ImageVariant = { url: string; width?: number; height?: number };
+type ImageDiagnostic = {
+  /** The URL the page actually pointed at, which may be a thumbnail. */
+  sourceUrl: string;
+  variants: ImageVariant[];
+  role: ImageRole;
+  selectedUrl: string;
+  width?: number;
+  height?: number;
+  destination: 'logo' | 'portrait' | 'hero' | 'article' | 'listing' | 'background' | 'omit';
+  fit: ImageFit;
+  renderedWidth: number;
+  renderedHeight: number;
+  upscaleRatio: number;
+  crop: ImageCrop;
+  /** Higher means the page asked for this job more clearly. CSS heroes outrank a nearby image. */
+  rank: number;
 };
 const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv } = (() => {
 /**
@@ -3045,7 +3088,7 @@ function parseListingCsv(csv: string): DiscoveredListing[] {
     } else if (!quoted && (ch === delimiter || ch === "\n" || ch === undefined)) {
       row.push(cell.replace(/\r$/, "")); cell = "";
       if (ch !== delimiter) { if (row.some(v => v.trim())) rows.push(row); row = []; }
-      if (rows.length > 1001) throw new Error("Please 1,000 or fewer listing rows per file.");
+      if (rows.length > 1001) throw new Error("Please export 1,000 or fewer listing rows per file.");
     } else cell += ch ?? "";
   }
   if (quoted) throw new Error("This CSV has an unfinished quoted field. Export it again and retry.");
@@ -3099,10 +3142,10 @@ function mergeFileListings(current: DiscoveredListing[], incoming: DiscoveredLis
   for (const item of [...current, ...incoming]) records.set(item.sourceUrl || item.importKey || `${item.title}|${item.neighborhood}`, item);
   return [...records.values()];
 }
-
-return {parseListingCsv, validateFileListings, mergeFileListings};
+return { parseListingCsv, validateFileListings, mergeFileListings };
 })();
-const { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, presentWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages } = (() => {
+
+const { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages } = (() => {
 /** Website markup is data, never executable UI. Both variants use native components. */
 type WebsiteVariant = 'original' | 'optimized';
 type WebsitePalette = { accent: string; background: string; ink: string; panel: string; muted: string };
@@ -4119,8 +4162,7 @@ function imageForTag(tag: string, images: ImageDiagnostic[], resolve: (raw: stri
 }
 
 const IMAGE_UPSCALE_LIMIT = MAX_UPSCALE;
-
-return { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, presentWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages };
+return { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages };
 })();
 
 type Source = {
@@ -4229,12 +4271,6 @@ async function publicHttps(raw: string): Promise<URL> {
 }
 
 /** Fetch one public HTML page, following up to 4 redirects (each re-checked). */
-function readableForbidden(html: string, status: number): boolean {
-  if (status !== 403) return false;
-  const head = html.slice(0, 8000);
-  if (/attention required|you have been blocked|sorry, you have been blocked|just a moment|access denied/i.test(head)) return false;
-  return /<h1\b/i.test(html);
-}
 async function fetchHtml(uri: string, options?: { fragment?: boolean; activationToken?: string; stylesheet?: boolean; cookie?: string; csrfToken?: string }): Promise<{ html: string; finalUrl: URL }> {
   let current = await publicHttps(uri);
   for (let hop = 0; hop < 5; hop++) {
@@ -4294,10 +4330,10 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
   throw new Error("The page redirected too many times.");
 }
 
+/** Same renderer contract as refresh and resume. Unconfigured environments pass nothing and do not pretend a browser ran. */
 function productionRenderPage() {
   return createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name)));
 }
-
 const decodeEntities = (value: string) => value
   .replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'")
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
@@ -4376,6 +4412,13 @@ function clean(value: string, max: number): string {
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").replace(/[ \t]+/g, " ").trim().slice(0, max);
 }
 
+/** A 403 that still delivered the site, not a block page, can be read. */
+function readableForbidden(html: string, status: number): boolean {
+  if (status !== 403) return false;
+  const head = html.slice(0, 8000);
+  if (/attention required|you have been blocked|sorry, you have been blocked|just a moment|access denied/i.test(head)) return false;
+  return /<h1\b/i.test(html);
+}
 /** Managed interstitials may clear in a normal browser. Captcha and login walls do not. */
 function renderableInterstitial(html: string): boolean {
   const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim() ?? "";
@@ -4743,7 +4786,7 @@ Deno.serve(async (request) => {
   if (input?.mode === "continue-import") {
     const sessionCookie = typeof input.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : "";
     const resume = input.resume && typeof input.resume === "object" ? input.resume : {};
-    const httpsOnly = (value, limit) => Array.isArray(value) ? value.filter(item => typeof item === "string" && item.startsWith("https://")).slice(0, limit) : [];
+    const httpsOnly = (value: unknown, limit: number) => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && item.startsWith("https://")).slice(0, limit) : [];
     const discovery = await continueAfterVerification({
       seeds: httpsOnly(resume.seeds, 8),
       pending: httpsOnly(resume.pending, 40),
@@ -4834,7 +4877,7 @@ Deno.serve(async (request) => {
       if (source.kind === "url" || source.kind === "listing") {
         const page = await readPage(source.uri, !websiteDesign && source.kind === 'url' ? async (html, url) => {
           websiteDesign = await analyzeWebsiteAppearance(html, url, renderPage);
-        } : undefined);
+        } : undefined, renderPage);
         pageChars += page.length;
         if (pageChars > 120_000) throw new Error("Too much webpage text. Remove a few links and retry.");
         content.push({ type: "input_text", text: `SOURCE ${source.id} (${source.label}, ${source.uri}):\n${page}` });
