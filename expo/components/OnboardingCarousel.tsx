@@ -14,11 +14,10 @@ import {
   type NativeSyntheticEvent,
 } from "react-native";
 import { Image } from "expo-image";
+import { BlurView } from "expo-blur";
 import { safeImageSource } from "@/lib/safeImageSource";
 import * as Haptics from "expo-haptics";
 import {
-  ArrowLeft,
-  ArrowRight,
   Building2,
   CalendarDays,
   Heart,
@@ -168,6 +167,8 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
     setCurrentIndex((prev) => (prev === clamped ? prev : clamped));
   }, [slides.length]);
 
+  const dragStartedOnLast = useRef(false);
+
   const handleScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const w = pageWidthSafe;
@@ -221,6 +222,18 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
     syncIndex(next);
     scrollToPage(next, true);
   }, [slides.length, finish, syncIndex, scrollToPage]);
+
+  const onSwipeEnd = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const vx = e.nativeEvent.velocity?.x ?? 0;
+      if (dragStartedOnLast.current && vx < -0.15) {
+        finish();
+        return;
+      }
+      handleScroll(e);
+    },
+    [finish, handleScroll],
+  );
 
   const goBack = useCallback(() => {
     const prev = indexRef.current - 1;
@@ -302,30 +315,6 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
         pointerEvents="box-none"
         style={[styles.content, { opacity, transform: [{ translateY }] }]}
       >
-        <View style={styles.topNavRow} pointerEvents="box-none">
-          {currentIndex > 0 ? (
-            <Pressable
-              onPress={goBack}
-              hitSlop={12}
-              style={styles.backBtn}
-              accessibilityRole="button"
-              accessibilityLabel="Back to previous walkthrough step"
-            >
-              <ArrowLeft size={16} color={brand.ivory} strokeWidth={2} />
-              <Text style={styles.skipText}>Back</Text>
-            </Pressable>
-          ) : <View style={{ width: 72 }} />}
-          <Pressable
-            onPress={finish}
-            hitSlop={12}
-            style={styles.skipBtn}
-            accessibilityRole="button"
-            accessibilityLabel="Skip walkthrough"
-          >
-            <Text style={styles.skipText}>Skip</Text>
-          </Pressable>
-        </View>
-
         <View style={styles.slideArea} pointerEvents="box-none">
           <Animated.FlatList
             ref={flatListRef}
@@ -334,11 +323,22 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
+            onScrollBeginDrag={() => {
+              dragStartedOnLast.current = indexRef.current >= slides.length - 1;
+            }}
             onMomentumScrollEnd={handleScroll}
-            onScrollEndDrag={handleScroll}
-            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
+            onScrollEndDrag={onSwipeEnd}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+              useNativeDriver: false,
+              listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                const w = pageWidthSafe;
+                if (!(w > 0)) return;
+                const idx = Math.max(0, Math.min(slides.length - 1, Math.round(e.nativeEvent.contentOffset.x / w)));
+                if (idx !== indexRef.current) syncIndex(idx);
+              },
+            })}
             scrollEventThrottle={16}
-            bounces={false}
+            bounces
             getItemLayout={getItemLayout}
             onScrollToIndexFailed={onScrollToIndexFailed}
             renderItem={({ item }) => (
@@ -355,33 +355,33 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
 
         <View style={styles.bottomBar} pointerEvents="box-none">
           <View style={styles.dotsRow}>
-            {slides.map((_, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.dot,
-                  i === currentIndex && styles.dotActive,
-                ]}
-              />
-            ))}
+            {slides.map((_, i) => {
+              const active = i === currentIndex;
+              return (
+                <Pressable
+                  key={i}
+                  onPress={() => {
+                    if (active && i === slides.length - 1) {
+                      finish();
+                      return;
+                    }
+                    if (Platform.OS !== "web") Haptics.selectionAsync();
+                    syncIndex(i);
+                    scrollToPage(i, true);
+                  }}
+                  hitSlop={12}
+                  accessibilityRole="button"
+                  accessibilityLabel={active && i === slides.length - 1 ? "Get started" : `Page ${i + 1}`}
+                  accessibilityState={{ selected: active }}
+                  style={[styles.dot, active && styles.dotActive]}
+                >
+                  <BlurView pointerEvents="none" intensity={36} tint="light" style={StyleSheet.absoluteFill} />
+                  <View pointerEvents="none" style={[StyleSheet.absoluteFill, active ? styles.dotFillOn : styles.dotFill]} />
+                  <View pointerEvents="none" style={styles.dotRim} />
+                </Pressable>
+              );
+            })}
           </View>
-
-          <Pressable
-            onPress={goNext}
-            accessibilityRole="button"
-            accessibilityLabel={currentIndex === slides.length - 1 ? "Get started" : "Next"}
-            hitSlop={8}
-            style={({ pressed }) => [
-              styles.nextBtn,
-              pressed && { opacity: 0.8, transform: [{ scale: 0.97 }] },
-              Platform.OS === "web" ? ({ cursor: "pointer" } as object) : null,
-            ]}
-          >
-            <Text style={styles.nextText}>
-              {currentIndex === slides.length - 1 ? "GET STARTED" : "NEXT"}
-            </Text>
-            <ArrowRight size={16} color={dark.bg} strokeWidth={2.2} />
-          </Pressable>
         </View>
       </Animated.View>
     </View>
@@ -422,42 +422,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  topNavRow: {
-    position: "absolute",
-    top: 60,
-    left: 16,
-    right: 16,
-    zIndex: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  backBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "rgba(244,239,230,0.18)",
-  },
-  skipBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "rgba(244,239,230,0.18)",
-  },
-  skipText: {
-    fontFamily: fonts.sansMedium,
-    color: "rgba(244,239,230,0.85)",
-    fontSize: 13,
-    letterSpacing: 1.4,
-    textShadowColor: "rgba(0,0,0,0.55)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 6,
   },
   slideArea: {
     flex: 1,
@@ -506,40 +470,43 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   bottomBar: {
-    paddingHorizontal: 28,
-    paddingBottom: 44,
-    gap: 24,
+    alignItems: "center",
+    paddingBottom: 28,
     zIndex: 20,
     elevation: 20,
   },
   dotsRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 8,
+    alignItems: "center",
+    gap: 10,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "rgba(244,239,230,0.18)",
+    width: 11,
+    height: 11,
+    borderRadius: 6,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.42)",
+    backgroundColor: "rgba(255,255,255,0.14)",
   },
   dotActive: {
-    backgroundColor: brand.goldLight,
-    width: 24,
+    width: 36,
+    borderRadius: 6,
+    borderColor: "rgba(255,255,255,0.62)",
   },
-  nextBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    backgroundColor: brand.ivory,
-    paddingVertical: 18,
-    borderRadius: 14,
+  dotFill: {
+    backgroundColor: "rgba(255,255,255,0.10)",
   },
-  nextText: {
-    fontFamily: fonts.sansSemi,
-    color: dark.bg,
-    fontSize: 12,
-    letterSpacing: 3,
+  dotFillOn: {
+    backgroundColor: "rgba(255,255,255,0.32)",
+  },
+  dotRim: {
+    position: "absolute",
+    top: 0,
+    left: 2,
+    right: 2,
+    height: 1,
+    backgroundColor: "rgba(255,255,255,0.7)",
   },
 });

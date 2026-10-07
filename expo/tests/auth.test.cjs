@@ -679,12 +679,16 @@ test('guest REALTOR session mints guestAccess and local builder flag', () => {
   assert.match(body, /guestAccess: true/);
 });
 
-test('walkthrough carousel exposes Back navigation after the first slide', () => {
+test('walkthrough moves by swipe and glass page dots, without skip back or next buttons', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'components/OnboardingCarousel.tsx'), 'utf8');
-  assert.match(src, /goBack/);
-  assert.match(src, /accessibilityLabel="Back to previous walkthrough step"/);
-  assert.match(src, /ArrowLeft/);
-  assert.match(src, /topNavRow/);
+  assert.match(src, /dotsRow/);
+  assert.match(src, /BlurView/);
+  assert.match(src, /onScrollBeginDrag/);
+  assert.doesNotMatch(src, /accessibilityLabel="Skip walkthrough"/);
+  assert.doesNotMatch(src, /accessibilityLabel="Back to previous walkthrough step"/);
+  assert.doesNotMatch(src, /accessibilityLabel=\{currentIndex === slides\.length - 1 \? "Get started" : "Next"\}/);
+  assert.doesNotMatch(src, /ArrowLeft/);
+  assert.doesNotMatch(src, /ArrowRight/);
 });
 
 test('realtor tour finish gates until /admin/build for incomplete setup', () => {
