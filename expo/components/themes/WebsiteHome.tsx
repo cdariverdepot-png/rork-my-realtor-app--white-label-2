@@ -93,7 +93,7 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
       {a.layout !== 'text-first' && heroCopy}
     </>}
     {(optimized || !sections.some(x => x.kind === 'listings')) && collection()}
-    {sections.map(section)}
+    {sections.map((item, i) => item.kind === 'listings' ? collection(item.title || collectionTitle) : section(item, i))}
     <View style={{ padding: a.spacing * s, gap: 8 * s }}><Text style={{ color: a.ink, fontFamily: bodyFont, lineHeight: 23 * s }}>{[b.realtor.phone, b.realtor.email, b.credentials.license.brokerage, b.credentials.license.number].filter(Boolean).join('\n')}</Text></View>
   </Animated.View></View>;
 }
