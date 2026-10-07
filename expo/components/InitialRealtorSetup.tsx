@@ -504,7 +504,7 @@ export default function InitialRealtorSetup() {
     </View>
   ) : null;
 
-  if (phase === 'collect') return <BuildUrlEntry listingCount={existingListings.length} onViewListings={() => router.push("/admin/listings")} url={url} onChange={setUrl} busy={busy} preparing={!loaded || builderReady===null || !authHydrated} onSubmit={needsBuilderAuth ? goPortalAuth : analyze} onExit={()=>void leaveBuild()} error={error?.place==='sources'?error.message:undefined}/>;
+  if (phase === 'collect') return <BuildUrlEntry listingCount={existingListings.length} onViewListings={() => router.push("/admin/listings")} url={url} onChange={setUrl} busy={busy} preparing={!loaded || builderReady===null || !authHydrated} onSubmit={needsBuilderAuth ? goPortalAuth : analyze} error={error?.place==='sources'?error.message:undefined}/>;
   return <View style={{ flex: 1 }}>
   {cropper}
   <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}

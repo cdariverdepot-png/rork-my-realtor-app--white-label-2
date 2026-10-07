@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { ArrowLeft, ArrowUpRight, Link2 } from "lucide-react-native";
+import { ArrowUpRight, Link2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Pressable from "./TactilePressable";
 import { SCREEN_BG } from "@/constants/backdrops";
@@ -20,7 +20,6 @@ export default function BuildUrlEntry({
   url,
   onChange,
   onSubmit,
-  onExit,
   busy = false,
   preparing = false,
   error,
@@ -30,7 +29,6 @@ export default function BuildUrlEntry({
   url: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
-  onExit: () => void;
   busy?: boolean;
   preparing?: boolean;
   error?: string;
@@ -81,30 +79,7 @@ export default function BuildUrlEntry({
           paddingBottom: insets.bottom + 32,
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Exit app builder"
-            onPress={onExit}
-            style={{
-              width: 44,
-              height: 44,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 22,
-              backgroundColor: "#FFFFFF13",
-              borderWidth: 1,
-              borderColor: "#FFFFFF33",
-            }}
-          >
-            <ArrowLeft color="#F7F3E8" size={20} />
-          </Pressable>
+        <View style={{ alignItems: "center" }}>
           <Text
             style={{
               fontSize: 10,
