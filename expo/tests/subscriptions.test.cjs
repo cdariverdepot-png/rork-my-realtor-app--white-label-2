@@ -15,6 +15,27 @@ function loader(stubs={},context={}){
  };return load;
 }
 const core=loader()(path.join(root,'supabase/functions/billing/core.ts'));
+test('subscription state never globally gates realtor or client navigation',()=>{
+ const layout=fs.readFileSync(path.join(root,'expo/app/_layout.tsx'),'utf8');
+ const gate=fs.readFileSync(path.join(root,'expo/components/ServiceAccessGate.tsx'),'utf8');
+ assert.doesNotMatch(layout,/ServiceAccessGate/);
+ assert.doesNotMatch(gate,/experience_access|ownerBlocked|clientBlocked|currently unavailable/);
+ assert.match(gate,/return <>{children}<\/?>/);
+});
+test('paid actions distinguish unknown entitlement and fail closed without blocking reads',()=>{
+ const source=fs.readFileSync(path.join(root,'expo/lib/serviceEntitlement.ts'),'utf8');
+ assert.match(source,/"active" \| "inactive" \| "unknown"/);
+ assert.match(source,/if \(error \|\| typeof data\?\.available !== "boolean"\) return "unknown"/);
+ for(const file of ['contexts/BrandContext.tsx','components/ChatThread.tsx','app/message.tsx','components/InvitationTools.tsx']){
+  const body=fs.readFileSync(path.join(root,'expo',file),'utf8'); assert.match(body,/serviceEntitlement|seats\.tracked/);
+ }
+});
+test('native subscription UI contains no private checkout path',()=>{
+ const plans=fs.readFileSync(path.join(root,'expo/app/admin/plans.tsx'),'utf8');
+ assert.doesNotMatch(plans,/billingRequest|verifiedBillingURL|TEST SUBSCRIPTION|checkout\.stripe/);
+ assert.match(plans,/managed by Apple|APP STORE SUBSCRIPTION/);
+});
+
 const c={enabled:true,secret:'sk_test_fixture',webhookSecret:'whsec_fixture',monthPrice:'price_month',yearPrice:'price_year',origin:'https://app.example.com',failurePolicy:'paid_period'};
 const price=interval=>({id:interval==='month'?c.monthPrice:c.yearPrice,livemode:false,active:true,type:'recurring',currency:'usd',unit_amount:interval==='month'?4900:49000,recurring:{interval,interval_count:1}});
 const end=Math.floor(Date.now()/1000)+86400*30;

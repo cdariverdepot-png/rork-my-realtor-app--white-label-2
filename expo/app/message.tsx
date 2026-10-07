@@ -22,6 +22,8 @@ import { avatarPlaceholder } from "@/constants/assets";
 import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
 import { useBrand } from "@/contexts/BrandContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { serviceEntitlement } from "@/lib/serviceEntitlement";
+import { serviceEntitlement } from "@/lib/serviceEntitlement";
 import { useMessages } from "@/contexts/MessagesContext";
 import { themeDesign } from "@/constants/themeDesigns";
 import ModalChrome from "@/components/ModalChrome";
@@ -50,18 +52,28 @@ export default function Message() {
   const [intent, setIntent] = useState<string | null>(null);
   const [sent, setSent] = useState<boolean>(false);
 
-  const { isClient } = useAuth();
+  const { isClient, realtorId } = useAuth();
   const { send: sendChat } = useMessages();
   // Primary action follows the realtor's selected theme.
   const action = themeDesign(b.layoutId, b.theme).accent;
 
   /** Delivers into the private realtor ↔ client thread (the realtor's Messages inbox). */
-  const send = () => {
+  const send = async () => {
     const body = [intent, text.trim()].filter(Boolean).join("\n\n");
     if (!body) return;
     if (!isClient) {
       // Realtor previews and the demo have no client thread — never pretend a message went out.
       Alert.alert("Preview only", `In your clients' app this sends straight to your Messages inbox, with their name, email and phone.`);
+      return;
+    }
+    const entitlement = await serviceEntitlement(realtorId);
+    if (entitlement !== "active") {
+      Alert.alert("Messaging unavailable", entitlement === "inactive" ? "Messaging is temporarily unavailable." : "Messaging is temporarily unavailable while service status is verified.");
+      return;
+    }
+    const entitlement = await serviceEntitlement(realtorId);
+    if (entitlement !== "active") {
+      Alert.alert("Messaging unavailable", entitlement === "inactive" ? "Messaging is temporarily unavailable." : "Messaging is temporarily unavailable while service status is verified.");
       return;
     }
     sendChat("client", body);
@@ -155,7 +167,7 @@ export default function Message() {
 
       <View style={[styles.dock, { paddingBottom: insets.bottom + 14 }]}>
         <PressableScale
-          onPress={send}
+          onPress={() => void send()}
           haptic={!text.trim() && !intent ? "none" : "medium"}
           scaleTo={0.97}
           style={[styles.send, { backgroundColor: action }, !text.trim() && !intent && { opacity: 0.45 }]}

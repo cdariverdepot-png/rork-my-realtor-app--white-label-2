@@ -38,6 +38,8 @@ import { useDocuments } from "@/contexts/DocumentsContext";
 import { useQuickReplies, type QuickReply } from "@/contexts/QuickRepliesContext";
 import ModalChrome from "@/components/ModalChrome";
 import { bustedUri } from "@/lib/imageUri";
+import { useAuth } from "@/contexts/AuthContext";
+import { serviceEntitlement } from "@/lib/serviceEntitlement";
 
 type Pending = { kind: "listing"; id: string } | { kind: "document"; id: string } | null;
 
@@ -61,6 +63,7 @@ export default function ChatThread({
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { messages, otherTyping, send, setTyping, markRead, hasThread } = useMessages();
+  const { realtorId } = useAuth();
   const { all: allListings } = useListings();
   const { items: docs } = useDocuments();
   const { replies, custom, add, remove, update } = useQuickReplies();
@@ -86,12 +89,17 @@ export default function ChatThread({
     return () => clearTimeout(t);
   }, [messages.length, otherTyping]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!text.trim() && !pending) return;
     // No conversation to send into (e.g. the realtor's client preview): say so
     // instead of clearing the text as if it had been sent.
     if (!hasThread) {
       Alert.alert("Preview only", "In your clients' app this sends straight to your Messages inbox.");
+      return;
+    }
+    const entitlement = await serviceEntitlement(realtorId);
+    if (entitlement !== "active") {
+      Alert.alert("Messaging unavailable", role === "client" ? "Messaging is temporarily unavailable." : entitlement === "inactive" ? "Messaging is unavailable while your subscription is inactive." : "Messaging is temporarily unavailable while your subscription status is verified.");
       return;
     }
     if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -345,7 +353,7 @@ export default function ChatThread({
           onSubmitEditing={onSubmit}
         />
         <Pressable
-          onPress={onSubmit}
+          onPress={() => void onSubmit()}
           disabled={!text.trim() && !pending}
           style={({ pressed }) => [
             styles.sendBtn,
