@@ -13,7 +13,7 @@ import PreviewSandbox, { isSandboxPage } from './PreviewSandbox';
 import ListingPhotoGallery from './ListingPhotoGallery';
 
 /** Local, read-only navigation inside a theme sample; never enters an authenticated account route. */
-export default function ThemePreviewPage({ route, brand, listings, onNavigate, savedIds = [], onFavorite }: { route: string; brand: Brand; listings: ManagedListing[]; onNavigate: (path: string) => void; savedIds?: string[]; onFavorite?: (id: string) => void }) {
+export default function ThemePreviewPage({ route, brand, listings, onNavigate, savedIds = [], onFavorite, width }: { route: string; brand: Brand; listings: ManagedListing[]; onNavigate: (path: string) => void; savedIds?: string[]; onFavorite?: (id: string) => void; width?: number }) {
   const d = themeDesign(brand.layoutId, brand.theme);
   const material = LIVE_THEME_MATERIALS[brand.layoutId ?? 'private-collection'];
   const feature = previewFeatures[route];
@@ -47,7 +47,7 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
     </View>}
     <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>THEME PREVIEW</Text>
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 34 }}>{feature?.title || (route === '/listings' ? 'Listings' : route === '/favorites' ? 'Saved homes' : 'App menu')}</Text>
-    {route === '/listings' && !listings.some(item=>!item.hidden&&!item.sourceArchived) ? <Text style={{color:d.muted,lineHeight:24}}>No active listings were found for this realtor yet.</Text> : route === '/listings' || route === '/favorites' && savedIds.length ? <ThemeCollection brand={brand} listings={route === '/favorites' ? listings.filter(item => savedIds.includes(item.id)) : listings}
+    {route === '/listings' && !listings.some(item=>!item.hidden&&!item.sourceArchived) ? <Text style={{color:d.muted,lineHeight:24}}>No active listings were found for this realtor yet.</Text> : route === '/listings' || route === '/favorites' && savedIds.length ? <ThemeCollection brand={brand} listings={route === '/favorites' ? listings.filter(item => savedIds.includes(item.id)) : listings} width={width}
       onOpen={id => onNavigate(`/listing/${id}`)} onFavorite={onFavorite} isFavorite={id => savedIds.includes(id)} onBrowse={() => onNavigate('/listings')} /> : route === '/favorites' ? <Text style={{ color: d.muted, lineHeight: 24 }}>Tap a heart on any home to try saving it here. These saves stay in your layout preview.</Text> : feature ? <Text style={{ color: d.muted, lineHeight: 24 }}>{feature.copy}</Text> : <>
       <Text style={{ color: d.muted, lineHeight: 24 }}>Client account controls appear after a client signs in. Explore the app’s navigation here.</Text>
       {([['Collection', '/listings', Layers], ['Saved homes', '/favorites', Heart], ['Messages', '/message', MessageCircle], ['Showings', '/calendar', CalendarDays]] as const).map(([title, path, Icon]) => <Pressable key={path} accessibilityRole="button" accessibilityLabel={title} onPress={() => onNavigate(path)} style={{ padding: 18, borderWidth: 1, borderRadius: 20, borderColor: d.accent + '33', backgroundColor: material.bg + '99', flexDirection: 'row', alignItems: 'center', gap: 16 }}><Icon color={d.accent} size={22}/><Text style={{ color: d.ink, flex: 1, fontSize: 16 }}>{title}</Text><ArrowUpRight color={d.accent} size={18}/></Pressable>)}
