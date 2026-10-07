@@ -1,20 +1,22 @@
 import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Animated,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
 import { Image } from "expo-image";
+import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { ArrowUpRight, Link2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Pressable from "./TactilePressable";
 import { SCREEN_BG } from "@/constants/backdrops";
+import { useReducedMotion } from "@/hooks/useThemeMotion";
 
 export default function BuildUrlEntry({
   url,
@@ -37,7 +39,11 @@ export default function BuildUrlEntry({
 }) {
   const insets = useSafeAreaInsets();
   const inputRef = useRef<TextInput>(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const { reduced } = useReducedMotion();
   const [notice, setNotice] = useState<string | null>(null);
+  const [urlFocused, setUrlFocused] = useState(false);
+  const [ctaHot, setCtaHot] = useState(false);
   const submit = () => {
     if (busy) return;
     if (!url.trim()) {
@@ -53,31 +59,60 @@ export default function BuildUrlEntry({
     onSubmit();
   };
   const feedback = error || notice;
+  const drift = reduced
+    ? 0
+    : scrollY.interpolate({
+        inputRange: [-140, 0, 520],
+        outputRange: [-22, 0, 42],
+        extrapolate: "clamp",
+      });
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1, backgroundColor: "#071A21" }}
     >
-      <Image
-        source={SCREEN_BG.listings}
-        contentFit="cover"
-        transition={0}
-        style={StyleSheet.absoluteFill}
-        accessible={false}
-      />
+      <Animated.View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: -56,
+          bottom: -56,
+          transform: [{ translateY: drift }],
+        }}
+      >
+        <Image
+          source={SCREEN_BG.listings}
+          contentFit="cover"
+          transition={0}
+          style={StyleSheet.absoluteFill}
+          accessible={false}
+        />
+      </Animated.View>
       <LinearGradient
-        colors={["#071A2170", "#071A2166", "#071A21E8", "#071A21"]}
+        colors={["#071A2160", "#071A2155", "#071A21D0", "#071A21"]}
         locations={[0, 0.35, 0.72, 1]}
         style={StyleSheet.absoluteFill}
+        pointerEvents="none"
       />
-      <ScrollView
+      <Animated.ScrollView
         keyboardShouldPersistTaps="handled"
+        bounces
+        alwaysBounceVertical
+        overScrollMode="always"
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false },
+        )}
         contentContainerStyle={{
           flexGrow: 1,
           paddingHorizontal: 26,
           paddingTop: insets.top + 18,
-          paddingBottom: insets.bottom + 32,
+          paddingBottom: insets.bottom + 48,
         }}
+        style={Platform.OS === "web" ? webScroll : undefined}
       >
         <View style={{ alignItems: "center" }}>
           <Text
@@ -133,109 +168,163 @@ export default function BuildUrlEntry({
             Paste the page where your listings live. We’ll figure out the rest.
           </Text>
         </View>
-        <View
-          style={{
-            borderRadius: 24,
-            padding: 20,
-            backgroundColor: "#071B27B8",
-            borderWidth: 1,
-            borderColor: "#CEE0D83D",
-            boxShadow: "0px 20px 50px rgba(0,0,0,0.22)",
-          }}
-        >
-          <Text style={{ color: "#F7F3E8", fontSize: 15, fontFamily: "Inter_600SemiBold", marginBottom: 8 }}>
-            Listings page URL
-          </Text>
-          <Text style={{ color: "#CBDAD1", fontSize: 14, lineHeight: 21, marginBottom: 12 }}>
-            Use your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 12,
-              alignItems: "center",
-              borderBottomWidth: 1,
-              borderColor: "#CBDAD17A",
-              paddingBottom: 12,
-            }}
-          >
-            <Link2 size={21} color="#DBC5A1" />
-            <TextInput
-              ref={inputRef}
-              accessibilityLabel="Your listings URL"
-              editable={!busy}
-              value={url}
-              onChangeText={(value) => { setNotice(null); onChange(value); }}
-              placeholder="https://your-website.com"
-              placeholderTextColor="#B4C0C6"
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="url"
-              returnKeyType="go"
-              onSubmitEditing={submit}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                minHeight: 48,
-                color: "#FFFFFF",
-                fontSize: 15,
-                paddingVertical: 10,
-              }}
+        <View style={styles.glassShadow}>
+          <View style={styles.glassClip}>
+            <BlurView pointerEvents="none" intensity={52} tint="dark" style={StyleSheet.absoluteFill} />
+            <View pointerEvents="none" style={styles.glassTint} />
+            <LinearGradient
+              pointerEvents="none"
+              colors={["rgba(255,255,255,0.28)", "rgba(255,255,255,0.05)", "rgba(255,255,255,0)"]}
+              locations={[0, 0.16, 0.42]}
+              style={StyleSheet.absoluteFill}
             />
-          </View>
-          {feedback ? (
-            <View
-              accessibilityRole="alert"
-              style={{
-                marginTop: 14,
-                padding: 12,
-                borderRadius: 12,
-                backgroundColor: "#F2AE9320",
-              }}
-            >
-              <Text style={{ color: "#FFD6C4", fontSize: 14, lineHeight: 21 }}>
-                {feedback}
+            <View style={styles.glassBody}>
+              <Text style={{ color: "#F7F3E8", fontSize: 15, fontFamily: "Inter_600SemiBold", marginBottom: 8 }}>
+                Listings page URL
               </Text>
+              <Text style={{ color: "#CBDAD1", fontSize: 14, lineHeight: 21, marginBottom: 12 }}>
+                Use your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 12,
+                  alignItems: "center",
+                  borderBottomWidth: 1,
+                  borderColor: urlFocused ? "rgba(225,206,173,0.95)" : "rgba(203,218,209,0.42)",
+                  paddingBottom: 12,
+                  transform: [{ translateY: urlFocused ? -1 : 0 }],
+                  ...(Platform.OS === "web" ? { transitionProperty: "border-color, transform", transitionDuration: "180ms" } : null),
+                }}
+              >
+                <Link2 size={21} color={urlFocused ? "#F3E6CC" : "#DBC5A1"} />
+                <TextInput
+                  ref={inputRef}
+                  accessibilityLabel="Your listings URL"
+                  editable={!busy}
+                  value={url}
+                  onChangeText={(value) => { setNotice(null); onChange(value); }}
+                  onFocus={() => setUrlFocused(true)}
+                  onBlur={() => setUrlFocused(false)}
+                  placeholder="https://your-website.com"
+                  placeholderTextColor="#B4C0C6"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="url"
+                  returnKeyType="go"
+                  onSubmitEditing={submit}
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    minHeight: 48,
+                    color: "#FFFFFF",
+                    fontSize: 15,
+                    paddingVertical: 10,
+                  }}
+                />
+              </View>
+              {feedback ? (
+                <View
+                  accessibilityRole="alert"
+                  style={{
+                    marginTop: 14,
+                    padding: 12,
+                    borderRadius: 12,
+                    backgroundColor: "#F2AE9320",
+                  }}
+                >
+                  <Text style={{ color: "#FFD6C4", fontSize: 14, lineHeight: 21 }}>
+                    {feedback}
+                  </Text>
+                </View>
+              ) : null}
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Import my listings"
+                onPress={submit}
+                disabled={busy}
+                onFocus={() => setCtaHot(true)}
+                onBlur={() => setCtaHot(false)}
+                style={{
+                  marginTop: 20,
+                  minHeight: 58,
+                  borderRadius: 18,
+                  opacity: busy ? 0.7 : 1,
+                }}
+              >
+                {({ pressed }) => (
+                  <LinearGradient
+                    colors={pressed ? ["#D7C196", "#C4AD84", "#B89A6E"] : ["#F8F1E0", "#E6D3B0", "#CDB58A"]}
+                    start={{ x: 0.15, y: 0 }}
+                    end={{ x: 0.85, y: 1 }}
+                    style={[styles.cta, ctaHot && styles.ctaHot, pressed && styles.ctaPressed]}
+                  >
+                    <Text style={styles.ctaLabel}>
+                      {busy ? "Connecting…" : "Import my listings"}
+                    </Text>
+                    {busy ? (
+                      <ActivityIndicator color="#122028" />
+                    ) : (
+                      <View style={{ transform: [{ translateX: pressed ? 3 : 0 }, { translateY: pressed ? -3 : 0 }] }}>
+                        <ArrowUpRight size={22} color="#122028" strokeWidth={2.4} />
+                      </View>
+                    )}
+                  </LinearGradient>
+                )}
+              </Pressable>
             </View>
-          ) : null}
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Import my listings"
-            onPress={submit}
-            disabled={busy}
-            style={{
-              marginTop: 20,
-              minHeight: 58,
-              borderRadius: 16,
-              paddingHorizontal: 20,
-              backgroundColor: "#E1CEAD",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              opacity: busy ? 0.55 : 1,
-            }}
-          >
-            <Text
-              style={{
-                color: "#11222B",
-                fontSize: 16,
-                fontFamily: "Inter_600SemiBold",
-              }}
-            >
-              {busy ? "Connecting…" : "Import my listings"}
-            </Text>
-            {busy ? (
-              <ActivityIndicator color="#11222B" />
-            ) : (
-              <ArrowUpRight size={23} color="#11222B" />
-            )}
-          </Pressable>
+          </View>
         </View>
         {listingCount > 0 && onViewListings ? <Pressable accessibilityRole="button" onPress={onViewListings} style={{ padding: 18, marginTop: 12 }}>
           <Text style={{ color: "#E7E9E5", textAlign: "center" }}>{listingCount} listings already saved · View listings</Text>
         </Pressable> : null}
-        <View style={{ height: 42 }} />
-      </ScrollView>
+        <View style={{ height: 56 }} />
+      </Animated.ScrollView>
     </KeyboardAvoidingView>
   );
 }
+
+const webScroll = { overscrollBehaviorY: "auto" } as const;
+
+const styles = StyleSheet.create({
+  glassShadow: {
+    borderRadius: 26,
+    boxShadow: "0px 22px 50px rgba(0, 0, 0, 0.28)",
+  },
+  glassClip: {
+    borderRadius: 26,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.28)",
+  },
+  glassTint: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(8, 22, 32, 0.38)",
+  },
+  glassBody: {
+    padding: 20,
+  },
+  cta: {
+    minHeight: 58,
+    borderRadius: 18,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.55)",
+    boxShadow: "0px 12px 24px rgba(62, 40, 14, 0.32), inset 0px 1px 0px rgba(255,255,255,0.72)",
+  },
+  ctaHot: {
+    boxShadow: "0px 0px 0px 3px rgba(225,206,173,0.38), 0px 14px 28px rgba(62, 40, 14, 0.36), inset 0px 1px 0px rgba(255,255,255,0.8)",
+  },
+  ctaPressed: {
+    borderColor: "rgba(255,255,255,0.35)",
+  },
+  ctaLabel: {
+    color: "#122028",
+    fontSize: 17,
+    letterSpacing: 0.15,
+    fontFamily: "Inter_600SemiBold",
+  },
+});

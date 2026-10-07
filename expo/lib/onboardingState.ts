@@ -15,3 +15,13 @@ export function clientSetupState(invitationAccepted: boolean, profileCompleted: 
   if (!invitationAccepted) return "invitation-required";
   return profileCompleted && essentialsComplete ? "experience-accessible" : "profile-incomplete";
 }
+
+/**
+ * While setup is still incomplete, the importer, adding a listing, the portfolio,
+ * and one listing's existing editor stay reachable. Any other admin page still
+ * returns to the importer. The editor is not a new parent of All Listings.
+ */
+export function incompleteSetupRouteAllowed(path: string): boolean {
+  if (path === "/admin/build" || path === "/admin/add" || path === "/admin/listings") return true;
+  return /^\/admin\/edit\/[^/?#]+/.test(path);
+}

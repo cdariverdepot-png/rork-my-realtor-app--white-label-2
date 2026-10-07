@@ -214,7 +214,7 @@ function summarize(target, result, counters, elapsedMs, error) {
     record.controlChecks.classifiedObstacle = (record.obstacles ?? []).some(row => /captcha_required|script_gate|requires_rendering/.test(row.code)) || (record.issues ?? []).some(issue => issue.code === 'requires-rendering');
     record.controlChecks.emptySuccess = record.outcome === 'found' && listings.length === 0;
   }
-  record.falseComplete = record.inventoryStatus === 'inventory_complete' && (!!record.weakComplete || (Number.isFinite(record.expectedCount) && record.expectedCount !== engineListings.length && !(meta.accounting?.sourceCollectionExhausted && meta.accounting?.sourceSeen === record.expectedCount)));
+  record.falseComplete = !!record.weakComplete || !!record.controlChecks.absorbedMarket || (record.engineInventoryComplete && Number.isFinite(record.expectedCount) && record.expectedCount !== engineListings.length && !(meta.accounting?.sourceCollectionExhausted && meta.accounting?.sourceSeen === record.expectedCount));
   record.sourceCountReconciled = !!(meta.accounting?.sourceCollectionExhausted && (meta.accounting.sourceTotal == null || meta.accounting.sourceSeen === meta.accounting.sourceTotal));
   record.eligibleCountReconciled = !!meta.accounting?.eligibleImportComplete;
   record.falseEmpty = (target.id === 'control_brenda' && listings.length === 0 && !record.controlChecks.classifiedObstacle)
@@ -338,11 +338,7 @@ async function main() {
   console.log(JSON.stringify(report.scoreboard, null, 2));
 }
 
-if (require.main === module) {
-  main().catch(error => {
-    console.error(error);
-    process.exitCode = 1;
-  });
-}
-
-module.exports = { summarize, scoreboard, strictComplete, failureClass };
+main().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
