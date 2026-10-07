@@ -34,6 +34,7 @@ import { useClients } from "@/contexts/ClientsContext";
 import { useListings } from "@/contexts/ListingsContext";
 import PressableScale from "@/components/PressableScale";
 import { useSiteCheck } from "@/lib/siteCheck";
+import { applyImportEvent, requestFinished, requestStarted, type ActivityLine, type ImportChannel, type ImportEvent } from "@/lib/importProgress";
 
 type Phase = "collect" | "building" | "review";
 type ErrorPlace = "sources" | "review" | "hero" | "intro" | "listings";
@@ -75,7 +76,8 @@ export default function InitialRealtorSetup() {
   const [builderReady, setBuilderReady] = useState<boolean | null>(null);
   const [contactCount, setContactCount] = useState(0);
   const [pendingContacts, setPendingContacts] = useState<{ contacts: ReturnType<typeof parseCsvContacts>; format: "csv" | "vcard" } | null>(null);
-  const [activity, setActivity] = useState("");
+  /** Live importer activity: lines change only when the importer reports real work. */
+  const [activity, setActivity] = useState<ActivityLine[]>([]);
   /** The website in the main field, once saved as a source. */
   const [primaryId, setPrimaryId] = useState<string | null>(null);
   const [urlFocused, setUrlFocused] = useState(false);
@@ -256,7 +258,7 @@ export default function InitialRealtorSetup() {
         setError({ place, message });
       }
     }
-    finally { setBusy(false); if (!building) setActivity(""); }
+    finally { setBusy(false); }
   };
   const errorFor = (place: ErrorPlace) => {
     if (!error || error.place !== place) return null;
@@ -334,11 +336,22 @@ export default function InitialRealtorSetup() {
     setBuilding(true);
     let buildSucceeded = false;
     try {
-      setActivity("Finding and saving your listings…");
       if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
+      const listingUrl = websiteUri ?? current.find(source => source.kind === "url")!.uri;
+      const report = (channel: ImportChannel) => (event: ImportEvent) => setActivity(lines => applyImportEvent(lines, channel, event));
+      setActivity(requestStarted(requestStarted([], "listings"), "build"));
+      // The listing import and the profile build are independent requests, so they run together.
+      // The build is told this page is being imported here, so it does not crawl it a second time.
+      const listingImport = connectListingSource(listingUrl, auth.realtorId, report("listings"))
+        .then(connected => { setActivity(lines => requestFinished(lines, "listings", true)); return connected; },
+          error => { setActivity(lines => requestFinished(lines, "listings", false)); throw error; });
+      const profileBuild = analyzeBuild({ connectedListingSources: [listingUrl], onEvent: report("build") })
+        .then(saved => { setActivity(lines => requestFinished(lines, "build", true)); return saved; },
+          error => { setActivity(lines => requestFinished(lines, "build", false)); throw error; });
+      const [listingOutcome, buildOutcome] = await Promise.allSettled([listingImport, profileBuild]);
       let listingWarning = "";
-      try {
-        const connected = await connectListingSource(websiteUri ?? current.find(source => source.kind === "url")!.uri, auth.realtorId);
+      if (listingOutcome.status === "fulfilled") {
+        const connected = listingOutcome.value;
         const connectedItems = connected.items ?? [];
         setImportedListingCount(connected.imported ?? connectedItems.length);
         setHasConnectedSource(true);
@@ -351,23 +364,24 @@ export default function InitialRealtorSetup() {
         } else {
           await refreshListings();
         }
-      } catch (error) {
+      } else {
         // A site with no readable inventory can still build the existing profile.
         // Account/session and save failures must stop the workflow.
+        const error = listingOutcome.reason;
         if (!(error instanceof ListingImportError) || error.status !== 422) throw error;
         listingWarning = error.message;
       }
-      setActivity(listingWarning ? "Building your profile…" : "Listings saved. Building your profile…");
-      const saved = await analyzeBuild();
+      if (buildOutcome.status === "rejected") throw buildOutcome.reason;
+      const saved = buildOutcome.value;
       setSources(saved.sources);
       setResult(saved);
       const next = applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft);
       const portraitUri = saved.draft.portraitSourceId && localImages.current[saved.draft.portraitSourceId];
-      if (portraitUri) next.portraitUrl = await toPortableImage(portraitUri, 1600);
+      if (portraitUri) {
+        setActivity(lines => [...lines, { id: "client:portrait", state: "active", text: "Preparing your uploaded portrait" }]);
+        next.portraitUrl = await toPortableImage(portraitUri, 1600);
+      }
       startReview(saved, next);
-      setActivity(saved.draft.discoveredListings?.length
-        ? `Importing ${saved.draft.discoveredListings.length} listing${saved.draft.discoveredListings.length === 1 ? "" : "s"}…`
-        : "Finishing your profile…");
       if (listingWarning) setError({ place: "listings", message: listingWarning });
       buildSucceeded = true;
       // The shared importer has already persisted the authoritative collection.
@@ -442,7 +456,6 @@ export default function InitialRealtorSetup() {
       const listingSources = result?.sources.filter(source => source.kind === "listing" || source.kind === "url") ?? [];
       const candidate = listingSources.findLast(source => source.kind === "listing") ?? listingSources[0];
       if (candidate) {
-        setActivity("Connecting your listings for automatic updates…");
         await connectListingSource(candidate.uri, auth.realtorId ?? undefined);
         setHasConnectedSource(true);
       }
@@ -557,7 +570,7 @@ export default function InitialRealtorSetup() {
       </Pressable>}
     </View>}
 
-    {loaded && phase === "building" && <BuildProgress activity={activity} />}
+    {loaded && phase === "building" && <BuildProgress lines={activity} />}
 
     {loaded && phase === "review" && result && draft && <>
       <Text style={{ color: "white", fontSize: 24, fontWeight: "600", marginTop: 28 }}>Here’s your app</Text>

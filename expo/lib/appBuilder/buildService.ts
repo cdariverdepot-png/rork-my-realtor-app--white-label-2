@@ -3,6 +3,8 @@ import { File } from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { Platform } from "react-native";
 import { ensureSupabaseSession, supabase } from "@/lib/supabase";
+import { invokeWithProgress } from "@/lib/importStream";
+import type { ImportEvent } from "@/lib/importProgress";
 import type { BuildSource, SourceEvidence } from "./sourceModel";
 import type { ClientLayoutId } from "@/constants/clientLayouts";
 import type { WebsiteDesign } from '@/lib/websitePresentation';
@@ -380,12 +382,24 @@ async function functionError(error: unknown, data: unknown, fallback: string): P
   return new Error(error instanceof Error && error.message ? error.message : fallback);
 }
 
-export async function analyzeBuild(): Promise<SavedBuild> {
+/**
+ * connectedListingSources: listing pages this setup run already imported through the listing
+ * importer; the build does not crawl them a second time. onEvent receives live progress.
+ */
+export async function analyzeBuild(options?: { connectedListingSources?: string[]; onEvent?: (event: ImportEvent) => void }): Promise<SavedBuild> {
   const route = await resolveBuilderRoute();
   if (route.kind === "local") return analyzeLocal(route.realtorId);
 
-  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", { body: {} });
-  if (error || data?.error) throw await functionError(error, data, "Analysis could not finish.");
+  const body = options?.connectedListingSources?.length ? { connectedListingSources: options.connectedListingSources } : {};
+  if (options?.onEvent) {
+    const streamed = await invokeWithProgress("analyze-realtor-build", body, options.onEvent);
+    if (streamed.status >= 400 || streamed.body?.error) {
+      throw new Error(streamed.body?.error ?? (streamed.status === 401 ? "Please sign in again to build your app." : `Analysis could not finish. (status ${streamed.status})`));
+    }
+  } else {
+    const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", { body });
+    if (error || data?.error) throw await functionError(error, data, "Analysis could not finish.");
+  }
   const saved = await loadBuild();
   if (!saved) throw new Error("The build result could not be loaded.");
   return saved;

@@ -105,3 +105,80 @@ for (const fixture of fixtures) {
     assert.deepEqual(events.slice(-2).map(e => [e.stage, e.state]), [['save', 'start'], ['save', 'done']]);
   }));
 }
+
+// ── Client activity: the build screen is a view of these events, never a timed script. ──
+const ts = require('typescript');
+const loadProgressModel = () => {
+  const source = fs.readFileSync(path.join(__dirname, '../lib/importProgress.ts'), 'utf8');
+  const moduleRef = { exports: {} };
+  new Function('module', 'exports', ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText)(moduleRef, moduleRef.exports);
+  return moduleRef.exports;
+};
+
+test('build progress has no timers, predetermined steps or percentages', () => {
+  const component = fs.readFileSync(path.join(__dirname, '../components/BuildProgress.tsx'), 'utf8');
+  const model = fs.readFileSync(path.join(__dirname, '../lib/importProgress.ts'), 'utf8');
+  for (const source of [component, model]) {
+    assert.doesNotMatch(source, /setInterval|setTimeout|requestAnimationFrame|Animated\.timing|%/);
+  }
+  assert.doesNotMatch(component, /STEPS|Running a final quality check|Choosing the best listing images/);
+  assert.match(component, /lines: ActivityLine\[\]/);
+});
+
+test('setup runs the listing import and profile build together and tells the build what was connected', () => {
+  const setup = fs.readFileSync(path.join(__dirname, '../components/InitialRealtorSetup.tsx'), 'utf8');
+  assert.match(setup, /Promise\.allSettled\(\[listingImport, profileBuild\]\)/);
+  assert.match(setup, /analyzeBuild\(\{ connectedListingSources: \[listingUrl\]/);
+  assert.match(setup, /connectListingSource\(listingUrl, auth\.realtorId, report\("listings"\)\)/);
+});
+
+test('before any event, the screen claims only that the requests were sent', () => {
+  const model = loadProgressModel();
+  const lines = model.requestStarted(model.requestStarted([], 'listings'), 'build');
+  assert.deepEqual(lines.map(line => line.state), ['active', 'active']);
+  for (const line of lines) assert.doesNotMatch(line.text, /\d|found|listing[s]? found/i);
+});
+
+for (const fixture of fixtures) {
+  test(`${fixture.id}: activity lines come only from streamed facts and nothing is left spinning`, () => quiet(async () => {
+    const model = loadProgressModel();
+    const run = await runBuild(bundle, fixture, { latencyMs: 1, stream: true });
+    let lines = model.requestStarted([], 'build');
+    for (const event of run.events) lines = model.applyImportEvent(lines, 'build', event);
+    lines = model.requestFinished(lines, 'build', run.status === 200);
+    assert.deepEqual(lines.filter(line => line.state === 'active'), []);
+    const text = lines.map(line => line.text).join('\n');
+    const site = run.events.find(event => event.kind === 'site');
+    if (site) assert.match(text, new RegExp(`Reading ${site.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
+    const count = run.body.discoveredListings.length;
+    assert.match(text, count ? new RegExp(`Found ${count} active listing`) : /No active listings/);
+    assert.match(text, /Found Replay Realtor/);
+    // Facts not reported by the importer never appear.
+    const reported = JSON.stringify(run.events);
+    for (const fact of ['Kellogg', 'Coeur d', 'Idaho', 'Cindy Carlson', 'McKenzie', 'Spokane']) {
+      if (!reported.includes(fact)) assert.ok(!text.includes(fact), `"${fact}" was shown without being reported`);
+    }
+    assert.doesNotMatch(text, /Opening .* in a browser/);
+  }));
+}
+
+test('a skipped duplicate crawl adds no line, and a failed import is shown as failed', () => {
+  const model = loadProgressModel();
+  let lines = model.applyImportEvent([], 'build', { kind: 'stage', stage: 'listings', state: 'skipped', reason: 'connected', at: 1 });
+  assert.deepEqual(lines, []);
+  lines = model.applyImportEvent(model.requestStarted([], 'listings'), 'listings', { kind: 'stage', stage: 'listings', state: 'start', at: 1 });
+  lines = model.applyImportEvent(lines, 'listings', { kind: 'render', host: 'my.flexmls.com', state: 'start', at: 2 });
+  assert.match(lines.at(-1).text, /Opening my\.flexmls\.com in a browser/);
+  lines = model.applyImportEvent(lines, 'listings', { kind: 'render', host: 'my.flexmls.com', state: 'failed', at: 30000 });
+  lines = model.applyImportEvent(lines, 'listings', { kind: 'stage', stage: 'listings', state: 'failed', at: 30001 });
+  lines = model.requestFinished(lines, 'listings', false);
+  assert.deepEqual(lines.map(line => line.state), ['failed', 'failed']);
+});
+
+test('streamed frames split across chunks are reassembled without guessing', () => {
+  const model = loadProgressModel();
+  const first = model.parseEventFrames('data: {"event":{"kind":"site","name":"A","host":"a.example","at":1}}\n\ndata: {"res');
+  assert.equal(first.messages.length, 1);
+  const second = model.parseEventFrames(first.rest + 'ult":{"status":200,"body":{"ok":true}}}\n\n');
+  assert.deepEqual(second.messages, [{ result: { status: 200, body: { ok: true } } }]);
+});

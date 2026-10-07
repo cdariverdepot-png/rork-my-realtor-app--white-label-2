@@ -8,6 +8,7 @@ import { requiredStatus } from "@/constants/sections";
 import { brand, fonts } from "@/constants/colors";
 import { loadBuild } from "@/lib/appBuilder/buildService";
 import InvitationTools from '@/components/InvitationTools';
+import { useListings } from "@/contexts/ListingsContext";
 
 export default function Ready() {
   const router = useRouter();
@@ -22,13 +23,17 @@ export default function Ready() {
   const invitationY = useRef(0);
   const complete = saved.hydrated && saved.isPublished && !!auth.realtorRecord?.client_code_enabled;
   const [listingLinks, setListingLinks] = useState<string[]>([]);
-  const [importedCount, setImportedCount] = useState(0);
+  const [discoveredCount, setDiscoveredCount] = useState(0);
+  // Setup imports through the connected listing source; the build draft only holds listings it found itself.
+  const { all: listings } = useListings();
+  const connectedCount = listings.filter(item => item.sourceId && !item.sourceArchived).length;
+  const importedCount = Math.max(discoveredCount, connectedCount);
   useEffect(() => {
     Animated.timing(opacity, { toValue: 1, duration: 650, useNativeDriver: true }).start();
     void loadBuild().then(build => {
       if (!build) return;
       const discovered = build.draft.discoveredListings ?? [];
-      setImportedCount(discovered.length);
+      setDiscoveredCount(discovered.length);
       const ids = new Set(build.draft.potentialListingSources ?? []);
       const fromPotential = build.sources.filter(source => ids.has(source.id) &&
         (source.kind === "url" || source.kind === "listing")).map(source => source.uri);

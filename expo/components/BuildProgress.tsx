@@ -1,37 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { Check, Sparkles } from "lucide-react-native";
+import { Check, Sparkles, X } from "lucide-react-native";
+import type { ActivityLine } from "@/lib/importProgress";
 
-const STEPS = [
-  "Connecting to your website",
-  "Reading your public profile",
-  "Finding active listings",
-  "Choosing the best listing images",
-  "Matching your website structure",
-  "Building your agent profile",
-  "Preparing the client experience",
-  "Running a final quality check",
-];
-
-export default function BuildProgress({ activity }: { activity?: string }) {
-  const [visible, setVisible] = useState(1);
-
-  useEffect(() => {
-    setVisible(1);
-    const timer = setInterval(() => {
-      setVisible(current => {
-        if (current >= STEPS.length) {
-          clearInterval(timer);
-          return current;
-        }
-        return current + 1;
-      });
-    }, 950);
-    return () => clearInterval(timer);
-  }, []);
-
+/**
+ * Live activity from the importer. Each line exists because the server reported that work
+ * started, produced data, or finished (see lib/importProgress). There are no timers here:
+ * the list changes only when a real event arrives, so it can move quickly or wait as long as
+ * the work does, and whatever is still running stays visibly active.
+ */
+export default function BuildProgress({ lines }: { lines: ActivityLine[] }) {
+  const running = lines.some(line => line.state === "active");
   return (
     <View
+      accessibilityLiveRegion="polite"
       style={{
         marginTop: 28,
         padding: 22,
@@ -63,42 +45,31 @@ export default function BuildProgress({ activity }: { activity?: string }) {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={{ color: "#F7F4EB", fontSize: 18, fontWeight: "600" }}>Building your app</Text>
-          <Text style={{ color: "#9EAAA7", fontSize: 12, marginTop: 2, letterSpacing: 0.5 }}>LIVE BUILD SEQUENCE</Text>
+          <Text style={{ color: "#9EAAA7", fontSize: 12, marginTop: 2, letterSpacing: 0.5 }}>{running ? "LIVE IMPORT ACTIVITY" : "IMPORT ACTIVITY"}</Text>
         </View>
       </View>
 
-      {STEPS.slice(0, visible).map((step, index) => {
-        const current = index === visible - 1;
-        const completed = index < visible - 1;
+      {lines.map(line => {
+        const active = line.state === "active";
         return (
-          <View
-            key={step}
-            style={{
-              minHeight: 34,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 11,
-              opacity: current ? 1 : 0.76,
-            }}
-          >
+          <View key={line.id} style={{ minHeight: 34, flexDirection: "row", alignItems: "center", gap: 11, opacity: active ? 1 : 0.8 }}>
             <View style={{ width: 22, alignItems: "center" }}>
-              {completed ? (
+              {active ? (
+                <ActivityIndicator size="small" color="#E3D6BB" />
+              ) : line.state === "failed" ? (
+                <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: "rgba(255,186,169,0.14)", alignItems: "center", justifyContent: "center" }}>
+                  <X size={12} color="#FFBAA9" strokeWidth={2.6} />
+                </View>
+              ) : (
                 <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: "rgba(116,211,164,0.14)", alignItems: "center", justifyContent: "center" }}>
                   <Check size={13} color="#74D3A4" strokeWidth={2.6} />
                 </View>
-              ) : (
-                <ActivityIndicator size="small" color="#E3D6BB" />
               )}
             </View>
-            <Text style={{ color: current ? "#F7F4EB" : "#BCC5C1", fontSize: 14.5, lineHeight: 20 }}>{step}</Text>
+            <Text style={{ flex: 1, color: active ? "#F7F4EB" : line.state === "failed" ? "#FFBAA9" : "#BCC5C1", fontSize: 14.5, lineHeight: 20 }}>{line.text}</Text>
           </View>
         );
       })}
-
-      <View style={{ height: 1, backgroundColor: "rgba(255,255,255,0.08)", marginTop: 10, marginBottom: 6 }} />
-      <Text style={{ color: "#9EAAA7", fontSize: 12.5, lineHeight: 19 }}>
-        {activity || "Reading your website and preparing the first version."}
-      </Text>
     </View>
   );
 }

@@ -304,9 +304,11 @@ function publishedSiteName(html: string): string {
     .find(tag => /^og:site_name$/i.test(attr(tag, "property") || attr(tag, "name")));
   const named = meta ? attr(meta, "content") : "";
   const title = decodeEntities(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-  const parts = (named || title).split(/\s+[|\u2013\u2014-]\s+/).map(part => part.trim())
+  const parts = (named || title).split(/\s+[|\u2013\u2014\u2022\u00b7:-]\s+/).map(part => part.trim())
     .filter(part => part && !/^(?:home|homepage|welcome|index|official site)$/i.test(part));
-  const name = parts.sort((a, b) => Number(/realt|propert|home|group|team|estate/i.test(b)) - Number(/realt|propert|home|group|team|estate/i.test(a)))[0] ?? "";
+  // A business name ("… Realty", "… Team") beats a tagline; among equals the shorter segment is the name.
+  const brand = (part: string) => Number(/\b(?:realty|realtors?|homes|group|team|properties|brokerage|associates)\b/i.test(part));
+  const name = parts.sort((a, b) => brand(b) - brand(a) || a.length - b.length)[0] ?? "";
   return EXPLICIT.test(name) ? "" : name.slice(0, 80);
 }
 

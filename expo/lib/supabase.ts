@@ -131,6 +131,9 @@ export const supabase: SupabaseClient | null = (() => {
 })();
 
 export const isSupabaseLive = !!supabase;
+/** Edge Function endpoint and public key, for requests that read a streamed response directly. */
+export const supabaseFunctionUrl = (name: string) => `${url}/functions/v1/${name}`;
+export const supabasePublicKey = anon;
 
 /** End private device access before discarding the JWT used to revoke it. */
 export async function endPrivateSession(): Promise<void> {
