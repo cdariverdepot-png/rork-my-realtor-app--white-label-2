@@ -6,16 +6,19 @@ import { File, Paths } from 'expo-file-system';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBrand } from '@/contexts/BrandContext';
 import { clientInviteLink } from '@/lib/bookingLink';
+import { serviceEntitlement } from '@/lib/serviceEntitlement';
 
 /** The same stable invitation is used on the first-publication screen and dashboard. */
 export default function InvitationTools() {
-  const { realtorRecord } = useAuth(), { isPublished, savedBrand } = useBrand();
+  const { realtorRecord, realtorId } = useAuth(), { isPublished, savedBrand } = useBrand();
   const [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const code = realtorRecord?.client_code;
   if (!isPublished || !realtorRecord?.client_code_enabled || !code) return null;
   const url = clientInviteLink(code), qr = `https://quickchart.io/qr?text=${encodeURIComponent(url)}&size=900&margin=3&dark=101820&light=ffffff&ecLevel=M`;
   const run = async (action: () => Promise<void>) => {
     if (busy) return; setBusy(true); setNotice('');
+    const entitlement = await serviceEntitlement(realtorId);
+    if (entitlement !== 'active') { setNotice(entitlement === 'inactive' ? 'Client invitations are unavailable while your subscription is inactive.' : 'Client invitations are temporarily unavailable while your subscription status is verified.'); setBusy(false); return; }
     try { await action(); } catch (e) { setNotice(e instanceof Error ? e.message : 'Please retry.'); } finally { setBusy(false); }
   };
   const saveQr = async () => {
