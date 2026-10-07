@@ -22,7 +22,7 @@ import ScreenBackdrop from "@/components/ScreenBackdrop";
 import { tint } from "@/constants/backdrops";
 import { CUSTOM_INQUIRY_URL, PLAN_TIERS, type PlanTier } from "@/constants/plans";
 import { ANNUAL_EQUIVALENT } from "@/constants/subscriptionPricing";
-import { billingRequest, exportRealtorData, verifiedBillingURL, type BillingResponse } from "@/lib/billing";
+import { exportRealtorData } from "@/lib/billing";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeats } from "@/contexts/SeatsContext";
 
@@ -37,23 +37,9 @@ export default function Plans() {
   const { isAdmin, hydrated, realtorId, session, logout } = useAuth();
   const seats = useSeats();
   const { plan, used, limit, unlimited, atLimit, tracked } = seats;
-  const { checkout } = useLocalSearchParams<{ checkout?: string }>();
-  const [billing, setBilling] = useState<BillingResponse>({ configured: false });
-  const [interval, setInterval] = useState<"month" | "year">("month");
+  useLocalSearchParams<{ checkout?: string }>();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const generation = useRef(realtorId); generation.current = realtorId;
-  useEffect(() => {
-    setBilling({ configured: false }); setMessage(null);
-    if (!tracked || !realtorId) return;
-    let canceled = false;
-    void billingRequest(realtorId, "status").then(async data => {
-      if (canceled) return;
-      setBilling(data);
-      if (checkout === "returned" && data.configured) { await billingRequest(realtorId, "refresh"); await seats.refresh(); }
-    }).catch(() => { if (!canceled) setMessage("Subscription checkout is not configured yet."); });
-    return () => { canceled = true; };
-  }, [tracked, realtorId, checkout, seats.refresh]);
 
   useEffect(() => {
     if (hydrated && !isAdmin) router.replace("/admin/login");
@@ -70,26 +56,7 @@ export default function Plans() {
     }).start();
   }, [rise]);
 
-  const action = useCallback(async (kind: "checkout" | "refresh" | "cancel" | "resume" | "manage") => {
-    if (!realtorId || busy || !tracked) return;
-    if (kind !== "refresh" && (Platform.OS !== "web" || !billing.configured || session?.guestAccess || session?.preview)) return;
-    const rid = realtorId; setBusy(true); setMessage(null);
-    try {
-      if (billing.configured) {
-        const result = await billingRequest(rid, kind, interval);
-        if (generation.current !== rid) return;
-        if (result.url) await Linking.openURL(verifiedBillingURL(result.url));
-      }
-      await seats.refresh();
-    } catch(e) { if (generation.current === rid) setMessage(e instanceof Error ? e.message : "Please retry."); }
-    finally { if (generation.current === rid) setBusy(false); }
-  }, [realtorId, busy, tracked, billing.configured, interval, seats.refresh, session?.guestAccess, session?.preview]);
-  const onUpgrade = useCallback((tier: PlanTier) => {
-    if (tier.contactOnly) {
-      if (Platform.OS !== "web") void Haptics.selectionAsync();
-      void Linking.openURL(CUSTOM_INQUIRY_URL).catch(() => setMessage("Please email hello@myrealtorapp.com about your custom app."));
-    } else void action("checkout");
-  }, [action]);
+  const onUpgrade = useCallback((tier: PlanTier) => {\n    if (tier.contactOnly) {\n      if (Platform.OS !== "web") void Haptics.selectionAsync();\n      void Linking.openURL(CUSTOM_INQUIRY_URL).catch(() => setMessage("Please email hello@myrealtorapp.com about your custom app."));\n    } else {\n      setMessage("App Store subscription setup is not configured in this build yet. No private checkout will be opened.");\n    }\n  }, []);
   const exportData = useCallback(async () => {
     if (!realtorId || busy || !tracked) return;
     setBusy(true); setMessage(null);
@@ -114,7 +81,7 @@ export default function Plans() {
     if (unlimited) return `${used} clients connected · unlimited allowance`;
     return `${used} of ${limit} clients connected.`;
   }, [tracked, unlimited, used, limit, seats.loaded, seats.active]);
-  const displayedTiers = PLAN_TIERS.map(tier => tier.id !== "pro" || !billing.prices ? tier : { ...tier, price: interval === "month" ? `${billing.prices.month.total}/month` : `${billing.prices.year.total}/year`, priceNote: interval === "year" ? "billed annually" : "billed monthly", altPrice: interval === "year" ? ANNUAL_EQUIVALENT : `${billing.prices.year.total}/year, billed annually` });
+  const displayedTiers = PLAN_TIERS;
   const date = seats.cancelAtPeriodEnd ? seats.serviceEnd : seats.renewalAt;
   const dateText = date ? new Date(date).toLocaleDateString() : null;
 
@@ -152,17 +119,13 @@ export default function Plans() {
             </View>
             {tracked ? <>
               <Text style={styles.footnote}>{session?.email}{seats.everPaid ? ` · ${seats.interval === "year" ? "Annual" : "Monthly"} subscription · ${seats.status}` : " · Evaluation"}{dateText ? ` · ${seats.cancelAtPeriodEnd ? "Service ends" : "Renewal"} ${dateText}` : ""}</Text>
-              {seats.paymentIssue ? <Text style={styles.footnote}>A payment issue needs attention. Use subscription management to update payment details and retry through the provider.</Text> : null}
-              <Text style={styles.footnote}>{billing.configured ? "Test billing only. No live charges are enabled." : "Checkout unavailable until test billing is configured."}{Platform.OS !== "web" ? " Purchases and external billing links are unavailable in this native build." : ""}</Text>
+              {seats.paymentIssue ? <Text style={styles.footnote}>Your App Store subscription needs attention. Manage or restore it through Apple to restore paid service actions.</Text> : null}
+              <Text style={styles.footnote}>Subscriptions are managed by Apple. This build does not use a private credit-card checkout.</Text>
               <View style={{ flexDirection: "row", gap: 10, marginTop: 12 }}>
                 {(["month", "year"] as const).map(value => <Pressable key={value} onPress={() => setInterval(value)} style={[styles.cta, styles.ctaQuiet, { flex: 1, opacity: interval === value ? 1 : 0.5 }]}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{value === "month" ? "MONTHLY" : "ANNUAL"}</Text></Pressable>)}
               </View>
               <Text style={styles.footnote}>Subscriptions renew automatically at the chosen interval until canceled. Annual billing charges $490 upfront. Cancellation keeps access through the paid service-end date.</Text>
-              {seats.everPaid && Platform.OS === "web" && billing.configured ? <>
-                <Pressable disabled={busy} style={styles.cta} onPress={() => void action("manage")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>MANAGE SUBSCRIPTION</Text></Pressable>
-                {seats.active ? <Pressable disabled={busy} style={styles.cta} onPress={() => void action(seats.cancelAtPeriodEnd ? "resume" : "cancel")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{seats.cancelAtPeriodEnd ? "KEEP SUBSCRIPTION" : "CANCEL AT PERIOD END"}</Text></Pressable> : null}
-              </> : null}
-              <Pressable disabled={busy} style={styles.cta} onPress={() => void action("refresh")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>REFRESH ACCOUNT STATUS</Text></Pressable>
+              <Pressable disabled={busy} style={styles.cta} onPress={() => void seats.refresh()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>REFRESH ACCOUNT STATUS</Text></Pressable>
               <Pressable disabled={busy} style={styles.cta} onPress={() => void exportData()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>EXPORT MY DATA</Text></Pressable>
               <Text style={styles.footnote}>The JSON export includes your saved draft and published designs, listings, listing sources, contacts, client relationships, messages, document references, appointments and saved properties. It excludes passwords and billing credentials; document file contents are not included.</Text>
               <Pressable style={styles.cta} onPress={() => router.push("/reset-password")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>PASSWORD & ACCOUNT ACCESS</Text></Pressable>
@@ -177,7 +140,7 @@ export default function Plans() {
                 key={tier.id}
                 tier={tier}
                 current={tier.id === plan && seats.active}
-                disabled={!tier.contactOnly && (busy || !tracked || !billing.configured || Platform.OS !== "web" || session?.guestAccess === true || session?.preview === true || (seats.everPaid && seats.active))}
+                disabled={!tier.contactOnly && (busy || !tracked || session?.guestAccess === true || session?.preview === true || (seats.everPaid && seats.active))}
                 onPress={() => onUpgrade(tier)}
               />
             ))}
@@ -275,7 +238,7 @@ function TierCard({
               featured ? { color: dark.bg } : { color: brand.goldLight },
             ]}
           >
-            {tier.contactOnly ? tier.ctaLabel : current ? "CURRENT SUBSCRIPTION" : disabled ? "CHECKOUT UNAVAILABLE" : "TEST SUBSCRIPTION"}
+            {tier.contactOnly ? tier.ctaLabel : current ? "CURRENT SUBSCRIPTION" : disabled ? "SUBSCRIPTION UNAVAILABLE" : "APP STORE SUBSCRIPTION"}
           </Text>
         </Pressable>
       )}
