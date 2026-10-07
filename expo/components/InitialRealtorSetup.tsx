@@ -286,8 +286,8 @@ export default function InitialRealtorSetup() {
   const websiteUri = normalizeUrl(url);
   // A well-formed address still has to exist: the checkmark waits for the domain lookup.
   const siteCheck = useSiteCheck(websiteUri);
-  const websiteState: "empty" | "valid" | "invalid" | "checking" | "missing" = !url.trim() ? "empty" : !websiteUri ? "invalid"
-    : siteCheck === "missing" ? "missing" : siteCheck === "found" || siteCheck === "unknown" ? "valid" : "checking";
+  const websiteState: "empty" | "valid" | "invalid" | "checking" | "missing" | "unknown" = !url.trim() ? "empty" : !websiteUri ? "invalid"
+    : siteCheck === "missing" ? "missing" : siteCheck === "found" ? "valid" : siteCheck === "unknown" ? "unknown" : "checking";
   const primarySource = sources.find(source => source.id === primaryId) ?? null;
   const extraLinks = sources.filter(source => source.kind === "url" && source.id !== primaryId);
   const documents = sources.filter(source => source.kind === "document");
