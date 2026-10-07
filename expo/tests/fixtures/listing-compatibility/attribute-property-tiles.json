@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "attribute-property-tiles",
+  "capturedAt": "2026-10-07T05:00:00.000Z",
+  "provenance": "synthetic-contract",
+  "rationale": "Repeated attribute tiles publish data-price, an address, and a property URL without a dollar sign inside the anchor. Search-context filters are not part of the property identity.",
+  "seeds": [
+    "https://tiles.example/"
+  ],
+  "options": {
+    "maxPages": 1,
+    "maxDetailPages": 0,
+    "maxListings": 10
+  },
+  "pages": [
+    {
+      "key": "[\"https://tiles.example/\",false,false]",
+      "url": "https://tiles.example/",
+      "fragment": false,
+      "rendering": false,
+      "finalUrl": "https://tiles.example/",
+      "html": "<main><div data-price=\"99\">not a home</div><div class=\"listings-tile-wrap\" data-id=\"2636623\" data-address=\"6747 State Highway 76\" data-locality=\"Wilson\" data-region=\"[&quot;OK&quot;]\" data-price=\"185000\" data-pl-navigate-url=\"https://tiles.example/property/ok/wilson/6747-state-highway-76/2636623/?filters=%7B%22zip%22%3A%2273463%22%7D\"><a href=\"https://tiles.example/property/ok/wilson/6747-state-highway-76/2636623/\"><img src=\"https://photos.example/2636623.jpg\" alt=\"6747 State Highway 76\"></a></div><div class=\"listings-tile-wrap\" data-id=\"2636515\" data-address=\"1209 SW Stanley Street\" data-locality=\"Wilson\" data-region=\"OK\" data-price=\"215000\" data-pl-navigate-url=\"https://tiles.example/property/ok/wilson/1209-sw-stanley/2636515\"><img data-src=\"https://photos.example/2636515.jpg\"></div></main>"
+    }
+  ],
+  "expected": {
+    "listings": [
+      {
+        "title": "1209 SW Stanley Street",
+        "description": "",
+        "price": "$215,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "Wilson, OK",
+        "image": "https://photos.example/2636515.jpg",
+        "images": [
+          "https://photos.example/2636515.jpg"
+        ],
+        "sourceUrl": "https://tiles.example/property/ok/wilson/1209-sw-stanley/2636515",
+        "listingNumber": "2636515"
+      },
+      {
+        "title": "6747 State Highway 76",
+        "description": "",
+        "price": "$185,000",
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "neighborhood": "Wilson, OK",
+        "image": "https://photos.example/2636623.jpg",
+        "images": [
+          "https://photos.example/2636623.jpg"
+        ],
+        "sourceUrl": "https://tiles.example/property/ok/wilson/6747-state-highway-76/2636623/",
+        "listingNumber": "2636623"
+      }
+    ],
+    "coverage": "unknown",
+    "outcome": "found",
+    "issues": [],
+    "failed": [],
+    "strategies": [
+      "attribute-cards"
+    ]
+  },
+  "evidence": {
+    "version": 1,
+    "pages": [
+      {
+        "url": "https://tiles.example/",
+        "rendering": "response",
+        "interfaces": [],
+        "navigation": [],
+        "attempts": [
+          {
+            "id": "attribute-cards",
+            "version": 1,
+            "evidence": "Repeated elements with data-price, an address, and a property URL",
+            "outcome": "extracted",
+            "records": 2
+          }
+        ],
+        "resolution": "known-pattern"
+      }
+    ]
+  },
+  "rehostOrigin": "https://tiles.example"
+}

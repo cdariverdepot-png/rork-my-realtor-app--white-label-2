@@ -50,6 +50,13 @@ async function renderWithBrowser(browser, target, cookie) {
       if (redirects > 6) throw Object.assign(new Error("Renderer stopped a redirect loop"), { status: 502 });
     }
     await page.waitForTimeout(800);
+    if (typeof page.waitForFunction === "function") {
+      await page.waitForFunction(() => {
+        const title = (document.title || "").toLowerCase();
+        if (/just a moment|attention required|client challenge|sorry, you have been blocked|you have been blocked/.test(title)) return false;
+        return ((document.body && document.body.innerText) || "").trim().length > 180;
+      }, { timeout: 12000 }).catch(() => {});
+    }
     await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
     const finalUrl = page.url();
     const checked = publicRenderTarget(finalUrl);

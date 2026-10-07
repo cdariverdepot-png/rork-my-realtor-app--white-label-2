@@ -44,14 +44,21 @@ function sameSite(left, right) {
   return strip(left.hostname) === strip(right.hostname);
 }
 
+function providerInventoryHost(hostname) {
+  return /(?:^|\.)(?:flexmls\.com|sparkplatform\.com|idxhome\.com|ihomefinder\.com|showcaseidx\.com|placester\.com|chimeroi\.com|chime\.me)$/i.test(hostname);
+}
+
 function usefulNetworkBody(entry, pageUrl) {
   let url;
   try { url = new URL(entry.url); } catch { return false; }
-  if (url.protocol !== "https:" || !sameSite(url, pageUrl)) return false;
+  if (url.protocol !== "https:") return false;
   const type = String(entry.contentType || "");
   if (/image|font|css|video|audio|octet-stream/i.test(type)) return false;
   const path = `${url.pathname}${url.search}`;
-  return /json/i.test(type) || /\/(?:api|graphql)\b|listing|search|bootstrap|config/i.test(path);
+  const structured = /json/i.test(type) || /\/(?:api|graphql)\b|listing|search|bootstrap|config/i.test(path);
+  if (!structured) return false;
+  if (sameSite(url, pageUrl)) return true;
+  return providerInventoryHost(url.hostname) && /\/(?:api|graphql)\b|listing|search/i.test(path);
 }
 
 /** Keep the discovery engine's useful same-origin payloads and drop the rest. */

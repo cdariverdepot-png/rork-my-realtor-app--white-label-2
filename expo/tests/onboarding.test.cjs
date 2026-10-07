@@ -20,7 +20,7 @@ function load(name) {
   return module.exports;
 }
 const { requiredStatus, visibleSections, sectionState, REQUIRED_FIELDS } = load('constants/sections');
-const { realtorSetupState, clientSetupState } = load('lib/onboardingState');
+const { realtorSetupState, clientSetupState, incompleteSetupRouteAllowed } = load('lib/onboardingState');
 const { essentialsMet, visibleSteps, missingRequired } = load('constants/clientProfile');
 const { editorSave } = load('lib/editorSave');
 const { imagePosition, imagePositionKey } = load('lib/themeImages');
@@ -191,6 +191,20 @@ test('base creation, credentials and connected client states stay distinct', () 
   assert.equal(realtorSetupState(fixture(), false), 'base-app-created');
   assert.equal(realtorSetupState(fixture(), true), 'credentials-available');
   assert.equal(realtorSetupState(fixture(), true, 1), 'client-connected');
+});
+test('incomplete setup can open one saved listing and still returns other admin pages to the importer', () => {
+  assert.equal(incompleteSetupRouteAllowed('/admin/build'), true);
+  assert.equal(incompleteSetupRouteAllowed('/admin/add'), true);
+  assert.equal(incompleteSetupRouteAllowed('/admin/listings'), true);
+  assert.equal(incompleteSetupRouteAllowed('/admin/edit/119-pine-st'), true);
+  assert.equal(incompleteSetupRouteAllowed('/admin/edit'), false);
+  assert.equal(incompleteSetupRouteAllowed('/admin'), false);
+  assert.equal(incompleteSetupRouteAllowed('/admin/studio'), false);
+  const listings = fs.readFileSync(path.join(root, 'app/admin/listings.tsx'), 'utf8');
+  assert.match(listings, /router\.push\(`\/admin\/edit\/\$\{item\.id\}`\)/);
+  const guard = fs.readFileSync(path.join(root, 'components/OnboardingGuard.tsx'), 'utf8');
+  assert.match(guard, /incompleteSetupRouteAllowed\(path\)/);
+  assert.doesNotMatch(guard, /!\s*\[\"\/admin\/build\", \"\/admin\/add\", \"\/admin\/listings\"\]\.includes\(path\)/);
 });
 test('hidden content survives removal and restores according to readiness', () => {
   const b = fixture(); b.note.body = ['A real note'];
