@@ -204,6 +204,24 @@ export default function LiveThemeHome(p: ReferenceHomeProps) {
                   {listingStatusLabel(item)}
                 </Text>
               </View>
+              {p.recommendedIds?.includes(item.id) && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 52,
+                    left: 16,
+                    maxWidth: "76%",
+                    paddingHorizontal: 10,
+                    paddingVertical: 6,
+                    borderRadius: 18,
+                    backgroundColor: m.accent + "EE",
+                  }}
+                >
+                  <Text style={{ color: m.bg, fontSize: 10, fontFamily: "Inter_600SemiBold" }}>
+                    {p.recommendationLabel || "Recommended by your realtor"}
+                  </Text>
+                </View>
+              )}
               {overlay && (
                 <View
                   style={{
