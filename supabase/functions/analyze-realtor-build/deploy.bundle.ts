@@ -3128,8 +3128,12 @@ type WebsiteSection = {
   destination?: 'native' | 'unique' | 'omit';
   native?: 'listings' | 'saved' | 'chat' | 'profile';
 };
+/** A source content image kept with the copy it accompanies on the submitted site. */
+type SupportingImage = { url: string; fit: 'contain' | 'cover'; role: ImageRole; width?: number; height?: number };
 type WebsiteDesign = {
   version: 1; sourceUrl: string; analyzedAt: number;
+  /** Image the source places with the main heading/intro copy (never promoted to hero or portrait). */
+  introImage?: SupportingImage;
   logoUrl?: string; heroImageUrl?: string; portraitImageUrl?: string; heroTitle: string; heroSubtitle: string;
   headerImageUrl?: string; backgroundImageUrl?: string;
   imagery?: { logo?: ImageDiagnostic; portrait?: ImageDiagnostic; hero?: ImageDiagnostic; images: ImageDiagnostic[] };
@@ -3657,6 +3661,7 @@ function extractWebsiteDesign(html: string, sourceUrl: string, stylesheets: { ur
   const routes: WebsiteRoute[] = [];
   const routeKeys = new Set<string>();
   let keptListingHeading = false;
+  const sectionByRawTitle = new Map<string, WebsiteSection>();
   const remember = (route: WebsiteRoute) => {
     const key = route.render === 'card' ? `${route.canonical}:${route.source.toLowerCase()}` : route.render === 'native' ? route.canonical : `omit:${route.source.toLowerCase()}`;
     if (routeKeys.has(key)) return;
@@ -3682,12 +3687,17 @@ function extractWebsiteDesign(html: string, sourceUrl: string, stylesheets: { ur
       if (keptListingHeading) continue;
       keptListingHeading = true;
     }
-    const img = m[3].match(/<img\b[^>]*>/i)?.[0];
-    const placed = img ? imageForTag(img, media.all, raw => websiteAsset(raw, sourceUrl)) : undefined;
-    const picture = placed && placed.role !== 'icon' && placed.destination !== 'omit' ? placed : undefined;
-    sections.push({ ...decision, title, body, imageUrl: picture?.selectedUrl, imageFit: picture?.fit, imageRole: picture?.role, imageWidth: picture?.width, imageHeight: picture?.height });
+    const section: WebsiteSection = { ...decision, title, body };
+    sectionByRawTitle.set(rawTitle.toLowerCase(), section);
+    sections.push(section);
     if (sections.length >= 24) break;
   }
+  // Source composition: every meaningful content image stays with the copy it sits in on the
+  // submitted page (the main heading's intro or a section). Roles decide slots (logo, portrait, hero,
+  // listing); an image not suited to one role is still placed where the source put it, never dropped.
+  const anchored = anchorContentImages(contentHtml, media, h1, sectionByRawTitle, raw => websiteAsset(raw, sourceUrl));
+  for (const [section, image] of anchored.sections) Object.assign(section, { imageUrl: image.url, imageFit: image.fit, imageRole: image.role, imageWidth: image.width, imageHeight: image.height });
+  const introImage = anchored.intro;
   const composed = composeWebsiteSections(sections).filter(section => section.destination !== 'omit' && section.title.toLowerCase() !== h1.toLowerCase());
   for (const section of composed) if (section.destination === 'unique') remember(websiteRoute(section.title, section));
   const neutral = (value?: string) => {
@@ -3710,7 +3720,7 @@ function extractWebsiteDesign(html: string, sourceUrl: string, stylesheets: { ur
     headingSize: Math.min(52, Math.max(28, numeric(headingInline.match(/font-size\s*:\s*([^;]+)/i)?.[1] ?? pick('font-size', /h1|hero.*title|heading-title/i), 38))),
     motion: /fade.?in/i.test(css) ? 'fade' : /slide.?up|translateY/i.test(css) ? 'rise' : 'none',
   };
-  return { version: 1, sourceUrl, analyzedAt: Date.now(), logoUrl: logo?.selectedUrl, headerImageUrl, backgroundImageUrl: bodyBackground, heroImageUrl, portraitImageUrl, heroTitle: h1, heroSubtitle, sections: composed,
+  return { version: 1, sourceUrl, analyzedAt: Date.now(), logoUrl: logo?.selectedUrl, headerImageUrl, backgroundImageUrl: bodyBackground, heroImageUrl, portraitImageUrl, introImage, heroTitle: h1, heroSubtitle, sections: composed,
     imagery: { logo: media.logo, portrait: media.portrait, hero: media.hero, images: media.all },
     original: appearance,
     optimized: { ...appearance, spacing: 24, radius: Math.max(12, appearance.radius), headingSize: 36, layout: overlaySafe ? 'image-overlay' : portraitImageUrl ? 'portrait-split' : 'text-first', motion: 'rise' },
@@ -4032,6 +4042,46 @@ function assignPageImages(images: ImageDiagnostic[]): PageImagery {
   return { logo, portrait, hero, all: images };
 }
 
+/** Content images that may accompany copy: not brand, person, listing, decorative, or the chosen hero. */
+function supportingImage(image: ImageDiagnostic | undefined, media: Pick<PageImagery, 'hero' | 'portrait' | 'logo'>): SupportingImage | undefined {
+  if (!image || image.destination === 'omit') return;
+  if (image.role === 'icon' || image.role === 'logo' || image.role === 'portrait' || image.role === 'listing' || image.role === 'background') return;
+  if (image === media.hero || image === media.portrait || image === media.logo) return;
+  const frame = frameForSlot({ width: image.width, height: image.height, role: 'article' }, { width: 320, height: 200, purpose: 'article' });
+  return { url: image.selectedUrl, fit: frame.fit, role: 'article', width: image.width, height: image.height };
+}
+
+/**
+ * Pair each content image with the heading whose copy it sits in. The nearest preceding kept
+ * heading wins; an image that precedes its copy (or sits under a generic page title such as "Home")
+ * belongs to the next kept heading. Images in unrelated chrome (sidebars, widgets) stay unplaced.
+ */
+function anchorContentImages(contentHtml: string, media: PageImagery, mainHeading: string, sections: Map<string, WebsiteSection>, resolve: (raw: string) => string | undefined): { intro?: SupportingImage; sections: Map<WebsiteSection, SupportingImage> } {
+  type Mark = { index: number; label: string; anchor: 'intro' | WebsiteSection | null };
+  const main = mainHeading.toLowerCase();
+  const headings: Mark[] = [...contentHtml.matchAll(/<h([1-3])\b[^>]*>([\s\S]*?)<\/h\1>/gi)].map(m => {
+    const label = text(m[2]).slice(0, 180).toLowerCase();
+    return { index: m.index ?? 0, label, anchor: label && label === main ? 'intro' as const : sections.get(label) ?? null };
+  }).filter(h => h.label); // empty spacer headings carry no meaning
+  // A page-title heading ("Home") carries no content of its own; images under it lead into the next copy.
+  const pageTitle = (h: Mark) => /^(?:home|homepage|welcome|blog|our blog)$/.test(h.label);
+  const result: { intro?: SupportingImage; sections: Map<WebsiteSection, SupportingImage> } = { sections: new Map() };
+  for (const m of contentHtml.matchAll(/<img\b[^>]*>/gi)) {
+    const image = supportingImage(imageForTag(m[0], media.all, resolve), media);
+    if (!image) continue;
+    const at = m.index ?? 0;
+    const before = headings.filter(h => h.index < at).at(-1);
+    const after = headings.find(h => h.index > at);
+    let anchor: Mark['anchor'] = null;
+    if (before?.anchor) anchor = before.anchor;
+    else if ((!before || pageTitle(before)) && after?.anchor) anchor = after.anchor;
+    if (!anchor) continue; // e.g. sidebar or widget imagery under an unrelated heading
+    if (anchor === 'intro') { result.intro ??= image; continue; }
+    if (!result.sections.has(anchor)) result.sections.set(anchor, image);
+  }
+  return result;
+}
+
 /**
  * The hero image a renderer may show, including designs saved before roles were tightened.
  * Requires the page to have asked for a hero (rank >= 2) or the file to fill the hero slot without
@@ -4045,6 +4095,19 @@ function renderableHero(design: Pick<WebsiteDesign, 'heroImageUrl' | 'imagery'>,
   const frame = frameForSlot({ width: meta.width, height: meta.height, role: meta.role }, { width: 390, height: 220, purpose: 'hero' }, dpr);
   if (meta.role !== 'hero') return null;
   return meta.rank >= 2 || (frame.fit === 'cover' && frame.crop !== 'rejected') ? { uri, frame } : null;
+}
+
+/**
+ * The image to show with the intro copy. Designs saved before intro anchoring stored an in-copy
+ * image as the hero; when that hero is not renderable it is shown here instead of being dropped.
+ */
+function introSupportingImage(design: Pick<WebsiteDesign, 'introImage' | 'heroImageUrl' | 'imagery' | 'portraitImageUrl'>, dpr = REFERENCE_DPR): SupportingImage | undefined {
+  if (design.introImage) return design.introImage;
+  const meta = design.imagery?.hero;
+  if (!meta || renderableHero(design, dpr)) return;
+  if (meta.role === 'portrait' || design.portraitImageUrl && meta.selectedUrl.split('?')[0] === design.portraitImageUrl.split('?')[0]) return;
+  const frame = frameForSlot({ width: meta.width, height: meta.height, role: 'article' }, { width: 320, height: 200, purpose: 'article' }, dpr);
+  return { url: meta.selectedUrl, fit: frame.fit, role: 'article', width: meta.width, height: meta.height };
 }
 
 function imageForTag(tag: string, images: ImageDiagnostic[], resolve: (raw: string) => string | undefined): ImageDiagnostic | undefined {

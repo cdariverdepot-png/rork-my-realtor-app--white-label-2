@@ -22,9 +22,10 @@ test('WordPress headings and body artwork do not import widget or footer chrome'
   const result = styles.extractWebsiteDesign(page, 'https://example.com/');
   assert.equal(result.heroTitle, 'Welcome to our valley');
   // Corrected 2026-10-07: this small body image (modeled on Cindy Carlson's office.jpg) cannot fill a hero
-  // and the page never asked for one, so it must not sit above the portrait as a hero. It is retained, not dropped.
+  // and the page never asked for one, so it must not sit above the portrait as a hero. It is kept with the welcome copy, not dropped.
   assert.equal(result.heroImageUrl, undefined);
   assert.equal(result.imagery.images.find(image => /office\.jpg/.test(image.sourceUrl))?.width, 498);
+  assert.equal(result.introImage?.url, 'https://example.com/office.jpg', 'kept with the welcome copy it follows');
   assert.equal(result.original.headingFontFamily, 'Georgia');
   assert.equal(result.original.headingSize, 31);
   assert.deepEqual(result.sections.map(x => x.title), ['Contact us']);

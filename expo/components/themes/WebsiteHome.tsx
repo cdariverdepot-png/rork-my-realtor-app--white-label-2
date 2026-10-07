@@ -6,7 +6,7 @@ import PortraitImage from '../PortraitImage';
 import { websiteAppearance, websiteFont } from '@/lib/websitePresentation';
 import type { ReferenceHomeProps, ReferenceRoute } from './ReferenceHome';
 import type { WebsiteSection } from '@/lib/websiteDesignRuntime';
-import { composeWebsiteSections, presentWebsiteSurface, websiteCopy, frameForSlot, renderableHero, type ImageRole } from '@/lib/websiteDesignRuntime';
+import { composeWebsiteSections, presentWebsiteSurface, websiteCopy, frameForSlot, renderableHero, introSupportingImage, type ImageRole } from '@/lib/websiteDesignRuntime';
 
 /** Native website interpretation, shared by onboarding, preview and published Home. */
 export default function WebsiteHome(p: ReferenceHomeProps) {
@@ -35,6 +35,9 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
   const dpr = Math.min(3, Math.max(1, PixelRatio.get?.() || 2));
   // Only a genuine hero is shown above the portrait; an in-copy illustration never is (Cindy regression).
   const hero = renderableHero(source, dpr);
+  // Supporting image the source places with the intro copy (e.g. an office photo in the welcome text).
+  const intro = introSupportingImage(source, dpr);
+  const introFrame = intro ? frameForSlot({ width: intro.width, height: intro.height, role: 'article' }, { width: 320, height: 200, purpose: 'article' }, dpr) : undefined;
   const portraitMeta = source.imagery?.portrait;
   const sameFile = (left?: string, right?: string) => !!left && !!right && left.split('?')[0] === right.split('?')[0];
   const thumbnail = (uri?: string) => !!uri && /[?&](?:resize|fit)=\d+/i.test(uri) && !!source.portraitImageUrl && sameFile(uri, source.portraitImageUrl);
@@ -47,6 +50,7 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
   const heroCopy = <View style={{ padding: a.spacing * s, gap: 18 * s, justifyContent: 'flex-end', flex: overlay ? 1 : undefined, backgroundColor: overlay ? '#10182099' : a.background }}>
     {!!b.realtor.city && <Text style={{ color: overlay ? '#ffffff' : a.accent, fontFamily: bodyFont, fontSize: 12 * s, letterSpacing: 2 }}>{b.realtor.city.toUpperCase()}</Text>}
     <Text style={{ color: overlay ? '#ffffff' : a.ink, fontFamily: headingFont, fontSize: a.headingSize * s, lineHeight: (a.headingSize + 8) * s }}>{heroTitle || b.realtor.brandName || b.realtor.name}</Text>
+    {!!intro && !!introFrame && !sameFile(intro.url, portraitUri) && <Image source={{ uri: intro.url }} contentFit={introFrame.fit} accessibilityIgnoresInvertColors style={{ width: introFrame.width * s, height: introFrame.height * s, alignSelf: introFrame.fit === 'contain' ? 'flex-start' : 'stretch', borderRadius: Math.min(12, a.radius) * s }} />}
     {!!heroSubtitle && <Text style={{ color: overlay ? '#ffffff' : a.ink, fontFamily: bodyFont, fontSize: 15 * s, lineHeight: 24 * s }}>{heroSubtitle}</Text>}
     <View style={{ gap: 10 * s }}>{button('View listings', '/listings')}</View>
   </View>;
