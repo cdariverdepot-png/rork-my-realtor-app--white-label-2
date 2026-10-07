@@ -142,8 +142,7 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
   const sweep = useRef(new Animated.Value(0)).current;
   const press = useRef(new Animated.Value(0)).current;
   const loopRef = useRef<Animated.CompositeAnimation | null>(null);
-  const fingerDown = useRef(false);
-  const latched = useRef(false);
+
 
   const startSweep = useCallback(() => {
     loopRef.current?.stop();
@@ -175,59 +174,38 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
   const translateX = sweep.interpolate({ inputRange: [0, 1], outputRange: [-140, 340] });
 
   const onPressIn = () => {
-    if (!heavy || latched.current) return;
-    fingerDown.current = true;
+    if (!heavy) return;
     loopRef.current?.stop();
     latchPulse("soft");
     press.stopAnimation();
-    // A light touch has to move immediately. The rest of the travel is the weight.
-    press.setValue(0.62);
     Animated.timing(press, {
-      toValue: 1,
-      duration: 200,
+      toValue: 1.15,
+      duration: 90,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
-    }).start(({ finished }) => {
-      if (!finished || !fingerDown.current || latched.current) return;
-      latched.current = true;
-      latchPulse("hard");
-      Animated.timing(press, {
-        toValue: 1.55,
-        duration: 90,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }).start(() => settle(true));
-    });
+    }).start();
   };
 
   const onPressOut = () => {
     if (!heavy) return;
-    const wasDown = fingerDown.current;
-    fingerDown.current = false;
-    if (!wasDown || latched.current) return;
     press.stopAnimation();
-    settle(false);
-  };
-
-  const settle = (commit: boolean) => {
-    const anim = commit
-      ? Animated.spring(press, { toValue: 0, speed: 14, bounciness: 0, useNativeDriver: true })
-      : Animated.timing(press, { toValue: 0, duration: 160, easing: Easing.out(Easing.cubic), useNativeDriver: true });
-    anim.start(() => {
-      if (commit) onPress();
-      else startSweep();
-    });
+    Animated.spring(press, {
+      toValue: 0,
+      speed: 18,
+      bounciness: 1,
+      useNativeDriver: true,
+    }).start(() => startSweep());
   };
 
   return (
     <Animated.View style={{ transform: [{ translateY }, { scale }] }}>
       <Pressable
-        onPress={heavy ? undefined : onPress}
+        onPress={onPress}
         onPressIn={heavy ? onPressIn : undefined}
         onPressOut={heavy ? onPressOut : undefined}
         accessibilityRole="button"
-        accessibilityLabel={heavy ? `${label}. Press and hold.` : label}
-        onAccessibilityTap={heavy ? onPress : undefined}
+        accessibilityLabel={label}
+        onAccessibilityTap={onPress}
         style={styles.cta}
       >
         <View style={styles.ctaFace} pointerEvents="none">
