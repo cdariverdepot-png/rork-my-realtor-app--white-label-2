@@ -77,10 +77,15 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
       {!!copy && <Text numberOfLines={8} style={{ color: a.ink, fontFamily: bodyFont, fontSize: 15 * s, lineHeight: 24 * s }}>{copy}</Text>}
     </View>;
   };
-  const sections = composeWebsiteSections(source.sections)
-    .map(item => presentWebsiteSection(item))
-    .filter((item): item is WebsiteSection => !!item && item.destination === 'unique')
-    .slice(0, optimized ? 3 : 6);
+  const sectionCandidates = composeWebsiteSections(source.sections)
+    .filter((item): item is WebsiteSection => item.destination === 'unique' || (item.destination === 'native' && item.native === 'listings'));
+  const sectionLimit = optimized ? 3 : 6;
+  const listingAnchor = sectionCandidates.find(item => item.kind === 'listings');
+  const sections = sectionCandidates.slice(0, sectionLimit);
+  if (listingAnchor && !sections.includes(listingAnchor)) {
+    sections.push(listingAnchor);
+    sections.sort((left, right) => sectionCandidates.indexOf(left) - sectionCandidates.indexOf(right));
+  }
   const backdrop = !optimized && source.backgroundImageUrl;
   return <View style={{ width, backgroundColor: a.background }}>
     {!!backdrop && <Image source={{ uri: backdrop }} contentFit="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
@@ -95,7 +100,7 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
       {!!portraitUri && (a.layout === 'portrait-split' || !!portraitMeta) && !sameFile(portraitUri, image) && <PortraitImage uri={portraitUri} contentFit="contain" style={{ width: (portraitFrame?.width ?? 260) * s, height: (portraitFrame?.height ?? 340) * s, alignSelf: 'center' }} />}
       {a.layout !== 'text-first' && heroCopy}
     </>}
-    {(optimized || !sections.some(x => x.kind === 'listings')) && collection()}
+    {!sections.some(x => x.kind === 'listings') && collection()}
     {sections.map((item, i) => item.kind === 'listings' ? collection(item.title || collectionTitle) : section(item, i))}
     <View style={{ padding: a.spacing * s, gap: 8 * s }}><Text style={{ color: a.ink, fontFamily: bodyFont, lineHeight: 23 * s }}>{[b.realtor.phone, b.realtor.email, b.credentials.license.brokerage, b.credentials.license.number].filter(Boolean).join('\n')}</Text></View>
   </Animated.View></View>;
