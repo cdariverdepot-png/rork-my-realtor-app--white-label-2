@@ -37,7 +37,7 @@ export default function BuildUrlEntry({
   error?: string;
   listingCount?: number;
   onViewListings?: () => void;
-  validationState?: "empty" | "valid" | "invalid" | "checking" | "missing";
+  validationState?: "empty" | "valid" | "invalid" | "checking" | "missing" | "unknown";
 }) {
   const insets = useSafeAreaInsets();
   const inputRef = useRef<TextInput>(null);
@@ -55,10 +55,6 @@ export default function BuildUrlEntry({
     }
     if (preparing) {
       setNotice("Your realtor session is still loading. Please try again in a moment.");
-      return;
-    }
-    if (validationState === "checking") {
-      setNotice("Finishing a quick check of that website…");
       return;
     }
     if (validationState === "invalid" || validationState === "missing") {
