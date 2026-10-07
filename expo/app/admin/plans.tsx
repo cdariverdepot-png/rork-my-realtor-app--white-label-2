@@ -128,9 +128,6 @@ export default function Plans() {
               <Text style={styles.footnote}>{session?.email}{seats.everPaid ? ` · ${seats.interval === "year" ? "Annual" : "Monthly"} subscription · ${seats.status}` : " · Evaluation"}{dateText ? ` · ${seats.cancelAtPeriodEnd ? "Service ends" : "Renewal"} ${dateText}` : ""}</Text>
               {seats.paymentIssue ? <Text style={styles.footnote}>Your App Store subscription needs attention. Manage or restore it through Apple to restore paid service actions.</Text> : null}
               <Text style={styles.footnote}>Subscriptions are managed by Apple. This build does not use a private credit-card checkout.</Text>
-              <View style={{ flexDirection: "row", gap: 10, marginTop: 12 }}>
-                {(["month", "year"] as const).map(value => <Pressable key={value} onPress={() => setInterval(value)} style={[styles.cta, styles.ctaQuiet, { flex: 1, opacity: interval === value ? 1 : 0.5 }]}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{value === "month" ? "MONTHLY" : "ANNUAL"}</Text></Pressable>)}
-              </View>
               <Text style={styles.footnote}>Subscriptions renew automatically at the chosen interval until canceled. Annual billing charges $490 upfront. Cancellation keeps access through the paid service-end date.</Text>
               <Pressable disabled={busy} style={styles.cta} onPress={() => void seats.refresh()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>REFRESH ACCOUNT STATUS</Text></Pressable>
               <Pressable disabled={busy} style={styles.cta} onPress={() => void exportData()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>EXPORT MY DATA</Text></Pressable>
