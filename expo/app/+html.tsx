@@ -16,6 +16,7 @@ export default function Root({ children }: PropsWithChildren) {
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no"
         />
+        <meta httpEquiv="Cache-Control" content="no-cache, must-revalidate" />
         <ScrollViewStyleReset />
         <style dangerouslySetInnerHTML={{ __html: ROOT_CSS }} />
       </head>

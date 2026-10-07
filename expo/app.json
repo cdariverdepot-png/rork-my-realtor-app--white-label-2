@@ -38,7 +38,14 @@
       "output": "static"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "headers": {
+            "Cache-Control": "no-cache, must-revalidate"
+          }
+        }
+      ],
       "expo-font",
       [
         "expo-splash-screen",

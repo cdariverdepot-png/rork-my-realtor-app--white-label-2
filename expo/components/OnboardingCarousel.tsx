@@ -168,23 +168,11 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
     return () => loopRef.current?.stop();
   }, [startSweep]);
 
-  const translateY = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [0, 3, 6] });
-  const scale = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [1, 0.986, 0.972] });
+  const translateY = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [0, 6, 9] });
+  const scale = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [1, 0.972, 0.955] });
   const dim = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [0, 0.16, 0.34] });
   const sheenOpacity = press.interpolate({ inputRange: [0, 0.45, 1.55], outputRange: [1, 0.25, 0], extrapolate: "clamp" });
   const translateX = sweep.interpolate({ inputRange: [0, 1], outputRange: [-140, 340] });
-
-  const release = (commit: boolean) => {
-    Animated.spring(press, {
-      toValue: 0,
-      speed: 16,
-      bounciness: 2,
-      useNativeDriver: true,
-    }).start(() => {
-      if (commit) onPress();
-      else startSweep();
-    });
-  };
 
   const onPressIn = () => {
     if (!heavy || latched.current) return;
@@ -192,10 +180,12 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
     loopRef.current?.stop();
     latchPulse("soft");
     press.stopAnimation();
+    // A light touch has to move immediately. The rest of the travel is the weight.
+    press.setValue(0.62);
     Animated.timing(press, {
       toValue: 1,
-      duration: 280,
-      easing: Easing.in(Easing.cubic),
+      duration: 200,
+      easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (!finished || !fingerDown.current || latched.current) return;
@@ -206,7 +196,7 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
         duration: 90,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
-      }).start(() => release(true));
+      }).start(() => settle(true));
     });
   };
 
@@ -216,7 +206,17 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
     fingerDown.current = false;
     if (!wasDown || latched.current) return;
     press.stopAnimation();
-    release(false);
+    settle(false);
+  };
+
+  const settle = (commit: boolean) => {
+    const anim = commit
+      ? Animated.spring(press, { toValue: 0, speed: 14, bounciness: 0, useNativeDriver: true })
+      : Animated.timing(press, { toValue: 0, duration: 160, easing: Easing.out(Easing.cubic), useNativeDriver: true });
+    anim.start(() => {
+      if (commit) onPress();
+      else startSweep();
+    });
   };
 
   return (
@@ -230,7 +230,7 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
         onAccessibilityTap={heavy ? onPress : undefined}
         style={styles.cta}
       >
-        <View style={styles.ctaFace}>
+        <View style={styles.ctaFace} pointerEvents="none">
           <BlurView pointerEvents="none" intensity={30} tint="dark" style={StyleSheet.absoluteFill} />
           <LinearGradient
             pointerEvents="none"
@@ -247,7 +247,7 @@ function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => voi
               style={StyleSheet.absoluteFill}
             />
           </Animated.View>
-          <Text style={styles.ctaText}>{label}</Text>
+          <Text selectable={false} style={styles.ctaText}>{label}</Text>
           <ArrowRight size={14} color="rgba(244,239,230,0.9)" strokeWidth={1.6} style={styles.ctaArrow} />
         </View>
       </Pressable>
@@ -666,6 +666,10 @@ const styles = StyleSheet.create({
           backdropFilter: "blur(18px) saturate(1.6)",
           WebkitBackdropFilter: "blur(18px) saturate(1.6)",
           boxShadow: "0 8px 20px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,236,205,0.45)",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          WebkitTouchCallout: "none",
+          touchAction: "manipulation",
         } as object)
       : {
           shadowColor: "#000",
@@ -689,6 +693,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 2.2,
     textAlign: "center",
+    ...(Platform.OS === "web"
+      ? ({ userSelect: "none", WebkitUserSelect: "none", WebkitTouchCallout: "none" } as object)
+      : {}),
   },
   ctaArrow: {
     position: "absolute",
