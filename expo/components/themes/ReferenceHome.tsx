@@ -20,6 +20,7 @@ import { SERIF, type HeroProps } from "./shared";
 export type ReferenceRoute = "/listings" | "/message" | "/favorites" | "/calendar" | "/insights" | "/notifications" | "/account" | "/book" | "/documents" | "/note";
 export type ReferenceHomeProps = { brand: Brand; portraitSource?: number; listings: ManagedListing[]; width?: number; scrollY?: Animated.Value; topInset?: number; miniature?: boolean; primaryOnly?: boolean;
   onNavigate?: (route: ReferenceRoute) => void; onCall?: () => void; onOpen?: (id: string) => void; onFavorite?: (id: string) => void; isFavorite?: (id: string) => boolean;
+  recommendedIds?: string[]; recommendationLabel?: string;
   onContact?: (channel: "call" | "text" | "email") => void; renderAdditional?: (section: ClientSectionId) => React.ReactNode };
 type CardKind = "coastal" | "journal" | "discovery" | "burgundy" | "nora" | "mina" | "editorial";
 
@@ -48,6 +49,7 @@ function CarouselReferenceHome(p: ReferenceHomeProps) {
     accessibilityLabel={p.isFavorite?.(item.id) ? "Remove saved home" : "Save home"} accessibilityState={{ selected: !!p.isFavorite?.(item.id) }}
     style={{ position: "absolute", right: 4 * s, top: bottom ? undefined : 3 * s, bottom: bottom ? 3 * s : undefined, padding: 11 * s, width: 44, height: 44, borderRadius: 22, backgroundColor: "#11171388", alignItems: "center", justifyContent: "center", zIndex: 2 }}><Heart color="#FFFCF4" size={18 * s} fill={p.isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
   const photo = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} accessibilityLabel={item.title} style={{ position: "absolute", width: "100%", height: "100%" }} />;
+  const recommendation = (item: ManagedListing) => p.recommendedIds?.includes(item.id) ? <Text style={{ position: "absolute", left: 7 * s, top: 29 * s, maxWidth: "78%", backgroundColor: "#D4B989EE", color: "#111713", fontSize: 6.5 * s, paddingHorizontal: 7 * s, paddingVertical: 4 * s, borderRadius: 12 * s, letterSpacing: 0.4 * s, zIndex: 3 }}>{p.recommendationLabel || "Recommended by your realtor"}</Text> : null;
   const meta = (item: ManagedListing, size = 8) => <Text style={{ color: "#CDCBC0", fontSize: size * s, marginTop: 6 * s }}>{item.beds} bd  ·  {item.baths} ba  ·  {item.sqft}</Text>;
   const card = (item: ManagedListing, kind: CardKind) => {
     const w = { coastal: 163, journal: 194, discovery: 119, burgundy: 153, nora: 112, mina: 169, editorial: 270 }[kind];
@@ -56,7 +58,7 @@ function CarouselReferenceHome(p: ReferenceHomeProps) {
     const photoHeight = kind === "mina" ? 87 : kind === "burgundy" ? 113 : kind === "journal" ? 99 : h;
     return <View key={item.id} style={{ width: w * s, height: h * s, borderRadius: (kind === "journal" || kind === "editorial" ? 3 : 8) * s, overflow: "hidden", backgroundColor: "#111713", borderWidth: 1, borderColor: d.accent + "33" }}>
       <Pressable disabled={!p.onOpen} onPress={() => p.onOpen?.(item.id)} accessibilityRole="button" accessibilityLabel={item.title} style={{ flex: 1 }}>
-        <View style={{ height: photoHeight * s }}>{photo(item)}</View>
+        <View style={{ height: photoHeight * s }}>{photo(item)}{recommendation(item)}</View>
         {overlay && <></>}
         {!!listingStatusLabel(item) && <Text numberOfLines={1} style={{ position: "absolute", top: 7 * s, left: 7 * s, maxWidth: "70%", backgroundColor: kind === "burgundy" ? "#641326" : kind === "discovery" ? "#DAB27A" : "#111713E8", color: kind === "discovery" ? "#121610" : "#F3EBDC", fontSize: 6 * s, padding: 4 * s, borderRadius: kind === "discovery" ? 12 * s : 2 * s, letterSpacing: 0.6 * s }}>{listingStatusLabel(item).toUpperCase()}</Text>}
         <View style={{ position: overlay ? "absolute" : "relative", bottom: overlay ? 9 * s : undefined, left: overlay ? 8 * s : undefined, right: overlay ? 8 * s : undefined, padding: overlay ? 0 : 8 * s }}>
@@ -123,7 +125,7 @@ function CarouselReferenceHome(p: ReferenceHomeProps) {
     { value: b.credentials.designations[0]?.mark, label: "DESIGNATION", Icon: ShieldCheck }, { value: r.yearsActive > 0 ? `${r.yearsActive}+` : "", label: "YEARS EXPERIENCE", Icon: ShieldCheck }].filter(stat => stat.value);
   const statsBand = stats.length > 0 && <View style={{ marginHorizontal: 16 * s, marginBottom: 10 * s, paddingVertical: 14 * s, flexDirection: "row", borderRadius: 10 * s, borderWidth: 1, borderColor: "#804352", backgroundColor: "#390E19" }}>{stats.map(({ value, label, Icon }) => <View key={label} style={{ flex: 1, alignItems: "center", gap: 5 * s }}><View style={{ flexDirection: "row", gap: 4 * s }}><Icon size={14 * s} color="#C7A676" />{text(value!, 14, "#FFF4E7", true)}</View><Text style={{ color: "#DDD2BD", fontSize: 5.5 * s, letterSpacing: 1 * s }}>{label}</Text></View>)}</View>;
   const featured = has("listings") && items[0] && <View style={{ marginHorizontal: 22 * s, marginTop: -3 * s, height: 176 * s, borderRadius: 11 * s, overflow: "hidden", borderWidth: 1, borderColor: "#9D774833" }}>
-    <Pressable disabled={!p.onOpen} onPress={() => p.onOpen?.(items[0].id)} accessibilityRole="button" accessibilityLabel={items[0].title} style={{ flex: 1 }}>{photo(items[0])}<></>
+    <Pressable disabled={!p.onOpen} onPress={() => p.onOpen?.(items[0].id)} accessibilityRole="button" accessibilityLabel={items[0].title} style={{ flex: 1 }}>{photo(items[0])}{recommendation(items[0])}<></>
       <View style={{ width: "61%", padding: 15 * s, justifyContent: "space-between", flex: 1 }}><Text style={{ color: "#FFF4E4", fontSize: 7 * s, letterSpacing: 1 * s }}>FEATURED PROPERTY</Text><Text numberOfLines={2} style={{ color: "#FFF4E4", fontFamily: SERIF, fontSize: 24 * s, lineHeight: 24 * s }}>{items[0].title}</Text>{text(items[0].neighborhood || "", 8, "#E7DDCF")}<View style={{ height: 1, backgroundColor: "#D1C5AA77", width: "70%" }} />{text(items[0].price, 22, "#CB7856", true)}{meta(items[0], 8)}<Text style={{ color: "#CB7856", fontSize: 8 * s, letterSpacing: 1 * s }}>VIEW DETAILS →</Text></View>
     </Pressable>{favorite(items[0])}
   </View>;
