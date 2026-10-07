@@ -127,9 +127,27 @@ export function nextWalkthroughIndex(current: number, total: number): number | n
  */
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-function FinalCta({ label, onPress }: { label: string; onPress: () => void }) {
+function latchPulse(weight: "soft" | "hard") {
+  if (Platform.OS === "web") {
+    const vibrate = (typeof navigator !== "undefined" ? navigator : undefined)?.vibrate?.bind(navigator);
+    vibrate?.(weight === "soft" ? 12 : 28);
+    return;
+  }
+  void Haptics.impactAsync(
+    weight === "soft" ? Haptics.ImpactFeedbackStyle.Light : Haptics.ImpactFeedbackStyle.Heavy,
+  );
+}
+
+function FinalCta({ label, onPress, heavy }: { label: string; onPress: () => void; heavy: boolean }) {
   const sweep = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
+  const press = useRef(new Animated.Value(0)).current;
+  const loopRef = useRef<Animated.CompositeAnimation | null>(null);
+  const fingerDown = useRef(false);
+  const latched = useRef(false);
+
+  const startSweep = useCallback(() => {
+    loopRef.current?.stop();
+    sweep.setValue(0);
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(sweep, {
@@ -141,37 +159,99 @@ function FinalCta({ label, onPress }: { label: string; onPress: () => void }) {
         Animated.delay(1600),
       ]),
     );
+    loopRef.current = loop;
     loop.start();
-    return () => loop.stop();
   }, [sweep]);
+
+  useEffect(() => {
+    startSweep();
+    return () => loopRef.current?.stop();
+  }, [startSweep]);
+
+  const translateY = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [0, 3, 6] });
+  const scale = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [1, 0.986, 0.972] });
+  const dim = press.interpolate({ inputRange: [0, 1, 1.55], outputRange: [0, 0.16, 0.34] });
+  const sheenOpacity = press.interpolate({ inputRange: [0, 0.45, 1.55], outputRange: [1, 0.25, 0], extrapolate: "clamp" });
   const translateX = sweep.interpolate({ inputRange: [0, 1], outputRange: [-140, 340] });
+
+  const release = (commit: boolean) => {
+    Animated.spring(press, {
+      toValue: 0,
+      speed: 16,
+      bounciness: 2,
+      useNativeDriver: true,
+    }).start(() => {
+      if (commit) onPress();
+      else startSweep();
+    });
+  };
+
+  const onPressIn = () => {
+    if (!heavy || latched.current) return;
+    fingerDown.current = true;
+    loopRef.current?.stop();
+    latchPulse("soft");
+    press.stopAnimation();
+    Animated.timing(press, {
+      toValue: 1,
+      duration: 280,
+      easing: Easing.in(Easing.cubic),
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (!finished || !fingerDown.current || latched.current) return;
+      latched.current = true;
+      latchPulse("hard");
+      Animated.timing(press, {
+        toValue: 1.55,
+        duration: 90,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }).start(() => release(true));
+    });
+  };
+
+  const onPressOut = () => {
+    if (!heavy) return;
+    const wasDown = fingerDown.current;
+    fingerDown.current = false;
+    if (!wasDown || latched.current) return;
+    press.stopAnimation();
+    release(false);
+  };
+
   return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      style={styles.cta}
-    >
-      <View style={styles.ctaFace}>
-      <BlurView pointerEvents="none" intensity={30} tint="dark" style={StyleSheet.absoluteFill} />
-      <LinearGradient
-        pointerEvents="none"
-        colors={["rgba(235,199,118,0.22)", "rgba(255,255,255,0.05)", "rgba(0,0,0,0.16)"]}
-        locations={[0, 0.45, 1]}
-        style={StyleSheet.absoluteFill}
-      />
-      <Animated.View pointerEvents="none" style={[styles.ctaSheen, { transform: [{ translateX }] }]}>
-        <LinearGradient
-          colors={["rgba(255,244,220,0)", "rgba(255,244,220,0.22)", "rgba(255,244,220,0)"]}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-          style={StyleSheet.absoluteFill}
-        />
-      </Animated.View>
-      <Text style={styles.ctaText}>{label}</Text>
-      <ArrowRight size={14} color="rgba(244,239,230,0.9)" strokeWidth={1.6} style={styles.ctaArrow} />
-      </View>
-    </Pressable>
+    <Animated.View style={{ transform: [{ translateY }, { scale }] }}>
+      <Pressable
+        onPress={heavy ? undefined : onPress}
+        onPressIn={heavy ? onPressIn : undefined}
+        onPressOut={heavy ? onPressOut : undefined}
+        accessibilityRole="button"
+        accessibilityLabel={heavy ? `${label}. Press and hold.` : label}
+        onAccessibilityTap={heavy ? onPress : undefined}
+        style={styles.cta}
+      >
+        <View style={styles.ctaFace}>
+          <BlurView pointerEvents="none" intensity={30} tint="dark" style={StyleSheet.absoluteFill} />
+          <LinearGradient
+            pointerEvents="none"
+            colors={["rgba(235,199,118,0.22)", "rgba(255,255,255,0.05)", "rgba(0,0,0,0.16)"]}
+            locations={[0, 0.45, 1]}
+            style={StyleSheet.absoluteFill}
+          />
+          <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.ctaDim, { opacity: dim }]} />
+          <Animated.View pointerEvents="none" style={[styles.ctaSheen, { transform: [{ translateX }], opacity: sheenOpacity }]}>
+            <LinearGradient
+              colors={["rgba(255,244,220,0)", "rgba(255,244,220,0.22)", "rgba(255,244,220,0)"]}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
+              style={StyleSheet.absoluteFill}
+            />
+          </Animated.View>
+          <Text style={styles.ctaText}>{label}</Text>
+          <ArrowRight size={14} color="rgba(244,239,230,0.9)" strokeWidth={1.6} style={styles.ctaArrow} />
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -440,7 +520,7 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
           </View>
         </View>
         {currentIndex === slides.length - 1 ? (
-          <FinalCta label={ctaLabel} onPress={finish} />
+          <FinalCta label={ctaLabel} heavy={buildStillOpen} onPress={finish} />
         ) : null}
       </Animated.View>
     </View>
@@ -619,5 +699,8 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 88,
+  },
+  ctaDim: {
+    backgroundColor: "#140e08",
   },
 });
