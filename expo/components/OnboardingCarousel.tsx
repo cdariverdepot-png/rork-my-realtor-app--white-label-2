@@ -18,15 +18,6 @@ import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { safeImageSource } from "@/lib/safeImageSource";
 import * as Haptics from "expo-haptics";
-import {
-  Building2,
-  CalendarDays,
-  Heart,
-  Key,
-  Home,
-  MessageSquareHeart,
-  Palette,
-} from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
 import type { Audience } from "@/contexts/OnboardingContext";
 
@@ -41,33 +32,35 @@ interface Slide {
 // Backgrounds move sequentially from a wide city overview down to a single
 // front door — mirroring the copy's arc from "your brand everywhere" to
 // "complete control" of every last detail.
+const markStyle = { width: 116, height: 116 };
+
 const SLIDES: Slide[] = [
   {
-    icon: <Building2 size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-phone.png")} style={markStyle} contentFit="contain" />,
     title: "Your Brand,\nYour App",
     body: "Add your website, documents, and photos. We'll build a branded starting point that fits your style.",
     bg: require("@/assets/images/onboard-bg-brand.jpg"),
   },
   {
-    icon: <Key size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-lock.png")} style={markStyle} contentFit="contain" />,
     title: "Private\nClient Codes",
     body: "Share a unique 6-character code with your clients. They enter it once and unlock an app tailored exclusively to you.",
     bg: require("@/assets/images/onboard-bg-codes.jpg"),
   },
   {
-    icon: <Home size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-house.png")} style={markStyle} contentFit="contain" />,
     title: "Beautiful\nListings",
     body: "Showcase properties with rich imagery, market insights, saved favorites, and a curated editorial feel.",
     bg: require("@/assets/images/onboard-bg-listings.jpg"),
   },
   {
-    icon: <MessageSquareHeart size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-chat.png")} style={markStyle} contentFit="contain" />,
     title: "Stay\nConnected",
     body: "Built-in messaging, document sharing, appointment booking, and push notifications keep everyone in sync.",
     bg: require("@/assets/images/onboard-bg-connected.jpg"),
   },
   {
-    icon: <Palette size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-doc.png")} style={markStyle} contentFit="contain" />,
     title: "Your App,\nReady to Use",
     body: "We'll ask about anything we can't confirm. Finish setup to see your dashboard, then edit or switch layouts whenever you like.",
     bg: require("@/assets/images/onboard-bg-control.jpg"),
@@ -79,31 +72,31 @@ const SLIDES: Slide[] = [
 // of the same relationship.
 const CLIENT_SLIDES: Slide[] = [
   {
-    icon: <Building2 size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-phone.png")} style={markStyle} contentFit="contain" />,
     title: "Welcome\nInside",
     body: "This app belongs to your realtor. You're not on a public search portal — you're on a private line to the person handling your move.",
     bg: require("@/assets/images/onboard-bg-brand.jpg"),
   },
   {
-    icon: <Key size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-lock.png")} style={markStyle} contentFit="contain" />,
     title: "Your Code,\nYour Agent",
     body: "The code you entered connected you directly to your realtor. Everything you see here has been set up specifically for you.",
     bg: require("@/assets/images/onboard-bg-codes.jpg"),
   },
   {
-    icon: <Heart size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-house.png")} style={markStyle} contentFit="contain" />,
     title: "Homes Worth\nSeeing",
     body: "Browse hand-picked listings with full galleries and market insight. Save the ones you love — your realtor sees every favorite.",
     bg: require("@/assets/images/onboard-bg-listings.jpg"),
   },
   {
-    icon: <CalendarDays size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-chat.png")} style={markStyle} contentFit="contain" />,
     title: "Book A\nShowing",
     body: "Request a viewing, message your realtor, and open paperwork in their secure signing portal.",
     bg: require("@/assets/images/onboard-bg-connected.jpg"),
   },
   {
-    icon: <MessageSquareHeart size={36} color={brand.goldLight} strokeWidth={1.4} />,
+    icon: <Image source={require("@/assets/images/onboard-icon-doc.png")} style={markStyle} contentFit="contain" />,
     title: "Nothing\nSlips",
     body: "Documents, appointments, and updates live in one place. Next, add your contact preference and moving plans to open your app.",
     bg: require("@/assets/images/onboard-bg-control.jpg"),
@@ -434,15 +427,11 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   iconRing: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    borderWidth: 1,
-    borderColor: "rgba(210,163,67,0.35)",
+    width: 116,
+    height: 116,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 36,
-    backgroundColor: "rgba(210,163,67,0.06)",
+    marginBottom: 28,
   },
   slideTitle: {
     fontFamily: fonts.serif,
@@ -481,12 +470,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 14,
+    gap: 9,
   },
   dotHit: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
     ...Platform.select({
       web: {
         boxShadow: "0 8px 18px rgba(0,0,0,0.38)",
@@ -502,7 +491,7 @@ const styles = StyleSheet.create({
   },
   dot: {
     flex: 1,
-    borderRadius: 8,
+    borderRadius: 4,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.38)",
@@ -516,7 +505,7 @@ const styles = StyleSheet.create({
       : {}),
   },
   dotActive: {
-    borderRadius: 8,
+    borderRadius: 4,
     borderColor: "rgba(255,255,255,0.72)",
     backgroundColor: "rgba(255,255,255,0.16)",
   },
