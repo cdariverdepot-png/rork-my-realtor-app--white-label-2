@@ -56,7 +56,14 @@ export default function Plans() {
     }).start();
   }, [rise]);
 
-  const onUpgrade = useCallback((tier: PlanTier) => {\n    if (tier.contactOnly) {\n      if (Platform.OS !== "web") void Haptics.selectionAsync();\n      void Linking.openURL(CUSTOM_INQUIRY_URL).catch(() => setMessage("Please email hello@myrealtorapp.com about your custom app."));\n    } else {\n      setMessage("App Store subscription setup is not configured in this build yet. No private checkout will be opened.");\n    }\n  }, []);
+  const onUpgrade = useCallback((tier: PlanTier) => {
+    if (tier.contactOnly) {
+      if (Platform.OS !== "web") void Haptics.selectionAsync();
+      void Linking.openURL(CUSTOM_INQUIRY_URL).catch(() => setMessage("Please email hello@myrealtorapp.com about your custom app."));
+    } else {
+      setMessage("App Store subscription setup is not configured in this build yet. No private checkout will be opened.");
+    }
+  }, []);
   const exportData = useCallback(async () => {
     if (!realtorId || busy || !tracked) return;
     setBusy(true); setMessage(null);
