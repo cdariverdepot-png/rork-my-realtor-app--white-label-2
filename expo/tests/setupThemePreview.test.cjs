@@ -67,7 +67,7 @@ test('setup review uses the actual client renderer and discovered inventory', ()
   const src = fs.readFileSync(path.join(root, 'components/InitialRealtorSetup.tsx'), 'utf8');
   assert.match(src, /OnboardingThemePreview/);
   assert.doesNotMatch(src,/themeSampleListings/);
-  assert.match(src,/mergeDiscoveredListings\(existingListings/);
+  assert.match(src,/saveDiscoveredListings\(listingsSnapshot\.current/);
   assert.match(src, /themeCandidate/);
   assert.match(src, /liveThemeDesign/);
   assert.doesNotMatch(src, /backgroundColor: draft\.layoutId === "coastal-personal" \? "#F8F4EF" : "#29231F"/);
