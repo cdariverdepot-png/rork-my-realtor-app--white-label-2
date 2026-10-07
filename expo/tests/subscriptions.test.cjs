@@ -86,7 +86,7 @@ test('Apple is the only payment path: no private checkout code and no fabricated
 test('StoreKit loads only in the iOS bundle; web and Android never import it',()=>{
  const stub=fs.readFileSync(path.join(root,'expo/lib/storekit.ts'),'utf8'),ios=fs.readFileSync(path.join(root,'expo/lib/storekit.ios.ts'),'utf8');
  assert.doesNotMatch(stub,/expo-iap/);assert.match(stub,/storeKitAvailable = false/);
- assert.match(ios,/from "expo-iap"/);assert.match(ios,/appAccountToken: realtorId/);assert.match(ios,/finishTransaction\(\{ purchase: p\.raw as Purchase, isConsumable: false \}\)/);
+ assert.match(ios,/try \{ cached = require\("expo-iap"\) as typeof Iap; \} catch \{ cached = null; \}/,'native module loads lazily so Expo Go/preview clients never crash');assert.doesNotMatch(ios,/^import \{[^}]*\} from "expo-iap"/m);assert.match(ios,/appAccountToken: realtorId/);assert.match(ios,/finishTransaction\(\{ purchase: p\.raw as Purchase, isConsumable: false \}\)/);
  const hook=fs.readFileSync(path.join(root,'expo/lib/useAppleSubscription.ts'),'utf8');
  assert.match(hook,/if \(result\.ok\) for \(const p of purchases\) await finishPurchase/,'transactions finish only after server verification');
 });

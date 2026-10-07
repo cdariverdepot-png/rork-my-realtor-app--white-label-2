@@ -29,3 +29,24 @@ jobs:
       - run: pnpm test
       - name: Export web app (build only, no deploy)
         run: pnpm exec expo export --platform web --clear
+
+      - name: Check preview credentials
+        id: creds
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: echo "ok=$([ -n "$EXPO_TOKEN" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Expo
+        if: steps.creds.outputs.ok == 'true'
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Deploy web preview (never production)
+        if: steps.creds.outputs.ok == 'true'
+        run: |
+          eas init --account jtaylor537 --force --non-interactive
+          alias="pr-${{ github.event.pull_request.number }}"
+          eas deploy --alias "$alias" --non-interactive
+          echo "Preview: https://cdariverdepot-my-realtor--$alias.expo.app" >> "$GITHUB_STEP_SUMMARY"
