@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
@@ -9,31 +9,35 @@ import {
 import { Asset } from "expo-asset";
 import { Image } from "expo-image";
 import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+import { dark } from "@/constants/colors";
 
 const SPLASH_MODULE = require("@/assets/splash-loading.mp4");
 const POSTER = require("@/assets/splash-loading-poster.jpg");
 
-/** White covers the last part of the clip. It does not add time after the video. */
-const FADE_LEAD_SEC = 0.9;
+/** Short dissolve into the app's own night background. Overlaps the ending only. */
+const FADE_LEAD_SEC = 0.35;
 
 interface Props {
   /** Auth hydration. It must not hold or stretch the intro. */
   ready?: boolean;
-  /** Called once the white fade has covered the clip and the boot screen can unmount. */
+  /** Called once the splash has dissolved and the boot screen can unmount. */
   onFinish: () => void;
 }
 
 /**
- * Launch splash. The zoom plays at its encoded rate with no seek, pause, or
- * time-stretch. A white fade overlaps the ending, then the app is shown.
+ * Launch splash. The zoom plays at its encoded rate. Nothing seeks, pauses,
+ * or changes playback speed. The last third of a second dissolves into the
+ * same near-black the app is already painted with.
  */
 export default function BootScreen({ onFinish }: Props) {
-  const white = useRef(new Animated.Value(0)).current;
+  const curtain = useRef(new Animated.Value(1)).current;
   const videoElRef = useRef<HTMLVideoElement | null>(null);
   const nativeRef = useRef<Video>(null);
   const onFinishRef = useRef(onFinish);
   const fadeStarted = useRef(false);
   const finished = useRef(false);
+  const fadeMs = useRef(FADE_LEAD_SEC * 1000);
+  const [fading, setFading] = useState(false);
   onFinishRef.current = onFinish;
 
   const finish = useCallback(() => {
@@ -42,18 +46,26 @@ export default function BootScreen({ onFinish }: Props) {
     onFinishRef.current();
   }, []);
 
-  const startWhiteFade = useCallback((durationMs: number) => {
+  const startFade = useCallback((durationMs: number) => {
     if (fadeStarted.current) return;
     fadeStarted.current = true;
-    Animated.timing(white, {
-      toValue: 1,
-      duration: Math.max(220, Math.round(durationMs)),
-      easing: Easing.inOut(Easing.cubic),
+    fadeMs.current = durationMs;
+    setFading(true);
+  }, []);
+
+  useEffect(() => {
+    if (!fading) return;
+    const anim = Animated.timing(curtain, {
+      toValue: 0,
+      duration: Math.max(180, Math.round(fadeMs.current)),
+      easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
-    }).start(({ finished: done }) => {
+    });
+    anim.start(({ finished: done }) => {
       if (done) finish();
     });
-  }, [finish, white]);
+    return () => anim.stop();
+  }, [curtain, fading, finish]);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,7 +115,6 @@ export default function BootScreen({ onFinish }: Props) {
     el.setAttribute("playsinline", "true");
     el.setAttribute("webkit-playsinline", "true");
     el.loop = false;
-    el.playbackRate = 1;
     const play = el.play();
     if (play && typeof play.catch === "function") play.catch(() => finish());
   }, [finish]);
@@ -112,22 +123,22 @@ export default function BootScreen({ onFinish }: Props) {
     const el = videoElRef.current;
     if (!el || !Number.isFinite(el.duration) || el.duration <= 0) return;
     const remain = el.duration - el.currentTime;
-    if (remain <= FADE_LEAD_SEC) startWhiteFade(remain * 1000);
-  }, [startWhiteFade]);
+    if (remain <= FADE_LEAD_SEC) startFade(remain * 1000);
+  }, [startFade]);
 
   const onWebEnded = useCallback(() => {
-    if (!fadeStarted.current) startWhiteFade(240);
-  }, [startWhiteFade]);
+    if (!fadeStarted.current) startFade(200);
+  }, [startFade]);
 
   const onNativeStatus = useCallback((status: AVPlaybackStatus) => {
     if (!status.isLoaded) return;
     const duration = status.durationMillis ?? 0;
     const position = status.positionMillis ?? 0;
     if (duration > 0 && duration - position <= FADE_LEAD_SEC * 1000) {
-      startWhiteFade(duration - position);
+      startFade(duration - position);
     }
-    if (status.didJustFinish && !fadeStarted.current) startWhiteFade(240);
-  }, [startWhiteFade]);
+    if (status.didJustFinish && !fadeStarted.current) startFade(200);
+  }, [startFade]);
 
   const webVideo =
     Platform.OS === "web"
@@ -156,7 +167,7 @@ export default function BootScreen({ onFinish }: Props) {
       : null;
 
   return (
-    <View pointerEvents="none" style={styles.fill} accessibilityLabel="Loading">
+    <Animated.View pointerEvents="none" style={[styles.fill, fading ? { opacity: curtain } : null]} accessibilityLabel="Loading">
       <View style={styles.videoHost}>
         <Image
           source={POSTER}
@@ -176,14 +187,13 @@ export default function BootScreen({ onFinish }: Props) {
             isLooping={false}
             isMuted
             rate={1}
-            progressUpdateIntervalMillis={80}
+            progressUpdateIntervalMillis={200}
             onPlaybackStatusUpdate={onNativeStatus}
             onError={() => finish()}
           />
         )}
       </View>
-      <Animated.View pointerEvents="none" style={[styles.white, { opacity: white }]} />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -202,20 +212,16 @@ const styles = StyleSheet.create({
           minHeight: "100dvh" as unknown as number,
         }
       : {}),
-    backgroundColor: "#101014",
+    backgroundColor: dark.bg,
     alignItems: "center",
     justifyContent: "center",
     zIndex: 9999,
   },
   videoHost: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "#101014",
+    backgroundColor: dark.bg,
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
-  },
-  white: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: "#ffffff",
   },
 });
