@@ -37,6 +37,7 @@ export default function AdminClients() {
     tracked: seatsTracked,
     isConnected,
     disconnect,
+    connections,
     used: seatsUsed,
     limit: seatLimit,
     unlimited: seatsUnlimited,
@@ -104,12 +105,12 @@ export default function AdminClients() {
    * away. Their contact card stays on the roster — losing someone's phone
    * number because you needed the place back would be its own bug.
    */
-  const confirmDisconnect = (c: Client) => {
+  const confirmDisconnect = (c: Pick<Client, "id" | "name">) => {
     const title = "Disconnect client";
     const body = `${c.name} will lose access to your app. They stay on your roster, and their place frees up straight away.`;
     const run = () => {
       void (async () => {
-        const ok = await disconnect(c.email);
+        const ok = await disconnect(c.id);
         if (!ok) {
           Alert.alert("Couldn't disconnect", "Check your connection and try again.");
           return;
@@ -236,6 +237,14 @@ export default function AdminClients() {
           </Pressable>
         </View>
 
+        {seatsTracked && connections.length > 0 ? <View style={{ paddingHorizontal: 16, gap: 8, marginBottom: 18 }}>
+          <Text style={styles.label}>CONNECTED CLIENT ACCOUNTS · {connections.length}</Text>
+          <Text style={styles.rosterNote}>These account connections are separate from your address-book contacts. Disconnecting keeps their saved history.</Text>
+          {connections.map(connection => <View key={connection.clientId} style={styles.row}>
+            <View style={{ flex: 1 }}><Text style={styles.name}>{connection.clientName || connection.clientKey}</Text><Text style={styles.rosterSeats}>{connection.clientKey}</Text></View>
+            <Pressable accessibilityLabel={`Disconnect ${connection.clientName || connection.clientKey}`} onPress={() => confirmDisconnect({ id: connection.clientId, name: connection.clientName || connection.clientKey })} style={{ padding: 12 }}><Unlink size={18} color={brand.goldLight} /></Pressable>
+          </View>)}
+        </View> : null}
         <View style={styles.rosterHead}>
           <Text style={styles.label}>ROSTER · {clients.length}</Text>
           {seatsTracked ? (
@@ -267,8 +276,7 @@ export default function AdminClients() {
           )}
 
           {sorted.map((c) => {
-            // Ids can differ between the client's device and the roster row,
-            // so fall back to email — the identity the seat ledger uses too.
+            // Contact metadata may match by email; connection identity uses account ID.
             const profile = getProfile(c.id) ?? getProfileByEmail(c.email);
             const headline = profile ? profileHeadline(profile.answers) : "";
             return (
@@ -304,7 +312,7 @@ export default function AdminClients() {
                   <Text style={styles.name} numberOfLines={1}>
                     {c.name}
                   </Text>
-                  {isConnected(c.email) ? (
+                  {isConnected(c.id) ? (
                     <View style={styles.connectedPill}>
                       <View style={styles.connectedDot} />
                       <Text style={styles.connectedText}>IN YOUR APP</Text>
@@ -361,7 +369,7 @@ export default function AdminClients() {
                     <IdCard size={13} color={ACCENT} strokeWidth={1.6} />
                   </Pressable>
                 ) : null}
-                {isConnected(c.email) ? (
+                {isConnected(c.id) ? (
                   <Pressable
                     onPress={() => confirmDisconnect(c)}
                     hitSlop={8}

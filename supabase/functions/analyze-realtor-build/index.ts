@@ -446,6 +446,12 @@ Deno.serve(async (request) => {
     return reply({ error: "A verified realtor account is required." }, 401);
   }
   const userId = auth.user.id;
+  const { data: accountOwner, error: ownerError } = await admin.from("realtors").select("id").eq("auth_user_id", userId).maybeSingle();
+  if (ownerError) return reply({ error: "Account access is unavailable." }, 503);
+  if (accountOwner) {
+    const access = await admin.rpc("realtor_service_active", { p_realtor_id: accountOwner.id });
+    if (access.error || access.data !== true) return reply({ error: "Service unavailable." }, 403);
+  }
   // Testing-code builds have a valid anonymous session, keep their drafts on
   // the device, and may submit public URLs only. Never read/write an account
   // build for this path or accept uploaded storage paths from its payload.

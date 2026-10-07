@@ -1,0 +1,44 @@
+name: Validate test-only subscriptions
+on:
+  push:
+    branches: [codex/subscription-model, reconcile-all-work-20261007]
+  pull_request:
+    paths: ['supabase/functions/billing/**', 'supabase/migrations/*subscription*', 'supabase/tests/**', 'expo/**', '.github/workflows/subscription-validation.yml']
+permissions:
+  contents: read
+jobs:
+  postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: isolated-test
+          POSTGRES_DB: subscription_tests
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: pnpm install --frozen-lockfile
+        working-directory: supabase/tests
+      - run: pnpm test
+        working-directory: supabase/tests
+        env:
+          PGTEST_DATABASE_URL: postgres://postgres:isolated-test@localhost:5432/subscription_tests
+  edge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.5.7
+      - run: deno check supabase/functions/billing/index.ts

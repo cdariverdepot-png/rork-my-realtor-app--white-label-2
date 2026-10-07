@@ -977,8 +977,8 @@ function SeatMeter({
       ) : null}
       <Text style={styles.seatMeterText}>
         {unlimited
-          ? "Unlimited client invitations"
-          : `${used} of ${limit} client invitation${limit === 1 ? "" : "s"} used`}
+          ? "Unlimited connected clients"
+          : `${used} of ${limit} clients connected`}
       </Text>
     </View>
   );

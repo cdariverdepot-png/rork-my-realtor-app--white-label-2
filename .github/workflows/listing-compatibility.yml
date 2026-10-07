@@ -2,7 +2,7 @@ name: Importer regression suite
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, reconcile-all-work-20261007]
   workflow_call:
   workflow_dispatch:
 permissions:

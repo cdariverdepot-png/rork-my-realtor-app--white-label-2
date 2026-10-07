@@ -1,5 +1,6 @@
 import createContextHook from "@nkzw/create-context-hook";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AppState } from "react-native";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import {
   EMPTY_SEAT_STATE,
@@ -27,25 +28,32 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
   const [state, setState] = useState<SeatState>(EMPTY_SEAT_STATE);
   const [loading, setLoading] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const inFlight = useRef<boolean>(false);
+  const inFlight = useRef<string | null>(null);
+  const scope = useRef(realtorId);
+  scope.current = realtorId;
+  const stateScope = useRef<string | null>(null);
+  const verified = loaded && stateScope.current === realtorId;
 
   /** The showcase realtor is exempt — it is a demo, not a customer. */
   const isDemoRealtor = !realtorId || realtorId === DEMO_REALTOR_ID;
   const tracked = isAdmin && !demoViewMode && !isDemoRealtor;
 
   const refresh = useCallback(async (): Promise<void> => {
-    if (!realtorId || inFlight.current) return;
-    inFlight.current = true;
+    if (!realtorId || inFlight.current === realtorId) return;
+    const requestedScope = realtorId;
+    inFlight.current = requestedScope;
     setLoading(true);
     try {
       const next = await fetchSeatState(realtorId);
+      if (scope.current !== requestedScope) return;
       if (next) {
+        stateScope.current = requestedScope;
         setState(next);
         setLoaded(true);
       }
     } finally {
-      inFlight.current = false;
-      setLoading(false);
+      if (inFlight.current === requestedScope) inFlight.current = null;
+      if (scope.current === requestedScope) setLoading(false);
     }
   }, [realtorId]);
 
@@ -59,6 +67,9 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
   useEffect(() => {
     if (!tracked) return;
     void refresh();
+    const timer = setInterval(() => void refresh(), 30000);
+    const listener = AppState.addEventListener("change", (value) => { if (value === "active") void refresh(); });
+    return () => { clearInterval(timer); listener.remove(); };
   }, [tracked, refresh]);
 
   /**
@@ -67,9 +78,9 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
    * than replaced.
    */
   const disconnect = useCallback(
-    async (email: string): Promise<boolean> => {
+    async (clientId: string): Promise<boolean> => {
       if (!realtorId) return false;
-      const ok = await releaseClientSeat(realtorId, email);
+      const ok = await releaseClientSeat(realtorId, clientId);
       if (ok) await refresh();
       return ok;
     },
@@ -86,29 +97,38 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
   /** Is this roster contact an actual connected client? */
   const connectedKeys = useMemo(() => {
     const set = new Set<string>();
-    for (const c of state.connections) set.add(c.clientKey.trim().toLowerCase());
+    for (const c of state.connections) set.add(c.clientId);
     return set;
   }, [state.connections]);
 
   const isConnected = useCallback(
-    (email: string): boolean => connectedKeys.has((email ?? "").trim().toLowerCase()),
+    (clientId: string): boolean => connectedKeys.has(clientId),
     [connectedKeys]
   );
 
-  const limit = tracked ? state.limit : -1;
-  const used = tracked ? state.used : 0;
+  const active = !tracked || (verified && state.active && (!state.everPaid || (state.serviceEnd !== null && Date.parse(state.serviceEnd) > Date.now())));
+  const limit = tracked ? (verified ? active ? state.limit : 0 : FREE_SEAT_LIMIT) : -1;
+  const used = tracked && verified ? state.used : 0;
   const unlimited = isUnlimited(limit);
   const remaining = unlimited ? Number.POSITIVE_INFINITY : Math.max(0, limit - used);
   const atLimit = tracked && !unlimited && used >= limit;
 
-  const plan: PlanId = state.plan;
-  const connections: SeatConnection[] = state.connections;
+  const plan: PlanId = verified ? state.plan : "evaluation";
+  const connections: SeatConnection[] = verified ? state.connections : [];
   const attempts: SeatAttempt[] = tracked ? state.attempts : [];
 
   return useMemo(
     () => ({
       /** True only when this account is actually metered. */
       tracked,
+      active,
+      status: verified ? active ? state.status : "inactive" : "unavailable",
+      everPaid: verified && state.everPaid,
+      serviceEnd: verified ? state.serviceEnd : null,
+      renewalAt: verified ? state.renewalAt : null,
+      interval: verified ? state.interval : null,
+      cancelAtPeriodEnd: verified && state.cancelAtPeriodEnd,
+      paymentIssue: verified && state.paymentIssue,
       plan,
       /** -1 when unlimited. */
       limit,
@@ -119,7 +139,7 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
       connections,
       attempts,
       loading,
-      loaded,
+      loaded: verified,
       isConnected,
       refresh,
       disconnect,
@@ -128,7 +148,7 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
       freeLimit: FREE_SEAT_LIMIT,
     }),
     [
-      tracked, plan, limit, used, remaining, unlimited, atLimit, connections,
+      active, verified, state, tracked, plan, limit, used, remaining, unlimited, atLimit, connections,
       attempts, loading, loaded, isConnected, refresh, disconnect,
       acknowledgeAttempts,
     ]

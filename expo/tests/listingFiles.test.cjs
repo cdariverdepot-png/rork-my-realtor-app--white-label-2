@@ -60,14 +60,15 @@ test('reordered and updated CSV imports keep stable properties and do not delete
   assert.deepEqual(next.map(l => l.id).sort(), first.map(l => l.id).sort());
 });
 
-async function runImport({ guest = false, sources, ids, files, modelResult, aiFails = false } = {}) {
+async function runImport({ guest = false, sources, ids, files, modelResult, aiFails = false, serviceActive = true } = {}) {
   const defaultSource = { id: 'report', kind: 'listing-file', label: 'properties.csv', uri: 'owner/properties.csv', mimeType: 'text/plain' };
   const savedSources = sources ?? [defaultSource];
   const draft = { heroMessage: 'Original profile', aboutParagraph: 'Original introduction', discoveredListings: [] };
   let update, aiBody, downloads = 0, handler;
   const admin = {
+    rpc: async () => ({data:serviceActive,error:null}),
     auth: { getUser: async () => ({ data: { user: { id: 'owner', is_anonymous: guest, email_confirmed_at: guest ? null : 'now' } } }) },
-    from: () => ({
+    from: table => table === 'realtors' ? ({select:()=>({eq:()=>({maybeSingle:async()=>({data:{id:'realtor'},error:null})})})}) : ({
       select: () => ({ eq: () => ({ single: async () => ({ data: { sources: savedSources, draft, evidence: [], status: 'needs-input' } }) }) }),
       update: value => ({ eq: async () => { update = value; return { error: null }; } }),
     }),
@@ -91,6 +92,9 @@ test('authenticated CSV endpoint imports multiple properties without AI or profi
   assert.equal(result.aiBody, undefined);
   assert.equal(result.update.draft.heroMessage, 'Original profile');
   assert.equal(result.update.draft.aboutParagraph, 'Original introduction');
+});
+test('inactive realtor cannot import files or invoke model processing',async()=>{
+ const r=await runImport({serviceActive:false});assert.equal(r.status,403);assert.equal(r.downloads,0);assert.equal(r.update,undefined);assert.equal(r.aiBody,undefined);
 });
 
 test('file endpoint rejects guests and mixed-owner paths before storage reads', async () => {

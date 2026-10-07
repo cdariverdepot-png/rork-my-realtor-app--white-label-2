@@ -47,6 +47,8 @@ Deno.serve(async req => {
       if (!data || data.id === DEMO || (body.realtorId && body.realtorId !== data.id)) return reply({ ok: false, error: "This session does not own the selected realtor account. Sign in to that account to import listings." }, 403);
       realtorId = data.id;
     }
+    const access = await sb.rpc("realtor_service_active", { p_realtor_id: realtorId });
+    if (access.error || access.data !== true) return reply({ ok: false, error: "Service unavailable." }, 403);
     if (!body.listingId && body.mode !== "legacy") {
       const result = await runSourceSync(sb, realtorId, body, fetchHtml, scheduled);
       if (result) return reply(result.body, result.status);

@@ -1,0 +1,1 @@
+{"private":true,"scripts":{"test":"node --test subscriptions.test.cjs"},"dependencies":{"@electric-sql/pglite":"0.3.15","pg":"8.16.3"}}

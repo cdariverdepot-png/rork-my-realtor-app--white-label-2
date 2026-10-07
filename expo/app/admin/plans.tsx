@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Alert,
   Animated,
   Easing,
   Linking,
@@ -11,7 +10,9 @@ import {
   Text,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { Check, Sparkles } from "lucide-react-native";
@@ -19,7 +20,9 @@ import { brand, dark, fonts } from "@/constants/colors";
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import { tint } from "@/constants/backdrops";
-import { PLAN_TIERS, type PlanTier } from "@/constants/plans";
+import { CUSTOM_INQUIRY_URL, PLAN_TIERS, type PlanTier } from "@/constants/plans";
+import { ANNUAL_EQUIVALENT } from "@/constants/subscriptionPricing";
+import { billingRequest, exportRealtorData, verifiedBillingURL, type BillingResponse } from "@/lib/billing";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeats } from "@/contexts/SeatsContext";
 
@@ -27,22 +30,30 @@ const GOLD = brand.gold;
 const LINE = "rgba(244,239,230,0.12)";
 const SURFACE = "rgba(14,16,15,0.74)";
 
-/** Where bespoke enquiries go. Sold outside the app, so a real mailto is fine. */
-const BESPOKE_EMAIL = "hello@myrealtorapp.com";
-
-/**
- * /admin/plans — the pricing page.
- *
- * Purchasing is not switched on yet: an in-app subscription has to go through
- * Apple's own purchase system, which is its own piece of work. The upgrade
- * buttons are therefore present and styled but deliberately inert. Bespoke is
- * a service delivered outside the app, so its button really does something.
- */
+/** Existing plan page doubles as account management, including during inactivity. */
 export default function Plans() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { isAdmin, hydrated } = useAuth();
-  const { plan, used, limit, unlimited, atLimit, tracked } = useSeats();
+  const { isAdmin, hydrated, realtorId, session, logout } = useAuth();
+  const seats = useSeats();
+  const { plan, used, limit, unlimited, atLimit, tracked } = seats;
+  const { checkout } = useLocalSearchParams<{ checkout?: string }>();
+  const [billing, setBilling] = useState<BillingResponse>({ configured: false });
+  const [interval, setInterval] = useState<"month" | "year">("month");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const generation = useRef(realtorId); generation.current = realtorId;
+  useEffect(() => {
+    setBilling({ configured: false }); setMessage(null);
+    if (!tracked || !realtorId) return;
+    let canceled = false;
+    void billingRequest(realtorId, "status").then(async data => {
+      if (canceled) return;
+      setBilling(data);
+      if (checkout === "returned" && data.configured) { await billingRequest(realtorId, "refresh"); await seats.refresh(); }
+    }).catch(() => { if (!canceled) setMessage("Subscription checkout is not configured yet."); });
+    return () => { canceled = true; };
+  }, [tracked, realtorId, checkout, seats.refresh]);
 
   useEffect(() => {
     if (hydrated && !isAdmin) router.replace("/admin/login");
@@ -59,26 +70,53 @@ export default function Plans() {
     }).start();
   }, [rise]);
 
+  const action = useCallback(async (kind: "checkout" | "refresh" | "cancel" | "resume" | "manage") => {
+    if (!realtorId || busy || !tracked) return;
+    if (kind !== "refresh" && (Platform.OS !== "web" || !billing.configured || session?.guestAccess || session?.preview)) return;
+    const rid = realtorId; setBusy(true); setMessage(null);
+    try {
+      if (billing.configured) {
+        const result = await billingRequest(rid, kind, interval);
+        if (generation.current !== rid) return;
+        if (result.url) await Linking.openURL(verifiedBillingURL(result.url));
+      }
+      await seats.refresh();
+    } catch(e) { if (generation.current === rid) setMessage(e instanceof Error ? e.message : "Please retry."); }
+    finally { if (generation.current === rid) setBusy(false); }
+  }, [realtorId, busy, tracked, billing.configured, interval, seats.refresh, session?.guestAccess, session?.preview]);
   const onUpgrade = useCallback((tier: PlanTier) => {
-    if (Platform.OS !== "web") Haptics.selectionAsync();
     if (tier.contactOnly) {
-      const subject = encodeURIComponent("Bespoke app enquiry");
-      Linking.openURL(`mailto:${BESPOKE_EMAIL}?subject=${subject}`).catch((e) =>
-        console.log("[plans] mailto", e)
-      );
-      return;
-    }
-    Alert.alert(
-      "Not open yet",
-      "Subscriptions go live shortly — we're finishing the payment side. Nothing changes on your account today, and your app keeps working exactly as it does now."
-    );
-  }, []);
+      if (Platform.OS !== "web") void Haptics.selectionAsync();
+      void Linking.openURL(CUSTOM_INQUIRY_URL).catch(() => setMessage("Please email hello@myrealtorapp.com about your custom app."));
+    } else void action("checkout");
+  }, [action]);
+  const exportData = useCallback(async () => {
+    if (!realtorId || busy || !tracked) return;
+    setBusy(true); setMessage(null);
+    try {
+      const content = JSON.stringify(await exportRealtorData(realtorId), null, 2);
+      const filename = `my-realtor-export-${new Date().toISOString().slice(0,10)}.json`;
+      if (Platform.OS === "web") {
+        const url = URL.createObjectURL(new Blob([content], { type: "application/json" }));
+        const a = document.createElement("a"); a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
+      } else {
+        const file = new File(Paths.cache, filename); file.write(content);
+        if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(file.uri, { mimeType: "application/json", UTI: "public.json" });
+        else throw new Error("File sharing is unavailable on this device.");
+      }
+    } catch(e) { setMessage(e instanceof Error ? e.message : "Export unavailable."); } finally { setBusy(false); }
+  }, [realtorId, busy, tracked]);
 
   const statusLine = useMemo(() => {
     if (!tracked) return "You're on the showcase account — no limits apply.";
-    if (unlimited) return "Unlimited client invitations.";
-    return `${used} of ${limit} client invitations used.`;
-  }, [tracked, unlimited, used, limit]);
+    if (!seats.loaded) return "Checking account status…";
+    if (!seats.active) return "Inactive — your saved records are retained.";
+    if (unlimited) return `${used} clients connected · unlimited allowance`;
+    return `${used} of ${limit} clients connected.`;
+  }, [tracked, unlimited, used, limit, seats.loaded, seats.active]);
+  const displayedTiers = PLAN_TIERS.map(tier => tier.id !== "pro" || !billing.prices ? tier : { ...tier, price: interval === "month" ? `${billing.prices.month.total}/month` : `${billing.prices.year.total}/year`, priceNote: interval === "year" ? "billed annually" : "billed monthly", altPrice: interval === "year" ? ANNUAL_EQUIVALENT : `${billing.prices.year.total}/year, billed annually` });
+  const date = seats.cancelAtPeriodEnd ? seats.serviceEnd : seats.renewalAt;
+  const dateText = date ? new Date(date).toLocaleDateString() : null;
 
   return (
     <View style={styles.root}>
@@ -103,8 +141,8 @@ export default function Plans() {
         >
           <View style={styles.header}>
             <Text style={styles.lede}>
-              Build the whole thing for nothing. Pay only when your clients are
-              actually in it.
+              Build your app with full access for 7 days and up to three connected clients.
+              Subscribe after the trial to keep your app active.
             </Text>
             <View style={[styles.statusPill, atLimit && styles.statusPillFull]}>
               <View
@@ -112,22 +150,42 @@ export default function Plans() {
               />
               <Text style={styles.statusText}>{statusLine}</Text>
             </View>
+            {tracked ? <>
+              <Text style={styles.footnote}>{session?.email}{seats.everPaid ? ` · ${seats.interval === "year" ? "Annual" : "Monthly"} subscription · ${seats.status}` : " · Evaluation"}{dateText ? ` · ${seats.cancelAtPeriodEnd ? "Service ends" : "Renewal"} ${dateText}` : ""}</Text>
+              {seats.paymentIssue ? <Text style={styles.footnote}>A payment issue needs attention. Use subscription management to update payment details and retry through the provider.</Text> : null}
+              <Text style={styles.footnote}>{billing.configured ? "Test billing only. No live charges are enabled." : "Checkout unavailable until test billing is configured."}{Platform.OS !== "web" ? " Purchases and external billing links are unavailable in this native build." : ""}</Text>
+              <View style={{ flexDirection: "row", gap: 10, marginTop: 12 }}>
+                {(["month", "year"] as const).map(value => <Pressable key={value} onPress={() => setInterval(value)} style={[styles.cta, styles.ctaQuiet, { flex: 1, opacity: interval === value ? 1 : 0.5 }]}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{value === "month" ? "MONTHLY" : "ANNUAL"}</Text></Pressable>)}
+              </View>
+              <Text style={styles.footnote}>Subscriptions renew automatically at the chosen interval until canceled. Annual billing charges $490 upfront. Cancellation keeps access through the paid service-end date.</Text>
+              {seats.everPaid && Platform.OS === "web" && billing.configured ? <>
+                <Pressable disabled={busy} style={styles.cta} onPress={() => void action("manage")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>MANAGE SUBSCRIPTION</Text></Pressable>
+                {seats.active ? <Pressable disabled={busy} style={styles.cta} onPress={() => void action(seats.cancelAtPeriodEnd ? "resume" : "cancel")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{seats.cancelAtPeriodEnd ? "KEEP SUBSCRIPTION" : "CANCEL AT PERIOD END"}</Text></Pressable> : null}
+              </> : null}
+              <Pressable disabled={busy} style={styles.cta} onPress={() => void action("refresh")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>REFRESH ACCOUNT STATUS</Text></Pressable>
+              <Pressable disabled={busy} style={styles.cta} onPress={() => void exportData()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>EXPORT MY DATA</Text></Pressable>
+              <Text style={styles.footnote}>The JSON export includes your saved draft and published designs, listings, listing sources, contacts, client relationships, messages, document references, appointments and saved properties. It excludes passwords and billing credentials; document file contents are not included.</Text>
+              <Pressable style={styles.cta} onPress={() => router.push("/reset-password")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>PASSWORD & ACCOUNT ACCESS</Text></Pressable>
+              <Pressable style={styles.cta} onPress={() => void logout().then(() => router.replace("/welcome"))}><Text style={[styles.ctaText, { color: brand.goldLight }]}>SIGN OUT</Text></Pressable>
+              {message ? <Text accessibilityRole="alert" style={styles.footnote}>{message}</Text> : null}
+            </> : null}
           </View>
 
           <View style={styles.tiers}>
-            {PLAN_TIERS.map((tier) => (
+            {displayedTiers.map((tier) => (
               <TierCard
                 key={tier.id}
                 tier={tier}
-                current={tier.id === plan}
+                current={tier.id === plan && seats.active}
+                disabled={!tier.contactOnly && (busy || !tracked || !billing.configured || Platform.OS !== "web" || session?.guestAccess === true || session?.preview === true || (seats.everPaid && seats.active))}
                 onPress={() => onUpgrade(tier)}
               />
             ))}
           </View>
 
           <Text style={styles.footnote}>
-            Your contacts are always unlimited and always free — that's your own
-            address book. Only clients who join your app count toward the limit,
+            Contacts and pending invitations do not consume connected-client
+            seats. Only authenticated clients who join your app count toward the limit,
             and someone who reinstalls or switches phones keeps the seat they
             already have.
           </Text>
@@ -140,14 +198,16 @@ export default function Plans() {
 function TierCard({
   tier,
   current,
+  disabled,
   onPress,
 }: {
   tier: PlanTier;
   current: boolean;
+  disabled: boolean;
   onPress: () => void;
 }) {
   const featured = tier.featured;
-  const isFree = tier.id === "free";
+  const isFree = tier.id === "evaluation";
   return (
     <View
       style={[
@@ -194,14 +254,17 @@ function TierCard({
       {isFree ? (
         <View style={styles.currentBadge}>
           <Text style={styles.currentBadgeText}>
-            {current ? "YOUR CURRENT PLAN" : "INCLUDED"}
+            {current ? "YOUR CURRENT PLAN" : "FOR NEW ACCOUNTS"}
           </Text>
         </View>
       ) : (
         <Pressable
           onPress={onPress}
+          disabled={disabled}
+          accessibilityState={{ disabled }}
           style={({ pressed }) => [
             styles.cta,
+            disabled && { opacity: 0.45 },
             featured ? styles.ctaFeatured : styles.ctaQuiet,
             pressed && { opacity: 0.85, transform: [{ scale: 0.99 }] },
           ]}
@@ -212,13 +275,13 @@ function TierCard({
               featured ? { color: dark.bg } : { color: brand.goldLight },
             ]}
           >
-            {tier.ctaLabel}
+            {tier.contactOnly ? tier.ctaLabel : current ? "CURRENT SUBSCRIPTION" : disabled ? "CHECKOUT UNAVAILABLE" : "TEST SUBSCRIPTION"}
           </Text>
         </Pressable>
       )}
 
       {!isFree && !tier.contactOnly ? (
-        <Text style={styles.soonNote}>Opens shortly</Text>
+        <Text style={styles.soonNote}>Monthly and annual include the same standard features.</Text>
       ) : null}
     </View>
   );
@@ -316,6 +379,7 @@ const styles = StyleSheet.create({
   },
   priceRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "baseline",
     gap: 8,
     marginTop: 18,
