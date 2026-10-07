@@ -30,6 +30,7 @@ import { isClientAccessCode, isRealtorAccessCode } from "@/constants/access";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import OnboardingCarousel from '@/components/OnboardingCarousel';
 import InvitationInstall from '@/components/InvitationInstall';
+import { supabase } from '@/lib/supabase';
 
 type Stage =
   | "entry"
@@ -311,7 +312,7 @@ export default function Portal() {
     : stage === "realtor-setup" ? "Create your private builder account, then check your email for the confirmation link. If you already used this app, use the same email to keep your profile and clients."
     : stage === "realtor-signin" ? "Use your email and password. Prefer the confirmation link from email when signing up; an email code is available as a fallback."
     : stage === "client-setup" ? `Create your private profile. ${resolvedRealtorName?.split(" ")[0] || "Your realtor"} will see you on the roster.`
-    : stage === "client-full" ? `${resolvedRealtorName?.split(" ")[0] || "This agent"} isn't accepting new clients at the moment.`
+    : stage === "client-full" ? `Please contact ${resolvedRealtorName || "your agent"} about access to their app.`
     : "Sign in to your private profile.";
 
   const shakeStyle = { transform: [{ translateX: shake.interpolate({ inputRange: [-1, 1], outputRange: [-10, 10] }) }] };
@@ -423,7 +424,8 @@ export default function Portal() {
                 ) : stage === "client-full" ? (
                   <AtCapacity
                     realtorName={resolvedRealtorName}
-                    onBack={() => { transitionTo("code"); setCode(""); setEmail(""); setPassword(""); setName(""); }}
+                    realtorId={resolvedRealtorId}
+                    onBack={() => { transitionTo("client-signin"); setPassword(""); }}
                   />
                 ) : (
                   <><AccountForm
@@ -545,8 +547,14 @@ function CodeForm({ code, onChange, onSubmit, error, busy }: { code: string; onC
 }
 
 // ── At capacity ────────────────────────────────────────────────
-function AtCapacity({ realtorName, onBack }: { realtorName: string; onBack: () => void }) {
+function AtCapacity({ realtorName, realtorId, onBack }: { realtorName: string; realtorId: string | null; onBack: () => void }) {
   const first = realtorName?.split(" ")[0] || "They";
+  const [contact, setContact] = useState<{email?:string;phone?:string}>({});
+  useEffect(() => {
+    let alive = true;
+    if(realtorId && supabase) void supabase.rpc('experience_access',{p_realtor_id:realtorId}).then(({data,error}) => { if(alive && !error) setContact(data?.contact ?? {}); });
+    return () => { alive = false; };
+  }, [realtorId]);
   return (
     <View style={{ width: "100%" }}>
       <View style={styles.calmCard}>
@@ -554,12 +562,14 @@ function AtCapacity({ realtorName, onBack }: { realtorName: string; onBack: () =
           <DoorClosed size={18} color={brand.goldLight} strokeWidth={1.5} />
         </View>
         <Text style={styles.calmBody}>
-          {first} will be able to add you once a place opens up. Reach out to
-          them directly and they&apos;ll let you know.
+          This app is currently unavailable. Please contact {first} directly
+          about access. Your invitation is saved so you can try signing in again.
         </Text>
       </View>
+      {contact.email ? <Pressable onPress={() => void Linking.openURL(`mailto:${contact.email}`)} style={styles.forgotRow}><Text style={styles.switchLink}>{contact.email}</Text></Pressable> : null}
+      {contact.phone ? <Pressable onPress={() => void Linking.openURL(`tel:${(contact.phone ?? '').replace(/[^+\d]/g,'')}`)} style={styles.forgotRow}><Text style={styles.switchLink}>{contact.phone}</Text></Pressable> : null}
       <PressableScale onPress={onBack} haptic="medium" scaleTo={0.97} hitSlop={12} style={styles.cta}>
-        <Text style={styles.ctaText}>TRY A DIFFERENT CODE</Text>
+        <Text style={styles.ctaText}>TRY SIGNING IN AGAIN</Text>
         <ArrowRight size={15} color={brand.forestDeep} strokeWidth={2} />
       </PressableScale>
     </View>

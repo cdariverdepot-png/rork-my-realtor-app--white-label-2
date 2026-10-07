@@ -1,0 +1,6 @@
+project_id = "my-realtor-app"
+
+# The handler verifies owner JWTs itself; provider webhooks use raw-body signatures.
+# Test-only function. Do not deploy to the production project during implementation.
+[functions.billing]
+verify_jwt = false

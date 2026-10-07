@@ -87,6 +87,7 @@ import { queryClient, queryPersister } from "@/lib/queryPersist";
 import BootScreen from "@/components/BootScreen";
 import { WorkflowDraftProvider } from '@/contexts/WorkflowDraftContext';
 import OnboardingGuard from "@/components/OnboardingGuard";
+import ServiceAccessGate from "@/components/ServiceAccessGate";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
 import { realtorSetupState } from "@/lib/onboardingState";
 import { useOnboarding, type Audience } from "@/contexts/OnboardingContext";
@@ -94,7 +95,7 @@ import { useOnboarding, type Audience } from "@/contexts/OnboardingContext";
 SplashScreen.preventAutoHideAsync();
 export const unstable_settings = { initialRouteName: 'index' };
 
-const clientScreenLayout = ({ children }: { children: React.ReactNode }) => <OnboardingGuard><ClientPreviewBoundary>{children}</ClientPreviewBoundary></OnboardingGuard>;
+const clientScreenLayout = ({ children }: { children: React.ReactNode }) => <ServiceAccessGate><OnboardingGuard><ClientPreviewBoundary>{children}</ClientPreviewBoundary></OnboardingGuard></ServiceAccessGate>;
 function RootLayoutNav() {
   const { isClient, viewAsClient, isAuthenticated } = useAuth();
   const modal = {
