@@ -55,7 +55,10 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
     {!entries.length ? <Text style={{ color: a.ink, paddingHorizontal: a.spacing * s, lineHeight: 24 }}>New listings will appear here as your realtor adds them. Get in touch to discuss your search.</Text> : <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: a.spacing * s, gap: 16 * s }}>
       {entries.slice(0, optimized ? 6 : 10).map(l => <View key={l.id} style={{ width: (optimized ? 285 : 310) * s, borderRadius: a.radius * s, overflow: 'hidden', borderColor: a.ink + '22', borderWidth: 1, backgroundColor: a.panel }}>
         <Pressable onPress={() => p.onOpen?.(l.id)} accessibilityRole="button" accessibilityLabel={l.title}>
-          <Image source={{ uri: l.images?.[0] || l.image }} contentFit="cover" style={{ width: '100%', height: 205 * s }} />
+          <View style={{ position: 'relative' }}>
+            <Image source={{ uri: l.images?.[0] || l.image }} contentFit="cover" style={{ width: '100%', height: 205 * s }} />
+            {p.recommendedIds?.includes(l.id) && <View style={{ position: 'absolute', left: 12 * s, top: 12 * s, maxWidth: '78%', paddingHorizontal: 10 * s, paddingVertical: 6 * s, borderRadius: 999, backgroundColor: a.accent }}><Text style={{ color: contrast(a.accent), fontFamily: 'Inter_600SemiBold', fontSize: 10 * s }}>{p.recommendationLabel || 'Recommended by your realtor'}</Text></View>}
+          </View>
           <View style={{ padding: 18 * s, gap: 8 * s }}><Text style={{ color: a.ink, fontSize: 25 * s, fontFamily: headingFont }}>{l.price}</Text><Text style={{ color: a.ink, fontFamily: bodyFont, fontSize: 16 * s }}>{l.title}</Text><Text style={{ color: a.ink, fontSize: 13 * s }}>{[l.beds > 0 ? `${l.beds} beds` : '', l.baths > 0 ? `${l.baths} baths` : '', l.sqft && l.sqft !== '0' ? l.sqft : ''].filter(Boolean).join(' · ') || l.neighborhood}</Text></View>
         </Pressable><Pressable accessibilityLabel={p.isFavorite?.(l.id) ? 'Remove saved home' : 'Save home'} accessibilityRole="button" onPress={() => p.onFavorite?.(l.id)} style={{ position: 'absolute', top: 12, right: 12, padding: 12, borderRadius: 24, backgroundColor: a.background }}><Heart size={22 * s} color={a.ink} fill={p.isFavorite?.(l.id) ? a.accent : 'transparent'} /></Pressable>
       </View>)}
