@@ -4,6 +4,8 @@ import { verifyAppleJws, type VerifyOptions } from "./appleJws.ts";
 export type AppleSnapshot = {
   original_transaction_id: string; product_id: string; environment: string;
   expires_at: string | null; revoked_at: string | null; signed_at: string;
+  /** Current period is Apple's introductory free trial (Apple decides eligibility). */
+  in_trial: boolean;
   auto_renew?: boolean | null; billing_issue?: boolean | null;
 };
 export type AppleConfig = { bundleId: string; productIds: string[]; environments: string[]; verify?: VerifyOptions };
@@ -34,6 +36,8 @@ export async function transactionSnapshot(jws: string, config: AppleConfig): Pro
     snapshot: {
       original_transaction_id: otid, product_id: t.productId, environment: t.environment,
       expires_at: iso(t.expiresDate), revoked_at: iso(t.revocationDate), signed_at: iso(t.signedDate) ?? new Date().toISOString(),
+      // offerType 1 = introductory offer; offerDiscountType (iOS 17.2+) confirms it is the free trial.
+      in_trial: t.offerType === 1 && (t.offerDiscountType === undefined || t.offerDiscountType === "FREE_TRIAL"),
     },
   };
 }

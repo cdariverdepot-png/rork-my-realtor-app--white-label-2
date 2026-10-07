@@ -24,21 +24,26 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
  await exec(fs.readFileSync(path.join(__dirname,'../migrations/20261007200000_apple_entitlements.sql'),'utf8'));
  // Verified Apple snapshots, as written by the apple-subscription Edge Function (service role only).
  let signedAt=Date.now();
- const paid=(over={})=>({original_transaction_id:'2000000000000001',product_id:'monthly',environment:'Sandbox',expires_at:new Date(Date.now()+86400000*30).toISOString(),revoked_at:null,signed_at:new Date(signedAt+=1000).toISOString(),auto_renew:true,billing_issue:false,...over});
+ const paid=(over={})=>({original_transaction_id:'2000000000000001',product_id:'monthly',environment:'Sandbox',expires_at:new Date(Date.now()+86400000*30).toISOString(),revoked_at:null,signed_at:new Date(signedAt+=1000).toISOString(),auto_renew:true,billing_issue:false,in_trial:false,...over});
+ const trial=(over={})=>paid({in_trial:true,expires_at:new Date(Date.now()+7*86400000).toISOString(),...over});
+ const past=()=>new Date(Date.now()-1000).toISOString();
  const apply=async(value,rid=R)=>{await as('', 'service_role');return scalar('select public.apple_apply($1,$2) result',[rid,value]);};
  const state=async()=>{await as(OWNER);return scalar('select public.realtor_seat_state($1) result',[R]);};
  const login=async(n,password='password')=>{await as(uid(n));return scalar('select public.verify_client_account($1,$2,$3) result',[R,`c${n}@example.com`,password]);};
  const disconnect=async(n)=>{await as(OWNER);return scalar('select public.disconnect_client($1,$2) result',[R,`c${n}`]);};
  await t.test('contacts, pending invitations and failed authentication consume no seats',async()=>{
-  assert.equal((await state()).used,0); assert.equal((await state()).active,true);
+  // No local trial: without a verified Apple entitlement, paid actions are off (access is not).
+  let s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'not_subscribed');assert.equal(s.limit,0);
+  await admin();assert.equal(await scalar("select count(*)::int result from information_schema.columns where table_schema='private' and column_name='trial_started_at'"),0,'no local trial clock exists');
+  assert.equal((await apply(trial())).ok,true);s=await state();assert.equal(s.active,true);assert.equal(s.status,'trial');assert.equal(s.limit,3);assert.ok(Date.parse(s.trialEnd)>Date.now());
+  assert.equal(s.used,0);
   await admin();for(let n=1;n<=6;n++)await query('insert into public.client_accounts values($1,$2,$3,$4,$5)',[R,`c${n}`,`c${n}@example.com`,'password',`Client ${n}`]);
   assert.equal((await login(1,'wrong')).reason,'bad_password');assert.equal((await state()).used,0);
   await as(uid(1));const spoof=await scalar('select public.claim_client_seat($1,$2,$3,$4) result',[R,'spoof@example.com','forged','Forged']);assert.equal(spoof.ok,false);assert.equal((await state()).used,0);
  });
- await t.test('evaluation expires after seven days and can be restored for the remaining lifecycle tests',async()=>{
-  await admin();await query("update private.realtor_entitlements set trial_started_at=now()-interval '8 days' where realtor_id=$1",[R]);
-  assert.equal((await state()).active,false);assert.equal((await login(1)).reason,'inactive');
-  await admin();await query("update private.realtor_entitlements set trial_started_at=now() where realtor_id=$1",[R]);assert.equal((await state()).active,true);
+ await t.test('Apple trial that expires stops new connections; Apple restores it, never a local date',async()=>{
+  await apply(trial({expires_at:past()}));let s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'expired');assert.equal((await login(1)).reason,'inactive');
+  await apply(trial());assert.equal((await state()).active,true);
  });
  await t.test('three authenticated clients and repeated/new-device acceptance count once',async()=>{
   for(let n=1;n<=3;n++)assert.equal((await login(n)).ok,true);
@@ -66,7 +71,8 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   await as(uid(7));const r=await scalar('select public.register_client_account($1,$2,$3,$4,$5) result',[R,'c7@example.com','password','c7','New client']);assert.equal(r.reason,'limit');assert.equal(r.account_created,true);
   await admin();assert.equal((await query('select count(*)::int n from public.client_accounts where realtor_id=$1 and client_id=$2',[R,'c7'])).rows[0].n,1);assert.equal((await state()).used,3);
  });
- await t.test('a verified Apple subscription unlocks unlimited connections without replacing records',async()=>{
+ await t.test('Apple trial converts to paid: unlimited connections without replacing records',async()=>{
+  assert.equal((await state()).limit,3,'trial keeps the 3-client limit');
   assert.equal((await apply(paid())).ok,true);assert.equal((await state()).limit,-1);assert.equal((await state()).status,'subscribed');assert.equal((await login(6)).ok,true);
   await as(OWNER);const exported=await scalar('select public.export_realtor_data($1) result',[R]);assert.deepEqual(exported.records[R+':messages.v1'],{history:['preserved']});assert.equal(exported.records[R+':auth.secret'],undefined);assert.equal(exported.records[OTHER+':brand.v2'],undefined);assert.equal(exported.listingSources[0].headers,undefined);
   await admin();assert.equal((await query('select client_code from public.realtors where id=$1',[R])).rows[0].client_code,'INVITE');assert.deepEqual((await query('select draft from public.realtor_builds where auth_user_id=$1',[OWNER])).rows[0].draft,{draft:'preserved'});
@@ -82,12 +88,15 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   await apply(paid());assert.equal((await state()).cancelAtPeriodEnd,false);
  });
  await t.test('a billing problem is reported only when Apple reports billing retry; service continues while Apple grants it',async()=>{
-  await apply(paid({billing_issue:true}));const s=await state();assert.equal(s.paymentIssue,true);assert.equal(s.active,true);
-  await apply(paid());assert.equal((await state()).paymentIssue,false);
+  await apply(paid({billing_issue:true}));let s=await state();assert.equal(s.paymentIssue,true);assert.equal(s.active,true);assert.equal(s.status,'grace_period');
+  await apply(paid({billing_issue:true,expires_at:past()}));s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'billing_retry');
+  await apply(paid());s=await state();assert.equal(s.paymentIssue,false);assert.equal(s.status,'subscribed');
+  await apply(paid({revoked_at:new Date().toISOString()}));s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'refunded');
+  await apply(paid());assert.equal((await state()).active,true,'resubscribing restores service');
  });
  await t.test('expiry never restores evaluation or locks anyone out; only new connections and service actions stop',async()=>{
-  await disconnect(2);await apply(paid({expires_at:new Date(Date.now()-1000).toISOString(),auto_renew:false}));
-  const s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'canceled');assert.equal(s.everPaid,true);assert.equal(s.limit,0);assert.equal(s.plan,'pro');assert.equal((await login(2)).reason,'inactive','a disconnected client cannot reconnect while inactive');assert.equal((await login(1)).ok,true,'an existing connected client still signs in');
+  await disconnect(2);await apply(paid({expires_at:past(),auto_renew:false}));
+  const s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'canceled');assert.equal(s.everPaid,true);assert.equal(s.limit,0);assert.equal(s.plan,'none');assert.equal((await login(2)).reason,'inactive','a disconnected client cannot reconnect while inactive');assert.equal((await login(1)).ok,true,'an existing connected client still signs in');
   await as(uid(1));const a=await scalar('select public.experience_access($1) result',[R]);assert.equal(a.available,false);assert.equal(a.contact.email,'business@example.com');assert.equal(a.paymentIssue,undefined);assert.equal(a.status,undefined);
   await as(uid(1));assert.deepEqual(await scalar('select private.kv_read($1) result',[R+':messages.v1']),{history:['preserved']},'existing clients keep reading');await assert.rejects(query('select private.request_showing($1,$2,$3,$4,$5)',[R,'request','listing',0,30]),/unavailable/);
   await as(OWNER);assert.ok((await query('select * from public.app_kv')).rows.length>0);assert.ok((await query('select * from public.listing_sources')).rows.length>0);assert.ok((await query('select * from public.realtor_builds')).rows.length>0);const data=await scalar('select public.export_realtor_data($1) result',[R]);assert.ok(data.records[R+':messages.v1']);assert.deepEqual(data.build.draft,{draft:'preserved'});assert.equal(data.clientAccounts[0].pw_hash,undefined);
@@ -97,6 +106,12 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   await apply(paid());assert.equal((await state()).active,true);
   await as(uid(1));assert.equal(await scalar('select private.bound_client($1) result',[R]),'c1');await as(uid(2));assert.equal(await scalar('select private.bound_client($1) result',[R]),null);
   await admin();assert.equal((await query('select client_code from public.realtors where id=$1',[R])).rows[0].client_code,'INVITE');
+ });
+ await t.test('a realtor with no Apple entitlement never gets a trial from local records',async()=>{
+  await as(OWNER);await admin();
+  assert.equal(await scalar('select private.service_active($1) result',[OTHER]),false);
+  await query("insert into public.realtors values('33333333-3333-4333-8333-333333333333','dddddddd-dddd-4ddd-8ddd-dddddddddddd',true,'NEW')");
+  assert.equal(await scalar("select private.service_active('33333333-3333-4333-8333-333333333333') result"),false,'new accounts start with no service until Apple says so');
  });
  await t.test('cross-realtor access and client billing writes are rejected',async()=>{
   await as(OWNER);await assert.rejects(query('select public.realtor_seat_state($1)',[OTHER]),/authorized/);await assert.rejects(query('select public.export_realtor_data($1)',[OTHER]),/authorized/);await assert.rejects(query('select public.disconnect_client($1,$2)',[OTHER,'c1']),/authorized/);

@@ -8,11 +8,11 @@ export type SeatState = {
   renewalAt: string | null; cancelAtPeriodEnd: boolean; paymentIssue: boolean; everPaid: boolean;
   /** Server-reported reason when service is inactive; never inferred as a payment failure. */
   inactiveReason?: InactiveReason | null;
-  /** End of the server-owned 7-day trial (never-subscribed accounts). */
+  /** End of Apple's introductory free trial, when the current period is the trial. */
   trialEnd?: string | null;
 };
-/** Apple-derived reasons: billing_retry only when Apple reports a failed renewal in billing retry. */
-export type InactiveReason = "trial_ended" | "billing_retry" | "revoked" | "canceled" | "expired";
+/** Reasons derived only from verified Apple state; billing_retry only when Apple reports it. */
+export type InactiveReason = "not_subscribed" | "billing_retry" | "refunded" | "canceled" | "expired";
 export type ClaimResult = { ok: true; reused: boolean; used: number; limit: number } | { ok: false; reason: "limit" | "inactive" | "error"; used?: number; limit?: number };
 export const EMPTY_SEAT_STATE: SeatState = { plan: "evaluation", limit: FREE_SEAT_LIMIT, used: 0, connections: [], attempts: [], active: false, status: "unavailable", interval: null, serviceEnd: null, renewalAt: null, cancelAtPeriodEnd: false, paymentIssue: false, everPaid: false, inactiveReason: null, trialEnd: null };
 /** Compatibility call after authentication. Never grants access on a network error. */
@@ -34,7 +34,7 @@ export async function fetchSeatState(realtorId: string): Promise<SeatState | nul
   try {
     const { data: r, error } = await supabase.rpc("realtor_seat_state", { p_realtor_id: realtorId });
     if (error || r?.ok !== true || !Number.isInteger(r.used) || !Number.isInteger(r.limit) || typeof r.active !== "boolean") return null;
-    return { ...EMPTY_SEAT_STATE, ...r, plan: r.everPaid === true ? "pro" : "evaluation", connections: Array.isArray(r.connections) ? r.connections : [], attempts: [] };
+    return { ...EMPTY_SEAT_STATE, ...r, plan: r.plan === "pro" ? "pro" : "evaluation", connections: Array.isArray(r.connections) ? r.connections : [], attempts: [] };
   } catch { return null; }
 }
 export async function markAttemptsSeen(_realtorId: string): Promise<void> { /* No unauthenticated attempts consume seats. */ }

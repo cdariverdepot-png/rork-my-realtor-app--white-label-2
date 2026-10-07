@@ -50,6 +50,11 @@ test('transaction and notification snapshots enforce app, product and environmen
  assert.equal(core.appleConfig(k=>({APPLE_BUNDLE_ID:'app.myrealtor'})[k]),null);
  const c=chain('snap');const config={...core.appleConfig(k=>({APPLE_BUNDLE_ID:'app.myrealtor',APPLE_SUBSCRIPTION_PRODUCT_IDS:'monthly.sub, annual.sub'})[k]),verify:{rootFingerprints:[c.fingerprint]}};
  const r=await core.transactionSnapshot(sign(c,tx()),config);
+ assert.equal(r.snapshot.in_trial,false,'no introductory offer = paid period');
+ assert.equal((await core.transactionSnapshot(sign(c,tx({offerType:1,offerDiscountType:'FREE_TRIAL'})),config)).snapshot.in_trial,true,'Apple introductory free trial');
+ assert.equal((await core.transactionSnapshot(sign(c,tx({offerType:1})),config)).snapshot.in_trial,true);
+ assert.equal((await core.transactionSnapshot(sign(c,tx({offerType:1,offerDiscountType:'PAY_AS_YOU_GO'})),config)).snapshot.in_trial,false);
+ assert.equal((await core.transactionSnapshot(sign(c,tx({offerType:2})),config)).snapshot.in_trial,false,'promotional offers are not the trial');
  assert.equal(r.appAccountToken,RID);assert.equal(r.snapshot.original_transaction_id,'2000000000000001');assert.equal(r.snapshot.product_id,'monthly.sub');
  for(const [bad,re] of [[{bundleId:'com.other'},/another app/],[{productId:'other'},/Unknown subscription/],[{environment:'Xcode'},/environment/],[{type:'Consumable'},/Not a subscription/]])
   await assert.rejects(core.transactionSnapshot(sign(c,tx(bad)),config),re);
@@ -84,4 +89,15 @@ test('apple-subscription endpoint: not configured, auth, account binding and not
  assert.equal((await (await call({signedPayload:n})).json()).unmatched,true);
  owner=RID;const count=applied.length;assert.equal((await (await call({signedPayload:n})).json()).ok,true);assert.equal(applied.length,count+1);
  delete env.APPLE_SUBSCRIPTION_PRODUCT_IDS;assert.equal((await call({action:'sync',signedTransactions:['x']},'realtor')).status,503);
+});
+
+test('StoreKit/server failures never grant service and never finish an unverified transaction',async()=>{
+ const make=invoke=>loader({'@/lib/supabase':{supabase:{functions:{invoke}},ensureSupabaseSession:async()=>{}}})(path.join(root,'expo/lib/appleSubscriptions.ts'));
+ const jws='a.b.c';
+ await assert.rejects(make(async()=>({data:null,error:{message:'offline'}})).syncAppleTransactions([jws]),/can't be verified/);
+ await assert.rejects(make(async()=>({data:{error:'App Store subscriptions are not configured yet.'},error:null})).syncAppleTransactions([jws]),/not configured/);
+ assert.deepEqual(await make(async()=>({data:{ok:false,results:[{ok:false,reason:'other_account'}]},error:null})).syncAppleTransactions([jws]),{ok:false,results:[{ok:false,reason:'other_account'}]});
+ assert.equal((await make(async()=>{throw new Error('should not be called');}).syncAppleTransactions(['not-a-jws'])).ok,false,'malformed device data is never sent as proof');
+ const hook=fs.readFileSync(path.join(root,'expo/lib/useAppleSubscription.ts'),'utf8');
+ assert.match(hook,/const result = await syncAppleTransactions\(signed\);\n\s*if \(result\.ok\) for \(const p of purchases\) await finishPurchase/);
 });

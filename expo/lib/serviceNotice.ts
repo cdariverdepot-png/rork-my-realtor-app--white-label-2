@@ -8,16 +8,16 @@ export function serviceNoticeCopy(reason: InactiveReason | null): { title: strin
   if (!reason) return null;
   const kept = "Your app, clients, messages and saved data remain available.";
   switch (reason) {
+    case "not_subscribed":
+      return { title: "Start your 7-day free trial.", body: `Subscribe through the App Store to enable publishing and client communication. ${kept}` };
     case "billing_retry":
-      // Reported only when Apple says the renewal failed and is in billing retry.
-      return { title: "Apple couldn't renew your subscription.", body: `Update the payment method for your Apple ID to restore publishing and client communication. ${kept}` };
-    case "revoked":
-      return { title: "Your subscription was refunded.", body: `Subscribe again to restore publishing and client communication. ${kept}` };
-    case "trial_ended":
-      return { title: "Your 7-day trial has ended.", body: `Subscribe to restore publishing and client communication. ${kept}` };
+      // Reported only when Apple says the renewal failed and Apple is retrying billing.
+      return { title: "Apple couldn't renew your subscription.", body: `Apple is retrying billing. Update the payment method for your Apple ID to restore publishing and client communication. ${kept}` };
+    case "refunded":
+      return { title: "Refunded — your subscription was refunded.", body: `Subscribe again to restore publishing and client communication. ${kept}` };
     case "canceled":
-      return { title: "Your subscription has ended.", body: `Renew to restore publishing and client communication. ${kept}` };
+      return { title: "Canceled — your subscription has ended.", body: `Resubscribe to restore publishing and client communication. ${kept}` };
     default:
-      return { title: "Your subscription is inactive.", body: `Renew to restore publishing and client communication. ${kept}` };
+      return { title: "Expired — your subscription has ended.", body: `Resubscribe to restore publishing and client communication. ${kept}` };
   }
 }

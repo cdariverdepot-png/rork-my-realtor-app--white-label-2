@@ -90,12 +90,17 @@ export default function Plans() {
   const statusLine = useMemo(() => {
     if (!tracked) return "You're on the showcase account — no limits apply.";
     if (!seats.loaded) return "Checking subscription status…";
+    // Every state below comes from the verified Apple entitlement.
     if (!seats.active) return notice?.title ?? "Subscription inactive.";
-    if (seats.everPaid) return unlimited ? `Subscription active · ${used} clients connected` : "Subscription active.";
-    const left = seats.trialEnd ? Math.max(0, Math.ceil((Date.parse(seats.trialEnd) - Date.now()) / 86400000)) : null;
-    const trial = left === null ? "7-day trial" : `7-day trial · ${left} ${left === 1 ? "day" : "days"} remaining`;
-    return `${trial} · ${used} of ${limit} clients connected`;
-  }, [tracked, unlimited, used, limit, seats.loaded, seats.active, seats.everPaid, seats.trialEnd, notice]);
+    const until = (d: string | null) => (d ? new Date(d).toLocaleDateString() : "");
+    if (seats.status === "trial") {
+      const left = seats.trialEnd ? Math.max(0, Math.ceil((Date.parse(seats.trialEnd) - Date.now()) / 86400000)) : null;
+      return `7-day free trial${left === null ? "" : ` · ${left} ${left === 1 ? "day" : "days"} remaining`} · ${used} of ${limit} clients connected`;
+    }
+    if (seats.status === "grace_period") return `Billing retry · grace period until ${until(seats.serviceEnd)}`;
+    if (seats.cancelAtPeriodEnd && seats.serviceEnd) return `Canceled — active until ${until(seats.serviceEnd)}`;
+    return unlimited ? `Subscription active · ${used} clients connected` : "Subscription active.";
+  }, [tracked, unlimited, used, limit, seats.loaded, seats.active, seats.status, seats.trialEnd, seats.serviceEnd, seats.cancelAtPeriodEnd, notice]);
   const displayedTiers = PLAN_TIERS;
   const date = seats.cancelAtPeriodEnd ? seats.serviceEnd : seats.renewalAt;
   const dateText = date ? new Date(date).toLocaleDateString() : null;
@@ -123,8 +128,8 @@ export default function Plans() {
         >
           <View style={styles.header}>
             <Text style={styles.lede}>
-              Build your app with full access for 7 days and up to three connected clients.
-              Subscribe after the trial to keep your app active.
+              Start a 7-day free trial through the App Store with up to three connected clients.
+              It then renews at $49/month or $490/year unless canceled in your Apple account.
             </Text>
             <View style={[styles.statusPill, atLimit && styles.statusPillFull]}>
               <View

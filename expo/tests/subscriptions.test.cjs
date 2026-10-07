@@ -45,7 +45,7 @@ test('seat/network failures never silently grant unlimited access; disconnect us
 test('evaluation, custom fee, upfront annual billing and working inquiry remain consistent',()=>{
  const {PLAN_TIERS,CUSTOM_SETUP_PRICE,CUSTOM_INQUIRY_URL}=loader()(path.join(root,'expo/constants/plans.ts'));
  assert.equal(CUSTOM_SETUP_PRICE,'$499');const custom=PLAN_TIERS.find(t=>t.id==='bespoke');assert.match(custom.altPrice,/required.*49\/month.*490\/year, billed annually/);assert.match(custom.features.join(' '),/Hosting.*standard platform updates.*bug fixes.*separately quoted/);assert.match(custom.features.join(' '),/own Apple Developer account.*membership.*separate cost/);assert.match(CUSTOM_INQUIRY_URL,/^mailto:hello@myrealtorapp.com\?subject=/);
- const evalTier=PLAN_TIERS.find(t=>t.id==='evaluation');assert.match(evalTier.features.join(' '),/All standard features for 7 days.*3 connected.*No payment details.*pending invitations do not count/);assert.match(evalTier.priceNote,/7 days/);assert.match(PLAN_TIERS.find(t=>t.id==='pro').altPrice,/490\/year, billed annually.*40\.83.*98/);
+ const evalTier=PLAN_TIERS.find(t=>t.id==='evaluation');assert.match(evalTier.features.join(' '),/All standard features for 7 days.*3 connected.*Free trial through the App Store; renews unless canceled.*pending invitations do not count/);assert.match(evalTier.priceNote,/7 days/);assert.match(PLAN_TIERS.find(t=>t.id==='pro').altPrice,/490\/year, billed annually.*40\.83.*98/);
 });
 test('entitlement lookup failures resolve to unknown, never inactive',async()=>{
  const cases=[[{data:null,error:{message:'function public.experience_access does not exist',code:'PGRST202'}},'unknown'],[{data:null,error:{message:'offline'}},'unknown'],[{data:{},error:null},'unknown'],[{data:{available:false},error:null},'inactive'],[{data:{available:true},error:null},'active']];
@@ -61,8 +61,8 @@ test('owner service notice is accurate to the actual inactive reason',()=>{
  assert.equal(serviceNoticeCopy(null),null);
  assert.match(serviceNoticeCopy('billing_retry').title,/Apple couldn't renew/);
  assert.match(serviceNoticeCopy('billing_retry').body,/restore publishing and client communication/);
- for(const reason of ['trial_ended','canceled','expired','revoked']){const c=serviceNoticeCopy(reason);assert.doesNotMatch(c.title+c.body,/payment/i,`${reason} never claims a payment failed`);assert.match(c.body,/remain available/);}
- assert.match(serviceNoticeCopy('trial_ended').title,/trial has ended/);
+ for(const reason of ['not_subscribed','canceled','expired','refunded']){const c=serviceNoticeCopy(reason);assert.doesNotMatch(c.title+c.body,/payment/i,`${reason} never claims a payment failed`);assert.match(c.body,/remain available/);}
+ assert.match(serviceNoticeCopy('not_subscribed').title,/7-day free trial/);assert.match(serviceNoticeCopy('refunded').title,/^Refunded/);assert.match(serviceNoticeCopy('expired').title,/^Expired/);assert.match(serviceNoticeCopy('canceled').title,/^Canceled/);
 });
 test('inactive or unknown seat state never becomes a lockout or a misleading capacity banner',()=>{
  const seats=fs.readFileSync(path.join(root,'expo/contexts/SeatsContext.tsx'),'utf8');
