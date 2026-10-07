@@ -688,7 +688,9 @@ test('walkthrough moves by swipe and glass page dots, without skip back or next 
   assert.doesNotMatch(src, /accessibilityLabel="Back to previous walkthrough step"/);
   assert.doesNotMatch(src, /accessibilityLabel=\{currentIndex === slides\.length - 1 \? "Get started" : "Next"\}/);
   assert.doesNotMatch(src, /ArrowLeft/);
-  assert.doesNotMatch(src, /ArrowRight/);
+  assert.match(src, /BUILD MY APP/);
+  assert.match(src, /CONTINUE/);
+  assert.match(src, /currentIndex === slides\.length - 1/);
 });
 
 test('realtor tour finish gates until /admin/build for incomplete setup', () => {

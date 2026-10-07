@@ -18,8 +18,12 @@ import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { safeImageSource } from "@/lib/safeImageSource";
 import * as Haptics from "expo-haptics";
+import { ArrowRight } from "lucide-react-native";
 import { brand, dark, fonts } from "@/constants/colors";
+import { useAuth } from "@/contexts/AuthContext";
+import { useBrand } from "@/contexts/BrandContext";
 import type { Audience } from "@/contexts/OnboardingContext";
+import { realtorSetupState } from "@/lib/onboardingState";
 
 
 interface Slide {
@@ -123,8 +127,63 @@ export function nextWalkthroughIndex(current: number, total: number): number | n
  */
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
+function FinalCta({ label, onPress }: { label: string; onPress: () => void }) {
+  const sweep = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(sweep, {
+          toValue: 1,
+          duration: 2400,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.delay(1600),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [sweep]);
+  const translateX = sweep.interpolate({ inputRange: [0, 1], outputRange: [-140, 340] });
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      style={styles.cta}
+    >
+      <View style={styles.ctaFace}>
+      <BlurView pointerEvents="none" intensity={30} tint="dark" style={StyleSheet.absoluteFill} />
+      <LinearGradient
+        pointerEvents="none"
+        colors={["rgba(235,199,118,0.22)", "rgba(255,255,255,0.05)", "rgba(0,0,0,0.16)"]}
+        locations={[0, 0.45, 1]}
+        style={StyleSheet.absoluteFill}
+      />
+      <Animated.View pointerEvents="none" style={[styles.ctaSheen, { transform: [{ translateX }] }]}>
+        <LinearGradient
+          colors={["rgba(255,244,220,0)", "rgba(255,244,220,0.22)", "rgba(255,244,220,0)"]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={StyleSheet.absoluteFill}
+        />
+      </Animated.View>
+      <Text style={styles.ctaText}>{label}</Text>
+      <ArrowRight size={14} color="rgba(244,239,230,0.9)" strokeWidth={1.6} style={styles.ctaArrow} />
+      </View>
+    </Pressable>
+  );
+}
+
 export default function OnboardingCarousel({ audience, onFinish }: Props) {
   const slides: Slide[] = audience === "client" ? CLIENT_SLIDES : SLIDES;
+  const { savedBrand } = useBrand();
+  const { realtorRecord } = useAuth();
+  const buildStillOpen =
+    audience === "realtor" &&
+    realtorRecord?.client_code_enabled !== true &&
+    realtorSetupState(savedBrand, false) === "setup-incomplete";
+  const ctaLabel = buildStillOpen ? "BUILD MY APP" : "CONTINUE";
   // Live window width — module-level Dimensions.get("window") is stale on Expo
   // web (SSR / first paint) and made slide width ≠ FlatList viewport, so the
   // first Next (0→1) looked like a no-op while later swipe/back still moved.
@@ -355,17 +414,14 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
                 <Pressable
                   key={i}
                   onPress={() => {
-                    if (active && i === slides.length - 1) {
-                      finish();
-                      return;
-                    }
+                    if (i === currentIndex) return;
                     if (Platform.OS !== "web") Haptics.selectionAsync();
                     syncIndex(i);
                     scrollToPage(i, true);
                   }}
                   hitSlop={12}
                   accessibilityRole="button"
-                  accessibilityLabel={active && i === slides.length - 1 ? "Get started" : `Page ${i + 1}`}
+                  accessibilityLabel={`Page ${i + 1}`}
                   accessibilityState={{ selected: active }}
                   style={styles.dotHit}
                 >
@@ -383,6 +439,9 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
             })}
           </View>
         </View>
+        {currentIndex === slides.length - 1 ? (
+          <FinalCta label={ctaLabel} onPress={finish} />
+        ) : null}
       </Animated.View>
     </View>
   );
@@ -508,5 +567,57 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "rgba(255,255,255,0.72)",
     backgroundColor: "rgba(255,255,255,0.16)",
+  },
+  cta: {
+    position: "absolute",
+    left: 40,
+    right: 40,
+    bottom: 36,
+    height: 48,
+    borderRadius: 24,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(212,175,120,0.62)",
+    backgroundColor: "transparent",
+    zIndex: 30,
+    ...(Platform.OS === "web"
+      ? ({
+          backdropFilter: "blur(18px) saturate(1.6)",
+          WebkitBackdropFilter: "blur(18px) saturate(1.6)",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,236,205,0.45)",
+        } as object)
+      : {
+          shadowColor: "#000",
+          shadowOpacity: 0.28,
+          shadowRadius: 12,
+          shadowOffset: { width: 0, height: 6 },
+          elevation: 8,
+        }),
+  },
+  ctaFace: {
+    ...StyleSheet.absoluteFill,
+    borderRadius: 24,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(28,24,18,0.22)",
+  },
+  ctaText: {
+    fontFamily: fonts.sansSemi,
+    color: brand.ivory,
+    fontSize: 12,
+    letterSpacing: 2.2,
+    textAlign: "center",
+  },
+  ctaArrow: {
+    position: "absolute",
+    right: 18,
+  },
+  ctaSheen: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: 88,
   },
 });
