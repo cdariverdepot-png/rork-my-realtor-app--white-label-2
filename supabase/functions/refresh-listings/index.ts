@@ -47,7 +47,10 @@ Deno.serve(async req => {
       if (!data || data.id === DEMO || (body.realtorId && body.realtorId !== data.id)) return reply({ ok: false, error: "This session does not own the selected realtor account. Sign in to that account to import listings." }, 403);
       realtorId = data.id;
     }
-    // Listing import is part of app setup/editing, not a paid service action.\n    // Subscription entitlement must never block entering or building the app;\n    // paid access is enforced only at explicit service-action boundaries.\n    if (!body.listingId && body.mode !== "legacy") {
+    // Listing import is part of app setup/editing, not a paid service action.
+    // Subscription entitlement must never block entering or building the app;
+    // paid access is enforced only at explicit service-action boundaries.
+    if (!body.listingId && body.mode !== "legacy") {
       const result = await runSourceSync(sb, realtorId, body, fetchHtml, scheduled);
       if (result) return reply(result.body, result.status);
     }
