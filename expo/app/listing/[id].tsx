@@ -1,6 +1,6 @@
 import { useWorkflowBack } from '@/hooks/useWorkflowBack';
 import { listingStatusLabel } from "@/lib/listingStatusLabel";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -28,6 +28,8 @@ import { useBrand } from "@/contexts/BrandContext";
 import { useListings } from "@/contexts/ListingsContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useEngagement } from "@/contexts/EngagementContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useClientFeed } from "@/contexts/ClientFeedContext";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 import { ListingDetailSkeleton } from "@/components/Skeleton";
@@ -47,8 +49,15 @@ export default function ListingDetail() {
   const { all, hydrated } = useListings();
   const { isFavorited, toggleListing } = useFavorites();
   const { recordView } = useEngagement();
+  const { currentClientId } = useAuth();
+  const { getFeed } = useClientFeed();
+  const recommendedIds = useMemo(
+    () => (currentClientId ? getFeed(currentClientId).pinnedListingIds : []),
+    [currentClientId, getFeed],
+  );
   // Never fall back to a different home: a stale link must not show (or book) the wrong listing.
   const item = all.find((l) => l.id === id);
+  const recommended = !!item && recommendedIds.includes(item.id);
 
   useEffect(() => {
     if (item?.id) recordView(item.id);
@@ -109,6 +118,11 @@ export default function ListingDetail() {
             </View>
           </View>
           <View style={styles.heroBottom}>
+            {recommended ? (
+              <View style={styles.recommendedTag}>
+                <Text style={styles.recommendedText}>Recommended by {firstName || "your realtor"}</Text>
+              </View>
+            ) : null}
             <Text style={styles.neighborhood}>{item.neighborhood.toUpperCase()}</Text>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.price}>{item.price}</Text>
@@ -242,6 +256,20 @@ const styles = StyleSheet.create({
   tagDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: brand.goldLight },
   tagText: { fontFamily: fonts.sansMedium, color: brand.ivory, fontSize: 10, letterSpacing: 2 },
   heroBottom: { position: "absolute", left: 24, right: 24, bottom: 28 },
+  recommendedTag: {
+    alignSelf: "flex-start",
+    marginBottom: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: "rgba(210,163,67,0.92)",
+  },
+  recommendedText: {
+    fontFamily: fonts.sansSemi,
+    color: brand.forestDeep,
+    fontSize: 10,
+    letterSpacing: 0.4,
+  },
   neighborhood: {
     fontFamily: fonts.sansMedium,
     color: brand.goldLight,
