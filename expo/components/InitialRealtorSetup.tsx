@@ -335,9 +335,18 @@ export default function InitialRealtorSetup() {
       let listingWarning = "";
       try {
         const connected = await connectListingSource(websiteUri ?? current.find(source => source.kind === "url")!.uri, auth.realtorId);
-        setImportedListingCount(connected.imported ?? 0);
+        const connectedItems = connected.items ?? [];
+        setImportedListingCount(connected.imported ?? connectedItems.length);
         setHasConnectedSource(true);
-        await refreshListings();
+        // The sync endpoint already returns the authoritative collection. Save it
+        // locally immediately so the review preview cannot open one render early
+        // with an empty Listings tab while realtime hydration catches up.
+        if (connectedItems.length) {
+          await saveListings(connectedItems);
+          listingsSnapshot.current = connectedItems;
+        } else {
+          await refreshListings();
+        }
       } catch (error) {
         // A site with no readable inventory can still build the existing profile.
         // Account/session and save failures must stop the workflow.
@@ -504,7 +513,7 @@ export default function InitialRealtorSetup() {
     </View>
   ) : null;
 
-  if (phase === 'collect') return <BuildUrlEntry listingCount={existingListings.length} onViewListings={() => router.push("/admin/listings")} url={url} onChange={setUrl} busy={busy} preparing={!loaded || builderReady===null || !authHydrated} onSubmit={needsBuilderAuth ? goPortalAuth : analyze} error={error?.place==='sources'?error.message:undefined}/>;
+  if (phase === 'collect') return <BuildUrlEntry listingCount={existingListings.length} onViewListings={() => router.push("/admin/listings")} url={url} onChange={setUrl} busy={busy} preparing={!loaded || builderReady===null || !authHydrated} onSubmit={needsBuilderAuth ? goPortalAuth : analyze} error={error?.place==='sources'?error.message:undefined} validationState={websiteState}/>;
   return <View style={{ flex: 1 }}>
   {cropper}
   <ScrollView ref={scrollRef} style={{ flex: 1, backgroundColor: "#101419" }}
@@ -558,7 +567,7 @@ export default function InitialRealtorSetup() {
         return <>
           <View style={{ marginTop: 18, alignItems: "center" }}>
             <View style={{ opacity: regenerating === "heroMessage" ? 0.55 : 1, width }}>
-              <OnboardingThemePreview brand={previewBrand} listings={mergeDiscoveredListings(existingListings,result?.draft.discoveredListings??[])} width={width}/>
+              <OnboardingThemePreview brand={previewBrand} listings={mergeDiscoveredListings(listingsSnapshot.current,result?.draft.discoveredListings??[])} width={width}/>
             </View>
             <Text style={{ color: "#9AA4AA", marginTop: 10, textAlign: "center", fontSize: 13 }}>
               {design.name} · how your clients will see the opening screen
@@ -662,7 +671,7 @@ export default function InitialRealtorSetup() {
       {errorFor("review")}
       {missingLabels.length > 0 && error?.place !== "review"
         ? <Text style={{ color: "#D6BA91", marginTop: 16 }}>Still needed: {missingLabels.join(", ")}</Text> : null}
-      <SetupReviewActions draft={draft} listings={mergeDiscoveredListings(existingListings,result?.draft.discoveredListings??[])}
+      <SetupReviewActions draft={draft} listings={mergeDiscoveredListings(listingsSnapshot.current,result?.draft.discoveredListings??[])}
         onChoose={setDraft} disabled={busy || !!regenerating}/>
       <PressableScale accessibilityRole="button" onPress={finish} disabled={busy || !!regenerating} haptic="medium" style={{ marginTop: 16 }}>
         <View style={{ minHeight: 58, borderRadius: 14, backgroundColor: "#171D22", borderWidth: 1, borderColor: "#646C70",
