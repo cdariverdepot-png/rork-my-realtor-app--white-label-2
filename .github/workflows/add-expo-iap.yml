@@ -1,0 +1,44 @@
+name: Add expo-iap dependency (one-time)
+on:
+  push:
+    branches: [deps/expo-iap]
+    paths: ['.github/workflows/add-expo-iap.yml']
+permissions:
+  contents: write
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: expo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install SDK-compatible expo-iap
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          npx expo install expo-iap -- --ignore-scripts || pnpm add expo-iap --ignore-scripts
+          node -e "console.log(require('./node_modules/expo-iap/package.json').version)"
+      - name: Capture API surface for review
+        run: |
+          mkdir -p ../.iap-api
+          v=$(node -p "require('./node_modules/expo-iap/package.json').version")
+          echo "$v" > ../.iap-api/VERSION
+          cp node_modules/expo-iap/package.json ../.iap-api/package.json
+          find node_modules/expo-iap/build -maxdepth 2 -name '*.d.ts' | head -40 | while read f; do mkdir -p "../.iap-api/$(dirname ${f#node_modules/expo-iap/})"; cp "$f" "../.iap-api/${f#node_modules/expo-iap/}"; done
+          ls node_modules/expo-iap > ../.iap-api/ROOT_FILES
+          cp node_modules/expo-iap/app.plugin.js ../.iap-api/ 2>/dev/null || true
+      - name: Commit lockfile
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add expo/package.json expo/pnpm-lock.yaml .iap-api
+          git commit -m "Add expo-iap (SDK-compatible) and lockfile"
+          git push
