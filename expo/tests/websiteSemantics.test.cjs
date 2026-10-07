@@ -51,8 +51,9 @@ test('the website home does not invent duplicate chat or explore destinations', 
   assert.doesNotMatch(home, /Explore more/);
   assert.doesNotMatch(home, /Start a conversation/);
   assert.doesNotMatch(home, /Chat with /);
-  assert.match(home, /presentWebsiteSection/);
+  assert.match(home, /composeWebsiteSections/);
   assert.match(home, /destination === 'unique'/);
+  assert.match(home, /item\.destination === 'native' && item\.native === 'listings'/);
 });
 
 test('a simple brokerage page keeps area copy and folds listings and contact into native destinations', () => {
