@@ -33,6 +33,11 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   assert.equal((await login(1,'wrong')).reason,'bad_password');assert.equal((await state()).used,0);
   await as(uid(1));const spoof=await scalar('select public.claim_client_seat($1,$2,$3,$4) result',[R,'spoof@example.com','forged','Forged']);assert.equal(spoof.ok,false);assert.equal((await state()).used,0);
  });
+ await t.test('evaluation expires after seven days and can be restored for the remaining lifecycle tests',async()=>{
+  await admin();await query("update private.billing_accounts set trial_started_at=now()-interval '8 days' where realtor_id=$1",[R]);
+  assert.equal((await state()).active,false);assert.equal((await login(1)).reason,'inactive');
+  await admin();await query("update private.billing_accounts set trial_started_at=now() where realtor_id=$1",[R]);assert.equal((await state()).active,true);
+ });
  await t.test('three authenticated clients and repeated/new-device acceptance count once',async()=>{
   for(let n=1;n<=3;n++)assert.equal((await login(n)).ok,true);
   assert.equal((await login(1)).ok,true);await as(uid(10));assert.equal((await scalar('select public.verify_client_account($1,$2,$3) result',[R,'c1@example.com','password'])).ok,true);

@@ -4,7 +4,7 @@ create table private.billing_accounts (
  realtor_id uuid primary key references public.realtors(id) on delete cascade,
  ever_paid boolean not null default false,
  provider_customer_id text unique, provider_subscription_id text,
- status text not null default 'evaluation', billing_interval text check (billing_interval in ('month','year')),
+ status text not null default 'evaluation', trial_started_at timestamptz not null default now(), billing_interval text check (billing_interval in ('month','year')),
  paid_through timestamptz, period_end timestamptz, cancel_at_period_end boolean not null default false,
  payment_issue boolean not null default false, revision bigint not null default 0,
  checkout_key uuid, checkout_until timestamptz, checkout_session_id text,
@@ -26,6 +26,15 @@ alter table private.billing_accounts enable row level security;
 alter table private.client_relationships enable row level security;
 alter table private.billing_events enable row level security;
 revoke all on private.billing_accounts,private.client_relationships,private.billing_events from public,anon,authenticated;
+-- Every realtor gets a server-owned trial clock. Existing accounts start their 7-day trial when this entitlement system is introduced.
+insert into private.billing_accounts(realtor_id) select id from public.realtors on conflict do nothing;
+create function private.initialize_billing_account() returns trigger language plpgsql security definer set search_path='' as $
+begin
+ insert into private.billing_accounts(realtor_id) values(new.id) on conflict do nothing;
+ return new;
+end; $;
+create trigger initialize_realtor_billing after insert on public.realtors for each row execute function private.initialize_billing_account();
+revoke all on function private.initialize_billing_account() from public,anon,authenticated;
 -- Existing authenticated, currently bound accounts retain their relationships; address-book contacts are excluded.
 insert into private.client_relationships(realtor_id,client_id)
  select distinct s.realtor_id,s.client_id from private.client_sessions s join public.client_accounts a
@@ -38,8 +47,8 @@ end; $$;
 
 create function private.service_active(rid uuid) returns boolean language sql stable security definer set search_path='' as $$
  select exists(select 1 from public.realtors where id=rid) and coalesce((select
- case when not ever_paid then exists(select 1 from public.realtors r where r.id=rid and r.created_at > now() - interval '7 days') else coalesce(paid_through>now(),false) end
- from private.billing_accounts where realtor_id=rid),true);
+ case when not ever_paid then trial_started_at + interval '7 days' > now() else coalesce(paid_through>now(),false) end
+ from private.billing_accounts where realtor_id=rid),false);
 $$;
 create function public.realtor_service_active(p_realtor_id uuid) returns boolean language sql security invoker set search_path='' as $$ select private.service_active(p_realtor_id); $$;
 revoke all on function public.realtor_service_active(uuid) from public,anon,authenticated;
@@ -52,7 +61,7 @@ begin
  enabled:=private.service_active(rid);
  return jsonb_build_object('ok',true,'plan',case when b.ever_paid then 'pro' else 'evaluation' end,
   'active',enabled,'status',case when not enabled then 'inactive' else coalesce(b.status,'evaluation') end,
-  'providerStatus',coalesce(b.status,'evaluation'),'interval',b.billing_interval,'serviceEnd',b.paid_through,
+  'providerStatus',coalesce(b.status,'evaluation'),'interval',b.billing_interval,'trialEnd',case when not coalesce(b.ever_paid,false) then b.trial_started_at + interval '7 days' else null end,'serviceEnd',b.paid_through,
   'renewalAt',b.period_end,'cancelAtPeriodEnd',coalesce(b.cancel_at_period_end,false),
   'paymentIssue',coalesce(b.payment_issue,false),'everPaid',coalesce(b.ever_paid,false),
   'limit',case when not enabled then 0 when b.ever_paid then -1 else 3 end,'used',used);
