@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View, Platform } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,6 +8,9 @@ import { Heart } from "lucide-react-native";
 import { brand, fonts } from "@/constants/colors";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useListings } from "@/contexts/ListingsContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useClientFeed } from "@/contexts/ClientFeedContext";
+import { useBrand } from "@/contexts/BrandContext";
 import ModalChrome from "@/components/ModalChrome";
 import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
@@ -18,6 +21,17 @@ export default function WatchlistDetail() {
   const router = useRouter();
   const { lists, toggleListing } = useFavorites();
   const { all } = useListings();
+  const { currentClientId } = useAuth();
+  const { getFeed } = useClientFeed();
+  const { brand: realtorBrand } = useBrand();
+  const recommendedIds = useMemo(
+    () => (currentClientId ? getFeed(currentClientId).pinnedListingIds : []),
+    [currentClientId, getFeed],
+  );
+  const recommendationLabel = useMemo(() => {
+    const first = realtorBrand.realtor.name.trim().split(/\s+/)[0];
+    return `Recommended by ${first || "your realtor"}`;
+  }, [realtorBrand.realtor.name]);
 
   const list = lists.find((l) => l.id === id);
   const homes =
@@ -71,6 +85,11 @@ export default function WatchlistDetail() {
                   locations={[0.45, 1]}
                   style={StyleSheet.absoluteFill}
                 />
+                {recommendedIds.includes(h.id) ? (
+                  <View style={styles.recommendedChip}>
+                    <Text style={styles.recommendedChipText}>{recommendationLabel}</Text>
+                  </View>
+                ) : null}
                 <Pressable
                   onPress={tap(() => toggleListing(list.id, h.id))}
                   style={styles.heartChip}
@@ -108,6 +127,7 @@ export default function WatchlistDetail() {
                   <View style={{ flex: 1 }}>
                     <Text style={styles.rowHood}>{c.neighborhood.toUpperCase()}</Text>
                     <Text style={styles.rowTitle}>{c.title}</Text>
+                    {recommendedIds.includes(c.id) ? <Text style={styles.rowRecommended}>{recommendationLabel}</Text> : null}
                     <Text style={styles.rowPrice}>{c.price}</Text>
                   </View>
                   <View style={styles.addPill}>
@@ -147,6 +167,23 @@ const styles = StyleSheet.create({
     backgroundColor: brand.forest,
     overflow: "hidden",
   },
+  recommendedChip: {
+    position: "absolute",
+    top: 14,
+    left: 14,
+    maxWidth: "70%",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: "rgba(210,163,67,0.92)",
+    zIndex: 2,
+  },
+  recommendedChipText: {
+    fontFamily: fonts.sansSemi,
+    color: brand.forestDeep,
+    fontSize: 9,
+    letterSpacing: 0.3,
+  },
   heartChip: {
     position: "absolute",
     top: 14,
@@ -182,6 +219,7 @@ const styles = StyleSheet.create({
   thumb: { width: 56, height: 56, backgroundColor: brand.forest },
   rowHood: { fontFamily: fonts.sansMedium, color: brand.goldDeep, fontSize: 9, letterSpacing: 2 },
   rowTitle: { fontFamily: fonts.serif, color: brand.ink, fontSize: 15, marginTop: 2 },
+  rowRecommended: { fontFamily: fonts.sansSemi, color: brand.goldDeep, fontSize: 9, marginTop: 2 },
   rowPrice: { fontFamily: fonts.sans, color: brand.muted, fontSize: 12, marginTop: 2 },
   addPill: {
     width: 32,
