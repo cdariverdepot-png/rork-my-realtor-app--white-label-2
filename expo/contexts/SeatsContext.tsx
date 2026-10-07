@@ -10,6 +10,7 @@ import {
   type SeatAttempt,
   type SeatConnection,
   type SeatState,
+  type InactiveReason,
 } from "@/lib/seats";
 import { FREE_SEAT_LIMIT, isUnlimited, type PlanId } from "@/constants/plans";
 
@@ -111,7 +112,14 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
   const used = tracked && verified ? state.used : 0;
   const unlimited = isUnlimited(limit);
   const remaining = unlimited ? Number.POSITIVE_INFINITY : Math.max(0, limit - used);
-  const atLimit = tracked && !unlimited && used >= limit;
+  /** Definitely inactive (server-verified). Unknown/unloaded state is never treated as inactive. */
+  const serviceInactive = tracked && verified && !active;
+  // An inactive account is not "full"; it shows the service notice instead of a capacity banner.
+  const atLimit = tracked && !serviceInactive && !unlimited && used >= limit;
+  const reported = verified ? state.inactiveReason : null;
+  const inactiveReason: InactiveReason | null = !serviceInactive ? null
+    : reported === "trial_ended" || reported === "payment_failed" || reported === "canceled" || reported === "expired" ? reported
+    : state.paymentIssue ? "payment_failed" : state.everPaid ? (state.cancelAtPeriodEnd ? "canceled" : "expired") : "trial_ended";
 
   const plan: PlanId = verified ? state.plan : "evaluation";
   const connections: SeatConnection[] = verified ? state.connections : [];
@@ -122,6 +130,8 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
       /** True only when this account is actually metered. */
       tracked,
       active,
+      serviceInactive,
+      inactiveReason,
       status: verified ? active ? state.status : "inactive" : "unavailable",
       everPaid: verified && state.everPaid,
       serviceEnd: verified ? state.serviceEnd : null,
@@ -148,7 +158,7 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
       freeLimit: FREE_SEAT_LIMIT,
     }),
     [
-      active, verified, state, tracked, plan, limit, used, remaining, unlimited, atLimit, connections,
+      active, serviceInactive, inactiveReason, verified, state, tracked, plan, limit, used, remaining, unlimited, atLimit, connections,
       attempts, loading, loaded, isConnected, refresh, disconnect,
       acknowledgeAttempts,
     ]

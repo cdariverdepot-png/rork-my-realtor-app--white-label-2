@@ -109,3 +109,28 @@ test('billing handler verifies owner, canonical events, duplicate checkout and d
  assert.equal((await deliver({...event,id:'evt_live',livemode:true})).status,400);assert.equal((await handler(new Request('https://edge.example/billing',{method:'POST',headers:{'stripe-signature':'invalid'},body:JSON.stringify(event)}))).status,400);
  await request('cancel');assert.equal(state.cancel_at_period_end,true);await request('resume');assert.equal(state.cancel_at_period_end,false);
 });
+test('entitlement lookup failures resolve to unknown, never inactive',async()=>{
+ const cases=[[{data:null,error:{message:'function public.experience_access does not exist',code:'PGRST202'}},'unknown'],[{data:null,error:{message:'offline'}},'unknown'],[{data:{},error:null},'unknown'],[{data:{available:false},error:null},'inactive'],[{data:{available:true},error:null},'active']];
+ for(const [reply,expected] of cases){
+  const lib=loader({'@/lib/supabase':{supabase:{rpc:async()=>reply}}})(path.join(root,'expo/lib/serviceEntitlement.ts'));
+  assert.equal(await lib.serviceEntitlement('r'),expected);
+ }
+ const thrown=loader({'@/lib/supabase':{supabase:{rpc:async()=>{throw new Error('network');}}}})(path.join(root,'expo/lib/serviceEntitlement.ts'));
+ assert.equal(await thrown.serviceEntitlement('r'),'unknown');
+});
+test('owner service notice is accurate to the actual inactive reason',()=>{
+ const {serviceNoticeCopy}=loader()(path.join(root,'expo/lib/serviceNotice.ts'));
+ assert.equal(serviceNoticeCopy(null),null);
+ assert.match(serviceNoticeCopy('payment_failed').title,/couldn't process your payment/);
+ assert.match(serviceNoticeCopy('payment_failed').body,/Update your billing information to restore publishing and client communication/);
+ for(const reason of ['trial_ended','canceled','expired']){const c=serviceNoticeCopy(reason);assert.doesNotMatch(c.title+c.body,/payment/i,`${reason} never claims a payment failed`);assert.match(c.body,/remain available/);}
+ assert.match(serviceNoticeCopy('trial_ended').title,/trial has ended/);
+});
+test('inactive or unknown seat state never becomes a lockout or a misleading capacity banner',()=>{
+ const seats=fs.readFileSync(path.join(root,'expo/contexts/SeatsContext.tsx'),'utf8');
+ assert.match(seats,/const serviceInactive = tracked && verified && !active;/);
+ assert.match(seats,/const atLimit = tracked && !serviceInactive &&/);
+ for(const file of ['components/OnboardingGuard.tsx','app/_layout.tsx','app/index.tsx']){
+  const body=fs.readFileSync(path.join(root,'expo',file),'utf8');assert.doesNotMatch(body,/useSeats|experience_access|serviceEntitlement|realtor_seat_state/,`${file} startup/navigation is billing-independent`);
+ }
+});

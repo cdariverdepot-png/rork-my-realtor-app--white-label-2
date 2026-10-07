@@ -99,7 +99,15 @@ export default function ChatThread({
     }
     const entitlement = await serviceEntitlement(realtorId);
     if (entitlement !== "active") {
-      Alert.alert("Messaging unavailable", role === "client" ? "Messaging is temporarily unavailable." : entitlement === "inactive" ? "Messaging is unavailable while your subscription is inactive." : "Messaging is temporarily unavailable while your subscription status is verified.");
+      // The draft stays in the composer; dismissing returns the user exactly where they were.
+      if (role !== "client" && entitlement === "inactive") {
+        Alert.alert("Messaging unavailable", "Client messaging is unavailable while your service is inactive. Update your subscription to resume communication.", [
+          { text: "Not now", style: "cancel" },
+          { text: "Account & Billing", onPress: () => router.push("/admin/plans") },
+        ]);
+      } else {
+        Alert.alert("Messaging unavailable", role === "client" ? "Messaging is temporarily unavailable." : "Messaging is temporarily unavailable while your subscription status is verified.");
+      }
       return;
     }
     if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

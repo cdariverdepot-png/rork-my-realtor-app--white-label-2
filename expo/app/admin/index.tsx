@@ -88,6 +88,7 @@ import { resolveTheme } from "@/constants/theme";
 import { useBrand, type Brand } from "@/contexts/BrandContext";
 import { useAccess } from "@/contexts/AccessContext";
 import { useSeats } from "@/contexts/SeatsContext";
+import { serviceNoticeCopy } from "@/lib/serviceNotice";
 import SwipeToSwitch from "@/components/SwipeToSwitch";
 import type { GestureType } from "react-native-gesture-handler";
 
@@ -217,8 +218,9 @@ export default function AdminDashboard() {
   const {
     tracked: seatsTracked, used: seatsUsed, limit: seatLimit,
     unlimited: seatsUnlimited, atLimit: seatsFull,
-    attempts: turnedAway, acknowledgeAttempts,
+    attempts: turnedAway, acknowledgeAttempts, inactiveReason,
   } = useSeats();
+  const serviceNotice = serviceNoticeCopy(inactiveReason);
 
   const { editPortrait, cropper: portraitCropper } = usePortraitPicker({ maxWidth: 800, cropOutputSize: 800 });
 
@@ -853,6 +855,25 @@ export default function AdminDashboard() {
                   <ArrowRight size={13} color={admin.bg} strokeWidth={2} />
                 </Pressable>
               </View>
+            ) : null}
+
+            {serviceNotice ? (
+              <Pressable
+                accessibilityRole="button"
+                onPress={tap(() => router.push("/admin/plans"))}
+                style={({ pressed }) => [styles.limitBanner, pressed && { opacity: 0.9 }]}
+              >
+                <BlurView intensity={22} tint="dark" style={StyleSheet.absoluteFill} />
+                <View style={styles.limitIcon}>
+                  <Crown size={13} color={admin.goldLight} strokeWidth={1.7} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.limitTitle}>{serviceNotice.title}</Text>
+                  <Text style={styles.limitBody}>{serviceNotice.body}</Text>
+                  <Text style={[styles.limitBody, { color: admin.goldLight, marginTop: 6 }]}>Account &amp; Billing</Text>
+                </View>
+                <ChevronRight size={15} color={admin.goldLight} strokeWidth={1.8} />
+              </Pressable>
             ) : null}
 
             {seatsFull ? (

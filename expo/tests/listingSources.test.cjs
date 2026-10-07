@@ -220,9 +220,11 @@ test('endpoint rejects invalid scheduler credentials, missing auth and foreign r
   }
 });
 
-test('inactive accounts cannot refresh inventory directly or through the scheduler',async()=>{
+test('subscription state never changes listing import or scheduled refresh outcomes',async()=>{
+ // Listing import is app setup/editing, not a paid service action (see refresh-listings/index.ts).
  for(const args of [{},{body:{realtorId:'11111111-1111-1111-1111-111111111111'},headers:{'x-listing-sync-token':'scheduler-secret'}}]){
-  const r=await endpoint({...args,serviceActive:false});assert.equal(r.status,403);assert.equal(r.fetched,0);assert.equal(r.writes.length,0);
+  const active=await endpoint({...args,serviceActive:true}),inactive=await endpoint({...args,serviceActive:false});
+  assert.notEqual(inactive.status,403);assert.equal(inactive.status,active.status);assert.equal(inactive.fetched,active.fetched);assert.equal(inactive.writes.length,active.writes.length);
  }
 });
 

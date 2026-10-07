@@ -83,13 +83,13 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   await apply({...paid,status:'past_due',paid_through:null,payment_issue:true},'evt_failure');const s=await state();assert.equal(s.paymentIssue,true);assert.equal(s.active,true);assert.equal(Date.parse(s.serviceEnd),Date.parse(paid.paid_through));
   await apply(paid,'evt_recovered');assert.equal((await state()).paymentIssue,false);
  });
- await t.test('expiry never restores evaluation, neutral client notice, export and account management survive',async()=>{
+ await t.test('expiry never restores evaluation or locks anyone out; only new connections and service actions stop',async()=>{
   await disconnect(2);await admin();await query("update private.billing_accounts set status='canceled',paid_through=now()-interval '1 second' where realtor_id=$1",[R]);
-  const s=await state();assert.equal(s.active,false);assert.equal(s.everPaid,true);assert.equal(s.limit,0);assert.equal(s.plan,'pro');assert.equal((await login(3)).reason,'inactive');
+  const s=await state();assert.equal(s.active,false);assert.equal(s.everPaid,true);assert.equal(s.limit,0);assert.equal(s.plan,'pro');assert.equal((await login(2)).reason,'inactive','a disconnected client cannot reconnect while inactive');assert.equal((await login(1)).ok,true,'an existing connected client still signs in');
   await as(uid(1));const a=await scalar('select public.experience_access($1) result',[R]);assert.equal(a.available,false);assert.equal(a.contact.email,'business@example.com');assert.equal(a.paymentIssue,undefined);assert.equal(a.status,undefined);
-  assert.equal(await scalar('select private.kv_read($1) result',[R+':messages.v1']),null);await assert.rejects(query('select private.request_showing($1,$2,$3,$4,$5)',[R,'request','listing',0,30]),/unavailable/);
-  await as(OWNER);assert.equal((await query('select * from public.app_kv')).rows.length,0);assert.equal((await query('select * from public.listing_sources')).rows.length,0);assert.equal((await query('select * from public.realtor_builds')).rows.length,0);const data=await scalar('select public.export_realtor_data($1) result',[R]);assert.ok(data.records[R+':messages.v1']);assert.deepEqual(data.build.draft,{draft:'preserved'});assert.equal(data.clientAccounts[0].pw_hash,undefined);
-  await assert.rejects(query('insert into storage.objects(name) values($1)',['blocked-upload']),/row-level security/);await as(uid(1));await assert.rejects(query('select private.capture_public_lead($1,$2,$3,$4)',[R,'Client','client@example.com','555']),/unavailable/);
+  await as(uid(1));assert.deepEqual(await scalar('select private.kv_read($1) result',[R+':messages.v1']),{history:['preserved']},'existing clients keep reading');await assert.rejects(query('select private.request_showing($1,$2,$3,$4,$5)',[R,'request','listing',0,30]),/unavailable/);
+  await as(OWNER);assert.ok((await query('select * from public.app_kv')).rows.length>0);assert.ok((await query('select * from public.listing_sources')).rows.length>0);assert.ok((await query('select * from public.realtor_builds')).rows.length>0);const data=await scalar('select public.export_realtor_data($1) result',[R]);assert.ok(data.records[R+':messages.v1']);assert.deepEqual(data.build.draft,{draft:'preserved'});assert.equal(data.clientAccounts[0].pw_hash,undefined);
+  await query('insert into storage.objects(name) values($1)',['allowed-upload']);await as(uid(1));await assert.rejects(query('select private.capture_public_lead($1,$2,$3,$4)',[R,'Client','client@example.com','555']),/unavailable/);
  });
  await t.test('reactivation restores only previously active relationships and existing invitations',async()=>{
   await apply({...paid,subscription:'sub_reactivated'},'evt_reactivated');assert.equal((await state()).active,true);
@@ -97,7 +97,6 @@ test('server entitlement lifecycle in isolated PostgreSQL',async t=>{
   await admin();assert.equal((await query('select client_code from public.realtors where id=$1',[R])).rows[0].client_code,'INVITE');
  });
  await t.test('cross-realtor access and client billing writes are rejected',async()=>{
-  await as(OWNER);assert.equal(await scalar('select private.kv_service_active($1) result',['global-setting']),false);assert.equal(await scalar('select private.kv_service_active($1) result',[R+':messages.v1']),true);
   await as(OWNER);await assert.rejects(query('select public.realtor_seat_state($1)',[OTHER]),/authorized/);await assert.rejects(query('select public.export_realtor_data($1)',[OTHER]),/authorized/);await assert.rejects(query('select public.disconnect_client($1,$2)',[OTHER,'c1']),/authorized/);
   await as(uid(1));await assert.rejects(query('select public.billing_snapshot($1)',[R]),/permission denied/);await assert.rejects(query('select * from private.billing_accounts'),/permission denied/);assert.equal(await scalar('select private.bound_client($1) result',[OTHER]),null);
   await as(OWNER);await assert.rejects(query('select public.billing_apply($1,$2,$3,$4)',[R,0,'evt_spoof',paid]),/permission denied/);
