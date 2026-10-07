@@ -1,4 +1,5 @@
 name: Deploy Supabase functions
+# Runs the importer regression suite before deploying every Edge Function.
 
 on:
   push:
