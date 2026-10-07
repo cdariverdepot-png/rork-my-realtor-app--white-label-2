@@ -98,7 +98,9 @@ export default function InitialRealtorSetup() {
   const listingsSnapshot = useRef(existingListings);
   useEffect(() => { listingsSnapshot.current = existingListings; }, [existingListings]);
 
-  // Once a build starts, keep the progress surface mounted through failures.\n  // Never dump the realtor back to URL entry because a downstream service failed.\n  const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
+  // Once a build starts, keep the progress surface mounted through failures.
+  // Never dump the realtor back to URL entry because a downstream service failed.
+  const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
   const isGuestAccess = !!auth.isGuestAccess;
   const authHydrated = !!auth.hydrated;
   // Guest REALTOR access codes: never gate. Edge (non-guest, no cloud auth): send to portal —
@@ -329,7 +331,9 @@ export default function InitialRealtorSetup() {
     }
     if (!current.some(source => source.kind !== "contacts")) throw new Error("Paste the public page where your listings live.");
     setEditingSources(false);
-    setBuilding(true);\n    let buildSucceeded = false;\n    try {
+    setBuilding(true);
+    let buildSucceeded = false;
+    try {
       setActivity("Finding and saving your listings…");
       if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
       let listingWarning = "";
@@ -364,8 +368,20 @@ export default function InitialRealtorSetup() {
       setActivity(saved.draft.discoveredListings?.length
         ? `Importing ${saved.draft.discoveredListings.length} listing${saved.draft.discoveredListings.length === 1 ? "" : "s"}…`
         : "Finishing your profile…");
-      if (listingWarning) setError({ place: "listings", message: listingWarning });\n      buildSucceeded = true;\n      // The shared importer has already persisted the authoritative collection.
-    } catch (e) {\n      // Preserve the in-progress screen and surface the failing stage in place.\n      // `act` owns the user-facing error; rethrow without resetting navigation state.\n      throw e;\n    } finally {\n      // Leave `building` true on failure so BuildProgress remains visible and the\n      // source URL/session are preserved for retry instead of snapping backward.\n      // Successful analysis calls startReview(), so result/draft transition to review.\n      if (buildSucceeded) setBuilding(false);\n    }\n  });
+      if (listingWarning) setError({ place: "listings", message: listingWarning });
+      buildSucceeded = true;
+      // The shared importer has already persisted the authoritative collection.
+    } catch (e) {
+      // Preserve the in-progress screen and surface the failing stage in place.
+      // `act` owns the user-facing error; rethrow without resetting navigation state.
+      throw e;
+    } finally {
+      // Leave `building` true on failure so BuildProgress remains visible and the
+      // source URL/session are preserved for retry instead of snapping backward.
+      // Successful analysis calls startReview(), so result/draft transition to review.
+      if (buildSucceeded) setBuilding(false);
+    }
+  });
   };
   const addContacts = () => void act("sources", async () => {
     const picked = await DocumentPicker.getDocumentAsync({ type: ["text/csv", "text/vcard", "text/x-vcard", "text/plain", "*/*"],
