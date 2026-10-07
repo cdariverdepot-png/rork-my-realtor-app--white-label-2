@@ -1,5 +1,5 @@
 import { useWorkflowBack } from '@/hooks/useWorkflowBack';
-import React from "react";
+import React, { useMemo } from "react";
 import {
   FlatList,
   Platform,
@@ -19,6 +19,9 @@ import { brand, dark, fonts } from "@/constants/colors";
 import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
 import { useListings, type ManagedListing } from "@/contexts/ListingsContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useClientFeed } from "@/contexts/ClientFeedContext";
+import { useBrand } from "@/contexts/BrandContext";
 import { bustedUri } from "@/lib/imageUri";
 import PressableScale from "@/components/PressableScale";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
@@ -31,7 +34,7 @@ const SIDE = 20;
 const CARD_W = (W - SIDE * 2 - COL_GAP) / 2;
 const CARD_H = Math.round(CARD_W * 1.32);
 
-function Card({ item }: { item: ManagedListing }) {
+function Card({ item, recommended, recommendationLabel }: { item: ManagedListing; recommended?: boolean; recommendationLabel?: string }) {
   const router = useRouter();
   const back = useWorkflowBack();
   const { isFavorited, toggleListing } = useFavorites();
@@ -63,6 +66,13 @@ function Card({ item }: { item: ManagedListing }) {
           <View style={styles.tagDot} />
           <Text style={styles.tagText}>{item.tag.toUpperCase()}</Text>
         </View>
+        {recommended ? (
+          <View style={styles.recommendedTag}>
+            <Text numberOfLines={1} style={styles.recommendedText}>
+              {recommendationLabel || "Recommended by your realtor"}
+            </Text>
+          </View>
+        ) : null}
         <Pressable hitSlop={8} onPress={onHeart} style={styles.heart}>
           <Heart
             size={14}
@@ -94,6 +104,17 @@ export default function AllListings() {
   const back = useWorkflowBack();
   const insets = useSafeAreaInsets();
   const { visible } = useListings();
+  const { currentClientId } = useAuth();
+  const { getFeed } = useClientFeed();
+  const { brand: realtorBrand } = useBrand();
+  const recommendedIds = useMemo(
+    () => (currentClientId ? getFeed(currentClientId).pinnedListingIds : []),
+    [currentClientId, getFeed],
+  );
+  const recommendationLabel = useMemo(() => {
+    const first = realtorBrand.realtor.name.trim().split(/\s+/)[0];
+    return `Recommended by ${first || "your realtor"}`;
+  }, [realtorBrand.realtor.name]);
 
   return (
     <View style={styles.root}>
@@ -113,7 +134,13 @@ export default function AllListings() {
         data={visible}
         keyExtractor={(it) => it.id}
         numColumns={2}
-        renderItem={({ item }) => <Card item={item} />}
+        renderItem={({ item }) => (
+          <Card
+            item={item}
+            recommended={recommendedIds.includes(item.id)}
+            recommendationLabel={recommendationLabel}
+          />
+        )}
         columnWrapperStyle={{ gap: COL_GAP, paddingHorizontal: SIDE }}
         contentContainerStyle={{
           paddingTop: 18,
@@ -218,6 +245,22 @@ const styles = StyleSheet.create({
     color: dark.text,
     fontSize: 8,
     letterSpacing: 1.6,
+  },
+  recommendedTag: {
+    position: "absolute",
+    top: 38,
+    left: 10,
+    right: 42,
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    borderRadius: 999,
+    backgroundColor: "rgba(210,163,67,0.92)",
+  },
+  recommendedText: {
+    fontFamily: fonts.sansSemi,
+    color: brand.forestDeep,
+    fontSize: 7.5,
+    letterSpacing: 0.2,
   },
   heart: {
     position: "absolute",
