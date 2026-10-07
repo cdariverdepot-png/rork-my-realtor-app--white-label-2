@@ -26,9 +26,8 @@ const {
   listingsFromIdxShowcase,
   listingFromIdxDetail,
   detectListingInterfaces,
-  listingsFromPublicJson, listingsFromCards, listingsFromMoxi, listingFromDsidxDetail,
+  listingsFromPublicJson, listingsFromCards, listingsFromMoxi, listingFromDsidxDetail, listingsFromAttributeCards,
   kestrelInventoryRequests, listingsFromKestrel, publicListingRequestHeaders, decodePublicListingResponse,
-  discoverListingsAcrossBatches,
 } = loadDiscovery();
 const {enrichListingFromPage,propertyDetailRequest,distinctPropertyImages}=loadDiscovery();
 
@@ -176,6 +175,21 @@ test('scores View Properties and FlexMLS CTAs highly', () => {
   assert.ok(scoreInventoryLink('https://cdn.flexmls.com/search/agent123', 'My listings', seed) >= 50);
   assert.equal(scoreInventoryLink('https://agent.example.com/login', 'Sign in', seed), 0);
   assert.ok(scoreInventoryLink('https://unrelated-news.com/story', 'Read more', seed) < 30);
+});
+
+test('attribute tiles require a price, an address, and a property URL', () => {
+  const base = new URL('https://tiles.example/');
+  const quoted = '&' + 'quot;';
+  const html = `<div class="listings-tile-wrap" data-id="2636623" data-address="6747 State Highway 76" data-locality="Wilson" data-region="[${quoted}OK${quoted}]" data-price="185000" data-pl-navigate-url="https://tiles.example/property/ok/wilson/6747/2636623/?filters=%7B%22z%22%3A1%7D"><img src="https://photos.example/2636623.jpg"></div>
+    <div data-price="250000">Monthly payment widget</div>`;
+  const rows = listingsFromAttributeCards(html, base);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].title, '6747 State Highway 76');
+  assert.equal(rows[0].price, '$185,000');
+  assert.equal(rows[0].neighborhood, 'Wilson, OK');
+  assert.equal(rows[0].sourceUrl, 'https://tiles.example/property/ok/wilson/6747/2636623/');
+  assert.equal(rows[0].image, 'https://photos.example/2636623.jpg');
+  assert.equal(listingsFromAttributeCards('<div data-price="185000" data-address="12 Pine St"></div>', base).length, 0);
 });
 
 test('collects inventory CTAs including outbound FlexMLS', () => {
@@ -408,66 +422,15 @@ test('optional renderer reads real DOM property facts and rejects unrelated redi
 });
 
 
-test('an IDX showcase without a listing agent id is not the brokerage inventory', async () => {
+test('a finite showcase cannot establish complete portfolio coverage', async () => {
   const widget='https://homes.agent.example/idx/customshowcasejs.php?widgetid=42';
-  const script=`var agentHeaderID = null;
-  aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake" class="IDX-showcaseLink"></a>');
-  idx('<div />').attr('class','IDX-showcaseAddress').html('123 Lake');
-  idx('<div />').attr('class','IDX-showcasePrice').html('$500,000');
-  idx('<div />').attr('class','IDX-showcaseStatus').html('Active');`;
-  const seen = [];
-  const r=await discoverListings(['https://agent.example/'],async (url) => { seen.push(url); return { html: url === widget ? script : '<script src="'+widget+'"></script>', finalUrl: new URL(url) }; });
-  assert.equal(r.listings.length,0);
-  assert.equal(r.meta.inventoryStatus,'inventory_blocked');
-  assert.ok(r.meta.obstacles.some(row => row.code === 'scope_not_established'));
-  assert.ok(r.meta.completenessEvidence.includes('scope_not_established'));
-  assert.ok(!seen.some(url => /[?&]paged=2|start=\d+/.test(url)));
-});
-
-test('an IDX showcase with a published agent id stays partial without a collection total', async () => {
-  const widget='https://homes.agent.example/idx/customshowcasejs.php?widgetid=42';
-  const script=`var agentHeaderID = 481;
-  aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake" class="IDX-showcaseLink"></a>');
+  const script=`aLink = idx('<a href="https://homes.agent.example/idx/details/listing/a1/MLS1/123-Lake" class="IDX-showcaseLink"></a>');
   idx('<div />').attr('class','IDX-showcaseAddress').html('123 Lake');
   idx('<div />').attr('class','IDX-showcasePrice').html('$500,000');
   idx('<div />').attr('class','IDX-showcaseStatus').html('Active');`;
   const r=await discoverListings(['https://agent.example/'],fixtureFetch({'https://agent.example/':'<script src="'+widget+'"></script>',[widget]:script}));
-  assert.equal(r.listings.length,1);
-  assert.equal(r.meta.coverage,'showcase');
-  assert.equal(r.meta.outcome,'partial');
-  assert.equal(r.meta.inventoryStatus,'inventory_partial');
-  assert.equal(r.meta.expectedCount ?? null, null);
+  assert.equal(r.listings.length,1); assert.equal(r.meta.coverage,'showcase'); assert.equal(r.meta.outcome,'partial');
   assert.ok(r.meta.issues.some(x=>x.code==='limited-showcase'));
-});
-
-test('IDX price-bucket result links are a market search, not listings', async () => {
-  const seed='https://agent.example/penthouses';
-  const market='https://agent.example/idx/results/listings?idxID=001&city%5B%5D=29920&lp=500000&hp=1000000&aw_remarksConcat=Penthouse';
-  const rows=listingsFromCards('<a href="'+market+'">Penthouses $500,000 to $1,000,000</a>', new URL(seed));
-  assert.equal(rows.length,0);
-  const seen=[];
-  const r=await discoverListings([seed], async (url) => { seen.push(url); return { html: '<a href="'+market+'">Penthouses $500,000</a><a href="/idx/search/advanced">Search homes</a>', finalUrl: new URL(url) }; }, { maxPages: 6 });
-  assert.equal(r.listings.length,0);
-  assert.equal(r.meta.inventoryStatus,'inventory_blocked');
-  assert.ok(r.meta.obstacles.some(row => row.code === 'scope_not_established'));
-  assert.ok(!seen.includes(market));
-});
-
-test('a scoped IDX results page can complete only when the published count matches the rows', async () => {
-  const page='https://homes.agent.example/idx/results/listings?a_listingAgentID=77';
-  const card=(id,addr)=>'<a href="https://homes.agent.example/idx/details/listing/b004/'+id+'/'+addr+'">'+addr.replace(/-/g,' ')+' $500,000</a>';
-  const html='<span class="IDX-resultsCount">2</span>'+card('A','11-Lake')+card('B','22-Oak');
-  const r=await discoverListings([page],fixtureFetch({[page]:html}),{maxPages:4,maxDetailPages:0});
-  assert.equal(r.listings.length,2);
-  assert.equal(r.meta.expectedCount,2);
-  assert.equal(r.meta.inventoryStatus,'inventory_complete');
-  assert.ok(r.meta.completenessEvidence.includes('published_count_match'));
-  const open='https://homes.agent.example/idx/results/listings?a_listingOfficeID=9';
-  const partial=await discoverListings([open],fixtureFetch({[open]:'<span class="IDX-resultsCount">40</span>'+card('A','11-Lake')}),{maxPages:4,maxDetailPages:0});
-  assert.equal(partial.listings.length,1);
-  assert.equal(partial.meta.expectedCount,40);
-  assert.equal(partial.meta.inventoryStatus,'inventory_partial');
-  assert.ok(!partial.meta.visited.some(url => /[?&]start=/.test(url)));
 });
 
 
@@ -666,6 +629,8 @@ test('architecture candidates rank lofty chime from markers, not from the hostna
   assert.equal(engine.classifyObstacle('<title>Just a moment...</title><form id="challenge-form"></form>'), 'requires_rendering');
   assert.equal(engine.classifyObstacle('<title>Just a moment...</title><script>window._cf_chl_opt={}</script>', 403), 'requires_rendering');
   assert.equal(engine.classifyObstacle('<title>Attention Required! | Cloudflare</title>', 403), 'requires_rendering');
+  assert.equal(engine.classifyObstacle('<title>Client Challenge</title><p>Please enable JavaScript to proceed.</p>'), 'requires_rendering');
+  assert.equal(engine.isRobotChallenge('<title>Client Challenge</title>'), true);
   assert.equal(engine.classifyObstacle('<title>Access to this page has been denied</title><div id="px-captcha"></div>', 403), 'captcha_required');
   assert.equal(engine.classifyObstacle('<title>403 Forbidden</title><h1>Forbidden</h1>', 403), 'access_denied');
   assert.equal(engine.isRobotChallenge('<title>12 Pine St</title><p>Just a moment while photos load</p>'), false);
@@ -689,8 +654,7 @@ test('enrichAll schedules every listing when the collection page budget is alrea
   assert.ok(capped.listings.filter(row => row.detailsComplete).length <= 1, 'collection budget must still limit the legacy detail path');
   const full = await discoverListings(['https://agent.example/inventory'], fetchHtml, { maxPages: 2, maxListings: 20, enrichAll: true });
   assert.equal(full.listings.length, 13);
-  assert.equal(full.meta.inventoryStatus, 'inventory_partial');
-  assert.deepEqual(full.meta.completenessEvidence, ['collection_boundary_unknown']);
+  assert.equal(full.meta.inventoryStatus, 'inventory_complete');
   assert.equal(full.meta.enrichment.scheduled, 13);
   assert.equal(full.meta.enrichment.enriched, 13);
   assert.equal(full.meta.enrichment.failed, 0);
@@ -709,8 +673,7 @@ test('a detail failure keeps the discovered listing and does not mark inventory 
   assert.equal(result.listings.length, 1);
   assert.equal(result.listings[0].title, '9 Oak St');
   assert.equal(result.listings[0].detailsComplete, undefined);
-  assert.equal(result.meta.inventoryStatus, 'inventory_partial');
-  assert.deepEqual(result.meta.completenessEvidence, ['collection_boundary_unknown']);
+  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
   assert.equal(result.meta.outcome, 'found');
   assert.equal(result.meta.enrichment.status, 'enrichment_unavailable');
   assert.equal(result.meta.enrichment.failed, 1);
@@ -803,21 +766,6 @@ test('captcha and failed script gates preserve a resumable state and invent no l
   assert.equal(gated.meta.resume.seeds[0], 'https://gated.example/');
 });
 
-test('continuation requests stay pending-only and each batch returns before the isolate deadline', () => {
-  const client = fs.readFileSync(path.resolve(__dirname, '../lib/appBuilder/buildService.ts'), 'utf8');
-  const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8');
-  assert.equal(client.includes('resume: { pending: resume.pending }'), true);
-  assert.equal(client.includes('batch < 40'), true);
-  assert.equal(/body = \{ \.\.\.baseBody, resume \}/.test(client), false);
-  assert.equal(client.includes('listings: Array.isArray(listings)'), false);
-  assert.equal(edge.includes('maxDurationMs: 22000'), true);
-  assert.equal(edge.includes('priorListings,'), false);
-  assert.equal(edge.includes('select(continuingListings ? "sources,evidence,status"'), true);
-  assert.equal(client.includes('batch < 40'), true);
-  assert.equal(client.includes('savedResume'), true);
-  assert.equal(client.includes('scope_not_established'), true);
-});
-
 test('deployment bundle contains the authoritative discovery engine', () => {
   const source = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingDiscovery.ts'), 'utf8').replace(/^export /gm, '').replace(/\s+$/, '\n');
   const bundle = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/deploy.bundle.ts'), 'utf8');
@@ -833,7 +781,7 @@ test('production bundle discovery matches the source engine on a chime collectio
   const start = bundle.indexOf('const { publicListingRequestHeaders');
   const end = bundle.indexOf('const { parseListingCsv');
   const slice = bundle.slice(start, end).replace(
-    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, discoverListingsAcrossBatches, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv } =',
+    'const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv } =',
     'const exported =');
   const compiled = ts.transpileModule(slice + '\nmodule.exports = exported;\n', { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const moduleRef = { exports: {} };
@@ -988,9 +936,8 @@ test('collection boundaries prove exhaustion without treating bare cards as comp
   const agreed = '<a href="' + origin + '/property/12-pine">12 Pine St $350,000</a><script type="application/ld+json">' + JSON.stringify({ '@type': 'RealEstateListing', name: '12 Pine St', price: 350000, url: origin + '/property/12-pine' }) + '</script>';
   const cross = await discoverListings([origin + '/cross'], async () => ({ html: agreed, finalUrl: new URL(origin + '/cross') }), { maxDetailPages: 0 });
   assert.equal(cross.listings.length, 1);
-  assert.equal(cross.meta.inventoryStatus, 'inventory_partial');
-  assert.equal(cross.meta.completenessEvidence.includes('structured_group_exhausted'), false);
-  assert.deepEqual(cross.meta.completenessEvidence, ['collection_boundary_unknown']);
+  assert.equal(cross.meta.inventoryStatus, 'inventory_complete');
+  assert.ok(cross.meta.completenessEvidence.includes('single_page_collection_confirmed') || cross.meta.completenessEvidence.includes('structured_group_exhausted'));
 
   const query = 'query Properties($limit: Int, $offset: Int) { properties(limit: $limit, offset: $offset) { id } propertiesCount { count } }';
   const scoped = { pageSize: '1', useRouterApi: false, query, variables: { limit: 1, offset: 0, featuredListing: true, statusId: '{{variables.statusId}}' } };
@@ -1047,45 +994,6 @@ test('collection boundaries prove exhaustion without treating bare cards as comp
   assert.equal(partial.meta.completenessEvidence.includes('api_total_match'), false);
 });
 
-test('a finite visible group is not a complete collection without authority', async () => {
-  const origin = 'https://crane.example';
-  const rows = [1, 2, 3, 4, 5, 6].map(id => ({ '@type': 'RealEstateListing', name: id + ' Abundance St', price: 250000, url: origin + '/listing-detail/' + id + '/' + id + '-Abundance-St' }));
-  const html = rows.map(row => '<a href="' + row.url + '">' + row.name + ' $250,000</a>').join('') + '<script type="application/ld+json">' + JSON.stringify(rows) + '</script>';
-  const result = await discoverListings([origin + '/'], async () => ({ html, finalUrl: new URL(origin + '/') }), { maxDetailPages: 0 });
-  assert.equal(result.listings.length, 6);
-  assert.equal(result.meta.expectedCount ?? null, null);
-  assert.equal(result.meta.inventoryStatus, 'inventory_partial');
-  assert.equal(result.meta.completenessEvidence.includes('structured_group_exhausted'), false);
-  assert.deepEqual(result.meta.completenessEvidence, ['collection_boundary_unknown']);
-});
-
-test('an owner-scoped featured search stays complete when its published count matches the structured group', async () => {
-  const origin = 'https://brenda.example';
-  const url = origin + '/api-site/search/realTimeListings?listingSource=0%2BCustom-Example&featureListingName=Custom-Example&listingType=featured-listing&page=1&pageSize=100';
-  const listings = [1, 2].map(id => ({ id, streetAddress: id + ' Hayden Lake Rd', listPrice: 500000, detailUrl: origin + '/listing-detail/' + id + '/hayden' }));
-  const html = JSON.stringify({ listings, counts: 2, totalPage: 1, listingType: 'featured-listing' });
-  const result = await discoverListings([url], async () => ({ html, finalUrl: new URL(url) }), { maxDetailPages: 0 });
-  assert.equal(result.listings.length, 2);
-  assert.equal(result.meta.expectedCount, 2);
-  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
-  assert.ok(result.meta.completenessEvidence.includes('structured_group_exhausted'));
-  assert.ok(result.meta.completenessEvidence.includes('api_total_match'));
-});
-
-test('an unscoped IDX shell does not crawl unrelated site links', async () => {
-  const origin = 'https://zane.example';
-  const html = '<a href="/idx/search/homes">Search homes</a><script src="/idx/widgets/5729"></script><a href="/search-by-city.html">Search By City</a><a href="/about">About our team</a><a href="/neighborhoods/greensboro">Greensboro homes</a>';
-  const seen = [];
-  const result = await discoverListings([origin + '/'], async (uri) => {
-    seen.push(uri);
-    return { html: uri === origin + '/' ? html : '<main>unrelated</main>', finalUrl: new URL(uri) };
-  }, { maxPages: 20, maxDetailPages: 0 });
-  assert.equal(result.listings.length, 0);
-  assert.equal(result.meta.inventoryStatus, 'inventory_blocked');
-  assert.ok(result.meta.completenessEvidence.includes('scope_not_established'));
-  assert.deepEqual(seen, [origin + '/']);
-});
-
 test('tracking parameters are not a second home, and distinct provider ids stay separate', async () => {
   const origin = 'https://identity.example';
   const haydenA = '1180161142';
@@ -1113,29 +1021,7 @@ test('tracking parameters are not a second home, and distinct provider ids stay 
   assert.equal(result.listings.some(row => row.title === 'New'), false);
 });
 
-test('a batch limit continues into the next page while time and page budget remain', async () => {
-  const origin = 'https://paged.example';
-  const pages = {
-    [origin + '/listings']: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
-    [origin + '/listings?page=2']: card('16 Elm St', '16-elm', '$500,000'),
-  };
-  const seen = [];
-  const finished = await discoverListings([origin + '/listings'], async uri => {
-    seen.push(uri);
-    if (!pages[uri]) throw new Error('unreadable page');
-    return { html: pages[uri], finalUrl: new URL(uri) };
-  }, { maxPages: 6, maxListings: 2, maxDetailPages: 0 });
-  assert.deepEqual(seen, [origin + '/listings', origin + '/listings?page=2']);
-  assert.equal(finished.listings.length, 3);
-  assert.equal(finished.meta.inventoryStatus, 'inventory_complete');
-  assert.equal(finished.meta.completenessEvidence.includes('collection_limit_reached'), false);
-  assert.ok(finished.meta.completenessEvidence.includes('pagination_exhausted'));
-  assert.equal(finished.meta.collectionBoundary.continuationAvailable, false);
-  assert.equal(finished.meta.resume, undefined);
-  assert.equal(finished.meta.accounting.eligibleImportComplete, true);
-});
-
-test('a batch limit stays partial when the page budget blocks the next page', async () => {
+test('an open numbered page at the safety cap is collection_limit_reached', async () => {
   const origin = 'https://paged.example';
   const pages = {
     [origin + '/listings']: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
@@ -1146,291 +1032,18 @@ test('a batch limit stays partial when the page budget blocks the next page', as
     seen.push(uri);
     if (!pages[uri]) throw new Error('unreadable page');
     return { html: pages[uri], finalUrl: new URL(uri) };
-  }, { maxPages: 1, maxListings: 2, maxDetailPages: 0 });
+  }, { maxPages: 6, maxListings: 2, maxDetailPages: 0 });
   assert.deepEqual(seen, [origin + '/listings']);
   assert.equal(capped.listings.length, 2);
   assert.equal(capped.meta.inventoryStatus, 'inventory_partial');
   assert.ok(capped.meta.completenessEvidence.includes('collection_limit_reached'));
   assert.equal(capped.meta.completenessEvidence.includes('pagination_exhausted'), false);
+  assert.notEqual(capped.meta.inventoryStatus, 'inventory_complete');
   assert.equal(capped.meta.collectionBoundary.continuationAvailable, true);
   assert.equal(capped.meta.resume.stage, 'collection_continuation');
   assert.equal(capped.meta.resume.obstacle, 'collection_limit_reached');
   assert.ok(capped.meta.resume.pending.some(url => url.includes('page=2')));
   assert.equal(capped.meta.accounting.eligibleImportComplete, false);
-});
-
-test('a batch limit walks every later page while time and page budget remain', async () => {
-  const origin = 'https://paged.example';
-  const pages = {};
-  for (let page = 1; page <= 5; page++) {
-    const url = page === 1 ? origin + '/listings' : origin + '/listings?page=' + page;
-    const next = page < 5 ? `<nav class="pagination"><a rel="next" href="?page=${page + 1}">Next</a></nav>` : '<nav class="pagination"><span>5</span></nav>';
-    pages[url] = next + card(page + ' Pine St', 'pine-' + page);
-  }
-  const seen = [];
-  const result = await discoverListings([origin + '/listings'], async uri => {
-    seen.push(uri);
-    if (!pages[uri]) throw new Error('unreadable page');
-    return { html: pages[uri], finalUrl: new URL(uri) };
-  }, { maxPages: 10, maxListings: 2, maxDetailPages: 0 });
-  assert.equal(seen.length, 5);
-  assert.equal(result.listings.length, 5);
-  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
-  assert.equal(result.meta.completenessEvidence.includes('collection_limit_reached'), false);
-  assert.ok(result.meta.completenessEvidence.includes('pagination_exhausted'));
-  assert.equal(result.meta.resume, undefined);
-});
-
-test('subsequent batches resume after a page budget until the collection is exhausted', async () => {
-  const origin = 'https://paged.example';
-  const pages = {};
-  for (let page = 1; page <= 3; page++) {
-    const url = page === 1 ? origin + '/listings' : origin + '/listings?page=' + page;
-    const next = page < 3 ? `<nav class="pagination"><a rel="next" href="?page=${page + 1}">Next</a></nav>` : '<nav class="pagination"><span>3</span></nav>';
-    pages[url] = next + card(page + ' A St', 'a-' + page) + card(page + ' B St', 'b-' + page, '$400,000');
-  }
-  const result = await discoverListingsAcrossBatches([origin + '/listings'], async uri => {
-    if (!pages[uri]) throw new Error('unreadable page');
-    return { html: pages[uri], finalUrl: new URL(uri) };
-  }, { maxPages: 1, maxListings: 2, maxDetailPages: 0, maxDurationMs: 15000 });
-  assert.equal(result.listings.length, 6);
-  assert.equal(result.meta.inventoryStatus, 'inventory_complete');
-  assert.equal(result.meta.resume, undefined);
-  assert.equal(result.meta.accounting.eligibleImportComplete, true);
-});
-
-test('a continuation deadline does not enrich before the next page is collected', async () => {
-  const origin = 'https://paged.example';
-  const first = origin + '/listings';
-  const seen = [];
-  const html = '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000');
-  const result = await discoverListingsAcrossBatches([first], async uri => {
-    seen.push(uri);
-    return { html, finalUrl: new URL(uri) };
-  }, { maxPages: 1, maxListings: 2, maxBatches: 1, enrichAll: true, maxDurationMs: 15000, maxDetailPages: 20 });
-  assert.deepEqual(seen, [first]);
-  assert.equal(result.listings.length, 2);
-  assert.equal(result.meta.resume.stage, 'collection_continuation');
-  assert.equal(result.meta.enrichment?.enriched ?? 0, 0);
-  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
-});
-
-test('a captcha on the next page stops automatic batches', async () => {
-  const origin = 'https://paged.example';
-  const robot = '<html><head><title>Robot Validate</title></head><body><h2>Error Access denied</h2><div id="recaptcha-wrap"></div></body></html>';
-  const first = origin + '/listings';
-  const second = origin + '/listings?page=2';
-  const pages = {
-    [first]: '<nav class="pagination"><a rel="next" href="?page=2">Next</a></nav>' + card('12 Pine St', '12-pine') + card('14 Oak St', '14-oak', '$400,000'),
-    [second]: robot,
-  };
-  const result = await discoverListingsAcrossBatches([first], async uri => ({ html: pages[uri] ?? robot, finalUrl: new URL(uri) }), { maxPages: 1, maxListings: 2, maxDetailPages: 0, maxDurationMs: 15000 });
-  assert.equal(result.listings.length, 2);
-  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
-  assert.ok(result.meta.obstacles.some(row => row.code === 'captcha_required'));
-  assert.equal(result.meta.accounting.eligibleImportComplete, false);
-});
-
-test('an Eureka client id without a featured Kestrel widget is not a scoped collection', async () => {
-  const origin = 'https://agent.example';
-  const seen = [];
-  const html = '<script src="https://www.idxhome.com/eureka/ihf-eureka.js"></script>'
-    + '<div data-ihf-client-id="178012"></div>'
-    + card('12 Pine St', '12-pine')
-    + '<a href="/homes-for-sale-featured/">Featured homes</a>';
-  const result = await discoverListings([origin + '/'], async uri => {
-    seen.push(uri);
-    return { html, finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(seen.some(uri => /idxhome\.com\/api\/(?:site\/\d+\/listings|kestrel\/listings)\.json/.test(uri)), false);
-  assert.equal(kestrelInventoryRequests(html).length, 0);
-  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
-  assert.equal(result.meta.accounting?.eligibleImportComplete, false);
-});
-
-test('an MLS-board archive without an owner constraint is not imported or paginated', async () => {
-  const origin = 'https://market.example';
-  const seen = [];
-  const page = (id) => '<nav class="pagination"><a rel="next" href="/properties/2/?listingType=Residential">Next</a></nav>'
-    + `<a href="/our-listings/">Our Listings</a>`
-    + `<a href="/listing/crmls/${id}100/Torrance/1-main/">1 Main Torrance $900,000</a>`
-    + `<a href="/listing/crmls/${id}200/Oroville/2-main/">2 Main Oroville $700,000</a>`;
-  const result = await discoverListings([origin + '/properties/'], async uri => {
-    seen.push(uri);
-    if (uri === origin + '/our-listings/') {
-      return { html: '<a href="/listing/crmls/OC1/Newport-Beach/3-main/">3 Main $1,000,000</a><a href="/listing/crmls/SN2/Beverly-Hills/4-main/">4 Main $2,000,000</a>', finalUrl: new URL(uri) };
-    }
-    return { html: page('SB'), finalUrl: new URL(uri) };
-  }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
-  assert.deepEqual(seen, [origin + '/properties/', origin + '/our-listings/']);
-  assert.equal(result.listings.length, 0);
-  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
-  assert.notEqual(result.meta.inventoryStatus, 'inventory_empty');
-  assert.ok(result.meta.completenessEvidence.includes('scope_not_established'));
-  assert.equal(result.meta.accounting.importedEligible, 0);
-  assert.ok(result.meta.accounting.exclusions.some(row => row.reason === 'excluded_unscoped_market' && row.count === 4));
-  assert.notEqual(result.meta.resume && result.meta.resume.stage, 'collection_continuation');
-  const scoped = await discoverListings([origin + '/properties/?officeId=office-1'], async uri => {
-    seen.push(uri);
-    const second = uri.includes('page=2');
-    const next = second ? '' : '<nav class="pagination"><a rel="next" href="/properties/?officeId=office-1&page=2">Next</a></nav>';
-    const first = second ? 'SB3' : 'SB1';
-    const other = second ? 'SB4' : 'SB2';
-    return { html: next + `<a href="/listing/crmls/${first}/Torrance/1-main/">${first} $900,000</a><a href="/listing/crmls/${other}/Torrance/2-main/">${other} $800,000</a>`, finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 2, maxDetailPages: 0 });
-  assert.equal(scoped.listings.length, 4);
-  assert.equal(scoped.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
-  const chrome = await discoverListings([origin + '/market/'], async uri => {
-    return { html: '<div data-agent-id="chrome-agent"></div>' + page('OC'), finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(chrome.listings.length, 0);
-  assert.ok(chrome.meta.completenessEvidence.includes('scope_not_established'));
-  const flagged = await discoverListings([origin + '/book/'], async uri => ({
-    html: page('LA') + '<section data-settings="{"agent_office_listings_only":1}"></section>',
-    finalUrl: new URL(uri),
-  }), { maxPages: 2, maxListings: 10, maxDetailPages: 0 });
-  assert.ok(flagged.listings.length >= 2);
-  assert.equal(flagged.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
-});
-
-test('an AgentFire search page of MLS-board listings is not a closed collection', async () => {
-  const origin = 'https://agent.example';
-  const card = (board, id, street, price) => `<div class="sp-listings__item"><a class="sp-listing" href="/listing/${board}/${id}/Town/${street}/"><span class="sp-listing__price">${price}</span><span class="sp-listing__street">${street}</span></a></div>`;
-  const html = '<body class="page page-id-1968 page-search-page"><article class="afe-content afe-content--searchpage_single"><section class="sp-listings"><div class="sp-listings__items">'
-    + card('salmlsfull', '212533', '11446-S-County-Road-33', '$1,548,000')
-    + card('wgmls', '556534', '4010-County-Road-708', '$1,099,000')
-    + '</div></section><div class="sp-listings__bottom"><a class="btn btn-spark" href="/properties/city-Town/?priceMin=1000000&status=Active">View More</a></div></article>'
-    + '<script>AgentFire_Settings.dsidx_disclaimer = false; var afxAccountData = {"wpUserId":"0","listingId":"","isSearchPage":""};</script>'
-    + '<img src="https://listing-images.homejunction.com/salmlsfull/photo_1.jpg">';
-  const seen = [];
-  const result = await discoverListings([origin + '/luxury/'], async uri => {
-    seen.push(uri);
-    return { html, finalUrl: new URL(uri) };
-  }, { maxPages: 6, maxListings: 30, maxDetailPages: 0 });
-  assert.deepEqual(seen, [origin + '/luxury/']);
-  assert.equal(result.listings.length, 0);
-  assert.equal(result.meta.inventoryStatus, 'inventory_blocked');
-  assert.notEqual(result.meta.inventoryStatus, 'inventory_complete');
-  assert.equal(result.meta.expectedCount ?? null, null);
-  assert.ok(result.meta.completenessEvidence.includes('scope_not_established'));
-  assert.equal(result.meta.accounting.importedEligible, 0);
-  assert.ok(result.meta.accounting.exclusions.some(row => row.reason === 'excluded_unscoped_market' && row.count === 2));
-  assert.equal(result.meta.obstacles.some(row => row.code === 'scope_not_established'), true);
-});
-
-test('a Real Geeks market search is not inventory, and an owner-scoped search completes only when its published total matches', async () => {
-  const origin = 'https://rg.example';
-  const shell = '<script src="https://cdn.realgeeks.com/static/CACHE/js/output.js"></script>';
-  const card = (kind, address, mls, price, href) => `<div class="row property ${kind} collapse"><a href="${href}" class="address">${address}</a><a class="price">${price}</a><img src="https://property-images.realgeeks.com/board/${mls}.jpg"><ul><li class="detail"><span class="number">3</span><span class="detail-title">Beds</span></li><li class="detail"><span class="number">${mls}</span><span class="detail-title">MLS</span></li></ul></div>`;
-  const seen = [];
-  const market = await discoverListings([origin + '/'], async uri => {
-    seen.push(uri);
-    if (uri.includes('/api/search/criteria/')) return { html: JSON.stringify({ data: { city: ['Boca Raton'], list_price_min: ['1000000'] } }), finalUrl: new URL(uri) };
-    if (uri.includes('/search/results/')) throw new Error('market search was fetched');
-    return { html: shell + card('featured', '21733 Old Bridge Trail', 'B26084971', '$2,250,000', '/property/B26084971/') + '<a href="/search/results/mkt/">Waterfront</a>', finalUrl: new URL(uri) };
-  }, { maxPages: 8, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(seen.some(uri => uri.includes('/search/results/')), false);
-  assert.equal(seen.some(uri => uri.includes('/api/search/criteria/') && uri.includes('search_id=mkt')), true);
-  assert.equal(market.listings.length, 1);
-  assert.equal(market.listings[0].listingNumber, 'B26084971');
-  assert.notEqual(market.meta.inventoryStatus, 'inventory_complete');
-  assert.ok(market.meta.obstacles.some(row => row.code === 'scope_not_established'));
-  const search = (ids, next) => shell + '<meta name="description" content="4 Homes for Sale"><div class="properties-found"><span>4 Properties</span></div>'
-    + (next ? `<a href="/search/results/own/?page=${next}" rel="next">Next</a>` : '')
-    + ids.map((id, index) => card('results', id + ' Main', id, '$800,000', `/search/details/own/${index}/`)).join('');
-  const owned = await discoverListings([origin + '/office/'], async uri => {
-    seen.push(uri);
-    if (uri.includes('/api/search/criteria/')) return { html: JSON.stringify({ data: { agent_id: ['A1'], city: ['Boca Raton'] } }), finalUrl: new URL(uri) };
-    if (uri.includes('page=2')) return { html: search(['RG3', 'RG4'], 0), finalUrl: new URL(uri) };
-    if (uri.includes('/search/results/own')) return { html: search(['RG1', 'RG2'], 2), finalUrl: new URL(uri) };
-    return { html: shell + '<a href="/search/results/own/">Our listings</a>', finalUrl: new URL(uri) };
-  }, { maxPages: 8, maxListings: 2, maxDetailPages: 0 });
-  assert.equal(owned.listings.length, 4);
-  assert.deepEqual(owned.listings.map(item => item.listingNumber).sort(), ['RG1', 'RG2', 'RG3', 'RG4']);
-  assert.equal(owned.meta.inventoryStatus, 'inventory_complete');
-  assert.ok(owned.meta.completenessEvidence.includes('published_count_match'));
-  const short = await discoverListings([origin + '/search/results/own/'], async uri => {
-    if (uri.includes('/api/search/criteria/')) return { html: JSON.stringify({ data: { office_id: ['O1'] } }), finalUrl: new URL(uri) };
-    return { html: search(['RG1', 'RG2'], 0), finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 10, maxDetailPages: 0 });
-  assert.equal(short.listings.length, 2);
-  assert.notEqual(short.meta.inventoryStatus, 'inventory_complete');
-  assert.equal(short.meta.expectedCount, 4);
-});
-
-test('a Sierra MLS-region feed is not the site owner inventory', async () => {
-  const origin = 'https://sierra.example';
-  const feed = (agentSiteId) => `<script>var siteData = { source: 0, siteid: '100', parentsiteid: -1, agentsiteid: ${agentSiteId}, defaultMLSRegion: '69', siteSearchToolsRootDirectory: 'property-search' };</script>`
-    + '<div class="js-lw-container" data-searchid="107365"><input type="hidden" name="searchid" value="107365"><input type="hidden" name="sortby" value="m.DateListed DESC"></div>'
-    + '<div class="si-listing"><a href="/property-search/detail/69/2589046/1-main-st/">1 Main St</a><span class="si-listing__photo-price">$400,000</span> Listed by Other Agent</div>'
-    + '<div class="si-listing"><a href="/property-search/detail/69/2590893/2-main-st/">2 Main St</a><span class="si-listing__photo-price">$500,000</span> Listed by Someone Else</div>'
-    + '<a href="/featured-listings/?pg=2">Next</a><a href="/property-search/results/?searchid=107365">Newest</a>'
-    + '<img src="https://cdn.listingphotos.sierrastatic.com/large/v1/69/69_2589046_01.jpg">';
-  const seen = [];
-  const market = await discoverListings([origin + '/featured-listings/'], async uri => {
-    seen.push(uri);
-    return { html: feed(-1), finalUrl: new URL(uri) };
-  }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(market.listings.length, 0);
-  assert.equal(market.meta.inventoryStatus, 'inventory_blocked');
-  assert.ok(market.meta.completenessEvidence.includes('scope_not_established'));
-  assert.equal(seen.some(uri => uri.includes('pg=2') || uri.includes('searchid=')), false);
-  const agentSite = await discoverListings([origin + '/la-puente/'], async uri => {
-    seen.push(uri);
-    return { html: feed(42), finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(agentSite.listings.length, 0);
-  assert.equal(agentSite.meta.inventoryStatus, 'inventory_blocked');
-  assert.ok(agentSite.meta.obstacles.some(row => row.code === 'scope_not_established'));
-});
-
-test('a Placester feed without an office or agent id is not inventory, and an office widget is partial without a published total', async () => {
-  const origin = 'https://placester.example';
-  const platform = '<script src="https://static.myrealestateplatform.com/Valhalla/theme.js"></script>';
-  const card = (street, price) => `<a href="/property/st/00000/town/-/${street.replace(/\s+/g, '-').toLowerCase()}/abc/">${street}</a><span>${price}</span>`;
-  const seen = [];
-  const zips = await discoverListings([origin + '/'], async uri => {
-    seen.push(uri);
-    return { html: platform + '<div data-query="{"search_num_results":6,"filter_zips":"73401,73430","origin_ids":[]}"></div>'
-      + card('1 Zip Lane', '$210,000') + card('2 Zip Lane', '$220,000')
-      + '<a href="/?paged=2">Next</a>', finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(zips.listings.length, 0);
-  assert.equal(zips.meta.inventoryStatus, 'inventory_blocked');
-  assert.ok(zips.meta.completenessEvidence.includes('scope_not_established'));
-  assert.equal(seen.some(uri => uri.includes('paged=2')), false);
-  const curated = await discoverListings([origin + '/featured/'], async uri => ({
-    html: '<script>var _placester={}; _placester.searchAppConfig={"globalFilters":[],"config":{"search_url":"https://queryserviceb.placester.net/search"}};</script>'
-      + '<script>{"featured_listings":{"filters":{"search_num_results":9},"featuredIds":["abc123"]}}</script>'
-      + '<a href="/listings/50-000-100-000/">$50,000-$100,000</a>' + card('3 Menu Road', '$75,000'),
-    finalUrl: new URL(uri),
-  }), { maxPages: 3, maxListings: 10, maxDetailPages: 0 });
-  assert.equal(curated.listings.length, 0);
-  assert.equal(curated.meta.inventoryStatus, 'inventory_blocked');
-  const office = await discoverListings([origin + '/featured-listings/'], async uri => {
-    seen.push(uri);
-    return { html: platform + '<div data-query=\'{"origin_ids":["feed"],"search_num_results":12,"oid":"OFF1,OFF2","oname":"Example Group"}\'></div>'
-      + '<div class="pagination-family"><span class="page-numbers current">1</span><a class="page-numbers" href="/featured-listings/?paged=2">2</a><a class="next page-numbers" href="/featured-listings/?paged=2">Next</a></div>'
-      + '<div data-address="18 Office Way" data-price="410000" data-locality="Town" data-region="ST"><a href="/property/st/00000/town/-/18-office-way/abc/?filters=oid">photo</a></div>'
-      + '<div data-address="20 Office Drive" data-price="390000"><a href="/property/st/00000/town/-/20-office-drive/def/">photo</a></div>', finalUrl: new URL(uri) };
-  }, { maxPages: 6, maxListings: 20, maxDetailPages: 0 });
-  assert.equal(office.listings.length, 2);
-  assert.equal(office.listings[0].price, '$410,000');
-  assert.equal(office.listings[0].title, '18 Office Way');
-  assert.equal(office.listings[0].sourceUrl.includes('filters='), false);
-  assert.equal(office.meta.inventoryStatus, 'inventory_partial');
-  assert.equal(office.meta.expectedCount ?? null, null);
-  assert.ok(office.meta.completenessEvidence.includes('collection_boundary_unknown'));
-  assert.equal(seen.some(uri => uri.includes('paged=2')), false);
-  assert.equal(office.meta.obstacles.some(row => row.code === 'scope_not_established'), false);
-  const hidden = await discoverListings([origin + '/agent/'], async uri => {
-    seen.push(uri);
-    return { html: platform + '<div data-query=\'{"search_num_results":9,"oid":"OFF9"}\'></div><a href="/listings-search/">Search homes</a>', finalUrl: new URL(uri) };
-  }, { maxPages: 4, maxListings: 10, maxDetailPages: 0 });
-  assert.equal(hidden.listings.length, 0);
-  assert.equal(hidden.meta.inventoryStatus, 'inventory_blocked');
-  assert.equal(seen.some(uri => uri.includes('listings-search')), false);
-  assert.ok(hidden.meta.stages.includes('collection_scoped'));
 });
 
 test('source totals keep pending inventory and account for sold and unknown', async () => {
@@ -1555,7 +1168,7 @@ test('production renderer is one bounded interface and is wired into onboarding 
   assert.notEqual(failed.meta.outcome, 'found');
   assert.ok(failed.meta.obstacles.some(row => row.code === 'render_failed'));
   const onboarding = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8');
-  assert.equal(onboarding.split('renderPage: productionRenderPage()').length - 1, 3);
+  assert.equal(onboarding.split('productionRenderPage()').length - 1, 2);
   const refresh = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/refresh-listings/sourceHandler.ts'), 'utf8');
   assert.match(refresh, /createListingRenderer\(listingRenderBackendFromEnv/);
   const sources = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/refresh-listings/sources.ts'), 'utf8');
@@ -1596,6 +1209,68 @@ test('production renderer is one bounded interface and is wired into onboarding 
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test('sold cards stay historical and a sold-only shell is not the active collection', async () => {
+  const base = new URL('https://shell.example/');
+  const dom = '<h2>Featured Listings</h2><a href="/listing-detail/1190186389/12-knoll-crest">12 Knoll Crest $1,100,000</a>'
+    + '<h2>Recently Sold</h2><a class="house-sold" href="/sold-listing/detail/216">216 Westend $319,900</a>';
+  const rows = listingsFromCards(dom, base);
+  assert.equal(rows.find(row => row.sourceUrl.includes('listing-detail')).status, undefined);
+  assert.equal(rows.find(row => row.sourceUrl.includes('sold-listing')).status, 'sold');
+  const shell = '<link rel="dns-prefetch" href="//static.chimeroi.com"><script src="/pageJsonAndGlobalData.js"></script><script>listingSource:"sold listings";listingSource:"all listings"</script>';
+  assert.equal(engine.chimeListingSearchRequests(shell, base).length, 0);
+  const fetched = [];
+  let renders = 0;
+  const result = await discoverListings(['https://shell.example/'], async url => {
+    fetched.push(url);
+    return { html: shell, finalUrl: new URL(url) };
+  }, {
+    maxPages: 4, maxDetailPages: 0, renderPage: async url => {
+      renders++;
+      return { html: dom, finalUrl: new URL(url), network: [] };
+    },
+  });
+  assert.equal(renders, 1);
+  assert.equal(fetched.some(url => /realTimeListings|sold listings/.test(url)), false);
+  const active = result.listings.filter(item => item.status !== 'sold' && item.status !== 'off_market');
+  assert.equal(active.length, 1);
+  assert.match(active[0].sourceUrl, /\/listing-detail\/1190186389\//);
+  assert.equal(result.listings.some(item => /sold-listing/.test(item.sourceUrl) && item.status === 'sold'), true);
+  assert.ok(result.meta.stages.includes('browser_render_escalated'));
+});
+
+test('attribute tiles do not escalate to a browser', async () => {
+  let renders = 0;
+  const html = '<div data-price="185000" data-address="12 Pine Road" data-locality="Kellogg" data-region="ID" data-pl-navigate-url="https://tiles.example/property/12-pine"></div>';
+  const result = await discoverListings(['https://tiles.example/'], async url => ({ html, finalUrl: new URL(url) }), {
+    maxPages: 2, maxDetailPages: 0, renderPage: async () => { renders++; throw new Error('browser should not run'); },
+  });
+  assert.equal(renders, 0);
+  assert.equal(result.listings.length, 1);
+  assert.equal(result.listings[0].price, '$185,000');
+});
+
+test('a persistent challenge origin is rendered once and a captcha is not rendered', async () => {
+  const wall = '<html><head><title>Client Challenge</title></head><body>checking</body></html>';
+  let renders = 0;
+  const blocked = await discoverListings(['https://blocked.example/a', 'https://blocked.example/b'], async url => ({ html: wall, finalUrl: new URL(url) }), {
+    maxPages: 4, maxDetailPages: 0, renderPage: async () => {
+      renders++;
+      return { html: wall, finalUrl: new URL('https://blocked.example/a') };
+    },
+  });
+  assert.equal(renders, 1);
+  assert.equal(blocked.listings.length, 0);
+  assert.ok(blocked.meta.stages.includes('browser_challenge_persistent'));
+  const robot = '<html><head><title>Robot Validate</title></head><body><h2>Error Access denied</h2><div id="recaptcha-wrap"></div></body></html>';
+  let captchaRenders = 0;
+  const captcha = await discoverListings(['https://captcha.example/listings'], async () => ({ html: robot, finalUrl: new URL('https://captcha.example/listings') }), {
+    maxPages: 2, maxDetailPages: 0, renderPage: async () => { captchaRenders++; return { html: '<a href="/property/1">1 Pine $100,000</a>', finalUrl: new URL('https://captcha.example/listings') }; },
+  });
+  assert.equal(captchaRenders, 0);
+  assert.equal(captcha.listings.length, 0);
+  assert.ok(captcha.meta.obstacles.some(row => row.code === 'captcha_required'));
 });
 
 

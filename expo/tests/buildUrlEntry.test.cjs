@@ -3,27 +3,33 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),ts=require('typescript');
 
 function screen(initial={}) {
-  let state=null,focused=0,submitted=0,changed='';
+  let focused=0,submitted=0,changed='';
+  const slots=[];
+  let cursor=0;
   const React={createElement:(type,props,...children)=>({type,props:props||{},children}),
-    useRef:()=>({current:{focus:()=>focused++}}),useState:()=>[state,value=>{state=value;}]};
+    useRef:(initial)=>{ const i=cursor++; if(slots[i]===undefined) slots[i]={current: initial==null ? {focus:()=>{focused++;}} : initial}; return slots[i]; },
+    useState:(initial)=>{ const i=cursor++; if(slots[i]===undefined) slots[i]=initial; return [slots[i], value=>{ slots[i]=typeof value==='function'?value(slots[i]):value; }]; },
+    useEffect:()=>{}};
   const module={exports:{}};
   const code=ts.transpileModule(fs.readFileSync(path.join(__dirname,'../components/BuildUrlEntry.tsx'),'utf8'),{
     compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.React,target:ts.ScriptTarget.ES2022,esModuleInterop:true}
   }).outputText;
   new Function('require','module','exports',code)(id=>{
     if(id==='react')return React;
-    if(id==='react-native')return {Platform:{OS:'web'},StyleSheet:{absoluteFill:{}},Text:'Text',TextInput:'TextInput',View:'View',ScrollView:'ScrollView',KeyboardAvoidingView:'KeyboardAvoidingView',ActivityIndicator:'ActivityIndicator'};
+    if(id==='react-native')return {Platform:{OS:'web'},StyleSheet:{absoluteFill:{},absoluteFillObject:{},create:styles=>styles},Text:'Text',TextInput:'TextInput',View:'View',ScrollView:'ScrollView',KeyboardAvoidingView:'KeyboardAvoidingView',ActivityIndicator:'ActivityIndicator',Animated:{Value:class{interpolate(){return 0}},View:'Animated.View',ScrollView:'ScrollView',event:()=>()=>{},timing:()=>({start(){}}),spring:()=>({start(){}})}};
     if(id==='expo-image')return {Image:'Image'};
+    if(id==='expo-blur')return {BlurView:'BlurView'};
     if(id==='expo-linear-gradient')return {LinearGradient:'LinearGradient'};
     if(id==='lucide-react-native')return {ArrowLeft:'ArrowLeft',ArrowUpRight:'ArrowUpRight',Link2:'Link2'};
     if(id==='react-native-safe-area-context')return {useSafeAreaInsets:()=>({top:0,bottom:0})};
     if(id==='./TactilePressable')return 'Pressable';
     if(id==='@/constants/backdrops')return {SCREEN_BG:{listings:'background'}};
+    if(id==='@/hooks/useThemeMotion')return {useReducedMotion:()=>({ready:true,reduced:true})};
     throw Error(id);
   },module,module.exports);
   let props={url:'',onChange:value=>{changed=value},onSubmit:()=>submitted++,onExit:()=>{},...initial};
   const nodes=root=>[root,...root.children.filter(x=>x&&typeof x==='object').flatMap(nodes)];
-  const render=()=>nodes(module.exports.default(props));
+  const render=()=>{ cursor=0; return nodes(module.exports.default(props)); };
   return {render,update:next=>{props={...props,...next}},get focused(){return focused},get submitted(){return submitted},get changed(){return changed}};
 }
 const button=s=>s.render().find(n=>n.props.accessibilityLabel==='Import my listings');

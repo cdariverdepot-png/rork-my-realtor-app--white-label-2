@@ -18,7 +18,7 @@ const discoverySource = ts.transpileModule(fs.readFileSync(path.resolve(__dirnam
 }).outputText;
 const discoveryModule = { exports: {} };
 new Function('require', 'module', 'exports', discoverySource)(require, discoveryModule, discoveryModule.exports);
-const { publicListingRequestHeaders, decodePublicListingResponse, createListingRenderer, listingRenderBackendFromEnv, isRobotChallenge, isPublishedScriptGate, continueAfterVerification } = discoveryModule.exports;
+const { publicListingRequestHeaders, decodePublicListingResponse, createListingRenderer, listingRenderBackendFromEnv, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, continueAfterVerification } = discoveryModule.exports;
 const designModule = { exports: {} };
 new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolve(__dirname,
   '../../supabase/functions/analyze-realtor-build/websiteDesign.ts'), 'utf8'), {
@@ -65,7 +65,6 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
       }
       return { listings, meta: { visited, hops: visited.length, found: listings.length, maxDepth: 0, rendered } };
     }
-    const discoverListingsAcrossBatches = discoverListings;
   `;
   const code = ts.transpileModule(discoveryStub + '\n' + edgeWithoutFiles, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   let handler, aiBody, update, reads = 0;
@@ -102,7 +101,7 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   if (invokeRenderer) globalThis.fetch = fetchFixture;
   let response;
   try {
-    new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls','createListingRenderer','listingRenderBackendFromEnv','isRobotChallenge','isPublishedScriptGate','continueAfterVerification',code)({env:{get:name => invokeRenderer && name === 'LISTING_RENDER_URL' ? 'https://render.example/run' : invokeRenderer && name === 'LISTING_RENDER_TOKEN' ? 'render-token' : name === 'LISTING_RENDER_URL' || name === 'LISTING_RENDER_TOKEN' ? undefined : 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls,createListingRenderer,listingRenderBackendFromEnv,isRobotChallenge,isPublishedScriptGate,continueAfterVerification);
+    new Function('Deno','createClient','fetch','publicListingRequestHeaders','decodePublicListingResponse','extractWebsiteDesign','websiteStylesheetUrls','websiteContentLinks','composeWebsiteSections','classifyWebsiteSection','websiteNeedsBrowser','websiteAsset','assignPageImages','describePageImages','createListingRenderer','listingRenderBackendFromEnv','isRobotChallenge','isPublishedScriptGate','publishedScriptGateCookie','continueAfterVerification',code)({env:{get:name => invokeRenderer && name === 'LISTING_RENDER_URL' ? 'https://render.example/run' : invokeRenderer && name === 'LISTING_RENDER_TOKEN' ? 'render-token' : name === 'LISTING_RENDER_URL' || name === 'LISTING_RENDER_TOKEN' ? undefined : 'fixture'},resolveDns:async(_,type)=>type==='A'?['8.8.8.8']:[],serve:fn=>{handler=fn;}},()=>admin,fetchFixture,publicListingRequestHeaders,decodePublicListingResponse,designModule.exports.extractWebsiteDesign,designModule.exports.websiteStylesheetUrls,designModule.exports.websiteContentLinks,designModule.exports.composeWebsiteSections,designModule.exports.classifyWebsiteSection,designModule.exports.websiteNeedsBrowser,designModule.exports.websiteAsset,designModule.exports.assignPageImages,designModule.exports.describePageImages,createListingRenderer,listingRenderBackendFromEnv,isRobotChallenge,isPublishedScriptGate,publishedScriptGateCookie,continueAfterVerification);
     response=await handler(new Request('https://fixture.invalid',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({guest,mode,target:'heroMessage',sources:[source],draft})}));
   } finally {
     globalThis.fetch = previousFetch;
