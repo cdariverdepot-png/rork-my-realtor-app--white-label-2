@@ -6,6 +6,7 @@ import { isKvEnabled, kvGet, kvSet } from "@/lib/kvStore";
 import { shouldApplyRemoteRevision } from "@/lib/remoteRevision";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
+import { useSeats } from "@/contexts/SeatsContext";
 import { requiredStatus } from "@/constants/sections";
 import { preserveProfile } from "@/lib/preserveProfile";
 import { sameJson } from "@/lib/sameJson";
@@ -619,6 +620,7 @@ const buildGuidedStarter = (current: Brand): Brand => {
 
 export const [BrandProvider, useBrand] = createContextHook(() => {
   const { realtorId, realtorRecord, demoViewMode, isAdmin, unlockSharingCredentials } = useAuth();
+  const seats = useSeats();
   const [brand, setBrand] = useState<Brand>(() => buildSeed());
   const [designDraft, setDesignDraft] = useState<Brand | null>(null);
   const [previousPublished, setPreviousPublished] = useState<Brand | null>(null);
@@ -945,6 +947,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   const publishBrand = useCallback(async (next?: Brand) => {
     if (demoViewMode || !isAdmin || !realtorId) throw new Error("Sign in as the realtor to publish.");
     if (publishing.current) throw new Error("Publication is already in progress.");
+    if (seats.tracked && (!seats.loaded || !seats.active)) throw new Error(seats.loaded ? "Publishing is unavailable while your subscription is inactive." : "Publishing is temporarily unavailable while your subscription status is verified.");
     const candidate = next ?? draftRef.current ?? brandRef.current;
     if (!requiredStatus(candidate).complete) throw new Error("Complete the required business details before publishing.");
     publishing.current = true;
@@ -972,7 +975,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
     broadcast(saved, rev);
     return saved;
     } finally { publishing.current = false; }
-  }, [demoViewMode, isAdmin, realtorId, realtorRecord?.client_code_enabled, saveBrand, PREVIOUS_KEY, STORAGE_KEY, REVISION_KEY, KV_KEY, broadcast, unlockSharingCredentials]);
+  }, [demoViewMode, isAdmin, realtorId, realtorRecord?.client_code_enabled, saveBrand, PREVIOUS_KEY, STORAGE_KEY, REVISION_KEY, KV_KEY, broadcast, unlockSharingCredentials, seats.tracked, seats.loaded, seats.active]);
 
   const restorePreviousPublished = useCallback(async () => {
     if (!previousPublished) throw new Error("No previously published design is available.");
