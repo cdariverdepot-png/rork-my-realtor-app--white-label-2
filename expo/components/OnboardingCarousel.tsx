@@ -286,7 +286,7 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
       {/* Solid curtain — never animated away, so home/demo cannot flash under exit. */}
       <View style={[StyleSheet.absoluteFill, { backgroundColor: dark.bg }]} pointerEvents="none" />
 
-      <Animated.View pointerEvents="none" style={[styles.bgLayer, { opacity }]}>
+      <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity }]}>
         {slides.map((slide, i) => (
           <AnimatedImage
             key={i}
@@ -374,7 +374,7 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
                   accessibilityRole="button"
                   accessibilityLabel={active && i === slides.length - 1 ? "Get started" : `Page ${i + 1}`}
                   accessibilityState={{ selected: active }}
-                  style={[styles.dotHit, active && styles.dotHitOn]}
+                  style={styles.dotHit}
                 >
                   <View style={[styles.dot, active && styles.dotActive]} pointerEvents="none">
                     <BlurView pointerEvents="none" intensity={28} tint="dark" style={StyleSheet.absoluteFill} />
@@ -413,19 +413,10 @@ const styles = StyleSheet.create({
         }
       : {}),
   },
-  // Photos hang past the overlay so the sign-in door cannot show in the
-  // strip under the screen. The footer stays in the overlay.
-  bgLayer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: -240,
-  },
+  // Photos fill the screen at their original cover. Do not extend the box:
+  // a taller frame makes cover scale the image up.
   bg: {
     ...StyleSheet.absoluteFill,
-    width: "100%",
-    height: "100%",
   },
   content: {
     flex: 1,
@@ -477,8 +468,12 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   bottomBar: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 148,
     alignItems: "center",
-    paddingBottom: 28,
+    justifyContent: "center",
     zIndex: 20,
     elevation: 20,
   },
@@ -486,12 +481,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: 14,
   },
   dotHit: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     ...Platform.select({
       web: {
         boxShadow: "0 8px 18px rgba(0,0,0,0.38)",
@@ -505,12 +500,9 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  dotHitOn: {
-    width: 42,
-  },
   dot: {
     flex: 1,
-    borderRadius: 7,
+    borderRadius: 8,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.38)",
@@ -524,8 +516,8 @@ const styles = StyleSheet.create({
       : {}),
   },
   dotActive: {
-    borderRadius: 7,
-    borderColor: "rgba(255,255,255,0.55)",
-    backgroundColor: "rgba(90,90,98,0.18)",
+    borderRadius: 8,
+    borderColor: "rgba(255,255,255,0.72)",
+    backgroundColor: "rgba(255,255,255,0.16)",
   },
 });
