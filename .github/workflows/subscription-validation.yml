@@ -1,7 +1,7 @@
 name: Validate test-only subscriptions
 on:
   push:
-    branches: [codex/subscription-model]
+    branches: [codex/subscription-model, reconcile-all-work-20261007]
   pull_request:
     paths: ['supabase/functions/billing/**', 'supabase/migrations/*subscription*', 'supabase/tests/**', 'expo/**', '.github/workflows/subscription-validation.yml']
 permissions:
