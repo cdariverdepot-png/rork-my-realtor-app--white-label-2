@@ -6,7 +6,7 @@ import PortraitImage from '../PortraitImage';
 import { websiteAppearance, websiteFont } from '@/lib/websitePresentation';
 import type { ReferenceHomeProps, ReferenceRoute } from './ReferenceHome';
 import type { WebsiteSection } from '@/lib/websiteDesignRuntime';
-import { composeWebsiteSections, presentWebsiteSurface, websiteCopy, frameForSlot, type ImageRole } from '@/lib/websiteDesignRuntime';
+import { composeWebsiteSections, presentWebsiteSurface, websiteCopy, frameForSlot, renderableHero, type ImageRole } from '@/lib/websiteDesignRuntime';
 
 /** Native website interpretation, shared by onboarding, preview and published Home. */
 export default function WebsiteHome(p: ReferenceHomeProps) {
@@ -33,12 +33,13 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
   const heroTitle = optimized ? b.realtor.heroMessage || source.heroTitle : source.heroTitle || b.realtor.heroMessage;
   const heroSubtitle = optimized ? b.realtor.welcomeNote || source.heroSubtitle : source.heroSubtitle || b.realtor.welcomeNote;
   const dpr = Math.min(3, Math.max(1, PixelRatio.get?.() || 2));
-  const heroMeta = source.imagery?.hero;
+  // Only a genuine hero is shown above the portrait; an in-copy illustration never is (Cindy regression).
+  const hero = renderableHero(source, dpr);
   const portraitMeta = source.imagery?.portrait;
   const sameFile = (left?: string, right?: string) => !!left && !!right && left.split('?')[0] === right.split('?')[0];
   const thumbnail = (uri?: string) => !!uri && /[?&](?:resize|fit)=\d+/i.test(uri) && !!source.portraitImageUrl && sameFile(uri, source.portraitImageUrl);
-  const image = heroMeta?.selectedUrl || source.heroImageUrl;
-  const heroFrame = heroMeta ? frameForSlot({ width: heroMeta.width, height: heroMeta.height, role: heroMeta.role }, { width: 390, height: 220, purpose: 'hero' }, dpr) : undefined;
+  const image = hero?.uri;
+  const heroFrame = hero?.frame;
   const portraitUri = portraitMeta && (!b.portraitUrl || sameFile(b.portraitUrl, portraitMeta.selectedUrl) || thumbnail(b.portraitUrl)) ? portraitMeta.selectedUrl : b.portraitUrl;
   const portraitFrame = portraitMeta ? frameForSlot({ width: portraitMeta.width, height: portraitMeta.height, role: 'portrait' }, { width: 280, height: 360, purpose: 'portrait' }, dpr) : undefined;
   const logoFrame = source.imagery?.logo?.width ? frameForSlot({ width: source.imagery.logo.width, height: source.imagery.logo.height, role: 'logo' }, { width: 190, height: 60, purpose: 'logo' }, dpr) : undefined;

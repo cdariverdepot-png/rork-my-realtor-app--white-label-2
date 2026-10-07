@@ -21,7 +21,10 @@ test('WordPress headings and body artwork do not import widget or footer chrome'
   const page = '<html><body><h1 class="site-title">Business name</h1><h1><span style="font-family: Georgia; font-size: 31px">Welcome to our valley</span></h1><img src="/office.jpg" width="498" height="335"><h2>Contact us</h2><p>&#xf0e0; Call our office</p><h2>Primary Sidebar</h2><p>Widgets</p><h2>Facebook Feed</h2><p>Copyright and WordPress comments</p></body></html>';
   const result = styles.extractWebsiteDesign(page, 'https://example.com/');
   assert.equal(result.heroTitle, 'Welcome to our valley');
-  assert.equal(result.heroImageUrl, 'https://example.com/office.jpg');
+  // Corrected 2026-10-07: this small body image (modeled on Cindy Carlson's office.jpg) cannot fill a hero
+  // and the page never asked for one, so it must not sit above the portrait as a hero. It is retained, not dropped.
+  assert.equal(result.heroImageUrl, undefined);
+  assert.equal(result.imagery.images.find(image => /office\.jpg/.test(image.sourceUrl))?.width, 498);
   assert.equal(result.original.headingFontFamily, 'Georgia');
   assert.equal(result.original.headingSize, 31);
   assert.deepEqual(result.sections.map(x => x.title), ['Contact us']);

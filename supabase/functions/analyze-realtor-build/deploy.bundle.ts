@@ -3786,7 +3786,12 @@ function aspectOf(width?: number, height?: number): number | undefined {
   return width / height;
 }
 
-function classify(hint: string, width?: number, height?: number, explicitHero = false): ImageRole {
+/**
+ * Role from the page's own structure first, proportions last. `floated` marks an image the author
+ * placed inside article copy (WordPress/Gutenberg alignleft/alignright): it illustrates the text it
+ * sits in and is never promoted to the page hero just because it is landscape.
+ */
+function classify(hint: string, width?: number, height?: number, explicitHero = false, floated = false): ImageRole {
   const aspect = aspectOf(width, height);
   if (/equal.?housing|eho\b|realtor.?logo|mls.?logo|sprite|favicon|wp-emoji|gravatar/i.test(hint)) return 'icon';
   if (/logo|wordmark|brand.?mark|custom-logo|site-logo/i.test(hint) && !/headshot|portrait/i.test(hint)) return 'logo';
@@ -3795,6 +3800,7 @@ function classify(hint: string, width?: number, height?: number, explicitHero = 
   if (aspect && aspect >= 0.55 && aspect <= 0.92 && (height ?? 0) >= 140 && !explicitHero) return 'portrait';
   if (/listing|property|mls|idx|dsidx|floorplan|floor-plan/i.test(hint) && !/hero|banner/i.test(hint)) return 'listing';
   if (explicitHero || /hero|banner|masthead|slider|billboard/i.test(hint)) return 'hero';
+  if (floated) return 'article';
   if (aspect && aspect >= 1.35 && (width ?? 0) >= 320) return 'hero';
   if (/background|texture|pattern/i.test(hint)) return 'background';
   return 'article';
@@ -3983,9 +3989,10 @@ function candidateFromTag(tag: string, extra: ImageVariant[], resolve: (raw: str
   const usable = legitimate(variants, intrinsicWidth);
   const hint = `${attr(tag, 'class')} ${attr(tag, 'id')} ${attr(tag, 'alt')} ${attr(tag, 'src')} ${attr(tag, 'data-image-title')}`;
   const explicitHero = /hero|banner|masthead|slider|billboard/i.test(hint);
+  const floated = /(?:^|\s)align(?:left|right)(?:\s|$)/i.test(attr(tag, 'class'));
   const pageSrc = resolve(attr(tag, 'src'));
   const sourceUrl = pageSrc || usable[0]?.url || variants[0]?.url || '';
-  return { sourceUrl, variants: usable.length ? usable : variants, width, height, role: classify(hint, width, height, explicitHero), explicitHero, cssHero: false, hint };
+  return { sourceUrl, variants: usable.length ? usable : variants, width, height, role: classify(hint, width, height, explicitHero, floated), explicitHero, cssHero: false, hint };
 }
 
 const slotFor = (role: ImageRole): ImageSlot => role === 'portrait'
@@ -4019,8 +4026,25 @@ function assignPageImages(images: ImageDiagnostic[]): PageImagery {
     .sort((a, b) => (b.variants.reduce((max, variant) => Math.max(max, variant.width ?? 0), 0)) - (a.variants.reduce((max, variant) => Math.max(max, variant.width ?? 0), 0)))[0];
   const heroes = usable.filter(image => image.role === 'hero' && image !== portrait && image !== logo)
     .sort((a, b) => b.rank - a.rank || (b.variants.reduce((max, variant) => Math.max(max, variant.width ?? 0), 0)) - (a.variants.reduce((max, variant) => Math.max(max, variant.width ?? 0), 0)));
-  const hero = heroes.find(image => image.fit === 'cover' && image.crop !== 'rejected') ?? heroes[0];
+  // A hero is either asked for by the page (CSS/explicit hero, rank >= 2) or able to fill the hero
+  // slot. A proportion-guessed image that can only be shown small is not a hero.
+  const hero = heroes.find(image => image.fit === 'cover' && image.crop !== 'rejected') ?? heroes.find(image => image.rank >= 2);
   return { logo, portrait, hero, all: images };
+}
+
+/**
+ * The hero image a renderer may show, including designs saved before roles were tightened.
+ * Requires the page to have asked for a hero (rank >= 2) or the file to fill the hero slot without
+ * a rejected crop. Older designs without diagnostics keep their saved hero URL.
+ */
+function renderableHero(design: Pick<WebsiteDesign, 'heroImageUrl' | 'imagery'>, dpr = REFERENCE_DPR): { uri: string; frame?: ReturnType<typeof frameForSlot> } | null {
+  const meta = design.imagery?.hero;
+  const uri = meta?.selectedUrl || design.heroImageUrl;
+  if (!uri) return null;
+  if (!meta) return { uri };
+  const frame = frameForSlot({ width: meta.width, height: meta.height, role: meta.role }, { width: 390, height: 220, purpose: 'hero' }, dpr);
+  if (meta.role !== 'hero') return null;
+  return meta.rank >= 2 || (frame.fit === 'cover' && frame.crop !== 'rejected') ? { uri, frame } : null;
 }
 
 function imageForTag(tag: string, images: ImageDiagnostic[], resolve: (raw: string) => string | undefined): ImageDiagnostic | undefined {
