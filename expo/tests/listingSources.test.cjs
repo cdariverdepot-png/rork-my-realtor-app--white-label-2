@@ -154,7 +154,7 @@ test('robots rules prefer a specific crawler group and longest matching allow pa
   assert.equal(robotsAllows('User-agent: *\nDisallow: /\nUser-agent: MyRealtorAppBuilder\nAllow: /', '/listings'), true);
 });
 
-function fakeDatabase({ rows = {}, auth = true, conflict = false, owner = true } = {}) {
+function fakeDatabase({ rows = {}, auth = true, conflict = false, owner = true, serviceActive = true } = {}) {
   const reads = [], writes = []; let conflictSeen = false;
   const db = { rpc:async()=>({data:serviceActive,error:null}), auth: { getUser: async () => ({ data: { user: auth === true ? { id: 'user', email_confirmed_at: 'now' } : auth || null } }) }, from: table => {
     let operation = 'select', payload, filters = {};
@@ -185,8 +185,8 @@ function fakeDatabase({ rows = {}, auth = true, conflict = false, owner = true }
   return { db, rows, reads, writes };
 }
 
-async function endpoint({ body = {}, auth = true, headers = {}, pages = {}, rows = {}, conflict = false, owner = true } = {}) {
-  const database = fakeDatabase({ rows, auth, conflict, owner }); let fetched = 0;
+async function endpoint({ body = {}, auth = true, headers = {}, pages = {}, rows = {}, conflict = false, owner = true, serviceActive = true } = {}) {
+  const database = fakeDatabase({ rows, auth, conflict, owner, serviceActive }); let fetched = 0;
   const r = runtime({ database: database.db, env: { SUPABASE_URL: 'https://project.supabase.co', SUPABASE_SERVICE_ROLE_KEY: 'private', LISTING_SYNC_TOKEN: 'scheduler-secret' },
     fetchFixture: async uri => {
       fetched++; const url = String(uri);

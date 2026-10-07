@@ -28,11 +28,11 @@ alter table private.billing_events enable row level security;
 revoke all on private.billing_accounts,private.client_relationships,private.billing_events from public,anon,authenticated;
 -- Every realtor gets a server-owned trial clock. Existing accounts start their 7-day trial when this entitlement system is introduced.
 insert into private.billing_accounts(realtor_id) select id from public.realtors on conflict do nothing;
-create function private.initialize_billing_account() returns trigger language plpgsql security definer set search_path='' as $
+create function private.initialize_billing_account() returns trigger language plpgsql security definer set search_path='' as $billing$
 begin
  insert into private.billing_accounts(realtor_id) values(new.id) on conflict do nothing;
  return new;
-end; $;
+end; $billing$;
 create trigger initialize_realtor_billing after insert on public.realtors for each row execute function private.initialize_billing_account();
 revoke all on function private.initialize_billing_account() from public,anon,authenticated;
 -- Existing authenticated, currently bound accounts retain their relationships; address-book contacts are excluded.

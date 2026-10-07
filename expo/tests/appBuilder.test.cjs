@@ -31,7 +31,7 @@ new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolv
 }).outputText)(presentationModule, presentationModule.exports);
 
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
-async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', invokeRenderer = false } = {}) {
+async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', invokeRenderer = false, serviceActive = true } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
