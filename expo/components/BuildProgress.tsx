@@ -26,7 +26,7 @@ export default function BuildProgress({ activity }: { activity?: string }) {
         }
         return current + 1;
       });
-    }, 720);
+    }, 950);
     return () => clearInterval(timer);
   }, []);
 
@@ -68,8 +68,8 @@ export default function BuildProgress({ activity }: { activity?: string }) {
       </View>
 
       {STEPS.slice(0, visible).map((step, index) => {
-        const current = index === visible - 1 && visible < STEPS.length;
-        const completed = index < visible - 1 || visible === STEPS.length;
+        const current = index === visible - 1;
+        const completed = index < visible - 1;
         return (
           <View
             key={step}
