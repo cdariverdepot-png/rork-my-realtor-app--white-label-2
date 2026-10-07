@@ -19,6 +19,7 @@ import { CLIENT_LAYOUTS, DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts
 import { themeCandidate } from "@/constants/themeDesigns";
 
 import BuildUrlEntry from "./BuildUrlEntry";
+import BuildProgress from "./BuildProgress";
 import OnboardingThemePreview from "./OnboardingThemePreview";
 import SetupReviewActions from "./SetupReviewActions";
 import {liveThemeDesign} from "@/constants/liveThemeDesigns";
@@ -545,11 +546,7 @@ export default function InitialRealtorSetup() {
       </Pressable>}
     </View>}
 
-    {loaded && phase === "building" && <View style={{ marginTop: 28, padding: 24, borderRadius: 16, backgroundColor: "#1A2127", alignItems: "center" }}>
-      <ActivityIndicator color="#C2A276" size="large" />
-      <Text style={{ color: "white", fontSize: 18, fontWeight: "600", marginTop: 16, textAlign: "center" }}>Building your app…</Text>
-      <Text style={{ color: "#9AA4AA", marginTop: 6, textAlign: "center" }}>{activity || "Reading your website and building your profile…"} This usually takes under a minute.</Text>
-    </View>}
+    {loaded && phase === "building" && <BuildProgress activity={activity} />}
 
     {loaded && phase === "review" && result && draft && <>
       <Text style={{ color: "white", fontSize: 24, fontWeight: "600", marginTop: 28 }}>Here’s your app</Text>
