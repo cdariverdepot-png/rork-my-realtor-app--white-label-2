@@ -3856,7 +3856,7 @@ function frameForSlot(source: { width?: number; height?: number; role: ImageRole
   const loss = aspect ? cropLoss(aspect, slotAspect) : 1;
   const coverScale = Math.max(slot.width / source.width, slot.height / source.height) * density;
   const coverOk = coverScale <= MAX_UPSCALE && loss <= (slot.purpose === 'listing' ? 0.4 : 0.28) && (slot.purpose !== 'hero' || (aspect ?? 0) >= 1.25);
-  if ((slot.purpose === 'hero' || slot.purpose === 'listing' || slot.purpose === 'article') && coverOk && source.role !== 'portrait' && source.role !== 'logo') {
+  if ((slot.purpose === 'hero' || slot.purpose === 'listing' || slot.purpose === 'article') && coverOk) {
     return { fit: 'cover', width: round(slot.width), height: round(slot.height), upscaleRatio: Number(coverScale.toFixed(2)), crop: loss > 0.08 ? 'modest' : 'none' };
   }
   const frame = contained(slot.width, slot.purpose === 'hero' ? Math.min(slot.height, 280) : slot.height);
