@@ -38,7 +38,7 @@ end; $$;
 
 create function private.service_active(rid uuid) returns boolean language sql stable security definer set search_path='' as $$
  select exists(select 1 from public.realtors where id=rid) and coalesce((select
- case when not ever_paid then true else coalesce(paid_through>now(),false) end
+ case when not ever_paid then exists(select 1 from public.realtors r where r.id=rid and r.created_at > now() - interval '7 days') else coalesce(paid_through>now(),false) end
  from private.billing_accounts where realtor_id=rid),true);
 $$;
 create function public.realtor_service_active(p_realtor_id uuid) returns boolean language sql security invoker set search_path='' as $$ select private.service_active(p_realtor_id); $$;

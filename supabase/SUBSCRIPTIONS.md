@@ -6,7 +6,7 @@ The custom service has a separate $499 setup/build-and-launch fee and requires t
 
 ## Server behavior
 
-Postgres owns the connection ledger, using the existing `(realtor_id, client_id)` account identity. Authentication, entitlement checks and activation execute in a locked transaction. Evaluation has all standard features, three active connected accounts, no expiry and no payment details. Contacts, pending invitations and previews do not consume seats. Failed authentication does not activate a relationship. A capacity refusal keeps a newly created account so the same invitation and account can retry login later.
+Postgres owns the connection ledger, using the existing `(realtor_id, client_id)` account identity. Authentication, entitlement checks and activation execute in a locked transaction. Evaluation has all standard features for 7 days from the realtor account's creation, with up to three active connected accounts and no payment details required to start. After day 7, an active $49/month or $490/year subscription is required regardless of connected-client count. Contacts, pending invitations and previews do not consume seats. Failed authentication does not activate a relationship. A capacity refusal keeps a newly created account so the same invitation and account can retry login later.
 
 Disconnection preserves the relationship and records, releases its seat, and revokes private reads/writes, booking and notification eligibility. Reconnection reuses the account and requires current entitlement. Client identity remains resumable when service is inactive, but identity alone grants no private access.
 
