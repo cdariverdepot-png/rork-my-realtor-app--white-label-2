@@ -6,7 +6,7 @@ import PortraitImage from '../PortraitImage';
 import { websiteAppearance, websiteFont } from '@/lib/websitePresentation';
 import type { ReferenceHomeProps, ReferenceRoute } from './ReferenceHome';
 import type { WebsiteSection } from '@/lib/websiteDesignRuntime';
-import { composeWebsiteSections, presentWebsiteSection, presentWebsiteSurface, websiteCopy, frameForSlot, type ImageRole } from '@/lib/websiteDesignRuntime';
+import { composeWebsiteSections, presentWebsiteSurface, websiteCopy, frameForSlot, type ImageRole } from '@/lib/websiteDesignRuntime';
 
 /** Native website interpretation, shared by onboarding, preview and published Home. */
 export default function WebsiteHome(p: ReferenceHomeProps) {
@@ -55,7 +55,10 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
     {!entries.length ? <Text style={{ color: a.ink, paddingHorizontal: a.spacing * s, lineHeight: 24 }}>New listings will appear here as your realtor adds them. Get in touch to discuss your search.</Text> : <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: a.spacing * s, gap: 16 * s }}>
       {entries.slice(0, optimized ? 6 : 10).map(l => <View key={l.id} style={{ width: (optimized ? 285 : 310) * s, borderRadius: a.radius * s, overflow: 'hidden', borderColor: a.ink + '22', borderWidth: 1, backgroundColor: a.panel }}>
         <Pressable onPress={() => p.onOpen?.(l.id)} accessibilityRole="button" accessibilityLabel={l.title}>
-          <Image source={{ uri: l.images?.[0] || l.image }} contentFit="cover" style={{ width: '100%', height: 205 * s }} />
+          <View style={{ position: 'relative' }}>
+            <Image source={{ uri: l.images?.[0] || l.image }} contentFit="cover" style={{ width: '100%', height: 205 * s }} />
+            {p.recommendedIds?.includes(l.id) && <View style={{ position: 'absolute', left: 12 * s, top: 12 * s, maxWidth: '78%', paddingHorizontal: 10 * s, paddingVertical: 6 * s, borderRadius: 999, backgroundColor: a.accent }}><Text style={{ color: contrast(a.accent), fontFamily: 'Inter_600SemiBold', fontSize: 10 * s }}>{p.recommendationLabel || 'Recommended by your realtor'}</Text></View>}
+          </View>
           <View style={{ padding: 18 * s, gap: 8 * s }}><Text style={{ color: a.ink, fontSize: 25 * s, fontFamily: headingFont }}>{l.price}</Text><Text style={{ color: a.ink, fontFamily: bodyFont, fontSize: 16 * s }}>{l.title}</Text><Text style={{ color: a.ink, fontSize: 13 * s }}>{[l.beds > 0 ? `${l.beds} beds` : '', l.baths > 0 ? `${l.baths} baths` : '', l.sqft && l.sqft !== '0' ? l.sqft : ''].filter(Boolean).join(' · ') || l.neighborhood}</Text></View>
         </Pressable><Pressable accessibilityLabel={p.isFavorite?.(l.id) ? 'Remove saved home' : 'Save home'} accessibilityRole="button" onPress={() => p.onFavorite?.(l.id)} style={{ position: 'absolute', top: 12, right: 12, padding: 12, borderRadius: 24, backgroundColor: a.background }}><Heart size={22 * s} color={a.ink} fill={p.isFavorite?.(l.id) ? a.accent : 'transparent'} /></Pressable>
       </View>)}
@@ -74,10 +77,15 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
       {!!copy && <Text numberOfLines={8} style={{ color: a.ink, fontFamily: bodyFont, fontSize: 15 * s, lineHeight: 24 * s }}>{copy}</Text>}
     </View>;
   };
-  const sections = composeWebsiteSections(source.sections)
-    .map(item => presentWebsiteSection(item))
-    .filter((item): item is WebsiteSection => !!item && item.destination === 'unique')
-    .slice(0, optimized ? 3 : 6);
+  const sectionCandidates = composeWebsiteSections(source.sections)
+    .filter((item): item is WebsiteSection => item.destination === 'unique' || (item.destination === 'native' && item.native === 'listings'));
+  const sectionLimit = optimized ? 3 : 6;
+  const listingAnchor = sectionCandidates.find(item => item.kind === 'listings');
+  const sections = sectionCandidates.slice(0, sectionLimit);
+  if (listingAnchor && !sections.includes(listingAnchor)) {
+    sections.push(listingAnchor);
+    sections.sort((left, right) => sectionCandidates.indexOf(left) - sectionCandidates.indexOf(right));
+  }
   const backdrop = !optimized && source.backgroundImageUrl;
   return <View style={{ width, backgroundColor: a.background }}>
     {!!backdrop && <Image source={{ uri: backdrop }} contentFit="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} />}
@@ -92,8 +100,8 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
       {!!portraitUri && (a.layout === 'portrait-split' || !!portraitMeta) && !sameFile(portraitUri, image) && <PortraitImage uri={portraitUri} contentFit="contain" style={{ width: (portraitFrame?.width ?? 260) * s, height: (portraitFrame?.height ?? 340) * s, alignSelf: 'center' }} />}
       {a.layout !== 'text-first' && heroCopy}
     </>}
-    {(optimized || !sections.some(x => x.kind === 'listings')) && collection()}
-    {sections.map(section)}
+    {!sections.some(x => x.kind === 'listings') && collection()}
+    {sections.map((item, i) => item.kind === 'listings' ? collection(item.title || collectionTitle) : section(item, i))}
     <View style={{ padding: a.spacing * s, gap: 8 * s }}><Text style={{ color: a.ink, fontFamily: bodyFont, lineHeight: 23 * s }}>{[b.realtor.phone, b.realtor.email, b.credentials.license.brokerage, b.credentials.license.number].filter(Boolean).join('\n')}</Text></View>
   </Animated.View></View>;
 }

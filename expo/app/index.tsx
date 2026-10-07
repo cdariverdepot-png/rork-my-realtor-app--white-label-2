@@ -274,7 +274,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const router = useRouter();
   const { isFavorited, toggleListing } = useFavorites();
   const [demoThemeDraft, setDemoThemeDraft] = useState<Brand | null>(null);
-  const { viewAsClient, demoViewMode, exitViewAsClient, exitDemoView, isAdmin, isPreviewAdmin } = useAuth();
+  const { viewAsClient, demoViewMode, exitViewAsClient, exitDemoView, isAdmin, isPreviewAdmin, currentClientId } = useAuth();
   const { editing, dirty, cancel, save, guardExit, previewBrand, previewListings } =
     useEditMode();
 
@@ -302,7 +302,15 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
   const exitDemo = exitTemplate;
   const { refresh: refreshListings, hydrated: listingsHydrated } = useListings();
   const { refresh: refreshBrand, brand: b, theme, previewingDraft, setDraftPreview, hydrated: brandHydrated } = useBrand();
-  const { refresh: refreshFeed } = useClientFeed();
+  const { refresh: refreshFeed, getFeed } = useClientFeed();
+  const recommendedIds = useMemo(
+    () => (currentClientId ? getFeed(currentClientId).pinnedListingIds : []),
+    [currentClientId, getFeed],
+  );
+  const recommendationLabel = useMemo(() => {
+    const first = previewBrand.realtor.name.trim().split(/\s+/)[0];
+    return `Recommended by ${first || "your realtor"}`;
+  }, [previewBrand.realtor.name]);
   const { refresh: refreshDocs } = useDocuments();
   const { refresh: refreshMessages } = useMessages();
   const { refresh: refreshNotifs } = useNotifications();
@@ -490,7 +498,8 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
               <Reveal delay={delays.listings ?? 120}>
                 {!designed ? <CuratedListings /> : <ThemeCollection brand={previewBrand} listings={previewListings}
                   onOpen={id => router.push(`/listing/${id}`)} onBrowse={() => router.push("/listings")}
-                  isFavorite={isFavorited} onFavorite={id => toggleListing("favorites", id)} />}
+                  isFavorite={isFavorited} onFavorite={id => toggleListing("favorites", id)}
+                  recommendedIds={recommendedIds} recommendationLabel={recommendationLabel} />}
               </Reveal>
             </View>
           );
@@ -542,7 +551,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
           return null;
       }
     },
-    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing, isAdmin, viewAsClient]
+    [delays, scrollY, demoViewMode, editing, previewBrand, previewListings, router, insets.top, isFavorited, toggleListing, isAdmin, viewAsClient, recommendedIds, recommendationLabel]
   );
 
   /**
@@ -604,6 +613,7 @@ function ClientHome({ insets }: { insets: { top: number; bottom: number } }) {
             <ReferenceHome brand={previewBrand} listings={previewListings} scrollY={scrollY} topInset={insets.top + 24}
               onNavigate={path => router.navigate(clientDestination(path, isAdmin && viewAsClient) as never)} onOpen={id => router.push(`/listing/${id}`)}
               onFavorite={id => toggleListing("favorites", id)} isFavorite={isFavorited}
+              recommendedIds={recommendedIds} recommendationLabel={recommendationLabel}
               onContact={channel => {
                 const phone = previewBrand.realtor.phone.replace(/[^+\d]/g, "");
                 const email = previewBrand.realtor.email.trim();

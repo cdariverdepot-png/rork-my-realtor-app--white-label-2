@@ -12,7 +12,7 @@ import {
 import { Image } from "expo-image";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
-import { ArrowUpRight, Link2 } from "lucide-react-native";
+import { ArrowUpRight, Check, Link2, X } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Pressable from "./TactilePressable";
 import { SCREEN_BG } from "@/constants/backdrops";
@@ -27,6 +27,7 @@ export default function BuildUrlEntry({
   error,
   listingCount = 0,
   onViewListings,
+  validationState = "empty",
 }: {
   url: string;
   onChange: (value: string) => void;
@@ -36,6 +37,7 @@ export default function BuildUrlEntry({
   error?: string;
   listingCount?: number;
   onViewListings?: () => void;
+  validationState?: "empty" | "valid" | "invalid" | "checking" | "missing" | "unknown";
 }) {
   const insets = useSafeAreaInsets();
   const inputRef = useRef<TextInput>(null);
@@ -53,6 +55,11 @@ export default function BuildUrlEntry({
     }
     if (preparing) {
       setNotice("Your realtor session is still loading. Please try again in a moment.");
+      return;
+    }
+    if (validationState === "invalid" || validationState === "missing") {
+      setNotice(validationState === "missing" ? "We couldn’t reach that website. Check the address and try again." : "That website address doesn’t look complete yet.");
+      inputRef.current?.focus();
       return;
     }
     setNotice(null);
@@ -77,8 +84,8 @@ export default function BuildUrlEntry({
           position: "absolute",
           left: 0,
           right: 0,
-          top: -56,
-          bottom: -56,
+          top: -120,
+          bottom: -160,
           transform: [{ translateY: drift }],
         }}
       >
@@ -93,7 +100,7 @@ export default function BuildUrlEntry({
       <LinearGradient
         colors={["#071A2160", "#071A2155", "#071A21D0", "#071A21"]}
         locations={[0, 0.35, 0.72, 1]}
-        style={StyleSheet.absoluteFill}
+        style={{ position: "absolute", left: 0, right: 0, top: -120, bottom: -180 }}
         pointerEvents="none"
       />
       <Animated.ScrollView
@@ -191,7 +198,7 @@ export default function BuildUrlEntry({
                   gap: 12,
                   alignItems: "center",
                   borderBottomWidth: 1,
-                  borderColor: urlFocused ? "rgba(225,206,173,0.95)" : "rgba(203,218,209,0.42)",
+                  borderColor: validationState === "valid" ? "rgba(116,211,164,0.92)" : validationState === "invalid" || validationState === "missing" ? "rgba(255,157,137,0.92)" : urlFocused ? "rgba(225,206,173,0.95)" : "rgba(203,218,209,0.42)",
                   paddingBottom: 12,
                   transform: [{ translateY: urlFocused ? -1 : 0 }],
                   ...(Platform.OS === "web" ? { transitionProperty: "border-color, transform", transitionDuration: "180ms" } : null),
@@ -222,6 +229,9 @@ export default function BuildUrlEntry({
                     paddingVertical: 10,
                   }}
                 />
+                <View pointerEvents="none" style={{ width: 24, height: 24, alignItems: "center", justifyContent: "center" }}>
+                  {validationState === "checking" ? <ActivityIndicator size="small" color="#E3D6BB" /> : validationState === "valid" ? <Check size={21} color="#74D3A4" strokeWidth={2.8} /> : validationState === "invalid" || validationState === "missing" ? <X size={21} color="#FF9D89" strokeWidth={2.5} /> : null}
+                </View>
               </View>
               {feedback ? (
                 <View

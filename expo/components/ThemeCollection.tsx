@@ -9,9 +9,10 @@ import type { ManagedListing } from "@/contexts/ListingsContext";
 import { liveThemeDesign as themeDesign } from "@/constants/liveThemeDesigns";
 import { sectionState } from "@/constants/sections";
 
-export default function ThemeCollection({ brand, listings, width: previewWidth, onOpen, onBrowse, onFavorite, isFavorite }:
+export default function ThemeCollection({ brand, listings, width: previewWidth, onOpen, onBrowse, onFavorite, isFavorite, recommendedIds, recommendationLabel }:
   { brand: Brand; listings: ManagedListing[]; width?: number; onOpen?: (id: string) => void;
-    onBrowse?: () => void; onFavorite?: (id: string) => void; isFavorite?: (id: string) => boolean }) {
+    onBrowse?: () => void; onFavorite?: (id: string) => void; isFavorite?: (id: string) => boolean;
+    recommendedIds?: string[]; recommendationLabel?: string }) {
   const window = useWindowDimensions();
   const width = previewWidth ?? window.width;
   const d = themeDesign(brand.layoutId, brand.theme);
@@ -39,6 +40,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const image = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityLabel={item.title} />;
   const badge = (item: ManagedListing) => listingStatusLabel(item) ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,
     borderRadius: discovery ? 16 : 3, backgroundColor: burgundy ? "#5E1526" : discovery ? "#C7A06B" : "#111713DD", color: discovery ? "#191713" : "#F9F2E8", fontSize: 7, letterSpacing: 0.8 }}>{listingStatusLabel(item).toUpperCase()}</Text> : null;
+  const recommendation = (item: ManagedListing) => recommendedIds?.includes(item.id) ? <Text style={{ position: "absolute", left: 8, top: 37, maxWidth: "74%", paddingHorizontal: 8, paddingVertical: 5, borderRadius: 14, backgroundColor: d.accent + "EE", color: d.background, fontSize: 7.5, fontFamily: "Inter_600SemiBold", zIndex: 3 }}>{recommendationLabel || "Recommended by your realtor"}</Text> : null;
   const card = (item: ManagedListing, compact = false) => {
     const overlay = coastal || discovery || compact || editorial;
     const height = coastal ? 155 : discovery ? 236 : compact ? 195 : editorial ? 310 : undefined;
@@ -46,7 +48,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
       borderWidth: 1, borderColor: d.accent + "33", backgroundColor: coastal ? "#FFFDF8" : d.background }}>
       <Pressable disabled={!onOpen} onPress={() => onOpen?.(item.id)} accessibilityRole="button" accessibilityLabel={item.title}>
         <View style={{ height: height ?? (minimal ? 155 : burgundy ? 180 : 132) }}>
-          {image(item)}{badge(item)}
+          {image(item)}{badge(item)}{recommendation(item)}
           {overlay && <><></>
             <View style={{ position: "absolute", bottom: 10, left: 9, right: 9 }}>
               <Text style={{ fontFamily: coastal ? "Inter_400Regular" : serif, fontSize: coastal ? 10 : compact ? 16 : 18, color: "#FFF8EF" }}>{coastal ? item.neighborhood || item.title : item.title}</Text>
@@ -78,7 +80,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
     {feature ? <>
       <View style={{ marginHorizontal: 20, borderRadius: 16, overflow: "hidden", height: 235 }}>
         <Pressable disabled={!onOpen} onPress={() => onOpen?.(heroListing.id)} accessibilityRole="button" accessibilityLabel={heroListing.title} style={{ flex: 1 }}>
-          {image(heroListing)}<></>
+          {image(heroListing)}{recommendation(heroListing)}<></>
           <View style={{ padding: 17, width: "62%", justifyContent: "space-between", flex: 1 }}>
             <Text style={{ color: d.ink, fontSize: 8, letterSpacing: 1.5 }}>FEATURED PROPERTY</Text>
             <Text style={{ color: d.ink, fontFamily: serif, fontSize: 29, lineHeight: 29 }}>{heroListing.title}</Text>
