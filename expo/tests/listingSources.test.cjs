@@ -156,7 +156,7 @@ test('robots rules prefer a specific crawler group and longest matching allow pa
 
 function fakeDatabase({ rows = {}, auth = true, conflict = false, owner = true } = {}) {
   const reads = [], writes = []; let conflictSeen = false;
-  const db = { auth: { getUser: async () => ({ data: { user: auth === true ? { id: 'user', email_confirmed_at: 'now' } : auth || null } }) }, from: table => {
+  const db = { rpc:async()=>({data:serviceActive,error:null}), auth: { getUser: async () => ({ data: { user: auth === true ? { id: 'user', email_confirmed_at: 'now' } : auth || null } }) }, from: table => {
     let operation = 'select', payload, filters = {};
     const query = {
       select: () => query, eq: (name, value) => { filters[name] = value; return query; },
@@ -218,6 +218,12 @@ test('endpoint rejects invalid scheduler credentials, missing auth and foreign r
     const result = await endpoint(args);
     assert.ok([401, 403].includes(result.status)); assert.equal(result.fetched, 0); assert.equal(result.writes.length, 0);
   }
+});
+
+test('inactive accounts cannot refresh inventory directly or through the scheduler',async()=>{
+ for(const args of [{},{body:{realtorId:'11111111-1111-1111-1111-111111111111'},headers:{'x-listing-sync-token':'scheduler-secret'}}]){
+  const r=await endpoint({...args,serviceActive:false});assert.equal(r.status,403);assert.equal(r.fetched,0);assert.equal(r.writes.length,0);
+ }
 });
 
 test('scheduled inventory sync adds new homes while CAS retries preserve concurrent editor additions', async () => {

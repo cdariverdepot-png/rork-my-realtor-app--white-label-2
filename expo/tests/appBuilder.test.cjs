@@ -72,7 +72,8 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
   const build = { sources:[source], evidence:[], draft, status };
-  const admin = { auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:()=> {
+  const admin = { rpc:async()=>({data:serviceActive,error:null}), auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:table=> {
+    if(table==='realtors')return {select:()=>({eq:()=>({maybeSingle:async()=>({data:{id:'realtor'},error:null})})})};
     reads++;
     return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:async()=>{update=value;return {error:null};}}) };
   } };
@@ -129,6 +130,10 @@ test('production onboarding invokes the configured renderer and continues discov
   assert.equal(r.rendererPosts[0].headers.authorization, 'Bearer render-token');
   assert.equal(r.result.listingDiscovery.rendered, true);
   assert.ok(r.result.discoveredListings.some(item => item.price === '$350,000'));
+});
+
+test('inactive account cannot bypass website service checks through a guest payload',async()=>{
+  for(const guest of [true,false]){const r=await runWebsiteBuild({guest,serviceActive:false});assert.equal(r.status,403);assert.equal(r.aiBody,undefined);assert.equal(r.update,undefined);}
 });
 
 test('retries reread URLs for existing drafts with zero facts and change only selected copy', async () => {
