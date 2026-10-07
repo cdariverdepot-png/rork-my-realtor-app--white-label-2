@@ -252,9 +252,41 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
 
   const opacity = entrance.interpolate({ inputRange: [0, 1], outputRange: [0, 1] });
   const translateY = entrance.interpolate({ inputRange: [0, 1], outputRange: [24, 0] });
+  const rootRef = useRef<View>(null);
+
+  useEffect(() => {
+    if (Platform.OS !== "web" || typeof document === "undefined") return;
+    const id = "onboarding-cover-style";
+    if (!document.getElementById(id)) {
+      const style = document.createElement("style");
+      style.id = id;
+      // 100% / 100dvh stop short in the Facebook in-app browser, which lets the
+      // sign-in door photo show as a strip under the slideshow.
+      style.textContent = `
+        .onboarding-cover {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: auto !important;
+          width: 100% !important;
+          height: 100vh !important;
+          height: 100dvh !important;
+          height: 100lvh !important;
+          min-height: -webkit-fill-available !important;
+          min-height: 100lvh !important;
+          z-index: 9998 !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    const node = rootRef.current as unknown as HTMLElement | null;
+    node?.classList?.add("onboarding-cover");
+  }, []);
 
   return (
     <View
+      ref={rootRef}
       style={styles.root}
       onLayout={(e) => {
         const w = e.nativeEvent.layout.width;
@@ -272,17 +304,14 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
       {/* Solid curtain — never animated away, so home/demo cannot flash under exit. */}
       <View style={[StyleSheet.absoluteFill, { backgroundColor: dark.bg }]} pointerEvents="none" />
 
-      <Animated.View
-        pointerEvents="box-none"
-        style={[styles.content, { opacity, transform: [{ translateY }] }]}
-      >
+      <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity }]}>
         {slides.map((slide, i) => (
           <AnimatedImage
             key={i}
             pointerEvents="none"
             source={safeImageSource(slide.bg) ?? undefined}
             style={[
-              StyleSheet.absoluteFill,
+              styles.bg,
               {
                 opacity: bgFade.interpolate({
                   inputRange: [i - 1, i, i + 1],
@@ -299,7 +328,12 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
             priority="high"
           />
         ))}
+      </Animated.View>
 
+      <Animated.View
+        pointerEvents="box-none"
+        style={[styles.content, { opacity, transform: [{ translateY }] }]}
+      >
         <View style={styles.topNavRow} pointerEvents="box-none">
           {currentIndex > 0 ? (
             <Pressable
@@ -392,6 +426,24 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFill,
     backgroundColor: dark.bg,
     zIndex: 9998,
+    overflow: "hidden",
+    ...(Platform.OS === "web"
+      ? {
+          position: "fixed" as unknown as "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: "auto" as unknown as number,
+          width: "100%" as unknown as number,
+          height: "100lvh" as unknown as number,
+          minHeight: "100lvh" as unknown as number,
+        }
+      : {}),
+  },
+  bg: {
+    ...StyleSheet.absoluteFill,
+    width: "100%",
+    height: "100%",
   },
   content: {
     flex: 1,
