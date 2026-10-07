@@ -6,7 +6,7 @@ import PortraitImage from '../PortraitImage';
 import { websiteAppearance, websiteFont } from '@/lib/websitePresentation';
 import type { ReferenceHomeProps, ReferenceRoute } from './ReferenceHome';
 import type { WebsiteSection } from '@/lib/websiteDesignRuntime';
-import { composeWebsiteSections, presentWebsiteSection, presentWebsiteSurface, websiteCopy, frameForSlot, type ImageRole } from '@/lib/websiteDesignRuntime';
+import { composeWebsiteSections, presentWebsiteSurface, websiteCopy, frameForSlot, type ImageRole } from '@/lib/websiteDesignRuntime';
 
 /** Native website interpretation, shared by onboarding, preview and published Home. */
 export default function WebsiteHome(p: ReferenceHomeProps) {
