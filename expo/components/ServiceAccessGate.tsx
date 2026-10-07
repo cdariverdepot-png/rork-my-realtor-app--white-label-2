@@ -21,7 +21,7 @@ export default function ServiceAccessGate({ children }: { children: React.ReactN
   }, [client, auth.realtorId]);
   useEffect(() => { checkedScope.current = null; setAccess(null); void check(); const timer = setInterval(() => void check(), 30000); const listener = AppState.addEventListener("change", v => { if(v === "active") void check(); }); return () => { clearInterval(timer); listener.remove(); }; }, [check]);
   const management = ["/admin/plans", "/admin/login", "/portal", "/reset-password", "/client-recovery", "/legal", "/auth/callback", "/welcome"].includes(path);
-  const ownerBlocked = seats.tracked && (!seats.loaded || !seats.active);
+  // Never replace startup/onboarding with billing merely because entitlement state has not loaded.\n  // Blocking is fail-closed only after the server has positively returned a metered state.\n  const ownerBlocked = seats.tracked && seats.loaded && !seats.active;
   const clientBlocked = client && (checkedScope.current !== auth.realtorId || access?.available !== true);
   if (management || (!ownerBlocked && !clientBlocked)) return <>{children}</>;
   const loading = seats.tracked ? !seats.loaded && seats.loading : access === null;
