@@ -338,7 +338,11 @@ async function main() {
   console.log(JSON.stringify(report.scoreboard, null, 2));
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { summarize, scoreboard, strictComplete, failureClass };
