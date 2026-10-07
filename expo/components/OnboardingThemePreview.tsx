@@ -61,6 +61,7 @@ export default function OnboardingThemePreview({
           onNavigate={navigate}
           savedIds={savedIds}
           onFavorite={toggleSaved}
+          width={width}
         />
       )}
       <ThemeNavigation
