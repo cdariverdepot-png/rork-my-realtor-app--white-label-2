@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { BlurView } from "expo-blur";
+import { LinearGradient } from "expo-linear-gradient";
 import { safeImageSource } from "@/lib/safeImageSource";
 import * as Haptics from "expo-haptics";
 import {
@@ -373,11 +374,17 @@ export default function OnboardingCarousel({ audience, onFinish }: Props) {
                   accessibilityRole="button"
                   accessibilityLabel={active && i === slides.length - 1 ? "Get started" : `Page ${i + 1}`}
                   accessibilityState={{ selected: active }}
-                  style={[styles.dot, active && styles.dotActive]}
+                  style={[styles.dotHit, active && styles.dotHitOn]}
                 >
-                  <BlurView pointerEvents="none" intensity={36} tint="light" style={StyleSheet.absoluteFill} />
-                  <View pointerEvents="none" style={[StyleSheet.absoluteFill, active ? styles.dotFillOn : styles.dotFill]} />
-                  <View pointerEvents="none" style={styles.dotRim} />
+                  <View style={[styles.dot, active && styles.dotActive]} pointerEvents="none">
+                    <BlurView pointerEvents="none" intensity={28} tint="dark" style={StyleSheet.absoluteFill} />
+                    <LinearGradient
+                      pointerEvents="none"
+                      colors={["rgba(255,255,255,0.42)", "rgba(255,255,255,0.06)", "rgba(0,0,0,0.22)"]}
+                      locations={[0, 0.42, 1]}
+                      style={StyleSheet.absoluteFill}
+                    />
+                  </View>
                 </Pressable>
               );
             })}
@@ -481,32 +488,44 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
+  dotHit: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 8px 18px rgba(0,0,0,0.38)",
+      } as object,
+      default: {
+        shadowColor: "#000",
+        shadowOpacity: 0.38,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 6 },
+        elevation: 6,
+      },
+    }),
+  },
+  dotHitOn: {
+    width: 42,
+  },
   dot: {
-    width: 11,
-    height: 11,
-    borderRadius: 6,
+    flex: 1,
+    borderRadius: 7,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.42)",
-    backgroundColor: "rgba(255,255,255,0.14)",
+    borderColor: "rgba(255,255,255,0.38)",
+    backgroundColor: "rgba(60,60,68,0.22)",
+    ...(Platform.OS === "web"
+      ? ({
+          backdropFilter: "blur(22px) saturate(1.8)",
+          WebkitBackdropFilter: "blur(22px) saturate(1.8)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(0,0,0,0.28)",
+        } as object)
+      : {}),
   },
   dotActive: {
-    width: 36,
-    borderRadius: 6,
-    borderColor: "rgba(255,255,255,0.62)",
-  },
-  dotFill: {
-    backgroundColor: "rgba(255,255,255,0.10)",
-  },
-  dotFillOn: {
-    backgroundColor: "rgba(255,255,255,0.32)",
-  },
-  dotRim: {
-    position: "absolute",
-    top: 0,
-    left: 2,
-    right: 2,
-    height: 1,
-    backgroundColor: "rgba(255,255,255,0.7)",
+    borderRadius: 7,
+    borderColor: "rgba(255,255,255,0.55)",
+    backgroundColor: "rgba(90,90,98,0.18)",
   },
 });
