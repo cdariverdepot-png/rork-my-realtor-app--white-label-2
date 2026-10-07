@@ -141,8 +141,8 @@ export default function Plans() {
         >
           <View style={styles.header}>
             <Text style={styles.lede}>
-              Build your app with full evaluation access. Subscribe when you
-              need more than three connected clients.
+              Build your app with full access for 7 days and up to three connected clients.
+              Subscribe after the trial to keep your app active.
             </Text>
             <View style={[styles.statusPill, atLimit && styles.statusPillFull]}>
               <View

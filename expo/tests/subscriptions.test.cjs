@@ -47,7 +47,7 @@ test('seat/network failures never silently grant unlimited access; disconnect us
 test('evaluation, custom fee, upfront annual billing and working inquiry remain consistent',()=>{
  const {PLAN_TIERS,CUSTOM_SETUP_PRICE,CUSTOM_INQUIRY_URL}=loader()(path.join(root,'expo/constants/plans.ts'));
  assert.equal(CUSTOM_SETUP_PRICE,'$499');const custom=PLAN_TIERS.find(t=>t.id==='bespoke');assert.match(custom.altPrice,/required.*49\/month.*490\/year, billed annually/);assert.match(custom.features.join(' '),/Hosting.*standard platform updates.*bug fixes.*separately quoted/);assert.match(custom.features.join(' '),/own Apple Developer account.*membership.*separate cost/);assert.match(CUSTOM_INQUIRY_URL,/^mailto:hello@myrealtorapp.com\?subject=/);
- const evalTier=PLAN_TIERS.find(t=>t.id==='evaluation');assert.match(evalTier.features.join(' '),/All standard.*3 connected.*No payment details.*pending invitations do not count/);assert.match(PLAN_TIERS.find(t=>t.id==='pro').altPrice,/490\/year, billed annually.*40\.83.*98/);
+ const evalTier=PLAN_TIERS.find(t=>t.id==='evaluation');assert.match(evalTier.features.join(' '),/All standard features for 7 days.*3 connected.*No payment details.*pending invitations do not count/);assert.match(evalTier.priceNote,/7 days/);assert.match(PLAN_TIERS.find(t=>t.id==='pro').altPrice,/490\/year, billed annually.*40\.83.*98/);
 });
 test('billing handler verifies owner, canonical events, duplicate checkout and delayed payment refresh',async()=>{
  const rid='11111111-1111-4111-8111-111111111111';let handler,canonical=sub('month'),state={realtor_id:rid,provider_customer_id:null,provider_subscription_id:null,revision:0},checkout=null,events=new Set(),created=0;
