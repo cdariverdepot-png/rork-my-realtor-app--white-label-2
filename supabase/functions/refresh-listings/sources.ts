@@ -1,4 +1,4 @@
-import { discoverListings, describeListingArchitecture, collectInventoryLinks, extractListingsFromPage, enrichPublicProperty, type DiscoveredListing, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
+import { discoverListings, describeListingArchitecture, collectInventoryLinks, extractListingsFromPage, enrichPublicProperty, type DiscoveredListing, type DiscoveryProgress, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
 import { applyObservation, observeListing, type SyncListing } from "./sync.ts";
 import { normalizePublicPage, selectInventoryLinks } from "./normalizePage.ts";
 
@@ -31,7 +31,7 @@ export function isPropertyUrl(raw: string) {
 
 /** Connect the inventory behind an observed public URL, rather than bookmarking one home. */
 export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: ListingSource,
-  selectLinks: SelectInventoryLinks = selectInventoryLinks, renderPage?: FetchHtml): Promise<SourceInventory> {
+  selectLinks: SelectInventoryLinks = selectInventoryLinks, renderPage?: FetchHtml, onProgress?: (event: DiscoveryProgress) => void): Promise<SourceInventory> {
   const submittedUrl = normalizedUrl(raw);
   const pages = new Map<string, Promise<Awaited<ReturnType<FetchHtml>>>>();
   const deadline = Date.now() + 45_000;
@@ -75,7 +75,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     if (associated) uri = associated;
     else directProperty = await Promise.all(original.map(async item=>{try{return await enrichPublicProperty(item,cachedFetch,page);}catch{return item;}}));
   }
-  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks, normalizePage: normalizePublicPage, renderPage });
+  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks, normalizePage: normalizePublicPage, renderPage, onProgress });
   // Empty is trustworthy only when the known inventory explicitly reports zero properties.
   let explicitEmpty = false;
   if (existing && !discovery.listings.length && !discovery.meta.failed?.length) {
@@ -135,15 +135,16 @@ export function reconcileInventory(current: SyncListing[], inventory: SourceInve
 export async function verifyMissing(items: SyncListing[], inventory: SourceInventory, fetchHtml: FetchHtml): Promise<SyncListing[]> {
   const found = new Set(inventory.listings.map(item => item.sourceUrl));
   const next = [...items];
-  const deadline = Date.now() + 20_000;
-  for (const item of items.filter(item => item.sourceId === inventory.source.id && item.sourceUrl && !found.has(item.sourceUrl)).slice(0, 4)) {
-    if (Date.now() > deadline) break;
+  // The (at most four) disappeared homes are independent pages, so they are checked together.
+  await Promise.all(items.filter(item => item.sourceId === inventory.source.id && item.sourceUrl && !found.has(item.sourceUrl)).slice(0, 4).map(async item => {
     try {
-      const page = await fetchHtml(item.sourceUrl!);
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const page = await Promise.race([fetchHtml(item.sourceUrl!), new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error("timeout")), 20_000); })])
+        .finally(() => clearTimeout(timer));
       const observation = observeListing(item, page.html, page.finalUrl, Date.now());
       const index = next.findIndex(p => p.id === item.id);
       if (index >= 0) next[index] = applyObservation(next[index], observation);
     } catch { /* confirmed inventory absence is separate from an unreadable detail page */ }
-  }
+  }));
   return next;
 }

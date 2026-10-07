@@ -3,6 +3,7 @@ import { fetchHtml } from "./publicPage.ts";
 import { isDue, observeListing, mergeObservations, type SyncListing, type Observation } from "./sync.ts";
 import { runSourceSync } from "./sourceHandler.ts";
 import { propertyDetailRequest, enrichPublicProperty, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
+import { createImportProgress, respondWithProgress, type ImportEvent } from "../analyze-realtor-build/progress.ts";
 
 const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-listing-sync-token" };
@@ -16,7 +17,9 @@ async function sameSecret(a: string, b: string) {
   let mismatch = 0; for (let i = 0; i < x.length; i++) mismatch |= x[i] ^ y[i]; return mismatch === 0;
 }
 
-Deno.serve(async req => {
+Deno.serve(req => req.method === "POST" ? respondWithProgress(req, cors, sink => handle(req, sink)) : handle(req));
+
+async function handle(req: Request, sink?: (event: ImportEvent) => void): Promise<Response> {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   if (req.method !== "POST") return reply({ ok: false, error: "Use POST." }, 405);
   try {
@@ -51,8 +54,13 @@ Deno.serve(async req => {
     // Subscription entitlement must never block entering or building the app;
     // paid access is enforced only at explicit service-action boundaries.
     if (!body.listingId && body.mode !== "legacy") {
-      const result = await runSourceSync(sb, realtorId, body, fetchHtml, scheduled);
-      if (result) return reply(result.body, result.status);
+      const progress = createImportProgress(sink);
+      const result = await runSourceSync(sb, realtorId, body, fetchHtml, scheduled, progress);
+      if (result) {
+        const timings = progress.timings();
+        console.log("[listing-sync] timings", { mode: body.mode ?? "sync", status: result.status ?? 200, ...timings });
+        return reply({ ...result.body, timings }, result.status);
+      }
     }
     const collectionKey = realtorId + ":listings.v2";
     const read = async () => {
@@ -110,5 +118,4 @@ Deno.serve(async req => {
     console.error("[listing-sync]", error instanceof Error ? error.message : "Sync failed");
     return reply({ ok: false, error: "Listing sync could not finish. Please retry." }, 500);
   }
-});
-
+}

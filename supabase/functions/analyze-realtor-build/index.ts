@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
+import { createImportProgress, discoveryReporter, respondWithProgress, type ImportEvent, type ImportProgress } from "./progress.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, type WebsiteDesign, type WebsiteSection } from "./websiteDesign.ts";
 
 type Source = {
@@ -265,8 +266,52 @@ function renderableInterstitial(html: string): boolean {
   return /<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(html.slice(0, 12000));
 }
 type PageRenderer = (uri: string, options?: { cookie?: string }) => Promise<{ html: string; finalUrl: URL }>;
-async function readPage(uri: string, capture?: (html: string, url: string) => Promise<void>, renderPage?: PageRenderer): Promise<string> {
-  let { html, finalUrl } = await fetchHtml(uri);
+type PageFetcher = typeof fetchHtml;
+
+/** One build reads each public page once, even when the profile and design readers both want it. */
+function memoizedPages(fetchPage: PageFetcher = fetchHtml): PageFetcher {
+  const pages = new Map<string, ReturnType<PageFetcher>>();
+  return (uri, options) => {
+    if (options?.fragment || options?.activationToken || options?.cookie || options?.csrfToken) return fetchPage(uri, options);
+    const key = `${options?.stylesheet ? "css" : "html"}|${uri.replace(/#.*$/, "")}`;
+    let page = pages.get(key);
+    if (!page) {
+      page = fetchPage(uri, options);
+      pages.set(key, page);
+      page.catch(() => pages.delete(key));
+    }
+    return page;
+  };
+}
+
+/** Bounded concurrency that keeps results in input order. */
+async function mapConcurrent<T, R>(items: T[], limit: number, work: (item: T, index: number) => Promise<R>): Promise<PromiseSettledResult<R>[]> {
+  const results: PromiseSettledResult<R>[] = new Array(items.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const index = next++;
+      try { results[index] = { status: "fulfilled", value: await work(items[index], index) }; }
+      catch (reason) { results[index] = { status: "rejected", reason }; }
+    }
+  }));
+  return results;
+}
+
+/** The site's own published name: og:site_name, else the most specific part of its title. */
+function publishedSiteName(html: string): string {
+  const meta = [...html.matchAll(/<meta\b[^>]*>/gi)].map(m => m[0])
+    .find(tag => /^og:site_name$/i.test(attr(tag, "property") || attr(tag, "name")));
+  const named = meta ? attr(meta, "content") : "";
+  const title = decodeEntities(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  const parts = (named || title).split(/\s+[|\u2013\u2014-]\s+/).map(part => part.trim())
+    .filter(part => part && !/^(?:home|homepage|welcome|index|official site)$/i.test(part));
+  const name = parts.sort((a, b) => Number(/realt|propert|home|group|team|estate/i.test(b)) - Number(/realt|propert|home|group|team|estate/i.test(a)))[0] ?? "";
+  return EXPLICIT.test(name) ? "" : name.slice(0, 80);
+}
+
+async function readPage(uri: string, capture?: (html: string, url: string) => Promise<void>, renderPage?: PageRenderer, fetchPage: PageFetcher = fetchHtml): Promise<string> {
+  let { html, finalUrl } = await fetchPage(uri);
   if (isRobotChallenge(html) && renderPage && renderableInterstitial(html)) {
     try {
       const rendered = await renderPage(finalUrl.toString());
@@ -279,21 +324,24 @@ async function readPage(uri: string, capture?: (html: string, url: string) => Pr
   if (isRobotChallenge(html)) {
     return `PAGE DETAILS (${finalUrl}):\nAutomated access was blocked. This response is not the website, and no verified profile or listing text was acquired.`;
   }
-  if (capture) await capture(html, finalUrl.toString());
   const { details, subpages } = pageDetails(html, finalUrl);
   const parts = [`PAGE DETAILS (${finalUrl}):\n${details}`, `PAGE TEXT:\n${decodeEntities(pageText(html)).slice(0, 30000)}`];
-  for (const sub of subpages) {
-    try {
-      const page = await fetchHtml(sub);
-      if (isRobotChallenge(page.html)) continue;
-      const extra = pageDetails(page.html, page.finalUrl).details;
-      parts.push(`LINKED PAGE (${page.finalUrl}):\n${extra}\n${decodeEntities(pageText(page.html)).slice(0, 8000)}`);
-    } catch { /* a missing about page shouldn't fail the whole source */ }
+  // The design reader and the profile's linked pages are independent reads of the same site.
+  const [, linked] = await Promise.all([
+    capture ? capture(html, finalUrl.toString()) : Promise.resolve(),
+    mapConcurrent(subpages, 4, sub => fetchPage(sub)),
+  ]);
+  for (const result of linked) {
+    if (result.status !== "fulfilled" || isRobotChallenge(result.value.html)) continue; // a missing about page shouldn't fail the whole source
+    const page = result.value;
+    const extra = pageDetails(page.html, page.finalUrl).details;
+    parts.push(`LINKED PAGE (${page.finalUrl}):\n${extra}\n${decodeEntities(pageText(page.html)).slice(0, 8000)}`);
   }
   return parts.join("\n\n").slice(0, 50000);
 }
 
-async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: PageRenderer): Promise<WebsiteDesign> {
+async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: PageRenderer, fetchPage: PageFetcher = fetchHtml,
+  progress?: ImportProgress): Promise<WebsiteDesign> {
   let currentHtml = html;
   let currentUrl = url;
   const preliminary = extractWebsiteDesign(currentHtml, currentUrl);
@@ -309,15 +357,25 @@ async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: 
     } catch { /* the static document stands */ }
   }
   const results = await Promise.allSettled(websiteStylesheetUrls(currentHtml, currentUrl).map(async cssUrl => {
-    const page = await fetchHtml(cssUrl, { stylesheet: true });
+    const page = await fetchPage(cssUrl, { stylesheet: true });
     return { url: page.finalUrl.toString(), css: page.html.slice(0, 500_000) };
   }));
   const design = extractWebsiteDesign(currentHtml, currentUrl, results.flatMap(r => r.status === 'fulfilled' ? [r.value] : []));
   const linked: WebsiteSection[] = [];
   let followedRender = false;
-  for (const link of websiteContentLinks(currentHtml, currentUrl)) {
+  const links = websiteContentLinks(currentHtml, currentUrl);
+  // Linked pages are fetched concurrently; render decisions and section order stay sequential and deterministic.
+  if (links.length) progress?.start("pages", { count: 0, total: links.length });
+  let fetched = 0;
+  const pages = await mapConcurrent(links, 6, async link => {
+    try { return await fetchPage(link.url); }
+    finally { fetched++; progress?.start("pages", { count: fetched, total: links.length }); }
+  });
+  for (const [index, link] of links.entries()) {
     try {
-      let page = await fetchHtml(link.url);
+      const result = pages[index];
+      if (result.status !== "fulfilled") continue;
+      let page = result.value;
       if (renderPage && !followedRender && websiteNeedsBrowser(page.html, { heroTitle: "present", sections: [] }) === "access-interstitial") {
         followedRender = true;
         try {
@@ -346,6 +404,7 @@ async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: 
       });
     } catch { /* a missing about page should not fail the design */ }
   }
+  if (links.length) progress?.finish("pages", "done", { count: linked.length, total: links.length });
   return { ...design, sections: composeWebsiteSections([...linked, ...design.sections]) };
 }
 
@@ -428,7 +487,11 @@ function validate(value: any, ids: Set<string>, imageIds: Set<string>) {
   } };
 }
 
-Deno.serve(async (request) => {
+Deno.serve(request => request.method === "POST"
+  ? respondWithProgress(request, corsHeaders, sink => handle(request, sink))
+  : handle(request));
+
+async function handle(request: Request, sink?: (event: ImportEvent) => void): Promise<Response> {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (request.method !== "POST") return reply({ error: "POST required" }, 405);
   const renderPage = productionRenderPage();
@@ -701,9 +764,31 @@ Deno.serve(async (request) => {
     "portraitSourceId. Only set portraitSourceId when an uploaded image clearly shows this realtor's face; otherwise null.";
   const content: any[] = [];
   const processed: Source[] = [];
+  const progress = createImportProgress(sink);
+  const fetchPage = memoizedPages();
   let websiteDesign: WebsiteDesign | undefined;
   let payloadBytes = 0;
   let pageChars = 0;
+  const designSource = sources.find(source => source?.kind === "url" && typeof source.uri === "string");
+  const webSources = sources.filter(source => source && typeof source.id === "string" && typeof source.uri === "string" &&
+    (source.kind === "url" || source.kind === "listing"));
+  if (webSources.length) progress.start("site");
+  // Public pages are read concurrently; their text is still accepted in source order below.
+  const pageReads = new Map(webSources.map(source => [source, readPage(source.uri, source === designSource ? async (html, url) => {
+    const name = publishedSiteName(html);
+    if (name) progress.emit({ kind: "site", name, host: new URL(url).hostname.replace(/^www\./, "") });
+    progress.start("design");
+    try {
+      websiteDesign = await analyzeWebsiteAppearance(html, url, renderPage, fetchPage, progress);
+      progress.emit({ kind: "design", portrait: !!websiteDesign.portraitImageUrl, logo: !!websiteDesign.logoUrl,
+        images: websiteDesign.imagery?.images.length ?? 0, sections: websiteDesign.sections.length });
+      progress.finish("design");
+    } catch (error) {
+      progress.finish("design", "failed");
+      throw error;
+    }
+  } : undefined, renderPage, fetchPage)] as const));
+  for (const read of pageReads.values()) read.catch(() => { /* handled in source order */ });
   for (const source of sources) {
     if (!source || typeof source.id !== "string" || typeof source.uri !== "string") continue;
     if (source.kind === "listing-file" || source.kind === "contacts" || contactTypes.has(source.mimeType ?? "") ||
@@ -713,9 +798,7 @@ Deno.serve(async (request) => {
     }
     try {
       if (source.kind === "url" || source.kind === "listing") {
-        const page = await readPage(source.uri, !websiteDesign && source.kind === 'url' ? async (html, url) => {
-          websiteDesign = await analyzeWebsiteAppearance(html, url, renderPage);
-        } : undefined, renderPage);
+        const page = await pageReads.get(source)!;
         pageChars += page.length;
         if (pageChars > 120_000) throw new Error("Too much webpage text. Remove a few links and retry.");
         content.push({ type: "input_text", text: `SOURCE ${source.id} (${source.label}, ${source.uri}):\n${page}` });
@@ -751,27 +834,49 @@ Deno.serve(async (request) => {
       processed.push({ ...source, status: "failed", error: error instanceof Error ? error.message : "Could not analyze source." });
     }
   }
+  if (webSources.length) progress.finish("site", processed.some(source => source.status === "ready") ? "done" : "failed",
+    { count: processed.filter(source => source.status === "ready" && (source.kind === "url" || source.kind === "listing")).length });
   // Multi-hop listing discovery from website / listing sources (landing → CTA → IDX/FlexMLS).
+  // A source the app already connected through refresh-listings in this same setup run is not crawled
+  // again: that import is authoritative and already saved, so a second crawl only repeats its work.
   let discoveredListings: DiscoveredListing[] = [];
-  let listingDiscovery: { visited: string[]; hops: number; found: number; maxDepth: number } = {
+  let listingDiscovery: { visited: string[]; hops: number; found: number; maxDepth: number; skipped?: string[] } = {
     visited: [], hops: 0, found: 0, maxDepth: 0,
   };
-  const listingSeeds = processed
+  const sameDocument = (a: string, b: string) => {
+    try {
+      const x = new URL(a), y = new URL(b);
+      return x.origin === y.origin && x.pathname.replace(/\/+$/, "") === y.pathname.replace(/\/+$/, "") && x.search === y.search;
+    } catch { return false; }
+  };
+  const connected = (Array.isArray(input?.connectedListingSources) ? input.connectedListingSources : [])
+    .filter((value: unknown): value is string => typeof value === "string" && value.startsWith("https://")).slice(0, 12);
+  const readySeeds = processed
     .filter((source) => source.status === "ready" && (source.kind === "url" || source.kind === "listing"))
     .map((source) => source.uri);
+  const listingSeeds = readySeeds.filter(seed => !connected.some((done: string) => sameDocument(seed, done)));
   if (listingSeeds.length) {
+    progress.start("listings");
     try {
-      const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
+      // Pages the profile reader already fetched (usually the homepage) are reused, not requested again.
+      const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchPage, {
         maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage,
+        onProgress: discoveryReporter(progress),
       });
       discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;
       if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discoveredListings.length;
       listingDiscovery = discovery.meta;
       console.log("[build] listing discovery", listingDiscovery);
+      if (progress.isOpen("details")) progress.finish("details", "done", { count: (discovery.meta.enrichment?.enriched ?? 0) + (discovery.meta.enrichment?.failed ?? 0), total: discovery.meta.enrichment?.scheduled });
+      progress.finish("listings", "done", { count: discoveredListings.length });
     } catch (error) {
       console.error("[build] listing discovery error", error instanceof Error ? error.message : String(error));
+      progress.finish("listings", "failed");
     }
+  } else if (readySeeds.length) {
+    listingDiscovery.skipped = readySeeds;
+    progress.finish("listings", "skipped", { reason: "connected" });
   }
 
   const readyIds = new Set(processed.filter((source) => source.status === "ready" && source.kind !== "contacts").map((source) => source.id));
@@ -781,6 +886,7 @@ Deno.serve(async (request) => {
     return reply({ error: "None of the profile sources could be read.", sources: processed }, 422);
   }
   let ai: Response;
+  progress.start("profile");
   try {
     ai = await fetch("https://api.openai.com/v1/responses", {
       method: "POST", headers: { Authorization: `Bearer ${openaiKey}`, "Content-Type": "application/json" },
@@ -813,6 +919,8 @@ Deno.serve(async (request) => {
     });
   } catch (e) {
     console.error("[build] OpenAI request failed to connect", e instanceof Error ? e.message : String(e));
+    progress.finish("profile", "failed");
+    console.log("[build] timings", progress.timings());
     return reply({ error: "Analysis could not connect. Your sources are still saved." }, 502);
   }
   if (!ai.ok) {
@@ -821,29 +929,43 @@ Deno.serve(async (request) => {
     console.error(`[build] OpenAI returned ${ai.status}`, body.slice(0, 800));
     const reason = ai.status === 401 ? " (AI key rejected)" : ai.status === 429 ? " (AI quota or rate limit)" :
       ai.status === 404 ? " (AI model unavailable)" : "";
+    progress.finish("profile", "failed");
+    console.log("[build] timings", progress.timings());
     return reply({ error: `Analysis failed${reason}. Your sources are still saved.` }, 502);
   }
   let result;
   try { result = validate(JSON.parse(responseText(await ai.json())), readyIds, imageIds); }
   catch (e) {
     console.error("[build] could not parse model output", e instanceof Error ? e.message : String(e));
+    progress.finish("profile", "failed");
+    console.log("[build] timings", progress.timings());
     return reply({ error: "Analysis was incomplete. Your sources are still saved." }, 502);
   }
   if (!result.evidence.length || !result.draft.heroMessage || !result.draft.aboutParagraph) {
+    progress.finish("profile", "failed");
+    console.log("[build] timings", progress.timings());
     return reply({ error: "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page." }, 422);
   }
+  const stated = (field: string) => result.evidence.find((fact: { field: string; value: string }) => fact.field === field)?.value?.trim() || undefined;
+  progress.emit({ kind: "profile", name: stated("realtor.name"), city: stated("realtor.city") });
+  progress.finish("profile");
   const draftWithListings = {
     ...result.draft,
     websiteDesign,
     discoveredListings,
     listingDiscovery,
   };
+  if (!guest) progress.start("save");
   const { error: saveError } = guest ? { error: null } : await admin.from("realtor_builds")
     .update({ sources: processed, evidence: result.evidence, draft: draftWithListings,
       selected_layout: result.draft.layoutId, status: "needs-input", updated_at: new Date().toISOString() })
     .eq("auth_user_id", userId);
+  if (!guest) progress.finish("save", saveError ? "failed" : "done");
+  const timings = progress.timings();
+  console.log("[build] timings", timings);
   if (saveError) return reply({ error: "Analysis finished but could not be saved." }, 503);
   return reply({
+    timings,
     ...result,
     draft: draftWithListings,
     discoveredListings,
@@ -851,4 +973,4 @@ Deno.serve(async (request) => {
     sources: processed,
     status: "needs-input",
   });
-});
+}

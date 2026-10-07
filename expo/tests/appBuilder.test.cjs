@@ -35,7 +35,9 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
     .replace(/^import .*createClient.*;\r?\n/, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
-  const edgeWithoutFiles = edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '');
+  // progress.ts has no imports; it is embedded as-is, exactly as the deployment bundle does.
+  const progressModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/progress.ts'), 'utf8').replace(/^export /gm, '');
+  const edgeWithoutFiles = progressModule + '\n' + edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml, options) {

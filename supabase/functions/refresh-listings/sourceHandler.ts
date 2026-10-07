@@ -1,12 +1,13 @@
 import { readSource, reconcileInventory, verifyMissing, type ListingSource, type SourceInventory } from "./sources.ts";
 import type { SyncListing } from "./sync.ts";
 import { createListingRenderer, listingRenderBackendFromEnv, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
+import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
 type Row = { value: Record<string, unknown>; rev: number };
 
 export async function runSourceSync(sb: Database, realtorId: string, body: { mode?: string; url?: string; sourceId?: string },
-  fetchHtml: FetchHtml, scheduled: boolean): Promise<{ body: Record<string, unknown>; status?: number } | null> {
+  fetchHtml: FetchHtml, scheduled: boolean, progress?: ImportProgress): Promise<{ body: Record<string, unknown>; status?: number } | null> {
   const sourceKey = `${realtorId}:listing-sources.v1`, listingKey = `${realtorId}:listings.v2`;
   const read = async (key: string): Promise<Row | null> => {
     const { data, error } = await sb.from("app_kv").select("value,rev").eq("key", key).maybeSingle();
@@ -41,9 +42,16 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   if (!connecting && !target) return body.sourceId ? { body: { ok: true, checked: 0 } } : null;
   if (connecting && sources.length >= 5 && !target) return { body: { ok: false, error: "You already have five connected sources. Use one of your connected pages." }, status: 400 };
   let inventory: SourceInventory;
+  progress?.start("listings");
   try {
-    inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))));
+    inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))),
+      progress ? discoveryReporter(progress) : undefined);
+    const enrichment = inventory.meta.enrichment;
+    if (progress?.isOpen("details")) progress.finish("details", "done", { count: (enrichment?.enriched ?? 0) + (enrichment?.failed ?? 0), total: enrichment?.scheduled });
+    progress?.finish("listings", "done", { count: inventory.listings.length });
   } catch (error) {
+    if (progress?.isOpen("details")) progress.finish("details", "failed");
+    progress?.finish("listings", "failed");
     const message = error instanceof Error ? error.message : "We couldn’t find your listings on that page. Try the page showing all of your active listings.";
     if (target) await save(sourceKey, value => ({ ...value, sources: (Array.isArray(value.sources) ? value.sources : []).map(source => {
       const s = source as ListingSource;
@@ -63,7 +71,11 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   });
   const old = await read(listingKey);
   const oldItems = (Array.isArray(old?.value.items) ? old!.value.items : []) as SyncListing[];
+  const missing = oldItems.filter(item => item.sourceId === inventory.source.id && item.sourceUrl && !inventory.listings.some(home => home.sourceUrl === item.sourceUrl)).length;
+  if (missing) progress?.start("verify", { total: Math.min(missing, 4) });
   const verified = await verifyMissing(oldItems, inventory, fetchHtml);
+  if (missing) progress?.finish("verify");
+  progress?.start("save", { total: inventory.listings.length });
   const observations = new Map(verified.filter((item, i) => item !== oldItems[i]).map(item => [item.id, item]));
   const saved = await save(listingKey, async value => {
     const sourceRow = await read(sourceKey);
@@ -78,6 +90,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     });
     return { ...value, items: reconcileInventory(enriched, inventory, now) };
   });
+  progress?.finish("save", "done", { count: inventory.listings.length });
   const incomplete=inventory.listings.filter(item=>!item.description||!item.images.length||!item.detailsComplete).length;
   return { body: { ok: true, source: inventory.source, imported: inventory.listings.length,
     ...(incomplete?{warning:`${incomplete} listing${incomplete===1?" has":"s have"} incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.`}:{}),

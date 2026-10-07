@@ -2128,6 +2128,17 @@ function soleFrameDocument(html: string, base: URL): string | null {
  * Walk seed URLs → inventory CTAs → optional detail pages.
  * Caps pages and depth so the builder stays snappy.
  */
+/** Property detail pages read at once. Each is an independent public page. After any 429/5xx the
+ * extra workers retire, returning to the previous three-at-a-time pace for that import. */
+const DETAIL_CONCURRENCY = 6;
+const THROTTLED_DETAIL_CONCURRENCY = 3;
+
+/** Observational discovery progress: real tallies only. */
+export type DiscoveryProgress =
+  | { phase: "inventory"; url: string; pages: number; found: number }
+  | { phase: "render"; url: string; state: "start" | "done" | "failed" }
+  | { phase: "details"; url: string; done: number; total: number };
+
 export async function discoverListings(
   seedUris: string[],
   fetchHtml: FetchHtml,
@@ -2140,8 +2151,25 @@ export async function discoverListings(
     /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
     enrichAll?: boolean;
     /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
-    sessionCookie?: string },
+    sessionCookie?: string;
+    /** Observes real progress (pages examined, listings found, renders, detail pages). Never alters discovery. */
+    onProgress?: (event: DiscoveryProgress) => void },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
+  const report = (event: DiscoveryProgress) => { try { options?.onProgress?.(event); } catch { /* progress is observational */ } };
+  if (options?.renderPage && options.onProgress) {
+    const render = options.renderPage;
+    options = { ...options, renderPage: async (uri, renderOptions) => {
+      report({ phase: "render", url: uri, state: "start" });
+      try {
+        const page = await render(uri, renderOptions);
+        report({ phase: "render", url: uri, state: "done" });
+        return page;
+      } catch (error) {
+        report({ phase: "render", url: uri, state: "failed" });
+        throw error;
+      }
+    } };
+  }
   const maxDepth = options?.maxDepth ?? 5;
   const maxPages = options?.maxPages ?? 20;
   const maxListings = options?.maxListings ?? 24;
@@ -2244,6 +2272,7 @@ export async function discoverListings(
     visitedSet.add(normalized);
     visited.push(normalized);
     maxDepthReached = Math.max(maxDepthReached, next.depth);
+    report({ phase: "inventory", url: normalized, pages: visited.length, found: listings.length });
 
     let html: string;
     let finalUrl: URL;
@@ -2625,11 +2654,16 @@ export async function discoverListings(
     }
   }
 
+  report({ phase: "inventory", url: visited[visited.length - 1] ?? seedUris[0] ?? "", pages: visited.length, found: listings.length });
   // Detail enrichment keeps collection provenance. enrichAll does not spend the collection page budget.
   const enrichAll = options?.enrichAll === true;
   let detailIndex=0;
   const detailLimit = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
+  let detailsHandled = 0;
+  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit }); };
+  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit });
   let enrichmentAttempted = 0, enrichmentEnriched = 0, enrichmentFailed = 0;
+  let detailThrottled = false;
   const detailFetch:FetchHtml=async (uri,opts)=>{
     if((!enrichAll && visited.length>=maxPages)||Date.now()>=deadline)throw Error("Property detail request budget reached");
     visited.push(uri);visitedSet.add(uri);
@@ -2645,6 +2679,7 @@ export async function discoverListings(
         const reason = error instanceof Error ? error.message : "";
         if (attempt === 2 || Date.now() >= deadline || !/\b429\b|too many requests|rate[- ]limited|\b(?:502|503|504)\b/i.test(reason)) break;
         visited.pop(); visitedSet.delete(uri);
+        detailThrottled = true;
         obstacles.push({ code: /\b429\b|rate[- ]limited|too many requests/i.test(reason) ? "rate_limited" : "temporarily_unavailable", url: uri, detail: "retrying" });
         stages.push("rate_limit_retry");
         await new Promise(resolve => setTimeout(resolve, Math.min(40 * 2 ** attempt, 400)));
@@ -2655,13 +2690,14 @@ export async function discoverListings(
   };
   // Small parallel batches give every property a turn without serial timeout starvation.
   if (detailLimit > 0) stages.push("detail_enrichment_scheduled");
-  await Promise.all(Array.from({length:Math.min(3,detailLimit)},async()=>{
-    while(detailIndex<detailLimit&&(enrichAll || visited.length<maxPages)&&Date.now()<deadline){
+  await Promise.all(Array.from({length:Math.min(DETAIL_CONCURRENCY,detailLimit)},async(_,worker)=>{
+    while(detailIndex<detailLimit&&(enrichAll || visited.length<maxPages)&&Date.now()<deadline&&!(detailThrottled&&worker>=THROTTLED_DETAIL_CONCURRENCY)){
       const i=detailIndex++,item=listings[i];
-      if(!item || item.detailsComplete){ if(item?.detailsComplete) enrichmentEnriched++; continue; }
+      if(!item || item.detailsComplete){ if(item?.detailsComplete) enrichmentEnriched++; detailSettled(item?.sourceUrl ?? ""); continue; }
       if (enrichAll && item.listingNumber && listings.some((other, j) => j < i && other.listingNumber === item.listingNumber && other.detailsComplete)) {
         listings[i] = { ...item, detailsComplete: true, description: item.description || listings.find(other => other.listingNumber === item.listingNumber)?.description || item.description };
         enrichmentEnriched++;
+        detailSettled(item.sourceUrl);
         continue;
       }
       enrichmentAttempted++;
@@ -2679,6 +2715,7 @@ export async function discoverListings(
         if (!enrichAll) failed.push(item.sourceUrl);
         failureDetails.push({url:item.sourceUrl,reason});
       }
+      detailSettled(item.sourceUrl);
     }
   }));
 
