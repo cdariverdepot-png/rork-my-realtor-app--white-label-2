@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   Animated,
   Easing,
@@ -13,138 +13,126 @@ import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 const SPLASH_MODULE = require("@/assets/splash-loading.mp4");
 const POSTER = require("@/assets/splash-loading-poster.jpg");
 
-// Play the supplied animation through its ending before fading.
-const SPLASH_END_SEC = Number.POSITIVE_INFINITY;
+/** White covers the last part of the clip. It does not add time after the video. */
+const FADE_LEAD_SEC = 0.9;
 
 interface Props {
-  /** True once auth has hydrated — curtain may fade after the video holds. */
+  /** Auth hydration. It must not hold or stretch the intro. */
   ready?: boolean;
-  /** Called once the curtain has fully faded out and the boot screen can unmount. */
+  /** Called once the white fade has covered the clip and the boot screen can unmount. */
   onFinish: () => void;
 }
 
 /**
- * Full-viewport launch splash using the branded loading animation video.
- * Plays the full animation at its encoded speed, then fades when the app is ready.
- * Black/#0a0a0a curtain prevents any peek of underlying UI.
+ * Launch splash. The zoom plays at its encoded rate with no seek, pause, or
+ * time-stretch. A white fade overlaps the ending, then the app is shown.
  */
-export default function BootScreen({ ready = true, onFinish }: Props) {
-  const curtain = useRef(new Animated.Value(1)).current;
-  const [videoUri, setVideoUri] = useState<string | null>(null);
-  const [videoDone, setVideoDone] = useState(false);
-  const fading = useRef(false);
+export default function BootScreen({ onFinish }: Props) {
+  const white = useRef(new Animated.Value(0)).current;
   const videoElRef = useRef<HTMLVideoElement | null>(null);
   const nativeRef = useRef<Video>(null);
   const onFinishRef = useRef(onFinish);
+  const fadeStarted = useRef(false);
+  const finished = useRef(false);
   onFinishRef.current = onFinish;
+
+  const finish = useCallback(() => {
+    if (finished.current) return;
+    finished.current = true;
+    onFinishRef.current();
+  }, []);
+
+  const startWhiteFade = useCallback((durationMs: number) => {
+    if (fadeStarted.current) return;
+    fadeStarted.current = true;
+    Animated.timing(white, {
+      toValue: 1,
+      duration: Math.max(220, Math.round(durationMs)),
+      easing: Easing.inOut(Easing.cubic),
+      useNativeDriver: true,
+    }).start(({ finished: done }) => {
+      if (done) finish();
+    });
+  }, [finish, white]);
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      try {
-        const asset = Asset.fromModule(SPLASH_MODULE);
-        await asset.downloadAsync();
-        const uri = asset.localUri ?? asset.uri;
-        if (!cancelled && uri) setVideoUri(uri);
-      } catch (e) {
-        console.log("[BootScreen] asset load failed", e);
-        if (!cancelled) setVideoDone(true);
+    try {
+      const asset = Asset.fromModule(SPLASH_MODULE);
+      const uri = asset.localUri ?? asset.uri;
+      if (!cancelled && uri && videoElRef.current && !videoElRef.current.src) {
+        videoElRef.current.src = uri;
       }
-    })();
+      if (!uri) {
+        asset.downloadAsync().then(() => {
+          const next = asset.localUri ?? asset.uri;
+          const el = videoElRef.current;
+          if (!cancelled && next && el && !el.src) el.src = next;
+        }).catch(() => {
+          if (!cancelled) finish();
+        });
+      }
+    } catch (e) {
+      console.log("[BootScreen] asset load failed", e);
+      if (!cancelled) finish();
+    }
     const failSafe = setTimeout(() => {
-      if (!cancelled) setVideoDone(true);
-    }, 12000);
+      if (!cancelled) finish();
+    }, 7000);
     return () => {
       cancelled = true;
       clearTimeout(failSafe);
     };
-  }, []);
+  }, [finish]);
 
-  const beginFade = useCallback(() => {
-    if (fading.current) return;
-    fading.current = true;
-    Animated.timing(curtain, {
-      toValue: 0,
-      duration: 550,
-      easing: Easing.bezier(0.42, 0, 0.58, 1),
-      useNativeDriver: true,
-    }).start(({ finished }) => {
-      if (finished) onFinishRef.current();
-    });
-  }, [curtain]);
-
-  useEffect(() => {
-    if (videoDone && ready) beginFade();
-  }, [videoDone, ready, beginFade]);
-
-  const finishVideo = useCallback(() => {
-    setVideoDone(true);
-  }, []);
-
-  const holdLastFrameWeb = useCallback(() => {
-    const el = videoElRef.current;
-    if (el && Number.isFinite(el.duration) && el.duration > 0) {
-      try {
-        el.pause();
-      } catch {
-        /* ignore */
-      }
-    }
-    finishVideo();
-  }, [finishVideo]);
-
-  const onWebTimeUpdate = useCallback(() => {
-    const el = videoElRef.current;
-    if (!el || !Number.isFinite(el.duration) || el.duration <= 0) return;
-    const cutAt = Math.min(el.duration, SPLASH_END_SEC);
-    if (el.currentTime >= cutAt) {
-      try {
-        el.pause();
-      } catch {
-        /* ignore */
-      }
-      finishVideo();
-    }
-  }, [finishVideo]);
-
-  const onNativeStatus = useCallback((status: AVPlaybackStatus) => {
-    if (!status.isLoaded) return;
-    const duration = status.durationMillis ?? 0;
-    const position = status.positionMillis ?? 0;
-    if (duration > 0 && position >= Math.min(duration, SPLASH_END_SEC * 1000)) {
-      void nativeRef.current?.pauseAsync().catch(() => {});
-      finishVideo();
-      return;
-    }
-    if (status.didJustFinish) {
-      void nativeRef.current?.pauseAsync().catch(() => {});
-      finishVideo();
-    }
-  }, [finishVideo]);
-
-  useEffect(() => {
-    if (Platform.OS !== "web" || !videoUri) return;
-    const el = videoElRef.current;
+  const playWeb = useCallback((el: HTMLVideoElement | null) => {
+    videoElRef.current = el;
     if (!el) return;
+    if (!el.src) {
+      try {
+        const asset = Asset.fromModule(SPLASH_MODULE);
+        const uri = asset.localUri ?? asset.uri;
+        if (uri) el.src = uri;
+      } catch {
+        /* resolved in the mount effect */
+      }
+    }
     el.muted = true;
     el.defaultMuted = true;
     el.playsInline = true;
     el.setAttribute("playsinline", "true");
     el.setAttribute("webkit-playsinline", "true");
     el.loop = false;
+    el.playbackRate = 1;
     const play = el.play();
-    if (play && typeof play.catch === "function") {
-      play.catch(() => setVideoDone(true));
+    if (play && typeof play.catch === "function") play.catch(() => finish());
+  }, [finish]);
+
+  const onWebTimeUpdate = useCallback(() => {
+    const el = videoElRef.current;
+    if (!el || !Number.isFinite(el.duration) || el.duration <= 0) return;
+    const remain = el.duration - el.currentTime;
+    if (remain <= FADE_LEAD_SEC) startWhiteFade(remain * 1000);
+  }, [startWhiteFade]);
+
+  const onWebEnded = useCallback(() => {
+    if (!fadeStarted.current) startWhiteFade(240);
+  }, [startWhiteFade]);
+
+  const onNativeStatus = useCallback((status: AVPlaybackStatus) => {
+    if (!status.isLoaded) return;
+    const duration = status.durationMillis ?? 0;
+    const position = status.positionMillis ?? 0;
+    if (duration > 0 && duration - position <= FADE_LEAD_SEC * 1000) {
+      startWhiteFade(duration - position);
     }
-  }, [videoUri]);
+    if (status.didJustFinish && !fadeStarted.current) startWhiteFade(240);
+  }, [startWhiteFade]);
 
   const webVideo =
     Platform.OS === "web"
       ? React.createElement("video", {
-          ref: (node: HTMLVideoElement | null) => {
-            videoElRef.current = node;
-          },
-          src: videoUri ?? undefined,
+          ref: playWeb,
           muted: true,
           autoPlay: true,
           playsInline: true,
@@ -152,52 +140,50 @@ export default function BootScreen({ ready = true, onFinish }: Props) {
           "webkit-playsinline": "true",
           disablePictureInPicture: true,
           controls: false,
-          onEnded: holdLastFrameWeb,
+          onEnded: onWebEnded,
           onTimeUpdate: onWebTimeUpdate,
-          onError: () => setVideoDone(true),
+          onError: () => finish(),
           style: {
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            objectFit: "cover",
-            backgroundColor: "#0a0a0a",
+            objectFit: "contain",
+            backgroundColor: "transparent",
           },
         })
       : null;
 
   return (
-    <Animated.View
-      pointerEvents="none"
-      style={[styles.fill, { opacity: curtain }]}
-      accessibilityLabel="Loading"
-    >
+    <View pointerEvents="none" style={styles.fill} accessibilityLabel="Loading">
       <View style={styles.videoHost}>
-        {/* Poster underneath so last-frame / load gap never shows UI */}
         <Image
           source={POSTER}
           style={StyleSheet.absoluteFill}
-          contentFit="cover"
+          contentFit="contain"
           transition={0}
         />
         {Platform.OS === "web" ? (
           webVideo
-        ) : videoUri ? (
+        ) : (
           <Video
             ref={nativeRef}
-            source={{ uri: videoUri }}
+            source={SPLASH_MODULE}
             style={StyleSheet.absoluteFill}
-            resizeMode={ResizeMode.COVER}
+            resizeMode={ResizeMode.CONTAIN}
             shouldPlay
             isLooping={false}
             isMuted
+            rate={1}
+            progressUpdateIntervalMillis={80}
             onPlaybackStatusUpdate={onNativeStatus}
-            onError={() => setVideoDone(true)}
+            onError={() => finish()}
           />
-        ) : null}
+        )}
       </View>
-    </Animated.View>
+      <Animated.View pointerEvents="none" style={[styles.white, { opacity: white }]} />
+    </View>
   );
 }
 
@@ -216,15 +202,20 @@ const styles = StyleSheet.create({
           minHeight: "100dvh" as unknown as number,
         }
       : {}),
-    backgroundColor: "#0a0a0a",
+    backgroundColor: "#101014",
     alignItems: "center",
     justifyContent: "center",
     zIndex: 9999,
   },
   videoHost: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "#0a0a0a",
+    backgroundColor: "#101014",
     overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  white: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "#ffffff",
   },
 });
-
