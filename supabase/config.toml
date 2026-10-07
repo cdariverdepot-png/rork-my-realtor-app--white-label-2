@@ -1,6 +1,6 @@
 project_id = "my-realtor-app"
 
-# The handler verifies owner JWTs itself; provider webhooks use raw-body signatures.
-# Test-only function. Do not deploy to the production project during implementation.
-[functions.billing]
+# Apple App Store Server Notifications carry no Supabase JWT; the handler verifies Apple's signed
+# payload itself, and verifies the realtor's JWT for in-app sync requests.
+[functions.apple-subscription]
 verify_jwt = false

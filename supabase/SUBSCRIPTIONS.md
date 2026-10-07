@@ -1,69 +1,52 @@
-# Subscription implementation — test only
+# Subscriptions — Apple App Store model
 
-The approved standard offer is $49/month or $490/year, billed annually. Both include identical standard features and unlimited connected clients. Annual billing charges $490 upfront; $40.83/month is an equivalent, not monthly installments. Annual savings are $98, or two monthly payments. Approved amounts live in `expo/constants/subscriptionPricing.ts`; the server rejects provider prices that differ.
+Apple handles purchase, renewal, cancellation, billing retry, payment-method problems and subscription management through StoreKit and the App Store. The app reads and verifies entitlement; the backend enforces it only for paid service actions. There is no private checkout, card entry or payment provider anywhere in the app or backend.
 
-The custom service has a separate $499 setup/build-and-launch fee and requires the same ongoing subscription. Hosting, standard platform updates and bug fixes are included. Additional custom design and features are separately quoted. Publication is directly through the realtor's own Apple Developer account; membership is separate. Appropriate developer access, delivery details and support response commitments must be agreed for each project. Store approval is not guaranteed. The existing inquiry email drafts a request; it does not charge or automate app publication.
+## Product rule
 
-## Server behavior
+Subscription inactive = paid service actions unavailable. Subscription inactive ≠ user locked out.
 
-Postgres owns the connection ledger, using the existing `(realtor_id, client_id)` account identity. Authentication, entitlement checks and activation execute in a locked transaction. Evaluation has all standard features for 7 days from the server-owned trial start, with up to three active connected accounts and no payment details required to start. After day 7, an active $49/month or $490/year subscription is required regardless of connected-client count. Contacts, pending invitations and previews do not consume seats. Failed authentication does not activate a relationship. A capacity refusal keeps a newly created account so the same invitation and account can retry login later.
+- Never gated by billing: sign-in, navigation, onboarding, client profile setup, reading listings, clients, messages, documents, favorites, settings, account and subscription information, data export.
+- Paid service actions (refused server-side while inactive): publishing the live design (`brand.v2`), new chat messages in either direction (history and read receipts stay writable), push delivery, new or re-established client connections, public lead capture and client showing requests.
+- Existing client relationships and data are never removed or hidden because of billing state.
+- Entitlement lookups that fail are "unknown", never "inactive". Unknown never affects access; paid actions wait until the server can verify.
 
-Disconnection preserves the relationship and records, releases its seat, and revokes private reads/writes, booking and notification eligibility. Reconnection reuses the account and requires current entitlement. Client identity remains resumable when service is inactive, but identity alone grants no private access.
+## Model
 
-Verified provider invoices establish paid-through dates. Checkout return parameters never establish paid access. Webhooks verify the signature on the raw body, accept only test-mode events, retrieve canonical subscription state, deduplicate events and use revision checks to retry stale reconciliations. Refresh also discovers a completed subscription if its webhook is delayed. Checkout reservations, idempotency keys and existing-subscription checks prevent accidental duplicate subscriptions.
+- 7-day trial, server-owned, starting at account creation (existing accounts: when the entitlement system was activated). Up to 3 connected (authenticated) clients. Contacts, pending invitations and previews do not count.
+- After the trial: an active App Store subscription ($49/month or $490/year) enables paid actions with unlimited connected clients.
+- An expired subscription never falls back to the trial.
 
-Cancellation schedules period-end cancellation and can be reversed before it takes effect. Already paid access continues through its verified date. `ever_paid` persists; expiry never returns former subscribers to evaluation. Payment recovery uses the provider portal, separately from cancellation. The implementation offers an explicit `paid_period` policy: retain already paid service, with no additional grace period. Checkout remains disabled until that policy is explicitly configured.
+## Server state (`private.realtor_entitlements`)
 
-Inactive service never gates sign-in, navigation, onboarding or reading existing data, and never disconnects existing clients. It restricts only paid service actions, enforced server-side: publishing the live design (`brand.v2`), new chat messages in either direction (read receipts and history stay writable), push delivery, new or re-established client connections, public lead capture and client showing requests. Listing import is setup, not a paid action. The owner sees an accurate account notice (trial ended, payment failed only when the provider reported it, canceled, or expired) with a path to Account & Billing. Clients see only whether an action is available and the realtor's published business contact, never billing details. An entitlement lookup that fails is "unknown", never "inactive"; it does not affect access. Reactivation restores restricted actions; individually disconnected relationships stay disconnected. No retention timer or destructive cleanup is introduced.
+One row per realtor: `trial_started_at` plus the latest verified Apple snapshot (`apple_original_transaction_id`, product, environment, `apple_expires_at`, `apple_revoked_at`, `apple_auto_renew`, `apple_billing_issue`, `apple_signed_at`). Older signed data never overwrites newer. One Apple subscription can belong to only one realtor. Only the service role can write it (`apple_apply`).
 
-The export is scoped to the verified owner and includes saved KV records (designs, listings, contacts, messages, documents metadata/references, appointments, favorites), preserved relationships and listing source definitions. Authentication records, password derivatives and source headers are excluded. It is JSON metadata, not a backup of uploaded binary files. Draft cloud build inputs are included. Published images remain publicly accessible under the app's pre-existing public storage design; subscription gating does not claim to revoke downloaded copies or public media URLs.
+`inactiveReason` is reported accurately: `trial_ended`, `billing_retry` (only when Apple reports a failed renewal in billing retry), `revoked` (refund), `canceled` (auto-renew off and expired), `expired`. Clients never receive billing details — only whether an action is available and the realtor's published business contact.
 
-## Remaining test-provider configuration
+## Edge Function `apple-subscription`
 
-Use a separate Supabase staging project with the existing schema and this migration. Do not apply test fixtures to staging or production. Every existing client account is backfilled as a connected relationship; the three-client evaluation allowance limits new connections only. Applied to production on 2026-10-07 after verification against `tests/live-replica-baseline.sql` (the captured live schema).
+- App sync (`{ action: "sync", signedTransactions }`, realtor JWT): verifies each StoreKit 2 JWS, requires the configured bundle ID, product IDs and environment, and requires `appAccountToken` (set to the realtor ID at purchase) to match the signed-in realtor. Used after purchase and for Restore Purchases.
+- App Store Server Notifications V2 (`{ signedPayload }`): verifies the notification, its transaction and renewal info; applies expiry, grace period, auto-renew and billing-retry state.
+- Verification (`appleJws.ts`, WebCrypto only): three-certificate x5c chain pinned to Apple Root CA - G3 (SHA-256 `63343abf…3e9179`, from support.apple.com/en-us/126047), each certificate signed by the next, valid at the signing date, Apple marker extensions on leaf and intermediate, then the ES256 signature.
+- Returns 503 until configured. It never invents product IDs.
 
-Configure server secrets in staging only:
+## App
 
-```dotenv
-BILLING_TEST_ENABLED=true
-STRIPE_TEST_SECRET_KEY=sk_test_...
-STRIPE_TEST_WEBHOOK_SECRET=whsec_...
-STRIPE_TEST_MONTH_PRICE_ID=price_...
-STRIPE_TEST_YEAR_PRICE_ID=price_...
-BILLING_WEB_ORIGIN=https://your-staging-web-origin.example
-BILLING_PAYMENT_FAILURE_POLICY=paid_period
-```
+- `lib/storekit.ios.ts` (expo-iap) purchases with `appAccountToken`, restores, opens Apple's subscription management, and finishes a transaction only after the server verified it. `lib/storekit.ts` is the web/Android stub.
+- Account & Billing (`/admin/plans`) shows status (active, "7-day trial · N days remaining", trial ended, billing retry, canceled, expired, refunded), Subscribe monthly/annually with App Store prices, Restore Purchases and Manage Subscription.
+- Blocked actions explain the specific limitation in place and offer Account & Billing; nothing redirects or covers the app.
 
-Create two **Stripe test-mode** recurring USD prices: 4900 cents every month and 49000 cents every year, interval count 1. Their IDs must be different. Provider keys and IDs stay on the server. Do not put secrets in Expo configuration. Configure the test billing portal with payment method recovery and subscription management. Only the approved monthly/annual prices should be selectable. Portal cancellation must be at period end. Tax handling, refund terms and support response commitments require business decisions before public activation.
+## App Store Connect configuration still required
 
-Deploy `billing` to staging with JWT gateway verification disabled (`supabase/config.toml`); the handler itself verifies user JWT ownership, while Stripe deliveries require webhook signatures. Register the staging `/functions/v1/billing` endpoint for:
-
-- `checkout.session.completed`
-- `customer.subscription.created`, `.updated`, `.deleted`
-- `invoice.paid`, `invoice.payment_failed`
-
-Use the pinned API version `2025-06-30.basil`. Verify a real test checkout with Stripe test cards, invoice payment, duplicate delivery, delayed webhook, cancellation/resume, expiry and recovery in staging. Current automated provider tests use fixtures; no payment has been processed against Stripe yet because test credentials and staging have not been supplied.
-
-## Native and production activation
-
-Native purchases and external billing links are disabled. Apple and Google rules differ by storefront and program; an external web checkout is not assumed to be permitted in every native app. A compliant StoreKit/Play Billing integration or approved storefront-specific external purchase program, including verified server notifications and entitlement mapping, is still required before native purchases can be enabled.
-
-Policy references checked during implementation:
-
-- [Apple App Review Guidelines, payment rules](https://developer.apple.com/app-store/review/guidelines/#payments)
-- [Google Play Payments policy](https://support.google.com/googleplay/android-developer/answer/9858738)
-- [Google Play billing policy guidance](https://support.google.com/googleplay/android-developer/answer/10281818)
-- [Stripe webhook handling](https://docs.stripe.com/webhooks)
-- [Stripe cancellation](https://docs.stripe.com/billing/subscriptions/cancel)
-- [Stripe invoice object for the pinned API](https://docs.stripe.com/api/invoices/object?api-version=2025-06-30.basil)
-- [Supabase row-level security](https://supabase.com/docs/guides/database/postgres/row-level-security)
-
-Before production: approve retention duration (no duration is promised here), recovery policy, refund/tax/support terms and native storefront strategy; complete staging tests; review a deliberate production-provider implementation (the current handler rejects live keys/events); coordinate the migration before the new app/Edge gates; then deploy only with explicit production authorization. Do not merge this branch into the current auto-deploying `main` during test implementation.
+1. Create an auto-renewable subscription group with a monthly ($49) and annual ($490) product. Do not add an introductory free trial unless you want it in addition to the server's 7-day trial.
+2. Set build env `EXPO_PUBLIC_IOS_SUBSCRIPTION_MONTHLY_ID` and `EXPO_PUBLIC_IOS_SUBSCRIPTION_ANNUAL_ID` to those product IDs and make a new iOS build (expo-iap is native; it does not run in Expo Go).
+3. Set Supabase function secrets: `APPLE_BUNDLE_ID=app.myrealtor`, `APPLE_SUBSCRIPTION_PRODUCT_IDS=<monthly>,<annual>`, optionally `APPLE_ENVIRONMENTS` (default `Production,Sandbox`).
+4. In App Store Connect → App Information → App Store Server Notifications, set Version 2 Production and Sandbox URLs to `https://xdcqjaodcvnlawqcunrr.supabase.co/functions/v1/apple-subscription`.
+5. Test in Sandbox/TestFlight: purchase, restore, renewal, cancellation, billing retry and refund.
 
 ## Validation
 
-`expo/tests/subscriptions.test.cjs` tests approved prices, equivalent access, signature verification, unpaid/prorated invoices, network refusal, stable identity, working custom inquiry, owner isolation, duplicate checkout, delayed reconciliation and canonical event handling. Existing app tests also check that inactive users cannot bypass imports using guest payloads or the listing scheduler.
-
-`supabase/tests/subscriptions.test.cjs` executes the production migration against an isolated baseline fixture. Locally it uses PostgreSQL via PGlite; CI uses a separate PostgreSQL 17 server and distinct concurrent connections. It covers the evaluation allowance, authentication, duplicates, disconnect/reconnect, saved history, paid plans, cancellation/resume, expiry, recovery, reactivation, export and cross-account isolation. The fixture intentionally simplifies pre-existing credential hashing and is never a production migration.
-
-The branch CI builds/type-checks Expo and checks the Deno billing handler. It does not deploy to production and needs no production secrets.
+- `supabase/tests/subscriptions.test.cjs` — lifecycle on an isolated baseline: trial limit, concurrency, disconnection, verified Apple subscription, stale data, auto-renew off, billing retry, expiry without lockout, reactivation, cross-account isolation.
+- `supabase/tests/subscriptions.live-replica.test.cjs` — the migrations applied to a replica of the captured production schema and function bodies (`live-replica-baseline.sql`), proving service actions are restricted and access never is.
+- `expo/tests/appleSubscription.test.cjs` — JWS verification against a generated (synthetic) chain, root pinning, tampering, marker extensions, snapshots, and the endpoint's auth and account binding.
+- `expo/tests/subscriptions.test.cjs` — no global gate, unknown ≠ inactive, accurate notice copy, no private payment path, StoreKit only in the iOS bundle.

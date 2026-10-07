@@ -50,6 +50,7 @@ export default function DesignPublicationPanel() {
       }))}
     </View>
     {!!error && <Text accessibilityRole="alert" style={{ color: '#FFBAA9', lineHeight: 22 }}>{error}</Text>}
+    {/service is inactive|subscription is inactive/.test(error) && button('Account & Billing', () => router.push('/admin/plans'))}
     {!!notice && <Text accessibilityRole="alert" style={{ color: '#8FD9B4', lineHeight: 22 }}>{notice}</Text>}
     <ThemePreviewModal visible={preview !== null} title={preview === 'published' ? 'Published client app' : 'Unpublished design draft'} subtitle="Preview · activity stays here" brand={preview === 'published' ? model.savedBrand : model.brand} listings={all} onClose={() => setPreview(null)} />
   </View>;

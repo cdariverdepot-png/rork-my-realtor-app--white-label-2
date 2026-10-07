@@ -118,8 +118,8 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
   const atLimit = tracked && !serviceInactive && !unlimited && used >= limit;
   const reported = verified ? state.inactiveReason : null;
   const inactiveReason: InactiveReason | null = !serviceInactive ? null
-    : reported === "trial_ended" || reported === "payment_failed" || reported === "canceled" || reported === "expired" ? reported
-    : state.paymentIssue ? "payment_failed" : state.everPaid ? (state.cancelAtPeriodEnd ? "canceled" : "expired") : "trial_ended";
+    : reported === "trial_ended" || reported === "billing_retry" || reported === "revoked" || reported === "canceled" || reported === "expired" ? reported
+    : state.paymentIssue ? "billing_retry" : state.everPaid ? (state.cancelAtPeriodEnd ? "canceled" : "expired") : "trial_ended";
 
   const plan: PlanId = verified ? state.plan : "evaluation";
   const connections: SeatConnection[] = verified ? state.connections : [];
@@ -135,6 +135,7 @@ export const [SeatsProvider, useSeats] = createContextHook(() => {
       status: verified ? active ? state.status : "inactive" : "unavailable",
       everPaid: verified && state.everPaid,
       serviceEnd: verified ? state.serviceEnd : null,
+      trialEnd: verified && !state.everPaid ? state.trialEnd ?? null : null,
       renewalAt: verified ? state.renewalAt : null,
       interval: verified ? state.interval : null,
       cancelAtPeriodEnd: verified && state.cancelAtPeriodEnd,

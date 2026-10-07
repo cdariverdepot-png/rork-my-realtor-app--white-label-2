@@ -562,7 +562,7 @@ function AtCapacity({ realtorName, realtorId, onBack }: { realtorName: string; r
           <DoorClosed size={18} color={brand.goldLight} strokeWidth={1.5} />
         </View>
         <Text style={styles.calmBody}>
-          This app is currently unavailable. Please contact {first} directly
+          {first} isn&apos;t able to connect new clients right now. Please contact {first} directly
           about access. Your invitation is saved so you can try signing in again.
         </Text>
       </View>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Linking, Platform, Pressable, Share, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import * as Clipboard from 'expo-clipboard';
 import { File, Paths } from 'expo-file-system';
@@ -11,6 +12,7 @@ import { serviceEntitlement } from '@/lib/serviceEntitlement';
 /** The same stable invitation is used on the first-publication screen and dashboard. */
 export default function InvitationTools() {
   const { realtorRecord, realtorId } = useAuth(), { isPublished, savedBrand } = useBrand();
+  const router = useRouter();
   const [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const code = realtorRecord?.client_code;
   if (!isPublished || !realtorRecord?.client_code_enabled || !code) return null;
@@ -18,7 +20,7 @@ export default function InvitationTools() {
   const run = async (action: () => Promise<void>) => {
     if (busy) return; setBusy(true); setNotice('');
     const entitlement = await serviceEntitlement(realtorId);
-    if (entitlement !== 'active') { setNotice(entitlement === 'inactive' ? 'Client invitations are unavailable while your subscription is inactive.' : 'Client invitations are temporarily unavailable while your subscription status is verified.'); setBusy(false); return; }
+    if (entitlement !== 'active') { setNotice(entitlement === 'inactive' ? 'Client invitations are unavailable while your subscription is inactive. Subscribe to invite new clients.' : 'Client invitations are temporarily unavailable while your subscription status is verified.'); setBusy(false); return; }
     try { await action(); } catch (e) { setNotice(e instanceof Error ? e.message : 'Please retry.'); } finally { setBusy(false); }
   };
   const saveQr = async () => {
@@ -47,5 +49,6 @@ export default function InvitationTools() {
       {button('Share invitation', async () => { await Share.share({ message: `${savedBrand.realtor.name} invites you to My Realtor App. ${url}`, url }); })}
     </View>
     {!!notice && <Text accessibilityRole="alert" style={{ color: '#E4D6BF', lineHeight: 22, textAlign: 'center' }}>{notice}</Text>}
+    {/subscription is inactive/.test(notice) && <Pressable accessibilityRole="button" onPress={() => router.push('/admin/plans')} style={{ paddingVertical: 10 }}><Text style={{ color: '#D4B989', fontWeight: '600' }}>Account &amp; Billing</Text></Pressable>}
   </View>;
 }

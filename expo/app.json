@@ -56,6 +56,7 @@
         }
       ],
       "expo-web-browser",
+      "expo-iap",
       "expo-secure-store",
       [
         "expo-image-picker",

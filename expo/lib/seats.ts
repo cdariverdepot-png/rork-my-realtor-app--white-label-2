@@ -8,10 +8,13 @@ export type SeatState = {
   renewalAt: string | null; cancelAtPeriodEnd: boolean; paymentIssue: boolean; everPaid: boolean;
   /** Server-reported reason when service is inactive; never inferred as a payment failure. */
   inactiveReason?: InactiveReason | null;
+  /** End of the server-owned 7-day trial (never-subscribed accounts). */
+  trialEnd?: string | null;
 };
-export type InactiveReason = "trial_ended" | "payment_failed" | "canceled" | "expired";
+/** Apple-derived reasons: billing_retry only when Apple reports a failed renewal in billing retry. */
+export type InactiveReason = "trial_ended" | "billing_retry" | "revoked" | "canceled" | "expired";
 export type ClaimResult = { ok: true; reused: boolean; used: number; limit: number } | { ok: false; reason: "limit" | "inactive" | "error"; used?: number; limit?: number };
-export const EMPTY_SEAT_STATE: SeatState = { plan: "evaluation", limit: FREE_SEAT_LIMIT, used: 0, connections: [], attempts: [], active: false, status: "unavailable", interval: null, serviceEnd: null, renewalAt: null, cancelAtPeriodEnd: false, paymentIssue: false, everPaid: false, inactiveReason: null };
+export const EMPTY_SEAT_STATE: SeatState = { plan: "evaluation", limit: FREE_SEAT_LIMIT, used: 0, connections: [], attempts: [], active: false, status: "unavailable", interval: null, serviceEnd: null, renewalAt: null, cancelAtPeriodEnd: false, paymentIssue: false, everPaid: false, inactiveReason: null, trialEnd: null };
 /** Compatibility call after authentication. Never grants access on a network error. */
 export async function claimClientSeat(input: { realtorId: string; email: string; clientId: string; name: string }): Promise<ClaimResult> {
   if (!supabase || !input.realtorId) return { ok: false, reason: "error" };
