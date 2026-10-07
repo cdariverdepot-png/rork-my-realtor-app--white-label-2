@@ -149,10 +149,6 @@ export function scoreInventoryLink(href: string, label: string, seed: URL): numb
   }
   if (link.protocol !== "https:" || LOGIN_PATH.test(link.pathname) ||
       /\/(?:emissary|shares|carts)\//i.test(link.pathname) || /^(?:log\s*in|sign\s*in|save|share|hide|unhide|print|contact)(?:\s|$)/i.test(label.trim())) return 0;
-  // IDX results, search, and saved links are market navigation unless the query names the listing agent or office.
-  if (/\/idx\/(?:results|search|map|featured|soldpending)(?:\/|$)/i.test(link.pathname) && !idxOwnerParams(link).length) return 0;
-  if (/\/idx\/details\/listing\//i.test(link.pathname) && !idxOwnerParams(link).length) return 0;
-  if (/(?:^|\.)idxbroker\.com$/i.test(link.hostname) && /^\/i\/[^/]+\/?$/i.test(link.pathname) && !idxOwnerParams(link).length) return 0;
   if (/\b(?:privacy|terms|cookie|copyright|training|support)\b/i.test(label) ||
       /(?:^|\.)(?:facebook|instagram|twitter|x|linkedin|youtube)\.com$/i.test(link.hostname) ||
       /^(?:www\.)?flexmls\.com$/i.test(link.hostname)) return 0;
@@ -472,8 +468,6 @@ export function listingsFromCards(html: string, base: URL, limit = 100): Discove
     const pathOk = DETAIL_PATH.test(link.pathname) || /listing|property|home|mls|pin|id=/i.test(link.pathname + link.search);
     // Price-bucket navigation is a filter, not a property, on any host.
     if (/\/\d+k-price\/?$/i.test(link.pathname) || /homes for sale under\b/i.test(label)) continue;
-    // An IDX Broker results URL is a market search, even when the label is a dollar range.
-    if (/\/idx\/results(?:\/|$)/i.test(link.pathname)) continue;
     if (!pathOk && !sameSite(link, base)) continue;
     if (!pathOk && label.length < 8) continue;
     // Peek at a window of HTML around the match for price / beds.
@@ -506,6 +500,7 @@ export function listingsFromCards(html: string, base: URL, limit = 100): Discove
     // Skip pure nav ("Listings", "Home", "Contact").
     if (/^(home|listings?|properties|contact|about|login|sign\s*in|menu)$/i.test(title)) continue;
     seen.add(href);
+    const historical = historicalInventoryUrl(href) || soldContext(html, idx, match[0]);
     found.push({
       title: title.slice(0, 160),
       description: "",
@@ -517,10 +512,76 @@ export function listingsFromCards(html: string, base: URL, limit = 100): Discove
       image,
       images: image ? [image] : [],
       sourceUrl: href,
+      ...(historical ? { status: "sold" as const, sourceStatus: "sold" as const } : {}),
     });
     if (found.length >= limit) break;
   }
   return found;
+}
+
+/** Repeated tiles that publish a price, an address, and a property URL as attributes.
+ * Placester/Valhalla and similar grids do this without a dollar sign inside the anchor.
+ * A price alone is not a listing. The URL must be a property path.
+ */
+export function listingsFromAttributeCards(html: string, base: URL, limit = 100): DiscoveredListing[] {
+  const found: DiscoveredListing[] = [];
+  const seen = new Set<string>();
+  const tags = [...html.matchAll(/<[a-z][a-z0-9-]*\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi)];
+  for (let i = 0; i < tags.length && found.length < limit; i++) {
+    const tag = tags[i][0];
+    const priceRaw = attr(tag, "data-price") || attr(tag, "data-list-price") || attr(tag, "data-listing-price");
+    if (!priceRaw) continue;
+    const numeric = Number(String(priceRaw).replace(/[^0-9.]/g, ""));
+    if (!Number.isFinite(numeric) || numeric < 1000 || numeric > 100_000_000) continue;
+    const price = priceFrom({ price: priceRaw });
+    if (!price) continue;
+    const address = decodeEntities(attr(tag, "data-address") || attr(tag, "data-street") || attr(tag, "data-street-address")).trim();
+    const label = decodeEntities(attr(tag, "data-pl-navigate-label") || attr(tag, "data-navigate-label")).trim();
+    const rawUrl = attr(tag, "data-pl-navigate-url") || attr(tag, "data-navigate-url") || attr(tag, "data-listing-url") || attr(tag, "data-url") || attr(tag, "data-href");
+    const start = tags[i].index ?? 0;
+    let end = Math.min(html.length, start + 8000);
+    for (let j = i + 1; j < tags.length; j++) {
+      if (attr(tags[j][0], "data-price") || attr(tags[j][0], "data-list-price") || attr(tags[j][0], "data-listing-price")) {
+        end = tags[j].index ?? end;
+        break;
+      }
+    }
+    const block = html.slice(start, end);
+    const childHref = block.match(/<a\b[^>]*href\s*=\s*["']([^"']+)["']/i)?.[1] ?? "";
+    const source = propertyAttributeUrl(rawUrl || childHref, base);
+    if (!source) continue;
+    const title = address || label.split(",")[0]?.trim() || "";
+    if (title.length < 3 || /^(?:home|listings?|properties|contact|about|featured listings)$/i.test(title)) continue;
+    const locality = decodeEntities(attr(tag, "data-locality") || attr(tag, "data-city")).replace(/^\[["']?|["']?\]$/g, "").replace(/^["']|["']$/g, "").trim();
+    const regionRaw = decodeEntities(attr(tag, "data-region") || attr(tag, "data-state"));
+    const region = /^\s*\[/.test(regionRaw) ? (regionRaw.match(/[A-Za-z]{2}/)?.[0] ?? "") : regionRaw.replace(/[\[\]"]/g, "").trim();
+    const img = block.match(/<img\b[^>]*>/i)?.[0] ?? "";
+    const imageRaw = absolutize(attr(img, "data-src") || attr(img, "data-lazy-src") || attr(img, "src"), base) ?? "";
+    const image = imageRaw && !looksLikeChrome(imageRaw) ? imageRaw : "";
+    const id = attr(tag, "data-id") || attr(tag, "data-listing-id");
+    const listingNumber = /^\d{5,16}$/.test(id) ? id : "";
+    if (seen.has(source)) continue;
+    seen.add(source);
+    const specs = specsFrom({ bedrooms: attr(tag, "data-beds") || attr(tag, "data-bedrooms"), bathrooms: attr(tag, "data-baths") || attr(tag, "data-bathrooms") }, stripTags(block));
+    found.push({
+      title: title.slice(0, 160), description: "", price, ...specs, neighborhood: [locality, region].filter(Boolean).join(", ").slice(0, 120),
+      image, images: image ? [image] : [], sourceUrl: source, ...(listingNumber ? { listingNumber } : {}),
+    });
+  }
+  return found;
+}
+
+function propertyAttributeUrl(raw: string, base: URL): string | null {
+  const abs = absolutize(decodeEntities(raw).trim(), base);
+  if (!abs) return null;
+  let url: URL;
+  try { url = new URL(abs); } catch { return null; }
+  if (!DETAIL_PATH.test(url.pathname) && !/\/property\/|\/listing\//i.test(url.pathname)) return null;
+  for (const key of [...url.searchParams.keys()]) {
+    const value = url.searchParams.get(key) ?? "";
+    if (/^(?:filters|filter|search_filters)$/i.test(key) && (value.startsWith("{") || value.startsWith("[") || value.length > 40)) url.searchParams.delete(key);
+  }
+  return canonicalListingUrl(url.toString());
 }
 
 /** Single-property page fallback via Open Graph / title. */
@@ -818,48 +879,6 @@ export function listingsFromBrivityResponse(html: string, base: URL): { listings
 }
 
 
-const IDX_OWNER_PARAM = /^(?:a_listingagentid|a_listingofficeid|a_listingteamid|agentheaderid)$/i;
-
-/** Listing agent or office on an IDX Broker URL. Widget id, MLS idxID, city, and price are not ownership. */
-export function idxOwnerParams(url: URL): string[] {
-  const found: string[] = [];
-  const seen = new Set<string>();
-  for (const [key, value] of url.searchParams) {
-    if (!IDX_OWNER_PARAM.test(key)) continue;
-    const trimmed = value.trim();
-    if (!trimmed || /^(?:null|undefined|0|all|-1)$/i.test(trimmed)) continue;
-    const id = `${key.toLowerCase()}=${trimmed.toLowerCase()}`;
-    if (seen.has(id)) continue;
-    seen.add(id);
-    found.push(id);
-  }
-  return found;
-}
-
-/** A showcase widget id is not the agent. Only a published non-empty agentHeaderID is. */
-export function idxShowcaseOwner(script: string): string | null {
-  const match = script.match(/\bagentHeaderID\s*=\s*(null|undefined|\d+|(['"])([\s\S]*?)\2)/);
-  if (!match || match[1] === "null" || match[1] === "undefined") return null;
-  const value = (match[3] ?? match[1]).trim();
-  if (!value || /^(?:null|undefined|0|all|-1)$/i.test(value)) return null;
-  return value;
-}
-
-function idxBrokerSurface(html: string, url: URL): boolean {
-  if (/\/idx\/details\/listing\//i.test(url.pathname)) return false;
-  if (/\/idx\/(?:customshowcasejs\.php|results(?:\/|$)|widgets\/|search(?:\/|$)|map(?:\/|$)|featured(?:\/|$))/i.test(url.pathname)) return true;
-  if (/(?:^|\.)idxbroker\.com$/i.test(url.hostname)) return true;
-  return /idxwidgetsrc-|customshowcasejs\.php|\/idx\/widgets\/|\/idx\/results\/listings/i.test(html);
-}
-
-function idxCollectedUrl(raw: string): boolean {
-  try {
-    return /\/idx\/(?:results(?:\/|$)|details\/listing\/)/i.test(new URL(raw).pathname);
-  } catch {
-    return false;
-  }
-}
-
 /** Read the public IDX Broker showcase's literal property fields without executing JavaScript. */
 export function listingsFromIdxShowcase(script: string, base: URL): DiscoveredListing[] {
   if (!/\/idx\/customshowcasejs\.php$/.test(base.pathname) || !base.searchParams.has("widgetid")) return [];
@@ -967,6 +986,7 @@ export function isRobotChallenge(html: string): boolean {
   if (/^robot validate$/i.test(title)) return true;
   if (/^just a moment\.\.\.$/i.test(title)) return true;
   if (/^attention required\b/i.test(title)) return true;
+  if (/^client challenge$/i.test(title)) return true;
   const heading = stripTags(html.match(/<h[12][^>]*>([\s\S]*?)<\/h[12]>/i)?.[1] ?? "");
   if (/\baccess denied\b/i.test(heading) && /recaptcha|verify your are human|verify you are human/i.test(html)) return true;
   if (/<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(html)) return true;
@@ -983,7 +1003,7 @@ export function classifyObstacle(html: string, status?: number): string | null {
   if (/^robot validate$/i.test(title.trim())) return "captcha_required";
   if (/recaptcha|hcaptcha|cf-turnstile|challenges\.cloudflare\.com/i.test(head) && /verify you are human|verify your are human|security check|human verification|access denied/i.test(head)) return "captcha_required";
   if (/px-captcha/i.test(head) && /access to this page has been denied/i.test(title)) return "captcha_required";
-  if (/^just a moment\.\.\.$/i.test(title.trim()) || /^attention required\b/i.test(title.trim())) return "requires_rendering";
+  if (/^just a moment\.\.\.$/i.test(title.trim()) || /^attention required\b/i.test(title.trim()) || /^client challenge$/i.test(title.trim())) return "requires_rendering";
   if (status === 429 || /\btoo many requests\b/i.test(title)) return "rate_limited";
   if (status === 401) return "authentication_required";
   if (status === 403 && !isRobotChallenge(html)) return "access_denied";
@@ -1025,6 +1045,7 @@ export function architectureCandidates(html: string, base?: URL): { id: string; 
   if (/squarespace\.com|squarespace-cdn|static1\.squarespace/i.test(text)) add("squarespace", 0.9, "squarespace-assets");
   if (/wixstatic\.com|static\.parastorage\.com/i.test(text)) add("wix", 0.88, "wix-assets");
   if (/data-wf-site|website-files\.com/i.test(text)) add("webflow", 0.9, "webflow-marker");
+  if (/data-price\s*=\s*["']\d/i.test(text) && /data-(?:address|pl-navigate-url|listing-url)\s*=/i.test(text)) add("placester_valhalla", 0.9, "attribute-property-tiles");
   if (/static\.dune\.|data-dune-site|dune-embed/i.test(text)) add("dune", 0.8, "dune-marker");
   if (/idxbroker|idx-broker|customshowcasejs\.php|idxwidgetsrc-/i.test(text)) add("idx_broker", 0.9, "idx-broker-widget");
   if (/ihomefinder|idxhome\.com|ihfKestrel|ihf-main-container/i.test(text) || host === "www.idxhome.com") add("ihomefinder", 0.9, "ihomefinder-widget");
@@ -1058,7 +1079,8 @@ export function chimeListingSearchRequests(html: string, base: URL): string[] {
   }
   return [...sources].flatMap(source => {
     const lower = source.toLowerCase();
-    if (lower === "all listings") return [];
+    // Sold history and the unscoped market are not an active collection.
+    if (lower === "all listings" || lower === "sold listings") return [];
     const url = new URL("/api-site/search/realTimeListings", base.origin);
     url.searchParams.set("listingSource", source);
     const named = !["sold listings", "single property promotion"].includes(lower);
@@ -1075,7 +1097,30 @@ export function chimeListingSearchRequests(html: string, base: URL): string[] {
 /** Common public data transport, including RESO-style property fields.
  * URLs must be present in the record; never manufacture provider endpoints or detail URLs.
  */
-/** A search payload's own result group, not a nearby or recommended market. */
+/** A sold or closed feed is history, not the active collection. */
+function historicalInventoryUrl(raw: string): boolean {
+  try {
+    const url = new URL(raw);
+    const type = (url.searchParams.get("listingType") || "").toLowerCase();
+    const source = (url.searchParams.get("listingSource") || "").toLowerCase();
+    if (type.includes("sold") || source === "sold listings") return true;
+    return /\/sold-listing(?:\/|$)|\/recently-sold(?:\/|$)|\/just-sold(?:\/|$)/i.test(url.pathname);
+  } catch {
+    return /sold-listing|recently-sold/i.test(raw);
+  }
+}
+
+function historicalListing(item: Pick<DiscoveredListing, "status" | "sourceStatus" | "sourceUrl">): boolean {
+  return item.status === "sold" || item.status === "off_market" || item.sourceStatus === "sold" || item.sourceStatus === "closed" || historicalInventoryUrl(item.sourceUrl);
+}
+
+function soldContext(html: string, index: number, anchor: string): boolean {
+  if (/\bhouse-sold\b/i.test(html.slice(Math.max(0, index - 500), index) + anchor)) return true;
+  const headings = [...html.slice(Math.max(0, index - 6000), index).matchAll(/<h[1-3]\b[^>]*>([\s\S]*?)<\/h[1-3]>/gi)];
+  const title = stripTags(headings.at(-1)?.[1] ?? "");
+  if (!title || /\b(?:featured|for sale|active)\b/i.test(title)) return false;
+  return /\b(?:recently sold|sold homes|sold listings|just sold|closed sales)\b/i.test(title);
+}
 function completeSearchGroups(payload: unknown, base: URL): DiscoveredListing[] {
   const nearby = /^(?:nearby|recommended|similar|related|discover)/i;
   const groups: DiscoveredListing[][] = [];
@@ -1343,201 +1388,6 @@ export function listingsFromMoxi(html: string, base: URL): DiscoveredListing[] {
   return out;
 }
 
-/** Real Geeks publishes a saved search as `/search/results/{id}/` and its filters at `/api/search/criteria/`.
- * Geography, price, and property type are the market. Only an agent, office, or team id is the site owner's collection.
- */
-export function realGeeksDocument(html: string): boolean {
-  return /cdn\.realgeeks\.com|property-images\.realgeeks\.com|name=["']rg-static-dist|realgeeks\.member/i.test(html);
-}
-
-const REAL_GEEKS_OWNER_KEY = /^(?:agent_id|office_id|team_id|listing_agent_id|listing_office_id|list_agent_id|list_office_id|mls_agent_id|mls_office_id)$/i;
-
-export function realGeeksSearchId(url: URL): string {
-  const id = url.pathname.match(/\/search\/results\/([A-Za-z0-9]{1,16})\/?$/)?.[1] ?? "";
-  return id && !/^(?:advanced_search|landing|mls_search|zip_code_search|address_search|condo_search|market_report_search)$/i.test(id) ? id : "";
-}
-
-export function realGeeksCriteriaUrl(base: URL, searchId: string): string {
-  const url = new URL("/api/search/criteria/", base.origin);
-  url.searchParams.set("search_id", searchId);
-  url.searchParams.set("format", "json");
-  return url.toString();
-}
-
-export function realGeeksCriteriaRequests(html: string, base: URL): string[] {
-  if (!realGeeksDocument(html) && !realGeeksSearchId(base)) return [];
-  const ids = new Set<string>();
-  const own = realGeeksSearchId(base);
-  if (own) ids.add(own);
-  for (const match of html.matchAll(/\/search\/results\/([A-Za-z0-9]{1,16})\//g)) {
-    if (!/^(?:advanced_search|landing)$/i.test(match[1])) ids.add(match[1]);
-  }
-  return [...ids].slice(0, 12).map(id => realGeeksCriteriaUrl(base, id));
-}
-
-export function realGeeksOwnerScope(payload: unknown): boolean {
-  const record = payload && typeof payload === "object" && !Array.isArray(payload) ? payload as Record<string, unknown> : null;
-  const data = record && record.data && typeof record.data === "object" && !Array.isArray(record.data) ? record.data as Record<string, unknown> : record;
-  if (!data) return false;
-  for (const [key, value] of Object.entries(data)) {
-    if (!REAL_GEEKS_OWNER_KEY.test(key)) continue;
-    const values = Array.isArray(value) ? value : [value];
-    if (values.some(item => String(item ?? "").trim() && !/^all$/i.test(String(item)))) return true;
-  }
-  return false;
-}
-
-export function realGeeksCriteriaDecision(html: string, url: URL): { searchId: string; scoped: boolean } | null {
-  if (!/\/api\/search\/criteria\/?$/i.test(url.pathname)) return null;
-  const searchId = url.searchParams.get("search_id") ?? "";
-  if (!searchId || searchId.startsWith("#")) return null;
-  try { return { searchId, scoped: realGeeksOwnerScope(JSON.parse(html)) }; }
-  catch { return { searchId, scoped: false }; }
-}
-
-/** Cards are bounded by `row property`. A positional `/search/details/{search}/{index}/` URL is not an identity. */
-export function listingsFromRealGeeks(html: string, base: URL): DiscoveredListing[] {
-  if (!realGeeksDocument(html) || !/class=["'][^"']*\bproperty\b[^"']*\b(?:featured|results)\b/i.test(html)) return [];
-  const blocks = html.split(/class=["'][^"']*\brow\s+property\b/i).slice(1);
-  const found: DiscoveredListing[] = [];
-  const seen = new Set<string>();
-  for (const block of blocks) {
-    const href = absolutize(decodeEntities(block.match(/href=["']([^"']+)["']/i)?.[1] ?? ""), base);
-    if (!href) continue;
-    const fields = new Map<string, string>();
-    for (const li of block.matchAll(/<li\b[^>]*class=["'][^"']*\bdetail\b[^"']*["'][^>]*>[\s\S]*?<span\b[^>]*class=["'][^"']*\bnumber\b[^"']*["'][^>]*>([\s\S]*?)<\/span>[\s\S]*?<span\b[^>]*class=["'][^"']*\bdetail-title\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi)) {
-      fields.set(stripTags(li[2]).toLowerCase(), decodeEntities(stripTags(li[1])).replace(/\s+/g, " ").trim());
-    }
-    const mls = fields.get("mls") || "";
-    let source = href;
-    try {
-      if (/\/search\/details\//i.test(new URL(href).pathname) && mls) source = new URL(`/property/${encodeURIComponent(mls)}/`, base.origin).toString();
-    } catch { /* keep the published href */ }
-    const key = (mls || source).toLowerCase();
-    if (seen.has(key)) continue;
-    const address = decodeEntities(stripTags(block.match(/class=["'][^"']*\baddress\b[^"']*["'][^>]*>([\s\S]*?)<\/a>/i)?.[1] ?? "")).replace(/\s+/g, " ").trim();
-    const price = (block.match(/class=["'][^"']*\bprice\b[^"']*["'][^>]*>[\s\S]*?(\$\s?[\d,]+)/i)?.[1] ?? "").replace(/\s+/g, "");
-    if (!address || !price) continue;
-    seen.add(key);
-    const image = absolutize(decodeEntities(block.match(/<img\b[^>]*\bsrc=["']([^"']+)["']/i)?.[1] ?? ""), base) ?? "";
-    const beds = Number(fields.get("beds") || 0);
-    const baths = Number(fields.get("baths") || 0);
-    const sqft = (fields.get("sqft.") || fields.get("sqft") || "").replace(/,/g, "");
-    const description = decodeEntities(stripTags(block.match(/class=["'][^"']*property-description[^"']*["'][^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? "")).replace(/\s+/g, " ").trim();
-    found.push({
-      title: address.slice(0, 160), description: description.slice(0, 16000), price,
-      beds: Number.isFinite(beds) ? beds : 0, baths: Number.isFinite(baths) ? baths : 0, sqft,
-      neighborhood: "", image: image && !looksLikeChrome(image) ? image : "", images: image && !looksLikeChrome(image) ? [image] : [],
-      sourceUrl: source, ...(mls ? { listingNumber: mls } : {}),
-    });
-  }
-  return found;
-}
-
-/** Sierra Interactive publishes `siteData` on the page. `siteid` is the website, `agentsiteid` -1 is not an agent,
- * and `searchid` / `searchtype` are saved MLS-region queries. None of those is the listing agent or office.
- */
-export function sierraDocument(html: string): boolean {
-  return /listingphotos\.sierrastatic\.com|\/sist_ajax\/|siteSearchToolsRootDirectory/i.test(html)
-    || /var\s+siteData\s*=\s*\{[^}]{0,500}\bagentsiteid\s*:/i.test(html)
-    || (/\bjs-lw-(?:container|panel)\b/i.test(html) && /\bdata-searchid\s*=/i.test(html));
-}
-
-export function sierraBoardDetail(url: string): boolean {
-  try { return /\/property-search\/detail\/\d+\/[^/]+\//i.test(new URL(url).pathname); }
-  catch { return false; }
-}
-
-/** A Sierra results, featured, or listing widget is the MLS feed unless a later contract proves a listing-agent query. */
-export function sierraUnscopedFeed(html: string, url: URL, found: { sourceUrl: string }[]): boolean {
-  if (!sierraDocument(html) || /\/property-search\/detail\//i.test(url.pathname)) return false;
-  const feedPath = /\/(?:featured-listings|property-search)(?:\/|$)/i.test(url.pathname);
-  const widget = /\bjs-lw-(?:container|panel)\b|data-searchid\s*=|class=["'][^"']*\bsi-listing\b/i.test(html);
-  const boardCards = found.length >= 2 && found.every(item => sierraBoardDetail(item.sourceUrl));
-  return feedPath || widget || boardCards;
-}
-
-const PLACESTER_NOT_OWNER = /^(?:origin_ids|import_id|region|filter_zips|filter_zip|filter_city_names|county|search_num_results|featuredids|featured_ids|oname|aname|sort_field|sort_direction|request_type|valhalla|id_requirement|purchase_types|property_type|zip|city|status)$/i;
-const PLACESTER_OWNER = /^(?:oid|aid|office_id|officeid|agent_id|agentid|listing_agent|listing_office)$/i;
-
-/** Placester Valhalla widgets and the classic search plugin. `origin_ids` is the IDX feed, not the brokerage. */
-export function placesterDocument(html: string): boolean {
-  return /queryserviceb?\.placester\.net|plugins\/placester|_placester\.searchAppConfig|myrealestateplatform\.com\/Valhalla/i.test(html)
-    || (/uploads-cf\.cdn\.placester\.net/i.test(html) && /data-query\s*=/i.test(html));
-}
-
-function placesterDecodedJson(raw: string): unknown {
-  const text = raw.replace(/"/g, '"').replace(/&#0*34;/g, '"').replace(/&/g, "&").replace(/\\\//g, "/");
-  try { return JSON.parse(text); }
-  catch { return null; }
-}
-
-/** Owner filters published on the page. ZIP, county, origin, region, page size, and curated ids are not owners. */
-export function placesterOwnerFilters(html: string): { key: string; value: string }[] {
-  const found: { key: string; value: string }[] = [];
-  const seen = new Set<string>();
-  const consider = (obj: unknown) => {
-    if (!obj || typeof obj !== "object" || Array.isArray(obj)) return;
-    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
-      if (!PLACESTER_OWNER.test(key) || typeof value !== "string") continue;
-      const trimmed = value.trim();
-      if (!trimmed || /^(?:all|-1|0)$/i.test(trimmed) || /^(?:agent|office)\s+(?:id|name)$/i.test(trimmed)) continue;
-      const id = `${key.toLowerCase()}=${trimmed.toLowerCase()}`;
-      if (seen.has(id)) continue;
-      seen.add(id);
-      found.push({ key, value: trimmed });
-    }
-  };
-  for (const match of html.matchAll(/\bdata-query\s*=\s*(["'])([\s\S]*?)\1/gi)) consider(placesterDecodedJson(match[2]));
-  for (const name of ["globalFilters", "filters"]) {
-    const re = new RegExp(`"${name}"\\s*:\\s*(\\{[^{}]{0,800}\\})`, "g");
-    for (const match of html.matchAll(re)) consider(placesterDecodedJson(match[1]));
-  }
-  return found;
-}
-
-/** A Placester shell whose public filters do not name an office or agent. Curated featured ids are still not ownership. */
-export function placesterUnscopedFeed(html: string, url: URL): boolean {
-  if (!placesterDocument(html) || /\/property\//i.test(url.pathname)) return false;
-  return placesterOwnerFilters(html).length === 0;
-}
-
-/** Valhalla tiles publish data-address and data-price. They count only after an office or agent filter is proven. */
-export function listingsFromPlacesterTiles(html: string, base: URL): DiscoveredListing[] {
-  const found: DiscoveredListing[] = [];
-  const seen = new Set<string>();
-  for (const match of html.matchAll(/<div\b([^>]*\bdata-address\s*=\s*["'][^"']+["'][^>]*)>/gi)) {
-    const tag = `<div ${match[1]}>`;
-    const address = decodeEntities(attr(tag, "data-address")).replace(/\s+/g, " ").trim();
-    const amount = Number(attr(tag, "data-price").replace(/[^0-9.]/g, ""));
-    if (!address || !Number.isFinite(amount) || amount <= 0) continue;
-    const block = html.slice(match.index ?? 0, (match.index ?? 0) + 4000);
-    const href = absolutize(decodeEntities(block.match(/<a\b[^>]*href\s*=\s*["']([^"']+)["']/i)?.[1] ?? ""), base);
-    if (!href) continue;
-    let source = "";
-    try {
-      const link = new URL(href);
-      if (!/\/property\//i.test(link.pathname)) continue;
-      link.search = "";
-      link.hash = "";
-      source = canonicalListingUrl(link.toString());
-    } catch { continue; }
-    if (seen.has(source)) continue;
-    seen.add(source);
-    const imageRaw = block.match(/<img\b[^>]*(?:data-src|src)\s*=\s*["']([^"']+)["']/i)?.[1] ?? "";
-    const image = absolutize(decodeEntities(imageRaw), base) ?? "";
-    const photo = image && !looksLikeChrome(image) ? image : "";
-    found.push({
-      title: address.slice(0, 160), description: "",
-      price: "$" + String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-      beds: 0, baths: 0, sqft: "",
-      neighborhood: [attr(tag, "data-locality"), attr(tag, "data-region")].filter(Boolean).join(", "),
-      image: photo, images: photo ? [photo] : [], sourceUrl: source,
-    });
-  }
-  return found;
-}
-
 export type ListingInterfaceAdapter = {
   id: string;
   matches: (html: string, url: URL) => boolean;
@@ -1556,8 +1406,6 @@ export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
       return url && /\/idx\/customshowcasejs\.php$/.test(new URL(url).pathname) && /^\d+$/.test(new URL(url).searchParams.get("widgetid") ?? "") ? [url] : []; }) },
   { id: "brivity", matches: (h,u) => /brivityidx\.com|FeaturedProperties-1R/.test(h) || /\/pages\/search\.php\/?$/.test(u.pathname),
     extract: (h,u) => listingsFromBrivityResponse(h,u)?.listings ?? [], fragments: brivityInventoryFragments },
-  { id: "realgeeks", matches: (h,u) => realGeeksDocument(h) || !!realGeeksSearchId(u),
-    extract: listingsFromRealGeeks, fragments: realGeeksCriteriaRequests },
   { id: "flexmls", matches: (h,u) => /(?:^|\.)flexmls\.com$/i.test(u.hostname), extract: listingsFromStructuredCards },
   { id: "public-json", matches: h => /^[\s]*[\[{]/.test(h), extract: listingsFromPublicJson },
   { id: "structured-property-data", matches: h => /application\/(?:ld\+json|json)/i.test(h),
@@ -1587,9 +1435,8 @@ const PLATFORM_CONTRACTS: Record<string, [string, string]> = {
   moxiworks: ["Moxi listing_detail literals or linktooverlay cards", "Read scoped cards and lazy photos; prefer the published active collection."],
   ihomefinder: ["Kestrel widget configuration or public idxhome response", "Use published featured filters and public transport; reject market and inactive records."],
   "agentfire-dsidx": ["AgentFire cards or dsIDXpress explicit property fields", "Property-local fields preserve identity and avoid neighboring cards and price history."],
-  "idx-broker": ["IDX showcase script or IDX detail route", "Import only a feed that publishes a listing agent or office id. A widget id, MLS board, city, or price bucket is not ownership, and a showcase is not a complete collection."],
+  "idx-broker": ["IDX showcase script or IDX detail route", "Parse literal widget facts without executing JavaScript; showcase is partial inventory."],
   brivity: ["Brivity featured widget or scoped search response", "Retain published agent/office filters and display permissions."],
-  realgeeks: ["Real Geeks property cards and public saved-search criteria", "Follow only a saved search that publishes an agent, office, or team id, and reconcile its published total."],
   flexmls: ["Public Flexmls server-rendered listing cards", "Preserve collection scope and per-card payloads through public fragments."],
   "public-json": ["JSON object/array containing evidenced property records", "Normalize RESO and common property fields independent of CMS or framework."],
 };
@@ -1607,6 +1454,10 @@ export const LISTING_EXTRACTION_STRATEGIES: ExtractionStrategy[] = [
   { id: "structured-cards", version: 1, phase: "specialized", evidence: "data-href listing/property cards",
     rationale: "Per-card payload boundaries work across server-rendered frameworks.",
     matches: h => /data-href/i.test(h), extract: listingsFromStructuredCards },
+  { id: "attribute-cards", version: 1, phase: "specialized", evidence: "Repeated elements with data-price, an address, and a property URL",
+    rationale: "Attribute tiles identify a property when the price is not written inside the anchor.",
+    matches: h => /data-price\s*=/i.test(h) && /data-(?:address|pl-navigate-url|navigate-url|listing-url)\s*=/i.test(h),
+    extract: listingsFromAttributeCards },
   { id: "json-ld", version: 1, phase: "merge", evidence: "application/ld+json script",
     rationale: "Schema property records are portable across CMSs; merge complementary card evidence.",
     matches: h => /application\/ld\+json/i.test(h), extract: listingsFromJsonLd },
@@ -1689,31 +1540,6 @@ function continuationUrl(raw: string, base: URL): string | null {
     const next = new URL(url);
     return sameCollectionQuery(next, base) || sameSite(next, base) ? url : null;
   } catch { return null; }
-}
-
-/** A structured group is the collection only when the document says so. Visible cards that agree with each other are not that proof. */
-function authoritativeStructuredGroup(html: string, base: URL, structured: DiscoveredListing[]): boolean {
-  const scoped = hasOwnerScope(base, html) || idxOwnerParams(base).length > 0;
-  let total: number | undefined;
-  let terminal = false;
-  try {
-    const payload = JSON.parse(html) as Record<string, unknown>;
-    const accounted = publishedCollectionTotal(payload);
-    const counts = payload.counts;
-    const parsed = Number(payload.total ?? payload.totalCount ?? payload["@odata.count"] ?? accounted.total ?? (typeof counts === "number" ? counts : counts && typeof counts === "object" ? (counts as Record<string, unknown>).total ?? (counts as Record<string, unknown>).all : undefined));
-    if (Number.isFinite(parsed) && parsed > 0) total = parsed;
-    const totalPage = Number(payload.totalPage ?? payload.totalPages ?? payload.pageCount);
-    const pageNum = Number(payload.page ?? payload.currentPage ?? base.searchParams.get("page") ?? 1);
-    if (Number.isInteger(totalPage) && totalPage > 0 && Number.isInteger(pageNum) && pageNum >= totalPage) terminal = true;
-    if (payload.hasNextPage === false || payload.hasMore === false) terminal = true;
-  } catch { /* a marketing document is not a provider collection payload */ }
-  if (scoped && total != null && total === structured.length) return true;
-  if (scoped && terminal && (total == null || total === structured.length)) return true;
-  if (/"@type"\s*:\s*"CollectionPage"/.test(html)) {
-    const numberOfItems = Number(html.match(/"numberOfItems"\s*:\s*(\d+)/)?.[1]);
-    if (numberOfItems > 0 && numberOfItems === structured.length) return true;
-  }
-  return false;
 }
 
 /** Continuation and terminal signals for one document. Absence of a next button is not proof. */
@@ -1810,16 +1636,6 @@ export function inspectCollectionDocument(html: string, base: URL, found: Discov
   const showingAll = text.match(/\bshowing all\s+(\d+)\s+(?:listings|properties|homes|results)\b/i);
   if (range && Number(range[1]) === 1 && Number(range[2]) === Number(range[3])) notePublished(Number(range[3]), "page");
   else if (showingAll) notePublished(Number(showingAll[1]), "page");
-  const realGeeksPage = /cdn\.realgeeks\.com|property-images\.realgeeks\.com|name=["']rg-static-dist/i.test(html);
-  const placesterPage = placesterDocument(html);
-  if (realGeeksPage) {
-    const meta = html.match(/<meta\b[^>]*name=["']description["'][^>]*>/i)?.[0] ?? "";
-    const raw = html.match(/properties-found[\s\S]{0,180}?(\d[\d,]*)\s+Properties/i)?.[1]
-      ?? meta.match(/content=["'](\d[\d,]*)\s+Homes for Sale/i)?.[1]
-      ?? html.match(/<meta\b[^>]*content=["'](\d[\d,]*)\s+Homes for Sale["'][^>]*>/i)?.[1];
-    const count = Number((raw ?? "").replace(/,/g, ""));
-    if (count > 0) notePublished(count, "page");
-  }
   if (continuations.length > 0 && continuations.every(url => url === base.toString())) repeatedCursor = true;
   if (continuations.some(url => url !== base.toString())) { open = false; mechanism = mechanism === "load-more" ? "load-more" : numberedNext || sawPager ? "numbered-pagination" : cursorTerminal || /cursor|after=/i.test(continuations.find(url => url !== base.toString()) ?? "") ? "cursor" : "next-link"; }
   else if (open) mechanism = mechanism === "load-more" ? "load-more" : "hidden";
@@ -1830,16 +1646,11 @@ export function inspectCollectionDocument(html: string, base: URL, found: Discov
     const b = new Set(right.map(item => item.sourceUrl));
     return a.size > 0 && a.size === b.size && [...a].every(url => b.has(url));
   };
-  const idsAgree = !open && !continuations.length && found.length > 0 && sameIds(structured, found);
-  // Matching every card on the page is not proof that the page is the collection.
-  const authoritative = idsAgree && authoritativeStructuredGroup(html, base, structured);
-  const structuredClosed = authoritative;
-  const crossCheck = authoritative && cards.length > 0 && structured.length > 0 && sameIds(cards, structured);
+  const structuredClosed = !open && !continuations.length && found.length > 0 && sameIds(structured, found);
+  const crossCheck = !open && !continuations.length && found.length > 0 && cards.length > 0 && structured.length > 0 && sameIds(cards, structured) && sameIds(structured, found);
   const pagerExhausted = sawPager && !continuations.length && !open && found.length > 0 && highestPage > 0 && highestPage <= Math.max(currentPage, 1);
   const countMatchesPage = !!publishedCount && publishedCount === found.length;
-  let singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
-  // A pager that simply stops is not proof the collection ended. Placester search_num_results is a page size.
-  if ((realGeeksPage || placesterPage) && !countMatchesPage) singlePageConfirmed = false;
+  const singlePageConfirmed = !open && !continuations.length && found.length > 0 && (explicitEnd || crossCheck || pagerExhausted || (countMatchesPage && publishedKind === "page") || (structuredClosed && cursorTerminal));
   if (/\binfinite-scroll\b|data-infinite/i.test(visible) && !continuations.length) open = true;
   return {
     continuations: continuations.filter(url => url !== base.toString()), open: open || repeatedCursor, mechanism, structuredClosed, singlePageConfirmed,
@@ -2313,26 +2124,6 @@ function soleFrameDocument(html: string, base: URL): string | null {
   } catch { return null; }
 }
 
-function mlsBoardPermalink(value: string): boolean {
-  try {
-    return /\/listing\/[a-z]{2,12}\/[a-z0-9-]*\d[a-z0-9-]*\//i.test(new URL(value).pathname);
-  } catch {
-    return false;
-  }
-}
-
-const OWNER_SCOPE_KEYS = /^(?:agent|agentid|agentids|agent_id|office|officeid|officeids|office_id|team|teamid|teamids|brokerage|brokerageid|listingoffice|mlsofficeid|mlsagentid|companyid|websiteid|searchprofileid|featurelistingname|collectionid)$/i;
-
-/** Same-domain is not ownership. Scope is a published office, agent, team, brokerage, or collection constraint — not site chrome. */
-function hasOwnerScope(url: URL, html: string): boolean {
-  if (/\/(?:office|agent)_listing_categories\//i.test(url.pathname)) return true;
-  for (const [key, value] of url.searchParams) {
-    if (OWNER_SCOPE_KEYS.test(key) && value.trim()) return true;
-  }
-  if (/(?:"|")agent_office_listings_only(?:"|")\s*:\s*1\b/.test(html)) return true;
-  return false;
-}
-
 /**
  * Walk seed URLs → inventory CTAs → optional detail pages.
  * Caps pages and depth so the builder stays snappy.
@@ -2348,10 +2139,6 @@ export async function discoverListings(
     maxRenders?: number;
     /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
     enrichAll?: boolean;
-    /** Listings already collected by an earlier batch. Used to enrich without crawling again. */
-    priorListings?: DiscoveredListing[];
-    /** Pending continuation URLs, not a new discovery seed. */
-    continuationSeeds?: boolean;
     /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
     sessionCookie?: string },
 ): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
@@ -2405,13 +2192,11 @@ export async function discoverListings(
   let sawContinuation = false;
   let continuationMechanism = "";
   let apiCount = false;
+  const renderedChallenges = new Set<string>();
   let rendersUsed = 0;
   let collectionRowsFetched = 0;
   let offsetQueryTotal = 0;
   let hitSafetyCap = false;
-  let unscopedMarket = false;
-  let rejectedRealGeeksMarket = false;
-  let listingCeiling = maxListings;
   let omissionTotal = 0;
   const omissionReasons = new Map<string, number>();
   const pendingContinuations = new Set<string>();
@@ -2420,8 +2205,8 @@ export async function discoverListings(
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean; ownerScoped?: boolean };
-  const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i, ...(options?.continuationSeeds ? { continuation: true } : {}) }));
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
+  const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
 
   const pushListing = (item: DiscoveredListing) => {
     const sourceUrl = canonicalListingUrl(item.sourceUrl);
@@ -2443,16 +2228,8 @@ export async function discoverListings(
     listingKeys.add(key);
     listings.push(normalized);
   };
-  for (const item of options?.priorListings ?? []) pushListing(item);
 
-  while (queue.length && visited.length < maxPages && Date.now() < deadline) {
-    if (listings.length >= listingCeiling) {
-      // The batch size is not a product stop. Only a queued continuation page extends it.
-      const continuationWaiting = queue.some(item => item.continuation && !visitedSet.has(item.url));
-      if (!continuationWaiting) break;
-      listingCeiling += maxListings;
-      hitSafetyCap = false;
-    }
+  while (queue.length && visited.length < maxPages && listings.length < maxListings && Date.now() < deadline) {
     queue.sort((a, b) => b.priority - a.priority);
     const next = queue.shift()!;
     let normalized = next.url;
@@ -2477,7 +2254,7 @@ export async function discoverListings(
       finalUrl = page.finalUrl;
       hops += 1;
       visitedSet.add(finalUrl.toString());
-      if (next.continuation) { continuationRequests++; sawContinuation = true; }
+      if (next.continuation) continuationRequests++;
     } catch (error) {
       const reason = error instanceof Error ? error.message.slice(0, 180) : "Unreadable public response";
       const rateLimited = /\b429\b|too many requests|rate[- ]limited/i.test(reason);
@@ -2546,7 +2323,7 @@ export async function discoverListings(
     if(next.activationToken && finalUrl.hostname === "www.idxhome.com"){try{const rows=JSON.parse(html);if(Array.isArray(rows))for(const row of rows){if(row.featured===true && row.statusId==="active" && /^[a-z0-9_-]+$/i.test(row.id) && typeof row.listingPageUrl==="string") publicDetails.set(row.listingPageUrl,{url:"https://www.idxhome.com/api/kestrel/listing/"+row.id+".json?context=DETAIL",activationToken:next.activationToken});}}catch{/* other formats */}}
     const showcase = broad ? [] : listingsFromIdxShowcase(html, finalUrl);
     if (/cbw-slider-listing/.test(html) && next.depth===0) {limitedShowcase=true;issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"agentfire-dsidx"});}
-    if (showcase.length && idxShowcaseOwner(html)) { limitedShowcase = true; issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"idx-broker"}); }
+    if (showcase.length) { limitedShowcase = true; issues.push({code:"limited-showcase",url:finalUrl.toString(),interface:"idx-broker"}); }
     for (const candidate of architectureCandidates(html, finalUrl)) {
       const prior = candidateMap.get(candidate.id);
       if (!prior || candidate.confidence > prior.confidence) candidateMap.set(candidate.id, candidate);
@@ -2567,6 +2344,7 @@ export async function discoverListings(
             html = rendered.html;
             finalUrl = rendered.finalUrl;
             stages.push("browser_render_escalated");
+            stages.push("browser:script-gate");
             observation = describeListingArchitecture(html, finalUrl, "rendered-dom");
             compatibilityPages.push(observation);
           }
@@ -2588,9 +2366,10 @@ export async function discoverListings(
     if (isRobotChallenge(html)) {
       let obstacle = classifyObstacle(html) ?? "captcha_required";
       let carriedNetwork: { url: string; html: string }[] | null = null;
-      if (obstacle === "requires_rendering" && options?.renderPage && Date.now() < deadline && rendersUsed < maxRenders) {
+      if (obstacle === "requires_rendering" && options?.renderPage && !renderedChallenges.has(finalUrl.origin) && Date.now() < deadline && rendersUsed < maxRenders) {
         rendersUsed++;
         stages.push("browser_render_escalated");
+        stages.push("browser:interstitial");
         try {
           const gate = cookieFor(finalUrl.toString());
           const rendered = await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
@@ -2598,7 +2377,11 @@ export async function discoverListings(
             html = rendered.html;
             finalUrl = rendered.finalUrl;
             carriedNetwork = rendered.network ?? [];
-            if (isRobotChallenge(html)) obstacle = classifyObstacle(html) ?? obstacle;
+            if (isRobotChallenge(html)) {
+              obstacle = classifyObstacle(html) ?? obstacle;
+              renderedChallenges.add(finalUrl.origin);
+              stages.push("browser_challenge_persistent");
+            } else stages.push("browser_fallback_interstitial");
           }
         } catch (error) {
           obstacles.push({ code: "render_failed", url: finalUrl.toString(), detail: error instanceof Error ? error.message.slice(0, 120) : "renderer unavailable" });
@@ -2629,19 +2412,23 @@ export async function discoverListings(
     if (/\/graphql$/i.test(finalUrl.pathname)) html = applyPublishedListingUrls(html, listingUrlTemplates.get(finalUrl.origin) ?? null);
     let found = excluded ? [] : extractListingsFromPage(html, finalUrl, observation.attempts);
     if (found.length) observation.resolution = "known-pattern";
-    const hint = !broad && !found.length ? dynamicInterfaceHint(html) : undefined;
+    const activeFound = found.filter(item => !historicalListing(item));
+    if (found.length && !activeFound.length) stages.push("historical_inventory_ignored");
+    const hint = !broad && !activeFound.length ? dynamicInterfaceHint(html) : undefined;
     if (hint) { interfaces.add(hint); inventoryUrls.add(finalUrl.toString()); }
     if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
       (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
       aiNormalizations++;
       try { found = await options.normalizePage(html, finalUrl); if (found.length) observation.resolution = "external-normalizer"; } catch { /* deterministic navigation continues */ }
     }
-    if (hint && !found.length && !collectInventoryFragments(html,finalUrl).length && !kestrelInventoryRequests(html).length) {
+    const activeFragments = collectInventoryFragments(html, finalUrl).filter(url => !historicalInventoryUrl(url));
+    if (hint && !activeFound.length && !activeFragments.length && !kestrelInventoryRequests(html).length && !renderedChallenges.has(finalUrl.origin)) {
       let renderedNetwork: { url: string; html: string }[] = pendingRenderNetwork ?? [];
       if ((!pendingRenderNetwork && options?.renderPage && Date.now() < deadline && rendersUsed < maxRenders) || pendingRenderNetwork) {
         if (!pendingRenderNetwork) {
           rendersUsed++;
           stages.push("browser_render_escalated");
+          stages.push("browser:incomplete-shell");
         }
         try {
           if (!pendingRenderNetwork && options?.renderPage) {
@@ -2664,23 +2451,26 @@ export async function discoverListings(
           for (const entry of renderedNetwork) {
             let entryUrl: URL;
             try { entryUrl = new URL(entry.url); } catch { continue; }
-            if (!entry.html || !sameSite(entryUrl, finalUrl)) continue;
+            if (!entry.html || !(sameSite(entryUrl, finalUrl) || MLS_INVENTORY_HOST.test(entryUrl.hostname))) continue;
             const networkObservation = describeListingArchitecture(entry.html, entryUrl, "rendered-dom");
             const rows = extractListingsFromPage(entry.html, entryUrl, networkObservation.attempts);
-            if (rows.length) {
+            const activeRows = rows.filter(item => !historicalListing(item));
+            if (rows.length && !activeRows.length) {
+              stages.push("historical_inventory_ignored");
+            } else if (activeRows.length) {
               networkObservation.resolution = "known-pattern";
               compatibilityPages.push(networkObservation);
               let scoped: DiscoveredListing[] = [];
               try { scoped = completeSearchGroups(JSON.parse(entry.html), entryUrl); } catch { scoped = []; }
-              if (scoped.length && scoped.length === rows.length) {
+              if (scoped.length && scoped.length === rows.length && activeRows.length === rows.length) {
                 found = rows;
                 expectedCount = Math.max(expectedCount, scoped.length);
                 apiCount = true;
-              } else found.push(...rows);
+              } else found.push(...activeRows);
               visitedSet.add(entry.url);
               stages.push("api_discovered");
               observation.resolution = "known-pattern";
-            } else if (/\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
+            } else if (!historicalInventoryUrl(entry.url) && /\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
               queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString() });
               stages.push("api_discovered");
             }
@@ -2700,7 +2490,7 @@ export async function discoverListings(
         if (observation.resolution !== "known-pattern") observation.resolution = "navigation-only";
       }
     }
-    if (found.length && next.fragment && next.parent) {
+    if (found.some(item => !historicalListing(item)) && next.fragment && next.parent) {
       // Once the shell's inventory loads, discard its toolbar/search alternatives.
       for (let i = queue.length - 1; i >= 0; i--) {
         if (queue[i].parent === next.parent && !queue[i].fragment) queue.splice(i, 1);
@@ -2719,169 +2509,32 @@ export async function discoverListings(
     }
     if (found.length || MLS_INVENTORY_HOST.test(finalUrl.hostname) || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
     const publishedQueries = broad ? [] : publishedCollectionRequests(html, finalUrl);
-    const criteriaDecision = broad ? null : realGeeksCriteriaDecision(html, finalUrl);
-    if (criteriaDecision) {
-      const target = new URL(`/search/results/${criteriaDecision.searchId}/`, finalUrl.origin).toString();
-      for (let i = queue.length - 1; i >= 0; i--) {
-        try {
-          if (!queue[i].ownerScoped && realGeeksSearchId(new URL(queue[i].url)) === criteriaDecision.searchId) queue.splice(i, 1);
-        } catch { /* ignore a malformed queued url */ }
-      }
-      if (criteriaDecision.scoped) {
-        if (!visitedSet.has(target) && !queue.some(item => item.url === target)) {
-          queue.push({ url: target, depth: next.depth, priority: 215, parent: finalUrl.toString(), ownerScoped: true });
-        }
-        stages.push("collection_scoped");
-      } else {
-        rejectedRealGeeksMarket = true;
-        if (!obstacles.some(row => row.code === "scope_not_established" && row.url === target)) {
-          obstacles.push({ code: "scope_not_established", url: target, detail: "Real Geeks saved search has no agent, office, or team id. A market search is not the site owner's inventory." });
-        }
-        stages.push("scope_not_established");
-      }
-      continue;
-    }
-    const realGeeksSearch = realGeeksSearchId(finalUrl);
-    if (!broad && realGeeksSearch && !next.ownerScoped && (realGeeksDocument(html) || /class=["'][^"']*\bproperty\b[^"']*\bresults\b/i.test(html))) {
-      rejectedRealGeeksMarket = true;
-      if (visited[visited.length - 1] === normalized) visited.pop();
-      visitedSet.delete(normalized);
-      visitedSet.delete(finalUrl.toString());
-      const criteria = realGeeksCriteriaUrl(finalUrl, realGeeksSearch);
-      if (!visitedSet.has(criteria) && !queue.some(item => item.url === criteria)) {
-        queue.push({ url: criteria, depth: next.depth, priority: 240, fragment: true, parent: finalUrl.toString() });
-      }
-      continue;
-    }
-    if (!broad && sierraUnscopedFeed(html, finalUrl, found)) {
-      unscopedMarket = true;
-      if (found.length) {
-        omissionTotal += found.length;
-        omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + found.length);
-      }
-      if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
-        obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "Sierra search is an MLS-region feed. A site id, agent-site id, or saved search id is not the listing agent or office." });
-      }
-      stages.push("scope_not_established");
-      observation.resolution = "excluded-market";
-      if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
-      continue;
-    }
-    if (!broad && placesterUnscopedFeed(html, finalUrl)) {
-      unscopedMarket = true;
-      if (found.length) {
-        omissionTotal += found.length;
-        omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + found.length);
-      }
-      if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
-        obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "Placester query has no office or agent id. A ZIP, county, IDX origin, or curated featured set is not the brokerage inventory." });
-      }
-      stages.push("scope_not_established");
-      observation.resolution = "excluded-market";
-      if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
-      continue;
-    }
-    const placesterOwners = !broad && placesterDocument(html) ? placesterOwnerFilters(html) : [];
-    if (placesterOwners.length) {
-      const tiles = listingsFromPlacesterTiles(html, finalUrl);
-      if (tiles.length) found = tiles;
-      stages.push("collection_scoped");
-      if (!found.length && !obstacles.some(row => row.code === "requires_rendering" && row.url === finalUrl.toString())) {
-        obstacles.push({ code: "requires_rendering", url: finalUrl.toString(), detail: "Placester office or agent filter is published, but this document has no listing rows and no collection total." });
-        issues.push({ code: "requires-rendering", url: finalUrl.toString() });
-        inventoryUrls.add(finalUrl.toString());
-      }
-    }
-    const idxOwners = !broad && (idxOwnerParams(finalUrl).length > 0 || !!idxShowcaseOwner(html));
-    if (!broad && !idxOwners && idxBrokerSurface(html, finalUrl)) {
-      const idxRows = found.filter(item => idxCollectedUrl(item.sourceUrl));
-      if (idxRows.length) {
-        omissionTotal += idxRows.length;
-        omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + idxRows.length);
-        found = found.filter(item => !idxCollectedUrl(item.sourceUrl));
-      }
-      const showcasePending = collectInventoryFragments(html, finalUrl).some(url => /\/idx\/customshowcasejs\.php$/i.test(new URL(url).pathname) && url !== finalUrl.toString());
-      const scopeLead = publishedQueries.length > 0 || chimeListingSearchRequests(html, finalUrl).length > 0 || collectInventoryLinks(html, finalUrl, 8).some(link => {
-        try {
-          const linked = new URL(link.url);
-          return hasOwnerScope(linked, "") || idxOwnerParams(linked).length > 0 || /\/(?:office|agent)_listing_categories\//i.test(linked.pathname);
-        } catch { return false; }
-      });
-      const collectionDocument = /\/idx\/(?:customshowcasejs\.php|results(?:\/|$)|widgets\/)/i.test(finalUrl.pathname) || (/(?:^|\.)idxbroker\.com$/i.test(finalUrl.hostname) && !/\/idx\/details\/listing\//i.test(finalUrl.pathname));
-      const marketShell = collectionDocument || idxRows.length > 0 || /customshowcasejs\.php|idxwidgetsrc-|\/idx\/results\/listings|\/idx\/widgets\//i.test(html);
-      if (!showcasePending && !scopeLead && marketShell && !found.length) {
-        unscopedMarket = true;
-        if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
-          obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "IDX Broker feed has no listing agent or office id. A widget id, MLS board, city, or price bucket is not the brokerage inventory." });
-        }
-        stages.push("scope_not_established");
-        observation.resolution = "excluded-market";
-        if (idxRows.length || collectionDocument || PATH_INVENTORY.test(finalUrl.pathname) || /\/idx\/results\/listings/i.test(html)) inventoryUrls.add(finalUrl.toString());
-        continue;
-      }
-    }
-    if (!broad && idxOwnerParams(finalUrl).length) {
-      const published = html.match(/<span\b[^>]*class=["'][^"']*\bIDX-resultsCount\b[^"']*["'][^>]*>\s*([\d,]+)\s*</i)?.[1];
-      const total = Number((published ?? "").replace(/,/g, ""));
-      if (Number.isFinite(total) && total > 0) expectedCount = Math.max(expectedCount, total);
-      stages.push("collection_scoped");
-    }
-    const unscopedMlsArchive = !broad && found.length >= 2 && found.every(item => mlsBoardPermalink(item.sourceUrl)) && !hasOwnerScope(finalUrl, html);
-    if (unscopedMlsArchive) {
-      unscopedMarket = true;
-      omissionTotal += found.length;
-      omissionReasons.set("excluded_unscoped_market", (omissionReasons.get("excluded_unscoped_market") ?? 0) + found.length);
-      if (!obstacles.some(row => row.code === "scope_not_established" && row.url === finalUrl.toString())) {
-        obstacles.push({ code: "scope_not_established", url: finalUrl.toString(), detail: "No office, agent, team, or brokerage constraint. MLS-board pages are not the site owner's inventory." });
-      }
-      stages.push("scope_not_established");
-      if (found.length || PATH_INVENTORY.test(finalUrl.pathname)) inventoryUrls.add(finalUrl.toString());
-      for (const match of html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
-          const label = stripTags(match[2]);
-          const href = absolutize(decodeEntities(match[1]), finalUrl);
-          if (!href) continue;
-          let linked: URL;
-          try { linked = new URL(href); } catch { continue; }
-          const own = /\b(?:our|my)\s+(?:active\s+)?(?:listings|properties|homes)\b/i.test(label) || /\/(?:our|my)-(?:listings|properties|homes)\/?$/i.test(linked.pathname);
-          if (!own || !sameSite(linked, finalUrl)) continue;
-          const target = linked.toString();
-          if (!visitedSet.has(target) && !queue.some(item => item.url === target)) queue.push({ url: target, depth: next.depth + 1, priority: 160, parent: finalUrl.toString() });
-          break;
-      }
-      continue;
-    }
     // A page that publishes a scoped, counted query is not itself the inventory. Shell cards can be sold, nearby, or unscoped.
-    const held: DiscoveredListing[] = [];
-    for (const item of found) {
-      if (publishedQueries.length) break;
-      if (next.depth === 0 && found.length === 1 && !item.price && item.sourceUrl === finalUrl.toString()) continue;
-      if (listings.length >= listingCeiling) { held.push(item); continue; }
-      pushListing(item);
+    // Active rows fill the cap first. Historical rows stay for accounting and are not the collection.
+    if (!publishedQueries.length) {
+      const ranked = [...found.filter(item => !historicalListing(item)), ...found.filter(item => historicalListing(item))];
+      for (const item of ranked) {
+        if (next.depth === 0 && found.length === 1 && !item.price && item.sourceUrl === finalUrl.toString()) continue;
+        pushListing(item);
+        if (listings.length >= maxListings) break;
+      }
     }
 
-    if (listings.length >= listingCeiling) {
-      const boundary = broad ? null : inspectCollectionDocument(html, finalUrl, found);
-      const nextUrls = boundary?.continuations ?? [];
-      for (const url of nextUrls) pendingContinuations.add(url);
-      if (boundary?.publishedCount && boundary.publishedCount > listings.length) expectedCount = Math.max(expectedCount, boundary.publishedCount);
-      const budgetRemains = () => Date.now() < deadline && visited.length < maxPages;
-      while (held.length && listings.length >= listingCeiling && budgetRemains()) {
-        listingCeiling += maxListings;
-        while (held.length && listings.length < listingCeiling) pushListing(held.shift()!);
+    if (listings.length >= maxListings) {
+      hitSafetyCap = true;
+      if (!broad) {
+        const boundary = inspectCollectionDocument(html, finalUrl, found);
+        if (boundary.open || boundary.continuations.length) openContinuation = true;
+        for (const url of boundary.continuations) pendingContinuations.add(url);
+        if (boundary.publishedCount && boundary.publishedCount > listings.length) expectedCount = Math.max(expectedCount, boundary.publishedCount);
       }
-      if (held.length === 0 && nextUrls.length > 0 && budgetRemains()) {
-        if (listings.length >= listingCeiling) listingCeiling += maxListings;
-        hitSafetyCap = false;
-      } else if (held.length > 0 || nextUrls.length > 0 || boundary?.open) {
-        hitSafetyCap = true;
-        openContinuation = true;
-      }
+      continue;
     }
-    if (hitSafetyCap && listings.length >= listingCeiling) continue;
     if (!broad) {
       for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString()}); }
       for (const url of collectInventoryFragments(html, finalUrl)) {
-        if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
+        if (historicalInventoryUrl(url) || visitedSet.has(url) || queue.some(q => q.url === url)) continue;
+        queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
       }
       for (const url of publishedQueries) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) {
@@ -2899,20 +2552,16 @@ export async function discoverListings(
             expectedCount = Math.max(expectedCount, boundary.publishedCount);
             if (boundary.publishedKind === "api") apiCount = true;
           }
-          // An office or agent id scopes the widget. Without a published total, another page is not a proven boundary.
-          const placesterOpenWithoutTotal = placesterOwners.length > 0 && !boundary.publishedCount;
-          if (!placesterOpenWithoutTotal && boundary.continuations.length) { sawContinuation = true; continuationMechanism = continuationMechanism || boundary.mechanism; }
-          if (!placesterOpenWithoutTotal && boundary.open) openContinuation = true;
+          if (boundary.continuations.length) { sawContinuation = true; continuationMechanism = continuationMechanism || boundary.mechanism; }
+          if (boundary.open) openContinuation = true;
           if (boundary.repeatedCursor) openContinuation = true;
           if (!boundary.open && !boundary.continuations.length && boundary.structuredClosed) structuredPages++;
           if (!boundary.open && !boundary.continuations.length && boundary.singlePageConfirmed) singlePagePages++;
           if (!boundary.open && boundary.cursorTerminal) cursorTerminalPages++;
           if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
-          if (!placesterOpenWithoutTotal) {
-            for (const url of boundary.continuations) {
-              if (url === finalUrl.toString()) { openContinuation = true; continue; }
-              if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, ownerScoped: next.ownerScoped || placesterOwners.length > 0 });
-            }
+          for (const url of boundary.continuations) {
+            if (url === finalUrl.toString()) { openContinuation = true; continue; }
+            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true });
           }
         }
         // Flexmls uses public paged fragments without a Next anchor.
@@ -2943,7 +2592,7 @@ export async function discoverListings(
     }
     if (next.depth >= maxDepth) continue;
 
-    const ctas = placesterOwners.length || found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
+    const ctas = found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
       if (queue.some((q) => q.url === cta.url)) continue;
@@ -2952,7 +2601,7 @@ export async function discoverListings(
       queue.push({ url: cta.url, depth: next.depth + 1, priority: cta.score, broad, parent: finalUrl.toString() });
     }
 
-    if (!placesterOwners.length && !listings.length && !queue.length && options?.selectLinks && aiRoutes < 2 && Date.now() < deadline) {
+    if (!listings.length && !queue.length && options?.selectLinks && aiRoutes < 2 && Date.now() < deadline) {
       const candidates = navigationCandidates(html, finalUrl).filter(c => !visitedSet.has(c.url));
       if (candidates.length) {
         aiRoutes++;
@@ -3036,18 +2685,11 @@ export async function discoverListings(
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
   if (queue.some(item => item.continuation)) openContinuation = true;
   for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
-  for (const url of [...pendingContinuations]) if (visitedSet.has(url)) pendingContinuations.delete(url);
   unresolvedPagination = unresolvedPagination || openContinuation;
-  if (rejectedRealGeeksMarket && !listings.length) unscopedMarket = true;
-  if (unscopedMarket && !listings.length) {
-    pendingContinuations.clear();
-    openContinuation = false;
-    hitSafetyCap = false;
-  }
   const proving = new Set<string>();
   const sourceSeen = listings.length + omissionTotal;
   const countMismatch = expectedCount > 0 && expectedCount !== sourceSeen;
-  const boundaryBlocked = (!listings.length && !omissionTotal) || hitSafetyCap || queue.length > 0 || unresolvedPagination || limitedShowcase || countMismatch;
+  const boundaryBlocked = (!listings.length && !omissionTotal) || listings.length >= maxListings || queue.length > 0 || unresolvedPagination || limitedShowcase || countMismatch;
   if (!boundaryBlocked && expectedCount > 0 && expectedCount === listings.length) proving.add(apiCount ? "api_total_match" : "published_count_match");
   else if (!boundaryBlocked && expectedCount > 0 && expectedCount === sourceSeen) proving.add("published_collection_total_reconciled");
   if (!boundaryBlocked && sawContinuation && continuationRequests > 0 && continuationMechanism === "cursor") proving.add("cursor_exhausted");
@@ -3056,12 +2698,8 @@ export async function discoverListings(
   if (!boundaryBlocked && providerTerminalPages > 0 && collectionPages > 0 && providerTerminalPages >= collectionPages) proving.add("provider_terminal_state");
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && structuredPages === collectionPages) proving.add("structured_group_exhausted");
   if (!boundaryBlocked && !sawContinuation && collectionPages > 0 && singlePagePages === collectionPages) proving.add("single_page_collection_confirmed");
-  if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && !hitSafetyCap) proving.add("pagination_exhausted");
+  if (offsetQueryTotal > 0 && collectionRowsFetched >= offsetQueryTotal && continuationRequests > 0 && !openContinuation && !queue.length && listings.length > 0 && listings.length < maxListings) proving.add("pagination_exhausted");
   if (hitSafetyCap && listings.length >= maxListings && (openContinuation || pendingContinuations.size > 0 || expectedCount > listings.length)) proving.add("collection_limit_reached");
-  if (unscopedMarket && !listings.length) {
-    proving.clear();
-    proving.add("scope_not_established");
-  }
   const completenessEvidence = proving.size ? [...proving] : (listings.length ? ["collection_boundary_unknown"] : []);
   const inventoryShort = !!(listings.length && (boundaryBlocked || !proving.size));
   const blocked = !listings.length && (failed.length > 0 || issues.some(issue => issue.code === "requires-rendering") || obstacles.length > 0);
@@ -3078,9 +2716,7 @@ export async function discoverListings(
   const verificationPending = obstacles.filter(row => (row.code === "captcha_required" || row.code === "authentication_required" || row.code === "user_action_required") && row.url).map(row => row.url!);
   const continuationAvailable = inventoryStatus !== "inventory_complete" && pendingContinuations.size > 0 && (hitSafetyCap || Date.now() >= deadline || (openContinuation && listings.length >= maxListings));
   const resumePending = [...new Set([...verificationPending, ...pendingContinuations])].slice(0, 40);
-  const resumeObstacle = unscopedMarket && !listings.length
-    ? "scope_not_established"
-    : verificationPending.length
+  const resumeObstacle = verificationPending.length
     ? (obstacles.find(row => row.code === "captcha_required" || row.code === "authentication_required")?.code ?? obstacles[0]?.code)
     : (hitSafetyCap ? "collection_limit_reached" : "import_deadline");
   if (verificationPending.length) stages.push("verification_required");
@@ -3107,8 +2743,8 @@ export async function discoverListings(
     eligibleImportComplete: sourceCollectionExhausted,
   };
   return {
-    listings,
-    meta: { visited, hops, found: listings.length, maxDepth: maxDepthReached,
+    listings: listings.slice(0, maxListings),
+    meta: { visited, hops, found: Math.min(listings.length, maxListings), maxDepth: maxDepthReached,
       compatibility: { version: 1, pages: compatibilityPages },
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
@@ -3117,150 +2753,6 @@ export async function discoverListings(
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
       resume: (!listings.length || verificationPending.length || continuationAvailable) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : continuationAvailable ? "collection_continuation" : "discovery_blocked" } : undefined },
   };
-}
-
-const BATCH_OBSTACLE = new Set(["collection_limit_reached", "import_deadline"]);
-const HARD_OBSTACLE = new Set(["captcha_required", "authentication_required", "script_gate", "render_failed", "rate_limited"]);
-
-function accountMergedListings(listings: DiscoveredListing[], sourceTotal: number | undefined, exhausted: boolean): NonNullable<ListingDiscoveryMeta["accounting"]> {
-  const exclusionCounts = new Map<string, number>();
-  let eligibleTotal = 0;
-  for (const item of listings) {
-    const reason = exclusionReason(item);
-    if (reason) exclusionCounts.set(reason, (exclusionCounts.get(reason) ?? 0) + 1);
-    else eligibleTotal++;
-  }
-  const exclusions = [...exclusionCounts.entries()].map(([reason, count]) => ({ reason, count })).sort((a, b) => a.reason.localeCompare(b.reason));
-  return {
-    sourceTotal, sourceSeen: listings.length, sourceClassified: listings.length, sourceCollectionExhausted: exhausted,
-    excludedTotal: exclusions.reduce((sum, row) => sum + row.count, 0), exclusions,
-    eligibleTotal, importedEligible: eligibleTotal, eligibleImportComplete: exhausted,
-  };
-}
-
-function mergeCollectionPasses(
-  earlier: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta },
-  later: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta },
-): { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } {
-  const listings: DiscoveredListing[] = [];
-  const absorb = (item: DiscoveredListing) => {
-    const index = listings.findIndex(row => listingIdentityKey(row) === listingIdentityKey(item));
-    if (index < 0) { listings.push({ ...item, images: [...item.images] }); return; }
-    const old = listings[index];
-    const images = [...new Set([...item.images, ...old.images])].slice(0, 500);
-    const preferIncoming = (!!item.detailsComplete && !old.detailsComplete) || item.description.length > old.description.length;
-    listings[index] = preferIncoming
-      ? { ...old, ...item, images, image: images[0] || item.image || old.image }
-      : { ...item, ...old, images, image: images[0] || old.image || item.image };
-  };
-  for (const item of earlier.listings) absorb(item);
-  for (const item of later.listings) absorb(item);
-  const complete = later.meta.inventoryStatus === "inventory_complete" && !later.meta.resume;
-  const inventoryStatus = complete ? "inventory_complete" as const : listings.length ? "inventory_partial" as const : (later.meta.inventoryStatus ?? "inventory_empty");
-  const expectedCount = Math.max(earlier.meta.expectedCount ?? 0, later.meta.expectedCount ?? 0) || undefined;
-  const sourceTotal = Math.max(earlier.meta.accounting?.sourceTotal ?? 0, later.meta.accounting?.sourceTotal ?? 0) || expectedCount;
-  return {
-    listings,
-    meta: {
-      ...later.meta,
-      visited: [...new Set([...(earlier.meta.visited ?? []), ...(later.meta.visited ?? [])])],
-      hops: (earlier.meta.hops ?? 0) + (later.meta.hops ?? 0),
-      found: listings.length,
-      maxDepth: Math.max(earlier.meta.maxDepth ?? 0, later.meta.maxDepth ?? 0),
-      expectedCount, inventoryStatus,
-      outcome: complete ? "found" : listings.length ? "partial" : later.meta.outcome,
-      completenessEvidence: complete ? (later.meta.completenessEvidence ?? []) : (later.meta.completenessEvidence?.length ? later.meta.completenessEvidence : ["collection_boundary_unknown"]),
-      accounting: accountMergedListings(listings, sourceTotal, complete),
-      resume: complete ? undefined : later.meta.resume ?? earlier.meta.resume,
-      stages: [...new Set([...(earlier.meta.stages ?? []), ...(later.meta.stages ?? [])])],
-      obstacles: [...(earlier.meta.obstacles ?? []), ...(later.meta.obstacles ?? [])],
-      failed: [...new Set([...(earlier.meta.failed ?? []), ...(later.meta.failed ?? [])])],
-      failureDetails: [...(earlier.meta.failureDetails ?? []), ...(later.meta.failureDetails ?? [])],
-      inventoryUrls: [...new Set([...(earlier.meta.inventoryUrls ?? []), ...(later.meta.inventoryUrls ?? [])])],
-      interfaces: [...new Set([...(earlier.meta.interfaces ?? []), ...(later.meta.interfaces ?? [])])],
-      collectionBoundary: {
-        ...(later.meta.collectionBoundary ?? {}),
-        continuationAvailable: complete ? false : later.meta.collectionBoundary?.continuationAvailable ?? earlier.meta.collectionBoundary?.continuationAvailable,
-        continuationRequests: (earlier.meta.collectionBoundary?.continuationRequests ?? 0) + (later.meta.collectionBoundary?.continuationRequests ?? 0),
-      },
-    },
-  };
-}
-
-/** Keep walking continuation pages after an internal batch or deadline. Captcha, auth, and render failures stop. */
-export async function discoverListingsAcrossBatches(
-  seedUris: string[],
-  fetchHtml: FetchHtml,
-  options?: Parameters<typeof discoverListings>[2] & { maxBatches?: number },
-): Promise<{ listings: DiscoveredListing[]; meta: ListingDiscoveryMeta }> {
-  const maxBatches = options?.maxBatches ?? 8;
-  const wall = Date.now() + (options?.maxDurationMs ?? 90000);
-  const attempted = new Set<string>();
-  let seeds = [...new Set(seedUris.filter(url => typeof url === "string" && url.startsWith("https://")))].slice(0, 8);
-  let merged: { listings: DiscoveredListing[]; meta: ListingDiscoveryMeta } | null = options?.priorListings?.length ? {
-    listings: options.priorListings.map(item => ({ ...item, images: [...(item.images ?? [])] })),
-    meta: {
-      visited: [], hops: 0, found: options.priorListings.length, maxDepth: 0,
-      inventoryStatus: "inventory_partial", outcome: "partial",
-      completenessEvidence: ["collection_boundary_unknown"], stages: ["collection_continuation"],
-      accounting: accountMergedListings(options.priorListings, undefined, false),
-    },
-  } : null;
-  for (let batch = 0; batch < maxBatches && seeds.length && Date.now() < wall; batch++) {
-    const fresh = seeds.filter(url => !attempted.has(url));
-    if (!fresh.length) break;
-    for (const url of fresh) attempted.add(url);
-    const remaining = wall - Date.now();
-    const pass = await discoverListings(fresh, fetchHtml, {
-      ...options,
-      priorListings: undefined,
-      continuationSeeds: batch > 0 || options?.continuationSeeds === true,
-      enrichAll: false,
-      maxDetailPages: 0,
-      maxDurationMs: Math.max(1000, Math.min(15000, remaining)),
-    });
-    merged = merged ? mergeCollectionPasses(merged, pass) : pass;
-    const resume = pass.meta.resume;
-    const hard = (pass.meta.obstacles ?? []).some(row => HARD_OBSTACLE.has(row.code) && row.detail !== "retrying");
-    const continuable = !hard && resume?.stage === "collection_continuation" && BATCH_OBSTACLE.has(resume.obstacle ?? "");
-    if (!continuable) break;
-    seeds = [...new Set(resume?.pending ?? [])].filter(url => url.startsWith("https://") && !attempted.has(url)).slice(0, 8);
-  }
-  if (!merged) return discoverListings(seedUris, fetchHtml, options);
-  const priorKeys = new Set((options?.priorListings ?? []).map(item => listingIdentityKey(item)));
-  const continuing = priorKeys.size > 0;
-  const enrichTargets = merged.listings.filter(item => !item.detailsComplete && (!continuing || !priorKeys.has(listingIdentityKey(item)))).slice(0, continuing ? 24 : 80);
-  const openResume = merged.meta.resume;
-  const stillPaging = openResume?.stage === "collection_continuation" && BATCH_OBSTACLE.has(openResume.obstacle ?? "");
-  if (options?.enrichAll && !stillPaging && enrichTargets.length && merged.meta.inventoryStatus !== "inventory_blocked" && Date.now() < wall - 1000) {
-    const enriched = await discoverListings([], fetchHtml, {
-      ...options,
-      priorListings: enrichTargets,
-      continuationSeeds: false,
-      enrichAll: true,
-      maxPages: 0,
-      maxDurationMs: Math.max(1000, Math.min(continuing ? 8000 : 15000, wall - Date.now())),
-    });
-    const updates = new Map(enriched.listings.map(item => [listingIdentityKey(item), item]));
-    const kept = merged.listings.map(item => updates.get(listingIdentityKey(item)) ?? item);
-    const enrichmentStages = (enriched.meta.stages ?? []).filter(stage => /enrichment|rate_limit/.test(stage));
-    merged = {
-      listings: kept,
-      meta: {
-        ...merged.meta,
-        found: kept.length,
-        enrichment: enriched.meta.enrichment,
-        stages: [...new Set([...(merged.meta.stages ?? []), ...enrichmentStages])],
-        obstacles: [...(merged.meta.obstacles ?? []), ...(enriched.meta.obstacles ?? [])],
-        failureDetails: [...(merged.meta.failureDetails ?? []), ...(enriched.meta.failureDetails ?? [])],
-        issues: [
-          ...(merged.meta.issues ?? []).filter(issue => issue.code !== "missing-photos"),
-          ...(enriched.meta.issues ?? []).filter(issue => issue.code === "missing-photos"),
-        ],
-      },
-    };
-  }
-  return merged;
 }
 
 const scrubSecret = (text: string, secret: string) => secret.length >= 8 ? text.split(secret).join("[session]") : text;
@@ -3373,7 +2865,11 @@ export function createListingRenderer(
   const maxRenders = limits?.maxRenders ?? 4;
   const timeoutMs = limits?.timeoutMs ?? 30000;
   const lanes = new Map<string, Promise<unknown>>();
+  const cache = new Map<string, { html: string; finalUrl: URL; network?: { url: string; html: string }[] }>();
   return async (uri, options) => {
+    const key = uri + "\n" + (options?.cookie ?? "");
+    const cached = cache.get(key);
+    if (cached) return cached;
     if (used >= maxRenders) throw new Error("Per-import browser budget reached");
     used++;
     let host = "";
@@ -3402,7 +2898,9 @@ export function createListingRenderer(
           return [{ url: url.toString(), html: String(entry.html ?? "").slice(0, RENDER_HTML_CAP) }];
         } catch { return []; }
       });
-      return { html, finalUrl, network };
+      const result = { html, finalUrl, network };
+      cache.set(key, result);
+      return result;
     } finally {
       clearTimeout(timeout);
       release();

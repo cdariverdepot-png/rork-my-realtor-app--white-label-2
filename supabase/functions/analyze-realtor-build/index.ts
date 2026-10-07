@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { publicListingRequestHeaders, decodePublicListingResponse, discoverListingsAcrossBatches, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
+import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
-import { extractWebsiteDesign, websiteStylesheetUrls, type WebsiteDesign } from "./websiteDesign.ts";
+import { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, type WebsiteDesign, type WebsiteSection } from "./websiteDesign.ts";
 
 type Source = {
   id: string;
@@ -158,7 +158,11 @@ async function fetchHtml(uri: string, options?: { fragment?: boolean; activation
     let offset = 0;
     for (const chunk of chunks) { joined.set(chunk, offset); offset += chunk.byteLength; }
     const html = await decodePublicListingResponse(new TextDecoder().decode(joined), contentType, current, options);
-    if (!response.ok && !isRobotChallenge(html) && !isPublishedScriptGate(html)) throw new Error(`The page returned ${response.status}.`);
+    if (!response.ok && !isRobotChallenge(html) && !isPublishedScriptGate(html) && !readableForbidden(html, response.status)) throw new Error(`The page returned ${response.status}.`);
+    if (isPublishedScriptGate(html) && !options?.cookie) {
+      const solved = await publishedScriptGateCookie(html);
+      if (solved) return fetchHtml(current.toString(), { ...options, cookie: solved });
+    }
     return { html, finalUrl: current };
   }
   throw new Error("The page redirected too many times.");
@@ -217,17 +221,9 @@ function pageDetails(html: string, base: URL) {
   if (phones.size) lines.push(`Phone links: ${[...phones].slice(0, 5).join(", ")}`);
   if (emails.size) lines.push(`Email links: ${[...emails].slice(0, 5).join(", ")}`);
   if (socials.size) lines.push(`Profile links: ${[...socials].slice(0, 10).join(", ")}`);
-  const images: string[] = [];
-  for (const tag of html.match(/<img\b[^>]*>/gi) ?? []) {
-    const src = attr(tag, "src") || attr(tag, "data-src");
-    const alt = attr(tag, "alt");
-    if (!src || /\.svg(\?|$)|logo|icon|sprite/i.test(src) || EXPLICIT.test(`${src} ${alt}`)) continue;
-    try {
-      const abs = new URL(src, base);
-      if (abs.protocol === "https:") images.push(`${abs.toString()}${alt ? ` (alt: ${alt.slice(0, 80)})` : ""}`);
-    } catch {}
-  }
-  if (images.length) lines.push(`Images: ${images.slice(0, 15).join(" | ")}`);
+  const images = assignPageImages(describePageImages(html, '', raw => websiteAsset(raw, base.toString()))).all
+    .filter(image => image.role !== 'icon' && image.role !== 'background' && image.destination !== 'omit');
+  if (images.length) lines.push(`Images: ${images.slice(0, 12).map(image => `${image.selectedUrl} (${image.role}${image.width && image.height ? `, ${image.width}x${image.height}` : ''})`).join(' | ')}`);
   return { details: lines.join("\n"), subpages: [...subpages].slice(0, 2) };
 }
 
@@ -254,15 +250,42 @@ function clean(value: string, max: number): string {
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").replace(/[ \t]+/g, " ").trim().slice(0, max);
 }
 
-/** Home page plus up to two about/contact pages on the same site. */
-async function readPage(uri: string, capture?: (html: string, url: string) => Promise<void>): Promise<string> {
-  const { html, finalUrl } = await fetchHtml(uri);
+/** A 403 that still delivered the site, not a block page, can be read. */
+function readableForbidden(html: string, status: number): boolean {
+  if (status !== 403) return false;
+  const head = html.slice(0, 8000);
+  if (/attention required|you have been blocked|sorry, you have been blocked|just a moment|access denied/i.test(head)) return false;
+  return /<h1\b/i.test(html);
+}
+/** Managed interstitials may clear in a normal browser. Captcha and login walls do not. */
+function renderableInterstitial(html: string): boolean {
+  const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim() ?? "";
+  if (/^robot validate$/i.test(title)) return false;
+  if (/^(?:just a moment\.\.\.|attention required|client challenge)\b/i.test(title)) return true;
+  return /<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(html.slice(0, 12000));
+}
+type PageRenderer = (uri: string, options?: { cookie?: string }) => Promise<{ html: string; finalUrl: URL }>;
+async function readPage(uri: string, capture?: (html: string, url: string) => Promise<void>, renderPage?: PageRenderer): Promise<string> {
+  let { html, finalUrl } = await fetchHtml(uri);
+  if (isRobotChallenge(html) && renderPage && renderableInterstitial(html)) {
+    try {
+      const rendered = await renderPage(finalUrl.toString());
+      if (rendered?.html && rendered.finalUrl.origin === finalUrl.origin && !isRobotChallenge(rendered.html)) {
+        html = rendered.html;
+        finalUrl = rendered.finalUrl;
+      }
+    } catch { /* a failed render stays a block, not invented copy */ }
+  }
+  if (isRobotChallenge(html)) {
+    return `PAGE DETAILS (${finalUrl}):\nAutomated access was blocked. This response is not the website, and no verified profile or listing text was acquired.`;
+  }
   if (capture) await capture(html, finalUrl.toString());
   const { details, subpages } = pageDetails(html, finalUrl);
   const parts = [`PAGE DETAILS (${finalUrl}):\n${details}`, `PAGE TEXT:\n${decodeEntities(pageText(html)).slice(0, 30000)}`];
   for (const sub of subpages) {
     try {
       const page = await fetchHtml(sub);
+      if (isRobotChallenge(page.html)) continue;
       const extra = pageDetails(page.html, page.finalUrl).details;
       parts.push(`LINKED PAGE (${page.finalUrl}):\n${extra}\n${decodeEntities(pageText(page.html)).slice(0, 8000)}`);
     } catch { /* a missing about page shouldn't fail the whole source */ }
@@ -270,12 +293,60 @@ async function readPage(uri: string, capture?: (html: string, url: string) => Pr
   return parts.join("\n\n").slice(0, 50000);
 }
 
-async function analyzeWebsiteAppearance(html: string, url: string): Promise<WebsiteDesign> {
-  const results = await Promise.allSettled(websiteStylesheetUrls(html, url).map(async cssUrl => {
+async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: PageRenderer): Promise<WebsiteDesign> {
+  let currentHtml = html;
+  let currentUrl = url;
+  const preliminary = extractWebsiteDesign(currentHtml, currentUrl);
+  const reason = websiteNeedsBrowser(currentHtml, preliminary);
+  if (renderPage && (reason === "client-shell-without-prose" || reason === "access-interstitial")) {
+    try {
+      const rendered = await renderPage(currentUrl);
+      const sameOrigin = rendered?.finalUrl?.origin === new URL(currentUrl).origin;
+      if (rendered?.html && sameOrigin && !isRobotChallenge(rendered.html) && websiteNeedsBrowser(rendered.html, { heroTitle: "", sections: [] }) !== "access-interstitial") {
+        currentHtml = rendered.html;
+        currentUrl = rendered.finalUrl.toString();
+      }
+    } catch { /* the static document stands */ }
+  }
+  const results = await Promise.allSettled(websiteStylesheetUrls(currentHtml, currentUrl).map(async cssUrl => {
     const page = await fetchHtml(cssUrl, { stylesheet: true });
     return { url: page.finalUrl.toString(), css: page.html.slice(0, 500_000) };
   }));
-  return extractWebsiteDesign(html, url, results.flatMap(r => r.status === 'fulfilled' ? [r.value] : []));
+  const design = extractWebsiteDesign(currentHtml, currentUrl, results.flatMap(r => r.status === 'fulfilled' ? [r.value] : []));
+  const linked: WebsiteSection[] = [];
+  let followedRender = false;
+  for (const link of websiteContentLinks(currentHtml, currentUrl)) {
+    try {
+      let page = await fetchHtml(link.url);
+      if (renderPage && !followedRender && websiteNeedsBrowser(page.html, { heroTitle: "present", sections: [] }) === "access-interstitial") {
+        followedRender = true;
+        try {
+          const rendered = await renderPage(page.finalUrl.toString());
+          if (rendered?.html && rendered.finalUrl.origin === page.finalUrl.origin && !isRobotChallenge(rendered.html) && websiteNeedsBrowser(rendered.html, { heroTitle: "", sections: [] }) !== "access-interstitial") {
+            page = { html: rendered.html, finalUrl: rendered.finalUrl };
+          }
+        } catch { /* keep the blocked link out of the app */ }
+      }
+      if (isRobotChallenge(page.html) || websiteNeedsBrowser(page.html, { heroTitle: "", sections: [] }) === "access-interstitial") continue;
+      const inner = extractWebsiteDesign(page.html, page.finalUrl.toString());
+      const ranked = inner.sections
+        .map(section => ({ ...section, ...classifyWebsiteSection(section.title, section.body) }))
+        .filter(section => section.destination === 'unique' && section.body.trim().length >= 80)
+        .filter(section => section.intent === link.intent || section.intent === 'content');
+      const matched = ranked.find(section => section.intent === link.intent) ?? ranked.find(section => section.intent === 'content');
+      const body = matched?.body?.trim() ?? '';
+      if (!body || !matched) continue;
+      const genericTitle = /^(?:explore more|learn more|read more|view more|see more|click here|more information|about|about the area|write (?:a |us )?recommendation(?: for me)?|leave a review|submit a review)$/i.test(matched.title);
+      linked.push({
+        kind: link.intent === 'area' ? 'content' : link.intent === 'profile' ? 'about' : link.intent === 'services' ? 'services' : link.intent === 'testimonials' ? 'testimonials' : 'content',
+        title: genericTitle ? link.title : matched.title,
+        body: body.slice(0, 900),
+        intent: link.intent === 'content' ? matched.intent : link.intent,
+        destination: 'unique',
+      });
+    } catch { /* a missing about page should not fail the design */ }
+  }
+  return { ...design, sections: composeWebsiteSections([...linked, ...design.sections]) };
 }
 
 function encode(bytes: Uint8Array): string {
@@ -360,6 +431,7 @@ function validate(value: any, ids: Set<string>, imageIds: Set<string>) {
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (request.method !== "POST") return reply({ error: "POST required" }, 405);
+  const renderPage = productionRenderPage();
   const input = await request.json().catch(() => ({}));
   const url = Deno.env.get("SUPABASE_URL");
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -374,27 +446,23 @@ Deno.serve(async (request) => {
     return reply({ error: "A verified realtor account is required." }, 401);
   }
   const userId = auth.user.id;
-  const continuingListings = input?.mode === "discover-listings"
-    && !!input.resume && typeof input.resume === "object"
-    && Array.isArray(input.resume.pending)
-    && input.resume.pending.some((item: unknown) => typeof item === "string" && item.startsWith("https://"));
-  if (continuingListings && input.draft && typeof input.draft === "object") delete input.draft.discoveredListings;
-  const guestDraft = input.draft && typeof input.draft === "object" ? { ...input.draft } : {};
-  // A continuation must not parse the next page while the previous inventory is live in the isolate.
+  // Testing-code builds have a valid anonymous session, keep their drafts on
+  // the device, and may submit public URLs only. Never read/write an account
+  // build for this path or accept uploaded storage paths from its payload.
   const { data: build } = guest ? { data: {
     sources: (Array.isArray(input.sources) ? input.sources : []).filter((source: any) =>
       source && (source.kind === "url" || source.kind === "listing")),
     evidence: Array.isArray(input.evidence) ? input.evidence : [],
-    draft: guestDraft, status: "collecting",
+    draft: input.draft && typeof input.draft === "object" ? input.draft : {}, status: "collecting",
   } } : await admin.from("realtor_builds")
-    .select(continuingListings ? "sources,evidence,status" : "sources,evidence,draft,status").eq("auth_user_id", userId).single();
+    .select("sources,evidence,draft,status").eq("auth_user_id", userId).single();
   if (!build) return reply({ error: "Start your app build first." }, 404);
   if (input?.mode === "refresh-design") {
     const source = (build.sources as Source[]).find(s => s.kind === 'url');
     if (!source) return reply({ error: 'Add your website URL before refreshing its design.' }, 422);
     try {
       const page = await fetchHtml(source.uri);
-      const websiteDesign = await analyzeWebsiteAppearance(page.html, page.finalUrl.toString());
+      const websiteDesign = await analyzeWebsiteAppearance(page.html, page.finalUrl.toString(), renderPage);
       return reply({ websiteDesign });
     } catch (e) { return reply({ error: e instanceof Error ? e.message : 'Could not refresh the website design.' }, 422); }
   }
@@ -416,7 +484,7 @@ Deno.serve(async (request) => {
       .slice(0, 3);
     for (const source of urls) {
       try {
-        pages.push(`SOURCE ${source.id} (${source.uri}):\n${await readPage(source.uri)}`);
+        pages.push(`SOURCE ${source.id} (${source.uri}):\n${await readPage(source.uri, undefined, renderPage)}`);
       } catch { /* Existing confirmed facts can still support a variation. */ }
     }
     if (!pages.length && !facts.length) {
@@ -557,7 +625,7 @@ Deno.serve(async (request) => {
       listings: Array.isArray(resume.listings) ? resume.listings.slice(0, 100) : [],
       obstacle: typeof resume.obstacle === "string" ? resume.obstacle.slice(0, 80) : undefined,
       stage: "verification_required",
-    }, sessionCookie, fetchHtml, { renderPage: productionRenderPage() });
+    }, sessionCookie, fetchHtml, { renderPage });
     return reply({ discoveredListings: discovery.listings, listingDiscovery: discovery.meta, status: discovery.meta.resume ? "verification_required" : "ok" });
   }
   // Soft-prompt path: realtor pasted a URL that goes straight to their listings.
@@ -573,44 +641,19 @@ Deno.serve(async (request) => {
         return reply({ error: error instanceof Error ? error.message : "That listings link could not be used." }, 400);
       }
     }
-    if (!seeds.length && !(input.resume && Array.isArray(input.resume.pending) && input.resume.pending.length)) return reply({ error: "Add a link to your property listings first." }, 400);
-    const resumeInput = input.resume && typeof input.resume === "object" ? input.resume : null;
-    const resumePending = Array.isArray(resumeInput?.pending) ? resumeInput.pending.filter((item: unknown): item is string => typeof item === "string" && item.startsWith("https://")).slice(0, 8) : [];
+    if (!seeds.length) return reply({ error: "Add a link to your property listings first." }, 400);
     let discovery;
     try {
-      discovery = await discoverListingsAcrossBatches(resumePending.length ? resumePending : seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 22000, enrichAll: !resumePending.length, continuationSeeds: resumePending.length > 0, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage: productionRenderPage() });
+      discovery = await discoverListings(seeds.slice(0, 4), fetchHtml, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, sessionCookie: typeof input?.sessionCookie === "string" ? input.sessionCookie.slice(0, 4000) : undefined, selectLinks: selectInventoryLinks, renderPage });
     } catch (error) {
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
     }
-    const postedListings = Array.isArray(resumeInput?.listings) ? resumeInput.listings.filter((item: unknown): item is DiscoveredListing => !!item && typeof item === "object" && typeof (item as DiscoveredListing).sourceUrl === "string").slice(0, 400) : [];
-    let draftBase: Record<string, unknown> = build.draft && typeof build.draft === "object" ? build.draft as Record<string, unknown> : {};
-    let carriedListings = postedListings;
-    if (resumePending.length && !guest) {
-      const { data: row, error: draftError } = await admin.from("realtor_builds").select("draft").eq("auth_user_id", userId).single();
-      if (draftError || !row) return reply({ error: "The next listing page was read but the saved draft could not be loaded. Please retry." }, 503);
-      draftBase = row.draft && typeof row.draft === "object" ? row.draft as Record<string, unknown> : {};
-      if (!carriedListings.length && Array.isArray((draftBase as { discoveredListings?: unknown }).discoveredListings)) {
-        carriedListings = ((draftBase as { discoveredListings: DiscoveredListing[] }).discoveredListings).filter(item => !!item && typeof item.sourceUrl === "string").slice(0, 400);
-      }
-    }
-    if (carriedListings.length) {
-      const seen = new Set(discovery.listings.map(item => item.listingNumber ? `id:${item.listingNumber}` : `url:${item.sourceUrl}`));
-      const kept = carriedListings.filter(item => !seen.has(item.listingNumber ? `id:${item.listingNumber}` : `url:${item.sourceUrl}`));
-      discovery.listings = [...kept, ...discovery.listings];
-    }
     discovery.listings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
     discovery.meta.found = discovery.listings.length;
-    if (discovery.meta.accounting) {
-      discovery.meta.accounting.importedEligible = discovery.listings.length;
-      if (carriedListings.length) {
-        discovery.meta.accounting.sourceSeen = discovery.listings.length;
-        discovery.meta.accounting.sourceClassified = discovery.listings.length;
-        discovery.meta.accounting.eligibleTotal = discovery.listings.length;
-      }
-    }
+    if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discovery.listings.length;
     const draft = {
-      ...draftBase,
+      ...(build.draft && typeof build.draft === "object" ? build.draft : {}),
       discoveredListings: discovery.listings,
       listingDiscovery: discovery.meta,
     };
@@ -665,8 +708,8 @@ Deno.serve(async (request) => {
     try {
       if (source.kind === "url" || source.kind === "listing") {
         const page = await readPage(source.uri, !websiteDesign && source.kind === 'url' ? async (html, url) => {
-          websiteDesign = await analyzeWebsiteAppearance(html, url);
-        } : undefined);
+          websiteDesign = await analyzeWebsiteAppearance(html, url, renderPage);
+        } : undefined, renderPage);
         pageChars += page.length;
         if (pageChars > 120_000) throw new Error("Too much webpage text. Remove a few links and retry.");
         content.push({ type: "input_text", text: `SOURCE ${source.id} (${source.label}, ${source.uri}):\n${page}` });
@@ -712,8 +755,8 @@ Deno.serve(async (request) => {
     .map((source) => source.uri);
   if (listingSeeds.length) {
     try {
-      const discovery = await discoverListingsAcrossBatches(listingSeeds.slice(0, 4), fetchHtml, {
-        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, maxDurationMs: 22000, enrichAll: true, selectLinks: selectInventoryLinks, renderPage: productionRenderPage(),
+      const discovery = await discoverListings(listingSeeds.slice(0, 4), fetchHtml, {
+        maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage,
       });
       discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
       discovery.meta.found = discoveredListings.length;
