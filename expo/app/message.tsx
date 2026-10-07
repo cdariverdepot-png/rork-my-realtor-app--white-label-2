@@ -23,7 +23,6 @@ import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
 import { useBrand } from "@/contexts/BrandContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { serviceEntitlement } from "@/lib/serviceEntitlement";
-import { serviceEntitlement } from "@/lib/serviceEntitlement";
 import { useMessages } from "@/contexts/MessagesContext";
 import { themeDesign } from "@/constants/themeDesigns";
 import ModalChrome from "@/components/ModalChrome";
@@ -64,11 +63,6 @@ export default function Message() {
     if (!isClient) {
       // Realtor previews and the demo have no client thread — never pretend a message went out.
       Alert.alert("Preview only", `In your clients' app this sends straight to your Messages inbox, with their name, email and phone.`);
-      return;
-    }
-    const entitlement = await serviceEntitlement(realtorId);
-    if (entitlement !== "active") {
-      Alert.alert("Messaging unavailable", entitlement === "inactive" ? "Messaging is temporarily unavailable." : "Messaging is temporarily unavailable while service status is verified.");
       return;
     }
     const entitlement = await serviceEntitlement(realtorId);
