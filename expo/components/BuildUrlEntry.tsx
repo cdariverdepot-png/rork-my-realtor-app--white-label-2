@@ -112,7 +112,7 @@ export default function BuildUrlEntry({
           paddingTop: insets.top + 18,
           paddingBottom: insets.bottom + 48,
         }}
-        style={Platform.OS === "web" ? webScroll : undefined}
+        style={Platform.OS === "web" ? (webScroll as any) : undefined}
       >
         <View style={{ alignItems: "center" }}>
           <Text
@@ -298,7 +298,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.28)",
   },
   glassTint: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     backgroundColor: "rgba(8, 22, 32, 0.38)",
   },
   glassBody: {
