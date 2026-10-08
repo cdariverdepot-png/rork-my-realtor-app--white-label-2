@@ -64,8 +64,9 @@ async function run(item, credentials, realtorId) {
     if (item.guest) {
       // Owner-test access code: the same path Jerrod uses to try a site without an account.
       await page.goto(`${APP}/portal?entry=client`, { waitUntil: 'networkidle', timeout: 60_000 });
-      await page.getByLabel('Access code').fill('REALTOR');
-      await page.getByLabel('Access code').press('Enter');
+      const code = page.getByLabel('Access code', { exact: true });
+      await code.fill('REALTOR');
+      await code.press('Enter');
       await page.waitForURL(url => String(url).includes('/admin'), { timeout: 60_000 });
       await page.getByLabel('Page 5').click({ timeout: 30_000 });
       await page.getByText('BUILD MY APP', { exact: true }).click({ timeout: 30_000 });
@@ -119,7 +120,7 @@ async function run(item, credentials, realtorId) {
       }
       result.reviewText = (await page.evaluate(() => document.body.innerText)).slice(0, 3000);
       const publishAt = Date.now();
-      await page.getByText('Publish My App', { exact: true }).click({ timeout: 30_000 });
+      await page.getByRole('button', { name: 'Publish My App' }).last().click({ timeout: 30_000 });
       const ready = await page.getByText('Congratulations! Your app is live.').waitFor({ timeout: 90_000 }).then(() => true, () => false);
       result.publishMs = Date.now() - publishAt;
       result.completedScreen = ready;
