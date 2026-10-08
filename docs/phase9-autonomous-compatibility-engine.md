@@ -98,3 +98,29 @@ held-out sites with no ownership regressions, but (a) the last full end-to-end g
 changes and was blocked by OpenAI credit, (b) 5 of 16 held-out sites need a rendered check, and (c) the Apple
 subscription cutover remains held. The next justified step is one budgeted Level D gate (needs credit or a
 staging key, and a justification line) followed by your review.
+
+## 9. Final integration (Oct 8 2026)
+
+- `repair/compatibility-engine` merged into `main` (merge `3395ca8`, `[skip ci]` so the push-triggered
+  production deploys did not run). The repair branch is kept as the recovery reference.
+- Validation: full suite 602/602 and type check (CI, Gate A); release gate 37840376601 (12 sites on staging:
+  11 reached review, RE/MAX stopped with its 403 reason, none stranded); it found one gap (detail jobs kept
+  price titles), fixed in `dc66234` and rechecked by 37843454766 (3/3, all titles named); the deployed preview
+  was checked end to end by 37846354461 (2/2 reached review, calls went to the staging functions).
+  OpenAI spend metered for these runs: $0.13 + $0.04 + $0.03 (some sites' usage is not captured by the
+  harness, so the true figure is slightly higher).
+- Staging Edge Functions (`analyze-realtor-build-staging`, `refresh-listings-staging`) run the merged code,
+  with `AI_STAGING_ALLOW_SHARED_KEY=1`. Production Edge Functions and the production web site were not
+  redeployed and still run the code from before Phase 1.
+- Development preview (web, staging importer): deployment `https://cdariverdepot-my-realtor--dkx12pzmez.expo.app`
+  (alias `https://cdariverdepot-my-realtor--preview.expo.app`), verified to serve main `5c70bca`;
+  record and QR code in `diagnostics/preview-deployed.json` and `diagnostics/preview-qr.png`.
+- Rork / Expo dev previews of `main` call the staging importer automatically (`__DEV__`); release builds
+  still call production.
+- Note: the existing workflows `deploy-functions` and `deploy-web` still deploy to production on the next push
+  to `main` that touches `supabase/functions/**` or `expo/**` (including Rork syncs). Such a push would put
+  this importer and client into production.
+- Known gaps: duplicates whose shared remarks arrive only in later detail jobs are not merged on the
+  production job-split path (Redman: 13 pairs live; merged offline); Real Geeks served the Supabase edge a
+  script-rendered page (Chatman: 0 listings live, 50 from GitHub runners); 5 of 16 held-out sites need a
+  rendered check; Century 21, Redfin, RE/MAX and one iFoundAgent site block automated readers.

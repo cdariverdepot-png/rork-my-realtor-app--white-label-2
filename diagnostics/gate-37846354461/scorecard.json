@@ -1,0 +1,32 @@
+{
+  "reached": 2,
+  "total": 2,
+  "stranded": 0,
+  "harness": 0,
+  "rows": [
+    {
+      "site": "katerina-sayles",
+      "outcome": "review",
+      "seconds": 26,
+      "reason": "",
+      "saved": 10,
+      "own": 0,
+      "featured": 0,
+      "unattributed": 10,
+      "fullDetails": 10,
+      "cardTextTitles": 0
+    },
+    {
+      "site": "realm-partners-idaho",
+      "outcome": "review",
+      "seconds": 11,
+      "reason": "",
+      "saved": 15,
+      "own": 15,
+      "featured": 0,
+      "unattributed": 0,
+      "fullDetails": 15,
+      "cardTextTitles": 0
+    }
+  ]
+}
