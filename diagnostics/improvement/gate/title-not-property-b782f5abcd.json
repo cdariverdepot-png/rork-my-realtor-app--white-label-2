@@ -1,0 +1,214 @@
+{
+  "failure": "title-not-property",
+  "base": "origin/repair/compatibility-engine",
+  "head": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+  "baseSha": "9ed67348936ca8c5e2edd09f0884c9e12b7ff6f1",
+  "at": "2026-10-08T16:49:08.040Z",
+  "checks": {
+    "policy": {
+      "ok": true,
+      "problems": [],
+      "notes": [
+        "5 files changed; 4 tests added."
+      ],
+      "files": [
+        {
+          "status": "A",
+          "file": "docs/compatibility-knowledge/title-not-property.md"
+        },
+        {
+          "status": "A",
+          "file": "expo/tests/detailPageTitle.test.cjs"
+        },
+        {
+          "status": "A",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "status": "M",
+          "file": "supabase/functions/analyze-realtor-build/deploy.bundle.ts"
+        },
+        {
+          "status": "M",
+          "file": "supabase/functions/analyze-realtor-build/listingDiscovery.ts"
+        }
+      ],
+      "declaredChanges": [
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261081/",
+          "field": "title",
+          "before": "$2,500,000",
+          "after": "239 Pierce Ln, Sagle, ID 83860",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261373/",
+          "field": "title",
+          "before": "$8,500,000",
+          "after": "Cottage Island, Hope, ID 83836",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261623/",
+          "field": "title",
+          "before": "$4,950,000",
+          "after": "172 Elk Hills Rd, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261624/",
+          "field": "title",
+          "before": "$3,200,000",
+          "after": "172 Elk Hills Rd, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261626/",
+          "field": "title",
+          "before": "$4,800,000",
+          "after": "Lot 2 Basin Express, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261646/",
+          "field": "title",
+          "before": "$6,490,000",
+          "after": "802 Sandpoint Ave #8201 & 8202, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261649/",
+          "field": "title",
+          "before": "$3,200,000",
+          "after": "37 Birch Haven, Sagle, ID 83860-8803",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261661/",
+          "field": "title",
+          "before": "$4,490,000",
+          "after": "802 Sandpoint Ave #8304, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261740/",
+          "field": "title",
+          "before": "$4,500,000",
+          "after": "802 Sandpoint Ave #8403, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261912/",
+          "field": "title",
+          "before": "$4,990,000",
+          "after": "802 Sandpoint Ave #8404, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20261961/",
+          "field": "title",
+          "before": "$4,150,000",
+          "after": "5033 E Dodd Rd., Hayden, ID 83835",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20262164/",
+          "field": "title",
+          "before": "$3,970,000",
+          "after": "417 Ravenwood Dr, Sandpoint, ID 83864",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        },
+        {
+          "capture": "realm-partners-idaho",
+          "sourceUrl": "https://www.realmidaho.com/property/20262172/",
+          "field": "title",
+          "before": "$6,970,000",
+          "after": "717 Olson Dr., Dover, ID 83825",
+          "file": "expo/tests/fixtures/baseline-changes/title-not-property.json"
+        }
+      ]
+    },
+    "static": {
+      "ok": true,
+      "problems": []
+    },
+    "suite": {
+      "ok": false,
+      "pass": 0,
+      "fail": null,
+      "failing": [],
+      "guard": "clean"
+    },
+    "corpus": {
+      "ok": true,
+      "problems": [],
+      "improvements": [
+        "TITLE_NOT_PROPERTY: 13 -> 0 code-defect records across the corpus.",
+        "realm-partners-idaho: \"$8,500,000\" -> \"Cottage Island, Hope, ID 83836\"",
+        "realm-partners-idaho: \"$6,970,000\" -> \"717 Olson Dr., Dover, ID 83825\"",
+        "realm-partners-idaho: \"$6,490,000\" -> \"802 Sandpoint Ave #8201 & 8202, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$4,990,000\" -> \"802 Sandpoint Ave #8404, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$4,950,000\" -> \"172 Elk Hills Rd, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$4,800,000\" -> \"Lot 2 Basin Express, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$4,500,000\" -> \"802 Sandpoint Ave #8403, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$4,490,000\" -> \"802 Sandpoint Ave #8304, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$4,150,000\" -> \"5033 E Dodd Rd., Hayden, ID 83835\"",
+        "realm-partners-idaho: \"$3,970,000\" -> \"417 Ravenwood Dr, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$3,200,000\" -> \"37 Birch Haven, Sagle, ID 83860-8803\"",
+        "realm-partners-idaho: \"$3,200,000\" -> \"172 Elk Hills Rd, Sandpoint, ID 83864\"",
+        "realm-partners-idaho: \"$2,500,000\" -> \"239 Pierce Ln, Sagle, ID 83860\""
+      ],
+      "notes": [
+        "Corpus CPU 3788 ms -> 3712 ms."
+      ],
+      "targetBefore": 13,
+      "targetAfter": 0
+    },
+    "declarations": {
+      "ok": true,
+      "problems": [],
+      "notes": [
+        "13 declared baseline changes verified."
+      ]
+    }
+  },
+  "holdout": [
+    "bridge-realty",
+    "century21-barbara-patterson",
+    "chattanooga-property-shop",
+    "cindy-carlson-realty",
+    "coldwell-banker-alena-goncharov",
+    "compass-jeff-stahlhut",
+    "elevate-realty-granbury",
+    "freestone-properties",
+    "houses-of-kansas-city",
+    "irene-on-whidbey",
+    "john-holden-homes",
+    "katerina-sayles",
+    "mount-snow-palmiter",
+    "raleigh-realty",
+    "reagent-denver",
+    "redfin-gavin-shettler",
+    "redman-realty-group",
+    "remax-alexis-kemp-sagert",
+    "rockys-mom-realty",
+    "ryan-realty",
+    "scott-a-jacobs-realtor",
+    "the-battle-group",
+    "woods-n-water-real-estate",
+    "zillow-leland-reed"
+  ],
+  "accepted": false
+}

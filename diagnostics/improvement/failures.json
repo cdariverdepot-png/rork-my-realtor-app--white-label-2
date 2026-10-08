@@ -505,7 +505,7 @@
         "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
         "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
       ],
-      "status": "open",
+      "status": "rejected",
       "firstSeen": "2026-10-08T16:31:29.309Z",
       "lastSeen": "2026-10-08T16:48:40.264Z",
       "evidenceHash": "f04715a7aa1c8ebe",
@@ -556,7 +556,22 @@
       "architectures": [
         "property-cards"
       ],
-      "attempts": []
+      "attempts": [
+        {
+          "at": "2026-10-08T16:49:55.369Z",
+          "outcome": "rejected",
+          "branch": "improve/title-not-property-session1",
+          "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+          "evidenceHash": "f04715a7aa1c8ebe",
+          "gate": {
+            "accepted": false,
+            "head": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+            "base": "9ed67348936ca8c5e2edd09f0884c9e12b7ff6f1",
+            "target": "13 -> 0",
+            "problems": []
+          }
+        }
+      ]
     },
     "title-not-property--temporary-outage": {
       "id": "title-not-property--temporary-outage",
