@@ -23,5 +23,17 @@
     "integratedAt": "2026-10-08T17:23:55.216Z",
     "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
     "gate": "13 -> 0"
+  },
+  {
+    "failure": "mirrored-listing",
+    "symptom": "MIRRORED_LISTING",
+    "stage": "save-boundary normalizer (one record per listing)",
+    "record": "docs/compatibility-knowledge/mirrored-listing.md",
+    "architectures": [
+      "property-cards"
+    ],
+    "integratedAt": "2026-10-08T19:33:38.653Z",
+    "commit": "f7f39d5f4cc50badb9e4b85fe9a4041e5f30b977",
+    "gate": "49 -> 0"
   }
 ]
