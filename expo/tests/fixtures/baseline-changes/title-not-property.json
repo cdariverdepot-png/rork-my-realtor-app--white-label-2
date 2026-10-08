@@ -1,0 +1,98 @@
+{
+  "failure": "title-not-property",
+  "evidence": "docs/compatibility-knowledge/title-not-property.md",
+  "rationale": "Each recorded card was titled only by its price. Each new title is the property's own published name, read from its own detail page in the same recording: the single <h1> that agrees with the page's single schema.org PostalAddress. Prices are unchanged. The two listings whose detail pages timed out in the recording keep their price titles.",
+  "changes": [
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261081/",
+      "field": "title",
+      "before": "$2,500,000",
+      "after": "239 Pierce Ln, Sagle, ID 83860"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261373/",
+      "field": "title",
+      "before": "$8,500,000",
+      "after": "Cottage Island, Hope, ID 83836"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261623/",
+      "field": "title",
+      "before": "$4,950,000",
+      "after": "172 Elk Hills Rd, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261624/",
+      "field": "title",
+      "before": "$3,200,000",
+      "after": "172 Elk Hills Rd, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261626/",
+      "field": "title",
+      "before": "$4,800,000",
+      "after": "Lot 2 Basin Express, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261646/",
+      "field": "title",
+      "before": "$6,490,000",
+      "after": "802 Sandpoint Ave #8201 & 8202, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261649/",
+      "field": "title",
+      "before": "$3,200,000",
+      "after": "37 Birch Haven, Sagle, ID 83860-8803"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261661/",
+      "field": "title",
+      "before": "$4,490,000",
+      "after": "802 Sandpoint Ave #8304, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261740/",
+      "field": "title",
+      "before": "$4,500,000",
+      "after": "802 Sandpoint Ave #8403, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261912/",
+      "field": "title",
+      "before": "$4,990,000",
+      "after": "802 Sandpoint Ave #8404, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20261961/",
+      "field": "title",
+      "before": "$4,150,000",
+      "after": "5033 E Dodd Rd., Hayden, ID 83835"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20262164/",
+      "field": "title",
+      "before": "$3,970,000",
+      "after": "417 Ravenwood Dr, Sandpoint, ID 83864"
+    },
+    {
+      "capture": "realm-partners-idaho",
+      "sourceUrl": "https://www.realmidaho.com/property/20262172/",
+      "field": "title",
+      "before": "$6,970,000",
+      "after": "717 Olson Dr., Dover, ID 83825"
+    }
+  ]
+}
