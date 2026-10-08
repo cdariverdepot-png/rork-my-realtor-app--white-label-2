@@ -45,8 +45,8 @@ test('improvement loop: a price title is a code defect only when the recorded de
 test('improvement loop: the same property twice is a duplicate; distinct units and lots are not', () => {
   const capture = { pages: [] };
   const dup = findingsFor(entry, capture, replay([
-    listing('https://a.example/d/1/111/', '14 Densmore Ave N Seattle, WA 98133', { description: 'Same words.' }),
-    listing('https://a.example/d/1/222/', '14 Densmore Ave N Seattle, WA 98133', { description: 'Same words.' }),
+    listing('https://a.example/d/1/111/', '14 Densmore Ave N Seattle, WA 98133', { description: 'Same words.', price: '$500,000' }),
+    listing('https://a.example/d/1/222/', '14 Densmore Ave N Seattle, WA 98133', { description: 'Same words.', price: '$500,000' }),
     listing('https://a.example/d/2/', '1017 Minor Ave #1401 Seattle, WA 98104', { description: 'Same words.' }),
     listing('https://a.example/d/3/', '1017 Minor Ave #1402 Seattle, WA 98104', { description: 'Same words.' }),
   ])).find(f => f.code === 'DUPLICATE_PROPERTY');
@@ -57,6 +57,12 @@ test('improvement loop: the same property twice is a duplicate; distinct units a
     listing('https://a.example/d/2/', '14 Densmore Ave N Seattle, WA 98133', { description: 'Two (another unit of a duplex, different text).' }),
   ])).find(f => f.code === 'DUPLICATE_PROPERTY');
   assert.equal(none, undefined);
+  // One parcel, two listings (Oct 2026 corpus: same address and lead photo, different price and remarks).
+  const split = findingsFor(entry, capture, replay([
+    listing('https://a.example/p/1623/', '172 Elk Hills Rd, Sandpoint, ID 83864', { price: '$4,950,000', description: 'Home and acreage.', images: ['https://cdn.example/a.jpg'] }),
+    listing('https://a.example/p/1624/', '172 Elk Hills Rd, Sandpoint, ID 83864', { price: '$3,200,000', description: 'Home only.', images: ['https://cdn.example/a.jpg'] }),
+  ])).find(f => f.code === 'DUPLICATE_PROPERTY');
+  assert.equal(split, undefined, 'different prices and remarks are different listings');
 });
 
 test('improvement loop: refused and unanswered sites are not code defects', () => {

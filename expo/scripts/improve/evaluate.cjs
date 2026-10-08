@@ -115,7 +115,10 @@ function findingsFor(entry, capture, replay) {
     const id = key(item.title) + '|' + key(item.neighborhood ?? '');
     groups.set(id, [...groups.get(id) ?? [], item]);
   }
-  const duplicates = [...groups.values()].filter(group => group.length > 1 && group.some((a, i) => group.some((b, j) => j > i &&
+  // Same address alone is not enough: one parcel can carry two listings (house and land, a split lot) with
+  // different prices and remarks. Same address, same price and the same remarks or lead photo is one property.
+  const samePrice = (a, b) => key(a.price) === key(b.price);
+  const duplicates = [...groups.values()].filter(group => group.length > 1 && group.some((a, i) => group.some((b, j) => j > i && samePrice(a, b) &&
     ((a.description && a.description === b.description) || (a.images?.[0] && a.images[0] === b.images?.[0])))));
   if (duplicates.length) add('DUPLICATE_PROPERTY', 'code_defect', 2, duplicates.map(group => ({ title: group[0].title, sourceUrls: group.map(i => i.sourceUrl) })),
     'The same property (same address and the same description or lead photo) is imported more than once under different URLs.');
