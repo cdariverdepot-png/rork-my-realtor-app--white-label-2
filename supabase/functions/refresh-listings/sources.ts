@@ -9,6 +9,14 @@ export type ListingSource = {
   connectedAt: number; lastCheckedAt?: number; lastCompleteSyncAt?: number; nextSyncAt: number;
   state: "connected" | "unavailable"; error?: string; failures?: number; listingCount: number;
 };
+/**
+ * Why a source produced no listings. "no_listings": the pages were read and publish no listings (a site
+ * without inventory is not a failure). "unreadable": pages failed or need a browser. "market_only": only
+ * other brokerages' listings were found.
+ */
+export class SourceReadError extends Error {
+  constructor(message: string, readonly code: "no_listings" | "unreadable" | "market_only") { super(message); this.name = "SourceReadError"; }
+}
 export type SourceInventory = { source: ListingSource; listings: DiscoveredListing[]; complete: boolean; meta: ListingDiscoveryMeta };
 const TWO_HOURS = 7_200_000;
 const key = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -95,10 +103,15 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       } catch { /* disappearance or blocked pages cannot establish sold status */ }
     }
   }
-  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new Error("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.");
+  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new SourceReadError("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.", "unreadable");
   const excludedOtherOffice = discovery.meta.scope?.excludedOtherOffice ?? 0;
-  if (!discovery.listings.length && !explicitEmpty && excludedOtherOffice) throw new Error(`That page shows homes listed by many different brokerages (a market search), not only yours. We import only listings attributed to you or your office, and none of the ${excludedOtherOffice} we checked were. Nothing was imported. Paste the page that shows your own listings.`);
-  if (!discovery.listings.length && !explicitEmpty) throw new Error("We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.");
+  if (!discovery.listings.length && !explicitEmpty && excludedOtherOffice) throw new SourceReadError(`That page shows homes listed by many different brokerages (a market search), not only yours. We import only listings attributed to you or your office, and none of the ${excludedOtherOffice} we checked were. Nothing was imported. Paste the page that shows your own listings.`, "market_only");
+  if (!discovery.listings.length && !explicitEmpty) {
+    // Pages that failed or were blocked are not evidence that the site has no listings.
+    const unreadable = (discovery.meta.failed?.length ?? 0) > 0 || (discovery.meta.obstacles?.length ?? 0) > 0;
+    if (unreadable) throw new SourceReadError("We couldn’t read your listings from that page: some of its pages could not be opened. Try pasting the page where all of your active listings are shown. The page must open without signing in.", "unreadable");
+    throw new SourceReadError("We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.", "no_listings");
+  }
   const now = Date.now();
   const source: ListingSource = { ...existing, id: existing?.id ?? `source-${hash(uri)}`, url: uri, submittedUrl: existing?.submittedUrl ?? submittedUrl,
     kind: detectSourceKind(uri), inventoryUrls: [...new Set([...discovery.meta.inventoryUrls ?? [], ...existing?.inventoryUrls ?? []])].filter(u => !isPropertyUrl(u) && !(new URL(u).hostname === "www.idxhome.com" && new URL(u).pathname.startsWith("/api/kestrel/"))),

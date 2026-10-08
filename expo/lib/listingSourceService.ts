@@ -8,7 +8,8 @@ export type ConnectedListingSource = { id: string; url: string; submittedUrl: st
   nextSyncAt: number; lastCheckedAt?: number; listingCount: number; error?: string };
 
 export class ListingImportError extends Error {
-  constructor(message: string, public readonly status?: number) { super(message); this.name = "ListingImportError"; }
+  /** code: "no_listings" (read fine, nothing published), "unreadable", "market_only" (only other brokerages' listings). */
+  constructor(message: string, public readonly status?: number, public readonly code?: string) { super(message); this.name = "ListingImportError"; }
 }
 
 export type ListingSyncResult = { ok: boolean; items?: ManagedListing[]; source?: ConnectedListingSource; imported?: number; warning?: string;
@@ -24,12 +25,12 @@ export async function invokeListingSync(body: { mode?: "connect" | "details"; ur
   if (onEvent) {
     const streamed = await invokeWithProgress(LISTING_FUNCTION, body, onEvent);
     if (streamed.status >= 400 || streamed.body?.error) {
-      throw new ListingImportError(streamed.body?.error ?? "We couldn’t check your listings right now. Please try again.", streamed.status);
+      throw new ListingImportError(streamed.body?.error ?? "We couldn’t check your listings right now. Please try again.", streamed.status, streamed.body?.code);
     }
     return streamed.body as ListingSyncResult;
   }
   const { data, error } = await supabase.functions.invoke(LISTING_FUNCTION, { body });
-  if (data?.error) throw new ListingImportError(data.error, error?.context?.status);
+  if (data?.error) throw new ListingImportError(data.error, error?.context?.status, data.code);
   if (error) {
     let detail: { error?: string } | undefined;
     try { detail = await error.context?.json(); } catch { /* Non-JSON transport error. */ }

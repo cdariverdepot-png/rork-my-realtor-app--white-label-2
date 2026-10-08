@@ -428,3 +428,19 @@ test('the listing import retries its first page once after a timeout', async () 
   assert.equal(calls, 2);
   assert.equal(result.listings.length, 2);
 });
+
+// Repair stage 8 (synthetic contracts): "no listings" is a finished read; unreadable pages are a failure.
+test('a site that publishes no listings is reported as such, not as unreadable', async () => {
+  const result = await endpoint({ body: { mode: 'connect', url: 'https://empty.example/' }, pages: { 'https://empty.example/': '<h1>Welcome</h1><p>About our team.</p>' } });
+  assert.equal(result.status, 422);
+  assert.equal(result.result.code, 'no_listings');
+  assert.match(result.result.error, /couldn’t find any active listings on it/);
+});
+
+test('pages that could not be opened are unreadable, never evidence of an empty inventory', async () => {
+  const result = await endpoint({ body: { mode: 'connect', url: 'https://agent.example/' },
+    pages: { 'https://agent.example/': '<h1>Agent</h1><a href="/my-listings">My Listings</a>' } });
+  assert.equal(result.status, 422);
+  assert.equal(result.result.code, 'unreadable');
+  assert.match(result.result.error, /some of its pages could not be opened/);
+});

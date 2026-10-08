@@ -285,7 +285,7 @@ const buildNeutralSeed = (record?: SeedRecord): Brand => {
       title: "",
       city: "",
       phone: "",
-      email: record?.email || "",
+      email: publicEmail(record?.email),
       tagline: "",
       heroMessage: "",
       welcomeNote: "",
@@ -373,6 +373,12 @@ const sameValue = (a: unknown, b: unknown): boolean =>
   JSON.stringify(a) === JSON.stringify(b);
 
 /** Return `fallback` when `value` is verbatim showcase copy, else keep it. */
+/** An address the realtor can be reached at. Owner-test/guest account placeholders are never contact details. */
+const publicEmail = (value: string | null | undefined) => {
+  const email = (value ?? "").trim();
+  return /@guest\.myrealtor\.app$/i.test(email) ? "" : email;
+};
+
 const unborrow = <T,>(value: T, demo: T, fallback: T): T =>
   sameValue(value, demo) ? fallback : value;
 
@@ -420,7 +426,7 @@ function scrubDemoContent(b: Brand, isDemo: boolean, fallback: Brand): Brand {
       title: unborrow(r.title, d.title, f.title),
       city: unborrow(r.city, d.city, f.city),
       phone: unborrow(r.phone, d.phone, f.phone),
-      email: unborrow(r.email, d.email, f.email),
+      email: publicEmail(unborrow(r.email, d.email, f.email)),
       tagline: unborrow(r.tagline, d.tagline, f.tagline),
       heroMessage: unborrow(r.heroMessage, d.heroMessage, f.heroMessage),
       welcomeNote: unborrow(r.welcomeNote, d.welcomeNote, f.welcomeNote),

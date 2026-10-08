@@ -47,6 +47,12 @@ function onlyImageDifferences(now, was, path = 'design', found = []) {
   return found;
 }
 
+// Repair stage 8, reviewed: section copy no longer carries CMS shortcodes, comment markers, contact-form
+// field labels or the site footer (copyright onward). Only section copy/classification may change, plus
+// the image URL fixes above; the profile model's input is otherwise unchanged.
+const REVIEWED_SECTION_CLEANUP = new Set(['scott-a-jacobs-realtor', 'the-battle-group', 'woods-n-water-real-estate', 'zillow-leland-reed']);
+const SITE_CHROME = /\[[a-z][\w-]*[-_][\w-]*(?:\s[^\]]*)?\]|<!--|-->|©|\bcopyright\b|all rights reserved|first name last name/i;
+
 const bundle = currentBundle();
 for (const id of ids) {
   test(`${id}: reader output is unchanged and stays within the CPU allowance`, () => quiet(async () => {
@@ -57,6 +63,23 @@ for (const id of ids) {
     if (REVIEWED_BLOCKED.has(id)) {
       assert.equal(run.status, 422);
       assert.equal(run.aiRequest, undefined, 'no profile is written from an error page');
+      assert.ok(run.cpuMs < CPU_CEILING_MS);
+      return;
+    }
+    if (REVIEWED_SECTION_CLEANUP.has(id)) {
+      const json = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+      const lines = value => JSON.stringify(value).split('\\n').filter(line => !/^Images: /.test(line));
+      assert.equal(run.status, expected.status);
+      assert.deepEqual(lines(json(run.aiRequest)), lines(expected.ai), 'the profile input is unchanged');
+      const { sections: nowSections, ...nowRest } = json(run.design);
+      const { sections: wasSections, ...wasRest } = expected.design;
+      assert.deepEqual(onlyImageDifferences(nowRest, wasRest), [], 'outside sections only image URLs may change');
+      // No section is invented; one disappears only when its copy was nothing but site chrome.
+      for (const section of nowSections) assert.ok(wasSections.some(old => old.title === section.title), `new section "${section.title}"`);
+      for (const old of wasSections.filter(old => !nowSections.some(section => section.title === old.title))) {
+        assert.match(old.body, SITE_CHROME, `"${old.title}" was removed although its copy was not site chrome`);
+      }
+      for (const section of run.design.sections) assert.doesNotMatch(section.body, SITE_CHROME, `site chrome left in "${section.title}"`);
       assert.ok(run.cpuMs < CPU_CEILING_MS);
       return;
     }

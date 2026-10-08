@@ -387,7 +387,9 @@ export default function InitialRealtorSetup() {
         next.portraitUrl = await toPortableImage(portraitUri, 1600);
       }
       startReview(saved, next);
-      if (listingWarning) setError({ place: "listings", message: listingWarning });
+      // A site that simply publishes no listings is not an error; the import line already says so.
+      const noListings = listingOutcome.status === "rejected" && listingOutcome.reason instanceof ListingImportError && listingOutcome.reason.code === "no_listings";
+      if (listingWarning && !noListings) setError({ place: "listings", message: listingWarning });
       buildSucceeded = true;
       // The shared importer has already persisted the authoritative collection.
     } catch (e) {

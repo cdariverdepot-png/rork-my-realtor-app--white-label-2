@@ -4337,9 +4337,27 @@ function composeWebsiteSections(sections: WebsiteSection[]): WebsiteSection[] {
   return [...composed, ...displayed].sort((a, b) => a.index - b.index).map(item => item.section);
 }
 
+/**
+ * Text a page carries that is not the section's copy: CMS shortcodes ([our-stories-count type="active"]),
+ * stray comment markers, form residue ("j6ac7108ab9bd1 Submit") and the site footer from its copyright
+ * line onward ("© Copyright 2026 … All Rights Reserved … Website Design by …").
+ */
+const FORM_FIELD = "(?:(?:first|last|full)\\s+name|name|e-?mail(?:\\s+address)?|phone(?:\\s+number)?|message|comments?|subject)";
+function withoutSiteChrome(body: string): string {
+  return body
+    .replace(/\[\/?[a-z][a-z0-9]*[-_][\w-]*(?:\s+[^\]]*)?\]|\[\/?[a-z][\w-]*(?:\s+[a-z_-]+=(?:"[^"]*"|'[^']*'|[^\s\]]+))+\s*\/?\]/gi, ' ')
+    .replace(/<!--|-->/g, ' ')
+    .replace(/\s+(?:©|\(c\)|copyright\b)[\s\S]*$/i, '')
+    .replace(/\b(?=[a-z0-9]*\d)(?=[a-z0-9]*[a-z])[a-z0-9]{10,}\s+submit\b/gi, ' ')
+    .replace(/\b(?:scroll up|back to top)\b/gi, ' ')
+    // A contact form's field labels in a row ("First Name Last Name Email Message SEND Thank you for submitting!").
+    .replace(new RegExp(`\\b${FORM_FIELD}(?:\\s+${FORM_FIELD}){2,}(?:\\s+(?:send|submit))?(?:\\s+thank you for (?:submitting|your (?:message|submission))!?)?`, 'gi'), ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
 /** Display copy for a mobile card: the site's sentences, without contact lines or a trailing generic CTA. */
 function websiteCopy(body: string): string {
-  const clean = body.replace(/\s+/g, ' ').trim();
+  const clean = withoutSiteChrome(body.replace(/\s+/g, ' ').trim());
   const cut = clean.replace(/\s*\b(?:explore more|learn more|read more|view more|see more|click here|more information|chat with [a-z]+|message your realtor|start a conversation|stay in touch|follow us)\b[\s\S]*$/i, '').trim();
   const contactLine = (sentence: string) => /(?:\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})|@|\b(?:office|cell|fax|phone|email)\s*:|\b\d{1,6}\s+[A-Za-z][\w.'’-]*(?:\s+[A-Za-z][\w.'’-]*){0,3}\s+(?:avenue|ave|street|st|road|rd|drive|dr|boulevard|blvd|lane|ln|way|court|ct)\b/i.test(sentence);
   const sentences = (cut || clean).split(/(?<=[.!?])\s+/).filter(sentence => !contactLine(sentence));

@@ -1,4 +1,4 @@
-import { readSource, reconcileInventory, verifyMissing, type ListingSource, type SourceInventory } from "./sources.ts";
+import { readSource, reconcileInventory, verifyMissing, SourceReadError, type ListingSource, type SourceInventory } from "./sources.ts";
 import { applyObservation, type SyncListing } from "./sync.ts";
 import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
@@ -69,7 +69,9 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     progress?.finish("listings", "done", { count: inventory.listings.length });
   } catch (error) {
     if (progress?.isOpen("details")) progress.finish("details", "failed");
-    progress?.finish("listings", "failed");
+    const code = error instanceof SourceReadError ? error.code : "unreadable";
+    // A site without listings is a finished read, not a failure.
+    if (code === "no_listings") progress?.finish("listings", "done", { count: 0 }); else progress?.finish("listings", "failed");
     const message = error instanceof Error ? error.message : "We couldn’t find your listings on that page. Try the page showing all of your active listings.";
     if (target) await save(sourceKey, value => ({ ...value, sources: (Array.isArray(value.sources) ? value.sources : []).map(source => {
       const s = source as ListingSource;
@@ -78,7 +80,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
       return { ...s, state: "unavailable", error: message, failures, lastCheckedAt: now,
         nextSyncAt: now + Math.min(24, 0.5 * 2 ** Math.min(failures - 1, 6)) * 3_600_000 };
     }) }));
-    return { body: { ok: false, error: message }, status: 422 };
+    return { body: { ok: false, error: message, code }, status: 422 };
   }
   // Save the source first so an interrupted collection write remains recoverable by the next sync.
   await save(sourceKey, value => {

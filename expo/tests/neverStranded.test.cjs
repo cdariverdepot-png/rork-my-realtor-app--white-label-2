@@ -229,3 +229,16 @@ test('one slow response is retried instead of failing the build', () => quiet(as
   assert.equal(homepage, 2, 'the homepage was requested twice');
   assert.equal(result.status, 200);
 }));
+
+test('a guest/owner-test placeholder address is never shown as the realtor contact', () => {
+  const brand = read('contexts/BrandContext.tsx');
+  assert.match(brand, /email: publicEmail\(record\?\.email\)/);
+  assert.match(brand, /email: publicEmail\(unborrow\(r\.email, d\.email, f\.email\)\)/);
+  assert.ok(brand.includes('/@guest\\.myrealtor\\.app$/i.test(email) ? "" : email'), 'guest placeholders are recognized');
+});
+
+test('an unpublished listing status is never shown as an internal sync state', () => {
+  const label = read('lib/listingStatusLabel.ts');
+  assert.doesNotMatch(label, /Status unconfirmed/);
+  assert.match(label, /return item\.tag \|\| "Listing";/);
+});
