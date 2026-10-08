@@ -195,3 +195,21 @@ test('improvement loop: a not-a-property repair may remove only the records iden
   assert.equal(compare(before, evaluation([site('a', [], [rec('h1', '1 Elm St, Boise, ID')])]), failureFor('NOT_A_PROPERTY')).ok, true);
   assert.equal(compare(before, evaluation([site('a', [], [rec('ig', 'cameronteam')])]), failureFor('NOT_A_PROPERTY')).ok, false, 'a real property may not be removed');
 });
+
+test('improvement loop: records from a host the site never links to are a scope escape', () => {
+  const capture = { seeds: ['https://www.agent.example/'], pages: [page('https://www.agent.example/', '<a href="https://search.agent.example/idx/1">Search</a><a href="https://idx.partner.example/x">IDX</a>')] };
+  const findings = findingsFor(entry, capture, replay([
+    listing('https://www.agent.example/p/1/', '1 Elm St, Boise, ID'), listing('https://search.agent.example/idx/2', '2 Elm St, Boise, ID'),
+    listing('https://idx.partner.example/p/3', '3 Elm St, Boise, ID'), listing('https://demo.vendor.example/property/4/', '4 Elm St, Boise, ID')]));
+  const escape = findings.find(f => f.code === 'OFFSITE_UNLINKED');
+  assert.deepEqual(escape.all, ['https://demo.vendor.example/property/4/']);
+});
+
+test('improvement loop: one listing id published on two hosts of a site is a mirrored listing', () => {
+  const findings = findingsFor(entry, { pages: [] }, replay([
+    listing('https://www.agent.example/property/21382178/', '7124 Chelsea Dr, Hurst, TX', { price: '$594,900' }),
+    listing('https://agent.platform.example/property/21382178/', '$594,900', { price: '$594,900' }),
+    listing('https://www.agent.example/property/21400828/', '1 Elm St, Hurst, TX', { price: '$300,000' })]));
+  const mirrored = findings.find(f => f.code === 'MIRRORED_LISTING');
+  assert.deepEqual(mirrored.groups, [['https://www.agent.example/property/21382178/', 'https://agent.platform.example/property/21382178/']]);
+});

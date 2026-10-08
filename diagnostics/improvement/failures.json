@@ -10,7 +10,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "d5329ba394858001",
       "sites": [
         {
@@ -43,7 +43,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "88df7a337168ae31",
       "sites": [
         {
@@ -119,7 +119,7 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "7cd585b7fe3604dd",
       "sites": [
         {
@@ -324,7 +324,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "48be237528437f38",
       "sites": [
         {
@@ -633,7 +633,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "0d7df76bc512fe9d",
       "sites": [
         {
@@ -743,7 +743,7 @@
       ],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "ad1098bc29198b26",
       "sites": [
         {
@@ -788,7 +788,7 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "88935e90db8f6ebb",
       "sites": [
         {
@@ -865,7 +865,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "89f4e5443044d67d",
       "sites": [
         {
@@ -909,7 +909,7 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "50c61de848c2b20d",
       "sites": [
         {
@@ -984,7 +984,7 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T19:22:34.206Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "2f61ac6a29cfa941",
       "sites": [
         {
@@ -1122,7 +1122,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T19:22:34.206Z",
-      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
       "evidenceHash": "62d2693c3d059b56",
       "sites": [
         {
@@ -1146,7 +1146,89 @@
         "agentfire-dsidx"
       ],
       "attempts": []
+    },
+    "mirrored-listing": {
+      "id": "mirrored-listing",
+      "code": "MIRRORED_LISTING",
+      "defectKind": "code_defect",
+      "severity": 3,
+      "stage": "save-boundary normalizer (one record per listing)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyKey, normalizeListingRecords)"
+      ],
+      "status": "open",
+      "firstSeen": "2026-10-08T19:27:11.442Z",
+      "lastSeen": "2026-10-08T19:27:11.442Z",
+      "evidenceHash": "56fdb8736b1f81e2",
+      "sites": [
+        {
+          "id": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "count": 49,
+          "examples": [
+            {
+              "titles": [
+                "9652 Calaveras Rd, Fort Worth, TX 76177",
+                "9652 Calaveras Rd, Fort Worth, TX 76177"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21400828/",
+                "https://northforworthhomes.realgeeks.com/property/21400828/"
+              ]
+            },
+            {
+              "titles": [
+                "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+                "3801 Heather Meadows Dr, Fort Worth, TX 76244"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21404560/",
+                "https://northforworthhomes.realgeeks.com/property/21404560/"
+              ]
+            },
+            {
+              "titles": [
+                "5752 Glynda Dr, North Richland Hills, TX 76180",
+                "5752 Glynda Dr, North Richland Hills, TX 76180"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21402334/",
+                "https://northforworthhomes.realgeeks.com/property/21402334/"
+              ]
+            },
+            {
+              "titles": [
+                "5768 Glynda Dr, North Richland Hills, TX 76180",
+                "5768 Glynda Dr, North Richland Hills, TX 76180"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21402340/",
+                "https://northforworthhomes.realgeeks.com/property/21402340/"
+              ]
+            },
+            {
+              "titles": [
+                "2110 Verona Dr, Haslet, TX 76052",
+                "2110 Verona Dr, Haslet, TX 76052"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21398837/",
+                "https://northforworthhomes.realgeeks.com/property/21398837/"
+              ]
+            }
+          ],
+          "detail": "The same listing (same listing-id path and price) is imported once per host the site publishes it on."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 49,
+      "architectures": [
+        "property-cards"
+      ],
+      "attempts": []
     }
   },
-  "lastEvaluation": "2026-10-08T19:23:09.157Z"
+  "lastEvaluation": "2026-10-08T19:27:11.372Z"
 }

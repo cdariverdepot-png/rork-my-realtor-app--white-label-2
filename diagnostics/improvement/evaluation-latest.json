@@ -1,5 +1,5 @@
 {
-  "evaluatedAt": "2026-10-08T19:23:09.157Z",
+  "evaluatedAt": "2026-10-08T19:27:11.372Z",
   "engine": "working tree",
   "sites": [
     {
@@ -9,7 +9,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:28:24.722Z",
-      "cpuMs": 132,
+      "cpuMs": 310,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -39,7 +39,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:31.687Z",
-      "cpuMs": 0,
+      "cpuMs": 1,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -70,7 +70,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:09.958Z",
-      "cpuMs": 3,
+      "cpuMs": 5,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -101,7 +101,7 @@
       "holdout": false,
       "architecture": "candidate:flexmls",
       "capturedAt": "2026-10-08T04:24:58.470Z",
-      "cpuMs": 9,
+      "cpuMs": 15,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -132,7 +132,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:31.496Z",
-      "cpuMs": 9,
+      "cpuMs": 16,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -168,7 +168,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:35.755Z",
-      "cpuMs": 23,
+      "cpuMs": 37,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -203,7 +203,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:09.828Z",
-      "cpuMs": 381,
+      "cpuMs": 700,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -397,7 +397,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:22.303Z",
-      "cpuMs": 29,
+      "cpuMs": 60,
       "imported": 3,
       "missing": 0,
       "listings": [
@@ -438,7 +438,7 @@
       "holdout": false,
       "architecture": "property-cards+public-json",
       "capturedAt": "2026-10-08T04:27:20.976Z",
-      "cpuMs": 90,
+      "cpuMs": 195,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -614,7 +614,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:17.303Z",
-      "cpuMs": 284,
+      "cpuMs": 504,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -637,7 +637,7 @@
       "holdout": false,
       "architecture": "candidate:wordpress",
       "capturedAt": "2026-10-08T04:27:21.799Z",
-      "cpuMs": 5,
+      "cpuMs": 7,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -672,21 +672,12 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:54.552Z",
-      "cpuMs": 102,
-      "imported": 12,
+      "cpuMs": 203,
+      "imported": 10,
       "missing": 0,
       "listings": [
         {
           "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
-          "title": "14035 Densmore Avenue N Seattle, WA 98133",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 1273,
-          "photos": 26,
-          "price": "$679,900"
-        },
-        {
-          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/",
           "title": "14035 Densmore Avenue N Seattle, WA 98133",
           "ownership": null,
           "listingOffice": null,
@@ -767,15 +758,6 @@
           "price": "$725,000"
         },
         {
-          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/",
-          "title": "320 NE 156th Street Shoreline, WA 98155",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 948,
-          "photos": 30,
-          "price": "$725,000"
-        },
-        {
           "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-B-28TH-AVENUE-S-SEATTLE-WA-98144/2548957/26/",
           "title": "906 B 28th Avenue S Seattle, WA 98144",
           "ownership": null,
@@ -785,45 +767,7 @@
           "price": "$739,950"
         }
       ],
-      "findings": [
-        {
-          "site": "katerina-sayles",
-          "set": "regression",
-          "category": "idx",
-          "architecture": "property-cards",
-          "code": "DUPLICATE_PROPERTY",
-          "defectKind": "code_defect",
-          "severity": 2,
-          "count": 2,
-          "examples": [
-            {
-              "title": "14035 Densmore Avenue N Seattle, WA 98133",
-              "sourceUrls": [
-                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
-                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/"
-              ]
-            },
-            {
-              "title": "320 NE 156th Street Shoreline, WA 98155",
-              "sourceUrls": [
-                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
-                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/"
-              ]
-            }
-          ],
-          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs.",
-          "groups": [
-            [
-              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
-              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/"
-            ],
-            [
-              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
-              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/"
-            ]
-          ]
-        }
-      ]
+      "findings": []
     },
     {
       "id": "mount-snow-palmiter",
@@ -832,7 +776,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:11.021Z",
-      "cpuMs": 519,
+      "cpuMs": 1004,
       "imported": 7,
       "missing": 0,
       "listings": [
@@ -939,7 +883,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:25.319Z",
-      "cpuMs": 389,
+      "cpuMs": 710,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -1010,7 +954,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:38.249Z",
-      "cpuMs": 33,
+      "cpuMs": 51,
       "imported": 15,
       "missing": 0,
       "listings": [
@@ -1216,8 +1160,8 @@
       "holdout": false,
       "architecture": "ihomefinder",
       "capturedAt": "2026-10-08T04:27:27.234Z",
-      "cpuMs": 33,
-      "imported": 100,
+      "cpuMs": 85,
+      "imported": 90,
       "missing": 0,
       "listings": [
         {
@@ -1581,15 +1525,6 @@
           "price": "$695,000"
         },
         {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219684/309/",
-          "title": "Lot 5 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 4,
-          "price": "$45,500"
-        },
-        {
           "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10380-LAKE-RD-N-IRONWOOD-MI-49938/219696/309/",
           "title": "10380 LAKE RD N",
           "ownership": null,
@@ -1597,87 +1532,6 @@
           "description": 1319,
           "photos": 38,
           "price": "$234,900"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219691/309/",
-          "title": "Lot 13 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 4,
-          "price": "$40,000"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219690/309/",
-          "title": "Lot 12 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 736,
-          "photos": 7,
-          "price": "$125,000"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/",
-          "title": "Lot 10 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 5,
-          "price": "$47,500"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/",
-          "title": "Lot 9 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 5,
-          "price": "$49,500"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/",
-          "title": "Lot 8 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 4,
-          "price": "$45,500"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219686/309/",
-          "title": "Lot 7 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 4,
-          "price": "$45,500"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219685/309/",
-          "title": "Lot 6 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 4,
-          "price": "$45,500"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/",
-          "title": "Lot 2 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 4,
-          "price": "$49,500"
-        },
-        {
-          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/",
-          "title": "Lot 1 CATOR DR",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 676,
-          "photos": 5,
-          "price": "$49,500"
         },
         {
           "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-SUTTON-RD-MINOCQUA-WI-54548/219674/309/",
@@ -2164,96 +2018,6 @@
             }
           ],
           "detail": "Neither the card nor a recorded detail page names the property."
-        },
-        {
-          "site": "redman-realty-group",
-          "set": "regression",
-          "category": "brokerage",
-          "architecture": "ihomefinder",
-          "code": "DUPLICATE_PROPERTY",
-          "defectKind": "code_defect",
-          "severity": 2,
-          "count": 10,
-          "examples": [
-            {
-              "title": "Lot 9 CATOR DR",
-              "sourceUrls": [
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/"
-              ]
-            },
-            {
-              "title": "Lot 2 CATOR DR",
-              "sourceUrls": [
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/"
-              ]
-            },
-            {
-              "title": "Lot 1 CATOR DR",
-              "sourceUrls": [
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/"
-              ]
-            },
-            {
-              "title": "Lot 10 CATOR DR",
-              "sourceUrls": [
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/"
-              ]
-            },
-            {
-              "title": "Lot 8 CATOR DR",
-              "sourceUrls": [
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
-                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/"
-              ]
-            }
-          ],
-          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs.",
-          "groups": [
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219758/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219686/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219757/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219685/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219754/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219684/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219753/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219691/309/"
-            ],
-            [
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219752/309/",
-              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219690/309/"
-            ]
-          ]
         }
       ]
     },
@@ -2295,7 +2059,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:26:49.820Z",
-      "cpuMs": 26,
+      "cpuMs": 46,
       "imported": 0,
       "missing": 4,
       "listings": [],
@@ -2359,7 +2123,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:55.391Z",
-      "cpuMs": 248,
+      "cpuMs": 492,
       "imported": 36,
       "missing": 0,
       "listings": [
@@ -2697,7 +2461,7 @@
       "holdout": false,
       "architecture": "candidate:wix",
       "capturedAt": "2026-10-08T04:29:58.580Z",
-      "cpuMs": 81,
+      "cpuMs": 162,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2735,7 +2499,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:03.893Z",
-      "cpuMs": 46,
+      "cpuMs": 89,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -2803,7 +2567,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:25:01.164Z",
-      "cpuMs": 13,
+      "cpuMs": 29,
       "imported": 2,
       "missing": 0,
       "listings": [
@@ -2857,7 +2621,7 @@
       "holdout": false,
       "architecture": "candidate:next",
       "capturedAt": "2026-10-08T04:29:45.911Z",
-      "cpuMs": 21,
+      "cpuMs": 37,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2892,7 +2656,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:44.547Z",
-      "cpuMs": 180,
+      "cpuMs": 291,
       "imported": 10,
       "missing": 0,
       "listings": [
@@ -2996,7 +2760,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:38.708Z",
-      "cpuMs": 126,
+      "cpuMs": 174,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -3064,8 +2828,8 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:37.044Z",
-      "cpuMs": 283,
-      "imported": 100,
+      "cpuMs": 551,
+      "imported": 99,
       "missing": 0,
       "listings": [
         {
@@ -3258,12 +3022,12 @@
           "price": "$547,000"
         },
         {
-          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21333972/",
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21333972/",
           "title": "212 Utopia Ct, Keller, TX 76248",
           "ownership": "featured",
           "listingOffice": "Christopher Ondarza from Power House Real Estate. Contact:",
           "description": 88,
-          "photos": 5,
+          "photos": 12,
           "price": "$1,300,000"
         },
         {
@@ -3708,15 +3472,6 @@
           "price": "$547,000"
         },
         {
-          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21333972/",
-          "title": "212 Utopia Ct, Keller, TX 76248",
-          "ownership": "featured",
-          "listingOffice": "Christopher Ondarza from Power House Real Estate. Contact:",
-          "description": 88,
-          "photos": 12,
-          "price": "$1,300,000"
-        },
-        {
           "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21348958/",
           "title": "$630,000 ▼",
           "ownership": null,
@@ -4018,24 +3773,259 @@
           "set": "unseen",
           "category": "Real Geeks",
           "architecture": "property-cards",
-          "code": "DUPLICATE_PROPERTY",
+          "code": "MIRRORED_LISTING",
           "defectKind": "code_defect",
-          "severity": 2,
-          "count": 1,
+          "severity": 3,
+          "count": 49,
           "examples": [
             {
-              "title": "212 Utopia Ct, Keller, TX 76248",
+              "titles": [
+                "9652 Calaveras Rd, Fort Worth, TX 76177",
+                "9652 Calaveras Rd, Fort Worth, TX 76177"
+              ],
               "sourceUrls": [
-                "https://www.chatmanrealtygroup.com/property/21333972/",
-                "https://northforworthhomes.realgeeks.com/property/21333972/"
+                "https://www.chatmanrealtygroup.com/property/21400828/",
+                "https://northforworthhomes.realgeeks.com/property/21400828/"
+              ]
+            },
+            {
+              "titles": [
+                "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+                "3801 Heather Meadows Dr, Fort Worth, TX 76244"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21404560/",
+                "https://northforworthhomes.realgeeks.com/property/21404560/"
+              ]
+            },
+            {
+              "titles": [
+                "5752 Glynda Dr, North Richland Hills, TX 76180",
+                "5752 Glynda Dr, North Richland Hills, TX 76180"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21402334/",
+                "https://northforworthhomes.realgeeks.com/property/21402334/"
+              ]
+            },
+            {
+              "titles": [
+                "5768 Glynda Dr, North Richland Hills, TX 76180",
+                "5768 Glynda Dr, North Richland Hills, TX 76180"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21402340/",
+                "https://northforworthhomes.realgeeks.com/property/21402340/"
+              ]
+            },
+            {
+              "titles": [
+                "2110 Verona Dr, Haslet, TX 76052",
+                "2110 Verona Dr, Haslet, TX 76052"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21398837/",
+                "https://northforworthhomes.realgeeks.com/property/21398837/"
               ]
             }
           ],
-          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs.",
+          "detail": "The same listing (same listing-id path and price) is imported once per host the site publishes it on.",
           "groups": [
             [
-              "https://www.chatmanrealtygroup.com/property/21333972/",
-              "https://northforworthhomes.realgeeks.com/property/21333972/"
+              "https://www.chatmanrealtygroup.com/property/21400828/",
+              "https://northforworthhomes.realgeeks.com/property/21400828/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21404560/",
+              "https://northforworthhomes.realgeeks.com/property/21404560/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21402334/",
+              "https://northforworthhomes.realgeeks.com/property/21402334/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21402340/",
+              "https://northforworthhomes.realgeeks.com/property/21402340/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21398837/",
+              "https://northforworthhomes.realgeeks.com/property/21398837/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21389782/",
+              "https://northforworthhomes.realgeeks.com/property/21389782/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21383579/",
+              "https://northforworthhomes.realgeeks.com/property/21383579/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21386087/",
+              "https://northforworthhomes.realgeeks.com/property/21386087/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21382178/",
+              "https://northforworthhomes.realgeeks.com/property/21382178/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21381715/",
+              "https://northforworthhomes.realgeeks.com/property/21381715/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21376990/",
+              "https://northforworthhomes.realgeeks.com/property/21376990/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21363978/",
+              "https://northforworthhomes.realgeeks.com/property/21363978/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21375297/",
+              "https://northforworthhomes.realgeeks.com/property/21375297/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21375749/",
+              "https://northforworthhomes.realgeeks.com/property/21375749/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21375808/",
+              "https://northforworthhomes.realgeeks.com/property/21375808/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21373564/",
+              "https://northforworthhomes.realgeeks.com/property/21373564/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21371983/",
+              "https://northforworthhomes.realgeeks.com/property/21371983/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21370065/",
+              "https://northforworthhomes.realgeeks.com/property/21370065/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21361236/",
+              "https://northforworthhomes.realgeeks.com/property/21361236/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21367554/",
+              "https://northforworthhomes.realgeeks.com/property/21367554/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21366848/",
+              "https://northforworthhomes.realgeeks.com/property/21366848/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21348958/",
+              "https://northforworthhomes.realgeeks.com/property/21348958/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21358260/",
+              "https://northforworthhomes.realgeeks.com/property/21358260/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21347230/",
+              "https://northforworthhomes.realgeeks.com/property/21347230/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21346991/",
+              "https://northforworthhomes.realgeeks.com/property/21346991/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21335778/",
+              "https://northforworthhomes.realgeeks.com/property/21335778/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21346416/",
+              "https://northforworthhomes.realgeeks.com/property/21346416/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21340717/",
+              "https://northforworthhomes.realgeeks.com/property/21340717/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21296945/",
+              "https://northforworthhomes.realgeeks.com/property/21296945/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21332222/",
+              "https://northforworthhomes.realgeeks.com/property/21332222/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21323149/",
+              "https://northforworthhomes.realgeeks.com/property/21323149/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21325284/",
+              "https://northforworthhomes.realgeeks.com/property/21325284/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21302163/",
+              "https://northforworthhomes.realgeeks.com/property/21302163/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21300735/",
+              "https://northforworthhomes.realgeeks.com/property/21300735/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21287592/",
+              "https://northforworthhomes.realgeeks.com/property/21287592/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21285865/",
+              "https://northforworthhomes.realgeeks.com/property/21285865/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21279404/",
+              "https://northforworthhomes.realgeeks.com/property/21279404/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21273381/",
+              "https://northforworthhomes.realgeeks.com/property/21273381/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21259747/",
+              "https://northforworthhomes.realgeeks.com/property/21259747/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21240443/",
+              "https://northforworthhomes.realgeeks.com/property/21240443/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21246536/",
+              "https://northforworthhomes.realgeeks.com/property/21246536/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21230831/",
+              "https://northforworthhomes.realgeeks.com/property/21230831/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21241721/",
+              "https://northforworthhomes.realgeeks.com/property/21241721/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21241759/",
+              "https://northforworthhomes.realgeeks.com/property/21241759/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21239094/",
+              "https://northforworthhomes.realgeeks.com/property/21239094/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21234358/",
+              "https://northforworthhomes.realgeeks.com/property/21234358/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21193615/",
+              "https://northforworthhomes.realgeeks.com/property/21193615/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21142672/",
+              "https://northforworthhomes.realgeeks.com/property/21142672/"
+            ],
+            [
+              "https://www.chatmanrealtygroup.com/property/21125741/",
+              "https://northforworthhomes.realgeeks.com/property/21125741/"
             ]
           ]
         },
@@ -4134,7 +4124,7 @@
       "holdout": true,
       "architecture": "attribute-cards",
       "capturedAt": "2026-10-08T19:20:13.553Z",
-      "cpuMs": 31,
+      "cpuMs": 59,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -4188,7 +4178,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:35.591Z",
-      "cpuMs": 996,
+      "cpuMs": 1855,
       "imported": 55,
       "missing": 0,
       "listings": [
@@ -4697,7 +4687,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:20.911Z",
-      "cpuMs": 114,
+      "cpuMs": 210,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -4872,7 +4862,7 @@
       "holdout": true,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T19:19:39.188Z",
-      "cpuMs": 0,
+      "cpuMs": 1,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4903,7 +4893,7 @@
       "holdout": true,
       "architecture": "candidate:lofty_chime",
       "capturedAt": "2026-10-08T19:19:39.733Z",
-      "cpuMs": 33,
+      "cpuMs": 63,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4934,7 +4924,7 @@
       "holdout": true,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T19:19:40.096Z",
-      "cpuMs": 3,
+      "cpuMs": 2,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4965,7 +4955,7 @@
       "holdout": true,
       "architecture": "candidate:idx_broker",
       "capturedAt": "2026-10-08T19:20:38.476Z",
-      "cpuMs": 46,
+      "cpuMs": 93,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -5004,7 +4994,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:13.012Z",
-      "cpuMs": 226,
+      "cpuMs": 434,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -5255,7 +5245,7 @@
       "holdout": true,
       "architecture": "agentfire-dsidx",
       "capturedAt": "2026-10-08T19:19:43.140Z",
-      "cpuMs": 43,
+      "cpuMs": 111,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -5285,7 +5275,10 @@
               "title": "cameronteam"
             }
           ],
-          "detail": "A social-media post or profile was imported as a property listing."
+          "detail": "A social-media post or profile was imported as a property listing.",
+          "all": [
+            "https://www.instagram.com/p/DeAMNvJjKI7/"
+          ]
         },
         {
           "site": "the-cameron-team",
@@ -5336,7 +5329,7 @@
       "holdout": true,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T19:19:39.032Z",
-      "cpuMs": 0,
+      "cpuMs": 1,
       "imported": 0,
       "missing": 0,
       "listings": [],

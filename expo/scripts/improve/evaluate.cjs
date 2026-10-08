@@ -95,6 +95,25 @@ function findingsFor(entry, capture, replay) {
   const obstacles = result.meta?.obstacles ?? [];
   if (result.error) add('ENGINE_ERROR', 'code_defect', 5, [{ error: result.error }], 'Discovery threw instead of returning a result.');
 
+  // Scope: a record hosted on another domain must be reachable from a link the site itself publishes.
+  // Records on a domain the site never links to were reached through someone else's pages (a website
+  // vendor's credit link, its showcase of other clients, a brokerage portal): never the agent's inventory.
+  const domainOf = host => host.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
+  const seedDomains = new Set((capture.seeds ?? []).map(seed => { try { return domainOf(new URL(seed).hostname); } catch { return ''; } }));
+  const sitePages = capture.pages.filter(p => { try { return !p.error && seedDomains.has(domainOf(new URL(p.finalUrl ?? p.url).hostname)); } catch { return false; } });
+  const linkedHosts = new Set(sitePages.flatMap(p => [...(p.html ?? '').matchAll(/(?:href|src|action|data-[\w-]+)=["']https?:\/\/([^/"'?#:]+)/gi)].map(m => m[1].toLowerCase())));
+  const unlinked = listings.filter(item => {
+    try {
+      const host = new URL(item.sourceUrl).hostname.toLowerCase();
+      return !seedDomains.has(domainOf(host)) && !linkedHosts.has(host);
+    } catch { return false; }
+  });
+  if (unlinked.length) {
+    add('OFFSITE_UNLINKED', 'code_defect', 5, unlinked.map(i => ({ sourceUrl: i.sourceUrl, title: i.title, ownership: i.ownership ?? null })),
+      'Records come from a host the site never links to: discovery left the site\'s own scope.');
+    out[out.length - 1].all = unlinked.map(i => i.sourceUrl);
+  }
+
   // A social post, video or profile is never a property record, whatever page linked to it.
   const SOCIAL = /(?:^|\.)(?:instagram\.com|facebook\.com|fb\.com|youtube\.com|youtu\.be|tiktok\.com|pinterest\.com|twitter\.com|x\.com|linkedin\.com|threads\.net|vimeo\.com)$/i;
   const social = listings.filter(item => { try { return SOCIAL.test(new URL(item.sourceUrl).hostname); } catch { return false; } });
@@ -133,6 +152,24 @@ function findingsFor(entry, capture, replay) {
       'The same property (same address and the same description or lead photo) is imported more than once under different URLs.');
     // Every group, not only the displayed examples: the gate checks merges against all of them.
     out[out.length - 1].groups = duplicates.map(group => group.map(i => i.sourceUrl));
+  }
+
+  // One listing on two hosts of the same site (the agent's domain and the platform's subdomain for it):
+  // the same listing-id path and the same price is the same listing, whatever each copy's title says.
+  const byPath = new Map();
+  for (const item of listings) {
+    try {
+      const url = new URL(item.sourceUrl);
+      if (!url.pathname.split('/').some(part => /^\d{5,}$/.test(part))) continue;
+      const id = url.pathname.replace(/\/+$/, '') + '|' + key(item.price);
+      byPath.set(id, [...byPath.get(id) ?? [], item]);
+    } catch { /* not a URL */ }
+  }
+  const mirrored = [...byPath.values()].filter(group => new Set(group.map(i => new URL(i.sourceUrl).hostname)).size > 1);
+  if (mirrored.length) {
+    add('MIRRORED_LISTING', 'code_defect', 3, mirrored.map(group => ({ titles: group.map(i => i.title), sourceUrls: group.map(i => i.sourceUrl) })),
+      'The same listing (same listing-id path and price) is imported once per host the site publishes it on.');
+    out[out.length - 1].groups = mirrored.map(group => group.map(i => i.sourceUrl));
   }
 
   // Details: a recorded detail page that publishes a description or gallery the record does not have.
