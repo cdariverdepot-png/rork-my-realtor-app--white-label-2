@@ -1,10 +1,7 @@
-Rendered capture requested Thu Oct  8 21:41:25 UTC 2026 for the final integration: Real Geeks / Chatman, the five sites that need rendering, and the three thin-detail sites.
-capture: chatman-realty-group--rendered https://www.chatmanrealtygroup.com/
-capture: tom-toole--rendered https://www.tomtoole.com/
-capture: idaho-perfect-home--rendered https://www.idahoperfecthome.com/
-capture: lauer-realty-group--rendered https://lauerrealtygroup.com/
-capture: magic-valley-homes--rendered https://magicvalley.homes/
-capture: howard-hanna-daniel-torri--rendered https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053
-capture: houses-of-kansas-city--recapture https://housesofkansascity.com/
-capture: mount-snow-palmiter--recapture https://www.mountsnowpalmiter.com/
-capture: skilled-real-estate-miami--recapture https://miamidadebrowardliving.com/
+Rendered capture requested Thu Oct  8 21:54:13 UTC 2026 after e12d06b (one render budget per site; refused renders keep the plain page).
+capture: chatman-realty-group--rendered-2 https://www.chatmanrealtygroup.com/
+capture: tom-toole--rendered-2 https://www.tomtoole.com/
+capture: idaho-perfect-home--rendered-2 https://www.idahoperfecthome.com/
+capture: lauer-realty-group--rendered-2 https://lauerrealtygroup.com/
+capture: magic-valley-homes--rendered-2 https://magicvalley.homes/
+capture: howard-hanna-daniel-torri--rendered-2 https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053
