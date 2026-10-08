@@ -1,5 +1,5 @@
 {
-  "evaluatedAt": "2026-10-08T17:25:19.210Z",
+  "evaluatedAt": "2026-10-08T19:20:50.767Z",
   "engine": "working tree",
   "sites": [
     {
@@ -9,7 +9,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:28:24.722Z",
-      "cpuMs": 214,
+      "cpuMs": 211,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -132,7 +132,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:31.496Z",
-      "cpuMs": 14,
+      "cpuMs": 13,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -168,7 +168,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:35.755Z",
-      "cpuMs": 34,
+      "cpuMs": 37,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -203,7 +203,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:09.828Z",
-      "cpuMs": 578,
+      "cpuMs": 595,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -397,7 +397,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:22.303Z",
-      "cpuMs": 47,
+      "cpuMs": 48,
       "imported": 3,
       "missing": 0,
       "listings": [
@@ -438,7 +438,7 @@
       "holdout": false,
       "architecture": "property-cards+public-json",
       "capturedAt": "2026-10-08T04:27:20.976Z",
-      "cpuMs": 137,
+      "cpuMs": 142,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -614,7 +614,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:17.303Z",
-      "cpuMs": 430,
+      "cpuMs": 452,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -672,7 +672,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:54.552Z",
-      "cpuMs": 159,
+      "cpuMs": 158,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -811,7 +811,17 @@
               ]
             }
           ],
-          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs.",
+          "groups": [
+            [
+              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/"
+            ],
+            [
+              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
+              "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/"
+            ]
+          ]
         }
       ]
     },
@@ -822,7 +832,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:11.021Z",
-      "cpuMs": 816,
+      "cpuMs": 824,
       "imported": 7,
       "missing": 0,
       "listings": [
@@ -929,7 +939,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:25.319Z",
-      "cpuMs": 576,
+      "cpuMs": 602,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -1000,7 +1010,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:38.249Z",
-      "cpuMs": 49,
+      "cpuMs": 50,
       "imported": 15,
       "missing": 0,
       "listings": [
@@ -1206,7 +1216,7 @@
       "holdout": false,
       "architecture": "ihomefinder",
       "capturedAt": "2026-10-08T04:27:27.234Z",
-      "cpuMs": 55,
+      "cpuMs": 51,
       "imported": 100,
       "missing": 0,
       "listings": [
@@ -2201,7 +2211,49 @@
               ]
             }
           ],
-          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs.",
+          "groups": [
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219758/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219686/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219757/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219685/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219754/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219684/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219753/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219691/309/"
+            ],
+            [
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219752/309/",
+              "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219690/309/"
+            ]
+          ]
         }
       ]
     },
@@ -2243,7 +2295,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:26:49.820Z",
-      "cpuMs": 37,
+      "cpuMs": 41,
       "imported": 0,
       "missing": 4,
       "listings": [],
@@ -2307,7 +2359,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:55.391Z",
-      "cpuMs": 388,
+      "cpuMs": 407,
       "imported": 36,
       "missing": 0,
       "listings": [
@@ -2645,7 +2697,7 @@
       "holdout": false,
       "architecture": "candidate:wix",
       "capturedAt": "2026-10-08T04:29:58.580Z",
-      "cpuMs": 116,
+      "cpuMs": 125,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2683,7 +2735,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:03.893Z",
-      "cpuMs": 71,
+      "cpuMs": 70,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -2830,6 +2882,2464 @@
             }
           ],
           "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "bernard-real-estate-group",
+      "set": "unseen",
+      "category": "IDX Broker on WordPress",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:19:44.547Z",
+      "cpuMs": 283,
+      "imported": 10,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228284/786-NE-Tierra-Road-Bend-97701",
+          "title": "27 Active 786 NE Tierra Road, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Ginny Kansas Real Estate",
+          "description": 979,
+          "photos": 27,
+          "price": "$539,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228277/61801-Camellia-Street-51-Bend-97702",
+          "title": "22 Active 61801 Camellia Street",
+          "ownership": "featured",
+          "listingOffice": "Pacwest Realty Group",
+          "description": 656,
+          "photos": 22,
+          "price": "$635,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228274/18840-Tumalo-Reservoir-Road-Bend-97703",
+          "title": "56 Active 18840 Tumalo Reservoir Road, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "LivOregon Real Estate LLC",
+          "description": 900,
+          "photos": 56,
+          "price": "$1,850,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228271/61647-Daly-Estates-Drive-14-Bend-97702",
+          "title": "33 Active 61647 Daly Estates Drive",
+          "ownership": "featured",
+          "listingOffice": "Real Broker",
+          "description": 763,
+          "photos": 33,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228270/61573-Twin-Lakes-Loop-Bend-97702",
+          "title": "50 Active 61573 Twin Lakes Loop, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Cascade Hasson SIR",
+          "description": 998,
+          "photos": 50,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228264/3068-NE-Brownstone-Place-Bend-97701",
+          "title": "26 Active 3068 NE Brownstone Place, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 966,
+          "photos": 26,
+          "price": "$799,900"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228253/60750-Breckenridge-Street-Bend-97702",
+          "title": "27 Active 60750 Breckenridge Street, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Duke Warner Realty ERA Powered",
+          "description": 999,
+          "photos": 27,
+          "price": "$599,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228252/1110-Nw-Kendirick-Place-Lot-297-Bend-97703",
+          "title": "4 Active 1110 NW Kendirick Place Lot 297, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Cascade Hasson SIR",
+          "description": 971,
+          "photos": 4,
+          "price": "$1,569,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228242/19737-SW-River-Camp-Lane-Bend-97702",
+          "title": "39 Active 19737 SW River Camp Lane, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Harcourts The Garner Group Real Estate",
+          "description": 897,
+          "photos": 39,
+          "price": "$950,000"
+        },
+        {
+          "sourceUrl": "https://search.bernardrealestategroup.com/idx/details/listing/b679/220228237/59865-Cheyenne-Road-Bend-97702",
+          "title": "44 Active 59865 Cheyenne Road, Bend, OR",
+          "ownership": "featured",
+          "listingOffice": "Nexthome Next Chapter",
+          "description": 393,
+          "photos": 44,
+          "price": "$550,000"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "canaday-group",
+      "set": "unseen",
+      "category": "Luxury Presence",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:19:38.708Z",
+      "cpuMs": 165,
+      "imported": 6,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://canadaygroup.com/properties/monarch-bay-terrace",
+          "title": "23011 Java Sea Drive, Dana Point, CA 92629",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1661,
+          "photos": 31,
+          "price": "$3,999,900"
+        },
+        {
+          "sourceUrl": "https://canadaygroup.com/properties/polo-club-indio-retreat",
+          "title": "82768 Kingsboro Ln, Indio, CA 92201",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1359,
+          "photos": 17,
+          "price": "$730,000"
+        },
+        {
+          "sourceUrl": "https://canadaygroup.com/properties/hunt-club-estate",
+          "title": "30602 Hunt Club Dr, San Juan Capistrano, CA 92675",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1407,
+          "photos": 71,
+          "price": "$5,695,000"
+        },
+        {
+          "sourceUrl": "https://canadaygroup.com/properties/gated-estate",
+          "title": "32121 Cook Ln, San Juan Capistrano, CA 92675",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 632,
+          "photos": 11,
+          "price": "$6,999,000"
+        },
+        {
+          "sourceUrl": "https://canadaygroup.com/properties/new-in-the-oaks-farms",
+          "title": "28690 Martingale Dr, San Juan Capistrano, CA 92675",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 877,
+          "photos": 54,
+          "price": "$4,752,000"
+        },
+        {
+          "sourceUrl": "https://canadaygroup.com/properties/gated-hunt-club-estate",
+          "title": "30821 Hunt Club Drive, San Juan Capistrano, CA 92675",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 629,
+          "photos": 21,
+          "price": "$3,588,800"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "chatman-realty-group",
+      "set": "unseen",
+      "category": "Real Geeks",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:19:37.044Z",
+      "cpuMs": 452,
+      "imported": 100,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21400828/",
+          "title": "9652 Calaveras Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Christie Cannon from LPT Realty LLC. Contact:",
+          "description": 1054,
+          "photos": 5,
+          "price": "$499,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21404560/",
+          "title": "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Jeff Abate from Orchard Brokerage. Contact:",
+          "description": 911,
+          "photos": 5,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21402334/",
+          "title": "5752 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 860,
+          "photos": 4,
+          "price": "$714,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21402340/",
+          "title": "5768 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1725,
+          "photos": 4,
+          "price": "$704,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21398837/",
+          "title": "2110 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1415,
+          "photos": 5,
+          "price": "$1,173,930"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21389782/",
+          "title": "9801 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Spencer Mulgrew from Walnut Hill Realty. Contact:",
+          "description": 935,
+          "photos": 5,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21383579/",
+          "title": "813 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1012,
+          "photos": 4,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21386087/",
+          "title": "2037 Waterleaf Rd, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Trevon Tate from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 1659,
+          "photos": 5,
+          "price": "$949,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21382178/",
+          "title": "7124 Chelsea Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ana Zavala from Regal, REALTORS. Contact:",
+          "description": 840,
+          "photos": 5,
+          "price": "$594,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21381715/",
+          "title": "4868 Nickeldale Ct, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Joe McCalip from LPT Realty, LLC. Contact:",
+          "description": 1095,
+          "photos": 5,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21376990/",
+          "title": "1613 Fiddleneck St, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Tonya Green from Orchard Brokerage. Contact:",
+          "description": 732,
+          "photos": 5,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21363978/",
+          "title": "6749 Cambridge Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Deanna Chavez from Real Broker, LLC. Contact:",
+          "description": 1714,
+          "photos": 5,
+          "price": "$639,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375297/",
+          "title": "9200 Brittlebrush Trl, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Rochelle Howey from Keller Williams Realty. Contact:",
+          "description": 1995,
+          "photos": 5,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375749/",
+          "title": "531 Syracuse St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Vinh Pham from Rendon Realty, LLC. Contact:",
+          "description": 856,
+          "photos": 5,
+          "price": "$795,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375808/",
+          "title": "8105 Kurgan Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Chandler Crouch from Chandler Crouch, REALTORS. Contact:",
+          "description": 1063,
+          "photos": 5,
+          "price": "$395,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21373564/",
+          "title": "9828 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Jennifer Palma from Peak Realty and Associates LLC. Contact:",
+          "description": 1000,
+          "photos": 5,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21371983/",
+          "title": "817 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1065,
+          "photos": 3,
+          "price": "$978,720"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21370065/",
+          "title": "7640 Rhyner Way, Fort Worth, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Donna Leibow from Keller Williams Central. Contact:",
+          "description": 1000,
+          "photos": 5,
+          "price": "$512,500"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21361236/",
+          "title": "6820 Westbury Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "James Sales from Compass RE Texas, LLC.. Contact:",
+          "description": 1043,
+          "photos": 5,
+          "price": "$549,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21367554/",
+          "title": "1201 Timberhurst Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Krishna Kodali from Swagruha LLC. Contact:",
+          "description": 1478,
+          "photos": 5,
+          "price": "$464,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21366848/",
+          "title": "11428 Colonial Trace Ln, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Andrew Kempka from Caple & Company. Contact:",
+          "description": 1855,
+          "photos": 5,
+          "price": "$547,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21333972/",
+          "title": "212 Utopia Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Christopher Ondarza from Power House Real Estate. Contact:",
+          "description": 88,
+          "photos": 5,
+          "price": "$1,300,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21348958/",
+          "title": "459 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Telly Dearmore from Orchard Brokerage. Contact:",
+          "description": 1944,
+          "photos": 5,
+          "price": "$630,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21358260/",
+          "title": "5732 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1756,
+          "photos": 4,
+          "price": "$729,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21347230/",
+          "title": "2109 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Julia Telligman from Texas Best Properties. Contact:",
+          "description": 1729,
+          "photos": 5,
+          "price": "$915,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21346991/",
+          "title": "499 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ryan Ebersole from Compass RE Texas, LLC.. Contact:",
+          "description": 1601,
+          "photos": 5,
+          "price": "$750,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21335778/",
+          "title": "4008 Knollbrook Ln, Fort Worth, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Trey Shadwick from eXp Realty LLC. Contact:",
+          "description": 1221,
+          "photos": 5,
+          "price": "$479,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21346416/",
+          "title": "2193 Cloverfern Way, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Brian Mattingly from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 575,
+          "photos": 5,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21340717/",
+          "title": "2141 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Mey-Ling Pauri from Ultima Real Estate. Contact:",
+          "description": 1662,
+          "photos": 5,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21296945/",
+          "title": "2042 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 436,
+          "photos": 5,
+          "price": "$1,249,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21332222/",
+          "title": "824 Lemongrass Ct, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Julia Lugo from Monument Realty. Contact:",
+          "description": 703,
+          "photos": 5,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21323149/",
+          "title": "412 Harmony Way, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Mark Zhen from Loyalty Realty, LLC. Contact:",
+          "description": 1637,
+          "photos": 5,
+          "price": "$639,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21325284/",
+          "title": "7257 Laguna Del Campo Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Mandy Linthicum from HomeSmart. Contact:",
+          "description": 1507,
+          "photos": 5,
+          "price": "$474,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21302163/",
+          "title": "1317 Naples Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1122,
+          "photos": 5,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21300735/",
+          "title": "9828 Milkweed Ln, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Xiaonan Xiang from Letshine Realty LLC. Contact:",
+          "description": 645,
+          "photos": 5,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21287592/",
+          "title": "8120 Horseman Rd, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Benjamin Deanda from RE/MAX Trinity. Contact:",
+          "description": 1059,
+          "photos": 5,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21285865/",
+          "title": "2132 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Angela Gilchrist from Radius Agent LLC, A Limited Li. Contact:",
+          "description": 1546,
+          "photos": 5,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21279404/",
+          "title": "2043 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Charles Brown from Keller Williams Realty. Contact:",
+          "description": 1930,
+          "photos": 5,
+          "price": "$1,199,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21273381/",
+          "title": "6717 Serenity Dr, Fort Worth, TX 76135",
+          "ownership": "featured",
+          "listingOffice": "James Cianelli from Tx Land & Legacy Realty, LLC. Contact:",
+          "description": 527,
+          "photos": 5,
+          "price": "$483,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21259747/",
+          "title": "917 Cushing Dr, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Shannon Byrd from Charitable Realty. Contact:",
+          "description": 1980,
+          "photos": 5,
+          "price": "$449,995"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21240443/",
+          "title": "4727 Bluffview Dr, Haltom City, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Lana Cline from The Property Shop. Contact:",
+          "description": 1150,
+          "photos": 5,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21246536/",
+          "title": "7120 Shady Grove Rd, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Colin Pair from Keller Williams Realty. Contact:",
+          "description": 1812,
+          "photos": 5,
+          "price": "$4,200,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21230831/",
+          "title": "7305 Howling Coyote Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "James Lian from Fathom Realty, LLC. Contact:",
+          "description": 901,
+          "photos": 5,
+          "price": "$429,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21241721/",
+          "title": "1929 Brahorn Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Ariel Gabriel from Compass RE Texas, LLC.. Contact:",
+          "description": 1431,
+          "photos": 5,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21241759/",
+          "title": "8025 Ponwar Dr, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Elizabeth Tormoehlen from Christie's Lone Star. Contact:",
+          "description": 1384,
+          "photos": 5,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21239094/",
+          "title": "3732 Trillium Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Kristen Mackey from Better Homes and Gardens Real. Contact:",
+          "description": 1900,
+          "photos": 5,
+          "price": "$464,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21234358/",
+          "title": "204 Townsend Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Jennifer Garcia from Elite Real Estate Texas. Contact:",
+          "description": 869,
+          "photos": 5,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21193615/",
+          "title": "2337 Buelingo Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Dilip Subedi from Beam Real Estate, LLC. Contact:",
+          "description": 1182,
+          "photos": 5,
+          "price": "$519,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21142672/",
+          "title": "2148 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 1136,
+          "photos": 5,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21125741/",
+          "title": "5716 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1972,
+          "photos": 5,
+          "price": "$724,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21400828/",
+          "title": "9652 Calaveras Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Christie Cannon from LPT Realty LLC. Contact:",
+          "description": 96,
+          "photos": 26,
+          "price": "$499,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21404560/",
+          "title": "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Jeff Abate from Orchard Brokerage. Contact:",
+          "description": 102,
+          "photos": 31,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21402334/",
+          "title": "5752 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 103,
+          "photos": 4,
+          "price": "$714,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21402340/",
+          "title": "5768 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 103,
+          "photos": 4,
+          "price": "$704,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21398837/",
+          "title": "2110 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 89,
+          "photos": 29,
+          "price": "$1,173,930"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21389782/",
+          "title": "9801 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Spencer Mulgrew from Walnut Hill Realty. Contact:",
+          "description": 96,
+          "photos": 37,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21383579/",
+          "title": "813 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 92,
+          "photos": 4,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21386087/",
+          "title": "2037 Waterleaf Rd, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Trevon Tate from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 92,
+          "photos": 28,
+          "price": "$949,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+          "title": "$594,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$594,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21381715/",
+          "title": "4868 Nickeldale Ct, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Joe McCalip from LPT Realty, LLC. Contact:",
+          "description": 97,
+          "photos": 38,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+          "title": "$495,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+          "title": "$639,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$639,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+          "title": "$650,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+          "title": "$795,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$795,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375808/",
+          "title": "8105 Kurgan Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Chandler Crouch from Chandler Crouch, REALTORS. Contact:",
+          "description": 94,
+          "photos": 40,
+          "price": "$395,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21373564/",
+          "title": "$475,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21371983/",
+          "title": "817 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 92,
+          "photos": 3,
+          "price": "$978,720"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21370065/",
+          "title": "$512,500 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$512,500"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21361236/",
+          "title": "$549,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$549,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21367554/",
+          "title": "$464,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$464,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21366848/",
+          "title": "$547,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$547,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21333972/",
+          "title": "212 Utopia Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Christopher Ondarza from Power House Real Estate. Contact:",
+          "description": 88,
+          "photos": 12,
+          "price": "$1,300,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21348958/",
+          "title": "$630,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$630,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21358260/",
+          "title": "$729,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$729,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21347230/",
+          "title": "2109 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Julia Telligman from Texas Best Properties. Contact:",
+          "description": 92,
+          "photos": 40,
+          "price": "$915,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21346991/",
+          "title": "499 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ryan Ebersole from Compass RE Texas, LLC.. Contact:",
+          "description": 93,
+          "photos": 40,
+          "price": "$750,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21335778/",
+          "title": "$479,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$479,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21346416/",
+          "title": "$649,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21340717/",
+          "title": "$850,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21296945/",
+          "title": "2042 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 89,
+          "photos": 6,
+          "price": "$1,249,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21332222/",
+          "title": "$399,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21323149/",
+          "title": "$639,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$639,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21325284/",
+          "title": "$474,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$474,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21302163/",
+          "title": "1317 Naples Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 89,
+          "photos": 28,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21300735/",
+          "title": "$599,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21287592/",
+          "title": "$415,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21285865/",
+          "title": "2132 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Angela Gilchrist from Radius Agent LLC, A Limited Li. Contact:",
+          "description": 89,
+          "photos": 32,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21279404/",
+          "title": "$1,199,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$1,199,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21273381/",
+          "title": "6717 Serenity Dr, Fort Worth, TX 76135",
+          "ownership": "featured",
+          "listingOffice": "James Cianelli from Tx Land & Legacy Realty, LLC. Contact:",
+          "description": 95,
+          "photos": 30,
+          "price": "$483,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21259747/",
+          "title": "$449,995 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$449,995"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21240443/",
+          "title": "$450,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21246536/",
+          "title": "7120 Shady Grove Rd, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Colin Pair from Keller Williams Realty. Contact:",
+          "description": 94,
+          "photos": 40,
+          "price": "$4,200,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21230831/",
+          "title": "$429,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$429,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21241721/",
+          "title": "$500,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21241759/",
+          "title": "$525,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21239094/",
+          "title": "$464,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$464,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21234358/",
+          "title": "$799,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21193615/",
+          "title": "2337 Buelingo Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Dilip Subedi from Beam Real Estate, LLC. Contact:",
+          "description": 95,
+          "photos": 22,
+          "price": "$519,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21142672/",
+          "title": "$1,175,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21125741/",
+          "title": "$724,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$724,900"
+        }
+      ],
+      "findings": [
+        {
+          "site": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 3,
+          "count": 30,
+          "examples": [
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+              "title": "$594,900 ▼",
+              "detailPageNames": "7124 Chelsea Dr, North Richland Hills, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+              "title": "$495,000 ▼",
+              "detailPageNames": "1613 Fiddleneck St, Fort Worth, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+              "title": "$639,900 ▼",
+              "detailPageNames": "6749 Cambridge Dr, North Richland Hills, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+              "title": "$650,000 ▼",
+              "detailPageNames": "9200 Brittlebrush Trl, Fort Worth, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+              "title": "$795,000 ▼",
+              "detailPageNames": "531 Syracuse St, Haslet, TX",
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+        },
+        {
+          "site": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "code": "DUPLICATE_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 1,
+          "examples": [
+            {
+              "title": "212 Utopia Ct, Keller, TX 76248",
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21333972/",
+                "https://northforworthhomes.realgeeks.com/property/21333972/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs.",
+          "groups": [
+            [
+              "https://www.chatmanrealtygroup.com/property/21333972/",
+              "https://northforworthhomes.realgeeks.com/property/21333972/"
+            ]
+          ]
+        },
+        {
+          "site": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 30,
+          "examples": [
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+              "title": "$594,900 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 31,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+              "title": "$495,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 26,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+              "title": "$639,900 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 46,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+              "title": "$650,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 46,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+              "title": "$795,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 40,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "craft-bauer",
+      "set": "unseen",
+      "category": "Ylopo",
+      "holdout": true,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T19:20:35.954Z",
+      "cpuMs": 0,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "craft-bauer",
+          "set": "unseen",
+          "category": "Ylopo",
+          "architecture": "unrecognized",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [],
+              "visited": [
+                "https://craftbauer.com/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "eddie-and-laura",
+      "set": "unseen",
+      "category": "Placester",
+      "holdout": true,
+      "architecture": "attribute-cards",
+      "capturedAt": "2026-10-08T19:20:13.553Z",
+      "cpuMs": 51,
+      "imported": 1,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.eddieandlaura.com/property/nc/27583/timberlake/the-forks/138-ann-drive/514b68aed37bb61569000014/10192125/",
+          "title": "138 Ann Drive",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 1,
+          "price": "$444,500"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "finch-and-gable",
+      "set": "unseen",
+      "category": "iFoundAgent (WordPress)",
+      "holdout": true,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T19:20:39.264Z",
+      "cpuMs": 0,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "finch-and-gable",
+          "set": "unseen",
+          "category": "iFoundAgent (WordPress)",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://finchandgable.com/",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "find-estes-park-homes",
+      "set": "unseen",
+      "category": "CINC",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:20:35.591Z",
+      "cpuMs": 1552,
+      "imported": 55,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1373961-coires2/964-ski-rd-allenspark-co-80510",
+          "title": "964 Ski Rd, Allenspark, CO 80510",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 80,
+          "photos": 3,
+          "price": "$1,495,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1373035-coires2/11982-peak-to-peak-dr-allenspark-co-80510",
+          "title": "11982 Peak To Peak Dr, Allenspark, CO 80510",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 89,
+          "photos": 3,
+          "price": "$899,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1371825-coires2/628-county-road-113s-allenspark-co-80540",
+          "title": "628 County Road",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1371214-coires2/360-ski-rd-e-allenspark-co-80510",
+          "title": "360 Ski Rd E, Allenspark, CO 80510",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 80,
+          "photos": 3,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1370658-coires2/449-hwy-7-business-allenspark-co-80510",
+          "title": "449 Hwy",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 86,
+          "photos": 3,
+          "price": "$550,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1370466-coires2/785-s-skinner-rd-allenspark-co-80510",
+          "title": "785 S Skinner Rd, Allenspark, CO 80510",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 84,
+          "photos": 3,
+          "price": "$645,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire402067159-coires2/338-county-road-84-allenspark-co-80510",
+          "title": "338 County Road",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$1,284,500"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1370022-coires2/338-county-road-84-w-allenspark-co-80510",
+          "title": "338 County Road",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 90,
+          "photos": 3,
+          "price": "$1,284,500"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1366049-coires2/1087-hwy-7-bus-rte-allenspark-co-80510",
+          "title": "1087 Hwy",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire402053754-coires2/23-2nd-ave-allenspark-co-80510",
+          "title": "23 2nd Ave, Allenspark, CO 80510",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 78,
+          "photos": 3,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire402053556-coires2/412-hwy-7-business-allenspark-co-80510",
+          "title": "412 Hwy",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 86,
+          "photos": 3,
+          "price": "$135,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/allenspark/coires-ire1365210-coires2/270-e-ski-rd-allenspark-co-80510",
+          "title": "270 E Ski Rd, Allenspark, CO 80510",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 80,
+          "photos": 3,
+          "price": "$499,900"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire1371906-coires2/745-hickory-dr-lyons-co-80540",
+          "title": "745 Hickory Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 77,
+          "photos": 3,
+          "price": "$645,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire1369358-coires2/39-hickory-dr-lyons-co-80540",
+          "title": "39 Hickory Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 76,
+          "photos": 3,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire1366395-coires2/438-aspen-dr-lyons-co-80540",
+          "title": "438 Aspen Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 75,
+          "photos": 3,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire1365346-coires2/71-cedar-dr-lyons-co-80540",
+          "title": "71 Cedar Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 74,
+          "photos": 3,
+          "price": "$550,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire402044473-coires2/177-cedar-dr-lyons-co-80540",
+          "title": "177 Cedar Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 75,
+          "photos": 3,
+          "price": "$539,900"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire1360623-coires2/760-hickory-dr-lyons-co-80540",
+          "title": "760 Hickory Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 77,
+          "photos": 3,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/lyons/coires-ire1352419-coires2/972-aspen-dr-lyons-co-80540",
+          "title": "972 Aspen Dr, Lyons, CO 80540",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 77,
+          "photos": 3,
+          "price": "$1,135,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire402081265-coires2/204-waltonia-rd-drake-co-80515",
+          "title": "204 Waltonia Rd, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 78,
+          "photos": 3,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1374147-coires2/270-river-fork-rd-drake-co-80515",
+          "title": "270 River Fork Rd, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 80,
+          "photos": 3,
+          "price": "$420,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1372379-coires2/280-streamside-dr-drake-co-80515",
+          "title": "280 Streamside Dr, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 80,
+          "photos": 3,
+          "price": "$486,900"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1371960-coires2/28-possum-ct-drake-co-80515",
+          "title": "28 Possum Ct, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 75,
+          "photos": 3,
+          "price": "$375,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire402071427-coires2/130-sly-fox-rd-drake-co-80515",
+          "title": "130 Sly Fox Rd, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 77,
+          "photos": 3,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1370780-coires2/1002-spruce-mountain-dr-drake-co-80515",
+          "title": "1002 Spruce Mountain Dr, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 86,
+          "photos": 3,
+          "price": "$429,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1370513-coires2/6727-storm-mountain-dr-drake-co-80515",
+          "title": "6727 Storm Mountain Dr, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 85,
+          "photos": 3,
+          "price": "$678,500"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1368698-coires2/5431-storm-mountain-dr-drake-co-80515",
+          "title": "5431 Storm Mountain Dr, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 85,
+          "photos": 3,
+          "price": "$559,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1368265-coires2/66-flag-mountain-rd-drake-co-80515",
+          "title": "66 Flag Mountain Rd, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 82,
+          "photos": 3,
+          "price": "$492,900"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1367406-coires2/456-storm-mountain-dr-drake-co-80515",
+          "title": "456 Storm Mountain Dr, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 84,
+          "photos": 3,
+          "price": "$998,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1366958-coires2/1035-streamside-dr-drake-co-80515",
+          "title": "1035 Streamside Dr, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 81,
+          "photos": 3,
+          "price": "$550,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/drake/coires-ire1366131-coires2/148-big-pine-ln-drake-co-80515",
+          "title": "148 Big Pine Ln, Drake, CO 80515",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 78,
+          "photos": 3,
+          "price": "$710,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374572-coires2/755-elm-rd-10-estes-park-co-80517",
+          "title": "755 Elm Rd",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 81,
+          "photos": 3,
+          "price": "$350,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374541-coires2/704-birdie-ln-estes-park-co-80517",
+          "title": "704 Birdie Ln, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 81,
+          "photos": 3,
+          "price": "$622,500"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374526-coires2/1435-matthew-cir-estes-park-co-80517",
+          "title": "1435 Matthew Cir, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 84,
+          "photos": 3,
+          "price": "$695,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374430-coires2/1069-morgan-st-unit-a-estes-park-co-80517",
+          "title": "1069 Morgan St Unit A, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 89,
+          "photos": 3,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374393-coires2/1180-coyote-run-estes-park-co-80517",
+          "title": "1180 Coyote Run, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 85,
+          "photos": 3,
+          "price": "$1,700,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374382-coires2/398-bristlecone-ct-estes-park-co-80517",
+          "title": "398 Bristlecone Ct, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$1,200,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374218-coires2/1516-fish-hatchery-rd-unit-b-16-estes-park-co-80517",
+          "title": "1516 Fish Hatchery Rd Unit B-16, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 99,
+          "photos": 3,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1374191-coires2/1861-raven-ave-unit-c3-estes-park-co-80517",
+          "title": "1861 Raven Ave Unit C3, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 90,
+          "photos": 3,
+          "price": "$515,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1373991-coires2/2570-eagle-rock-dr-estes-park-co-80517",
+          "title": "2570 Eagle Rock Dr, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$1,349,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1373967-coires2/151-willowstone-dr-estes-park-co-80517",
+          "title": "151 Willowstone Dr, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 86,
+          "photos": 3,
+          "price": "$750,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1373815-coires2/1480-david-dr-unit-2-estes-park-co-80517",
+          "title": "1480 David Dr Unit 2, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$439,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/estes-park/coires-ire1373797-coires2/1730-raven-ave-unit-a-1-estes-park-co-80517",
+          "title": "1730 Raven Ave Unit A-1, Estes Park, CO 80517",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 91,
+          "photos": 3,
+          "price": "$240,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1374500-coires2/225-solitude-ct-glen-haven-co-80532",
+          "title": "225 Solitude Ct, Glen Haven, CO 80532",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 83,
+          "photos": 3,
+          "price": "$899,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1373993-coires2/32-horseshoe-bend-rd-glen-haven-co-80532",
+          "title": "32 Horseshoe Bend Rd",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$300,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1373969-coires2/6781-county-road-43-glen-haven-co-80532",
+          "title": "6781 County Road",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 87,
+          "photos": 3,
+          "price": "$356,100"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1373948-coires2/189-fishermans-ln-glen-haven-co-80532",
+          "title": "189 Fishermans Ln, Glen Haven, CO 80532",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 85,
+          "photos": 3,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1372433-coires2/459-streamside-dr-glen-haven-co-80532",
+          "title": "459 Streamside Dr, Glen Haven, CO 80532",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 85,
+          "photos": 3,
+          "price": "$769,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1368729-coires2/19-pipers-canyon-rd-rd-glen-haven-co-80532",
+          "title": "19 Pipers Canyon Rd Rd",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 90,
+          "photos": 3,
+          "price": "$504,900"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1367526-coires2/417-dunraven-glade-rd-glen-haven-co-80532",
+          "title": "417 Dunraven Glade Rd, Glen Haven, CO 80532",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 89,
+          "photos": 3,
+          "price": "$775,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1366046-coires2/163-w-creek-rd-glen-haven-co-80532",
+          "title": "163 W Creek Rd",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 82,
+          "photos": 3,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1365023-coires2/255-miller-fork-rd-glen-haven-co-80532",
+          "title": "255 Miller Fork Rd, Glen Haven, CO 80532",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 86,
+          "photos": 3,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire402049013-coires2/232-fox-creek-rd-glen-haven-co-80532",
+          "title": "232 Fox Creek Rd",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 84,
+          "photos": 3,
+          "price": "$389,900"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1362968-coires2/1002-streamside-dr-glen-haven-co-80532",
+          "title": "1002 Streamside Dr, Glen Haven, CO 80532",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 86,
+          "photos": 3,
+          "price": "$485,001"
+        },
+        {
+          "sourceUrl": "https://www.findestesparkhomes.com/homedetails/co/glen-haven/coires-ire1362905-coires2/500-bulwark-ridge-dr-glen-haven-co-80532",
+          "title": "500 Bulwark Ridge Dr",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 88,
+          "photos": 3,
+          "price": "$549,000"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "georgina-jacobson",
+      "set": "unseen",
+      "category": "Agent Image + iHomefinder",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:20:20.911Z",
+      "cpuMs": 180,
+      "imported": 12,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/2056-PORT-WEYBRIDGE-PLACE-NEWPORT-BEACH-CA-92660/NP26193108/306/",
+          "title": "2056 Port Weybridge Place Newport Beach, CA 92660",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1981,
+          "photos": 1,
+          "price": "$5,000,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/96-OLD-COURSE-NEWPORT-BEACH-CA-92660/NP26070797/306/",
+          "title": "96 Old Course Newport Beach, CA 92660",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$5,095,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/3302-BOUNTY-CIRCLE-HUNTINGTON-BEACH-CA-92649/OC26212047/306/",
+          "title": "3302 Bounty Circle Huntington Beach, CA 92649",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$5,250,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/1414-DUNNING-DRIVE-LAGUNA-BEACH-CA-92651/OC26211128/306/",
+          "title": "1414 Dunning Drive Laguna Beach, CA 92651",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 12,
+          "photos": 1,
+          "price": "$5,275,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/413-29TH-NEWPORT-BEACH-CA-92663/OC26130304/306/",
+          "title": "413 29th Newport Beach, CA 92663",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$5,295,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/2-EMERALD-BAY-LAGUNA-BEACH-CA-92651/LG26005607/306/",
+          "title": "2 Emerald Bay Laguna Beach, CA 92651",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1076,
+          "photos": 1,
+          "price": "$5,295,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/1915-LEEWARD-NEWPORT-BEACH-CA-92660/OC26199429/306/",
+          "title": "1915 LEEWARD Newport Beach, CA 92660",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1338,
+          "photos": 1,
+          "price": "$5,299,900"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/1617-E-BALBOA-BOULEVARD-NEWPORT-BEACH-CA-92661/NP26146717/306/",
+          "title": "1617 E Balboa Boulevard Newport Beach, CA 92661",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1167,
+          "photos": 1,
+          "price": "$5,350,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/2401-CLAY-NEWPORT-BEACH-CA-92663/OC26103273/306/",
+          "title": "2401 Clay Newport Beach, CA 92663",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1132,
+          "photos": 1,
+          "price": "$5,375,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/1900-CATALINA-STREET-LAGUNA-BEACH-CA-92651/LG26174337/306/",
+          "title": "1900 Catalina Street Laguna Beach, CA 92651",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 2447,
+          "photos": 1,
+          "price": "$5,395,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/867-BERKELEY-STREET-SANTA-MONICA-CA-90403/26859413/306/",
+          "title": "867 Berkeley Street Santa Monica, CA 90403",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 991,
+          "photos": 1,
+          "price": "$5,398,000"
+        },
+        {
+          "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/19-HARBOR-POINTE-CORONA-DEL-MAR-CA-92625/NP26011317/306/",
+          "title": "19 Harbor Pointe Corona Del Mar, CA 92625",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1244,
+          "photos": 1,
+          "price": "$5,400,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "georgina-jacobson",
+          "set": "unseen",
+          "category": "Agent Image + iHomefinder",
+          "architecture": "property-cards",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "needs_review",
+          "severity": 2,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/413-29TH-NEWPORT-BEACH-CA-92663/OC26130304/306/",
+              "title": "413 29th Newport Beach, CA 92663",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 0,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "howard-hanna-daniel-torri",
+      "set": "unseen",
+      "category": "Howard Hanna brokerage profile",
+      "holdout": true,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T19:20:39.033Z",
+      "cpuMs": 1,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "howard-hanna-daniel-torri",
+          "set": "unseen",
+          "category": "Howard Hanna brokerage profile",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "idaho-perfect-home",
+      "set": "unseen",
+      "category": "kvCORE / BoldTrail",
+      "holdout": true,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T19:19:39.188Z",
+      "cpuMs": 0,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "idaho-perfect-home",
+          "set": "unseen",
+          "category": "kvCORE / BoldTrail",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.idahoperfecthome.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "lauer-realty-group",
+      "set": "unseen",
+      "category": "Lofty (Chime)",
+      "holdout": true,
+      "architecture": "candidate:lofty_chime",
+      "capturedAt": "2026-10-08T19:19:39.733Z",
+      "cpuMs": 64,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "lauer-realty-group",
+          "set": "unseen",
+          "category": "Lofty (Chime)",
+          "architecture": "candidate:lofty_chime",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://lauerrealtygroup.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "magic-valley-homes",
+      "set": "unseen",
+      "category": "AgentFire (Home Junction data)",
+      "holdout": true,
+      "architecture": "candidate:static_html",
+      "capturedAt": "2026-10-08T19:19:40.096Z",
+      "cpuMs": 4,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "magic-valley-homes",
+          "set": "unseen",
+          "category": "AgentFire (Home Junction data)",
+          "architecture": "candidate:static_html",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://magicvalley.homes/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "remington-crispeno-team",
+      "set": "unseen",
+      "category": "Wix",
+      "holdout": true,
+      "architecture": "candidate:idx_broker",
+      "capturedAt": "2026-10-08T19:20:38.476Z",
+      "cpuMs": 75,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "remington-crispeno-team",
+          "set": "unseen",
+          "category": "Wix",
+          "architecture": "candidate:idx_broker",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.my-new-home.com/",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=41973&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=5067&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=13943&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=42790&widgetReferer=true"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "skilled-real-estate-miami",
+      "set": "unseen",
+      "category": "Showcase IDX (WordPress)",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:20:13.012Z",
+      "cpuMs": 353,
+      "imported": 20,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085778/FL/Delray-Beach/706-SE-2nd-Street",
+          "title": "706 SE 2nd Street Delray Beach, FL",
+          "ownership": "featured",
+          "listingOffice": "Douglas Elliman",
+          "description": 6264,
+          "photos": 4,
+          "price": "$27,500,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085776/FL/West-Palm-Beach/4846-ORLEANS-Court-B",
+          "title": "4846 ORLEANS Court B West Palm Beach",
+          "ownership": "featured",
+          "listingOffice": "LPT Realty, LLC",
+          "description": 718,
+          "photos": 4,
+          "price": "$305,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085775/FL/Boca-Raton/281-FANSHAW-G",
+          "title": "281 Fanshaw G, Boca Raton",
+          "ownership": "featured",
+          "listingOffice": "Realty ONE Group Innovation",
+          "description": 553,
+          "photos": 4,
+          "price": "$128,500"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085774/FL/Okeechobee/32801-US-HIGHWAY-441-N-121",
+          "title": "32801 US HIGHWAY",
+          "ownership": "featured",
+          "listingOffice": "Timber Properties",
+          "description": 951,
+          "photos": 4,
+          "price": "$1,200,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103150/FL/Lauderdale-Lakes/3033-NW-43rd-Ave-102",
+          "title": "3033 NW 43rd Ave",
+          "ownership": "featured",
+          "listingOffice": "Cutting Edge Investments & Realty Inc",
+          "description": 1357,
+          "photos": 4,
+          "price": "$124,990"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12102096/FL/Aventura/20225-NE-34th-Ct-1216",
+          "title": "20225 NE 34th Ct",
+          "ownership": "featured",
+          "listingOffice": "United Realty Group Inc",
+          "description": 1465,
+          "photos": 4,
+          "price": "$359,900"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12102658/FL/Oakland-Park/3123-Oakland-Shores-Dr-D202",
+          "title": "3123 Oakland Shores Dr",
+          "ownership": "featured",
+          "listingOffice": "Interinvestments Realty, Inc",
+          "description": 860,
+          "photos": 4,
+          "price": "$190,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12102588/FL/Miami/398-NE-5th-St-1711",
+          "title": "398 NE 5th St",
+          "ownership": "featured",
+          "listingOffice": "Coldwell Banker Realty",
+          "description": 664,
+          "photos": 4,
+          "price": "$1,299,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12089348/FL/Miami/495-Brickell-Ave-5005",
+          "title": "495 Brickell Ave",
+          "ownership": "featured",
+          "listingOffice": "Compass Florida, LLC",
+          "description": 1074,
+          "photos": 4,
+          "price": "$1,249,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103142/FL/Miami/3330-NW-101st-St",
+          "title": "3330 NW 101st St Miami, FL 33147",
+          "ownership": "featured",
+          "listingOffice": "Titan Properties",
+          "description": 384,
+          "photos": 1,
+          "price": "$699,999"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085770/FL/Boynton-Beach/1301-COPLEY-Court",
+          "title": "1301 COPLEY Court Boynton Beach, FL 33436",
+          "ownership": "featured",
+          "listingOffice": "Savvy Avenue, LLC",
+          "description": 775,
+          "photos": 4,
+          "price": "$389,950"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085767/FL/Boynton-Beach/9826-Turning-Bluff-Lane",
+          "title": "9826 Turning Bluff Lane Boynton Beach",
+          "ownership": "featured",
+          "listingOffice": "Lang Realty - Boynton Beach",
+          "description": 2347,
+          "photos": 4,
+          "price": "$1,500,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085772/FL/Vero-Beach/1270-42nd-Avenue",
+          "title": "1270 42nd Avenue Vero Beach, FL 32960",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 1,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085766/FL/Miami/1660-NE-191ST-Street-308-1",
+          "title": "1660 1660 NE 191ST Street",
+          "ownership": "featured",
+          "listingOffice": "State Street Realty Group",
+          "description": 774,
+          "photos": 4,
+          "price": "$219,900"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12102136/FL/Dania-Beach/121-Eleuthera-Dr",
+          "title": "121 Eleuthera Dr Dania Beach, FL 33004",
+          "ownership": "featured",
+          "listingOffice": "Keyes Company",
+          "description": 1159,
+          "photos": 4,
+          "price": "$180,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103116/FL/Lehigh-Acres/9006-Maywood-Cir",
+          "title": "9006 Maywood Cir Lehigh Acres, FL 33935",
+          "ownership": "featured",
+          "listingOffice": "Southern Heritage Real Estate",
+          "description": 684,
+          "photos": 4,
+          "price": "$39,900"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085764/FL/West-Palm-Beach/730-47TH-Street",
+          "title": "730 47TH Street West Palm Beach, FL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 1,
+          "price": "$540,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12099067/FL/Palm-Beach/15962-Wildflower-CT",
+          "title": "15962 Wildflower CT Palm Beach, FL",
+          "ownership": "featured",
+          "listingOffice": "Florida Realty of Miami Corp",
+          "description": 1497,
+          "photos": 4,
+          "price": "$1,399,000"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+          "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 1,
+          "price": "$249,900"
+        },
+        {
+          "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085761/FL/Sunrise/2801-N-Pine-Island-Road-N-202",
+          "title": "72 2801 N Pine Island Road N",
+          "ownership": "featured",
+          "listingOffice": "Beachfront Properties Real Est",
+          "description": 537,
+          "photos": 4,
+          "price": "$119,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 3,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "detailPageNames": "1001 NW 193rd Ave, Pembroke Pines, FL",
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+        },
+        {
+          "site": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 3,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085772/FL/Vero-Beach/1270-42nd-Avenue",
+              "title": "1270 42nd Avenue Vero Beach, FL 32960",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085764/FL/West-Palm-Beach/730-47TH-Street",
+              "title": "730 47TH Street West Palm Beach, FL",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "the-cameron-team",
+      "set": "unseen",
+      "category": "AgentFire + /idx/ plugin",
+      "holdout": true,
+      "architecture": "agentfire-dsidx",
+      "capturedAt": "2026-10-08T19:19:43.140Z",
+      "cpuMs": 69,
+      "imported": 1,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+          "title": "cameronteam",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 583,
+          "photos": 1,
+          "price": "$849,900"
+        }
+      ],
+      "findings": [
+        {
+          "site": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam",
+              "detailPageNames": null,
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "Neither the card nor a recorded detail page names the property."
+        },
+        {
+          "site": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "needs_review",
+          "severity": 2,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam",
+              "description": 583,
+              "photos": 1,
+              "pagePhotos": 18,
+              "pageDescription": false
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "tom-toole",
+      "set": "unseen",
+      "category": "Sierra Interactive",
+      "holdout": true,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T19:19:39.032Z",
+      "cpuMs": 1,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "tom-toole",
+          "set": "unseen",
+          "category": "Sierra Interactive",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.tomtoole.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
         }
       ]
     }

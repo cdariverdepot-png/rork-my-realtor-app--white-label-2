@@ -10,7 +10,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
       "evidenceHash": "d5329ba394858001",
       "sites": [
         {
@@ -43,8 +43,8 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
-      "evidenceHash": "43a04cbcd9360989",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "71cf6b21c74d51fe",
       "sites": [
         {
           "id": "century21-barbara-patterson",
@@ -129,12 +129,97 @@
             }
           ],
           "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "finch-and-gable",
+          "set": "unseen",
+          "category": "iFoundAgent (WordPress)",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://finchandgable.com/",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "howard-hanna-daniel-torri",
+          "set": "unseen",
+          "category": "Howard Hanna brokerage profile",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "idaho-perfect-home",
+          "set": "unseen",
+          "category": "kvCORE / BoldTrail",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.idahoperfecthome.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "lauer-realty-group",
+          "set": "unseen",
+          "category": "Lofty (Chime)",
+          "architecture": "candidate:lofty_chime",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://lauerrealtygroup.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "magic-valley-homes",
+          "set": "unseen",
+          "category": "AgentFire (Home Junction data)",
+          "architecture": "candidate:static_html",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://magicvalley.homes/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "tom-toole",
+          "set": "unseen",
+          "category": "Sierra Interactive",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.tomtoole.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
         }
       ],
-      "siteCount": 6,
-      "listingsAffected": 6,
+      "siteCount": 12,
+      "listingsAffected": 12,
       "architectures": [
         "candidate:flexmls",
+        "candidate:lofty_chime",
         "candidate:static_html",
         "unrecognized"
       ],
@@ -149,8 +234,8 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
-      "evidenceHash": "9ffebbc59d143cba",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "7cd585b7fe3604dd",
       "sites": [
         {
           "id": "coldwell-banker-alena-goncharov",
@@ -290,11 +375,50 @@
             }
           ],
           "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "craft-bauer",
+          "set": "unseen",
+          "category": "Ylopo",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [],
+              "visited": [
+                "https://craftbauer.com/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "remington-crispeno-team",
+          "set": "unseen",
+          "category": "Wix",
+          "architecture": "candidate:idx_broker",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.my-new-home.com/",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=41973&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=5067&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=13943&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=42790&widgetReferer=true"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
         }
       ],
-      "siteCount": 7,
-      "listingsAffected": 7,
+      "siteCount": 9,
+      "listingsAffected": 9,
       "architectures": [
+        "candidate:idx_broker",
         "candidate:next",
         "candidate:static_html",
         "candidate:wix",
@@ -315,8 +439,8 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
-      "evidenceHash": "5849995abb2cc7ae",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "48be237528437f38",
       "sites": [
         {
           "id": "houses-of-kansas-city",
@@ -393,10 +517,94 @@
             }
           ],
           "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "count": 30,
+          "examples": [
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+              "title": "$594,900 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 31,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+              "title": "$495,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 26,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+              "title": "$639,900 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 46,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+              "title": "$650,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 46,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+              "title": "$795,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 40,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "count": 3,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085772/FL/Vero-Beach/1270-42nd-Avenue",
+              "title": "1270 42nd Avenue Vero Beach, FL 32960",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085764/FL/West-Palm-Beach/730-47TH-Street",
+              "title": "730 47TH Street West Palm Beach, FL",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
         }
       ],
-      "siteCount": 2,
-      "listingsAffected": 10,
+      "siteCount": 4,
+      "listingsAffected": 43,
       "architectures": [
         "property-cards",
         "property-cards+public-json"
@@ -414,8 +622,8 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
-      "evidenceHash": "18fe8af664e1a653",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "92b59e2a4981a304",
       "sites": [
         {
           "id": "katerina-sayles",
@@ -485,10 +693,27 @@
             }
           ],
           "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+        },
+        {
+          "id": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "title": "212 Utopia Ct, Keller, TX 76248",
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21333972/",
+                "https://northforworthhomes.realgeeks.com/property/21333972/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
         }
       ],
-      "siteCount": 2,
-      "listingsAffected": 12,
+      "siteCount": 3,
+      "listingsAffected": 13,
       "architectures": [
         "ihomefinder",
         "property-cards"
@@ -505,54 +730,70 @@
         "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
         "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
       ],
-      "status": "integrated",
+      "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
-      "evidenceHash": "f04715a7aa1c8ebe",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "0d7df76bc512fe9d",
       "sites": [
         {
-          "id": "realm-partners-idaho",
-          "set": "regression",
-          "category": "brokerage",
+          "id": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
           "architecture": "property-cards",
-          "count": 13,
+          "count": 30,
           "examples": [
             {
-              "sourceUrl": "https://www.realmidaho.com/property/20261373/",
-              "title": "$8,500,000",
-              "detailPageNames": "Cottage Island, Hope, ID",
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+              "title": "$594,900 ▼",
+              "detailPageNames": "7124 Chelsea Dr, North Richland Hills, TX",
               "detailPage": "recorded"
             },
             {
-              "sourceUrl": "https://www.realmidaho.com/property/20262172/",
-              "title": "$6,970,000",
-              "detailPageNames": "717 Olson Dr., Dover, ID",
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+              "title": "$495,000 ▼",
+              "detailPageNames": "1613 Fiddleneck St, Fort Worth, TX",
               "detailPage": "recorded"
             },
             {
-              "sourceUrl": "https://www.realmidaho.com/property/20261646/",
-              "title": "$6,490,000",
-              "detailPageNames": "802 Sandpoint Ave #8201 \\u0026 8202, Sandpoint, ID",
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+              "title": "$639,900 ▼",
+              "detailPageNames": "6749 Cambridge Dr, North Richland Hills, TX",
               "detailPage": "recorded"
             },
             {
-              "sourceUrl": "https://www.realmidaho.com/property/20261912/",
-              "title": "$4,990,000",
-              "detailPageNames": "802 Sandpoint Ave #8404, Sandpoint, ID",
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+              "title": "$650,000 ▼",
+              "detailPageNames": "9200 Brittlebrush Trl, Fort Worth, TX",
               "detailPage": "recorded"
             },
             {
-              "sourceUrl": "https://www.realmidaho.com/property/20261623/",
-              "title": "$4,950,000",
-              "detailPageNames": "172 Elk Hills Rd, Sandpoint, ID",
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+              "title": "$795,000 ▼",
+              "detailPageNames": "531 Syracuse St, Haslet, TX",
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+        },
+        {
+          "id": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "detailPageNames": "1001 NW 193rd Ave, Pembroke Pines, FL",
               "detailPage": "recorded"
             }
           ],
           "detail": "The property detail page names the property, but the imported title is a price, card text or label."
         }
       ],
-      "siteCount": 1,
-      "listingsAffected": 13,
+      "siteCount": 2,
+      "listingsAffected": 31,
       "architectures": [
         "property-cards"
       ],
@@ -601,7 +842,7 @@
       ],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
       "evidenceHash": "ad1098bc29198b26",
       "sites": [
         {
@@ -646,8 +887,8 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
-      "evidenceHash": "08caf8876fc4a2e6",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "88935e90db8f6ebb",
       "sites": [
         {
           "id": "redman-realty-group",
@@ -688,11 +929,28 @@
             }
           ],
           "detail": "Neither the card nor a recorded detail page names the property."
+        },
+        {
+          "id": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam",
+              "detailPageNames": null,
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "Neither the card nor a recorded detail page names the property."
         }
       ],
-      "siteCount": 1,
-      "listingsAffected": 8,
+      "siteCount": 2,
+      "listingsAffected": 9,
       "architectures": [
+        "agentfire-dsidx",
         "ihomefinder"
       ],
       "attempts": []
@@ -706,7 +964,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
       "evidenceHash": "89f4e5443044d67d",
       "sites": [
         {
@@ -750,8 +1008,8 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:25:19.310Z",
-      "evidenceHash": "a2d35fcb2aa5ba2d",
+      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "evidenceHash": "50c61de848c2b20d",
       "sites": [
         {
           "id": "woods-n-water-real-estate",
@@ -770,15 +1028,52 @@
             }
           ],
           "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "georgina-jacobson",
+          "set": "unseen",
+          "category": "Agent Image + iHomefinder",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/413-29TH-NEWPORT-BEACH-CA-92663/OC26130304/306/",
+              "title": "413 29th Newport Beach, CA 92663",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 0,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam",
+              "description": 583,
+              "photos": 1,
+              "pagePhotos": 18,
+              "pageDescription": false
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
         }
       ],
-      "siteCount": 1,
-      "listingsAffected": 1,
+      "siteCount": 3,
+      "listingsAffected": 3,
       "architectures": [
+        "agentfire-dsidx",
         "property-cards"
       ],
       "attempts": []
     }
   },
-  "lastEvaluation": "2026-10-08T17:25:19.210Z"
+  "lastEvaluation": "2026-10-08T19:20:50.767Z"
 }

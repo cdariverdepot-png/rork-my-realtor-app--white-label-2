@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-08T16:35:36.611Z",
-  "evaluation": "2026-10-08T16:35:36.488Z",
+  "at": "2026-10-08T19:20:50.868Z",
+  "evaluation": "2026-10-08T19:20:50.767Z",
   "regression": {
     "sites": 25,
     "sitesImporting": 11,
-    "sitesClean": 6,
+    "sitesClean": 7,
     "records": 214,
-    "recordsNamed": 191,
+    "recordsNamed": 204,
     "recordsWithDescription": 208,
     "recordsWithGallery": 196,
     "attribution": {
@@ -16,7 +16,7 @@
       "unattributed": 120
     },
     "defects": {
-      "titleNotProperty": 13,
+      "titleNotProperty": 0,
       "duplicateProperty": 12,
       "detailIncomplete": 10,
       "needsStrategy": 0,
@@ -41,43 +41,57 @@
       "unrecognized"
     ],
     "architecturesSupported": [],
-    "cpuMsTotal": 4643,
-    "cpuMsMax": 988
+    "cpuMsTotal": 3905,
+    "cpuMsMax": 824
   },
   "unseen": {
-    "sites": 0,
-    "sitesImporting": 0,
-    "sitesClean": 0,
-    "records": 0,
-    "recordsNamed": 0,
-    "recordsWithDescription": 0,
-    "recordsWithGallery": 0,
+    "sites": 16,
+    "sitesImporting": 8,
+    "sitesClean": 6,
+    "records": 205,
+    "recordsNamed": 173,
+    "recordsWithDescription": 168,
+    "recordsWithGallery": 157,
     "attribution": {
       "own": 0,
-      "featured": 0,
+      "featured": 97,
       "unverifiedOffice": 0,
-      "unattributed": 0
+      "unattributed": 108
     },
     "defects": {
-      "titleNotProperty": 0,
-      "duplicateProperty": 0,
-      "detailIncomplete": 0,
+      "titleNotProperty": 31,
+      "duplicateProperty": 1,
+      "detailIncomplete": 33,
       "needsStrategy": 0,
       "engineErrors": 0
     },
     "notCode": {
-      "blocked": 0,
+      "blocked": 6,
       "outage": 0,
       "harness": 0,
       "marketOnly": 0
     },
-    "needsReview": 0,
-    "architecturesEncountered": [],
-    "architecturesSupported": [],
-    "cpuMsTotal": 0,
-    "cpuMsMax": 0
+    "needsReview": 5,
+    "architecturesEncountered": [
+      "agentfire-dsidx",
+      "attribute-cards",
+      "candidate:idx_broker",
+      "candidate:lofty_chime",
+      "candidate:static_html",
+      "property-cards",
+      "unrecognized"
+    ],
+    "architecturesSupported": [
+      "agentfire-dsidx",
+      "attribute-cards"
+    ],
+    "cpuMsTotal": 3250,
+    "cpuMsMax": 1552
   },
-  "newlySupportedArchitectures": [],
+  "newlySupportedArchitectures": [
+    "agentfire-dsidx",
+    "attribute-cards"
+  ],
   "strategies": [
     "flexmls-detail@1",
     "structured-cards@1",
@@ -93,9 +107,9 @@
     "open": 3
   },
   "repairs": {
-    "attempts": 0,
-    "integrated": 0,
-    "rejected": 0,
+    "attempts": 2,
+    "integrated": 1,
+    "rejected": 1,
     "rolledBack": 0
   },
   "aiCostUsd": {
@@ -104,5 +118,23 @@
     "levelD": 0,
     "entries": 0,
     "note": "Estimated from reported tokens at list price; testing campaigns only."
+  },
+  "delta": {
+    "regressionDefects": {
+      "titleNotProperty": -13,
+      "duplicateProperty": 0,
+      "detailIncomplete": 0,
+      "needsStrategy": 0,
+      "engineErrors": 0
+    },
+    "unseenDefects": {
+      "titleNotProperty": 31,
+      "duplicateProperty": 1,
+      "detailIncomplete": 33,
+      "needsStrategy": 0,
+      "engineErrors": 0
+    },
+    "regressionRecordsNamed": 13,
+    "strategiesAdded": []
   }
 }
