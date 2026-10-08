@@ -1,780 +1,1635 @@
 {
-  "at": "2026-10-08T23:44:55.811Z",
-  "runner": "GitHub Actions 1000000561",
+  "at": "2026-10-08T23:54:17.787Z",
+  "runner": "GitHub Actions 1000000562",
   "sites": [
     {
-      "url": "https://cindycarlsonrealty.com/property-search/",
+      "url": "https://www.tomtoole.com/property-search/results/",
       "plain": {
-        "status": 200,
-        "ms": 642,
-        "finalUrl": "https://cindycarlsonrealty.com/property-search/",
-        "bytes": 59727,
-        "title": "Property Search",
+        "status": 403,
+        "ms": 212,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/",
+        "bytes": 5457,
+        "title": "Just a moment...",
         "prices": 0,
         "detailLinks": 0,
         "frames": [],
-        "scripts": [
-          "https://cdn.trustedsite.com/js/1.js",
-          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
-          "https://stats.wp.com/e-202641.js",
-          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
-        ],
-        "links": [
-          "https://cindycarlsonrealty.com/feed/",
-          "https://cindycarlsonrealty.com/comments/feed/",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F&#038;format=xml",
-          "https://cindycarlsonrealty.com/property-search/",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
-          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-json/",
-          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/23",
-          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
-          "https://cindycarlsonrealty.com/xmlrpc.php",
-          "https://cindycarlsonrealty.com/",
-          "https://cindycarlsonrealty.com/featured-listings/",
-          "https://cindycarlsonrealty.com/about-the-area/",
-          "https://cindycarlsonrealty.com/about-us/",
-          "https://cindycarlsonrealty.com/contact-us/",
-          "https://my.flexmls.com/CiindyCarlson/search/idx_links/20170223165601030945000000/listings?_filter=CountyOrParish+Eq+%27Shoshone%27+And+MlsStatus+Eq+%27Active%27%2C%27Active+with+Bump+Clause%27%2C%27Pending%27+And+%28PurchaseContractDate+Bt+2024-04-08%2C2035-04-08+Or+StandardStatus+Ne+%27Pending%27%29+And+PropertyType+Eq+%27A%27",
-          "https://cindycarlsonrealty.com/wp-login.php"
-        ]
+        "scripts": [],
+        "links": []
       },
       "plainFragment": {
-        "status": 200,
-        "ms": 73,
-        "finalUrl": "https://cindycarlsonrealty.com/property-search/",
-        "bytes": 59727,
-        "title": "Property Search",
+        "status": 403,
+        "ms": 101,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/",
+        "bytes": 5500,
+        "title": "Just a moment...",
         "prices": 0,
         "detailLinks": 0,
         "frames": [],
-        "scripts": [
-          "https://cdn.trustedsite.com/js/1.js",
-          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
-          "https://stats.wp.com/e-202641.js",
-          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
-        ],
-        "links": [
-          "https://cindycarlsonrealty.com/feed/",
-          "https://cindycarlsonrealty.com/comments/feed/",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F&#038;format=xml",
-          "https://cindycarlsonrealty.com/property-search/",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
-          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-json/",
-          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/23",
-          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
-          "https://cindycarlsonrealty.com/xmlrpc.php",
-          "https://cindycarlsonrealty.com/",
-          "https://cindycarlsonrealty.com/featured-listings/",
-          "https://cindycarlsonrealty.com/about-the-area/",
-          "https://cindycarlsonrealty.com/about-us/",
-          "https://cindycarlsonrealty.com/contact-us/",
-          "https://my.flexmls.com/CiindyCarlson/search/idx_links/20170223165601030945000000/listings?_filter=CountyOrParish+Eq+%27Shoshone%27+And+MlsStatus+Eq+%27Active%27%2C%27Active+with+Bump+Clause%27%2C%27Pending%27+And+%28PurchaseContractDate+Bt+2024-04-08%2C2035-04-08+Or+StandardStatus+Ne+%27Pending%27%29+And+PropertyType+Eq+%27A%27",
-          "https://cindycarlsonrealty.com/wp-login.php"
-        ]
+        "scripts": [],
+        "links": []
       },
       "service": {
-        "error": "The operation was aborted due to timeout",
-        "ms": 90002
-      },
-      "serviceAgain": {
-        "error": "The operation was aborted due to timeout",
-        "ms": 90001
-      },
-      "local": {
-        "timeline": [
+        "status": 200,
+        "ms": 2791,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/",
+        "bytes": 245397,
+        "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
           {
-            "at": 374,
-            "event": "domcontentloaded",
-            "url": "https://cindycarlsonrealty.com/property-search/"
-          },
-          {
-            "at": 1383,
-            "url": "https://cindycarlsonrealty.com/property-search/",
-            "bytes": 67107,
-            "title": "Property Search",
+            "url": "https://www.tomtoole.com/property-search/results/",
+            "bytes": 235656,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
             "prices": 0,
             "detailLinks": 0
           },
           {
-            "at": 6416,
-            "url": "https://cindycarlsonrealty.com/property-search/",
-            "bytes": 67097,
-            "title": "Property Search",
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "bytes": 0,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 2260,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/",
+        "bytes": 245397,
+        "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://www.tomtoole.com/property-search/results/",
+            "bytes": 235656,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "bytes": 0,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "local": {
+        "timeline": [
+          {
+            "at": 1047,
+            "event": "domcontentloaded",
+            "url": "https://www.tomtoole.com/property-search/results/"
+          },
+          {
+            "at": 2127,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 337819,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 3151,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 328974,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 6234,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 340672,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 7257,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 340674,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 8279,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 340781,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 9300,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 343613,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 10325,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 352514,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 11348,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 352905,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 21582,
+            "url": "https://www.tomtoole.com/property-search/results/#listtypeinclude_Residential/",
+            "bytes": 353115,
+            "title": "Property Search - Greater Philadelphia PA Homes for Sale and Real Estate",
             "prices": 0,
             "detailLinks": 0
           }
         ],
         "responses": [
           {
-            "url": "https://cindycarlsonrealty.com/property-search/",
+            "url": "https://www.tomtoole.com/property-search/results/",
             "status": 200,
-            "type": "text/html; charset=UTF-8"
+            "type": "text/html;charset=UTF-8"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/hoverIntent.min.js?ver=1.10.2",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://fonts.googleapis.com/css?family=Oswald:400&ver=2.2.1",
-            "status": 200,
-            "type": "text/css; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/style.css?ver=2.2.1",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://fonts.googleapis.com/css?family=Quintessential:400&subset=latin,latin-ext&ver=2",
-            "status": 200,
-            "type": "text/css; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+            "url": "https://www.tomtoole.com/assets/dist/js/common-above-fold.js?v=20260316120005",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js",
-            "status": 301,
-            "type": ""
-          },
-          {
-            "url": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/realtycandy-idx-broker-simple-social-icons-idxaddon/css/style.css?ver=1.0.12",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.min.js?ver=1.7.10",
+            "url": "https://www.tomtoole.com/assets/scout-app/scout-app.js?v=15",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
             "status": 200,
-            "type": "text/css"
+            "type": "text/javascript;charset=UTF-8"
           },
           {
-            "url": "https://img1.wsimg.com/signals/js/clients/tti/tti.min.js",
-            "status": 200,
-            "type": "text/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.args.min.js?ver=3.6.2",
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/skip-links.min.js?ver=3.6.2",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/js/responsive-menus.min.js?ver=2.2.1",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://stats.wp.com/e-202641.js",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiZQ.woff2",
-            "status": 200,
-            "type": "font/woff2"
-          },
-          {
-            "url": "https://img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js",
-            "status": 200,
-            "type": "text/javascript"
-          },
-          {
-            "url": "blob:https://cindycarlsonrealty.com/7a477e25-5293-45fb-a282-a839f4bd42aa",
-            "status": 200,
-            "type": "text/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/cropped-satincombinedlogoccr-1-2.png",
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_logo_tt-logo-20240424023033.png",
             "status": 200,
             "type": "image/png"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
-            "status": 200,
-            "type": "image/jpeg"
-          },
-          {
-            "url": "https://pixel.wp.com/g.gif?v=ext&blog=127862438&post=23&tz=0&srv=cindycarlsonrealty.com&j=1%3A16.3&host=cindycarlsonrealty.com&ref=&fcp=332&rand=0.0651949442045",
-            "status": 200,
-            "type": "image/gif"
-          },
-          {
-            "url": "https://connect.facebook.net/en_US/sdk.js",
-            "status": 200,
-            "type": "application/x-javascript; charset=utf-8"
-          },
-          {
-            "url": "https://cdn.trustedsite.com/js/1.js",
-            "status": 200,
-            "type": "text/javascript; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3",
+            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-inner-above-fold.js?v=202603161200",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://connect.facebook.net/en_US/bundle/sdk.js/",
+            "url": "https://css.site-static.com/assets/dist/v20260216120008/css/search-results-1.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v20260216120001/css/common.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/css/common-quick-search.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/fontawesome-webfont.woff2?v=4.7.0",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v20260216120015/css/scout-app.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/images/templates/excelweb/flags.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_hero_untitled-design-20240426084445.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/fontawesome-webfont.woff2?v=4.7.0",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/sierra-social-icons.ttf?bjnuhu",
+            "status": 200,
+            "type": "application/octet-stream"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/scout-app/react-vendor.XJPoRaat.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/scout-app/sierra-components.CGRaIkUI.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/scout-app/external-dependencies.DEgQQLfs.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://accounts.google.com/gsi/client",
+            "status": 200,
+            "type": "application/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/scripts/jsd/main.js",
+            "status": 302,
+            "type": ""
+          },
+          {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-HRZCCMT0XJ",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/scripts/jsd/4df4a60fa397/main.js?",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://sessions.bugsnag.com/",
+            "status": 202,
+            "type": "application/json"
+          },
+          {
+            "url": "https://0bde96d7c724c9ac12feafe4631a39c9.otlp.bugsnag.com/v1/traces",
+            "status": 200,
+            "type": "application/json"
+          },
+          {
+            "url": "https://connect.facebook.net/en_US/fbevents.js",
             "status": 200,
             "type": "application/x-javascript; charset=utf-8"
           },
           {
-            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsmain",
+            "url": "https://www.googletagmanager.com/gtag/js?id=AW-18087344730&cx=c&gtm=4e6a72",
             "status": 200,
-            "type": "application/json"
+            "type": "application/javascript; charset=UTF-8"
           },
           {
-            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsinline",
-            "status": 200,
-            "type": "application/json"
+            "url": "https://analytics.google.com/g/collect?v=2&tid=G-HRZCCMT0XJ&gtm=45je6a72v9249282964za208zd9249282964xf1&_p=1791503666315&_gaz=1&gcd=13l3l3l3l1l1&npa=0&dma=0&eci",
+            "status": 204,
+            "type": "text/plain"
           },
           {
-            "url": "https://connect.facebook.net/app_config/json/249643311490/",
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/jsd/oneshot/4df4a60fa397/0.6504291366812137:1791500562:O6lFD5IDdpi6wF96Cw6mdBhuQIKsaMIGO_wqX4lVxUc/a4791",
+            "status": 200,
+            "type": "text/plain; charset=UTF-8"
+          },
+          {
+            "url": "https://stats.g.doubleclick.net/g/collect?v=2&tid=G-HRZCCMT0XJ&cid=117606832.1791503666&gtm=45je6a72v9249282964za208zd9249282964xf1&rcb=12&aip=1&dma=0&gcd=13l3l",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://www.tomtoole.com/property-search/sist_ajax/process_fb_tracking_event.asp",
+            "status": 200,
+            "type": "text/html"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.google.com/ccm/collect?rcb=15&frm=0&apvc=1&auid=720276536.1791503667&dt=Property%20Search%20-%20Greater%20Philadelphia%20PA%20Homes%20for%20Sale%20a",
+            "status": 200,
+            "type": ""
+          },
+          {
+            "url": "https://www.google.com/rmkt/collect/18087344730/?random=1791503666558&cv=11&fst=1791503666558&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW-",
+            "status": 200,
+            "type": ""
+          },
+          {
+            "url": "https://ad.doubleclick.net/ccm/s/collect?auid=720276536.1791503667&gtm=45be6a72z8f_AW-18087344730za208zb9249282964zd9249282964xecxf1&fmt=8",
+            "status": 204,
+            "type": ""
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input-utils.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/18087344730/?random=1791503666558&cv=11&fst=1791503666558&bg=ffffff&guid=ON&async=1&en=gtag.con",
+            "status": 200,
+            "type": "text/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://connect.facebook.net/signals/config/523798467994449?v=2.9.415&r=stable&domain=www.tomtoole.com&hme=a4c28c8787325ac3f8f9eac68364f47df2a8c4266e43177443e5d",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.google.com/pagead/1p-user-list/18087344730/?random=1791503666558&cv=11&fst=1791500400000&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW",
+            "status": 200,
+            "type": "image/gif"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/sapp-2.js?v=20260316120012",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-inner.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.facebook.com/tr/?id=523798467994449&ev=PageView&dl=https%3A%2F%2Fwww.tomtoole.com%2Fproperty-search%2Fresults%2F&rl=&if=false&ts=1791503666738&iw=fa",
+            "status": 200,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/rum?",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://api.sierrainteractivedev.com/searchForms/multi-region?siteId=5653&mlsRegionIds=337",
             "status": 200,
             "type": "application/json; charset=utf-8"
           },
           {
-            "url": "https://connect.facebook.net/app_config/json/249643311490/",
-            "status": 200,
-            "type": "application/json; charset=utf-8"
-          },
-          {
-            "url": "https://cdn.ywxi.net/meter/cindycarlsonrealty.com/205.svg?ts=1791453262656&l=en",
+            "url": "https://css.site-static.com/assets/dist/v202311021200/images/listings/home-light-version.svg",
             "status": 200,
             "type": "image/svg+xml"
           },
           {
-            "url": "https://cdn.ywxi.net/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503277712",
-            "status": 302,
-            "type": "text/html; charset=utf-8"
+            "url": "https://www.tomtoole.com/property-search/sist_ajax/get_list_types.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
           },
           {
-            "url": "https://www.trustedsite.com/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503277712&hash=1791503277808",
+            "url": "https://www.facebook.com/tr/?id=523798467994449&ev=PageView&dl=https%3A%2F%2Fwww.tomtoole.com%2Fproperty-search%2Fresults%2F%23listtypeinclude_Residential%2F&rl",
             "status": 200,
-            "type": "text/javascript; charset=utf-8"
+            "type": "text/plain"
           },
           {
-            "url": "https://csp.secureserver.net/eventbus/web?clientid=b18ef4f046435b64a469b32c3c1c20a3",
-            "status": 202,
-            "type": "application/json"
+            "url": "https://www.tomtoole.com/property-search/res/includes/search_application/get_listings_count.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
           },
           {
-            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
-            "status": 202,
-            "type": "application/json"
+            "url": "https://www.tomtoole.com/property-search/res/includes/search_application/get_listings.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
           },
           {
-            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
-            "status": 202,
-            "type": "application/json"
+            "url": "https://www.tomtoole.com/property-search/res/includes/search_application/get_listings_count.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
           }
         ],
         "cookies": [
           {
-            "name": "__cf_bm",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "siGUID",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "_tccl_visitor",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "siSharedSessionID",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "_tccl_visit",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "siMLSRegionID",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "_scc_session",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "sirecs",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "trustedsite_visit",
-            "domain": "cindycarlsonrealty.com"
+            "name": "siND",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "trustedsite_tm_float_seen",
-            "domain": "cindycarlsonrealty.com"
+            "name": "ASPSESSIONIDQSGSQHDR",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "AWSALBCORS",
-            "domain": "www.trustedsite.com"
+            "name": "_ga",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "_ga_HRZCCMT0XJ",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "cf_clearance",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "_gcl_au",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "ASPSESSIONIDQQBQVACS",
+            "domain": "www.tomtoole.com"
+          },
+          {
+            "name": "test_cookie",
+            "domain": ".doubleclick.net"
+          },
+          {
+            "name": "_fbp",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "siListingsView",
+            "domain": "www.tomtoole.com"
           }
         ]
       }
     },
     {
-      "url": "https://cindycarlsonrealty.com/about-us/",
+      "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
       "plain": {
-        "status": 200,
-        "ms": 193,
-        "finalUrl": "https://cindycarlsonrealty.com/about-us/",
-        "bytes": 81296,
-        "title": "About Us",
+        "status": 403,
+        "ms": 81,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+        "bytes": 5544,
+        "title": "Just a moment...",
         "prices": 0,
         "detailLinks": 0,
         "frames": [],
-        "scripts": [
-          "https://cdn.trustedsite.com/js/1.js",
-          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
-          "https://stats.wp.com/e-202641.js",
-          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/carousel/jetpack-carousel.min.js?ver=16.3",
-          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
-        ],
-        "links": [
-          "https://cindycarlsonrealty.com/feed/",
-          "https://cindycarlsonrealty.com/comments/feed/",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F&#038;format=xml",
-          "https://cindycarlsonrealty.com/about-us/",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
-          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-json/",
-          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/26",
-          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
-          "https://cindycarlsonrealty.com/xmlrpc.php",
-          "https://cindycarlsonrealty.com/",
-          "https://cindycarlsonrealty.com/featured-listings/",
-          "https://cindycarlsonrealty.com/property-search/",
-          "https://cindycarlsonrealty.com/about-the-area/",
-          "https://cindycarlsonrealty.com/contact-us/",
-          "https://www.facebook.com/674159426036823",
-          "https://www.linkedin.com/in/cindy-carlson-2317824b/",
-          "https://cindycarlsonrealty.com/wp-login.php"
-        ]
+        "scripts": [],
+        "links": []
       },
       "plainFragment": {
-        "status": 200,
-        "ms": 36,
-        "finalUrl": "https://cindycarlsonrealty.com/about-us/",
-        "bytes": 81296,
-        "title": "About Us",
+        "status": 403,
+        "ms": 81,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+        "bytes": 5587,
+        "title": "Just a moment...",
         "prices": 0,
         "detailLinks": 0,
         "frames": [],
-        "scripts": [
-          "https://cdn.trustedsite.com/js/1.js",
-          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
-          "https://stats.wp.com/e-202641.js",
-          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/carousel/jetpack-carousel.min.js?ver=16.3",
-          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
-        ],
-        "links": [
-          "https://cindycarlsonrealty.com/feed/",
-          "https://cindycarlsonrealty.com/comments/feed/",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F",
-          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F&#038;format=xml",
-          "https://cindycarlsonrealty.com/about-us/",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
-          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
-          "https://cindycarlsonrealty.com/wp-json/",
-          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/26",
-          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
-          "https://cindycarlsonrealty.com/xmlrpc.php",
-          "https://cindycarlsonrealty.com/",
-          "https://cindycarlsonrealty.com/featured-listings/",
-          "https://cindycarlsonrealty.com/property-search/",
-          "https://cindycarlsonrealty.com/about-the-area/",
-          "https://cindycarlsonrealty.com/contact-us/",
-          "https://www.facebook.com/674159426036823",
-          "https://www.linkedin.com/in/cindy-carlson-2317824b/",
-          "https://cindycarlsonrealty.com/wp-login.php"
-        ]
+        "scripts": [],
+        "links": []
       },
       "service": {
-        "error": "The operation was aborted due to timeout",
-        "ms": 90001
-      },
-      "serviceAgain": {
-        "error": "The operation was aborted due to timeout",
-        "ms": 90000
-      },
-      "local": {
-        "timeline": [
+        "status": 200,
+        "ms": 2434,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+        "bytes": 245899,
+        "title": "Luxury Homes",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
           {
-            "at": 416,
-            "event": "domcontentloaded",
-            "url": "https://cindycarlsonrealty.com/about-us/"
-          },
-          {
-            "at": 1426,
-            "url": "https://cindycarlsonrealty.com/about-us/",
-            "bytes": 89821,
-            "title": "About Us",
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 236158,
+            "title": "Luxury Homes",
             "prices": 0,
             "detailLinks": 0
           },
           {
-            "at": 6465,
-            "url": "https://cindycarlsonrealty.com/about-us/",
-            "bytes": 89811,
-            "title": "About Us",
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "bytes": 0,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 2312,
+        "finalUrl": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+        "bytes": 245899,
+        "title": "Luxury Homes",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 236158,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "bytes": 0,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "local": {
+        "timeline": [
+          {
+            "at": 794,
+            "event": "domcontentloaded",
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824"
+          },
+          {
+            "at": 1856,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 344579,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 2880,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 344573,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 4934,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 345340,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 5959,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 356254,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 6985,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 356234,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 8010,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 359074,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 10056,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 363684,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 11081,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 368465,
+            "title": "Luxury Homes",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 21333,
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
+            "bytes": 368675,
+            "title": "Luxury Homes",
             "prices": 0,
             "detailLinks": 0
           }
         ],
         "responses": [
           {
-            "url": "https://cindycarlsonrealty.com/about-us/",
+            "url": "https://www.tomtoole.com/property-search/results/?searchid=2460824",
             "status": 200,
-            "type": "text/html; charset=UTF-8"
+            "type": "text/html;charset=UTF-8"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/realtycandy-idx-broker-simple-social-icons-idxaddon/css/style.css?ver=1.0.12",
+            "url": "https://css.site-static.com/assets/dist/v20260216120008/css/search-results-1.css",
             "status": 200,
             "type": "text/css"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/scout-app/scout-app.js?v=15",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/style.css?ver=2.2.1",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/hoverIntent.min.js?ver=1.10.2",
+            "url": "https://www.tomtoole.com/assets/dist/js/common-above-fold.js?v=20260316120005",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+            "url": "https://css.site-static.com/assets/dist/v20260216120001/css/common.css",
             "status": 200,
             "type": "text/css"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/fontawesome-webfont.woff2?v=4.7.0",
             "status": 200,
-            "type": "application/javascript"
+            "type": "application/font-woff2"
           },
           {
-            "url": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
-            "status": 200,
-            "type": "text/css; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/blocks/swiper.css?ver=16.3",
+            "url": "https://css.site-static.com/assets/dist/v202602161200/css/common-quick-search.css",
             "status": 200,
             "type": "text/css"
           },
           {
-            "url": "https://fonts.googleapis.com/css?family=Oswald:400&ver=2.2.1",
-            "status": 200,
-            "type": "text/css; charset=utf-8"
-          },
-          {
-            "url": "https://fonts.googleapis.com/css?family=Quintessential:400&subset=latin,latin-ext&ver=2",
-            "status": 200,
-            "type": "text/css; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+            "url": "https://css.site-static.com/assets/dist/v20260216120015/css/scout-app.css",
             "status": 200,
             "type": "text/css"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/modules/carousel/jetpack-carousel.css?ver=16.3",
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
             "status": 200,
-            "type": "text/css"
+            "type": "text/javascript;charset=UTF-8"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.min.js?ver=1.7.10",
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_logo_tt-logo-20240424023033.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/js/responsive-menus.min.js?ver=2.2.1",
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
             "status": 200,
-            "type": "application/javascript"
+            "type": "application/font-woff2"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.args.min.js?ver=3.6.2",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_hero_untitled-design-20240426084445.jpg",
             "status": 200,
             "type": "image/jpeg"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/cropped-satincombinedlogoccr-1-2.png",
+            "url": "https://css.site-static.com/assets/dist/v202311021200/images/templates/excelweb/flags.png",
             "status": 200,
             "type": "image/png"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/skip-links.min.js?ver=3.6.2",
+            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-inner-above-fold.js?v=202603161200",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://stats.wp.com/e-202641.js",
+            "url": "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/fontawesome-webfont.woff2?v=4.7.0",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/sierra-social-icons.ttf?bjnuhu",
+            "status": 200,
+            "type": "application/octet-stream"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/scout-app/external-dependencies.DEgQQLfs.js",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiZQ.woff2",
-            "status": 200,
-            "type": "font/woff2"
-          },
-          {
-            "url": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0",
-            "status": 200,
-            "type": "font/woff2"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/carousel/jetpack-carousel.min.js?ver=16.3",
+            "url": "https://www.tomtoole.com/assets/scout-app/react-vendor.XJPoRaat.js",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/images/lines.png",
-            "status": 200,
-            "type": "image/png"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/blocks/swiper.js",
+            "url": "https://www.tomtoole.com/assets/scout-app/sierra-components.CGRaIkUI.js",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js",
-            "status": 301,
+            "url": "https://accounts.google.com/gsi/client",
+            "status": 200,
+            "type": "application/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-HRZCCMT0XJ",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/scripts/jsd/main.js",
+            "status": 302,
             "type": ""
           },
           {
-            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2019/09/Heather-3.jpg?resize=279%2C300&ssl=1",
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/scripts/jsd/4df4a60fa397/main.js?",
             "status": 200,
-            "type": "image/webp"
+            "type": "application/javascript; charset=UTF-8"
           },
           {
-            "url": "https://img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js",
+            "url": "https://0bde96d7c724c9ac12feafe4631a39c9.otlp.bugsnag.com/v1/traces",
             "status": 200,
-            "type": "text/javascript"
+            "type": "application/json"
           },
           {
-            "url": "https://img1.wsimg.com/signals/js/clients/tti/tti.min.js",
-            "status": 200,
-            "type": "text/javascript"
+            "url": "https://sessions.bugsnag.com/",
+            "status": 202,
+            "type": "application/json"
           },
           {
-            "url": "blob:https://cindycarlsonrealty.com/7188f2f4-bb21-4cef-a6a3-bca79b51454d",
+            "url": "https://connect.facebook.net/en_US/fbevents.js",
             "status": 200,
-            "type": "text/javascript"
+            "type": "application/x-javascript; charset=utf-8"
           },
           {
-            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2020/05/25-scaled.jpg?resize=200%2C300&ssl=1",
-            "status": 200,
-            "type": "image/webp"
+            "url": "https://analytics.google.com/g/collect?v=2&tid=G-HRZCCMT0XJ&gtm=45je6a72v9249282964za208zd9249282964xf1&_p=1791503718230&_gaz=1&gcd=13l3l3l3l1l1&npa=0&dma=0&eci",
+            "status": 204,
+            "type": "text/plain"
           },
           {
-            "url": "https://pixel.wp.com/g.gif?v=ext&blog=127862438&post=26&tz=0&srv=cindycarlsonrealty.com&j=1%3A16.3&host=cindycarlsonrealty.com&ref=&fcp=300&rand=0.3870069444618",
+            "url": "https://www.googletagmanager.com/gtag/js?id=AW-18087344730&cx=c&gtm=4e6a72",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://stats.g.doubleclick.net/g/collect?v=2&tid=G-HRZCCMT0XJ&cid=1758313923.1791503718&gtm=45je6a72v9249282964za208zd9249282964xf1&rcb=18&aip=1&dma=0&gcd=13l3",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/jsd/oneshot/4df4a60fa397/0.6504291366812137:1791500562:O6lFD5IDdpi6wF96Cw6mdBhuQIKsaMIGO_wqX4lVxUc/a4791",
+            "status": 200,
+            "type": "text/plain; charset=UTF-8"
+          },
+          {
+            "url": "https://connect.facebook.net/signals/config/523798467994449?v=2.9.415&r=stable&domain=www.tomtoole.com&hme=a4c28c8787325ac3f8f9eac68364f47df2a8c4266e43177443e5d",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/property-search/sist_ajax/process_fb_tracking_event.asp",
+            "status": 200,
+            "type": "text/html"
+          },
+          {
+            "url": "https://www.google.com/ccm/collect?rcb=18&frm=0&apvc=1&auid=813063250.1791503718&dt=Luxury%20Homes&tid=AW-18087344730&en=page_view&dl=https%3A%2F%2Fwww.tomtoole",
+            "status": 200,
+            "type": ""
+          },
+          {
+            "url": "https://www.google.com/rmkt/collect/18087344730/?random=1791503718480&cv=11&fst=1791503718480&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW-",
+            "status": 200,
+            "type": ""
+          },
+          {
+            "url": "https://ad.doubleclick.net/ccm/s/collect?_gsid=x5bL8s3PQI_act2_jaiYuUd9EWWlSo55Ag&auid=813063250.1791503718&gtm=45be6a72z8f_AW-18087344730za208zb9249282964zd924",
+            "status": 204,
+            "type": ""
+          },
+          {
+            "url": "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/18087344730/?random=1791503718480&cv=11&fst=1791503718480&bg=ffffff&guid=ON&async=1&en=gtag.con",
+            "status": 200,
+            "type": "text/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://www.google.com/pagead/1p-user-list/18087344730/?random=1791503718480&cv=11&fst=1791500400000&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW",
             "status": 200,
             "type": "image/gif"
           },
           {
-            "url": "https://connect.facebook.net/en_US/sdk.js",
-            "status": 200,
-            "type": "application/x-javascript; charset=utf-8"
-          },
-          {
-            "url": "https://cdn.trustedsite.com/js/1.js",
-            "status": 200,
-            "type": "text/javascript; charset=utf-8"
-          },
-          {
-            "url": "https://cindycarlsonrealty.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3",
+            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input-utils.js",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2019/09/SterlingR-2019-Sm.gif?resize=40%2C32&ssl=1",
+            "url": "https://www.tomtoole.com/assets/dist/js/common.js?v=202603161200",
             "status": 200,
-            "type": "image/webp"
+            "type": "application/javascript"
           },
           {
-            "url": "https://connect.facebook.net/en_US/bundle/sdk.js/",
+            "url": "https://www.tomtoole.com/assets/dist/js/sapp-2.js?v=20260316120012",
             "status": 200,
-            "type": "application/x-javascript; charset=utf-8"
+            "type": "application/javascript"
           },
           {
-            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/IMG_6669_3617.jpg?resize=200%2C300&ssl=1",
+            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-inner.js?v=202603161200",
             "status": 200,
-            "type": "image/webp"
+            "type": "application/javascript"
           },
           {
-            "url": "https://connect.facebook.net/app_config/json/249643311490/",
+            "url": "https://www.facebook.com/tr/?id=523798467994449&ev=PageView&dl=https%3A%2F%2Fwww.tomtoole.com%2Fproperty-search%2Fresults%2F%3Fsearchid%3D2460824&rl=&if=false&t",
+            "status": 200,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/rum?",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://api.sierrainteractivedev.com/searchForms/multi-region?siteId=5653&mlsRegionIds=337",
             "status": 200,
             "type": "application/json; charset=utf-8"
           },
           {
-            "url": "https://connect.facebook.net/app_config/json/249643311490/",
-            "status": 200,
-            "type": "application/json; charset=utf-8"
-          },
-          {
-            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2026/02/kristen-jarvey.jpg?resize=262%2C300&ssl=1",
-            "status": 200,
-            "type": "image/webp"
-          },
-          {
-            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsinline",
-            "status": 200,
-            "type": "application/json"
-          },
-          {
-            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsmain",
-            "status": 200,
-            "type": "application/json"
-          },
-          {
-            "url": "https://www.facebook.com/v2.3/plugins/page.php?app_id=249643311490&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb",
-            "status": 302,
-            "type": "text/html; charset=\"utf-8\""
-          },
-          {
-            "url": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fplugins%2Fpage.php%3Fapp_id%3D249643311490%26channel%3Dhttps%253A%252F%252Fstaticxx.facebo",
-            "status": 400,
-            "type": "text/html; charset=\"utf-8\""
-          },
-          {
-            "url": "https://cdn.ywxi.net/meter/cindycarlsonrealty.com/205.svg?ts=1791453262656&l=en",
+            "url": "https://css.site-static.com/assets/dist/v202311021200/images/listings/home-light-version.svg",
             "status": 200,
             "type": "image/svg+xml"
           },
           {
-            "url": "https://cdn.ywxi.net/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503503750",
-            "status": 302,
-            "type": "text/html; charset=utf-8"
+            "url": "https://www.tomtoole.com/property-search/sist_ajax/get_list_types.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
           },
           {
-            "url": "https://www.trustedsite.com/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503503750&hash=1791503503947",
+            "url": "https://www.tomtoole.com/property-search/res/includes/search_application/get_listings_count.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/property-search/res/includes/search_application/get_listings.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_footerlogo_ourblue-20260813111638.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://www.google.com/recaptcha/api.js?render=6LcYnbkqAAAAAOb5BdOwLCmKZmWU7IKHf_mXvXTs",
             "status": 200,
             "type": "text/javascript; charset=utf-8"
-          },
-          {
-            "url": "https://www.facebook.com/v2.3/plugins/page.php?app_id=249643311490&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb",
-            "status": 302,
-            "type": "text/html; charset=\"utf-8\""
-          },
-          {
-            "url": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fplugins%2Fpage.php%3Fapp_id%3D249643311490%26channel%3Dhttps%253A%252F%252Fstaticxx.facebo",
-            "status": 400,
-            "type": "text/html; charset=\"utf-8\""
-          },
-          {
-            "url": "https://csp.secureserver.net/eventbus/web?clientid=b18ef4f046435b64a469b32c3c1c20a3",
-            "status": 202,
-            "type": "application/json"
-          },
-          {
-            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
-            "status": 202,
-            "type": "application/json"
-          },
-          {
-            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
-            "status": 202,
-            "type": "application/json"
           }
         ],
         "cookies": [
           {
-            "name": "__cf_bm",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "siGUID",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "_tccl_visitor",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "siSharedSessionID",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "_tccl_visit",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "sirecs",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "_scc_session",
-            "domain": ".cindycarlsonrealty.com"
+            "name": "siND",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "trustedsite_visit",
-            "domain": "cindycarlsonrealty.com"
+            "name": "ASPSESSIONIDSCDQEEVB",
+            "domain": "www.tomtoole.com"
           },
           {
-            "name": "trustedsite_tm_float_seen",
-            "domain": "cindycarlsonrealty.com"
+            "name": "_ga",
+            "domain": ".tomtoole.com"
           },
           {
-            "name": "AWSALBCORS",
-            "domain": "www.trustedsite.com"
+            "name": "_ga_HRZCCMT0XJ",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "cf_clearance",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "_gcl_au",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "ASPSESSIONIDSSXQEUAQ",
+            "domain": "www.tomtoole.com"
+          },
+          {
+            "name": "_fbp",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "test_cookie",
+            "domain": ".doubleclick.net"
+          },
+          {
+            "name": "siListingsView",
+            "domain": "www.tomtoole.com"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.tomtoole.com/",
+      "plain": {
+        "status": 403,
+        "ms": 82,
+        "finalUrl": "https://www.tomtoole.com/",
+        "bytes": 5364,
+        "title": "Just a moment...",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [],
+        "links": []
+      },
+      "plainFragment": {
+        "status": 403,
+        "ms": 81,
+        "finalUrl": "https://www.tomtoole.com/",
+        "bytes": 5407,
+        "title": "Just a moment...",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [],
+        "links": []
+      },
+      "service": {
+        "status": 200,
+        "ms": 2509,
+        "finalUrl": "https://www.tomtoole.com/",
+        "bytes": 315123,
+        "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "bytes": 104613,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 2334,
+        "finalUrl": "https://www.tomtoole.com/",
+        "bytes": 315214,
+        "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "bytes": 104613,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "local": {
+        "timeline": [
+          {
+            "at": 671,
+            "event": "domcontentloaded",
+            "url": "https://www.tomtoole.com/"
+          },
+          {
+            "at": 1700,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 317771,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 2722,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 323582,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 3744,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 323651,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 4766,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 323607,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 5792,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 325918,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 6816,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 335277,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 7839,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 335865,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 8862,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 339830,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 9887,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 343765,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 10911,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 343787,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 11935,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 349820,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 12960,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 349829,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 16033,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 349827,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 17059,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 349838,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 20131,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 349847,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 22180,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350057,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 23205,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350055,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 24230,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350066,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 27304,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350065,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 33454,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350055,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 34479,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350066,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 40631,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350055,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 41655,
+            "url": "https://www.tomtoole.com/",
+            "bytes": 350066,
+            "title": "Greater Philadelphia Real Estate - Homes for Sale in Greater Philadelphia",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ],
+        "responses": [
+          {
+            "url": "https://www.tomtoole.com/",
+            "status": 200,
+            "type": "text/html;charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-above-fold.js?v=20260316120005",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_logo_tt-logo-20240424023033.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_hero_untitled-design-20240426084445.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+            "status": 200,
+            "type": "text/javascript;charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-home-above-fold.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/scripts/jsd/main.js",
+            "status": 302,
+            "type": ""
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/images/templates/excelweb/flags.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/scripts/jsd/4df4a60fa397/main.js?",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v20260216120001/css/common.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/fontawesome-webfont.woff2?v=4.7.0",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/css/common-quick-search.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/images/templates/excelweb/star.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v20260216120029/css/content-components.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/pt-sans/v11-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-700.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/fontawesome-webfont.woff2?v=4.7.0",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/pt-sans/v11-latin-regular.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://accounts.google.com/gsi/client",
+            "status": 200,
+            "type": "application/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-HRZCCMT0XJ",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/jsd/oneshot/4df4a60fa397/0.6504291366812137:1791500562:O6lFD5IDdpi6wF96Cw6mdBhuQIKsaMIGO_wqX4lVxUc/a4791",
+            "status": 200,
+            "type": "text/plain; charset=UTF-8"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/sierra-social-icons.ttf?bjnuhu",
+            "status": 200,
+            "type": "application/octet-stream"
+          },
+          {
+            "url": "https://www.googletagmanager.com/gtag/js?id=AW-18087344730&cx=c&gtm=4e6a72",
+            "status": 200,
+            "type": "application/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://www.tomtoole.com/property-search/sist_ajax/process_fb_tracking_event.asp",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
+          },
+          {
+            "url": "https://connect.facebook.net/en_US/fbevents.js",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://analytics.google.com/g/collect?v=2&tid=G-HRZCCMT0XJ&gtm=45je6a72v9249282964za208zd9249282964xf1&_p=1791503770368&_gaz=1&gcd=13l3l3l3l1l1&npa=0&dma=0&eci",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://stats.g.doubleclick.net/g/collect?v=2&tid=G-HRZCCMT0XJ&cid=942495496.1791503770&gtm=45je6a72v9249282964za208zd9249282964xf1&rcb=10&aip=1&dma=0&gcd=13l3l",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://ad.doubleclick.net/ccm/s/collect?auid=1785220174.1791503771&gtm=45be6a72z8f_AW-18087344730za208zb9249282964zd9249282964xecxf1&fmt=8",
+            "status": 204,
+            "type": ""
+          },
+          {
+            "url": "https://www.google.com/ccm/collect?rcb=14&frm=0&apvc=1&auid=1785220174.1791503771&dt=Greater%20Philadelphia%20Real%20Estate%20-%20Homes%20for%20Sale%20in%20Grea",
+            "status": 200,
+            "type": ""
+          },
+          {
+            "url": "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/18087344730/?random=1791503770513&cv=11&fst=1791503770513&bg=ffffff&guid=ON&async=1&en=gtag.con",
+            "status": 200,
+            "type": "text/javascript; charset=UTF-8"
+          },
+          {
+            "url": "https://www.google.com/rmkt/collect/18087344730/?random=1791503770513&cv=11&fst=1791503770513&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW-",
+            "status": 200,
+            "type": ""
+          },
+          {
+            "url": "https://www.google.com/pagead/1p-user-list/18087344730/?random=1791503770513&cv=11&fst=1791500400000&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW",
+            "status": 200,
+            "type": "image/gif"
+          },
+          {
+            "url": "https://connect.facebook.net/signals/config/523798467994449?v=2.9.415&r=stable&domain=www.tomtoole.com&hme=a4c28c8787325ac3f8f9eac68364f47df2a8c4266e43177443e5d",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.facebook.com/tr/?id=523798467994449&ev=PageView&dl=https%3A%2F%2Fwww.tomtoole.com%2F&rl=&if=false&ts=1791503770849&iw=false&sw=1280&sh=720&v=2.9.415",
+            "status": 200,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://www.tomtoole.com/cdn-cgi/rum?",
+            "status": 204,
+            "type": "text/plain"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/common.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input-utils.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/content-components.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-home.js?v=202603161200",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v20260216120001/fonts/slick.woff",
+            "status": 200,
+            "type": "font/x-woff"
+          },
+          {
+            "url": "https://www.tomtoole.com/shared/templates/excelweb/res/includes/listing-carousel-item.asp?photosize=pic1x&savedsearch=true&searchid=2460824&numshow=0&numlimit=5",
+            "status": 403,
+            "type": "text/html; charset=UTF-8"
+          },
+          {
+            "url": "https://css.site-static.com/assets/dist/v202602161200/images/templates/excelweb/stats-bg.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_footerlogo_ourblue-20260813111638.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_fma_thinking-about-selling-widget-photo-20240424024015.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_testimonialsbackground_testimonials7-20240424024054.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://cdn.sitephotos.sierrastatic.com/5653_fmabackground_selling-20240424024010.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://www.tomtoole.com/assets/images/agents/no_photo.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://assets.site-static.com/agentsitephotos/5653/agent_5507.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://www.google.com/recaptcha/api.js?render=6LcYnbkqAAAAAOb5BdOwLCmKZmWU7IKHf_mXvXTs",
+            "status": 200,
+            "type": "text/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://cdn.userway.org/widget.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://www.gstatic.com/recaptcha/releases/nY0xPItgwtlvjEjk2TqdwOQz/recaptcha__en.js",
+            "status": 200,
+            "type": "text/javascript"
+          }
+        ],
+        "cookies": [
+          {
+            "name": "siGUID",
+            "domain": "www.tomtoole.com"
+          },
+          {
+            "name": "siSharedSessionID",
+            "domain": "www.tomtoole.com"
+          },
+          {
+            "name": "siND",
+            "domain": "www.tomtoole.com"
+          },
+          {
+            "name": "ASPSESSIONIDSSCXXACR",
+            "domain": "www.tomtoole.com"
+          },
+          {
+            "name": "cf_clearance",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "_ga",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "_ga_HRZCCMT0XJ",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "_gcl_au",
+            "domain": ".tomtoole.com"
+          },
+          {
+            "name": "test_cookie",
+            "domain": ".doubleclick.net"
+          },
+          {
+            "name": "_fbp",
+            "domain": ".tomtoole.com"
           }
         ]
       }
