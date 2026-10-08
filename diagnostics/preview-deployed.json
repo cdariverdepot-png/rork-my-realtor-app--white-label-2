@@ -1,12 +1,12 @@
 {
-  "verified": "https://cdariverdepot-my-realtor--dkx12pzmez.expo.app",
-  "commit": "5c70bca39a1df6e2b40d512d6b9d99307d338aff",
-  "entry": "/_expo/static/js/web/entry-32ae74b7c82b6b638cea92c86f125d3d.js",
+  "verified": "https://cdariverdepot-my-realtor--srxznbvflh.expo.app",
+  "commit": "4d824b4c5d0b971c1641d3cfcefdbd456b446436",
+  "entry": "/_expo/static/js/web/entry-961eb3a45d6cd126d059972699063a71.js",
   "importer": "staging",
-  "at": "2026-10-08T21:21:51.034Z",
+  "at": "2026-10-08T22:36:24.031Z",
   "triedUrls": [
     "https://cdariverdepot-my-realtor--preview.expo.app",
-    "https://cdariverdepot-my-realtor--dkx12pzmez.expo.app",
+    "https://cdariverdepot-my-realtor--srxznbvflh.expo.app",
     "https://cdariverdepot-my-realtor--preview.expo.app"
   ],
   "deployLog": [
@@ -18,7 +18,7 @@
     "✔ Assigned alias preview to deployment",
     "🎉 Your deployment is ready",
     "Dashboard       https://expo.dev/projects/b715c6fd-84ee-4f15-86c4-eba1467262c4/hosting/deployments",
-    "Deployment URL  https://cdariverdepot-my-realtor--dkx12pzmez.expo.app",
+    "Deployment URL  https://cdariverdepot-my-realtor--srxznbvflh.expo.app",
     "Alias URL       https://cdariverdepot-my-realtor--preview.expo.app",
     "🚀 When you are ready to deploy to production:",
     "  $ eas deploy --prod"
