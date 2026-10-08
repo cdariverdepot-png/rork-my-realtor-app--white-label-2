@@ -1,0 +1,1356 @@
+{
+  "id": "the-battle-group",
+  "url": "https://www.thebattlegroup.com/",
+  "category": "custom",
+  "timeline": [
+    {
+      "at": 56,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1060,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1661,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6"
+    },
+    {
+      "at": 2461,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 4665,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 5269,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 3 of 6\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 5470,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 3 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6071,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 4 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6271,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 5 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6473,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6874,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaving 6 listings"
+    },
+    {
+      "at": 7475,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings"
+    },
+    {
+      "at": 11285,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Shawn Battle · Arlington, VA"
+    },
+    {
+      "at": 11486,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 658,
+      "totalMs": 11165,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Homes for Sale Arlington VA",
+          "host": "thebattlegroup.com",
+          "at": 434
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 434
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 2,
+          "at": 1346
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 2,
+          "at": 3634
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 2,
+          "at": 3981
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 0,
+          "total": 2,
+          "at": 4328
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 33,
+          "sections": 5,
+          "at": 4329
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 4329
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 4329
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 4329
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 4330
+        },
+        {
+          "kind": "profile",
+          "name": "Shawn Battle",
+          "city": "Arlington, VA",
+          "at": 10284
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 10284
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 2982,
+            "design": 3895,
+            "site": 4329,
+            "profile": 5954,
+            "total": 10284
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "value": "Shawn Battle",
+              "confidence": 1,
+              "locator": "PAGE TEXT, Who We Are, Team Lead and repeated in contact"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "value": "Team Lead",
+              "confidence": 0.95,
+              "locator": "PAGE TEXT, Who We Are section"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "value": "+1.703.999.8108",
+              "confidence": 1,
+              "locator": "PAGE DETAILS, Phone links and footer contact line"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "value": "Shawn@TheBattleGroup.com",
+              "confidence": 0.98,
+              "locator": "PAGE TEXT, stylized as Shawn(at)TheBattleGroup(dotted)com"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "value": "The Battle Group",
+              "confidence": 1,
+              "locator": "PAGE TEXT and logos: 'We are The Battle Group'"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "value": "Arlington, VA",
+              "confidence": 0.92,
+              "locator": "PAGE TITLE and focus of website"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Guiding You Home in Arlington & Northern Virginia",
+            "welcomeNote": "Welcome to The Battle Group, where real estate is a story told and an experience to be shared. Led by Shawn Battle, our team pairs dynamic marketing and attentive guidance for buyers and sellers in Arlington and across Northern Virginia.",
+            "tagline": "Your Northern Virginia Real Estate Guide",
+            "aboutParagraph": "The Battle Group specializes in delivering a personalized, results-driven real estate experience for clients in Arlington and the greater Northern Virginia and DC markets. From creative 4K property videos to powerful digital campaigns and hands-on transaction management, our team ensures every home has a story that stands out—and every client’s journey is smooth and memorable. As Team Lead, Shawn Battle draws on deep local expertise and a commitment to service that’s built for today’s fast-changing market.",
+            "conciergeLine": "Curious about your home’s value or ready to make your next move? Reach out—Shawn Battle and The Battle Group are with you every step of the way.",
+            "contactLine": "Call 703.999.8108 or email Shawn@TheBattleGroup.com to start your real estate journey.",
+            "tone": "approachable, professional, locally focused",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "05ba8165-f9d5-4cd9-9403-2c82e31b66cf"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://thebattlegroup.com/",
+              "analyzedAt": 1791430039551,
+              "logoUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+              "portraitImageUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+              "heroTitle": "Homes for Sale Arlington VA",
+              "heroSubtitle": "",
+              "sections": [
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Our Stories",
+                  "body": "--> We sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound --> All Stories --> All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ([our-stories-count type=\"active\"] Videos) Pending Stories ([our-stories-count type=\"pending\"] Videos) Sold Stories ([our-stories-count type=\"sold\"] Videos) -->"
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "unique",
+                  "title": "Who We Are",
+                  "body": "Facebook Twitter Instagram Youtube Sound --> Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.",
+                  "imageUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Our Listings",
+                  "body": "Browse Our Homes for Sale in Northern Virginia and DC."
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "The Shawn & Matt Show",
+                  "body": "Episodes + View All Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video --> --> --> <!--"
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Sell your home through proven marketing system Contact Us",
+                  "body": "Shawn Battle . All Rights Reserved. Sitemap . Real Estate Website Design by Agent Image Scroll Up"
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                  "variants": [
+                    {
+                      "url": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                  "variants": [
+                    {
+                      "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/fixed-h-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2024/01/fixed-h-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/fixed-h-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/main-logo-w.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/main-logo-w.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/main-logo-w.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-3.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-3.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-3.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-2.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-2.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-2.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-4.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-4.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-4.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-5.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-5.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-5.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-6.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-6.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-6.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-7.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-7.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-7.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/kbp7dgR6l_g/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/kbp7dgR6l_g/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/kbp7dgR6l_g/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/K5bt5yU4eHk/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/K5bt5yU4eHk/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/K5bt5yU4eHk/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/Fn7ZpxFvYuc/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/Fn7ZpxFvYuc/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/Fn7ZpxFvYuc/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/4Cc15Rev6XQ/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/4Cc15Rev6XQ/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/4Cc15Rev6XQ/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/ChKDS7WVWYE/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/ChKDS7WVWYE/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/ChKDS7WVWYE/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/QENBul1ABsQ/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/QENBul1ABsQ/sddefault.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://i.ytimg.com/vi/QENBul1ABsQ/sddefault.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/iXaDGxhTFL8/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/iXaDGxhTFL8/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/iXaDGxhTFL8/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/OIQ5v8fU374/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/OIQ5v8fU374/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/OIQ5v8fU374/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/YOmnNUG8064/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/YOmnNUG8064/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/YOmnNUG8064/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/LNxBC9ZAn7k/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/LNxBC9ZAn7k/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/LNxBC9ZAn7k/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/ZIHV1iAeVrw/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/ZIHV1iAeVrw/sddefault.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://i.ytimg.com/vi/ZIHV1iAeVrw/sddefault.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/RIexkLaBZCY/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/RIexkLaBZCY/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/RIexkLaBZCY/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.thebattlegroup.com/wp-content/themes/shawnbattle.com/images/hp-listing-overlay.png",
+                    "variants": [
+                      {
+                        "url": "https://www.thebattlegroup.com/wp-content/themes/shawnbattle.com/images/hp-listing-overlay.png"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebattlegroup.com/wp-content/themes/shawnbattle.com/images/hp-listing-overlay.png",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/homebot-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2024/01/homebot-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/homebot-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/agent-headshot-v1.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/agent-headshot-v1.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/agent-headshot-v1.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/broker-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/broker-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/broker-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#05c3f9",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Montserrat",
+                "headingFontFamily": "Montserrat",
+                "layout": "portrait-split",
+                "spacing": 30,
+                "radius": 15,
+                "headingSize": 52,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#05c3f9",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Montserrat",
+                "headingFontFamily": "Montserrat",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 15,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://resources.agentimage.com/libraries/css/aios-popup.min.css",
+                  "https://resources.agentimage.com/libraries/css/frontend.min.css",
+                  "https://thebattlegroup.com/wp-content/themes/aios-starter-theme/style.css",
+                  "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/style.css",
+                  "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/style-media-queries.css",
+                  "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/css/onepage-scroll.css"
+                ],
+                "colors": [
+                  "#ffffff",
+                  "#000000",
+                  "#0b0b0b",
+                  "#cccccc",
+                  "#333333",
+                  "#3f3f3f",
+                  "#444444",
+                  "#bdbdbd",
+                  "#f3f3f3",
+                  "#969696",
+                  "#afafaf",
+                  "#5b5b5b",
+                  "#898989",
+                  "#636363",
+                  "#6d6d6d",
+                  "#484848",
+                  "#595959",
+                  "#c2c2c2",
+                  "#707070",
+                  "#e1e1e1",
+                  "#cacaca",
+                  "#d7d7d7",
+                  "#b2b2b2",
+                  "#076e83",
+                  "#329db3",
+                  "#4d6baa",
+                  "#4fc6f8",
+                  "#dc4e41",
+                  "#ff0000",
+                  "#007bb6"
+                ],
+                "fonts": [
+                  "Arial",
+                  "Verdana",
+                  "Open Sans",
+                  "monospace",
+                  "Montserrat"
+                ],
+                "routing": [
+                  {
+                    "source": "703.999.8108",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Shawn(at)TheBattleGroup(dotted)com",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Our Stories",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Shawn Battle",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Matt Leighton",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Our Listings",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "The Shawn & Matt Show",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Value",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Neighborhoods",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Arlington",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lyon Village",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lyon Park",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Ashton Heights",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Cherrydale",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Waverly Hills",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Waycroft Woodlawn",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Tara Leeway Heights",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Alexandria",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Del Ray",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Hollin Hills",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Falls Church",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lake Barcroft",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Falls Church City",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Join Our VIP List",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Arlington VA Real Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Your Home's Story",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Through Proven",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Trending Videos",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Video Marketing",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "5 Predictions for the Arlington Real Estate Market This Fall",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Condo Financing Just Changed. Here's What Buyers and Sellers Need to Know",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "The Top 5 Most Expensive Rentals in Arlington, VA",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "These are the top 5 most expensive houses in Arlington in 2026",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Top 10 Biggest Arlington Price Drops of 2026",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Does This MLS Status Hurt Home Sellers?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Is Arlington’s Spring Market Finally Slowing Down?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "We Ranked Arlington’s Craziest Bidding Wars",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Ramit Sethi's Homebuying Guidelines | Top Affordable Beach Towns | $65M TN Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "NAR Settles Lawsuit.... What Happens Next?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.thebattlegroup.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.thebattlegroup.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "05ba8165-f9d5-4cd9-9403-2c82e31b66cf",
+              "kind": "url",
+              "label": "www.thebattlegroup.com",
+              "uri": "https://www.thebattlegroup.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "the-battle-group-00-url.png",
+    "the-battle-group-01-review.png",
+    "the-battle-group-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 26,
+    "text": []
+  },
+  "submittedAt": 3966,
+  "reviewMs": 11486,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Homes for Sale Arlington VA\nFound 6 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Shawn Battle · Arlington, VA",
+  "reviewText": "Back\nAPP BUILDER\nwww.thebattlegroup.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nARLINGTON, VA\nHomes for Sale Arlington VA\nWelcome to The Battle Group, where real estate is a story told and an experience to be shared. Led by Shawn Battle, our team pairs dynamic marketing and attentive guidance for buyers and sellers in Arlington and across Northern Virginia.\nView listings\nFROM THE SITE\nOur Stories\n--> We sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound --> All Stories --> All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ([our-stories-count type=\"active\"] Videos) Pending Stories ([our-stories-count type=\"pending\"] Videos) Sold Stories ([our-stories-count type=\"sold\"] Videos) -->\nABOUT\nWho We Are\nFacebook Twitter Instagram Youtube Sound --> Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.\nOur Listings\n$849,900\n2165 CABOTS POINT LN RESTON View Details\n$759,900\n1530 KEY BLVD #520 ARLINGTON View Details\n$699,900\n1111 19TH ST N #2110 ARLINGTON View Details\n$625,000\n900 N STAFFORD ST #1805 ARLINGTON View Details\n$575,000\n900 N STAFFORD ST #1719 ARLINGTON View Details\n$482,500\n888 N QUINCY ST #1105 ARLINGTON View Details\nFROM THE SITE\nThe Shawn & Matt Show\nEpisodes + View All Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video --> --> --> <!--\n+1.703.999.8108\nShawn@TheBattleGroup.com\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nGuiding You Home in Arlington & Northern Virginia\nTry another opening line\nYOUR INTRODUCTION\nThe Battle Group specializes in delivering a personalized, results-driven real estate experience for clients in Arlington and the greater Northern Virginia and DC markets. From creative 4K property videos to powerful digital campaigns and hands-on transaction management, our team ensures every home has a story that stands out—and every client’s journey is smooth and memorable. As Team Lead, Shawn Battle draws on deep local expertise and a commitment to service that’s built for today’s fast-changing market.\nTry another introduction\n6 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\n▸ Brokerage & license (optional)\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nARLINGTON, VA\nHomes for Sale Arlington VA\nWelcome to The Battle Group, where real estate is a story told and an experience to be shared. Led by Shawn Battle, our team pairs dynamic marketing and attentive guidance for buyers and sellers in Arlington and across Northern Virginia.\nView listings\nFROM THE SITE\nOur Stories\n--> We sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound --> All Stories --> All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ([our-stories-count type=\"active\"] Videos) Pending Stories ([our-stories-count type=\"pending\"] Videos) Sold Stories ([our-stories-count type=\"sold\"] Videos) -->\nABOUT\nWho We Are\nFacebook Twitter Instagram Youtube Sound --> Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.\nOur Listings\n$849,900\n2165 CABOTS POINT LN RESTON View Details\n$759,900\n1530 KEY BLVD #520 ARLINGTON View Details\n$699,900\n1111 19TH ST N #2110 ARLINGTON View Details\n$625,000\n900 N STAFFORD ST #1805 ARLINGTON View Details\n$575,000\n900 N STAFFORD ST #1719 ARLINGTON View Details\n$482,500\n888 N QUINCY ST #1105 ARLINGTON View Details\nFROM THE SITE\nThe Shawn & Matt Show\nEpisodes + View All Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video --> --> --> <!--\n+1.703.999.8108\nShawn@TheBattleGroup.com\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 2165 CABOTS POINT LN RESTON View Details $849,900 STATUS UNCONFIRMED 1530 KEY BLVD #520 ARLINGTON View Details $759,900 STAT",
+        "textLength": 543,
+        "stillHome": false
+      },
+      {
+        "label": "2165 CABOTS POINT LN RESTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 2165 CABOTS POINT LN RESTON View Details $849,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client da",
+        "textLength": 267,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "1530 KEY BLVD #520 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 1530 KEY BLVD #520 ARLINGTON View Details $759,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client d",
+        "textLength": 268,
+        "stillHome": false
+      },
+      {
+        "label": "1111 19TH ST N #2110 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 1111 19TH ST N #2110 ARLINGTON View Details $699,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client",
+        "textLength": 270,
+        "stillHome": false
+      },
+      {
+        "label": "900 N STAFFORD ST #1805 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 900 N STAFFORD ST #1805 ARLINGTON View Details $625,000 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no cli",
+        "textLength": 273,
+        "stillHome": false
+      },
+      {
+        "label": "900 N STAFFORD ST #1719 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 900 N STAFFORD ST #1719 ARLINGTON View Details $575,000 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no cli",
+        "textLength": 273,
+        "stillHome": false
+      },
+      {
+        "label": "888 N QUINCY ST #1105 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 888 N QUINCY ST #1105 ARLINGTON View Details $482,500 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no clien",
+        "textLength": 271,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app ARLINGTON, VA Homes for Sale Arlington VA Welcome to The Battle Group, where real estate is a story told and an experience to be shared. Led by Shawn Battle, our team pairs dynamic marketing and atte",
+        "textLength": 1824,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 2165 CABOTS POINT LN RESTON View Details $849,900 STATUS UNCONFIRMED 1530 KEY BLVD #520 ARLINGTON View Details $759,900 STAT",
+        "textLength": 543,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.thebattlegroup.com/",
+      "status": 200,
+      "finalUrl": "https://thebattlegroup.com/",
+      "title": "Real Estate in Arlington Virginia | Homes for Sale Arlington VA",
+      "textLength": 2807,
+      "priceCount": 15,
+      "uniquePrices": 6,
+      "propertyLinkCount": 8,
+      "sample": "HOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n703.999.8108\nHOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n \n703.999.8108\nReal Estate in Arlington VA\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nVIDEO\nMARKETING\n\nWe sell your home by telling your home's story through unique 4K video.\n\nSHARE\nWHO\nWE\nARE\nSHAWN BATTLE\nTEAM LEAD\nMATT LEIGHTON\nREALTOR\nPATRICIA GIL\nREALTOR\nMIGUEL MOSCOL\nREALTOR\nMIKE LANCZYCKI\nREALTOR\nALISON PIERRE\nCONTRACT COORDINATOR\nCHERRY LANCISO\nTEAM ASSISTANT\n\nWe are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads. Our goal is to get you the best contract possible backed up with a smooth transaction from contract to close. Our team of real estat",
+      "challenge": false,
+      "screenshot": "the-battle-group-source-0.png"
+    }
+  ],
+  "wallMs": 48745
+}

@@ -1,0 +1,64 @@
+{
+  "id": "redfin-gavin-shettler",
+  "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+  "category": "third-party-profile",
+  "timeline": [
+    {
+      "at": 47,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1250,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 2051,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 5 active listings\nReading Redfin\nMatching your website’s design and imagery\nFull details weren’t available for these 5 listings"
+    },
+    {
+      "at": 2452,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 5 active listings\nReading Redfin\nMatching your website’s design and imagery\nFull details weren’t available for these 5 listings\nSaving 5 listings"
+    },
+    {
+      "at": 2853,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 5 active listings\nReading Redfin\nMatching your website’s design and imagery\nFull details weren’t available for these 5 listings\nSaved 5 listings"
+    },
+    {
+      "at": 4058,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 5 active listings\nReading Redfin\nMatching your website’s design and imagery\nFull details weren’t available for these 5 listings\nSaved 5 listings\nReading linked pages · 0 of 7"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "redfin-gavin-shettler-00-url.png",
+    "redfin-gavin-shettler-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 5,
+    "text": []
+  },
+  "submittedAt": 3925,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 5 active listings\nReading Redfin\nMatching your website’s design and imagery\nFull details weren’t available for these 5 listings\nSaved 5 listings\nReading linked pages · 0 of 7",
+  "reviewText": "Exit\nAPP BUILDER\nwww.redfin.com/real-estate-agents/gavin-shettler\nBuilding your app\nIMPORT ACTIVITY\nFound 5 active listings\nReading Redfin\nMatching your website’s design and imagery\nFull details weren’t available for these 5 listings\nSaved 5 listings\nReading linked pages · 0 of 7",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+      "status": 429,
+      "finalUrl": "https://ratelimited.redfin.com/",
+      "title": "Are You a Robot? | Redfin",
+      "textLength": 402,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "There seems to be an issue...\nOur usage behavior algorithm thinks you might be a robot.\n\nEnsure you are accessing Redfin.com according to our terms of usage.\n\nTips:\nIf you are using a VPN, pause it while browsing Redfin.com.\nMake sure you have Javascript enabled in your web browser.\nEnsure your browser is up to date.\nPlease email techsupport@redfin.com for help and include the following information:",
+      "challenge": false,
+      "screenshot": "redfin-gavin-shettler-source-0.png"
+    }
+  ],
+  "wallMs": 249511
+}

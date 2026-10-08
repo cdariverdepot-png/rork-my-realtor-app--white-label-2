@@ -1,0 +1,56 @@
+{
+  "id": "remax-alexis-kemp-sagert",
+  "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+  "category": "franchise",
+  "timeline": [
+    {
+      "at": 50,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1052,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nWriting your profile and app copy\nLooking for your listings"
+    },
+    {
+      "at": 1252,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nWriting your profile and app copy\nYour listings could not be read from this page"
+    },
+    {
+      "at": 3054,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nYour profile could not be written\nYour listings could not be read from this page"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "remax-alexis-kemp-sagert-00-url.png",
+    "remax-alexis-kemp-sagert-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3675,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nYour profile could not be written\nYour listings could not be read from this page",
+  "reviewText": "Exit\nAPP BUILDER\nwww.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071\nBuilding your app\nIMPORT ACTIVITY\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nYour profile could not be written\nYour listings could not be read from this page",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+      "status": 202,
+      "finalUrl": "https://www.remax.com/usa/en/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+      "title": "Alexis Kemp-Sagert, Cedar Rapids, IA Real Estate Associate - REMAX Concepts",
+      "textLength": 3686,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 1,
+      "sample": "Buy\nSell\nFind an Agent\nAdvice\nHome\n>\nAgent Search\n>\nREMAX\n>\nAlexis Kemp-Sagert\nCONTACT ME\nWebsite:\nwww.alexisrealestateteam.com\nMobile: (319) 795-5394\nREMAX Concepts\nAlexis Kemp-Sagert\n\nAssociate\n\nOffice Address\n5235 Buffalo Ridge Dr. NE, Suite 116, Cedar Rapids, IA 52411\nAbout Me\nTeam\nAwards\nListings\n\nMy name is Alexis Kemp-Sagert, and I would love to be your trusted real estate expert. With over 4 years of experience, more than $70 million in real estate sold, and having helped over 275 families achieve their real estate goals, I bring proven results and an in-depth understanding of the local market. I am proud to be recognized as a Top 10 agent in the MLS for the past three consecutive years, as well as a RE/MAX Torchbearer the past 3 years, placing me among the Top 5 Iowa RE/MAX agents under 40. These honors reflect my commitment to excellence, consistent performance, and exceptional client service. With a passion for residential real estate, I have successfully guided clients through every stage of the buying, selling, and investing process—ensuring their needs are met and their goals realized. Whether you are a first-time homebuyer, a seasoned investor, or relocating out of s",
+      "challenge": false,
+      "screenshot": "remax-alexis-kemp-sagert-source-0.png"
+    }
+  ],
+  "wallMs": 249620
+}

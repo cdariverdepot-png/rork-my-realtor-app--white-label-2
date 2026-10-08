@@ -1,0 +1,96 @@
+{
+  "id": "chattanooga-property-shop",
+  "url": "https://chattanoogapropertyshop.com/",
+  "category": "idx",
+  "timeline": [
+    {
+      "at": 52,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1058,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1259,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1461,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading your website\nReading listing details · 4 of 24"
+    },
+    {
+      "at": 1662,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading your website\nReading listing details · 7 of 24"
+    },
+    {
+      "at": 1862,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nReading listing details · 14 of 24\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2063,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nReading listing details · 18 of 24\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2264,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nReading listing details · 20 of 24\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2466,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nReading listing details · 21 of 24\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2869,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nReading listing details · 23 of 24\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3070,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nRead full details for all 24 listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3674,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nRead full details for all 24 listings\nMatching your website’s design and imagery\nSaving 24 listings"
+    },
+    {
+      "at": 4478,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nRead full details for all 24 listings\nMatching your website’s design and imagery\nSaved 24 listings"
+    },
+    {
+      "at": 4681,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nRead full details for all 24 listings\nMatching your website’s design and imagery\nSaved 24 listings\nReading linked pages · 0 of 2"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "chattanooga-property-shop-00-url.png",
+    "chattanooga-property-shop-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 30,
+    "text": []
+  },
+  "submittedAt": 3879,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nRead full details for all 24 listings\nMatching your website’s design and imagery\nSaved 24 listings\nReading linked pages · 0 of 2",
+  "reviewText": "Exit\nAPP BUILDER\nchattanoogapropertyshop.com\nBuilding your app\nIMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nRead full details for all 24 listings\nMatching your website’s design and imagery\nSaved 24 listings\nReading linked pages · 0 of 2",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://chattanoogapropertyshop.com/",
+      "status": 403,
+      "finalUrl": "https://chattanoogapropertyshop.com/",
+      "title": "Just a moment...",
+      "textLength": 74,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Ray ID: a471e47b5855005c • Contact support@agentfire.com for any questions",
+      "challenge": true,
+      "screenshot": "chattanooga-property-shop-source-0.png"
+    }
+  ],
+  "wallMs": 249283
+}

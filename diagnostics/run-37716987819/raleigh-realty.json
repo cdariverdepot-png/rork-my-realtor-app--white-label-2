@@ -1,0 +1,937 @@
+{
+  "id": "raleigh-realty",
+  "url": "https://raleighrealty.com/",
+  "category": "edge",
+  "timeline": [
+    {
+      "at": 47,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1253,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 2258,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for listings · 2 pages checked"
+    },
+    {
+      "at": 2660,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3062,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3865,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 4 pages checked\nMatching your website’s design and imagery\nReading linked pages · 0 of 5"
+    },
+    {
+      "at": 4065,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 4 pages checked\nMatching your website’s design and imagery\nReading linked pages · 1 of 5"
+    },
+    {
+      "at": 4266,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 4 pages checked\nMatching your website’s design and imagery\nReading linked pages · 2 of 5"
+    },
+    {
+      "at": 4467,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 4 pages checked\nMatching your website’s design and imagery\nReading linked pages · 3 of 5"
+    },
+    {
+      "at": 4668,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nLooking for listings · 4 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 4868,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 2 listings so far · 5 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 15512,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 2 listings so far · 6 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 16115,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 4 listings so far · 7 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 26951,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 4 listings so far · 8 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 27555,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 4 listings so far · 9 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 28156,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 5 listings so far · 10 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 28759,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 11 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 29562,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 12 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 29965,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 13 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 30566,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 14 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 31169,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 15 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 31570,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 16 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 31971,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 17 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 32173,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 18 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 32575,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 6 listings so far · 19 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 33377,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 20 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 34382,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 21 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 34785,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 22 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 34987,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 23 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 35389,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 24 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 35590,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 25 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 35791,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 26 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 36193,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 27 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 36394,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 28 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 36796,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 29 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 37399,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 30 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 37801,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 31 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 38205,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 32 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 38807,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 33 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 39410,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 34 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 39812,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 35 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 40415,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 36 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 40817,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 36 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nReading listing details · 0 of 7"
+    },
+    {
+      "at": 41621,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 36 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nReading listing details · 4 of 7"
+    },
+    {
+      "at": 41822,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 36 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nReading listing details · 5 of 7"
+    },
+    {
+      "at": 42224,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 listings so far · 36 pages checked\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nReading listing details · 6 of 7"
+    },
+    {
+      "at": 43029,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Realtors\nFound 7 active listings\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nRead full details for all 7 listings"
+    },
+    {
+      "at": 43431,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Realtors\nFound 7 active listings\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nRead full details for all 7 listings\nSaving 7 listings"
+    },
+    {
+      "at": 44033,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Realtors\nFound 7 active listings\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nRead full details for all 7 listings\nSaved 7 listings"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 773,
+      "totalMs": 43796,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 109
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 1,
+          "found": 0,
+          "at": 1039
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 2,
+          "found": 0,
+          "at": 1085
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 3,
+          "found": 0,
+          "at": 1893
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 4,
+          "found": 0,
+          "at": 2667
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 5,
+          "found": 2,
+          "at": 3692
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 6,
+          "found": 2,
+          "at": 14366
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 7,
+          "found": 4,
+          "at": 14994
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 8,
+          "found": 4,
+          "at": 25748
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 9,
+          "found": 4,
+          "at": 26420
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 10,
+          "found": 5,
+          "at": 27091
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 11,
+          "found": 6,
+          "at": 27702
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 12,
+          "found": 6,
+          "at": 28359
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 13,
+          "found": 6,
+          "at": 28945
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 14,
+          "found": 6,
+          "at": 29507
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 15,
+          "found": 6,
+          "at": 30100
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 16,
+          "found": 6,
+          "at": 30476
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 17,
+          "found": 6,
+          "at": 30815
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 18,
+          "found": 6,
+          "at": 31138
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 19,
+          "found": 6,
+          "at": 31434
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 20,
+          "found": 7,
+          "at": 32292
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 21,
+          "found": 7,
+          "at": 33292
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 22,
+          "found": 7,
+          "at": 33569
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 23,
+          "found": 7,
+          "at": 33930
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 24,
+          "found": 7,
+          "at": 34178
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 25,
+          "found": 7,
+          "at": 34460
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 26,
+          "found": 7,
+          "at": 34731
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 27,
+          "found": 7,
+          "at": 35037
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 28,
+          "found": 7,
+          "at": 35318
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 29,
+          "found": 7,
+          "at": 35735
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 30,
+          "found": 7,
+          "at": 36204
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 31,
+          "found": 7,
+          "at": 36610
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 32,
+          "found": 7,
+          "at": 37155
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 33,
+          "found": 7,
+          "at": 37729
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 34,
+          "found": 7,
+          "at": 38330
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 35,
+          "found": 7,
+          "at": 38599
+        },
+        {
+          "kind": "listings",
+          "host": "raleighrealty.com",
+          "pages": 36,
+          "found": 7,
+          "at": 39355
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 7,
+          "succeeded": 0,
+          "at": 39627
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 7,
+          "succeeded": 1,
+          "at": 40545
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 7,
+          "succeeded": 2,
+          "at": 40571
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 7,
+          "succeeded": 3,
+          "at": 40582
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 7,
+          "succeeded": 4,
+          "at": 40594
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 7,
+          "succeeded": 5,
+          "at": 40659
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 7,
+          "succeeded": 6,
+          "at": 41119
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 7,
+          "total": 7,
+          "succeeded": 7,
+          "at": 41898
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 7,
+          "at": 41899
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 7,
+          "at": 42378
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 7,
+          "at": 42824
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-zb4go1",
+            "url": "https://raleighrealty.com/",
+            "submittedUrl": "https://raleighrealty.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+              "https://raleighrealty.com/raleigh/homes-with-first-floor-master?page=2",
+              "https://raleighrealty.com/raleigh/homes-with-basement",
+              "https://raleighrealty.com/raleigh/homes-with-basement?page=2",
+              "https://raleighrealty.com/raleigh/ranch-homes",
+              "https://raleighrealty.com/raleigh/townhomes",
+              "https://raleighrealty.com/raleigh/townhomes?page=2",
+              "https://raleighrealty.com/raleigh/single-family"
+            ],
+            "connectedAt": 1791430378156,
+            "lastCheckedAt": 1791430378156,
+            "nextSyncAt": 1791437578156,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 7
+          },
+          "imported": 7,
+          "checked": 7,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1b0klrt",
+              "title": "5716 N Hills Dr, Raleigh, NC 27612",
+              "neighborhood": "",
+              "price": "$484,000",
+              "beds": 3,
+              "baths": 3,
+              "sqft": "2,078",
+              "images": [
+                "https://raleighrealty.com/rr-images/uploads/settings/fallback-image-ac36f2df-4dfa-4eaf-ac12-746fa1bc59a9.jpg"
+              ],
+              "image": "https://raleighrealty.com/rr-images/uploads/settings/fallback-image-ac36f2df-4dfa-4eaf-ac12-746fa1bc59a9.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/5716-hills-dr-raleigh-nc-27612-9d7520da",
+              "description": "5716 N Hills Dr, Raleigh, NC 27612 is for sale. View 0 photos of this 3 bed, 3 bath, 2078 sqft property with a list price of 484000. This property was listed on 10-06-2026 and is located at 5716 N Hills Dr, Raleigh, NC 27612 in the Meadows At Eaglechase neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-ocis64",
+              "title": "3417 Makers Cir, Raleigh, NC 27612",
+              "neighborhood": "",
+              "price": "$1,831,388",
+              "beds": 4,
+              "baths": 5,
+              "sqft": "3,943",
+              "images": [
+                "https://images.agentloft.com/mls-images/triangle/media/doorify/images/3417-makers-cir-raleigh-nc-27612-bdec8775/3d9d1de809d51982cff48e1d7444648c.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2"
+              ],
+              "image": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/3417-makers-cir-raleigh-nc-27612-bdec8775/3d9d1de809d51982cff48e1d7444648c.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/3417-makers-cir-raleigh-nc-27612-bdec8775",
+              "description": "3417 Makers Cir, Raleigh, NC 27612 is for sale. View 1 photos of this 4 bed, 5 bath, 3943 sqft property with a list price of 1831388. This property was listed on 10-05-2026 and is located at 3417 Makers Cir, Raleigh, NC 27612 in the The Founding At Blue Ridge neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1w2mr0p",
+              "title": "2619 Marchmont St, Raleigh, NC 27608",
+              "neighborhood": "",
+              "price": "$2,069,837",
+              "beds": 4,
+              "baths": 5,
+              "sqft": "3,543",
+              "images": [
+                "https://images.agentloft.com/mls-images/triangle/tri/2619-marchmont-st-raleigh-nc-27608-692f427f/20260826182315517064000000-o.jpg?width=350&s=550e8400-e29b-41d4-a716-446655440000&wv=v2"
+              ],
+              "image": "https://images.agentloft.com/mls-images/triangle/tri/2619-marchmont-st-raleigh-nc-27608-692f427f/20260826182315517064000000-o.jpg?width=350&s=550e8400-e29b-41d4-a716-446655440000&wv=v2",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/2619-marchmont-st-raleigh-nc-27608-692f427f",
+              "description": "2619 Marchmont St, Raleigh, NC 27608 is for sale. View 1 photos of this 4 bed, 5 bath, 3543 sqft property with a list price of 2069837. This property was listed on 08-26-2026 and is located at 2619 Marchmont St, Raleigh, NC 27608 in the Budleigh neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-jpz2fm",
+              "title": "2611 Marchmont St, Raleigh, NC 27608",
+              "neighborhood": "",
+              "price": "$2,494,088",
+              "beds": 4,
+              "baths": 5,
+              "sqft": "4,096",
+              "images": [
+                "https://images.agentloft.com/mls-images/triangle/tri/2611-marchmont-st-raleigh-nc-27608-28f2f8a6/20260826182511788707000000-o.jpg?width=350&s=550e8400-e29b-41d4-a716-446655440000&wv=v2"
+              ],
+              "image": "https://images.agentloft.com/mls-images/triangle/tri/2611-marchmont-st-raleigh-nc-27608-28f2f8a6/20260826182511788707000000-o.jpg?width=350&s=550e8400-e29b-41d4-a716-446655440000&wv=v2",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/2611-marchmont-st-raleigh-nc-27608-28f2f8a6",
+              "description": "2611 Marchmont St, Raleigh, NC 27608 is for sale. View 1 photos of this 4 bed, 5 bath, 4096 sqft property with a list price of 2494088. This property was listed on 08-26-2026 and is located at 2611 Marchmont St, Raleigh, NC 27608 in the Budleigh neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-a5zijr",
+              "title": "4453 Hillsgrove Rd, Wake Forest, NC 27587",
+              "neighborhood": "",
+              "price": "$295,995",
+              "beds": 3,
+              "baths": 3,
+              "sqft": "1,572",
+              "images": [
+                "https://images.agentloft.com/mls-images/triangle/media/doorify/images/4453-hillsgrove-rd-wake-forest-nc-27587-1785f8bd/a8f220096d01b19df7036c0418b3cbc9.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2"
+              ],
+              "image": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/4453-hillsgrove-rd-wake-forest-nc-27587-1785f8bd/a8f220096d01b19df7036c0418b3cbc9.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/4453-hillsgrove-rd-wake-forest-nc-27587-1785f8bd",
+              "description": "4453 Hillsgrove Rd, Wake Forest, NC 27587 is for sale. View 1 photos of this 3 bed, 3 bath, 1572 sqft property with a list price of 295995. This property was listed on 10-06-2026 and is located at 4453 Hillsgrove Rd, Wake Forest, NC 27587 in the Shearon Farms neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-81dv6v",
+              "title": "1015 Breadsell Ln, Wake Forest, NC 27587",
+              "neighborhood": "",
+              "price": "$359,900",
+              "beds": 3,
+              "baths": 4,
+              "sqft": "2,336",
+              "images": [
+                "https://images.agentloft.com/mls-images/triangle/media/doorify/images/1015-breadsell-ln-wake-forest-nc-27587-6ff8974e/b1afa0ad252ea3263d20bc638e5d2830.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2"
+              ],
+              "image": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/1015-breadsell-ln-wake-forest-nc-27587-6ff8974e/b1afa0ad252ea3263d20bc638e5d2830.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/1015-breadsell-ln-wake-forest-nc-27587-6ff8974e",
+              "description": "1015 Breadsell Ln, Wake Forest, NC 27587 is for sale. View 1 photos of this 3 bed, 4 bath, 2336 sqft property with a list price of 359900. This property was listed on 10-06-2026 and is located at 1015 Breadsell Ln, Wake Forest, NC 27587 in the Forestville Towns neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-kd717x",
+              "title": "401 Hallingsfield Way, Zebulon, NC 27597",
+              "neighborhood": "",
+              "price": "$369,990",
+              "beds": 4,
+              "baths": 3,
+              "sqft": "2,428",
+              "images": [
+                "https://images.agentloft.com/mls-images/triangle/media/doorify/images/401-hallingsfield-way-zebulon-nc-27597-7edc084c/05eb05444f744985f33c2066676182c8.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2"
+              ],
+              "image": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/401-hallingsfield-way-zebulon-nc-27597-7edc084c/05eb05444f744985f33c2066676182c8.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://raleighrealty.com/home/401-hallingsfield-way-zebulon-nc-27597-7edc084c",
+              "description": "401 Hallingsfield Way, Zebulon, NC 27597 is for sale. View 1 photos of this 4 bed, 3 bath, 2428 sqft property with a list price of 369990. This property was listed on 10-07-2026 and is located at 401 Hallingsfield Way, Zebulon, NC 27597 in the Barrington neighborhood.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791430336366,
+              "lastSyncAttemptAt": 1791430336366,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791437536366,
+              "updatedAt": 1791430336366,
+              "sourceId": "source-zb4go1",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            }
+          ],
+          "timings": {
+            "details": 2271,
+            "listings": 41790,
+            "save": 446,
+            "total": 42824
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "raleigh-realty-00-url.png",
+    "raleigh-realty-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 4343,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Realtors\nFound 7 active listings\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nRead full details for all 7 listings\nSaved 7 listings",
+  "reviewText": "Exit\nAPP BUILDER\nraleighrealty.com\nBuilding your app\nIMPORT ACTIVITY\nReading Realtors\nFound 7 active listings\nMatching your website’s design and imagery\nReading linked pages · 4 of 5\nRead full details for all 7 listings\nSaved 7 listings",
+  "listingImages": [
+    {
+      "title": "5716 N Hills Dr, Raleigh, NC 27612",
+      "photos": 1,
+      "first": "https://raleighrealty.com/rr-images/uploads/settings/fallback-image-ac36f2df-4dfa-4eaf-ac12-746fa1bc59a9.jpg",
+      "size": {
+        "status": 200,
+        "width": 1200,
+        "height": 800,
+        "type": "jpg",
+        "bytes": 36916
+      }
+    },
+    {
+      "title": "3417 Makers Cir, Raleigh, NC 27612",
+      "photos": 1,
+      "first": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/3417-makers-cir-raleigh-nc-27612-bdec8775/3d9d1de809d51982cff48e1d7444648c.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+      "size": {
+        "status": 200,
+        "width": 350,
+        "height": 227,
+        "type": "jpg",
+        "bytes": 14175
+      }
+    },
+    {
+      "title": "2619 Marchmont St, Raleigh, NC 27608",
+      "photos": 1,
+      "first": "https://images.agentloft.com/mls-images/triangle/tri/2619-marchmont-st-raleigh-nc-27608-692f427f/20260826182315517064000000-o.jpg?width=350&s=550e8400-e29b-41d4-a716-446655440000&wv=v2",
+      "size": {
+        "status": 200,
+        "width": 350,
+        "height": 262,
+        "type": "jpg",
+        "bytes": 23418
+      }
+    },
+    {
+      "title": "2611 Marchmont St, Raleigh, NC 27608",
+      "photos": 1,
+      "first": "https://images.agentloft.com/mls-images/triangle/tri/2611-marchmont-st-raleigh-nc-27608-28f2f8a6/20260826182511788707000000-o.jpg?width=350&s=550e8400-e29b-41d4-a716-446655440000&wv=v2",
+      "size": {
+        "status": 200,
+        "width": 350,
+        "height": 243,
+        "type": "jpg",
+        "bytes": 18422
+      }
+    },
+    {
+      "title": "4453 Hillsgrove Rd, Wake Forest, NC 27587",
+      "photos": 1,
+      "first": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/4453-hillsgrove-rd-wake-forest-nc-27587-1785f8bd/a8f220096d01b19df7036c0418b3cbc9.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+      "size": {
+        "status": 200,
+        "width": 350,
+        "height": 232,
+        "type": "jpg",
+        "bytes": 20922
+      }
+    },
+    {
+      "title": "1015 Breadsell Ln, Wake Forest, NC 27587",
+      "photos": 1,
+      "first": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/1015-breadsell-ln-wake-forest-nc-27587-6ff8974e/b1afa0ad252ea3263d20bc638e5d2830.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+      "size": {
+        "status": 200,
+        "width": 350,
+        "height": 233,
+        "type": "jpg",
+        "bytes": 22562
+      }
+    },
+    {
+      "title": "401 Hallingsfield Way, Zebulon, NC 27597",
+      "photos": 1,
+      "first": "https://images.agentloft.com/mls-images/triangle/media/doorify/images/401-hallingsfield-way-zebulon-nc-27597-7edc084c/05eb05444f744985f33c2066676182c8.jpg?width=350&s=ed64419f-67f5-442e-a4cd-f461acf32ba3&wv=v2",
+      "size": {
+        "status": 200,
+        "width": 350,
+        "height": 196,
+        "type": "jpg",
+        "bytes": 16023
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://raleighrealty.com/",
+      "status": 200,
+      "finalUrl": "https://raleighrealty.com/",
+      "title": "Raleigh Realty | Real Estate | Homes for Sale | Realtors",
+      "textLength": 9349,
+      "priceCount": 17,
+      "uniquePrices": 17,
+      "propertyLinkCount": 2,
+      "sample": "Searches\nCities\nNeighborhoods\nResources\nContact\nBlog\nAdvanced Search\nSign In\nRALEIGH HOMES & REAL ESTATE\nSearch homes\nBrowse all homes ↗︎\nWhat’s my home worth? →\n5.0\n672 Google reviews\n★★★★★Read them ↗︎\n4×\nBest Real Estate Company\nINDY Week · 2023–2026 ↗︎\n400+\nHomes sold\nevery year\n$150M+\nIn sales volume\nevery year\nSearch Raleigh Area Homes for Sale\nNew - 2 Hours Ago\n>\n$1,950,000\nActive\n4\nBeds\n4\nBaths\n4002\nSqft\n0.22\nAcres\n609 Mills St, Raleigh, NC 27608\nMLS#: 10197158\nNew - 2 Hours Ago\n>\n$350,000\nActive\n3\nBeds\n3\nBaths\n1348\nSqft\n0.1\nAcres\n4249 Beacon Crest Way, Raleigh, NC 27604\nMLS#: 10197151\nNew - 4 Hours Ago\n>\n$3,400,000\nActive\n5\nBeds\n6\nBaths\n5700\nSqft\n0.34\nAcres\n1101 Gunnison Pl, Raleigh, NC 27609\nMLS#: 10197137\nNew - 5 Hours Ago\n>\n$269,900\nActive\n3\nBeds\n3\nBaths\n1200\nSqft\n0.21\nAcres\n1009 Ridge Rock Rd, Raleigh, NC 27610\nMLS#: 10197129\nNew - 6 Hours Ago\n>\n$355,990\nActive\n5\nBeds\n3\nBaths\n2368\nSqft\n0.14\nAcres\n345 Chapel St, Fuquay Varina, NC 27526\nMLS#: 10197115\nNew - 7 Hours Ago\n>\n$336,990\nActive\n3\nBeds\n3\nBaths\n2148\nSqft\n0.09\nAcres\n316 Chapel St, Fuquay Varina, NC 27526\nMLS#: 10197098\nNew - 8 Hours Ago\n>\n$497,500\nActive\n4\nBeds\n3\nBaths\n2065\nSqft\n0.59\nAcres\n1302 Kingston Ridge Rd, Ca",
+      "challenge": false,
+      "screenshot": "raleigh-realty-source-0.png"
+    },
+    {
+      "url": "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+      "status": 200,
+      "finalUrl": "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+      "title": "Primary Bedroom Main Floor Homes for Sale in Raleigh, NC",
+      "textLength": 7604,
+      "priceCount": 25,
+      "uniquePrices": 24,
+      "propertyLinkCount": 2,
+      "sample": "Searches\nCities\nNeighborhoods\nResources\nContact\nBlog\nAdvanced Search\nSign In\nRaleigh, NC\nFor Sale\nPrice\nBeds & Baths\nMore Filters\nSave Search\n1.95M\n1.90M\n225K\n438.9K\n325K\n329.9K\n319K\n998K\n365K\n484K\n1.56M\n385K\n359.9K\n1.83M\n1.15M\n699K\n675K\n400K\n515K\n639K\n459K\n659.9K\n1.15M\n915K\nKeyboard shortcuts\nMap data ©2026 Google\nTerms\nReport a map error\nMap\nListings\nMarket Stats\nPopular Searches\nShow Map\nPrimary Bedroom Main Floor Homes for Sale in Raleigh, NC\nHome\nRaleigh\nHomes With First Floor Master\n1157 Properties Found\nSort By:\nDate: Newest First \nNew - 2 Hours Ago\n>\n$1,950,000\nActive\n4\nBeds\n4\nBaths\n4002\nSqft\n0.22\nAcres\n609 Mills St, Raleigh, NC 27608\nMLS#: 10197158\nNew - 4 Hours Ago\n>\n$1,900,000\nPending\n--\nBeds\n3\nBaths\n1984\nSqft\n--\nAcres\n217 W Martin St #12 E, Raleigh, NC 27601\nMLS#: 10197143\nNew - 8 Hours Ago\n>\n$225,000\nComing Soon\n3\nBeds\n1\nBaths\n1134\nSqft\n0.64\nAcres\n1600 Rock Dr, Raleigh, NC 27610\nMLS#: 10197077\nNew - 11 Hours Ago\n>\n$438,900\nActive\n4\nBeds\n2\nBaths\n1248\nSqft\n0.25\nAcres\n1401 Crabtree Blvd, Raleigh, NC 27610\nMLS#: 10197026\nNew - 12 Hours Ago\n>\n$915,000\nActive\n3\nBeds\n4\nBaths\n3018\nSqft\n3\nAcres\n13204 Old Creedmoor Rd, Raleigh, NC 27613\nMLS#: 10197010\nOpen: Sat 10:00 AM - 11:00 ",
+      "challenge": false,
+      "screenshot": "raleigh-realty-source-1.png"
+    }
+  ],
+  "wallMs": 258302
+}

@@ -1,0 +1,821 @@
+{
+  "id": "houses-of-kansas-city",
+  "url": "https://www.housesofkansascity.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 52,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nReading your website"
+    },
+    {
+      "at": 1060,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1664,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for listings · 2 pages checked"
+    },
+    {
+      "at": 2066,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nFound 12 listings so far · 2 pages checked\nReading listing details · 0 of 12"
+    },
+    {
+      "at": 2470,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Anthony West\nFound 12 listings so far · 2 pages checked\nReading listing details · 0 of 12\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2672,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Anthony West\nFound 12 active listings\nFull details weren’t available for these 12 listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3278,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Anthony West\nFound 12 active listings\nFull details weren’t available for these 12 listings\nMatching your website’s design and imagery\nSaving 12 listings"
+    },
+    {
+      "at": 4085,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Anthony West\nFound 12 active listings\nFull details weren’t available for these 12 listings\nMatching your website’s design and imagery\nSaved 12 listings"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 631,
+      "totalMs": 3943,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 94
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 1,
+          "found": 0,
+          "at": 498
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 0,
+          "at": 596
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 12,
+          "at": 1190
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1190
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1606
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1753
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1801
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1807
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1813
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1824
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 7,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1824
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 8,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1825
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 9,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1825
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 10,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1826
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 11,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1833
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 12,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1860
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 12,
+          "at": 1860
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 12,
+          "at": 2304
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 12,
+          "at": 3195
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-1636u8n",
+            "url": "https://www.housesofkansascity.com/",
+            "submittedUrl": "https://www.housesofkansascity.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://housesofkansascity.com/",
+              "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D"
+            ],
+            "connectedAt": 1791426751878,
+            "lastCheckedAt": 1791426751878,
+            "nextSyncAt": 1791433951878,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 12
+          },
+          "imported": 12,
+          "warning": "12 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 12,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1ubwuuu",
+              "title": "10004 W 123rd Street, Overland Park, KS 66213",
+              "neighborhood": "",
+              "price": "$540,000",
+              "beds": 4,
+              "baths": 3,
+              "sqft": "3,632",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2641865/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2641865/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658209059020976480-10004-W-123rd-Street",
+              "description": "$540,000 · 4 bd / 4 ba, 3,632 sq ft home for sale at 10004 W 123rd Street, Overland Park, KS 66213. MLS# 2641865. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "38.907072, -94.701871"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-j8h23q",
+              "title": "620 W 60TH Terrace, Kansas City, MO 64113",
+              "neighborhood": "",
+              "price": "$530,000",
+              "beds": 3,
+              "baths": 1.5,
+              "sqft": "1,673",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2643720/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2643720/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665891552317534343-620-W-60TH-Terrace",
+              "description": "$530,000 · 3 bd / 2 ba, 1,673 sq ft home for sale at 620 W 60th Terrace, Kansas City, MO 64113. MLS# 2643720. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "39.0183, -94.596365"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-136mnm3",
+              "title": "24111 W 121st Street, Olathe, KS 66061",
+              "neighborhood": "",
+              "price": "$685,000",
+              "beds": 4,
+              "baths": 3,
+              "sqft": "3,205",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644679/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644679/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658883668662905796-24111-W-121st-Street",
+              "description": "$685,000 · 4 bd / 3 ba, 3,205 sq ft home for sale at 24111 W 121st Street, Olathe, KS 66061. MLS# 2644679. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "38.908482, -94.864387"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-g0pgyi",
+              "title": "5320 W 160 Street, Overland Park, KS 66085",
+              "neighborhood": "",
+              "price": "$610,000",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "3,328",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642002/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642002/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665894481133003907-5320-W-160-Street",
+              "description": "$610,000 · 4 bd / 5 ba, 3,328 sq ft home for sale at 5320 W 160 Street, Overland Park, KS 66085. MLS# 2642002. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "38.838804, -94.647026"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1ttuxah",
+              "title": "10531 Mission Road Unit: 206, Leawood, KS 66206",
+              "neighborhood": "",
+              "price": "$369,000",
+              "beds": 1,
+              "baths": 1.5,
+              "sqft": "1,088",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646096/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646096/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658988280142852804-10531-Mission-Road-Unit-206",
+              "description": "$369,000 · 1 bd / 2 ba, 1,088 sq ft condo for sale at 10531 Mission Road Unit: 206, Leawood, KS 66206. MLS# 2646096. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "38.934706, -94.629002"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1x0v2dk",
+              "title": "8614 Houston Street, Lenexa, KS 66227",
+              "neighborhood": "",
+              "price": "$625,000",
+              "beds": 4,
+              "baths": 4,
+              "sqft": "3,764",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644840/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644840/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658603038584334435-8614-Houston-Street",
+              "description": "$625,000 · 4 bd / 5 ba, 3,764 sq ft home for sale at 8614 Houston Street, Lenexa, KS 66227. MLS# 2644840. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "38.972278, -94.874134"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-8zpgwz",
+              "title": "5902 noland Road, Shawnee, KS 66216",
+              "neighborhood": "",
+              "price": "$399,000",
+              "beds": 4,
+              "baths": 2.5,
+              "sqft": "3,300",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637566/1b4d13c4-1096-4d3b-806b-95d37fdb8dca.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637566/1b4d13c4-1096-4d3b-806b-95d37fdb8dca.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658286945420726050-5902-noland-Road",
+              "facts": {
+                "Coordinates": "39.021722, -94.738302"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-gfwh55",
+              "title": "19455 Metcalf Avenue, Stilwell, KS 66085",
+              "neighborhood": "",
+              "price": "$449,000",
+              "beds": 3,
+              "baths": 2,
+              "sqft": "2,125",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646089/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646089/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658952791257258564-19455-Metcalf-Avenue",
+              "facts": {
+                "Coordinates": "38.77586591, -94.66729198"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-i7nipk",
+              "title": "14150 W 147th Street, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$599,000",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "2,624",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645899/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645899/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658666774988572167-14150-W-147th-Street",
+              "facts": {
+                "Coordinates": "38.86394064, -94.75130219"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1vdh2a",
+              "title": "7531 Fairway Street, Prairie Village, KS 66208",
+              "neighborhood": "",
+              "price": "$615,000",
+              "beds": 4,
+              "baths": 2,
+              "sqft": "1,817",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2641963/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2641963/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658620819030586766-7531-Fairway-Street",
+              "facts": {
+                "Coordinates": "38.992016, -94.618893"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1dj2pzf",
+              "title": "14121 Meadow Lane, Leawood, KS 66224",
+              "neighborhood": "",
+              "price": "$1,599,999",
+              "beds": 4,
+              "baths": 5.5,
+              "sqft": "6,937",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645515/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645515/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658353948779566010-14121-Meadow-Lane",
+              "facts": {
+                "Coordinates": "38.871744, -94.614969"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1e5e84r",
+              "title": "17021 King Street, Overland Park, KS 66221",
+              "neighborhood": "",
+              "price": "$1,125,000",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "3,152",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2523491/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2523491/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658392134725891547-17021-King-Street",
+              "facts": {
+                "Coordinates": "38.819404, -94.715894"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791426750112,
+              "lastRefreshedAt": 1791426750112,
+              "lastSyncAttemptAt": 1791426750112,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791433950112,
+              "updatedAt": 1791426750112,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            }
+          ],
+          "timings": {
+            "details": 670,
+            "listings": 1766,
+            "save": 891,
+            "total": 3195
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "houses-of-kansas-city-00-url.png",
+    "houses-of-kansas-city-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3463,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Anthony West\nFound 12 active listings\nFull details weren’t available for these 12 listings\nMatching your website’s design and imagery\nSaved 12 listings",
+  "reviewText": "Exit\nAPP BUILDER\nwww.housesofkansascity.com\nBuilding your app\nIMPORT ACTIVITY\nReading Anthony West\nFound 12 active listings\nFull details weren’t available for these 12 listings\nMatching your website’s design and imagery\nSaved 12 listings",
+  "listingImages": [
+    {
+      "title": "10004 W 123rd Street, Overland Park, KS 66213",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2641865/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 575,
+        "type": "jpg",
+        "bytes": 248423
+      }
+    },
+    {
+      "title": "620 W 60TH Terrace, Kansas City, MO 64113",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2643720/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 683,
+        "type": "jpg",
+        "bytes": 205472
+      }
+    },
+    {
+      "title": "24111 W 121st Street, Olathe, KS 66061",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644679/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 111578
+      }
+    },
+    {
+      "title": "5320 W 160 Street, Overland Park, KS 66085",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642002/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 768,
+        "type": "jpg",
+        "bytes": 127352
+      }
+    },
+    {
+      "title": "10531 Mission Road Unit: 206, Leawood, KS 66206",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646096/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 768,
+        "type": "jpg",
+        "bytes": 168103
+      }
+    },
+    {
+      "title": "8614 Houston Street, Lenexa, KS 66227",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644840/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 683,
+        "type": "jpg",
+        "bytes": 160467
+      }
+    },
+    {
+      "title": "5902 noland Road, Shawnee, KS 66216",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637566/1b4d13c4-1096-4d3b-806b-95d37fdb8dca.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 576,
+        "type": "jpg",
+        "bytes": 173733
+      }
+    },
+    {
+      "title": "19455 Metcalf Avenue, Stilwell, KS 66085",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646089/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 438,
+        "type": "jpg",
+        "bytes": 139796
+      }
+    },
+    {
+      "title": "14150 W 147th Street, Olathe, KS 66062",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645899/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 681,
+        "type": "jpg",
+        "bytes": 170006
+      }
+    },
+    {
+      "title": "7531 Fairway Street, Prairie Village, KS 66208",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2641963/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 216945
+      }
+    },
+    {
+      "title": "14121 Meadow Lane, Leawood, KS 66224",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645515/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 575,
+        "type": "jpg",
+        "bytes": 175521
+      }
+    },
+    {
+      "title": "17021 King Street, Overland Park, KS 66221",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2523491/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 167961
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 30193,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-0.png"
+    },
+    {
+      "url": "https://housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 29921,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-1.png"
+    }
+  ],
+  "wallMs": 257253
+}

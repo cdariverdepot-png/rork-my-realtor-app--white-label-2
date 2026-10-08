@@ -1,0 +1,144 @@
+{
+  "id": "redman-realty-group",
+  "url": "https://www.redmanrealtygroup.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 50,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1055,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nReading your website"
+    },
+    {
+      "at": 1256,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1859,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nLooking for your listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2060,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2462,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 0 of 100"
+    },
+    {
+      "at": 2663,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 8 of 100"
+    },
+    {
+      "at": 2864,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 14 of 100"
+    },
+    {
+      "at": 3064,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 21 of 100"
+    },
+    {
+      "at": 3266,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 29 of 100"
+    },
+    {
+      "at": 3466,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 36 of 100"
+    },
+    {
+      "at": 3666,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 43 of 100"
+    },
+    {
+      "at": 3867,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 53 of 100"
+    },
+    {
+      "at": 4067,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 59 of 100"
+    },
+    {
+      "at": 4268,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 64 of 100"
+    },
+    {
+      "at": 4469,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 71 of 100"
+    },
+    {
+      "at": 4670,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 80 of 100"
+    },
+    {
+      "at": 4871,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 87 of 100"
+    },
+    {
+      "at": 5072,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 93 of 100"
+    },
+    {
+      "at": 5273,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 listings so far · 2 pages checked\nMatching your website’s design and imagery\nReading listing details · 99 of 100"
+    },
+    {
+      "at": 5473,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 active listings\nMatching your website’s design and imagery\nRead full details for all 100 listings"
+    },
+    {
+      "at": 5674,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 active listings\nMatching your website’s design and imagery\nRead full details for all 100 listings\nSaving 100 listings"
+    },
+    {
+      "at": 6679,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 active listings\nMatching your website’s design and imagery\nRead full details for all 100 listings\nSaved 100 listings"
+    }
+  ],
+  "console": [
+    {
+      "at": 11803,
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 422 ()"
+    }
+  ],
+  "failedResources": [
+    {
+      "at": 11802,
+      "status": 422,
+      "url": "https://xdcqjaodcvnlawqcunrr.supabase.co/realtime/v1/api/broadcast?apikey=sb_publishable_yAEO6l9LfHPccsDDPUR-uQ_5pRbv4Dt&eventsPerSecond=5&vsn=2.0.0"
+    }
+  ],
+  "calls": [],
+  "screenshots": [
+    "redman-realty-group-00-url.png",
+    "redman-realty-group-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3791,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 active listings\nMatching your website’s design and imagery\nRead full details for all 100 listings\nSaved 100 listings",
+  "reviewText": "Exit\nAPP BUILDER\nwww.redmanrealtygroup.com\nBuilding your app\nIMPORT ACTIVITY\nReading Redman Realty Group\nFound 100 active listings\nMatching your website’s design and imagery\nRead full details for all 100 listings\nSaved 100 listings",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.redmanrealtygroup.com/",
+      "status": 200,
+      "finalUrl": "https://www.redmanrealtygroup.com/",
+      "title": "Redman Realty Group - The #1 Brokerage in Northwoods Wisconsin",
+      "textLength": 5572,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 1,
+      "sample": "Skip to content\nThe Premier Real Estate Brokerage in Northern Wisconsin\n(opens in new tab)\n \n(opens in new tab)\n \n(opens in new tab)\n \n(opens in new tab)\nHOME\n \nFEATURED LISTINGS\n \nPROPERTY SEARCH\n \nCOMMUNITIES\n \nFOR BUYERS\n \nFOR SELLERS\n \nOUR TEAM\n \nCONTACT\nThe #1 Brokerage in the Northwoods\n\nRedman Realty Group has a proven record for providing a first class, professional  service and getting results for our customers and clients. Our numbers speak for themselves.\n\nFind Your Dream Home\n\t\n\nYou MUST enter a City, Address, Postal Code or MLS ID in the Location field before clicking on the Search button.\n\nThe Most Recognized Name In Northwoods Real Estate\nRedman Realty Group\n\nWe set ourselves apart by working closely with you to develop robust marketing campaigns structured for your individual needs. We invest in targeted marketing, locally and out-of-state, both traditional and digital. We commission professional photography, Drone images, single websites for individual properties, and we were the first Brokerage in the Northwoods to use the cutting edge, state-of-the-art technology of the 3D Scan, as part of our Marketing portfolio. We are constantly striving to find new and innova",
+      "challenge": false,
+      "screenshot": "redman-realty-group-source-0.png"
+    }
+  ],
+  "wallMs": 251028
+}

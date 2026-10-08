@@ -1,0 +1,140 @@
+{
+  "id": "rockys-mom-realty",
+  "url": "https://www.rockysmom.com/",
+  "category": "flexmls",
+  "timeline": [
+    {
+      "at": 53,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 856,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1859,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 2 pages checked\nReading your website"
+    },
+    {
+      "at": 3062,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 3 pages checked\nReading your website"
+    },
+    {
+      "at": 5071,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 4 pages checked\nReading your website"
+    },
+    {
+      "at": 7280,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 9 listings so far · 5 pages checked\nReading your website"
+    },
+    {
+      "at": 9286,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 6 pages checked\nReading your website"
+    },
+    {
+      "at": 11491,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 listings so far · 7 pages checked\nReading your website"
+    },
+    {
+      "at": 13497,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 18 listings so far · 8 pages checked\nReading your website"
+    },
+    {
+      "at": 15702,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 21 listings so far · 9 pages checked\nReading your website"
+    },
+    {
+      "at": 17708,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 10 pages checked\nReading your website"
+    },
+    {
+      "at": 19916,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 27 listings so far · 11 pages checked\nReading your website"
+    },
+    {
+      "at": 21924,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 30 listings so far · 12 pages checked\nReading your website"
+    },
+    {
+      "at": 23729,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 33 listings so far · 13 pages checked\nReading your website"
+    },
+    {
+      "at": 25738,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 36 listings so far · 14 pages checked\nReading your website"
+    },
+    {
+      "at": 28148,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 39 listings so far · 15 pages checked\nReading your website"
+    },
+    {
+      "at": 30360,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 42 listings so far · 16 pages checked\nReading your website"
+    },
+    {
+      "at": 32575,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 45 listings so far · 17 pages checked\nReading your website"
+    },
+    {
+      "at": 34585,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 48 listings so far · 18 pages checked\nReading your website"
+    },
+    {
+      "at": 36790,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 51 listings so far · 19 pages checked\nReading your website"
+    },
+    {
+      "at": 38799,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 54 listings so far · 20 pages checked\nReading your website"
+    },
+    {
+      "at": 40808,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 57 listings so far · 21 pages checked\nReading your website"
+    },
+    {
+      "at": 42817,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 60 listings so far · 22 pages checked\nReading your website"
+    },
+    {
+      "at": 44827,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 63 listings so far · 23 pages checked\nReading your website"
+    },
+    {
+      "at": 48040,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 63 listings so far · 23 pages checked\nReading your website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "rockys-mom-realty-00-url.png",
+    "rockys-mom-realty-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3645,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 63 listings so far · 23 pages checked\nReading your website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.rockysmom.com\nBuilding your app\nIMPORT ACTIVITY\nFound 63 listings so far · 23 pages checked\nReading your website",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.rockysmom.com/",
+      "status": 200,
+      "finalUrl": "https://rockysmom.com/",
+      "title": "Homes for Sale | Rocky'S Mom Realty",
+      "textLength": 2982,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 3,
+      "sample": "Skip to content\nHome\n \nAbout\n \nSearch Properties\n \nBuyers\n \nSellers\n \nTestimonials\n \nContact\n×\nHome\nAbout\nSearch Properties\nBuyers\nSellers\nTestimonials\nContact\nMatching People With Homes\nAcross Generations\n\nTrusted Guidance for Buyers, Sellers, Investors, and Growing Families Across the Roanoke Valley and Surrounding Areas\n\nFind Your Next Home\nDiscuss Your Goals\nMY PROMISE\nI Bring the Best to You\n\nWith more than 20 years in local real estate, I combine market knowledge, hometown connections, and lasting relationships to help you make confident decisions. Many clients return over the years and trust me to help their children and families with their next move.\n\nExplore My Approach\nWHAT I'D DO FOR YOU\nThe Best Brokerage Services\nPersonalized\nBuying Guidance\n\nI help first-time and repeat buyers navigate options, timelines, financing, negotiations, and market conditions confidently.\n\nStrategic\nSelling Support\n\nI position homes effectively with pricing, preparation, marketing, and communication throughout the selling process locally.\n\nLocal\nMarket Insight\n\nI share hometown knowledge and neighborhood insight to support decisions that fit your goals and lifestyle.\n\nFeatured Property Listin",
+      "challenge": false,
+      "screenshot": "rockys-mom-realty-source-0.png"
+    }
+  ],
+  "wallMs": 250072
+}

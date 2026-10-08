@@ -1,0 +1,56 @@
+{
+  "id": "katerina-sayles",
+  "url": "https://www.katerinasaylesrealtor.com/",
+  "category": "idx",
+  "timeline": [
+    {
+      "at": 48,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1053,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1253,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 13507,
+      "screen": "Building your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nYour website could not be read"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "katerina-sayles-00-url.png",
+    "katerina-sayles-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 5,
+    "text": []
+  },
+  "submittedAt": 3764,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nYour website could not be read",
+  "reviewText": "Exit\nAPP BUILDER\nwww.katerinasaylesrealtor.com\nBuilding your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nYour website could not be read",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.katerinasaylesrealtor.com/",
+      "status": 200,
+      "finalUrl": "https://www.katerinasaylesrealtor.com/",
+      "title": "Explore Seattle Real Estate Today | Katerina Sayles, Realtor",
+      "textLength": 4540,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 3,
+      "sample": "HOMESEARCHMARKET REPORTSCOMMUNITIES\nWEST SEATTLE\nSEATTLE\nMAGNOLIA\nQUEEN ANNE\nMADISON PARK\nCOLUMBIA CITY\nNORMANDY PARK\nISSAQUAH\nGREATER EASTSIDE\nBELLEVUE\nLAKE SAMMAMISH\nNORTHBEND\nSNOQUALMIE VALLEY\nRECREATIONAL/\nVACATION LIFESTYLE\nINTERACTIVE MAP\nBUYERS\nHOME BUYING PROCESS\nWHY YOU NEED A REAL ESTATE PROFESSIONAL\nHOME AFFORDABILITY CALCULATOR\nSIGN-UP FOR LISTING ALERTS\nSELLERS\nREQUEST YOUR HOME VALUATION\nMARKET STRATEGY PLAN\nSELLER SUGGESTIONS\nNW GREEN LIVING\nLEED GREEN\nNAR GREEN DESIGNATION\nGREEN HOME BUYER’S GUIDE\nTHE CERTIFIED HIGH-PERFORMANCE HOME\nNET-ZERO ENERGY HOMES\nGREEN HOME CERTIFICATIONS\nRESOURCES\nCONTACT\nx\nABOUT\nMeet Katerina – Seattle Realtor\nPROPERTIESMARKET REPORTS\nCOMMUNITIES\nWest Seattle\nSeattle\nMagnolia\nQueen Anne\nMadison Park\nColumbia City\nNormandy Park\nIssaquah\nGreater Eastside\nBellevue\nLake Sammamish\nNorth Bend/\nSnoqualmie Valley\nRecreational/\nVacation Lifestyle\nBUYERS\nHome Buying Process\nWhy You Need\na Real Estate Professional\nHome Affordability Calculator\nSign-Up for Listing Alerts\nSELLERS\nRequest Your Home Valuation\nMarket Strategy Plan\nSeller Suggestions\nBLOGNW GREEN LIVING\nLEED Green Associate & NAR Green Designation\nGreen Home Buyer’s Guide\nThe Certified Hig",
+      "challenge": false,
+      "screenshot": "katerina-sayles-source-0.png"
+    }
+  ],
+  "wallMs": 249819
+}

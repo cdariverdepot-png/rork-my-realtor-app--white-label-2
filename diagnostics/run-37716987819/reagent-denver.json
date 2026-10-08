@@ -1,0 +1,56 @@
+{
+  "id": "reagent-denver",
+  "url": "https://www.reagentdenver.com/",
+  "category": "edge",
+  "timeline": [
+    {
+      "at": 50,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1057,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nYour listings could not be read from this page"
+    },
+    {
+      "at": 1258,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading your website\nWriting your profile and app copy"
+    },
+    {
+      "at": 3861,
+      "screen": "Building your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nReading your website\nYour profile could not be written"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "reagent-denver-00-url.png",
+    "reagent-denver-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3374,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nReading your website\nYour profile could not be written",
+  "reviewText": "Exit\nAPP BUILDER\nwww.reagentdenver.com\nBuilding your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nReading your website\nYour profile could not be written",
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.reagentdenver.com/",
+      "status": 403,
+      "finalUrl": "https://www.reagentdenver.com/",
+      "title": "Just a moment...",
+      "textLength": 269,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "www.reagentdenver.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a47213904e58476c\nPerformance and Security by Cloudflare\nPrivacy",
+      "challenge": true,
+      "screenshot": "reagent-denver-source-0.png"
+    }
+  ],
+  "wallMs": 248847
+}

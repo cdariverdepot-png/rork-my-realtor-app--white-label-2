@@ -1,0 +1,378 @@
+{
+  "id": "freestone-properties",
+  "url": "https://www.freestoneproperties.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 50,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1056,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1257,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nReading listing details · 0 of 3\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1459,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nReading listing details · 2 of 3\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2263,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nReading listing details · 2 of 3\nMatching your website’s design and imagery\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 2465,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nFull details weren’t available for these 3 listings\nMatching your website’s design and imagery\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 2866,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nFull details weren’t available for these 3 listings\nMatching your website’s design and imagery\nReading linked pages · 1 of 2\nSaving 3 listings"
+    },
+    {
+      "at": 3068,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nFull details weren’t available for these 3 listings\nMatching your website’s design and imagery\nReading linked pages · 1 of 2\nSaved 3 listings"
+    },
+    {
+      "at": 3268,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nFull details weren’t available for these 3 listings\nMatching your website’s design and imagery\nRead 2 linked pages\nSaved 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 7880,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nFull details weren’t available for these 3 listings\nMatching your website’s design and imagery\nRead 2 linked pages\nSaved 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nFound Black Mountain, NC"
+    },
+    {
+      "at": 8091,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 690,
+      "totalMs": 2981,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 90
+        },
+        {
+          "kind": "listings",
+          "host": "freestoneproperties.com",
+          "pages": 1,
+          "found": 0,
+          "at": 270
+        },
+        {
+          "kind": "listings",
+          "host": "freestoneproperties.com",
+          "pages": 1,
+          "found": 3,
+          "at": 315
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 3,
+          "succeeded": 0,
+          "at": 315
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 3,
+          "succeeded": 0,
+          "at": 528
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 3,
+          "succeeded": 0,
+          "at": 534
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 3,
+          "total": 3,
+          "succeeded": 0,
+          "at": 1569
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 3,
+          "at": 1570
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 3,
+          "at": 1872
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 3,
+          "at": 2140
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-nkdipb",
+            "url": "https://www.freestoneproperties.com/",
+            "submittedUrl": "https://www.freestoneproperties.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://www.freestoneproperties.com/"
+            ],
+            "connectedAt": 1791427055746,
+            "lastCheckedAt": 1791427055746,
+            "nextSyncAt": 1791434255746,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 3
+          },
+          "imported": 3,
+          "warning": "3 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 3,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1l895v0",
+              "title": "$289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo for sale in Black Mountain, NC!This",
+              "neighborhood": "",
+              "price": "$289,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/102-llama-way/cache/102Llamastagedphoto.jpg-nggid0512795-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1784300838"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/102-llama-way/cache/102Llamastagedphoto.jpg-nggid0512795-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1784300838",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/102-llama-way-black-mountain/",
+              "lastRefreshedAt": 1791427054266,
+              "lastSyncAttemptAt": 1791427054266,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791434254266,
+              "updatedAt": 1791427054266,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-n637b0",
+              "title": "$335,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 1,805 Located in the heart of Black Mountain, NC, this home offers a rar",
+              "neighborhood": "",
+              "price": "$335,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/213-old-state-ten/cache/Gemini_Generated_Image_not6f1not6f1not6.jpg-nggid0512272-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1781205433"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/213-old-state-ten/cache/Gemini_Generated_Image_not6f1not6f1not6.jpg-nggid0512272-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1781205433",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/213-old-state-ten-road-black-mountain/",
+              "lastRefreshedAt": 1791427054266,
+              "lastSyncAttemptAt": 1791427054266,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791434254266,
+              "updatedAt": 1791427054266,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-j8inpk",
+              "title": "$849,000 Biltmore Lake Beds: 4 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,897 Welcome to your secluded mountain retreat at 4 Yellow Owl Court, pe",
+              "neighborhood": "",
+              "price": "$849,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/4-yellow-owl/cache/Yellow-Owl-108.jpg-nggid049794-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1780416875"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/4-yellow-owl/cache/Yellow-Owl-108.jpg-nggid049794-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1780416875",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/4-yellow-owl-court-biltmore-lake/",
+              "lastRefreshedAt": 1791427054266,
+              "lastSyncAttemptAt": 1791427054266,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791434254266,
+              "updatedAt": 1791427054266,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0
+            }
+          ],
+          "timings": {
+            "details": 1254,
+            "listings": 1480,
+            "save": 268,
+            "total": 2141
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "freestone-properties-00-url.png",
+    "freestone-properties-01-review.png",
+    "freestone-properties-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 3619,
+  "reviewMs": 8091,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nFull details weren’t available for these 3 listings\nMatching your website’s design and imagery\nRead 2 linked pages\nSaved 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nFound Black Mountain, NC",
+  "reviewText": "Back\nAPP BUILDER\nwww.freestoneproperties.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nBLACK MOUNTAIN, NC\nAsheville & Black Mountain Real Estate\nBrowse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents.\nView listings\nTHE AREA\nWaynesville - Primary Community, NC\nView all Waynesville homes for sale Waynesville, NC is a town located southwest of Asheville. It’s the county seat of Haywood County and the biggest town west of Asheville before the North Carolina-Tennessee border. In addition to a warm and walkable downtown, the larger Waynesville area also contains quiet neighborhoods and rural communities. It is considered part of the Asheville metropolitan area, being only 45 minutes from the Asheville city center.\nTHE AREA\nArden\nLearn More Arden is one of the larger suburbs of Asheville, spreading across most of the southern portion of Buncombe County. Homes in Arden range from modest ranch-style homes and bungalows to multi-million ... Details\nFROM THE SITE\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nX/Twitter This field is for validation purposes and should be left unchanged. Name (Required) Email (Required) Phone Message (Required) Referrer URL Submit Search Asheville Area Homes More Save Search\nFreestone Properties\n$289,000\n$289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo for sale in Black Mountain, NC!This\n$335,000\n$335,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 1,805 Located in the heart of Black Mountain, NC, this home offers a rar\n$849,000\n$849,000 Biltmore Lake Beds: 4 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,897 Welcome to your secluded mountain retreat at 4 Yellow Owl Court, pe\nCLIENTS\nWhat Clients Are Saying Testimonials\n\" We have bought and sold seven homes so far with these being located all over the United States, including Hawaii. During the buying and selling process, we were privileged to work with many, outstanding real estate professionals. We have to say, Scott... continued \" - Jim and Linda W., Black Mountain, NC \" I can honestly say the property we sold would not have happened with that particular buyer without a patient agent representing our interest.\nFROM THE SITE\nMoving to Asheville, NC\nAsheville, North Carolina is one of those places that has a lasting effect on a person. Just at the mention of it, a person who...\n828-419-0444\nrealestate@freestoneproperties.com\nFreestone Properties\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour trusted partner for Asheville & Black Mountain real estate.\nTry another opening line\nYOUR INTRODUCTION\nAt Freestone Properties, we pride ourselves on offering an innovative, technology-driven real estate experience while never losing sight of what matters most—our clients and our community. Founded in 2016 by Scott and Lisa Russell, our firm was built on a passion for the outdoors and a deep appreciation for the dynamic real estate landscape of the Asheville and Black Mountain areas. As a family-owned company and now in partnership with Allen Tate/Beverly-Hanks, we combine exceptional client service with the resources and expertise of the region’s leading brokerage—always ensuring your needs come first.\nTry another introduction\n3 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nJust a few more details\nWe couldn’t find these on your website.\nYour name\n▸ Brokerage & license (optional)\n✓ Freestone Properties\nStill needed: Your name\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nBLACK MOUNTAIN, NC\nAsheville & Black Mountain Real Estate\nBrowse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents.\nView listings\nTHE AREA\nWaynesville - Primary Community, NC\nView all Waynesville homes for sale Waynesville, NC is a town located southwest of Asheville. It’s the county seat of Haywood County and the biggest town west of Asheville before the North Carolina-Tennessee border. In addition to a warm and walkable downtown, the larger Waynesville area also contains quiet neighborhoods and rural communities. It is considered part of the Asheville metropolitan area, being only 45 minutes from the Asheville city center.\nTHE AREA\nArden\nLearn More Arden is one of the larger suburbs of Asheville, spreading across most of the southern portion of Buncombe County. Homes in Arden range from modest ranch-style homes and bungalows to multi-million ... Details\nFROM THE SITE\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nX/Twitter This field is for validation purposes and should be left unchanged. Name (Required) Email (Required) Phone Message (Required) Referrer URL Submit Search Asheville Area Homes More Save Search\nFreestone Properties\n$289,000\n$289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo for sale in Black Mountain, NC!This\n$335,000\n$335,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 1,805 Located in the heart of Black Mountain, NC, this home offers a rar\n$849,000\n$849,000 Biltmore Lake Beds: 4 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,897 Welcome to your secluded mountain retreat at 4 Yellow Owl Court, pe\nCLIENTS\nWhat Clients Are Saying Testimonials\n\" We have bought and sold seven homes so far with these being located all over the United States, including Hawaii. During the buying and selling process, we were privileged to work with many, outstanding real estate professionals. We have to say, Scott... continued \" - Jim and Linda W., Black Mountain, NC \" I can honestly say the property we sold would not have happened with that particular buyer without a patient agent representing our interest.\nFROM THE SITE\nMoving to Asheville, NC\nAsheville, North Carolina is one of those places that has a lasting effect on a person. Just at the mention of it, a person who...\n828-419-0444\nrealestate@freestoneproperties.com\nFreestone Properties\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED $289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo",
+        "textLength": 676,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app BLACK MOUNTAIN, NC Asheville & Black Mountain Real Estate Browse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents. ",
+        "textLength": 2553,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED $289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo",
+        "textLength": 676,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingImages": [
+    {
+      "title": "$289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo for sale in Black Mountain, NC!This",
+      "photos": 1,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/102-llama-way/cache/102Llamastagedphoto.jpg-nggid0512795-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1784300838",
+      "size": {
+        "status": 200,
+        "width": 650,
+        "height": 508,
+        "type": "jpg",
+        "bytes": 25307
+      }
+    },
+    {
+      "title": "$335,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 1,805 Located in the heart of Black Mountain, NC, this home offers a rar",
+      "photos": 1,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/213-old-state-ten/cache/Gemini_Generated_Image_not6f1not6f1not6.jpg-nggid0512272-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1781205433",
+      "size": {
+        "status": 200,
+        "width": 650,
+        "height": 508,
+        "type": "jpg",
+        "bytes": 61188
+      }
+    },
+    {
+      "title": "$849,000 Biltmore Lake Beds: 4 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,897 Welcome to your secluded mountain retreat at 4 Yellow Owl Court, pe",
+      "photos": 1,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/4-yellow-owl/cache/Yellow-Owl-108.jpg-nggid049794-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1780416875",
+      "size": {
+        "status": 200,
+        "width": 650,
+        "height": 508,
+        "type": "jpg",
+        "bytes": 89799
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9063,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-0.png"
+    },
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9063,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-1.png"
+    }
+  ],
+  "wallMs": 37692
+}
