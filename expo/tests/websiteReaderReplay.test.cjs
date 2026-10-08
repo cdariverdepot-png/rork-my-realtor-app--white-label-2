@@ -33,6 +33,20 @@ test('the website-reader corpus covers the 25 diagnostic sites', () => {
 // An error page is never the website: the build stops with the reason and the model is never called.
 const REVIEWED_BLOCKED = new Set(['century21-barbara-patterson', 'remax-alexis-kemp-sagert']);
 
+// Repair stage 7, reviewed: image URLs only. srcset was split on every comma, and image CDNs put commas
+// inside URLs (Wix, Cloudflare image resizing), so baselines recorded broken URLs ("/offset-x50",
+// "/width=960/https://…", an SVG placeholder as John Holden's portrait); Wix blurred placeholders are now
+// full-size. Everything else the reader produces must be byte-identical.
+const REVIEWED_IMAGE_URL_FIXES = new Set(['bridge-realty', 'houses-of-kansas-city', 'john-holden-homes', 'scott-a-jacobs-realtor']);
+const imageField = path => /(?:url|Url|variants|width|height|selectedUrl|imageUrl)(?:\.|$)|\.variants\.\d+/.test(path);
+function onlyImageDifferences(now, was, path = 'design', found = []) {
+  if (JSON.stringify(now) === JSON.stringify(was)) return found;
+  if (now && was && typeof now === 'object' && typeof was === 'object') {
+    for (const key of new Set([...Object.keys(now), ...Object.keys(was)])) onlyImageDifferences(now[key], was[key], `${path}.${key}`, found);
+  } else if (!imageField(path)) found.push(path);
+  return found;
+}
+
 const bundle = currentBundle();
 for (const id of ids) {
   test(`${id}: reader output is unchanged and stays within the CPU allowance`, () => quiet(async () => {
@@ -43,6 +57,18 @@ for (const id of ids) {
     if (REVIEWED_BLOCKED.has(id)) {
       assert.equal(run.status, 422);
       assert.equal(run.aiRequest, undefined, 'no profile is written from an error page');
+      assert.ok(run.cpuMs < CPU_CEILING_MS);
+      return;
+    }
+    if (REVIEWED_IMAGE_URL_FIXES.has(id)) {
+      const json = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+      const lines = value => JSON.stringify(value).split('\\n').filter(line => !/^Images: /.test(line));
+      assert.equal(run.status, expected.status);
+      assert.deepEqual(lines(json(run.aiRequest)), lines(expected.ai), 'only the Images line of the profile input may change');
+      assert.deepEqual(onlyImageDifferences(json(run.design), expected.design), [], 'only image URLs/sizes may change');
+      for (const url of [run.design.portraitImageUrl, run.design.heroImageUrl, run.design.logoUrl].filter(Boolean)) {
+        assert.doesNotMatch(url, /%3Csvg|\/(?:width|quality|offset-[xy])\d*=|blur_\d|\/fill\/w_\d+$/, `well-formed full-size image: ${url}`);
+      }
       assert.ok(run.cpuMs < CPU_CEILING_MS);
       return;
     }

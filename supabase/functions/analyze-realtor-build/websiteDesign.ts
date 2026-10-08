@@ -734,8 +734,9 @@ function sizeFromUrl(url: string): { width?: number; height?: number } {
 
 function parseSrcset(value: string, resolve: (raw: string) => string | undefined): ImageVariant[] {
   const variants: ImageVariant[] = [];
-  for (const part of value.split(',')) {
-    const bits = part.trim().split(/\s+/);
+  // Candidates are separated by a comma followed by whitespace; image CDNs (Wix) put commas inside URLs.
+  for (const part of value.split(/,\s+/)) {
+    const bits = part.trim().replace(/,$/, '').split(/\s+/);
     const url = resolve(bits[0] ?? '');
     if (!url) continue;
     const mark = bits[1] ?? '';

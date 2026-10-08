@@ -1,7 +1,13 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
-import { normalizeListingRecords } from "./listingRecords.ts";
+import { normalizeListingRecords, fullSizeImageUrl } from "./listingRecords.ts";
+
+/** The website's chosen images at full size (a resizer's blurred or thumbnail placeholder is not the image). */
+function fullSizeDesign(design: WebsiteDesign): WebsiteDesign {
+  const upgrade = (value: string | undefined) => value ? fullSizeImageUrl(value) : value;
+  return { ...design, heroImageUrl: upgrade(design.heroImageUrl), portraitImageUrl: upgrade(design.portraitImageUrl), logoUrl: upgrade(design.logoUrl) } as WebsiteDesign;
+}
 import { createImportProgress, discoveryReporter, respondWithProgress, type ImportEvent, type ImportProgress } from "./progress.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, type WebsiteDesign, type WebsiteSection } from "./websiteDesign.ts";
 
@@ -597,7 +603,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     if (!source) return reply({ error: 'Add your website URL before refreshing its design.' }, 422);
     try {
       const page = await fetchHtml(source.uri);
-      const websiteDesign = await analyzeWebsiteAppearance(page.html, page.finalUrl.toString(), renderPage);
+      const websiteDesign = fullSizeDesign(await analyzeWebsiteAppearance(page.html, page.finalUrl.toString(), renderPage));
       return reply({ websiteDesign });
     } catch (e) { return reply({ error: e instanceof Error ? e.message : 'Could not refresh the website design.' }, 422); }
   }
@@ -845,7 +851,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     if (name) progress.emit({ kind: "site", name, host: new URL(url).hostname.replace(/^www\./, "") });
     progress.start("design");
     try {
-      websiteDesign = await analyzeWebsiteAppearance(html, url, renderPage, fetchPage, progress);
+      websiteDesign = fullSizeDesign(await analyzeWebsiteAppearance(html, url, renderPage, fetchPage, progress));
       progress.emit({ kind: "design", portrait: !!websiteDesign.portraitImageUrl, logo: !!websiteDesign.logoUrl,
         images: websiteDesign.imagery?.images.length ?? 0, sections: websiteDesign.sections.length });
       progress.finish("design");
