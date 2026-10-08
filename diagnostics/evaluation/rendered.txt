@@ -1,7 +1,2 @@
-Rendered capture requested Thu Oct  8 21:54:13 UTC 2026 after e12d06b (one render budget per site; refused renders keep the plain page).
-capture: chatman-realty-group--rendered-2 https://www.chatmanrealtygroup.com/
-capture: tom-toole--rendered-2 https://www.tomtoole.com/
-capture: idaho-perfect-home--rendered-2 https://www.idahoperfecthome.com/
-capture: lauer-realty-group--rendered-2 https://lauerrealtygroup.com/
-capture: magic-valley-homes--rendered-2 https://magicvalley.homes/
-capture: howard-hanna-daniel-torri--rendered-2 https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053
+Rendered capture requested Thu Oct  8 23:36:21 UTC 2026: Cindy Carlson zero-listing investigation (Flexmls Client Challenge).
+capture: cindy-carlson-realty--rendered https://cindycarlsonrealty.com/
