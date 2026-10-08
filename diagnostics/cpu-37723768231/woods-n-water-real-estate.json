@@ -1,0 +1,213 @@
+{
+  "id": "woods-n-water-real-estate",
+  "url": "https://www.woodsnwaterrealestate.com/",
+  "analyze": {
+    "wallMs": 3294,
+    "cpuMs": 748,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 3,
+        "cpuMs": 3,
+        "event": "site:start"
+      },
+      {
+        "at": 753,
+        "cpuMs": 145,
+        "event": "site",
+        "detail": "Wood n Water Real Estate"
+      },
+      {
+        "at": 753,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 1175,
+        "cpuMs": 197,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 1497,
+        "cpuMs": 76,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 1817,
+        "cpuMs": 3,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 2007,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 3014,
+        "cpuMs": 12,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 3287,
+        "cpuMs": 301,
+        "event": "pages:done",
+        "detail": 3
+      },
+      {
+        "at": 3287,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 3287,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 3292,
+        "cpuMs": 5,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 3292,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 3292,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 3293,
+        "cpuMs": 1,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 3293,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 3293,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 3293,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.woodsnwaterrealestate.com/",
+        "start": 1791430792906,
+        "status": 301,
+        "type": "text/html; charset=UTF-8",
+        "ms": 354
+      },
+      {
+        "url": "https://woodsnwaterrealestate.com/",
+        "start": 1791430793261,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 288
+      },
+      {
+        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/elementor/css/post-3.css?ver=1790370262",
+        "start": 1791430793656,
+        "status": 200,
+        "type": "text/css",
+        "ms": 59
+      },
+      {
+        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/elementor/css/post-512.css?ver=1790370320",
+        "start": 1791430793656,
+        "status": 200,
+        "type": "text/css",
+        "ms": 249
+      },
+      {
+        "url": "https://woodsnwaterrealestate.com/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.5.1",
+        "start": 1791430793657,
+        "status": 200,
+        "type": "text/css",
+        "ms": 247
+      },
+      {
+        "url": "https://woodsnwaterrealestate.com/wp-content/themes/hello-elementor/assets/css/theme.css?ver=3.5.1",
+        "start": 1791430793658,
+        "status": 200,
+        "type": "text/css",
+        "ms": 292
+      }
+    ],
+    "requests": 13,
+    "events": 18
+  },
+  "discovery": {
+    "wallMs": 1866,
+    "cpuMs": 69,
+    "found": 3,
+    "outcome": "partial",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://woodsnwaterrealestate.com/"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.woodsnwaterrealestate.com/",
+      "https://woodsnwaterrealestate.com/idx/search/?My=listings&OrderBy=-ModificationTimestamp&pg=1&SavedSearch=20210102172055451402000000",
+      "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+      "https://woodsnwaterrealestate.com/idx/W18572-H-42-Curtis-MI-49820-mls_26-887?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=y&pg=1&SavedSearch=20210102172055451402000000"
+    ],
+    "maxCpuStep": {
+      "at": 186,
+      "cpuMs": 42,
+      "phase": "inventory",
+      "url": "https://www.woodsnwaterrealestate.com/",
+      "pages": 1,
+      "found": 3
+    },
+    "steps": 6,
+    "requests": 4,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "12 Listings",
+        "price": "$64,900",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/search/?My=listings&OrderBy=-ModificationTimestamp&pg=1&SavedSearch=20210102172055451402000000",
+        "images": 0
+      },
+      {
+        "title": "$64,900 8112 M-77 Germfask, MI 49836",
+        "price": "$64,900",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+        "images": 1
+      },
+      {
+        "title": "$179,000 W18572 H-42 Curtis, MI 49820",
+        "price": "$179,000",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/W18572-H-42-Curtis-MI-49820-mls_26-887?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=y&pg=1&SavedSearch=20210102172055451402000000",
+        "images": 1
+      }
+    ]
+  }
+}

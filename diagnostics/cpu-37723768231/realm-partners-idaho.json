@@ -1,0 +1,220 @@
+{
+  "id": "realm-partners-idaho",
+  "url": "https://realmidaho.com/",
+  "analyze": {
+    "wallMs": 2861,
+    "cpuMs": 1715,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 4,
+        "cpuMs": 4,
+        "event": "site:start"
+      },
+      {
+        "at": 936,
+        "cpuMs": 266,
+        "event": "site",
+        "detail": "Realm Partners"
+      },
+      {
+        "at": 936,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 2495,
+        "cpuMs": 1418,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 2847,
+        "cpuMs": 7,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 2858,
+        "cpuMs": 18,
+        "event": "pages:done",
+        "detail": 1
+      },
+      {
+        "at": 2858,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 2858,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 2859,
+        "cpuMs": 1,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 2859,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 2859,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 2860,
+        "cpuMs": 1,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 2860,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 2860,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 2860,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://realmidaho.com/",
+        "start": 1791431000597,
+        "status": 301,
+        "type": "text/html",
+        "length": 166,
+        "ms": 280
+      },
+      {
+        "url": "https://www.realmidaho.com/",
+        "start": 1791431000878,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 496
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2?family=Inter&display=swap",
+        "start": 1791431001529,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 52
+      },
+      {
+        "url": "https://fonts.googleapis.com/css?family=Lato:400,700&display=swap",
+        "start": 1791431001530,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 47
+      },
+      {
+        "url": "https://www.realmidaho.com/ss/miranda-thin.css?hash=9d9dbc349ffef3310e070fd0a10dc008:99b960a07a039a2dda176997a5433a93",
+        "start": 1791431001531,
+        "status": 200,
+        "type": "text/css",
+        "ms": 68
+      },
+      {
+        "url": "https://cdn.realgeeks.com/static/designs/css/ie8.css?v=4",
+        "start": 1791431001531,
+        "status": 200,
+        "type": "text/css",
+        "ms": 269
+      }
+    ],
+    "requests": 11,
+    "events": 15
+  },
+  "discovery": {
+    "wallMs": 777,
+    "cpuMs": 107,
+    "found": 15,
+    "outcome": "found",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://www.realmidaho.com/"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_completed"
+    ],
+    "visited": [
+      "https://realmidaho.com/",
+      "https://www.realmidaho.com/property/20261536/",
+      "https://www.realmidaho.com/property/20261373/",
+      "https://www.realmidaho.com/property/20262172/",
+      "https://www.realmidaho.com/property/20261646/",
+      "https://www.realmidaho.com/property/20261912/",
+      "https://www.realmidaho.com/property/20261623/",
+      "https://www.realmidaho.com/property/20261626/",
+      "https://www.realmidaho.com/property/20261740/",
+      "https://www.realmidaho.com/property/20261661/",
+      "https://www.realmidaho.com/property/20261961/",
+      "https://www.realmidaho.com/property/20262164/",
+      "https://www.realmidaho.com/property/20261425/",
+      "https://www.realmidaho.com/property/20261649/",
+      "https://www.realmidaho.com/property/20261624/",
+      "https://www.realmidaho.com/property/20261081/"
+    ],
+    "maxCpuStep": {
+      "at": 222,
+      "cpuMs": 37,
+      "phase": "inventory",
+      "url": "https://realmidaho.com/",
+      "pages": 1,
+      "found": 15
+    },
+    "steps": 18,
+    "requests": 16,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "$20,000,000",
+        "price": "$20,000,000",
+        "sourceUrl": "https://www.realmidaho.com/property/20261536/",
+        "images": 5
+      },
+      {
+        "title": "$8,500,000",
+        "price": "$8,500,000",
+        "sourceUrl": "https://www.realmidaho.com/property/20261373/",
+        "images": 5
+      },
+      {
+        "title": "$6,970,000",
+        "price": "$6,970,000",
+        "sourceUrl": "https://www.realmidaho.com/property/20262172/",
+        "images": 5
+      },
+      {
+        "title": "$6,490,000",
+        "price": "$6,490,000",
+        "sourceUrl": "https://www.realmidaho.com/property/20261646/",
+        "images": 5
+      },
+      {
+        "title": "$4,990,000",
+        "price": "$4,990,000",
+        "sourceUrl": "https://www.realmidaho.com/property/20261912/",
+        "images": 5
+      }
+    ]
+  }
+}

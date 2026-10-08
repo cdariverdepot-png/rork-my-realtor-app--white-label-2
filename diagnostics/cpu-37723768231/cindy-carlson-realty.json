@@ -1,0 +1,189 @@
+{
+  "id": "cindy-carlson-realty",
+  "url": "https://cindycarlsonrealty.com/",
+  "analyze": {
+    "wallMs": 1417,
+    "cpuMs": 1162,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 32,
+        "cpuMs": 41,
+        "event": "site:start"
+      },
+      {
+        "at": 391,
+        "cpuMs": 345,
+        "event": "site",
+        "detail": "Cindy Carlson Realty"
+      },
+      {
+        "at": 391,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 1052,
+        "cpuMs": 381,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 1052,
+        "cpuMs": 0,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 1052,
+        "cpuMs": 0,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 1410,
+        "cpuMs": 387,
+        "event": "pages:done",
+        "detail": 2
+      },
+      {
+        "at": 1410,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 1410,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 1415,
+        "cpuMs": 6,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 1415,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 1415,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 1416,
+        "cpuMs": 2,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 1417,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 1417,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 1417,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://cindycarlsonrealty.com/",
+        "start": 1791430790923,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 140
+      },
+      {
+        "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/style.css?ver=2.2.1",
+        "start": 1791430791282,
+        "status": 200,
+        "type": "text/css",
+        "ms": 33
+      },
+      {
+        "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+        "start": 1791430791283,
+        "status": 200,
+        "type": "text/css",
+        "ms": 116
+      },
+      {
+        "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+        "start": 1791430791284,
+        "status": 200,
+        "type": "text/css",
+        "ms": 106
+      },
+      {
+        "url": "https://cindycarlsonrealty.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+        "start": 1791430791285,
+        "status": 200,
+        "type": "text/css",
+        "ms": 388
+      },
+      {
+        "url": "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+        "start": 1791430791286,
+        "status": 200,
+        "type": "text/css",
+        "ms": 129
+      }
+    ],
+    "requests": 9,
+    "events": 16
+  },
+  "discovery": {
+    "wallMs": 272,
+    "cpuMs": 61,
+    "found": 0,
+    "outcome": "unreadable",
+    "interfaces": [
+      "structured-property-data",
+      "flexmls",
+      "managed-challenge"
+    ],
+    "inventoryUrls": [
+      "https://cindycarlsonrealty.com/featured-listings/",
+      "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+    ],
+    "obstacles": [
+      {
+        "code": "requires_rendering",
+        "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://cindycarlsonrealty.com/",
+      "https://cindycarlsonrealty.com/featured-listings/",
+      "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+    ],
+    "maxCpuStep": {
+      "at": 66,
+      "cpuMs": 38,
+      "phase": "inventory",
+      "url": "https://cindycarlsonrealty.com/featured-listings/",
+      "pages": 2,
+      "found": 0
+    },
+    "steps": 4,
+    "requests": 3,
+    "largestResponses": [
+      3038
+    ],
+    "sample": []
+  }
+}

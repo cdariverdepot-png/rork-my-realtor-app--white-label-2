@@ -1,0 +1,247 @@
+{
+  "id": "rockys-mom-realty",
+  "url": "https://www.rockysmom.com/",
+  "analyze": {
+    "wallMs": 11572,
+    "cpuMs": 10563,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 3807,
+        "cpuMs": 3162,
+        "event": "site",
+        "detail": "Rocky&#039;s Mom Realty"
+      },
+      {
+        "at": 3807,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 7050,
+        "cpuMs": 3213,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 7063,
+        "cpuMs": 21,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 7461,
+        "cpuMs": 20,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 11552,
+        "cpuMs": 4125,
+        "event": "pages:done",
+        "detail": 2
+      },
+      {
+        "at": 11553,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 11553,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 11571,
+        "cpuMs": 19,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 11571,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 11571,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 11571,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 11571,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 11571,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 11571,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.rockysmom.com/",
+        "start": 1791430798354,
+        "status": 301,
+        "type": "text/html; charset=UTF-8",
+        "ms": 782
+      },
+      {
+        "url": "https://rockysmom.com/",
+        "start": 1791430799136,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 129
+      },
+      {
+        "url": "https://rockysmom.com/wp-content/plugins/bb-plugin/css/jquery.magnificpopup.min.css?ver=2.11.0.1",
+        "start": 1791430802160,
+        "status": 200,
+        "type": "text/css",
+        "ms": 177
+      },
+      {
+        "url": "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css?ver=4.0.5-full",
+        "start": 1791430802160,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 1624,
+        "ms": 88
+      },
+      {
+        "url": "https://rockysmom.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+        "start": 1791430802161,
+        "status": 200,
+        "type": "text/css",
+        "ms": 194
+      },
+      {
+        "url": "https://rockysmom.com/wp-content/plugins/bb-ultimate-addon/modules/info-list/css/animate.css",
+        "start": 1791430802162,
+        "status": 200,
+        "type": "text/css",
+        "ms": 247
+      }
+    ],
+    "requests": 11,
+    "events": 16
+  },
+  "discovery": {
+    "wallMs": 61207,
+    "cpuMs": 2594,
+    "found": 89,
+    "outcome": "partial",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://rockysmom.com/",
+      "https://rockysmom.com/?pg=2",
+      "https://rockysmom.com/?pg=3",
+      "https://rockysmom.com/?pg=4",
+      "https://rockysmom.com/?pg=5",
+      "https://rockysmom.com/?pg=6"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial",
+      "collection_continuation"
+    ],
+    "visited": [
+      "https://www.rockysmom.com/",
+      "https://rockysmom.com/buyers/",
+      "https://rockysmom.com/?pg=2",
+      "https://rockysmom.com/?pg=3",
+      "https://rockysmom.com/?pg=4",
+      "https://rockysmom.com/?pg=5",
+      "https://rockysmom.com/?pg=6",
+      "https://rockysmom.com/?pg=7",
+      "https://rockysmom.com/?pg=8",
+      "https://rockysmom.com/?pg=9",
+      "https://rockysmom.com/?pg=10",
+      "https://rockysmom.com/?pg=11",
+      "https://rockysmom.com/?pg=12",
+      "https://rockysmom.com/?pg=13",
+      "https://rockysmom.com/?pg=14",
+      "https://rockysmom.com/?pg=15",
+      "https://rockysmom.com/?pg=16",
+      "https://rockysmom.com/?pg=17",
+      "https://rockysmom.com/?pg=18",
+      "https://rockysmom.com/?pg=19",
+      "https://rockysmom.com/?pg=20",
+      "https://rockysmom.com/?pg=21",
+      "https://rockysmom.com/?pg=22",
+      "https://rockysmom.com/?pg=23",
+      "https://rockysmom.com/?pg=24",
+      "https://rockysmom.com/?pg=25",
+      "https://rockysmom.com/?pg=26",
+      "https://rockysmom.com/?pg=27",
+      "https://rockysmom.com/?pg=28",
+      "https://rockysmom.com/?pg=29",
+      "https://rockysmom.com/?pg=30"
+    ],
+    "maxCpuStep": {
+      "at": 27728,
+      "cpuMs": 155,
+      "phase": "inventory",
+      "url": "https://rockysmom.com/?pg=15",
+      "pages": 16,
+      "found": 42
+    },
+    "steps": 33,
+    "requests": 31,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "57 Hemlock Ridge LN Catawba VA 24070 mls 919472",
+        "price": "$2,250,000",
+        "sourceUrl": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919472?Limit=3&m=20051230194116769413000000&OrderBy=-ModificationTimestamp&pg=1&search_referral_url=https%3A%2F%2Frockysmom.com",
+        "images": 1
+      },
+      {
+        "title": "57 Hemlock Ridge LN Catawba VA 24070 mls 919474",
+        "price": "$2,250,000",
+        "sourceUrl": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919474?Limit=3&m=20051230194116769413000000&OrderBy=-ModificationTimestamp&pg=1&search_referral_url=https%3A%2F%2Frockysmom.com",
+        "images": 1
+      },
+      {
+        "title": "57 Hemlock Ridge LN Catawba VA 24070 mls 919473",
+        "price": "$2,250,000",
+        "sourceUrl": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919473?Limit=3&m=20051230194116769413000000&OrderBy=-ModificationTimestamp&pg=1&search_referral_url=https%3A%2F%2Frockysmom.com",
+        "images": 1
+      },
+      {
+        "title": "5822 Fieldview DR Roanoke VA 24019 mls 931239",
+        "price": "$469,950",
+        "sourceUrl": "https://rockysmom.com/idx/5822-Fieldview-DR-Roanoke-VA-24019-mls_931239?Limit=3&m=20051230194116769413000000&OrderBy=-ModificationTimestamp&pg=2&search_referral_url=https%3A%2F%2Frockysmom.com%2F%3Fpg%3D2",
+        "images": 1
+      },
+      {
+        "title": "125 Whispering Breeze DR Rocky Mount VA 24151 mls 931153",
+        "price": "$309,900",
+        "sourceUrl": "https://rockysmom.com/idx/125-Whispering-Breeze-DR-Rocky-Mount-VA-24151-mls_931153?Limit=3&m=20051230194116769413000000&OrderBy=-ModificationTimestamp&pg=2&search_referral_url=https%3A%2F%2Frockysmom.com%2F%3Fpg%3D2",
+        "images": 1
+      }
+    ]
+  }
+}

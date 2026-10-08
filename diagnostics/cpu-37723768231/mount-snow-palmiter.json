@@ -1,0 +1,278 @@
+{
+  "id": "mount-snow-palmiter",
+  "url": "https://www.mountsnowpalmiter.com/",
+  "analyze": {
+    "wallMs": 676,
+    "cpuMs": 289,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 244,
+        "cpuMs": 102,
+        "event": "site",
+        "detail": "Adam Palmiter"
+      },
+      {
+        "at": 244,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 449,
+        "cpuMs": 105,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 452,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 500,
+        "cpuMs": 3,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 502,
+        "cpuMs": 1,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 624,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 671,
+        "cpuMs": 65,
+        "event": "pages:done",
+        "detail": 2
+      },
+      {
+        "at": 671,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 671,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 675,
+        "cpuMs": 4,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 675,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 675,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 675,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 675,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 675,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 675,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.mountsnowpalmiter.com/",
+        "start": 1791430871419,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "length": 11690,
+        "ms": 211
+      },
+      {
+        "url": "https://www.mountsnowpalmiter.com/defaultv10.css",
+        "start": 1791430871662,
+        "status": 200,
+        "type": "text/css",
+        "length": 3828,
+        "ms": 40
+      },
+      {
+        "url": "https://www.mountsnowpalmiter.com/zoom.css",
+        "start": 1791430871662,
+        "status": 200,
+        "type": "text/css",
+        "length": 3767,
+        "ms": 134
+      },
+      {
+        "url": "https://www.mountsnowpalmiter.com/page/about",
+        "start": 1791430871663,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "length": 15787,
+        "ms": 206
+      },
+      {
+        "url": "https://www.mountsnowpalmiter.com/page/selling",
+        "start": 1791430871867,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "length": 8037,
+        "ms": 52
+      },
+      {
+        "url": "https://www.mountsnowpalmiter.com/page/mountsnowcondos",
+        "start": 1791430871867,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "length": 8859,
+        "ms": 50
+      }
+    ],
+    "requests": 7,
+    "events": 18
+  },
+  "discovery": {
+    "wallMs": 15015,
+    "cpuMs": 1632,
+    "found": 40,
+    "outcome": "found",
+    "interfaces": [
+      "idx-broker",
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://realestatevt.mountsnowpalmiter.com/idx/featured",
+      "https://realestatevt.mountsnowpalmiter.com/idx/search/advanced",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?idxID=b027&ciID=&coID=&pcID=",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5089881",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153/121-Fannie-Hill-Road-Wilmington-VT-05363"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.mountsnowpalmiter.com/",
+      "https://realestatevt.mountsnowpalmiter.com/idx/featured",
+      "https://www.mountsnowpalmiter.com/page/mysoldhomes&soldpage=recentsales",
+      "https://realestatevt.mountsnowpalmiter.com/idx/search/advanced",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?idxID=b027&ciID=&coID=&pcID=",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5089881",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153/121-Fannie-Hill-Road-Wilmington-VT-05363",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5095153",
+      "https://realestatevt.mountsnowpalmiter.com/idx/search/listingid",
+      "https://realestatevt.mountsnowpalmiter.com/idx/search/address",
+      "https://realestatevt.mountsnowpalmiter.com/idx/map/mapsearch",
+      "https://realestatevt.mountsnowpalmiter.com/idx/search/advanced?modifySearch=true",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208/650-Francis-Road-Barnard-VT-05031",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5066208",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208",
+      "https://realestatevt.mountsnowpalmiter.com/idx/search/basic",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?stp=basic&pt=1&city%5B%5D=31580&city%5B%5D=53181&lp=100000&hp=10000000&bd=0&ba=0&srt=prd&start=0&per=25",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5107096/21-Sundance-Village-Loop-Dover-VT-05356",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5107096",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5107096",
+      "https://realestatevt.mountsnowpalmiter.com/idx/homevaluation",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?ciID=50&ccz=city&per=10&pt=1&a_propSubType%5B%5D=Single+Family&city%5B%5D=53181&srt=prd&lp=0&hp=10000000&start=0&per=25",
+      "https://realestatevt.mountsnowpalmiter.com/idx/soldpending",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092/20-Carinthia-Road-Dover-VT-05356",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/4984092",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5046444/56-Coldbrook-Crossing-Wilmington-VT-05363",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092",
+      "https://realestatevt.mountsnowpalmiter.com/idx/searchbycity",
+      "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Acton-186",
+      "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Acworth-190",
+      "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Addison-260",
+      "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Albany-462",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?ciID=50&ccz=city&per=10&pt=1&a_propSubType%5B%5D=Single+Family&city%5B%5D=53181&city%5B%5D=52041&city%5B%5D=29515&city%5B%5D=51685&city%5B%5D=22981&srt=prd&lp=0&hp=10000000&start=0&per=25",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?ciID=50&ccz=city&per=10&pt=1&a_propSubType%5B%5D=Condo&city%5B%5D=53181&srt=prd&lp=0&hp=10000000&start=0&per=25",
+      "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?city%5B%5D=186&hp=550000&idxID=b027&lp=0&pt=1",
+      "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089212/80-Maple-Street-Acton-ME-04001",
+      "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5089212"
+    ],
+    "maxCpuStep": {
+      "at": 12744,
+      "cpuMs": 86,
+      "phase": "details",
+      "url": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+      "done": 1
+    },
+    "steps": 82,
+    "requests": 92,
+    "largestResponses": [
+      38661,
+      37979,
+      31737,
+      31735,
+      31688
+    ],
+    "sample": [
+      {
+        "title": "392 Lake Raponda Road ,&nbsp; Wilmington , Vermont VT 05363",
+        "price": "$2,195,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+        "images": 0
+      },
+      {
+        "title": "121 Fannie Hill Road ,&nbsp; Wilmington , Vermont VT 05363",
+        "price": "$2,100,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153/121-Fannie-Hill-Road-Wilmington-VT-05363",
+        "images": 0
+      },
+      {
+        "title": "650 Francis Road ,&nbsp; Barnard , Vermont VT 05031",
+        "price": "$25,000,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208/650-Francis-Road-Barnard-VT-05031",
+        "images": 0
+      },
+      {
+        "title": "392 Lake Raponda Road ,&nbsp; Wilmington , Vermont VT 05363",
+        "price": "$2,195,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881",
+        "images": 0
+      },
+      {
+        "title": "121 Fannie Hill Road ,&nbsp; Wilmington , Vermont VT 05363",
+        "price": "$2,100,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153",
+        "images": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "id": "freestone-properties",
+  "url": "https://www.freestoneproperties.com/",
+  "analyze": {
+    "wallMs": 2493,
+    "cpuMs": 1874,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 309,
+        "cpuMs": 135,
+        "event": "site",
+        "detail": "Freestone Properties"
+      },
+      {
+        "at": 309,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 1477,
+        "cpuMs": 1064,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 1632,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 1866,
+        "cpuMs": 20,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 2484,
+        "cpuMs": 636,
+        "event": "pages:done",
+        "detail": 2
+      },
+      {
+        "at": 2484,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 2484,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 2491,
+        "cpuMs": 8,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 2491,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 2492,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 2492,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 2492,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 2492,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 2492,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.freestoneproperties.com/",
+        "start": 1791430921428,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 213
+      },
+      {
+        "url": "https://www.freestoneproperties.com/wp-content/themes/phoenix/lib/idxc_addons/css/styles_addons.css?ver=1.0.37",
+        "start": 1791430921736,
+        "status": 200,
+        "type": "text/css",
+        "ms": 36
+      },
+      {
+        "url": "https://www.freestoneproperties.com/wp-content/themes/phoenix/style.css?ver=1.0.37",
+        "start": 1791430921737,
+        "status": 200,
+        "type": "text/css",
+        "ms": 58
+      },
+      {
+        "url": "https://www.freestoneproperties.com/wp-content/themes/phoenix/lib/css/animate_custom.css?ver=1.0.37",
+        "start": 1791430921738,
+        "status": 200,
+        "type": "text/css",
+        "ms": 56
+      },
+      {
+        "url": "https://www.freestoneproperties.com/wp-content/themes/phoenix/lib/idxc_addons/css/style.css?ver=1.0.0",
+        "start": 1791430921738,
+        "status": 200,
+        "type": "text/css",
+        "ms": 118
+      },
+      {
+        "url": "https://search.showcaseidx.com/app/css/ZjNjODIyNzktNjZhOC00NzVlL/custom.css",
+        "start": 1791430921739,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 290
+      }
+    ],
+    "requests": 11,
+    "events": 16
+  },
+  "discovery": {
+    "wallMs": 1881,
+    "cpuMs": 69,
+    "found": 3,
+    "outcome": "found",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://www.freestoneproperties.com/"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.freestoneproperties.com/",
+      "https://www.freestoneproperties.com/listings/102-llama-way-black-mountain/",
+      "https://www.freestoneproperties.com/listings/122-w-sweetbriar-lane-etowah/",
+      "https://www.freestoneproperties.com/listings/5-chaucer-road-black-mountain/"
+    ],
+    "maxCpuStep": {
+      "at": 58,
+      "cpuMs": 35,
+      "phase": "inventory",
+      "url": "https://www.freestoneproperties.com/",
+      "pages": 1,
+      "found": 3
+    },
+    "steps": 6,
+    "requests": 4,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "$289,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,051 Very desirable Llama Vista condo for sale in Black Mountain, NC!This",
+        "price": "$289,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/102-llama-way-black-mountain/",
+        "images": 1
+      },
+      {
+        "title": "$445,000 Etowah Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,561 Welcome to this charming 3 bedroom, 2.5 bath home in the desirable Etowah ",
+        "price": "$445,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/122-w-sweetbriar-lane-etowah/",
+        "images": 1
+      },
+      {
+        "title": "$1,900,000 Black Mountain Beds: 6 &nbsp;|&nbsp;&nbsp;Baths:: 8 &nbsp;|&nbsp;&nbsp;SqFt: Varies Six vacation cabins in the Village of Cheshire, currently profess",
+        "price": "$1,900,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/5-chaucer-road-black-mountain/",
+        "images": 1
+      }
+    ]
+  }
+}

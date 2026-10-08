@@ -1,0 +1,116 @@
+{
+  "id": "century21-barbara-patterson",
+  "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+  "analyze": {
+    "wallMs": 76,
+    "cpuMs": 20,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 73,
+        "cpuMs": 15,
+        "event": "site",
+        "detail": "ERROR: The request could not be satisfied"
+      },
+      {
+        "at": 75,
+        "cpuMs": 2,
+        "event": "design:start"
+      },
+      {
+        "at": 75,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 75,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 75,
+        "cpuMs": 0,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 75,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 75,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 76,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 76,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 76,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 76,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+        "start": 1791431159838,
+        "status": 403,
+        "type": "text/html",
+        "length": 919,
+        "ms": 62
+      }
+    ],
+    "requests": 1,
+    "events": 12
+  },
+  "discovery": {
+    "wallMs": 49,
+    "cpuMs": 5,
+    "found": 0,
+    "outcome": "not-found",
+    "interfaces": [],
+    "inventoryUrls": [],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://www.century21.com/real-estate/barbara-patterson/O10000058"
+    ],
+    "maxCpuStep": {
+      "at": 49,
+      "cpuMs": 5,
+      "phase": "inventory",
+      "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+      "pages": 1,
+      "found": 0
+    },
+    "steps": 2,
+    "requests": 1,
+    "largestResponses": [
+      919
+    ],
+    "sample": []
+  }
+}

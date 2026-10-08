@@ -1,0 +1,116 @@
+{
+  "id": "remax-alexis-kemp-sagert",
+  "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+  "analyze": {
+    "wallMs": 68,
+    "cpuMs": 85,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 65,
+        "cpuMs": 81,
+        "event": "site",
+        "detail": "ERROR: The request could not be satisfied"
+      },
+      {
+        "at": 67,
+        "cpuMs": 2,
+        "event": "design:start"
+      },
+      {
+        "at": 67,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 67,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 68,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+        "start": 1791431133164,
+        "status": 403,
+        "type": "text/html",
+        "length": 919,
+        "ms": 51
+      }
+    ],
+    "requests": 1,
+    "events": 12
+  },
+  "discovery": {
+    "wallMs": 40,
+    "cpuMs": 10,
+    "found": 0,
+    "outcome": "not-found",
+    "interfaces": [],
+    "inventoryUrls": [],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071"
+    ],
+    "maxCpuStep": {
+      "at": 39,
+      "cpuMs": 10,
+      "phase": "inventory",
+      "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+      "pages": 1,
+      "found": 0
+    },
+    "steps": 2,
+    "requests": 1,
+    "largestResponses": [
+      919
+    ],
+    "sample": []
+  }
+}

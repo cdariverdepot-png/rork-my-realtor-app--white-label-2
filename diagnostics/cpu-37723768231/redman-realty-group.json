@@ -1,0 +1,217 @@
+{
+  "id": "redman-realty-group",
+  "url": "https://www.redmanrealtygroup.com/",
+  "analyze": {
+    "wallMs": 5659,
+    "cpuMs": 3454,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 1224,
+        "cpuMs": 230,
+        "event": "site",
+        "detail": "Redman Realty Group"
+      },
+      {
+        "at": 1224,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 3949,
+        "cpuMs": 2814,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 3955,
+        "cpuMs": 7,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 4586,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 4682,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 5295,
+        "cpuMs": 5,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 5653,
+        "cpuMs": 379,
+        "event": "pages:done",
+        "detail": 4
+      },
+      {
+        "at": 5653,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 5653,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 5658,
+        "cpuMs": 5,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 5658,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 5658,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 5658,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 5658,
+        "cpuMs": 1,
+        "event": "profile:done"
+      },
+      {
+        "at": 5658,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 5658,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.redmanrealtygroup.com/",
+        "start": 1791430926075,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 1058
+      },
+      {
+        "url": "https://www.redmanrealtygroup.com/wp-content/plugins/bb-plugin/css/yui3.css?ver=2.11.1.1",
+        "start": 1791430927298,
+        "status": 200,
+        "type": "text/css",
+        "length": 206,
+        "ms": 24
+      },
+      {
+        "url": "https://www.redmanrealtygroup.com/wp-content/uploads/bb-plugin/cache/2-layout.css?ver=e8c01623f5ca6604705bdf2d7145dcd8",
+        "start": 1791430927298,
+        "status": 200,
+        "type": "text/css",
+        "length": 14846,
+        "ms": 96
+      },
+      {
+        "url": "https://www.redmanrealtygroup.com/wp-content/uploads/bb-plugin/cache/b41966516055daae8bb2bf531322e596-layout-bundle.css?ver=2.11.1.1-1.6.1",
+        "start": 1791430927299,
+        "status": 200,
+        "type": "text/css",
+        "length": 19207,
+        "ms": 55
+      },
+      {
+        "url": "https://www.redmanrealtygroup.com/wp-content/themes/bb-theme/css/bootstrap.min.css?ver=1.7.20",
+        "start": 1791430927300,
+        "status": 200,
+        "type": "text/css",
+        "length": 18239,
+        "ms": 50
+      },
+      {
+        "url": "https://www.redmanrealtygroup.com/wp-content/uploads/bb-theme/skin-6a8621e057eba.css?ver=1.7.20",
+        "start": 1791430927301,
+        "status": 200,
+        "type": "text/css",
+        "length": 11700,
+        "ms": 52
+      }
+    ],
+    "requests": 13,
+    "events": 18
+  },
+  "discovery": {
+    "wallMs": 3279,
+    "cpuMs": 113,
+    "found": 0,
+    "outcome": "unreadable",
+    "interfaces": [
+      "ihomefinder",
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://www.redmanrealtygroup.com/",
+      "https://www.redmanrealtygroup.com/homes-for-sale-featured/",
+      "https://www.redmanrealtygroup.com/email-alerts/",
+      "https://www.redmanrealtygroup.com/for-buyers/home-finance/"
+    ],
+    "obstacles": [
+      {
+        "code": "requires_rendering",
+        "url": "https://www.redmanrealtygroup.com/homes-for-sale-featured/",
+        "detail": "No browser renderer is configured"
+      },
+      {
+        "code": "requires_rendering",
+        "url": "https://www.redmanrealtygroup.com/email-alerts/",
+        "detail": "No browser renderer is configured"
+      },
+      {
+        "code": "requires_rendering",
+        "url": "https://www.redmanrealtygroup.com/for-buyers/home-finance/",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://www.redmanrealtygroup.com/",
+      "https://www.idxhome.com/api/kestrel/listings.json?featuredOnlyYn=true&status=active&limit=100&context=RESULT&sort=ds",
+      "https://www.redmanrealtygroup.com/homes-for-sale-featured/",
+      "https://www.redmanrealtygroup.com/email-alerts/",
+      "https://www.redmanrealtygroup.com/for-buyers/home-finance/"
+    ],
+    "maxCpuStep": {
+      "at": 2744,
+      "cpuMs": 31,
+      "phase": "inventory",
+      "url": "https://www.redmanrealtygroup.com/for-buyers/home-finance/",
+      "pages": 5,
+      "found": 0
+    },
+    "steps": 6,
+    "requests": 5,
+    "largestResponses": [],
+    "sample": []
+  }
+}

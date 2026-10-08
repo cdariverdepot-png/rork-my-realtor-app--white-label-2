@@ -1,0 +1,77 @@
+{
+  "id": "redfin-gavin-shettler",
+  "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+  "analyze": {
+    "wallMs": 292,
+    "cpuMs": 7,
+    "status": 422,
+    "error": "None of the profile sources could be read.",
+    "sourceErrors": [
+      "The page returned 405."
+    ],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 292,
+        "cpuMs": 7,
+        "event": "site:failed",
+        "detail": 0
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+        "start": 1791431168954,
+        "status": 405,
+        "type": "text/html; charset=UTF-8",
+        "length": 2168,
+        "ms": 290
+      }
+    ],
+    "requests": 1,
+    "events": 2
+  },
+  "discovery": {
+    "wallMs": 12,
+    "cpuMs": 3,
+    "found": 0,
+    "outcome": "unreadable",
+    "interfaces": [
+      "waf-challenge"
+    ],
+    "inventoryUrls": [
+      "https://www.redfin.com/real-estate-agents/gavin-shettler"
+    ],
+    "obstacles": [
+      {
+        "code": "requires_rendering",
+        "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://www.redfin.com/real-estate-agents/gavin-shettler"
+    ],
+    "maxCpuStep": {
+      "at": 12,
+      "cpuMs": 3,
+      "phase": "inventory",
+      "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+      "pages": 1,
+      "found": 0
+    },
+    "steps": 2,
+    "requests": 1,
+    "largestResponses": [
+      2168
+    ],
+    "sample": []
+  }
+}

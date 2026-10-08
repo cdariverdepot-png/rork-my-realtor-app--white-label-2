@@ -1,0 +1,262 @@
+{
+  "id": "elevate-realty-granbury",
+  "url": "https://www.granburyrelocationexperts.com/",
+  "analyze": {
+    "wallMs": 35257,
+    "cpuMs": 28895,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 10155,
+        "cpuMs": 8615,
+        "event": "site",
+        "detail": "Elevate Realty Group -"
+      },
+      {
+        "at": 10155,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 16128,
+        "cpuMs": 5835,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 18188,
+        "cpuMs": 34,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 18309,
+        "cpuMs": 10,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 18391,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 18550,
+        "cpuMs": 13,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 18576,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 20639,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 6
+      },
+      {
+        "at": 20935,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 7
+      },
+      {
+        "at": 35241,
+        "cpuMs": 14340,
+        "event": "pages:done",
+        "detail": 4
+      },
+      {
+        "at": 35241,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 35241,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 35255,
+        "cpuMs": 14,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 35255,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 35255,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 35256,
+        "cpuMs": 1,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 35256,
+        "cpuMs": 1,
+        "event": "profile:done"
+      },
+      {
+        "at": 35256,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 35256,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.granburyrelocationexperts.com/",
+        "start": 1791431084145,
+        "status": 301,
+        "type": "text/html; charset=UTF-8",
+        "ms": 1423
+      },
+      {
+        "url": "https://granburyrelocationexperts.com/",
+        "start": 1791431085568,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 295
+      },
+      {
+        "url": "https://granburyrelocationexperts.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791310131",
+        "start": 1791431094299,
+        "error": "fetch failed",
+        "ms": 7
+      },
+      {
+        "url": "https://granburyrelocationexperts.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791310137",
+        "start": 1791431094299,
+        "status": 200,
+        "type": "text/css",
+        "length": 3409,
+        "ms": 226
+      },
+      {
+        "url": "https://granburyrelocationexperts.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791310130",
+        "start": 1791431094300,
+        "status": 200,
+        "type": "text/css",
+        "length": 542,
+        "ms": 217
+      },
+      {
+        "url": "https://granburyrelocationexperts.com/wp-content/cache/autoptimize/css/autoptimize_single_f6bd9ab55a9eebd4177ddb9a75d26600.css?ver=1791310140",
+        "start": 1791431094301,
+        "status": 200,
+        "type": "text/css",
+        "length": 996,
+        "ms": 224
+      }
+    ],
+    "requests": 16,
+    "events": 21
+  },
+  "discovery": {
+    "wallMs": 13100,
+    "cpuMs": 839,
+    "found": 20,
+    "outcome": "found",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://granburyrelocationexperts.com/"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.granburyrelocationexperts.com/",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403980/Granbury/4304-Acoma-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21404665/Granbury/4647-Lyndi-Lane",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403928/Granbury/9508-Nutcracker-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398139/Granbury/3904-Country-Meadows-Road",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398791/Granbury/157-Ponce-De-Leon-Road",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21402501/Granbury/3205-Windcrest-Drive",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21402449/Granbury/113-W-Arnold-Street",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401040/Granbury/700-Aqua-Vista-Drive",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21380359/Granbury/2105-Wood-Duck-Lane",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21397972/Granbury/6343-Weatherby-Road",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401713/Granbury/5703-N-Sunchase-Drive",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21393472/Granbury/4101-Newport-Bay-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401268/Granbury/408-Cactus-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401246/Granbury/400-Cactus-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401250/Granbury/419-Cactus-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401449/Granbury/237-Coronado-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401447/Granbury/441-Carnero-Drive",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401235/Granbury/411-Cactus-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401232/Granbury/404-Cactus-Court",
+      "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401231/Granbury/8001-Mesquite-Trail"
+    ],
+    "maxCpuStep": {
+      "at": 2591,
+      "cpuMs": 225,
+      "phase": "inventory",
+      "url": "https://www.granburyrelocationexperts.com/",
+      "pages": 1,
+      "found": 20
+    },
+    "steps": 23,
+    "requests": 21,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "New Listing &#8211; yesterday 1 / 40 $510,000 Single Family Residence For Sale Active 4 BEDS 3 TOTAL BATHS 2,212 SQFT 4304 Acoma Court Granbury, TX 76048 Indian",
+        "price": "$510,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403980/Granbury/4304-Acoma-Court",
+        "images": 1
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 30 $170,000 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,464 SQFT 4647 Lyndi Lane Granbury, TX 76049 Blue Wa",
+        "price": "$170,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21404665/Granbury/4647-Lyndi-Lane",
+        "images": 1
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 40 $468,500 Single Family Residence For Sale Active 3 BEDS 3 TOTAL BATHS 2,636 SQFT 9508 Nutcracker Court Granbury, TX 76049 P",
+        "price": "$468,500",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403928/Granbury/9508-Nutcracker-Court",
+        "images": 1
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 40 $249,999 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,447 SQFT 3904 Country Meadows Road Granbury, TX 760",
+        "price": "$249,999",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398139/Granbury/3904-Country-Meadows-Road",
+        "images": 1
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 17 $418,000 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,840 SQFT 157 Ponce De Leon Road Granbury, TX 76048 ",
+        "price": "$418,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398791/Granbury/157-Ponce-De-Leon-Road",
+        "images": 1
+      }
+    ]
+  }
+}

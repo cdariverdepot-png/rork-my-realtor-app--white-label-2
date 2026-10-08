@@ -1,0 +1,249 @@
+{
+  "id": "bridge-realty",
+  "url": "https://www.thebridgerealty.com/",
+  "analyze": {
+    "wallMs": 4787,
+    "cpuMs": 3077,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 921,
+        "cpuMs": 148,
+        "event": "site",
+        "detail": "Bridge Realty"
+      },
+      {
+        "at": 921,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 3589,
+        "cpuMs": 2641,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 3595,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 4062,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 4233,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 4277,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 4543,
+        "cpuMs": 2,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 4779,
+        "cpuMs": 248,
+        "event": "pages:done",
+        "detail": 3
+      },
+      {
+        "at": 4779,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 4780,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 4786,
+        "cpuMs": 7,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 4786,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 4786,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 4786,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 4787,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 4787,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 4787,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.thebridgerealty.com/",
+        "start": 1791430935227,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "length": 30623,
+        "ms": 833
+      },
+      {
+        "url": "https://fonts.googleapis.com/css?family=Figtree:300,400,400i,500,600,700&display=swap",
+        "start": 1791430936147,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 70
+      },
+      {
+        "url": "https://prd-assets1.fastly.propertybase.com/company_frontend_54808_116bc22d1a447876551827a8d3387de7_1790814697.css?as=style&rel=preload",
+        "start": 1791430936148,
+        "status": 200,
+        "type": "text/css",
+        "length": 132464,
+        "ms": 90
+      },
+      {
+        "url": "https://prd-assets1.fastly.propertybase.com/company_frontend_54808_116bc22d1a447876551827a8d3387de7_1790814697.css",
+        "start": 1791430936149,
+        "status": 200,
+        "type": "text/css",
+        "length": 132457,
+        "ms": 72
+      },
+      {
+        "url": "https://www.thebridgerealty.com/about",
+        "start": 1791430936149,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "length": 19292,
+        "ms": 2671
+      },
+      {
+        "url": "https://www.thebridgerealty.com/contact",
+        "start": 1791430936150,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "length": 21141,
+        "ms": 3343
+      }
+    ],
+    "requests": 10,
+    "events": 19
+  },
+  "discovery": {
+    "wallMs": 60319,
+    "cpuMs": 5203,
+    "found": 0,
+    "outcome": "unreadable",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://www.thebridgerealty.com/featured",
+      "https://www.thebridgerealty.com/properties/sale_prices",
+      "https://www.thebridgerealty.com/all-listings",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=2",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=3",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=141"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://www.thebridgerealty.com/",
+      "https://www.thebridgerealty.com/featured",
+      "https://www.thebridgerealty.com/properties/sale_prices",
+      "https://www.thebridgerealty.com/properties/sold_valuation",
+      "https://www.thebridgerealty.com/all-listings",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=2",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=3",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=141",
+      "https://www.thebridgerealty.com/all-listings?active=0&page_0=142",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=2&page_0=1",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=2&page_0=3",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=2&page_0=141",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=2&page_0=142",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=3&page_0=2",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=3&page_0=1",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=3&page_0=4",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=3&page_0=141",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=2&page_0=2",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=3&page_0=3",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=3&page_0=142",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=4&page_0=3",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=4&page_0=1",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=4&page_0=2",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=4&page_0=5",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=4&page_0=141",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=4&page_0=142",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=5&page_0=4",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=5&page_0=1",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=5&page_0=2",
+      "https://www.thebridgerealty.com/all-listings?active=0&page=5&page_0=3",
+      "https://www.thebridgerealty.com/new-real-estate-listings",
+      "https://www.thebridgerealty.com/rental-and-investment-properties",
+      "https://www.thebridgerealty.com/new-real-estate-listings?active=0&page_0=2",
+      "https://www.thebridgerealty.com/new-real-estate-listings?active=0&page_0=3",
+      "https://www.thebridgerealty.com/new-real-estate-listings?active=0&page_0=58",
+      "https://www.thebridgerealty.com/rental-and-investment-properties?active=0&page_0=2",
+      "https://www.thebridgerealty.com/rental-and-investment-properties?active=0&page_0=3",
+      "https://www.thebridgerealty.com/new-real-estate-listings?active=0&page=2&page_0=1",
+      "https://www.thebridgerealty.com/new-real-estate-listings?active=0&page=2&page_0=3",
+      "https://www.thebridgerealty.com/new-real-estate-listings?active=0&page=3&page_0=2"
+    ],
+    "maxCpuStep": {
+      "at": 7796,
+      "cpuMs": 160,
+      "phase": "inventory",
+      "url": "https://www.thebridgerealty.com/all-listings?active=0&page=2&page_0=141",
+      "pages": 12,
+      "found": 0
+    },
+    "steps": 72,
+    "requests": 71,
+    "largestResponses": [
+      156215,
+      156213,
+      156211,
+      156209,
+      156204
+    ],
+    "sample": []
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "id": "john-holden-homes",
+  "url": "https://johnholdenhomes.com/",
+  "analyze": {
+    "wallMs": 14717,
+    "cpuMs": 1182,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 1013,
+        "cpuMs": 176,
+        "event": "site",
+        "detail": "John Holden Homes"
+      },
+      {
+        "at": 1013,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 2662,
+        "cpuMs": 913,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 2817,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 14664,
+        "cpuMs": 13,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 14716,
+        "cpuMs": 74,
+        "event": "pages:done",
+        "detail": 0
+      },
+      {
+        "at": 14716,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 14716,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 14716,
+        "cpuMs": 1,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 14716,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 14716,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 14716,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 14717,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 14717,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 14717,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://johnholdenhomes.com/",
+        "start": 1791430905809,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 789
+      },
+      {
+        "url": "https://johnholdenhomes.com/wp-content/uploads/fusion-styles/cec4e5494985a915607dd291398e8334.min.css?ver=3.11.2",
+        "start": 1791430906821,
+        "status": 200,
+        "type": "text/css",
+        "length": 142784,
+        "ms": 424
+      },
+      {
+        "url": "https://johnholdenhomes.com/wp-content/uploads/trustindex-zillow-widget.css?1787119029",
+        "start": 1791430906821,
+        "status": 200,
+        "type": "text/css",
+        "length": 9397,
+        "ms": 600
+      },
+      {
+        "url": "https://johnholdenhomes.com/why-us/",
+        "start": 1791430908470,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "length": 14203,
+        "ms": 154
+      },
+      {
+        "url": "https://johnholdenhomes.com/case-studies/",
+        "start": 1791430908471,
+        "error": "The operation was aborted due to timeout",
+        "ms": 12001
+      }
+    ],
+    "requests": 5,
+    "events": 16
+  },
+  "discovery": {
+    "wallMs": 686,
+    "cpuMs": 23,
+    "found": 0,
+    "outcome": "not-found",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://johnholdenhomes.com/"
+    ],
+    "maxCpuStep": {
+      "at": 686,
+      "cpuMs": 23,
+      "phase": "inventory",
+      "url": "https://johnholdenhomes.com/",
+      "pages": 1,
+      "found": 0
+    },
+    "steps": 2,
+    "requests": 1,
+    "largestResponses": [],
+    "sample": []
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "id": "irene-on-whidbey",
+  "url": "https://www.ireneonwhidbey.com/",
+  "analyze": {
+    "wallMs": 1545,
+    "cpuMs": 985,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 379,
+        "cpuMs": 179,
+        "event": "site",
+        "detail": "Whidbey Island Real Estate"
+      },
+      {
+        "at": 379,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 731,
+        "cpuMs": 452,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 738,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 947,
+        "cpuMs": 17,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 968,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 1053,
+        "cpuMs": 16,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 1084,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 1119,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 6
+      },
+      {
+        "at": 1289,
+        "cpuMs": 5,
+        "event": "pages:start",
+        "detail": 7
+      },
+      {
+        "at": 1527,
+        "cpuMs": 272,
+        "event": "pages:done",
+        "detail": 5
+      },
+      {
+        "at": 1527,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 1527,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 1542,
+        "cpuMs": 16,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 1542,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 1542,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 1543,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 1543,
+        "cpuMs": 1,
+        "event": "profile:done"
+      },
+      {
+        "at": 1543,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 1543,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.ireneonwhidbey.com/",
+        "start": 1791430887379,
+        "status": 200,
+        "type": "text/html;charset=utf-8",
+        "length": 54685,
+        "ms": 189
+      },
+      {
+        "url": "https://definitions.sqspcdn.com/website-component-definition/static-assets/website.components.socialLinks/5814eb66-baa7-4ba6-b819-e3a0276bac39_745/website.compo",
+        "start": 1791430887757,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 1308,
+        "ms": 41
+      },
+      {
+        "url": "https://definitions.sqspcdn.com/website-component-definition/static-assets/website.components.html/dd67834c-aac8-460c-97f6-e9e034e58ef8_967/website.components.h",
+        "start": 1791430887758,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 105,
+        "ms": 38
+      },
+      {
+        "url": "https://definitions.sqspcdn.com/website-component-definition/static-assets/website.components.imageLayout/3a73ab14-671f-4231-bb63-5934d56303e3_211/website.compo",
+        "start": 1791430887759,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 1525,
+        "ms": 50
+      },
+      {
+        "url": "https://definitions.sqspcdn.com/website-component-definition/static-assets/website.components.spacer/ef9a67ad-ad8a-41e5-beb2-7d36f7b8e7f1_1290/website.component",
+        "start": 1791430887760,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 98,
+        "ms": 47
+      },
+      {
+        "url": "https://definitions.sqspcdn.com/website-component-definition/static-assets/website.components.button/1bbaf798-9cbe-431e-a232-e338e97f5c5f_1137/website.component",
+        "start": 1791430887760,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 244,
+        "ms": 69
+      }
+    ],
+    "requests": 17,
+    "events": 21
+  },
+  "discovery": {
+    "wallMs": 7892,
+    "cpuMs": 872,
+    "found": 3,
+    "outcome": "found",
+    "interfaces": [
+      "idx-broker",
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://search.ireneonwhidbey.com/idx/map/mapsearch",
+      "https://search.ireneonwhidbey.com/idx/search/advanced",
+      "https://search.ireneonwhidbey.com/idx/search/listingid",
+      "https://search.ireneonwhidbey.com/idx/search/address",
+      "https://search.ireneonwhidbey.com/idx/results/listings?idxID=b045",
+      "https://search.ireneonwhidbey.com/idx/results/listings"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.ireneonwhidbey.com/",
+      "https://search.ireneonwhidbey.com/idx/map/mapsearch",
+      "https://search.ireneonwhidbey.com/idx/search/advanced",
+      "https://search.ireneonwhidbey.com/idx/search/listingid",
+      "https://search.ireneonwhidbey.com/idx/search/address",
+      "https://search.ireneonwhidbey.com/idx/results/listings?idxID=b045",
+      "https://search.ireneonwhidbey.com/idx/results/listings",
+      "https://search.ireneonwhidbey.com/idx/search/advanced?modifySearch=true",
+      "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+      "https://search.ireneonwhidbey.com/idx/photogallery/b045/2554926",
+      "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926",
+      "https://search.ireneonwhidbey.com/idx/mortgage",
+      "https://search.ireneonwhidbey.com/idx/%7B%7Bcpc%7D%7D",
+      "https://search.ireneonwhidbey.com/idx/search/",
+      "https://www.ireneonwhidbey.com/my-active-listings",
+      "https://search.ireneonwhidbey.com/home",
+      "https://search.ireneonwhidbey.com/home-valuation",
+      "https://www.idxbroker.com/",
+      "https://www.ireneonwhidbey.com/oak-harbor-wa-homes-for-sale",
+      "https://www.ireneonwhidbey.com/coupeville-wa-houses-for-sale",
+      "https://www.ireneonwhidbey.com/langley-wa-homes-for-sale",
+      "https://www.ireneonwhidbey.com/home-valuation",
+      "https://www.ireneonwhidbey.com/home",
+      "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+      "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926",
+      "https://www.idxbroker.com/",
+      "https://search.ireneonwhidbey.com/idx/photogallery/b045/2554926",
+      "https://search.ireneonwhidbey.com/idx/photogallery/b045/2554926"
+    ],
+    "maxCpuStep": {
+      "at": 2049,
+      "cpuMs": 60,
+      "phase": "inventory",
+      "url": "https://search.ireneonwhidbey.com/idx/results/listings",
+      "pages": 7,
+      "found": 0
+    },
+    "steps": 28,
+    "requests": 28,
+    "largestResponses": [
+      54685,
+      52723,
+      49922,
+      43695,
+      40025
+    ],
+    "sample": [
+      {
+        "title": "Add to Favorites",
+        "price": "$1,650,000",
+        "sourceUrl": "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+        "images": 1
+      },
+      {
+        "title": "Add to Favorites",
+        "price": "$1,650,000",
+        "sourceUrl": "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926",
+        "images": 1
+      },
+      {
+        "title": "Subscription cost",
+        "price": "$50",
+        "sourceUrl": "https://www.idxbroker.com/",
+        "images": 0
+      }
+    ]
+  }
+}

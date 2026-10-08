@@ -1,0 +1,102 @@
+{
+  "id": "chattanooga-property-shop",
+  "url": "https://chattanoogapropertyshop.com/",
+  "analyze": {
+    "wallMs": 132,
+    "cpuMs": 55,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 3,
+        "cpuMs": 3,
+        "event": "site:start"
+      },
+      {
+        "at": 131,
+        "cpuMs": 50,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 131,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 131,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 132,
+        "cpuMs": 1,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 132,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 132,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 132,
+        "cpuMs": 1,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://chattanoogapropertyshop.com/",
+        "start": 1791431132755,
+        "status": 403,
+        "type": "text/html; charset=UTF-8",
+        "ms": 123
+      }
+    ],
+    "requests": 1,
+    "events": 8
+  },
+  "discovery": {
+    "wallMs": 66,
+    "cpuMs": 12,
+    "found": 0,
+    "outcome": "unreadable",
+    "interfaces": [
+      "managed-challenge"
+    ],
+    "inventoryUrls": [
+      "https://chattanoogapropertyshop.com/"
+    ],
+    "obstacles": [
+      {
+        "code": "requires_rendering",
+        "url": "https://chattanoogapropertyshop.com/",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected"
+    ],
+    "visited": [
+      "https://chattanoogapropertyshop.com/"
+    ],
+    "maxCpuStep": {
+      "at": 66,
+      "cpuMs": 12,
+      "phase": "inventory",
+      "url": "https://chattanoogapropertyshop.com/",
+      "pages": 1,
+      "found": 0
+    },
+    "steps": 2,
+    "requests": 1,
+    "largestResponses": [],
+    "sample": []
+  }
+}

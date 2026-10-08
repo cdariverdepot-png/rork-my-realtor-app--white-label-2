@@ -1,0 +1,150 @@
+{
+  "id": "katerina-sayles",
+  "url": "https://www.katerinasaylesrealtor.com/",
+  "analyze": {
+    "wallMs": 12004,
+    "cpuMs": 29,
+    "status": 422,
+    "error": "None of the profile sources could be read.",
+    "sourceErrors": [
+      "The operation was aborted due to timeout"
+    ],
+    "stages": [
+      {
+        "at": 3,
+        "cpuMs": 3,
+        "event": "site:start"
+      },
+      {
+        "at": 12004,
+        "cpuMs": 26,
+        "event": "site:failed",
+        "detail": 0
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.katerinasaylesrealtor.com/",
+        "start": 1791431004455,
+        "error": "The operation was aborted due to timeout",
+        "ms": 12001
+      }
+    ],
+    "requests": 1,
+    "events": 2
+  },
+  "discovery": {
+    "wallMs": 67424,
+    "cpuMs": 850,
+    "found": 36,
+    "outcome": "partial",
+    "interfaces": [
+      "structured-property-data",
+      "ihomefinder"
+    ],
+    "inventoryUrls": [
+      "https://www.katerinasaylesrealtor.com/",
+      "https://www.katerinasaylesrealtor.com/featured-properties/",
+      "https://www.katerinasaylesrealtor.com/featured-open-houses/",
+      "https://www.ihomefinder.com/",
+      "https://www.ihomefinder.com/solutions/idx-websites/",
+      "https://www.ihomefinder.com/resources/idx-coverage/"
+    ],
+    "obstacles": [
+      {
+        "code": "requires_rendering",
+        "url": "https://www.katerinasaylesrealtor.com/",
+        "detail": "No browser renderer is configured"
+      },
+      {
+        "code": "requires_rendering",
+        "url": "https://www.katerinasaylesrealtor.com/featured-open-houses/",
+        "detail": "No browser renderer is configured"
+      },
+      {
+        "code": "requires_rendering",
+        "url": "https://www.ihomefinder.com/",
+        "detail": "No browser renderer is configured"
+      },
+      {
+        "code": "requires_rendering",
+        "url": "https://www.ihomefinder.com/solutions/idx-websites/",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.katerinasaylesrealtor.com/",
+      "https://www.katerinasaylesrealtor.com/featured-properties/",
+      "https://www.katerinasaylesrealtor.com/featured-open-houses/",
+      "https://www.ihomefinder.com/",
+      "https://www.ihomefinder.com/solutions/idx-websites/",
+      "https://www.ihomefinder.com/resources/idx-coverage",
+      "https://www.ihomefinder.com/idx-plugin-for-wordpress/",
+      "https://www.ihomefinder.com/features/idx-for-any-website/wix-real-estate-app/",
+      "https://www.ihomefinder.com/solutions/mls-marketing-solutions/",
+      "https://www.ihomefinder.com/resources/idx-coverage/boards-now-sold-listings/",
+      "https://www.ihomefinder.com/resources/idx-coverage/additional-idx-service-fees/",
+      "https://www.ihomefinder.com/resources/idx-coverage/baldwin-county-association-of-realtors/",
+      "https://www.ihomefinder.com/resources/idx-coverage/birmingham-association-of-realtors/",
+      "https://www.ihomefinder.com/platform/idx-solutions-for-real-estate/",
+      "https://www.katerinasaylesrealtor.com/homes-for-sale-results",
+      "https://www.katerinasaylesrealtor.com/properties/",
+      "https://www.katerinasaylesrealtor.com/properties",
+      "https://www.katerinasaylesrealtor.com/homes-for-sale-featured/?status=active",
+      "https://www.katerinasaylesrealtor.com/buyers/sign-up-for-listing-alerts/"
+    ],
+    "maxCpuStep": {
+      "at": 13420,
+      "cpuMs": 154,
+      "phase": "inventory",
+      "url": "https://www.katerinasaylesrealtor.com/featured-open-houses/",
+      "pages": 3,
+      "found": 12
+    },
+    "steps": 21,
+    "requests": 19,
+    "largestResponses": [
+      208963,
+      166484,
+      131481
+    ],
+    "sample": [
+      {
+        "title": "$679,900",
+        "price": "$679,900",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+        "images": 0
+      },
+      {
+        "title": "$679,900",
+        "price": "$679,900",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/",
+        "images": 0
+      },
+      {
+        "title": "$685,000",
+        "price": "$685,000",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/7916-RENTON-AVENUE-S-SEATTLE-WA-98118/2586856/26/",
+        "images": 0
+      },
+      {
+        "title": "$694,950",
+        "price": "$694,950",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/18002-B-10TH-AVENUE-NE-SHORELINE-WA-98155/2552373/26/",
+        "images": 0
+      },
+      {
+        "title": "$699,000",
+        "price": "$699,000",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/583-BATTERY-STREET-508N-SEATTLE-WA-98121/2574763/26/",
+        "images": 0
+      }
+    ]
+  }
+}

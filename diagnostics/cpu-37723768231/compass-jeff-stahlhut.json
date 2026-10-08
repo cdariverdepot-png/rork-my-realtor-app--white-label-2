@@ -1,0 +1,254 @@
+{
+  "id": "compass-jeff-stahlhut",
+  "url": "https://www.compass.com/agents/jeff-stahlhut/",
+  "analyze": {
+    "wallMs": 2601,
+    "cpuMs": 1870,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 888,
+        "cpuMs": 608,
+        "event": "site",
+        "detail": "Compass"
+      },
+      {
+        "at": 1308,
+        "cpuMs": 477,
+        "event": "design:start"
+      },
+      {
+        "at": 1308,
+        "cpuMs": 0,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 1416,
+        "cpuMs": 17,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 1520,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 1639,
+        "cpuMs": 7,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 1892,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 2592,
+        "cpuMs": 733,
+        "event": "pages:done",
+        "detail": 1
+      },
+      {
+        "at": 2592,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 2592,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 2600,
+        "cpuMs": 9,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 2600,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 2600,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 2601,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 2601,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 2601,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 2601,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.compass.com/agents/jeff-stahlhut/",
+        "start": 1791431160187,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 395
+      },
+      {
+        "url": "https://www.compass.com/agents/",
+        "start": 1791431161494,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 103
+      },
+      {
+        "url": "https://www.compass.com/agents-compass/",
+        "start": 1791431161494,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 189
+      },
+      {
+        "url": "https://www.compass.com/sell/",
+        "start": 1791431161495,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 207
+      },
+      {
+        "url": "https://www.compass.com/neighborhood-guides/",
+        "start": 1791431161496,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 272
+      },
+      {
+        "url": "https://www.compass.com/agents/jeff-stahlhut/',a+=o.suppressValue(o.contextOrFrameLookup(n,t,",
+        "start": 1791431161497,
+        "status": 301,
+        "type": "text/html; charset=utf-8",
+        "length": 91,
+        "ms": 179
+      }
+    ],
+    "requests": 10,
+    "events": 18
+  },
+  "discovery": {
+    "wallMs": 5939,
+    "cpuMs": 545,
+    "found": 9,
+    "outcome": "partial",
+    "interfaces": [
+      "structured-property-data",
+      "waf-challenge"
+    ],
+    "inventoryUrls": [
+      "https://www.compass.com/coming-soon/listings/",
+      "https://www.compass.com/compass-listings/",
+      "https://www.compass.com/homes-for-sale/phoenix-az/exclusive/p-2/",
+      "https://www.compass.com/homes-for-sale/"
+    ],
+    "obstacles": [
+      {
+        "code": "requires_rendering",
+        "url": "https://www.compass.com/homes-for-sale/phoenix-az/exclusive/p-2/",
+        "detail": "No browser renderer is configured"
+      },
+      {
+        "code": "requires_rendering",
+        "url": "https://www.compass.com/homes-for-sale/",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_completed"
+    ],
+    "visited": [
+      "https://www.compass.com/agents/jeff-stahlhut/",
+      "https://www.compass.com/coming-soon/listings/",
+      "https://www.compass.com/compass-listings/",
+      "https://www.compass.com/homes-for-sale/phoenix-az/exclusive/p-2/",
+      "https://www.compass.com/homes-for-sale/",
+      "https://www.compass.com/homedetails/4632-N-Royal-Palm-Cir-Phoenix-AZ-85018/10N6UZ_pid/",
+      "https://www.compass.com/homedetails/5916-E-Bramble-Berry-Ln-Cave-Creek-AZ-85331/Z1NG7_pid/",
+      "https://www.compass.com/homedetails/2-Biltmore-Estates-Dr-Unit-108-Phoenix-AZ-85016/W5S8O_pid/",
+      "https://www.compass.com/homedetails/4211-E-Palm-Ln-Unit-208-Phoenix-AZ-85008/VMOKF_pid/",
+      "https://www.compass.com/homedetails/16655-S-3rd-Pl-Phoenix-AZ-85048/10OAZU_pid/",
+      "https://www.compass.com/homedetails/4048-E-Minnezona-Ave-Phoenix-AZ-85018/ZVI1O_pid/",
+      "https://www.compass.com/homedetails/1217-W-Solano-Dr-Phoenix-AZ-85013/WMBC4_pid/",
+      "https://www.compass.com/homedetails/11640-N-Tatum-Blvd-Unit-2013-Phoenix-AZ-85028/W7F1M_pid/",
+      "https://www.compass.com/homedetails/11809-N-40th-Pl-Phoenix-AZ-85028/W3TZH_pid/"
+    ],
+    "maxCpuStep": {
+      "at": 5079,
+      "cpuMs": 168,
+      "phase": "inventory",
+      "url": "https://www.compass.com/homes-for-sale/phoenix-az/exclusive/p-2/",
+      "pages": 4,
+      "found": 9
+    },
+    "steps": 16,
+    "requests": 14,
+    "largestResponses": [
+      2399,
+      2399
+    ],
+    "sample": [
+      {
+        "title": "Open House - 11:00 AM - 2:00 PM",
+        "price": "$8,450,000",
+        "sourceUrl": "https://www.compass.com/homedetails/4632-N-Royal-Palm-Cir-Phoenix-AZ-85018/10N6UZ_pid/",
+        "images": 31
+      },
+      {
+        "title": "5916 East Bramble Berry Lane",
+        "price": "$895,000",
+        "sourceUrl": "https://www.compass.com/homedetails/5916-E-Bramble-Berry-Ln-Cave-Creek-AZ-85331/Z1NG7_pid/",
+        "images": 90
+      },
+      {
+        "title": "2 Biltmore Estates Drive, Unit 108",
+        "price": "$3,900,000",
+        "sourceUrl": "https://www.compass.com/homedetails/2-Biltmore-Estates-Dr-Unit-108-Phoenix-AZ-85016/W5S8O_pid/",
+        "images": 57
+      },
+      {
+        "title": "4211 East Palm Lane, Unit 208",
+        "price": "$198,500",
+        "sourceUrl": "https://www.compass.com/homedetails/4211-E-Palm-Ln-Unit-208-Phoenix-AZ-85008/VMOKF_pid/",
+        "images": 30
+      },
+      {
+        "title": "16655 South 3rd Place",
+        "price": "$759,000",
+        "sourceUrl": "https://www.compass.com/homedetails/16655-S-3rd-Pl-Phoenix-AZ-85048/10OAZU_pid/",
+        "images": 4
+      }
+    ]
+  }
+}

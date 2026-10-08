@@ -1,0 +1,283 @@
+{
+  "id": "houses-of-kansas-city",
+  "url": "https://www.housesofkansascity.com/",
+  "analyze": {
+    "wallMs": 5940,
+    "cpuMs": 3883,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 1291,
+        "cpuMs": 1153,
+        "event": "site",
+        "detail": "Anthony West"
+      },
+      {
+        "at": 1291,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 2648,
+        "cpuMs": 1361,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 2660,
+        "cpuMs": 18,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 3143,
+        "cpuMs": 20,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 3387,
+        "cpuMs": 19,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 3392,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 3506,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 3600,
+        "cpuMs": 9,
+        "event": "pages:start",
+        "detail": 6
+      },
+      {
+        "at": 3725,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 7
+      },
+      {
+        "at": 4610,
+        "cpuMs": 11,
+        "event": "pages:start",
+        "detail": 8
+      },
+      {
+        "at": 4724,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 9
+      },
+      {
+        "at": 5925,
+        "cpuMs": 1249,
+        "event": "pages:done",
+        "detail": 8
+      },
+      {
+        "at": 5926,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 5926,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 5938,
+        "cpuMs": 14,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 5938,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 5938,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 5938,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 5939,
+        "cpuMs": 1,
+        "event": "profile:done"
+      },
+      {
+        "at": 5939,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 5939,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.housesofkansascity.com/",
+        "start": 1791430897091,
+        "status": 301,
+        "type": "text/html; charset=UTF-8",
+        "ms": 150
+      },
+      {
+        "url": "https://housesofkansascity.com/",
+        "start": 1791430897242,
+        "status": 200,
+        "type": "text/html",
+        "ms": 118
+      },
+      {
+        "url": "https://fonts.googleapis.com/css?family=Open%20Sans:300,400,500,600,700,800,300i,400i,500i,600i,700i,800i",
+        "start": 1791430898381,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 58
+      },
+      {
+        "url": "https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css",
+        "start": 1791430898382,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 1860,
+        "ms": 50
+      },
+      {
+        "url": "https://styles.luxurypresence.com/masterpiece/index.css",
+        "start": 1791430898383,
+        "status": 200,
+        "type": "text/css",
+        "ms": 100
+      },
+      {
+        "url": "https://housesofkansascity.com/about",
+        "start": 1791430898384,
+        "status": 200,
+        "type": "text/html",
+        "ms": 1360
+      }
+    ],
+    "requests": 15,
+    "events": 23
+  },
+  "discovery": {
+    "wallMs": 2564,
+    "cpuMs": 235,
+    "found": 12,
+    "outcome": "found",
+    "interfaces": [
+      "structured-property-data",
+      "public-json"
+    ],
+    "inventoryUrls": [
+      "https://housesofkansascity.com/",
+      "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D"
+    ],
+    "obstacles": [
+      {
+        "code": "captcha_required",
+        "url": "https://housesofkansascity.com/home-search/listings/6658666774988572167-14150-W-147th-Street",
+        "detail": "detail enrichment"
+      },
+      {
+        "code": "captcha_required",
+        "url": "https://housesofkansascity.com/home-search/listings/665867360374538741-8710-Lamar-Avenue",
+        "detail": "detail enrichment"
+      }
+    ],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial",
+      "verification_required"
+    ],
+    "visited": [
+      "https://www.housesofkansascity.com/",
+      "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D",
+      "https://housesofkansascity.com/home-search/listings/6658353948779566010-14121-Meadow-Lane",
+      "https://housesofkansascity.com/home-search/listings/6658883668662905796-24111-W-121st-Street",
+      "https://housesofkansascity.com/home-search/listings/6658659302875745536-12501-W-169th-Street",
+      "https://housesofkansascity.com/home-search/listings/6658807665809419245-7321-Belleview-Avenue",
+      "https://housesofkansascity.com/home-search/listings/6658350714748411355-17120-W-197th-Place",
+      "https://housesofkansascity.com/home-search/listings/6658126195968364152-6781-Rene-Street",
+      "https://housesofkansascity.com/home-search/listings/6658623479113663554-10952-S-Barth-Road",
+      "https://housesofkansascity.com/home-search/listings/6658269337014777830-5532-Knox-Avenue",
+      "https://housesofkansascity.com/home-search/listings/665891552317534343-620-W-60TH-Terrace",
+      "https://housesofkansascity.com/home-search/listings/665829906563548297-5418-W-131st-Terrace",
+      "https://housesofkansascity.com/home-search/listings/6658666774988572167-14150-W-147th-Street",
+      "https://housesofkansascity.com/home-search/listings/665867360374538741-8710-Lamar-Avenue"
+    ],
+    "maxCpuStep": {
+      "at": 178,
+      "cpuMs": 111,
+      "phase": "inventory",
+      "url": "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamId",
+      "pages": 2,
+      "found": 0
+    },
+    "steps": 16,
+    "requests": 14,
+    "largestResponses": [
+      5745,
+      5733
+    ],
+    "sample": [
+      {
+        "title": "14121 Meadow Lane, Leawood, KS 66224",
+        "price": "$1,599,999",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658353948779566010-14121-Meadow-Lane",
+        "images": 1
+      },
+      {
+        "title": "24111 W 121st Street, Olathe, KS 66061",
+        "price": "$685,000",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658883668662905796-24111-W-121st-Street",
+        "images": 1
+      },
+      {
+        "title": "12501 W 169th Street, Overland Park, KS 66221",
+        "price": "$1,050,000",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658659302875745536-12501-W-169th-Street",
+        "images": 1
+      },
+      {
+        "title": "7321 Belleview Avenue, Kansas City, MO 64114",
+        "price": "$625,000",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658807665809419245-7321-Belleview-Avenue",
+        "images": 1
+      },
+      {
+        "title": "17120 W 197th Place, Spring Hill, KS 66083",
+        "price": "$569,900",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658350714748411355-17120-W-197th-Place",
+        "images": 1
+      }
+    ]
+  }
+}

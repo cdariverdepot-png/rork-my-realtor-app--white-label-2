@@ -1,0 +1,211 @@
+{
+  "id": "zillow-leland-reed",
+  "url": "https://www.zillow.com/profile/Leland-Reed",
+  "analyze": {
+    "wallMs": 6168,
+    "cpuMs": 4787,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 0,
+        "event": "site:start"
+      },
+      {
+        "at": 1654,
+        "cpuMs": 1001,
+        "event": "site",
+        "detail": "Zillow"
+      },
+      {
+        "at": 1654,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 4089,
+        "cpuMs": 2487,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 4285,
+        "cpuMs": 17,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 4336,
+        "cpuMs": 5,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 4442,
+        "cpuMs": 13,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 4545,
+        "cpuMs": 7,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 4865,
+        "cpuMs": 15,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 4956,
+        "cpuMs": 7,
+        "event": "pages:start",
+        "detail": 6
+      },
+      {
+        "at": 6166,
+        "cpuMs": 1232,
+        "event": "pages:done",
+        "detail": 4
+      },
+      {
+        "at": 6166,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 6166,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 6167,
+        "cpuMs": 1,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 6167,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 6167,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 6167,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 6167,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 6167,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 6167,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.zillow.com/profile/Leland-Reed",
+        "start": 1791431169454,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 759
+      },
+      {
+        "url": "https://www.zillowstatic.com/s3/professional-profile-page/_next/static/css/199a89ebaa223ec7.css",
+        "start": 1791431171107,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "length": 44505,
+        "ms": 86
+      },
+      {
+        "url": "https://www.zillow.com/homes/for_sale/",
+        "start": 1791431173542,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 451
+      },
+      {
+        "url": "https://www.zillow.com/learn/category/buying/",
+        "start": 1791431173543,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 240
+      },
+      {
+        "url": "https://www.zillow.com/buy/app-download/",
+        "start": 1791431173544,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 186
+      },
+      {
+        "url": "https://www.zillow.com/agents/",
+        "start": 1791431173544,
+        "status": 307,
+        "type": null,
+        "ms": 254
+      }
+    ],
+    "requests": 14,
+    "events": 20
+  },
+  "discovery": {
+    "wallMs": 131,
+    "cpuMs": 5,
+    "found": 0,
+    "outcome": "unreadable",
+    "interfaces": [
+      "robot-validate"
+    ],
+    "inventoryUrls": [
+      "https://www.zillow.com/profile/Leland-Reed"
+    ],
+    "obstacles": [
+      {
+        "code": "captcha_required",
+        "url": "https://www.zillow.com/profile/Leland-Reed",
+        "detail": "No browser renderer is configured"
+      }
+    ],
+    "stages": [
+      "architecture_detected",
+      "user_action_required",
+      "verification_required"
+    ],
+    "visited": [
+      "https://www.zillow.com/profile/Leland-Reed"
+    ],
+    "maxCpuStep": {
+      "at": 131,
+      "cpuMs": 5,
+      "phase": "inventory",
+      "url": "https://www.zillow.com/profile/Leland-Reed",
+      "pages": 1,
+      "found": 0
+    },
+    "steps": 2,
+    "requests": 1,
+    "largestResponses": [
+      5824
+    ],
+    "sample": []
+  }
+}

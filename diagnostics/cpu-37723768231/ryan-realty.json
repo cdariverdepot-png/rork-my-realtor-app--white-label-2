@@ -1,0 +1,307 @@
+{
+  "id": "ryan-realty",
+  "url": "https://ryan-realty.com/",
+  "analyze": {
+    "wallMs": 4251,
+    "cpuMs": 1391,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 447,
+        "cpuMs": 141,
+        "event": "site",
+        "detail": "Ryan Realty"
+      },
+      {
+        "at": 447,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 1479,
+        "cpuMs": 802,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 1487,
+        "cpuMs": 11,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 1667,
+        "cpuMs": 14,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 1682,
+        "cpuMs": 7,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 1686,
+        "cpuMs": 5,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 1765,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 1879,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 6
+      },
+      {
+        "at": 1898,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 7
+      },
+      {
+        "at": 1950,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 8
+      },
+      {
+        "at": 2068,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 9
+      },
+      {
+        "at": 2412,
+        "cpuMs": 6,
+        "event": "pages:start",
+        "detail": 10
+      },
+      {
+        "at": 2603,
+        "cpuMs": 5,
+        "event": "pages:start",
+        "detail": 11
+      },
+      {
+        "at": 3905,
+        "cpuMs": 4,
+        "event": "pages:start",
+        "detail": 12
+      },
+      {
+        "at": 4229,
+        "cpuMs": 350,
+        "event": "pages:done",
+        "detail": 10
+      },
+      {
+        "at": 4229,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 4229,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 4249,
+        "cpuMs": 22,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 4250,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 4250,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 4250,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 4250,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 4250,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 4250,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://ryan-realty.com/",
+        "start": 1791431175943,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 372
+      },
+      {
+        "url": "https://ryan-realty.com/_next/static/chunks/6552b5378a88e460.css?dpl=dpl_Fawmm7GctKY8GfeAmpscB4dGquYB",
+        "start": 1791431176389,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 53
+      },
+      {
+        "url": "https://ryan-realty.com/_next/static/chunks/b16a1374c8a0d0be.css?dpl=dpl_Fawmm7GctKY8GfeAmpscB4dGquYB",
+        "start": 1791431176389,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 225
+      },
+      {
+        "url": "https://ryan-realty.com/_next/static/chunks/aed54c457a2347fa.css?dpl=dpl_Fawmm7GctKY8GfeAmpscB4dGquYB",
+        "start": 1791431176390,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 145
+      },
+      {
+        "url": "https://ryan-realty.com/_next/static/chunks/ca7fdc7fd9a06a97.css?dpl=dpl_Fawmm7GctKY8GfeAmpscB4dGquYB",
+        "start": 1791431176390,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 168
+      },
+      {
+        "url": "https://ryan-realty.com/_next/static/chunks/46a82084661c5f40.css?dpl=dpl_Fawmm7GctKY8GfeAmpscB4dGquYB",
+        "start": 1791431176391,
+        "status": 200,
+        "type": "text/css; charset=utf-8",
+        "ms": 170
+      }
+    ],
+    "requests": 20,
+    "events": 26
+  },
+  "discovery": {
+    "wallMs": 9037,
+    "cpuMs": 1230,
+    "found": 37,
+    "outcome": "found",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://ryan-realty.com/"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://ryan-realty.com/",
+      "https://ryan-realty.com/homes-for-sale/bend/discovery-west-phase-6-7/3333-leavitt-220227817",
+      "https://ryan-realty.com/homes-for-sale/bend/caldera-springs/56350-mirror-rock-220216436",
+      "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2215-high-lakes-220228229",
+      "https://ryan-realty.com/homes-for-sale/bend/woodside-ranch/20423-heritage-220222195",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/20896-caldera-220222571",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/20895-caldera-220221989",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/20892-caldera-220214438",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/60943-apollo-220207851",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/60935-apollo-220216758",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/60850-barstow-220213099",
+      "https://ryan-realty.com/homes-for-sale/la-pine/cagle/52460-pine-220225463",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/60936-apollo-220219837",
+      "https://ryan-realty.com/homes-for-sale/bend/shevlin-bluffs/62720-ridge-rock-220228438",
+      "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2765-high-lakes-220227670",
+      "https://ryan-realty.com/homes-for-sale/redmond/antler-ridge/3301-antler-ridge-220226153",
+      "https://ryan-realty.com/homes-for-sale/bend/elkhorn-ridge/19870-powers-220224645",
+      "https://ryan-realty.com/homes-for-sale/bend/sun-meadow/61235-splendor-220222160",
+      "https://ryan-realty.com/homes-for-sale/bend/deschutes-riverwoods/59976-hopi-220228584",
+      "https://ryan-realty.com/homes-for-sale/bend/romaine-village/60948-flint-220227577",
+      "https://ryan-realty.com/homes-for-sale/bend/boyd-acres-view-est/20711-nicolette-220229168",
+      "https://ryan-realty.com/homes-for-sale/bend/elkhorn-ridge/19976-heron-220227772",
+      "https://ryan-realty.com/homes-for-sale/bend/river-canyon-estates/60984-snowberry-220228355",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/20738-scout-220221788",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/60844-epic-220226289",
+      "https://ryan-realty.com/homes-for-sale/bend/rivers-edge-village/3119-hidden-ridge-220229593",
+      "https://ryan-realty.com/homes-for-sale/bend/1055-leonel-220229717",
+      "https://ryan-realty.com/homes-for-sale/bend/calaveras/20534-empire-220226617",
+      "https://ryan-realty.com/homes-for-sale/prineville/ironhorse/1575-perspective-220229362",
+      "https://ryan-realty.com/homes-for-sale/bend/glacier-ridge/3348-hoona-220229721",
+      "https://ryan-realty.com/homes-for-sale/bend/easton/20901-denver-220229720",
+      "https://ryan-realty.com/homes-for-sale/prineville/golden-horseshoe/11260-lister-220229718",
+      "https://ryan-realty.com/homes-for-sale/terrebonne/crr-7/7948-shad-220229716",
+      "https://ryan-realty.com/homes-for-sale/redmond/the-cliffs/1834-nickernut-220229715",
+      "https://ryan-realty.com/homes-for-sale/bend/19210-pinehurst-220229343",
+      "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21556-etna-220229714",
+      "https://ryan-realty.com/homes-for-sale/redmond/eagle-crest/704-golden-pheasant-220229659",
+      "https://ryan-realty.com/cities/la-pine"
+    ],
+    "maxCpuStep": {
+      "at": 340,
+      "cpuMs": 134,
+      "phase": "inventory",
+      "url": "https://ryan-realty.com/",
+      "pages": 1,
+      "found": 37
+    },
+    "steps": 40,
+    "requests": 38,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "$1,695,000 3 bd 3 ba 2,304 sqft $736 /sqft 3333 Leavitt Lane Bend 97703 See this listing",
+        "price": "$1,695,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/discovery-west-phase-6-7/3333-leavitt-220227817",
+        "images": 5
+      },
+      {
+        "title": "$2,895,000 5 bd · 7 ba · 4,826 sqft · $600/sqft 56350 Mirror Rock Loop Bend 97707",
+        "price": "$2,895,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/caldera-springs/56350-mirror-rock-220216436",
+        "images": 5
+      },
+      {
+        "title": "$1,585,000 4 bd · 3 ba · 2,549 sqft · $622/sqft 2215 High Lakes Loop Bend 97703",
+        "price": "$1,585,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2215-high-lakes-220228229",
+        "images": 5
+      },
+      {
+        "title": "$899,900 3 bd · 3 ba · 2,110 sqft · $426/sqft 20423 Heritage Avenue Bend 97702",
+        "price": "$899,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/woodside-ranch/20423-heritage-220222195",
+        "images": 5
+      },
+      {
+        "title": "$649,900 3 bd · 3 ba · 2,010 sqft · $323/sqft 20896 Caldera Drive Bend 97702",
+        "price": "$649,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20896-caldera-220222571",
+        "images": 5
+      }
+    ]
+  }
+}

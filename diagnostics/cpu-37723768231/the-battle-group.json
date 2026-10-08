@@ -1,0 +1,218 @@
+{
+  "id": "the-battle-group",
+  "url": "https://www.thebattlegroup.com/",
+  "analyze": {
+    "wallMs": 4163,
+    "cpuMs": 1234,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 0,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 885,
+        "cpuMs": 192,
+        "event": "site",
+        "detail": "Homes for Sale Arlington VA"
+      },
+      {
+        "at": 885,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 1772,
+        "cpuMs": 695,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 3426,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 3868,
+        "cpuMs": 8,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 4162,
+        "cpuMs": 329,
+        "event": "pages:done",
+        "detail": 0
+      },
+      {
+        "at": 4162,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 4162,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 4162,
+        "cpuMs": 0,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 4162,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 4162,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 4162,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 4163,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 4163,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 4163,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.thebattlegroup.com/",
+        "start": 1791431196833,
+        "status": 301,
+        "type": "text/html; charset=UTF-8",
+        "ms": 387
+      },
+      {
+        "url": "https://thebattlegroup.com/",
+        "start": 1791431197220,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 391
+      },
+      {
+        "url": "https://resources.agentimage.com/libraries/css/aios-popup.min.css",
+        "start": 1791431197718,
+        "status": 200,
+        "type": "text/css",
+        "ms": 83
+      },
+      {
+        "url": "https://resources.agentimage.com/libraries/css/frontend.min.css",
+        "start": 1791431197719,
+        "status": 200,
+        "type": "text/css",
+        "ms": 78
+      },
+      {
+        "url": "https://thebattlegroup.com/wp-content/themes/aios-starter-theme/style.css",
+        "start": 1791431197720,
+        "status": 200,
+        "type": "text/css",
+        "length": 5163,
+        "ms": 90
+      },
+      {
+        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/style.css",
+        "start": 1791431197720,
+        "status": 200,
+        "type": "text/css",
+        "length": 18697,
+        "ms": 128
+      }
+    ],
+    "requests": 10,
+    "events": 16
+  },
+  "discovery": {
+    "wallMs": 5052,
+    "cpuMs": 209,
+    "found": 6,
+    "outcome": "partial",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://thebattlegroup.com/"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial"
+    ],
+    "visited": [
+      "https://www.thebattlegroup.com/",
+      "https://www.thebattlegroup.com/homes-for-sale-details/2165-CABOTS-POINT-LN-RESTON-VA-20191/VAFX2341822/530/",
+      "https://www.thebattlegroup.com/homes-for-sale-details/1530-KEY-BLVD-520-ARLINGTON-VA-22209/VAAR2079436/530/",
+      "https://www.thebattlegroup.com/homes-for-sale-details/1111-19TH-ST-N-2110-ARLINGTON-VA-22209/VAAR2069906/530/",
+      "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1805-ARLINGTON-VA-22203/VAAR2079614/530/",
+      "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1719-ARLINGTON-VA-22203/VAAR2079526/530/",
+      "https://www.thebattlegroup.com/homes-for-sale-details/888-N-QUINCY-ST-1105-ARLINGTON-VA-22203/VAAR2079448/530/"
+    ],
+    "maxCpuStep": {
+      "at": 319,
+      "cpuMs": 113,
+      "phase": "inventory",
+      "url": "https://www.thebattlegroup.com/",
+      "pages": 1,
+      "found": 6
+    },
+    "steps": 9,
+    "requests": 7,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "2165 CABOTS POINT LN RESTON View Details",
+        "price": "$849,900",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/2165-CABOTS-POINT-LN-RESTON-VA-20191/VAFX2341822/530/",
+        "images": 1
+      },
+      {
+        "title": "1530 KEY BLVD #520 ARLINGTON View Details",
+        "price": "$759,900",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1530-KEY-BLVD-520-ARLINGTON-VA-22209/VAAR2079436/530/",
+        "images": 1
+      },
+      {
+        "title": "1111 19TH ST N #2110 ARLINGTON View Details",
+        "price": "$699,900",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1111-19TH-ST-N-2110-ARLINGTON-VA-22209/VAAR2069906/530/",
+        "images": 1
+      },
+      {
+        "title": "900 N STAFFORD ST #1805 ARLINGTON View Details",
+        "price": "$625,000",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1805-ARLINGTON-VA-22203/VAAR2079614/530/",
+        "images": 1
+      },
+      {
+        "title": "900 N STAFFORD ST #1719 ARLINGTON View Details",
+        "price": "$575,000",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1719-ARLINGTON-VA-22203/VAAR2079526/530/",
+        "images": 1
+      }
+    ]
+  }
+}

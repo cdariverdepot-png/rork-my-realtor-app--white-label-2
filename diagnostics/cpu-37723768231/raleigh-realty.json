@@ -1,0 +1,272 @@
+{
+  "id": "raleigh-realty",
+  "url": "https://raleighrealty.com/",
+  "analyze": {
+    "wallMs": 4072,
+    "cpuMs": 2717,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 1043,
+        "cpuMs": 331,
+        "event": "site",
+        "detail": "Realtors"
+      },
+      {
+        "at": 1043,
+        "cpuMs": 0,
+        "event": "design:start"
+      },
+      {
+        "at": 2066,
+        "cpuMs": 1148,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 2334,
+        "cpuMs": 19,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 2767,
+        "cpuMs": 10,
+        "event": "pages:start",
+        "detail": 2
+      },
+      {
+        "at": 2817,
+        "cpuMs": 3,
+        "event": "pages:start",
+        "detail": 3
+      },
+      {
+        "at": 2964,
+        "cpuMs": 15,
+        "event": "pages:start",
+        "detail": 4
+      },
+      {
+        "at": 2968,
+        "cpuMs": 5,
+        "event": "pages:start",
+        "detail": 5
+      },
+      {
+        "at": 4058,
+        "cpuMs": 1170,
+        "event": "pages:done",
+        "detail": 5
+      },
+      {
+        "at": 4058,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 4058,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 4070,
+        "cpuMs": 13,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 4070,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 4070,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 4071,
+        "cpuMs": 0,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 4071,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 4071,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 4071,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://raleighrealty.com/",
+        "start": 1791431206707,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 743
+      },
+      {
+        "url": "https://raleighrealty.com/styles-4CNLW3WC.css",
+        "start": 1791431207749,
+        "status": 200,
+        "type": "text/css; charset=UTF-8",
+        "ms": 21
+      },
+      {
+        "url": "https://raleighrealty.com/about",
+        "start": 1791431207749,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 1286
+      },
+      {
+        "url": "https://raleighrealty.com/agents",
+        "start": 1791431207750,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 1916
+      },
+      {
+        "url": "https://raleighrealty.com/raleigh/homes-with-gated-community",
+        "start": 1791431208772,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 892
+      },
+      {
+        "url": "https://raleighrealty.com/raleigh/55-adult-community",
+        "start": 1791431208773,
+        "status": 200,
+        "type": "text/html; charset=utf-8",
+        "ms": 827
+      }
+    ],
+    "requests": 8,
+    "events": 19
+  },
+  "discovery": {
+    "wallMs": 21272,
+    "cpuMs": 2059,
+    "found": 7,
+    "outcome": "found",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+      "https://raleighrealty.com/raleigh/homes-with-first-floor-master?page=2",
+      "https://raleighrealty.com/raleigh/homes-with-basement",
+      "https://raleighrealty.com/raleigh/homes-with-basement?page=2",
+      "https://raleighrealty.com/raleigh/ranch-homes",
+      "https://raleighrealty.com/raleigh/townhomes"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_completed"
+    ],
+    "visited": [
+      "https://raleighrealty.com/",
+      "https://raleighrealty.com/sitemap-listings.html",
+      "https://raleighrealty.com/raleigh",
+      "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+      "https://raleighrealty.com/raleigh/homes-with-first-floor-master?page=2",
+      "https://raleighrealty.com/raleigh/homes-with-basement",
+      "https://raleighrealty.com/raleigh/homes-with-basement?page=2",
+      "https://raleighrealty.com/raleigh/ranch-homes",
+      "https://raleighrealty.com/raleigh/townhomes",
+      "https://raleighrealty.com/raleigh/townhomes?page=2",
+      "https://raleighrealty.com/raleigh/townhomes?page=3",
+      "https://raleighrealty.com/raleigh/condos",
+      "https://raleighrealty.com/raleigh/luxury",
+      "https://raleighrealty.com/sitemap-listings.html?page=115",
+      "https://raleighrealty.com/sitemap-listings.html?page=2",
+      "https://raleighrealty.com/sitemap-listings.html?page=3",
+      "https://raleighrealty.com/sitemap-listings.html?page=4",
+      "https://raleighrealty.com/sitemap-listings.html?page=200",
+      "https://raleighrealty.com/raleigh/single-family",
+      "https://raleighrealty.com/raleigh/single-family?page=2",
+      "https://raleighrealty.com/sitemap-listings.html?page=114",
+      "https://raleighrealty.com/sitemap-listings.html?page=116",
+      "https://raleighrealty.com/sitemap-listings.html?page=5",
+      "https://raleighrealty.com/sitemap-listings.html?page=199",
+      "https://raleighrealty.com/sitemap-listings.html?page=197",
+      "https://raleighrealty.com/sitemap-listings.html?page=198",
+      "https://raleighrealty.com/sitemap-listings.html?page=113",
+      "https://raleighrealty.com/sitemap-listings.html?page=117",
+      "https://raleighrealty.com/sitemap-listings.html?page=6",
+      "https://raleighrealty.com/sitemap-listings.html?page=196",
+      "https://raleighrealty.com/sitemap-listings.html?page=112",
+      "https://raleighrealty.com/sitemap-listings.html?page=118",
+      "https://raleighrealty.com/sitemap-listings.html?page=7",
+      "https://raleighrealty.com/sitemap-listings.html?page=195",
+      "https://raleighrealty.com/sitemap-listings.html?page=111",
+      "https://raleighrealty.com/sitemap-listings.html?page=119",
+      "https://raleighrealty.com/home/5716-hills-dr-raleigh-nc-27612-9d7520da",
+      "https://raleighrealty.com/home/3417-makers-cir-raleigh-nc-27612-bdec8775",
+      "https://raleighrealty.com/home/2619-marchmont-st-raleigh-nc-27608-692f427f",
+      "https://raleighrealty.com/home/2611-marchmont-st-raleigh-nc-27608-28f2f8a6"
+    ],
+    "maxCpuStep": {
+      "at": 12468,
+      "cpuMs": 146,
+      "phase": "inventory",
+      "url": "https://raleighrealty.com/raleigh/single-family?page=2",
+      "pages": 20,
+      "found": 7
+    },
+    "steps": 45,
+    "requests": 43,
+    "largestResponses": [],
+    "sample": [
+      {
+        "title": "5716 N Hills Dr, Raleigh, NC 27612",
+        "price": "$484,000",
+        "sourceUrl": "https://raleighrealty.com/home/5716-hills-dr-raleigh-nc-27612-9d7520da",
+        "images": 1
+      },
+      {
+        "title": "3417 Makers Cir, Raleigh, NC 27612",
+        "price": "$1,831,388",
+        "sourceUrl": "https://raleighrealty.com/home/3417-makers-cir-raleigh-nc-27612-bdec8775",
+        "images": 1
+      },
+      {
+        "title": "2619 Marchmont St, Raleigh, NC 27608",
+        "price": "$2,069,837",
+        "sourceUrl": "https://raleighrealty.com/home/2619-marchmont-st-raleigh-nc-27608-692f427f",
+        "images": 1
+      },
+      {
+        "title": "2611 Marchmont St, Raleigh, NC 27608",
+        "price": "$2,494,088",
+        "sourceUrl": "https://raleighrealty.com/home/2611-marchmont-st-raleigh-nc-27608-28f2f8a6",
+        "images": 1
+      },
+      {
+        "title": "4453 Hillsgrove Rd, Wake Forest, NC 27587",
+        "price": "$295,995",
+        "sourceUrl": "https://raleighrealty.com/home/4453-hillsgrove-rd-wake-forest-nc-27587-1785f8bd",
+        "images": 1
+      }
+    ]
+  }
+}

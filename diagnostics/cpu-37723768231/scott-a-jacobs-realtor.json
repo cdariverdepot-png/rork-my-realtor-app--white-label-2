@@ -1,0 +1,228 @@
+{
+  "id": "scott-a-jacobs-realtor",
+  "url": "https://www.scottajacobsrealtor.com/",
+  "analyze": {
+    "wallMs": 1026,
+    "cpuMs": 1021,
+    "status": 200,
+    "sourceErrors": [],
+    "stages": [
+      {
+        "at": 1,
+        "cpuMs": 1,
+        "event": "site:start"
+      },
+      {
+        "at": 530,
+        "cpuMs": 481,
+        "event": "site",
+        "detail": "ScottAJacobsRealtor"
+      },
+      {
+        "at": 814,
+        "cpuMs": 331,
+        "event": "design:start"
+      },
+      {
+        "at": 814,
+        "cpuMs": 0,
+        "event": "pages:start",
+        "detail": 0
+      },
+      {
+        "at": 915,
+        "cpuMs": 70,
+        "event": "pages:start",
+        "detail": 1
+      },
+      {
+        "at": 1024,
+        "cpuMs": 135,
+        "event": "pages:done",
+        "detail": 0
+      },
+      {
+        "at": 1024,
+        "cpuMs": 0,
+        "event": "design"
+      },
+      {
+        "at": 1024,
+        "cpuMs": 0,
+        "event": "design:done"
+      },
+      {
+        "at": 1024,
+        "cpuMs": 1,
+        "event": "site:done",
+        "detail": 1
+      },
+      {
+        "at": 1025,
+        "cpuMs": 0,
+        "event": "listings:skipped"
+      },
+      {
+        "at": 1025,
+        "cpuMs": 0,
+        "event": "profile:start"
+      },
+      {
+        "at": 1025,
+        "cpuMs": 1,
+        "event": "profile",
+        "detail": "Replay Realtor"
+      },
+      {
+        "at": 1026,
+        "cpuMs": 0,
+        "event": "profile:done"
+      },
+      {
+        "at": 1026,
+        "cpuMs": 0,
+        "event": "save:start"
+      },
+      {
+        "at": 1026,
+        "cpuMs": 0,
+        "event": "save:done"
+      }
+    ],
+    "firstRequests": [
+      {
+        "url": "https://www.scottajacobsrealtor.com/",
+        "start": 1791431189480,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "length": 145019,
+        "ms": 182
+      },
+      {
+        "url": "https://www.scottajacobsrealtor.com/about",
+        "start": 1791431190293,
+        "status": 200,
+        "type": "text/html; charset=UTF-8",
+        "ms": 89
+      }
+    ],
+    "requests": 2,
+    "events": 15
+  },
+  "discovery": {
+    "wallMs": 6068,
+    "cpuMs": 540,
+    "found": 100,
+    "outcome": "partial",
+    "interfaces": [
+      "structured-property-data"
+    ],
+    "inventoryUrls": [
+      "https://www.scottajacobsrealtor.com/featured-listings",
+      "https://www.scottajacobsrealtor.com/featured-listing",
+      "https://www.scottajacobsrealtor.com/search-listings",
+      "https://www.greencrowngr.com/fine/real/estate/newsearch/cityname/Ada+-+MI",
+      "https://www.greencrowngr.com/search_results_page/2",
+      "https://www.greencrowngr.com/search_results_page/3"
+    ],
+    "obstacles": [],
+    "stages": [
+      "architecture_detected",
+      "detail_enrichment_scheduled",
+      "inventory_discovered",
+      "detail_enrichment_partial",
+      "collection_continuation"
+    ],
+    "visited": [
+      "https://www.scottajacobsrealtor.com/",
+      "https://www.scottajacobsrealtor.com/featured-listings",
+      "https://www.scottajacobsrealtor.com/featured-listing",
+      "https://www.scottajacobsrealtor.com/search-listings",
+      "https://www.greencrowngr.com/index.html",
+      "https://www.greencrowngr.com/fine/real/estate/newsearch/cityname/Ada+-+MI",
+      "https://www.greencrowngr.com/search_results_page/2",
+      "https://www.greencrowngr.com/search_results_page/3",
+      "https://www.greencrowngr.com/property_listing/26052389/mlsname/MIRIC/ltype/res/7538-Watermill-Drive-Unit-42-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26052459/mlsname/MIRIC/ltype/res/7775-Sudbury-Lane-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26050843/mlsname/MIRIC/ltype/res/1926-Country-Brook-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26050913/mlsname/MIRIC/ltype/res/5169-Snow-Avenue-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26049684/mlsname/MIRIC/ltype/res/4320-Trail-East-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26049524/mlsname/MIRIC/ltype/res/5760-Grand-River-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26049686/mlsname/MIRIC/ltype/res/4786-Sunflower-Ridge-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26048971/mlsname/MIRIC/ltype/res/8824-Grand-River-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26048725/mlsname/MIRIC/ltype/res/956-Spaulding-Avenue-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26048337/mlsname/MIRIC/ltype/res/5327-Canyon-River-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26047743/mlsname/MIRIC/ltype/res/8655-Conservation-Street-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26047804/mlsname/MIRIC/ltype/res/6285-Wilden-Ridge-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26047604/mlsname/MIRIC/ltype/res/8548-Conservation-Street-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26047673/mlsname/MIRIC/ltype/res/7685-Wood-Violet-Court-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26047570/mlsname/MIRIC/ltype/res/4621-Whitneyville-Avenue-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26047095/mlsname/MIRIC/ltype/res/9020-Bailey-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26046768/mlsname/MIRIC/ltype/res/7200-Knapp-Street-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26046187/mlsname/MIRIC/ltype/res/8977-2-Mile-Road-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26046226/mlsname/MIRIC/ltype/res/5075-Spring-Ridge-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26045169/mlsname/MIRIC/ltype/res/5501-Canyon-River-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26043990/mlsname/MIRIC/ltype/res/1873-Grand-River-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26043398/mlsname/MIRIC/ltype/res/311-Honey-Creek-Avenue-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26042986/mlsname/MIRIC/ltype/res/560-Saddlebrook-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26042011/mlsname/MIRIC/ltype/res/7820-Cascade-Road-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26041155/mlsname/MIRIC/ltype/res/5220-Canyon-River-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26040037/mlsname/MIRIC/ltype/res/8707-Cannonsburg-Road-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26039326/mlsname/MIRIC/ltype/res/926-Dogwood-Meadows-Drive-Unit-45-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26036798/mlsname/MIRIC/ltype/res/974-Dogwood-Meadows-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26036434/mlsname/MIRIC/ltype/res/5354-Pinnacle-Point-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26031906/mlsname/MIRIC/ltype/res/7261-Driftwood-Drive-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26031593/mlsname/MIRIC/ltype/res/7494-Bridle-Path-Court-Ada-MI-49301",
+      "https://www.greencrowngr.com/property_listing/26029739/mlsname/MIRIC/ltype/res/2825-Terra-Nova-Drive-Ada-MI-49301"
+    ],
+    "maxCpuStep": {
+      "at": 2713,
+      "cpuMs": 72,
+      "phase": "inventory",
+      "url": "https://www.scottajacobsrealtor.com/search-listings",
+      "pages": 4,
+      "found": 0
+    },
+    "steps": 110,
+    "requests": 108,
+    "largestResponses": [
+      22673,
+      21163,
+      21154,
+      6674,
+      1188
+    ],
+    "sample": [
+      {
+        "title": "7538 Watermill Drive Unit 42 Ada MI 49301",
+        "price": "$997,500",
+        "sourceUrl": "https://www.greencrowngr.com/property_listing/26052389/mlsname/MIRIC/ltype/res/7538-Watermill-Drive-Unit-42-Ada-MI-49301",
+        "images": 1
+      },
+      {
+        "title": "7775 Sudbury Lane Ada MI 49301",
+        "price": "$2,995,000",
+        "sourceUrl": "https://www.greencrowngr.com/property_listing/26052459/mlsname/MIRIC/ltype/res/7775-Sudbury-Lane-Ada-MI-49301",
+        "images": 1
+      },
+      {
+        "title": "1926 Country Brook Drive Ada MI 49301",
+        "price": "$699,000",
+        "sourceUrl": "https://www.greencrowngr.com/property_listing/26050843/mlsname/MIRIC/ltype/res/1926-Country-Brook-Drive-Ada-MI-49301",
+        "images": 1
+      },
+      {
+        "title": "5169 Snow Avenue Ada MI 49301",
+        "price": "$575,000",
+        "sourceUrl": "https://www.greencrowngr.com/property_listing/26050913/mlsname/MIRIC/ltype/res/5169-Snow-Avenue-Ada-MI-49301",
+        "images": 1
+      },
+      {
+        "title": "4320 Trail East Drive Ada MI 49301",
+        "price": "$799,900",
+        "sourceUrl": "https://www.greencrowngr.com/property_listing/26049684/mlsname/MIRIC/ltype/res/4320-Trail-East-Drive-Ada-MI-49301",
+        "images": 1
+      }
+    ]
+  }
+}
