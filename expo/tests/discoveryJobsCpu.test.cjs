@@ -23,6 +23,18 @@ test('detail job sizes match the refresh-listings function', () => {
   assert.match(handler, new RegExp(`DETAIL_JOB_SIZE = ${DETAIL_JOB_SIZE};`));
 });
 
+// Repair stage 4 (accuracy over quantity), reviewed one by one against the captured pages. Each site
+// keeps a subset of what it imported before (never a new listing), for the stated structural reason.
+const REVIEWED_SCOPE_CHANGES = {
+  'coldwell-banker-alena-goncharov': { listings: 0, why: 'the 100 came from Summerville market pages p_2-p_5 outside the agent\'s pages; her /listings/ page publishes no cards' },
+  'compass-jeff-stahlhut': { listings: 0, why: 'the 11 came from site-wide /coming-soon/ and /compass-listings/ collections, not the agent page' },
+  'irene-on-whidbey': { listings: 2, why: 'the vendor ad read from the www.idxbroker.com homepage is no longer imported' },
+  'raleigh-realty': { listings: 0, why: 'city filter pages; every listing\'s detail page attributes it to another brokerage' },
+  'rockys-mom-realty': { listings: 0, why: 'a regional MLS feed (32,115 pages); no card read was attributed to the site\'s own office' },
+  'scott-a-jacobs-realtor': { listings: 0, why: 'the 100 were a brokerage city search reached through the brokerage homepage' },
+  'zillow-leland-reed': { listings: 0, why: 'the 100 came from Zillow FSBO/rental/marketing pages and followupboss.com, outside the agent profile' },
+};
+
 let engine;
 const cpu = () => { const u = process.cpuUsage(); return (u.user + u.system) / 1000; };
 for (const file of files) {
@@ -33,10 +45,17 @@ for (const file of files) {
     // Imported inventory is unchanged; fewer failed requests is allowed, new failures are not.
     const full = await replayDiscovery(engine, fixture);
     const now = snapshot(full.result), was = fixture.expected;
-    assert.deepEqual(now.listings, was.listings);
-    assert.equal(now.outcome, was.outcome);
-    assert.equal(now.coverage, was.coverage);
-    for (const url of now.failed ?? []) assert.ok((was.failed ?? []).includes(url), `new failed request ${url}`);
+    const reviewed = REVIEWED_SCOPE_CHANGES[id];
+    if (reviewed) {
+      assert.equal(now.listings.length, reviewed.listings, reviewed.why);
+      const before = new Set(was.listings.map(item => item.sourceUrl));
+      for (const item of now.listings) assert.ok(before.has(item.sourceUrl), `scope rules never add listings: ${item.sourceUrl}`);
+    } else {
+      assert.deepEqual(now.listings, was.listings);
+      assert.equal(now.outcome, was.outcome);
+      assert.equal(now.coverage, was.coverage);
+      for (const url of now.failed ?? []) assert.ok((was.failed ?? []).includes(url), `new failed request ${url}`);
+    }
 
     const inventoryJob = { ...fixture, options: { ...fixture.options, detailBudget: INVENTORY_JOB_DETAILS } };
     await replayDiscovery(engine, inventoryJob); // warm-up: JIT is not the import's work

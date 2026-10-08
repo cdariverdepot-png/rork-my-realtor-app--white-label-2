@@ -398,3 +398,21 @@ test('a detail job needs the import it belongs to', async () => {
   assert.equal(result.status, 400);
   assert.equal(result.fetched, 0);
 });
+
+// Repair stage 4 (synthetic contract): a market feed never becomes the agent's inventory.
+test('a market page with none of the agent\'s own listings imports nothing and says why', async () => {
+  const office = n => ['Other Brokers Inc', 'Third Office Group', 'Fourth Homes Co', 'Fifth Realty'][n % 4];
+  const cards = [1, 2, 3, 4].map(n => `<div class="card"><a href="https://agent.example/property/${n}-elm"><img src="https://photos.example/${n}.jpg"><h3>${n} Elm St</h3><span>$${400 + n},000</span></a><p><span>Listing Office:</span> ${office(n)}</p></div>`).join('');
+  const page = `<html><head><title>Pine Realty</title></head><body>${cards}<div class="pagination"><a href="/?page=2">2</a><a href="/?page=900">900</a></div></body></html>`;
+  await assert.rejects(sources.readSource('https://agent.example/', fetchPages({ 'https://agent.example/': page })),
+    /many different brokerages.*none of the 4 we checked were\. Nothing was imported/);
+});
+
+test('saved listings keep their attribution and ownership label', () => {
+  const item = { id: 'x', title: '1 Elm St', sourceUrl: 'https://agent.example/property/1' };
+  const property = { title: '1 Elm St', description: '', price: '', beds: 0, baths: 0, sqft: '', neighborhood: '', image: '', images: [], sourceUrl: item.sourceUrl,
+    listingOffice: 'Other Brokers Inc', ownership: 'featured' };
+  const next = sync.applyObservation(item, { sourceUrl: item.sourceUrl, checkedAt: 5, property });
+  assert.equal(next.listingOffice, 'Other Brokers Inc');
+  assert.equal(next.ownership, 'featured');
+});

@@ -4,6 +4,8 @@ import { normalizePublicPage, selectInventoryLinks } from "./normalizePage.ts";
 
 export type ListingSource = {
   id: string; url: string; submittedUrl: string; kind: string; inventoryUrls: string[];
+  /** What the site published about itself; detail jobs use it to label ownership. */
+  identity?: { phrases: string[]; words: string[] };
   connectedAt: number; lastCheckedAt?: number; lastCompleteSyncAt?: number; nextSyncAt: number;
   state: "connected" | "unavailable"; error?: string; failures?: number; listingCount: number;
 };
@@ -88,12 +90,15 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     }
   }
   if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new Error("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.");
+  const excludedOtherOffice = discovery.meta.scope?.excludedOtherOffice ?? 0;
+  if (!discovery.listings.length && !explicitEmpty && excludedOtherOffice) throw new Error(`That page shows homes listed by many different brokerages (a market search), not only yours. We import only listings attributed to you or your office, and none of the ${excludedOtherOffice} we checked were. Nothing was imported. Paste the page that shows your own listings.`);
   if (!discovery.listings.length && !explicitEmpty) throw new Error("We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.");
   const now = Date.now();
   const source: ListingSource = { ...existing, id: existing?.id ?? `source-${hash(uri)}`, url: uri, submittedUrl: existing?.submittedUrl ?? submittedUrl,
     kind: detectSourceKind(uri), inventoryUrls: [...new Set([...discovery.meta.inventoryUrls ?? [], ...existing?.inventoryUrls ?? []])].filter(u => !isPropertyUrl(u) && !(new URL(u).hostname === "www.idxhome.com" && new URL(u).pathname.startsWith("/api/kestrel/"))),
     connectedAt: existing?.connectedAt ?? now, lastCheckedAt: now, nextSyncAt: now + TWO_HOURS,
-    state: "connected", error: undefined, failures: 0, listingCount: discovery.listings.length };
+    state: "connected", error: undefined, failures: 0, listingCount: discovery.listings.length,
+    ...(discovery.meta.identity ? { identity: discovery.meta.identity } : {}) };
   const inventoryComplete = discovery.meta.inventoryStatus === "inventory_complete" || (!discovery.meta.inventoryStatus && discovery.meta.outcome === "found");
   const complete = explicitEmpty || discovery.meta.coverage === "collection" && inventoryComplete && discovery.listings.length < 100;
   if (complete) source.lastCompleteSyncAt = now;

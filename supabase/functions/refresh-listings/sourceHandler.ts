@@ -1,6 +1,6 @@
 import { readSource, reconcileInventory, verifyMissing, type ListingSource, type SourceInventory } from "./sources.ts";
 import { applyObservation, type SyncListing } from "./sync.ts";
-import { createListingRenderer, enrichPublicProperty, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
+import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
@@ -40,7 +40,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     }
     throw new Error("Your listings changed during sync. Please retry.");
   };
-  if (body.mode === "details") return runDetailJob(body, fetchHtml, read, save, listingKey, progress);
+  if (body.mode === "details") return runDetailJob(body, fetchHtml, read, save, listingKey, sourceKey, progress);
   const row = await read(sourceKey);
   const sources = (Array.isArray(row?.value?.sources) ? row!.value.sources : []) as ListingSource[];
   const connecting = body.mode === "connect";
@@ -109,9 +109,13 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   });
   progress?.finish("save", "done", { count: inventory.listings.length });
   const detailsPending = inventory.meta.enrichment?.deferred?.length ?? 0;
+  const excludedOtherOffice = inventory.meta.scope?.excludedOtherOffice ?? 0;
+  const featured = inventory.listings.filter(item => item.ownership === "featured").length;
+  if (excludedOtherOffice || featured) progress?.emit({ kind: "scope", excluded: excludedOtherOffice, featured });
   const incomplete=detailsPending ? 0 : inventory.listings.filter(item=>!item.description||!item.images.length||!item.detailsComplete).length;
   return { body: { ok: true, source: inventory.source, imported: inventory.listings.length,
     ...(detailsPending ? { detailsPending, detailsSince: now } : {}),
+    ...(excludedOtherOffice || featured ? { scope: { excludedOtherOffice, featured } } : {}),
     ...(incomplete?{warning:`${incomplete} listing${incomplete===1?" has":"s have"} incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.`}:{}),
     checked: inventory.listings.length, complete: inventory.complete, items: saved.items } };
 }
@@ -130,7 +134,7 @@ const asDiscovered = (item: SyncListing): DiscoveredListing => ({
 
 /** One bounded batch of property detail pages for the import that started at `since`. */
 async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHtml: FetchHtml, read: Read, save: Save,
-  listingKey: string, progress?: ImportProgress): Promise<{ body: Record<string, unknown>; status?: number }> {
+  listingKey: string, sourceKey: string, progress?: ImportProgress): Promise<{ body: Record<string, unknown>; status?: number }> {
   const since = Number(body.since);
   if (!body.sourceId || !Number.isFinite(since) || since <= 0) return { body: { ok: false, error: "Choose the import whose details should be read." }, status: 400 };
   const items = ((await read(listingKey))?.value.items ?? []) as SyncListing[];
@@ -163,13 +167,21 @@ async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHt
     }
   }));
   const now = Date.now();
-  const saved = await save(listingKey, value => ({ ...value, items: ((Array.isArray(value.items) ? value.items : []) as SyncListing[]).map(item => {
-    if (!results.has(item.id) || item.sourceId !== body.sourceId) return item;
-    const property = results.get(item.id);
-    const observed = property && property.sourceUrl === item.sourceUrl
-      ? applyObservation(item, { sourceUrl: item.sourceUrl!, checkedAt: now, property, status: property.status }) : item;
-    return { ...observed, detailAttemptAt: now };
-  }) }));
+  const sources = ((await read(sourceKey))?.value.sources ?? []) as ListingSource[];
+  const identity = (Array.isArray(sources) ? sources : []).find(source => source.id === body.sourceId)?.identity;
+  const saved = await save(listingKey, value => {
+    const merged = ((Array.isArray(value.items) ? value.items : []) as SyncListing[]).map(item => {
+      if (!results.has(item.id) || item.sourceId !== body.sourceId) return item;
+      const property = results.get(item.id);
+      const observed = property && property.sourceUrl === item.sourceUrl
+        ? applyObservation(item, { sourceUrl: item.sourceUrl!, checkedAt: now, property, status: property.status }) : item;
+      return { ...observed, detailAttemptAt: now };
+    });
+    // Attribution read from detail pages labels this source's listings own or featured.
+    const labelled = labelInventoryOwnership(merged.filter(item => item.sourceId === body.sourceId), identity);
+    const byId = new Map(labelled.map(item => [item.id, item]));
+    return { ...value, items: merged.map(item => byId.get(item.id) ?? item) };
+  });
   const remaining = pending.length - batch.length;
   const savedItems = (Array.isArray(saved.items) ? saved.items : []) as SyncListing[];
   if (remaining > 0) {

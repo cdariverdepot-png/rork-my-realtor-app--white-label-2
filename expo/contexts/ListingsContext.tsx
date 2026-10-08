@@ -33,6 +33,10 @@ export type ManagedListing = Omit<SeedListing, "tag"> & {
   propertyType?: string;
   detailsComplete?: boolean;
   facts?: Record<string, string>;
+  /** Listing brokerage/agent attribution published with the property (IDX attribution). */
+  listingOffice?: string;
+  /** "featured": another office's listing shown on the agent's site; never presented as the agent's own. */
+  ownership?: "own" | "featured";
   /** Optional long-form copy pulled in when a listing is imported/refreshed from a source URL. */
   description?: string;
 };

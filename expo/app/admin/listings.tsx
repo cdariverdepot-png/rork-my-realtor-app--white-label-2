@@ -265,6 +265,11 @@ function ListingRow({
               {item.beds} BD · {item.baths} BA
             </Text>
           </View>
+          {item.ownership === "featured" ? (
+            <Text style={styles.cardSync} numberOfLines={1}>
+              {`Featured · listed by ${item.listingOffice ?? "another office"} · not shown as yours`}
+            </Text>
+          ) : null}
           <Text style={styles.cardSync} numberOfLines={1}>
             {item.sourceArchived ? "Archived after repeated source checks" : item.syncState === "unavailable" ? "Couldn’t verify source — retrying automatically" : item.syncState === "status-unconfirmed" ? "Details checked · status not provided by source" : item.sourceUrl ? formatRefreshed(item.lastRefreshedAt) : "No source URL"}
           </Text>

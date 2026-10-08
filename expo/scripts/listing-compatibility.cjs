@@ -14,8 +14,13 @@ async function loadEngine() {
 const sanitize = text => text.replace(/("activationToken"\s*:\s*")[^"]+("|$)/g,
   (_, prefix, suffix) => prefix + '00000000-0000-0000-0000-000000000000' + suffix);
 const requestKey = (url, options, rendering = false) => JSON.stringify(options?.cookie ? [url, !!options?.fragment, rendering, "gate"] : [url, !!options?.fragment, rendering]);
+// The extraction contract. Ownership annotations (listingOffice, ownership; repair campaign stage 4)
+// are a separate contract with their own cases, so recorded extraction baselines stay untouched.
+const extractionOnly = ({ listingOffice, ownership, ...listing }) => listing;
+const ownershipSnapshot = result => [...result.listings].sort((a,b) => a.sourceUrl.localeCompare(b.sourceUrl))
+  .map(item => ({ sourceUrl: item.sourceUrl, listingOffice: item.listingOffice, ownership: item.ownership }));
 const snapshot = result => JSON.parse(JSON.stringify({
-  listings: [...result.listings].sort((a,b) => a.sourceUrl.localeCompare(b.sourceUrl)),
+  listings: [...result.listings].sort((a,b) => a.sourceUrl.localeCompare(b.sourceUrl)).map(extractionOnly),
   coverage: result.meta.coverage, outcome: result.meta.outcome, expectedCount: result.meta.expectedCount,
   issues: result.meta.issues, failed: result.meta.failed,
   strategies: [...new Set((result.meta.compatibility?.pages ?? []).flatMap(p => p.attempts.filter(a => a.outcome === 'extracted').map(a => a.id)))].sort(),
@@ -69,4 +74,4 @@ function writeFixture(directory, fixture) {
   fs.writeFileSync(path.join(directory, fixture.id + '.json'), JSON.stringify(fixture, null, 2) + '\n', { flag: 'wx' });
 }
 
-module.exports = { loadEngine, createRecorder, replayFixture, writeFixture, snapshot, requestKey };
+module.exports = { loadEngine, createRecorder, replayFixture, writeFixture, snapshot, ownershipSnapshot, requestKey };

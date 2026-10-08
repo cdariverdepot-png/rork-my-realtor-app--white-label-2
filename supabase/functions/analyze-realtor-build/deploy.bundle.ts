@@ -19,6 +19,14 @@ type DiscoveredListing = {
   importKey?: string;
   /** True only when a property detail/gallery, rather than a collection card, was read. */
   detailsComplete?: boolean;
+  /** Listing brokerage/agent attribution published with the property (IDX attribution). */
+  listingOffice?: string;
+  /**
+   * "own": attributed to the site's own agent/office. "featured": shown on the agent's site but
+   * attributed to another office (kept, and labelled so it is never presented as the agent's own).
+   * Absent: the source published no attribution.
+   */
+  ownership?: "own" | "featured";
   facts?: Record<string, string>;
 };
 type NavigationCandidate = { url: string; label: string };
@@ -35,6 +43,8 @@ type ImportEvent =
   | { kind: "profile"; name?: string; city?: string; at: number }
   /** Listing discovery tallies: pages examined and distinct listings found so far. */
   | { kind: "listings"; host: string; pages: number; found: number; at: number }
+  /** Ownership scope: other brokerages' listings left out of a market feed, and other offices' listings featured on the site. */
+  | { kind: "scope"; excluded: number; featured: number; at: number }
   /** A browser render was requested because the public page needs one. */
   | { kind: "render"; host: string; state: "start" | "done" | "failed"; at: number };
 type ImportProgress = ReturnType<typeof createImportProgress>;
@@ -130,6 +140,14 @@ type DiscoveredListing = {
   importKey?: string;
   /** True only when a property detail/gallery, rather than a collection card, was read. */
   detailsComplete?: boolean;
+  /** Listing brokerage/agent attribution published with the property (IDX attribution). */
+  listingOffice?: string;
+  /**
+   * "own": attributed to the site's own agent/office. "featured": shown on the agent's site but
+   * attributed to another office (kept, and labelled so it is never presented as the agent's own).
+   * Absent: the source published no attribution.
+   */
+  ownership?: "own" | "featured";
   facts?: Record<string, string>;
 };
 
@@ -197,6 +215,14 @@ type ListingDiscoveryMeta = {
   enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number;
     /** Listings (source URLs) whose details were left for follow-up detail jobs (detailBudget). */
     deferred?: string[] };
+  /**
+   * Ownership scope: the person page the import was limited to, collection pages recognized as market
+   * feeds (only own-office listings kept), how many other offices' listings were excluded, and how many
+   * navigation links were outside the scope.
+   */
+  scope?: { person?: string; marketPages: string[]; excludedOtherOffice: number; outOfScopeLinks: number };
+  /** What the site published about itself; decides whether a listing attribution is the site's own. */
+  identity?: SiteIdentity;
   /** Machine-readable obstacles. Never a substitute for extracted listings. */
   obstacles?: { code: string; url?: string; detail?: string }[];
   stages?: string[];
@@ -1702,6 +1728,10 @@ function inventoryFragmentsOf(html: string, base: URL): string[] {
 }
 
 function visibleDocument(html: string): string {
+  return documentOnce(html, "visible", () => visibleDocumentOf(html));
+}
+
+function visibleDocumentOf(html: string): string {
   return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ");
 }
 
@@ -1717,11 +1747,228 @@ const PAGER_LABEL = /^\s*(?:\d{1,4}|next|prev(?:ious)?|first|last|more|[»«›�
 function isPagerOf(target: string, base: URL, label: string): boolean {
   let next: URL;
   try { next = new URL(target); } catch { return false; }
-  if (next.origin !== base.origin || next.pathname.replace(/\/+$/, "") !== base.pathname.replace(/\/+$/, "")) return false;
+  if (next.protocol !== base.protocol || !sameSite(next, base) || next.pathname.replace(/\/+$/, "") !== base.pathname.replace(/\/+$/, "")) return false;
   const keys = new Set([...next.searchParams.keys(), ...base.searchParams.keys()]);
   const changed = [...keys].filter(key => next.searchParams.getAll(key).join("\u0000") !== base.searchParams.getAll(key).join("\u0000"));
   if (!changed.length) return false;
   return changed.every(key => PAGER_PARAM.test(key)) || (PAGER_LABEL.test(label) && changed.some(key => PAGER_PARAM.test(key)));
+}
+
+// ── Ownership and scope ─────────────────────────────────────────────────────────────────────────
+// Importing another agent's inventory is worse than importing nothing. These rules use structural
+// signals only (URL scope of the seed, IDX listing attribution, collection shape), never customer names.
+
+/** Registrable domain (example.com, example.co.uk): the boundary of "the agent's own site". */
+function registrableDomain(host: string): string {
+  const labels = host.toLowerCase().replace(/^www\./, "").split(".");
+  const n = labels.length >= 3 && /^(?:co|com|org|net|ac|gov)$/.test(labels[labels.length - 2]) && labels[labels.length - 1].length === 2 ? 3 : 2;
+  return labels.slice(-n).join(".");
+}
+
+type SeedScope = { domain: string; person?: { prefix: string; tokens: string[] } };
+
+/**
+ * A seed that is one person's page on a multi-agent platform (/agents/<name>, /profile/<name>,
+ * /…/agent/<name>/<id>) scopes the import to that person. Pages elsewhere on the platform are the
+ * platform's market, not the person's inventory.
+ */
+function seedScope(seed: URL): SeedScope {
+  const segments = seed.pathname.split("/").filter(Boolean);
+  const at = segments.findIndex(part => /^(?:agents?|profiles?|realtors?|people|team-members?|our-agents|associates?|brokers?)$/i.test(part));
+  const domain = registrableDomain(seed.hostname);
+  if (at < 0 || !segments[at + 1]) return { domain };
+  const slug = decodeURIComponent(segments[at + 1]);
+  const id = segments[at + 2] && /\d{4,}/.test(segments[at + 2]) ? segments[at + 2] : undefined;
+  const prefix = "/" + segments.slice(0, id ? at + 3 : at + 2).join("/");
+  const tokens = [slug.toLowerCase(), ...(id ? [id.toLowerCase(), ...(id.match(/\d{4,}/g) ?? [])] : [])].filter(token => token.length >= 4);
+  return { domain, person: { prefix: prefix.toLowerCase(), tokens } };
+}
+
+/** A link that itself claims the agent's own inventory ("My listings", "Our properties"). */
+const OWN_INVENTORY_LABEL = /\b(?:my|our)\s+(?:active\s+|current\s+|featured\s+|exclusive\s+)?(?:listings?|properties|homes|inventory)\b/i;
+
+/**
+ * Navigation (not transports, fragments or details) must stay within the seed's scope:
+ * - a person page on a multi-agent platform: that person's pages, links carrying the person's
+ *   identifier, or links that themselves claim the person's own inventory;
+ * - anywhere: another company's homepage (a bare domain's root) is never inventory. That is where
+ *   vendor credits ("Powered by…") and brokerage home links lead.
+ */
+function navigationInScope(target: string, scope: SeedScope | undefined, label = ""): boolean {
+  if (!scope) return true;
+  let url: URL;
+  try { url = new URL(target); } catch { return false; }
+  const domain = registrableDomain(url.hostname);
+  const bareHost = url.hostname.toLowerCase().replace(/^www\./, "") === domain;
+  const homepage = /^\/?(?:index\.(?:html?|php|aspx?))?$/i.test(url.pathname.replace(/\/+$/, "")) && !url.search;
+  if (domain !== scope.domain && bareHost && homepage) return false;
+  if (!scope.person) return true;
+  const scoped = scope.person.tokens.some(token => decodeURIComponent(url.pathname + url.search).toLowerCase().includes(token));
+  const path = url.pathname.toLowerCase().replace(/\/+$/, "");
+  const inside = domain === scope.domain && (path === scope.person.prefix || path.startsWith(scope.person.prefix + "/"));
+  return inside || scoped || OWN_INVENTORY_LABEL.test(label);
+}
+
+const GENERIC_IDENTITY_WORDS = new Set(["real", "estate", "realty", "realtor", "realtors", "homes", "home", "sale", "sales", "for", "the", "and", "group",
+  "team", "agent", "agents", "broker", "brokerage", "properties", "property", "llc", "inc", "co", "company", "listings", "listing", "search", "your",
+  "best", "top", "luxury", "island", "city", "county", "north", "south", "east", "west", "international", "associates", "partners", "services"]);
+const identityKey = (value: string) => decodeEntities(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+const identityWords = (value: string) => decodeEntities(value).toLowerCase().split(/[^a-z0-9]+/).filter(word => word.length >= 5 && !GENERIC_IDENTITY_WORDS.has(word));
+
+type SiteIdentity = { phrases: string[]; words: string[] };
+
+/** What the site publishes about itself: its domain label, site name and title segments. */
+function siteIdentity(html: string, base: URL): SiteIdentity {
+  const parts = [registrableDomain(base.hostname).split(".")[0]];
+  for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
+    if (/^(?:og:site_name|application-name|author)$/i.test(attr(tag, "property") || attr(tag, "name"))) parts.push(...attr(tag, "content").split(/\s[|–—\-:]\s/));
+  }
+  const title = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1];
+  if (title) parts.push(...decodeEntities(stripTags(title)).split(/\s[|–—\-:]\s/));
+  const phrases = [...new Set(parts.map(identityKey).filter(key => key.length >= 6))];
+  return { phrases, words: [...new Set(parts.flatMap(identityWords))] };
+}
+
+/** "strong": the attribution names the site's own agent or office. "brand": only a shared brand word. */
+function officeMatch(office: string, identity: SiteIdentity | undefined): "strong" | "brand" | "none" {
+  if (!identity) return "none";
+  const key = identityKey(office);
+  if (key.length >= 6 && identity.phrases.some(phrase => key.includes(phrase) || phrase.includes(key))) return "strong";
+  return identityWords(office).some(word => identity.words.includes(word)) ? "brand" : "none";
+}
+
+const ATTRIBUTION_TEXT = /\b(?:listing office|listing courtesy of|courtesy of|listed by|listing provided by|listing brokerage|brokered by|offered by)\s*:?\s*([^|•\n]{3,90})/i;
+const ATTRIBUTION_JSON = /"(?:brokerName|brokerageName|listOfficeName|ListOfficeName|listingOfficeName|listingOffice|officeName|listingBrokerName|ListOfficeFullName)"\s*:\s*"([^"]{2,90})"/;
+
+function cleanAttribution(raw: string): string | undefined {
+  let value = decodeEntities(raw).replace(/\\u0026/g, "&").replace(/\s+/g, " ").trim();
+  value = value.split(/\s--\s|\s\|\s|,?\s*(?:phone|tel|off|office|cell|mobile)\s*:|\s\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|\s[\w.+-]+@[\w-]+\./i)[0].replace(/[.,;\s]+$/, "").trim();
+  if (value.length < 3 || /mls|multiple listing|information|deemed|reliable|presenting|copyright|©|__|\[\[|\{\{|\$\{/i.test(value)) return undefined;
+  return value.slice(0, 80);
+}
+
+/**
+ * IDX attribution for each listing, read only from that listing's own card: the markup from the
+ * listing's link up to the next listing's link (IDX rules require the attribution on every card).
+ */
+function attributeListingOffices(html: string, listings: DiscoveredListing[]): Map<string, string> {
+  const positions: { url: string; at: number }[] = [];
+  for (const item of listings) {
+    let path = "";
+    try { const url = new URL(item.sourceUrl); path = url.pathname.length > 1 ? url.pathname : url.pathname + url.search; } catch { continue; }
+    // The card starts at the listing's link (href / JSON url field), not wherever the URL is first mentioned.
+    const escaped = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const link = new RegExp(`(?:href\\s*=\\s*["'][^"']*|"(?:url|detailUrl|href|link|permalink|listingUrl)"\\s*:\\s*"[^"]*)(?:${escaped(path)}|${escaped(path.replace(/\//g, "\\/"))})`, "i");
+    const at = html.search(link);
+    if (at >= 0) positions.push({ url: item.sourceUrl, at });
+  }
+  positions.sort((a, b) => a.at - b.at);
+  const offices = new Map<string, string>();
+  positions.forEach((position, i) => {
+    const end = Math.min(positions.slice(i + 1).find(next => next.at > position.at)?.at ?? html.length, position.at + 8000);
+    const card = html.slice(position.at, end);
+    const fromJson = card.match(ATTRIBUTION_JSON)?.[1];
+    // Tag boundaries end a value: an attribution never runs on into the next element's text.
+    const fromText = decodeEntities(card.replace(/<(?:script|style)\b[\s\S]*?<\/(?:script|style)>/gi, "\n").replace(/<[^>]+>/g, "\n")).match(ATTRIBUTION_TEXT)?.[1];
+    const office = (fromJson && cleanAttribution(fromJson)) || (fromText && cleanAttribution(fromText));
+    if (office && !offices.has(position.url)) offices.set(position.url, office);
+  });
+  return offices;
+}
+
+/**
+ * A collection request that publishes an agent or office filter (agentIds, officeId, My=listings,
+ * agent_listing_categories…) is the agent's own inventory by construction, whatever offices co-list.
+ */
+function agentScopedRequest(raw: string): boolean {
+  let url: URL;
+  try { url = new URL(raw); } catch { return false; }
+  if (/\/(?:office|agent)_listing_categories\/|\/(?:my|our)[-_](?:active[-_])?listings\b/i.test(url.pathname)) return true;
+  const decoded = decodeURIComponent(url.search).toLowerCase();
+  if (/[?&]my=listings\b/.test(decoded)) return true;
+  for (const [key, value] of url.searchParams) {
+    if (/^(?:agent_?ids?|agentid|office_?ids?|officeid|list_?agent(?:_?mls)?_?id|listagentmlsid|listofficemlsid|aid|agent)$/i.test(key) && value.trim() && value !== "[]") return true;
+  }
+  return /"(?:agentIds|officeIds|agentId|officeId|listAgentMlsId|listOfficeMlsId)"\s*:\s*(?:\[\s*"[^"]+|"[^"]+)/i.test(decodeURIComponent(url.search));
+}
+
+/** IDX attribution on a property's own detail page (the first one: recommendations come later). */
+function detailAttribution(html: string): string | undefined {
+  const fromJson = html.match(ATTRIBUTION_JSON)?.[1];
+  if (fromJson && cleanAttribution(fromJson)) return cleanAttribution(fromJson);
+  const text = decodeEntities(html.replace(/<(?:script|style|nav|header)\b[\s\S]*?<\/(?:script|style|nav|header)>/gi, "\n").replace(/<[^>]+>/g, "\n"));
+  const fromText = text.match(ATTRIBUTION_TEXT)?.[1];
+  return fromText ? cleanAttribution(fromText) : undefined;
+}
+
+/** own when the attribution names the site's own agent or office; otherwise shown as featured. */
+function ownershipFor(office: string | undefined, identity: SiteIdentity | undefined): "own" | "featured" | undefined {
+  if (!office || !identity) return undefined;
+  return officeMatch(office, identity) === "strong" ? "own" : "featured";
+}
+
+/**
+ * Labels attributed listings that no collection rule labelled: one or two brokerages across the
+ * inventory is the brokerage the agent or team lists under (own); with several, listings not
+ * attributed to the site's own agent or office are featured. Unattributed listings stay unlabelled.
+ */
+function labelInventoryOwnership<T extends object>(items: T[], identity: SiteIdentity | undefined): T[] {
+  const fields = (item: T) => item as { listingOffice?: unknown; ownership?: unknown };
+  const officeOf = (item: T) => typeof fields(item).listingOffice === "string" ? fields(item).listingOffice as string : "";
+  const unlabeled = items.filter(item => !fields(item).ownership && officeOf(item));
+  const brokerages = new Set(unlabeled.map(item => identityKey(officeOf(item)))).size;
+  return items.map(item => {
+    if (fields(item).ownership || !officeOf(item)) return item;
+    const ownership = brokerages <= 2 ? "own" : ownershipFor(officeOf(item), identity);
+    return ownership ? { ...item, ownership } : item;
+  });
+}
+
+type CollectionScope = {
+  kind: "single-office" | "featured" | "market" | "unattributed";
+  keep: DiscoveredListing[]; excluded: number; offices: number;
+};
+
+/**
+ * Scope of one collection page from its listings' IDX attribution. A page whose cards name several
+ * offices is either a bounded featured showcase (kept, other offices labelled "featured") or a market
+ * feed/search (paginated or counted beyond the page): only listings attributed to the site's own
+ * agent or office are kept, and the feed is not paginated further.
+ */
+function classifyCollection(listings: DiscoveredListing[], offices: Map<string, string>, identity: SiteIdentity | undefined,
+  paginated: boolean, large = false): CollectionScope {
+  const attributed = listings.filter(item => offices.has(item.sourceUrl));
+  const distinct = new Set(attributed.map(item => identityKey(offices.get(item.sourceUrl)!)));
+  const label = (item: DiscoveredListing, ownership?: "own" | "featured") => ({ ...item, listingOffice: offices.get(item.sourceUrl) ?? item.listingOffice,
+    ...(ownership ? { ownership } : {}) });
+  if (attributed.length < 3 || attributed.length < listings.length * 0.6) {
+    return { kind: "unattributed", keep: listings.map(item => label(item, offices.has(item.sourceUrl) && officeMatch(offices.get(item.sourceUrl)!, identity) === "strong" ? "own" : undefined)), excluded: 0, offices: distinct.size };
+  }
+  const own = (item: DiscoveredListing) => offices.has(item.sourceUrl) && officeMatch(offices.get(item.sourceUrl)!, identity) === "strong";
+  // One or two offices on a bounded collection: the brokerage the agent or team lists under.
+  // A large paginated collection is a market feed even when one page happens to show one office.
+  if (distinct.size <= 2 && !large) return { kind: "single-office", keep: listings.map(item => label(item, "own")), excluded: 0, offices: distinct.size };
+  if (!paginated && !large) return { kind: "featured", keep: listings.map(item => label(item, own(item) ? "own" : "featured")), excluded: 0, offices: distinct.size };
+  const keep = listings.filter(own).map(item => label(item, "own"));
+  return { kind: "market", keep, excluded: listings.length - keep.length, offices: distinct.size };
+}
+
+/** The highest page number this collection's own pager links reach (0 when it publishes none). */
+function pagerExtent(html: string, base: URL): number {
+  let extent = 0;
+  for (const match of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+    const href = absolutize(attr(`<a ${match[1]}>`, "href"), base);
+    const label = stripTags(match[2]);
+    if (!href || !isPagerOf(href, base, label)) continue;
+    const url = new URL(href);
+    for (const [key, value] of url.searchParams) if (PAGER_PARAM.test(key) && /^\d{1,7}$/.test(value) && !/offset|limit|per_page|start/i.test(key)) extent = Math.max(extent, Number(value));
+    if (/^\d{1,7}$/.test(label.trim())) extent = Math.max(extent, Number(label.trim()));
+  }
+  // A pagination control may page through another URL (a widget on /buyers/ paging via /?pg=N).
+  for (const match of html.matchAll(/<(?:div|nav|ul|ol|p|section)\b[^>]*(?:class|id)=["'][^"']*(?:pagination|pager|paging|page-numbers)[^"']*["'][^>]*>([\s\S]{0,4000}?)<\/(?:div|nav|ul|ol|p|section)>/gi)) {
+    for (const token of decodeEntities(match[1].replace(/<[^>]+>/g, " ")).split(/\s+/)) if (/^\d{1,7}$/.test(token)) extent = Math.max(extent, Number(token));
+  }
+  return extent;
 }
 
 function sameCollectionQuery(next: URL, base: URL): boolean {
@@ -2248,7 +2495,8 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
   }
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
-  return { ...item, facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
+  const office = item.listingOffice ?? detailAttribution(html);
+  return { ...item, ...(office ? { listingOffice: office } : {}), facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }
@@ -2441,6 +2689,15 @@ async function discoverListings(
 
   type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
+  // Ownership and scope: navigation stays inside the seed's scope; market feeds keep only own listings.
+  const seedScopes = [...new Set(seedUris.filter(Boolean))].flatMap(url => { try { return [seedScope(new URL(url))]; } catch { return []; } });
+  const inScope = (url: string, label?: string) => !seedScopes.length || seedScopes.some(scope => navigationInScope(url, scope, label));
+  let identity: SiteIdentity | undefined;
+  const marketPages: string[] = [];
+  /** Listings that came from a paginated or large collection (candidates for detail-level market evidence). */
+  const pagedCollectionListings = new Set<string>();
+  let largeCollectionSeen = false;
+  let excludedOtherOffice = 0, outOfScopeLinks = 0;
 
   const pushListing = (item: DiscoveredListing) => {
     const sourceUrl = canonicalListingUrl(item.sourceUrl);
@@ -2456,6 +2713,8 @@ async function discoverListings(
         status: old.status ?? normalized.status, image: images[0] || old.image, images,
         listingNumber: old.listingNumber || normalized.listingNumber, neighborhood: old.neighborhood || normalized.neighborhood,
         sourceStatus: old.sourceStatus && old.sourceStatus !== "unspecified" ? old.sourceStatus : normalized.sourceStatus,
+        ...(old.listingOffice || normalized.listingOffice ? { listingOffice: old.listingOffice || normalized.listingOffice } : {}),
+        ...(old.ownership || normalized.ownership ? { ownership: old.ownership === "own" || normalized.ownership === "own" ? "own" as const : "featured" as const } : {}),
         sourceUrl: canonicalListingUrl(old.sourceUrl) };
       return;
     }
@@ -2645,7 +2904,29 @@ async function discoverListings(
     const listingTemplate = publishedListingUrlTemplate(html);
     if (listingTemplate) listingUrlTemplates.set(finalUrl.origin, listingTemplate);
     if (/\/graphql$/i.test(finalUrl.pathname)) html = applyPublishedListingUrls(html, listingUrlTemplates.get(finalUrl.origin) ?? null);
+    if (next.depth === 0 && !identity) identity = siteIdentity(html, finalUrl);
     let found = excluded ? [] : extractListingsFromPage(html, finalUrl, observation.attempts);
+    let marketPage = false;
+    if (found.length) {
+      const published = Number(html.match(/data-(?:search-results-search-count|listings-count|results-count)\s*=\s*["']?(\d+)/i)?.[1] ?? 0);
+      const extent = documentOnce(html, `pagerExtent|${finalUrl.href}`, () => pagerExtent(visibleDocument(html), finalUrl));
+      const paginated = !!next.continuation || published > found.length || extent > 1 || paginationLinks(visibleDocument(html), finalUrl).length > 0;
+      const large = extent >= 20 || published >= 300;
+      // An agent/office-filtered request is the agent's inventory; it is never classified as a market.
+      const agentScoped = agentScopedRequest(finalUrl.toString()) || agentScopedRequest(next.url);
+      if ((paginated || large) && !agentScoped) for (const item of found) pagedCollectionListings.add(canonicalListingUrl(item.sourceUrl));
+      if (large && !agentScoped) largeCollectionSeen = true;
+      if (found.length >= 3 && !agentScoped) {
+      const collection = classifyCollection(found, attributeListingOffices(html, found), identity, paginated, large);
+      if (collection.kind === "market") {
+        marketPage = true;
+        marketPages.push(finalUrl.toString());
+        excludedOtherOffice += collection.excluded;
+        stages.push("market_feed_scoped");
+      }
+      found = collection.keep;
+      }
+    }
     if (found.length) observation.resolution = "known-pattern";
     const activeFound = found.filter(item => !historicalListing(item));
     if (found.length && !activeFound.length) stages.push("historical_inventory_ignored");
@@ -2794,7 +3075,7 @@ async function discoverListings(
           if (!boundary.open && !boundary.continuations.length && boundary.singlePageConfirmed) singlePagePages++;
           if (!boundary.open && boundary.cursorTerminal) cursorTerminalPages++;
           if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
-          for (const url of boundary.continuations) {
+          for (const url of marketPage ? [] : boundary.continuations) {
             if (url === finalUrl.toString()) { openContinuation = true; continue; }
             if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true });
           }
@@ -2831,6 +3112,7 @@ async function discoverListings(
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
       if (isPagerOf(cta.url, finalUrl, cta.label)) continue;
+      if (!inScope(cta.url, cta.label)) { outOfScopeLinks++; continue; }
       if (queue.some((q) => q.url === cta.url)) continue;
       const broad = /property\s+search|search\s+(?:all\s+)?(?:homes|properties)|all\s+(?:homes|properties|listings)/i.test(cta.label) &&
         !/\bmy\b|\bour\b|featured|exclusive|office_listing_categories|agent_listing_categories/i.test(cta.label + cta.url);
@@ -2845,7 +3127,7 @@ async function discoverListings(
           const selected = await options.selectLinks(finalUrl.toString(), candidates);
           // Never fetch a URL invented by the model, or follow its page-supplied instructions.
           for (const url of [...new Set(selected)].slice(0, 4)) {
-            if (candidates.some(c => c.url === url)) queue.push({ url, depth: next.depth + 1, priority: 100 });
+            if (candidates.some(c => c.url === url) && inScope(url, candidates.find(c => c.url === url)?.label)) queue.push({ url, depth: next.depth + 1, priority: 100 });
           }
         } catch { /* navigation remains useful when AI is unavailable */ }
       }
@@ -2930,6 +3212,23 @@ async function discoverListings(
     }
   }));
 
+  // Detail pages carry most IDX attribution. Listings from paginated collections whose detail pages
+  // show a multi-office market keep only the site's own; everything attributed is labelled own/featured.
+  {
+    const paged = listings.filter(item => pagedCollectionListings.has(canonicalListingUrl(item.sourceUrl)) && !item.ownership);
+    const offices = new Map(paged.filter(item => item.listingOffice).map(item => [item.sourceUrl, item.listingOffice!] as const));
+    const collection = classifyCollection(paged, offices, identity, true, largeCollectionSeen);
+    if (collection.kind === "market" && collection.excluded) {
+      const kept = new Set(collection.keep.map(item => item.sourceUrl));
+      const drop = new Set(paged.filter(item => !kept.has(item.sourceUrl)).map(item => item.sourceUrl));
+      for (let i = listings.length - 1; i >= 0; i--) if (drop.has(listings[i].sourceUrl)) listings.splice(i, 1);
+      excludedOtherOffice += drop.size;
+      stages.push("market_feed_scoped_by_details");
+    }
+    // Same rule as for cards: one or two brokerages across the inventory is the brokerage the agent or
+    // team lists under (own); with several, listings not attributed to the site's own office are featured.
+    labelInventoryOwnership(listings, identity).forEach((item, i) => { listings[i] = item; });
+  }
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
   if (queue.some(item => item.continuation)) openContinuation = true;
   for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
@@ -2999,6 +3298,9 @@ async function discoverListings(
       failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome,
       inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests, continuationAvailable }, accounting, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed,
         ...(budgeted ? { deferred: listings.slice(detailLimit, maxListings).map(item => item.sourceUrl) } : {}) },
+      ...(identity ? { identity } : {}),
+      ...(marketPages.length || excludedOtherOffice || outOfScopeLinks || seedScopes.some(scope => scope.person) ? { scope: {
+        person: seedScopes.find(scope => scope.person)?.person?.prefix, marketPages, excludedOtherOffice, outOfScopeLinks } } : {}),
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
       resume: (!listings.length || verificationPending.length || continuationAvailable) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : continuationAvailable ? "collection_continuation" : "discovery_blocked" } : undefined },
   };
@@ -3324,6 +3626,8 @@ type ImportEvent =
   | { kind: "profile"; name?: string; city?: string; at: number }
   /** Listing discovery tallies: pages examined and distinct listings found so far. */
   | { kind: "listings"; host: string; pages: number; found: number; at: number }
+  /** Ownership scope: other brokerages' listings left out of a market feed, and other offices' listings featured on the site. */
+  | { kind: "scope"; excluded: number; featured: number; at: number }
   /** A browser render was requested because the public page needs one. */
   | { kind: "render"; host: string; state: "start" | "done" | "failed"; at: number };
 

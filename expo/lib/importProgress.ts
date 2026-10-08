@@ -13,7 +13,9 @@ export type ImportEvent =
   | { kind: "design"; portrait: boolean; logo: boolean; images: number; sections: number; at: number }
   | { kind: "profile"; name?: string; city?: string; at: number }
   | { kind: "listings"; host: string; pages: number; found: number; at: number }
-  | { kind: "render"; host: string; state: "start" | "done" | "failed"; at: number };
+  | { kind: "render"; host: string; state: "start" | "done" | "failed"; at: number }
+  /** Other brokerages' listings left out of a market feed; other offices' listings featured on the site. */
+  | { kind: "scope"; excluded: number; featured: number; at: number };
 
 /** Which request an event belongs to: the listing import (refresh-listings) or the profile build (analyze-realtor-build). */
 export type ImportChannel = "listings" | "build";
@@ -82,6 +84,12 @@ export function applyImportEvent(previous: ActivityLine[], channel: ImportChanne
       if (event.state === "start") return upsert(lines, { id: id(`render:${host}`), state: "active", text: `Opening ${host} in a browser (it requires one)` });
       if (event.state === "done") return settle(lines, id(`render:${host}`), "done", `Opened ${host} in a browser`);
       return settle(lines, id(`render:${host}`), "failed", `${host} did not finish loading in the browser`);
+    }
+    case "scope": {
+      // Accuracy over quantity: say what was left out and what is shown as featured, never hide it.
+      const parts = [event.excluded ? `Left out ${plural(event.excluded, "listing")} from other brokerages` : "",
+        event.featured ? `${plural(event.featured, "listing")} from other offices will be shown as featured, not as yours` : ""].filter(Boolean);
+      return parts.length ? upsert(lines, { id: id("scope"), state: "note", text: parts.join(" · ") }) : lines;
     }
     case "stage":
       return applyStage(lines, channel, event);
