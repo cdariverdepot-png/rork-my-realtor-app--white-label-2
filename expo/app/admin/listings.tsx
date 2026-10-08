@@ -31,6 +31,7 @@ import { fonts } from "@/constants/colors";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrand } from "@/contexts/BrandContext";
 import { useListings, type ListingStatus, type ManagedListing } from "@/contexts/ListingsContext";
+import { specLine } from "@/lib/listingSpecs";
 
 /** Shares the dashboard's dark palette so the full portfolio view reads as a
  *  natural extension of the command center (it's pushed from "VIEW ALL"). */
@@ -260,10 +261,10 @@ function ListingRow({
           </Text>
           <View style={styles.cardMetaRow}>
             <Text style={styles.cardPrice}>{item.price}</Text>
-            <Text style={styles.cardDot}>·</Text>
-            <Text style={styles.cardSpec}>
-              {item.beds} BD · {item.baths} BA
-            </Text>
+            {specLine(item, "upper", false) ? <>
+              <Text style={styles.cardDot}>·</Text>
+              <Text style={styles.cardSpec}>{specLine(item, "upper", false)}</Text>
+            </> : null}
           </View>
           {item.ownership === "featured" ? (
             <Text style={styles.cardSync} numberOfLines={1}>

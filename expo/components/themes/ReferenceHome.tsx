@@ -16,6 +16,7 @@ import ThemeContentSection from "../ThemeContentSection";
 import LiveThemeHome from "./LiveThemeHome";
 import WebsiteHome from './WebsiteHome';
 import { SERIF, type HeroProps } from "./shared";
+import { specLine } from "@/lib/listingSpecs";
 
 export type ReferenceRoute = "/listings" | "/message" | "/favorites" | "/calendar" | "/insights" | "/notifications" | "/account" | "/book" | "/documents" | "/note";
 export type ReferenceHomeProps = { brand: Brand; portraitSource?: number; listings: ManagedListing[]; width?: number; scrollY?: Animated.Value; topInset?: number; miniature?: boolean; primaryOnly?: boolean;
@@ -50,7 +51,7 @@ function CarouselReferenceHome(p: ReferenceHomeProps) {
     style={{ position: "absolute", right: 4 * s, top: bottom ? undefined : 3 * s, bottom: bottom ? 3 * s : undefined, padding: 11 * s, width: 44, height: 44, borderRadius: 22, backgroundColor: "#11171388", alignItems: "center", justifyContent: "center", zIndex: 2 }}><Heart color="#FFFCF4" size={18 * s} fill={p.isFavorite?.(item.id) ? d.accent : "transparent"} /></Pressable>;
   const photo = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} accessibilityLabel={item.title} style={{ position: "absolute", width: "100%", height: "100%" }} />;
   const recommendation = (item: ManagedListing) => p.recommendedIds?.includes(item.id) ? <Text style={{ position: "absolute", left: 7 * s, top: 29 * s, maxWidth: "78%", backgroundColor: "#D4B989EE", color: "#111713", fontSize: 6.5 * s, paddingHorizontal: 7 * s, paddingVertical: 4 * s, borderRadius: 12 * s, letterSpacing: 0.4 * s, zIndex: 3 }}>{p.recommendationLabel || "Recommended by your realtor"}</Text> : null;
-  const meta = (item: ManagedListing, size = 8) => <Text style={{ color: "#CDCBC0", fontSize: size * s, marginTop: 6 * s }}>{item.beds} bd  ·  {item.baths} ba  ·  {item.sqft}</Text>;
+  const meta = (item: ManagedListing, size = 8) => <Text style={{ color: "#CDCBC0", fontSize: size * s, marginTop: 6 * s }}>{specLine(item).split(" · ").join("  ·  ")}</Text>;
   const card = (item: ManagedListing, kind: CardKind) => {
     const w = { coastal: 163, journal: 194, discovery: 119, burgundy: 153, nora: 112, mina: 169, editorial: 270 }[kind];
     const h = { coastal: 146, journal: 172, discovery: 192, burgundy: 169, nora: 133, mina: 142, editorial: 280 }[kind];

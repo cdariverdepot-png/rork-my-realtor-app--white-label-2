@@ -34,6 +34,7 @@ import PressableScale from "@/components/PressableScale";
 import Reveal from "@/components/Reveal";
 import { ListingDetailSkeleton } from "@/components/Skeleton";
 import ListingPhotoGallery from "@/components/ListingPhotoGallery";
+import { hasValue, specParts } from "@/lib/listingSpecs";
 
 const { height: H } = Dimensions.get("window");
 
@@ -131,11 +132,11 @@ export default function ListingDetail() {
 
         <Reveal delay={60}>
         <View style={styles.specsRow}>
-          <Spec icon={<Bed size={18} color={brand.forest} strokeWidth={1.5} />} label={`${item.beds} bedrooms`} />
-          <View style={styles.specDivider} />
-          <Spec icon={<Bath size={18} color={brand.forest} strokeWidth={1.5} />} label={`${item.baths} baths`} />
-          <View style={styles.specDivider} />
-          <Spec icon={<Maximize size={18} color={brand.forest} strokeWidth={1.5} />} label={item.sqft} />
+          {[
+            hasValue(item.beds) ? <Spec key="beds" icon={<Bed size={18} color={brand.forest} strokeWidth={1.5} />} label={`${item.beds} bedrooms`} /> : null,
+            hasValue(item.baths) ? <Spec key="baths" icon={<Bath size={18} color={brand.forest} strokeWidth={1.5} />} label={`${item.baths} baths`} /> : null,
+            specParts({ sqft: item.sqft }).length ? <Spec key="size" icon={<Maximize size={18} color={brand.forest} strokeWidth={1.5} />} label={item.sqft} /> : null,
+          ].filter(Boolean).flatMap((spec, i) => i ? [<View key={`divider-${i}`} style={styles.specDivider} />, spec] : [spec])}
         </View>
         </Reveal>
 
@@ -168,9 +169,9 @@ export default function ListingDetail() {
           <Text style={styles.detailsKicker}>THE FACTS</Text>
           <Detail label="Neighborhood" value={item.neighborhood} />
           <Detail label="Price" value={item.price} />
-          <Detail label="Bedrooms" value={String(item.beds)} />
-          <Detail label="Bathrooms" value={String(item.baths)} />
-          <Detail label="Interior" value={item.sqft} />
+          {hasValue(item.beds) ? <Detail label="Bedrooms" value={String(item.beds)} /> : null}
+          {hasValue(item.baths) ? <Detail label="Bathrooms" value={String(item.baths)} /> : null}
+          {specParts({ sqft: item.sqft }).length ? <Detail label="Interior" value={item.sqft} /> : null}
           <Detail label="Status" value={listingStatusLabel(item)} />
           {!!item.listingNumber && <Detail label="MLS number" value={item.listingNumber} />}
           {!!item.propertyType && <Detail label="Property type" value={item.propertyType} />}

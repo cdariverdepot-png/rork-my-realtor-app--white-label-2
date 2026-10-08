@@ -41,6 +41,7 @@ import {
 import ModalChrome from "@/components/ModalChrome";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
 import { SCREEN_ACCENT, tint } from "@/constants/backdrops";
+import { specLine } from "@/lib/listingSpecs";
 
 const ACCENT = SCREEN_ACCENT.adminFeed;
 const SURFACE = "rgba(14,16,15,0.72)";
@@ -392,7 +393,7 @@ function PinnedTab({
                   {l.title}
                 </Text>
                 <Text style={styles.pinMeta}>
-                  {l.price} · {l.beds} bd · {l.baths} ba
+                  {[l.price, specLine(l, "short", false)].filter(Boolean).join(" · ")}
                 </Text>
               </View>
               {on ? (

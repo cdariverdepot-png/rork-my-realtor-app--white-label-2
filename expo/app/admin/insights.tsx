@@ -29,6 +29,7 @@ import { brand, dark, fonts } from "@/constants/colors";
 import { useEngagement, type EngagementBucket } from "@/contexts/EngagementContext";
 import { useClients } from "@/contexts/ClientsContext";
 import { useListings } from "@/contexts/ListingsContext";
+import { specLine } from "@/lib/listingSpecs";
 
 const BUCKET_LABEL: Record<EngagementBucket, string> = {
   hot: "HOT",
@@ -203,7 +204,7 @@ export default function AdminInsightsScreen() {
                     <View style={{ flex: 1 }}>
                       <Text style={styles.listingNeighborhood}>{l.neighborhood.toUpperCase()}</Text>
                       <Text style={styles.listingTitle} numberOfLines={1}>{l.title}</Text>
-                      <Text style={styles.listingMeta}>{l.price} · {l.beds} bd · {l.baths} ba</Text>
+                      <Text style={styles.listingMeta}>{[l.price, specLine(l, "short", false)].filter(Boolean).join(" · ")}</Text>
                     </View>
                     <View style={styles.viewsPill}>
                       <Eye size={11} color={brand.goldDeep} strokeWidth={1.6} />
