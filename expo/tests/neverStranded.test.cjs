@@ -242,3 +242,19 @@ test('an unpublished listing status is never shown as an internal sync state', (
   assert.doesNotMatch(label, /Status unconfirmed/);
   assert.match(label, /return item\.tag \|\| "Listing";/);
 });
+
+test('an exhausted AI account is reported as unavailable on our side, not as the realtor\'s retry problem', () => quiet(async () => {
+  const fixture = { seeds: ['https://agent.example/'], pages: [{ url: 'https://agent.example/', finalUrl: 'https://agent.example/',
+    html: '<html><head><title>Jane Agent | Realtor</title></head><body><h1>Jane Agent</h1><p>Helping buyers and sellers in Springfield.</p></body></html>' }] };
+  const network = replayNetwork(fixture, { latencyMs: 1 });
+  const fetch = async (input, init) => String(input).startsWith('https://api.openai.com/')
+    ? new Response('{"error":{"type":"insufficient_quota","code":"credit_balance_exhausted"}}', { status: 429 }) : network.fetch(input, init);
+  const { handler } = loadBuildFunction(bundle, { fetch, sources: [{ id: 'website', kind: 'url', label: 'Website', uri: fixture.seeds[0], status: 'queued' }] });
+  const response = await handler(new Request('https://fixture.invalid/functions/v1/analyze-realtor-build', {
+    method: 'POST', headers: { Authorization: 'Bearer fixture', 'Content-Type': 'application/json' }, body: '{}' }));
+  const body = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(body.code, 'ai_unavailable');
+  assert.match(body.error, /temporarily unavailable on our side.*listings are saved/);
+  assert.doesNotMatch(body.error, /quota|credit/i);
+}));

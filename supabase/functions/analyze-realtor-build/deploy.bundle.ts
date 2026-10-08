@@ -6194,6 +6194,10 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
       ai.status === 404 ? " (AI model unavailable)" : "";
     progress.finish("profile", "failed");
     console.log("[build] timings", progress.timings());
+    // The service's own account is out of credit: not something the realtor caused or can fix by retrying now.
+    if (ai.status === 429 && /insufficient_quota|credit_balance_exhausted/.test(body)) {
+      return reply({ code: "ai_unavailable", error: "Writing your profile is temporarily unavailable on our side. Your website, sources and any imported listings are saved; please try again later." }, 503);
+    }
     return reply({ code: "ai_rejected", error: `Analysis failed${reason}. Your sources are still saved; please retry.` }, 502);
   }
   let result;
