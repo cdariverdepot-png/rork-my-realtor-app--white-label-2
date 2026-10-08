@@ -153,7 +153,10 @@ function compare(before, after, failure) {
     if (targetAt(site) > targetAt(prior)) problems.push(`${site.id}: ${target} findings increased (${targetAt(prior)} -> ${targetAt(site)}).`);
     const now = new Map(site.listings.map(l => [l.sourceUrl, l]));
     const was = new Map(prior.listings.map(l => [l.sourceUrl, l]));
-    const mergedAway = new Set(target === 'DUPLICATE_PROPERTY' ? prior.findingsMerged ?? (prior.findings.filter(f => f.code === 'DUPLICATE_PROPERTY').flatMap(f => f.examples.flatMap(e => e.sourceUrls ?? []))) : []);
+    // A duplicate-property repair may remove records only inside a base duplicate group, and each group must keep one.
+    const groups = target === 'DUPLICATE_PROPERTY' ? prior.findings.filter(f => f.code === 'DUPLICATE_PROPERTY').flatMap(f => f.groups ?? f.examples.map(e => e.sourceUrls ?? [])) : [];
+    const mergedAway = new Set(groups.flat());
+    for (const group of groups) if (!group.some(url => now.has(url))) problems.push(`${site.id}: every record of a duplicate group disappeared (${group.join(', ')})`);
     for (const [url, old] of was) {
       const cur = now.get(url);
       if (!cur) { if (!mergedAway.has(url)) problems.push(`${site.id}: imported record disappeared: ${url}`); continue; }

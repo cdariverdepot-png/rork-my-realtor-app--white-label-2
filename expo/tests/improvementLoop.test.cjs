@@ -170,3 +170,14 @@ test('improvement loop: a declared baseline change must be produced exactly and 
   assert.equal(checkDeclarations([{ ...good, after: '999 Invented Rd, Boise, ID' }], before, after).ok, false, 'must be what the engine now produces');
   assert.equal(checkDeclarations([{ ...good, sourceUrl: 'u2', before: '1 Elm St, Boise, ID', after: '$1' }], before, after).ok, false, 'a regression cannot be declared');
 });
+
+test('improvement loop: a duplicate repair may remove records only within a duplicate group, keeping one of each', () => {
+  const dupFinding = { ...finding('DUPLICATE_PROPERTY', 'code_defect', 7), examples: [{ sourceUrls: ['d1', 'd2'] }], groups: [['d1', 'd2'], ['e1', 'e2']] };
+  const before = evaluation([site('a', [dupFinding], [rec('d1', '1 Elm St, Boise, ID'), rec('d2', '1 Elm St, Boise, ID'), rec('e1', '2 Oak St, Boise, ID'), rec('e2', '2 Oak St, Boise, ID'), rec('f1', '3 Ash St, Boise, ID')])]);
+  const merged = evaluation([site('a', [], [rec('d2', '1 Elm St, Boise, ID'), rec('e1', '2 Oak St, Boise, ID'), rec('f1', '3 Ash St, Boise, ID')])]);
+  assert.equal(compare(before, merged, failureFor('DUPLICATE_PROPERTY')).ok, true, 'groups beyond the displayed examples count');
+  const lostGroup = evaluation([site('a', [], [rec('d2', '1 Elm St, Boise, ID'), rec('f1', '3 Ash St, Boise, ID')])]);
+  assert.ok(compare(before, lostGroup, failureFor('DUPLICATE_PROPERTY')).problems.some(p => /every record of a duplicate group disappeared/.test(p)));
+  const lostOther = evaluation([site('a', [], [rec('d2', '1 Elm St, Boise, ID'), rec('e1', '2 Oak St, Boise, ID')])]);
+  assert.ok(compare(before, lostOther, failureFor('DUPLICATE_PROPERTY')).problems.some(p => /disappeared: f1/.test(p)));
+});

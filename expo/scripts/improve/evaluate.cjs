@@ -120,8 +120,12 @@ function findingsFor(entry, capture, replay) {
   const samePrice = (a, b) => key(a.price) === key(b.price);
   const duplicates = [...groups.values()].filter(group => group.length > 1 && group.some((a, i) => group.some((b, j) => j > i && samePrice(a, b) &&
     ((a.description && a.description === b.description) || (a.images?.[0] && a.images[0] === b.images?.[0])))));
-  if (duplicates.length) add('DUPLICATE_PROPERTY', 'code_defect', 2, duplicates.map(group => ({ title: group[0].title, sourceUrls: group.map(i => i.sourceUrl) })),
-    'The same property (same address and the same description or lead photo) is imported more than once under different URLs.');
+  if (duplicates.length) {
+    add('DUPLICATE_PROPERTY', 'code_defect', 2, duplicates.map(group => ({ title: group[0].title, sourceUrls: group.map(i => i.sourceUrl) })),
+      'The same property (same address and the same description or lead photo) is imported more than once under different URLs.');
+    // Every group, not only the displayed examples: the gate checks merges against all of them.
+    out[out.length - 1].groups = duplicates.map(group => group.map(i => i.sourceUrl));
+  }
 
   // Details: a recorded detail page that publishes a description or gallery the record does not have.
   const thin = [];
