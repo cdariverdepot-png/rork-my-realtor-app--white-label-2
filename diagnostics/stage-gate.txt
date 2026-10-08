@@ -1,2 +1,2 @@
-2026-10-08T05:55:05Z
-Stages 3 (blocked/shell/retry), 4 (ownership and scope), 5 (normalizer), 6 (detail reader) on top of 1-2
+2026-10-08T06:39:59Z
+Stages 7 (images), 8 (cleanup/messaging), off-site ownership claim; full 25
