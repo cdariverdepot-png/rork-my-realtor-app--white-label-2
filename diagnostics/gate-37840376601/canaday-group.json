@@ -1,0 +1,1480 @@
+{
+  "id": "canaday-group",
+  "url": "https://canadaygroup.com/",
+  "category": "Luxury Presence",
+  "timeline": [
+    {
+      "at": 53,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 853,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nLooking for your listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1055,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6"
+    },
+    {
+      "at": 1256,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 1 of 4"
+    },
+    {
+      "at": 1457,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 2 of 4"
+    },
+    {
+      "at": 1858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 3 of 4"
+    },
+    {
+      "at": 2258,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 1 of 6\nReading linked pages · 3 of 4"
+    },
+    {
+      "at": 2459,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 4 of 6\nReading linked pages · 3 of 4"
+    },
+    {
+      "at": 3060,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 5 of 6\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 23 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3860,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 active listings\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 23 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4061,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 active listings\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 23 website images by role\nWriting your profile and app copy\nSaving 6 listings"
+    },
+    {
+      "at": 4260,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Canaday Group\nFound 6 active listings\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 23 website images by role\nWriting your profile and app copy\nSaved 6 listings"
+    },
+    {
+      "at": 10268,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Canaday Group\nFound 6 active listings\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 23 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Corona del Mar, CA"
+    },
+    {
+      "at": 10481,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 465,
+      "totalMs": 10174,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Canaday Group",
+          "host": "canadaygroup.com",
+          "at": 115
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 115
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 4,
+          "at": 450
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 4,
+          "at": 541
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 4,
+          "at": 705
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 4,
+          "at": 1051
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 4,
+          "at": 2123
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 4,
+          "total": 4,
+          "at": 2191
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 23,
+          "sections": 8,
+          "at": 2193
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 2193
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 2212
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 2212
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 2212
+        },
+        {
+          "kind": "profile",
+          "city": "Corona del Mar, CA",
+          "at": 9546
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 9546
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 1741,
+            "design": 2078,
+            "site": 2212,
+            "profile": 7334,
+            "total": 9546
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 6542,
+            "outputTokens": 806,
+            "estimatedUsd": 0.019532,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.019532
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 6542,
+                "cachedInputTokens": 0,
+                "outputTokens": 806,
+                "estimatedUsd": 0.019532,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.brandName",
+              "sourceId": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "value": "Canaday Group",
+              "confidence": 1,
+              "locator": "sitewide branding, page titles, meta, About, Team"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "value": "Corona del Mar, CA",
+              "confidence": 0.95,
+              "locator": "footer. Address: 2801 E Coast Hwy Ste D Corona del Mar, CA 92625"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "value": "949-249-2424",
+              "confidence": 1,
+              "locator": "header, footer, contact, phone links"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "value": "RE/MAX Fine Homes",
+              "confidence": 1,
+              "locator": "footer, About, Team, sitewide"
+            },
+            {
+              "field": "credentials.license.number",
+              "sourceId": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "value": "01526370",
+              "confidence": 1,
+              "locator": "footer, About, Team, sitewide 'CA DRE# 01526370'"
+            },
+            {
+              "field": "credentials.license.state",
+              "sourceId": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "value": "CA",
+              "confidence": 1,
+              "locator": "footer, About, Team, sitewide 'CA DRE# 01526370'"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Orange County Luxury Real Estate Expertise",
+            "welcomeNote": "Welcome to Canaday Group – your trusted advisors for Orange County's extraordinary homes.",
+            "tagline": "Distinctive Properties. Unmatched Service.",
+            "aboutParagraph": "At Canaday Group, we believe in more than just real estate transactions—we foster relationships built on trust, expertise, and collaboration. As Orange County’s luxury home specialists, our mission is to deliver swift, professional results backed by decades of market insight and a passion for service. Anchored by RE/MAX Fine Homes, our team combines innovative marketing with personal dedication to ensure your experience is seamless from start to finish. We pride ourselves on our deep roots in the community and a legacy of exceeding expectations for distinguished buyers and sellers throughout the region.",
+            "conciergeLine": "Let our team handle every detail of your real estate journey in Orange County.",
+            "contactLine": "Call 949-249-2424 to speak directly with a Canaday Group specialist today.",
+            "tone": "refined, knowledgeable, and service-oriented with a focus on trust and tailored expertise",
+            "layoutId": "advisor-journal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "c7778d68-8ac6-4e62-81a2-521ae3842c44"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://canadaygroup.com/",
+              "analyzedAt": 1791492343964,
+              "logoUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+              "portraitImageUrl": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca",
+              "heroTitle": "Canaday Group",
+              "heroSubtitle": "RE/MAX Fine Homes - Canaday Group | Orange County Luxury Home Specialists. 949-249-2424",
+              "sections": [
+                {
+                  "kind": "about",
+                  "title": "Stylish Blufftop Penthouse Dana Point",
+                  "body": "Experience the 3D floor plan, take measurements and walk through the private home at your convenience.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Canaday Group",
+                  "body": "Middle Name Email Address Sent! RE/MAX Fine Homes sales specialists enjoy access to a network of more than 87,500 RE/MAX Associates in over 89 countries, enabling us to connect buyers and sellers from virtually anywhere. MONARCH BEACH LAGUNA BEACH",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "testimonials",
+                  "title": "- Kelly R.",
+                  "body": "\"I had the good fortune to select The Canaday Group as my listing agent for a home in south county. From start to finish the service was outstanding. Lee Ann and team are masters at gaining exposure through print, web, TV advertising and social media. They marketed the property at a professional level I hadn't experienced in the past. Her extended team was diligent about finding a buyer, creating quality foot traffic, and negotiating a fair price for the home.",
+                  "intent": "testimonials",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Welcome to Laguna Beach",
+                  "body": "Laguna Beach in the opinion of many travelers is one the most beautiful beach cities in the world, featuring 27 beaches and coves, 7 miles of coastline, and ubiquitous trails. When looking out at the crystal blue waters of Laguna it's not uncommon to see whales as well as dolphins and other sea life. At low tide you can get an up close look at various sea creatures from starfish to anemones in the tide pools.",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Meet Canaday Group",
+                  "body": ""
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Orange County Luxury Home Specialists",
+                  "body": "As the #1 RE/MAX Team in Orange County, and one of the most successful real estate teams in the world, Canaday Group provides the knowledge and experience that you expect from a top-flight real estate group. We've closed over $2 Billion in sales and approach each challenge with an energy and enthusiasm that is only matched by our level of expertise."
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Properties in the Area",
+                  "body": ""
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "CONTACT US",
+                  "body": "Phone 949.249.2424 Email [email protected] Address 2801 E Coast Hwy Ste D Corona del Mar, CA 92625 Canaday Group | RE/MAX FINE HOMES CA DRE# 01526370"
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                  "variants": [
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                      "width": 320
+                    },
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                      "width": 800
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                  "width": 800,
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca",
+                  "variants": [
+                    {
+                      "url": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca",
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                        "width": 800
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kyluatjnbll8gjqqxirg",
+                    "width": 800,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/c0sblcwh66d2yya3k4ns",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/c0sblcwh66d2yya3k4ns",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/c0sblcwh66d2yya3k4ns",
+                        "width": 800
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/c0sblcwh66d2yya3k4ns",
+                    "width": 800,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://media-production.lp-cdn.com/media/bb7a2be5-c8c9-47a9-9a7b-a281a357fdca",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                        "width": 2738
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/20985c3c-08a4-47ff-aa6e-fcfc2961f4b1",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                        "width": 2734
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/qc3xwyslsqkbmnearwr6",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/d1uamqcj3ykoj9nf5u6y",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gonelttixuttmmpjhiu6",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/gonelttixuttmmpjhiu6",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gonelttixuttmmpjhiu6",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/gonelttixuttmmpjhiu6",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/gonelttixuttmmpjhiu6",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/bn0zlpqyjcy7wd9hcuvk",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/bn0zlpqyjcy7wd9hcuvk",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/bn0zlpqyjcy7wd9hcuvk",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/bn0zlpqyjcy7wd9hcuvk",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/bn0zlpqyjcy7wd9hcuvk",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ng1hng6lwunkihjyctol",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ng1hng6lwunkihjyctol",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ng1hng6lwunkihjyctol",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ng1hng6lwunkihjyctol",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ng1hng6lwunkihjyctol",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/uqsngtiouifhkux5sddt",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/uqsngtiouifhkux5sddt",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/uqsngtiouifhkux5sddt",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/uqsngtiouifhkux5sddt",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/uqsngtiouifhkux5sddt",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/l8sfv1zoljq3uwiwywet",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/oaal51rtdjdn0aetvmyt",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/media/c171d93b-a102-41fe-9c61-41ce024cb7cd",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/media/c171d93b-a102-41fe-9c61-41ce024cb7cd"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/media/c171d93b-a102-41fe-9c61-41ce024cb7cd",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/rillim6owg2fgdf87oxt",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/rillim6owg2fgdf87oxt",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/rillim6owg2fgdf87oxt",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rillim6owg2fgdf87oxt",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/rillim6owg2fgdf87oxt",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/jherqzhrxafo6t42uv4a",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/jherqzhrxafo6t42uv4a",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/jherqzhrxafo6t42uv4a",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/jherqzhrxafo6t42uv4a",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/jherqzhrxafo6t42uv4a",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/h22onkvurgmqr50mwwfo",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/h22onkvurgmqr50mwwfo",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/h22onkvurgmqr50mwwfo",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/h22onkvurgmqr50mwwfo",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/h22onkvurgmqr50mwwfo",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/a66qox4ccga8oruz0ag1",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/a66qox4ccga8oruz0ag1",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/a66qox4ccga8oruz0ag1",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/a66qox4ccga8oruz0ag1",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/a66qox4ccga8oruz0ag1",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/y7vpofaa0fptfoc4scch",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/y7vpofaa0fptfoc4scch",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/y7vpofaa0fptfoc4scch",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/y7vpofaa0fptfoc4scch",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/y7vpofaa0fptfoc4scch",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/vd8vmtt8lafjgvzbhrmu",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/vd8vmtt8lafjgvzbhrmu",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/vd8vmtt8lafjgvzbhrmu",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/vd8vmtt8lafjgvzbhrmu",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/vd8vmtt8lafjgvzbhrmu",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/mlrsuxrfwd6uzmap2jxy",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/mlrsuxrfwd6uzmap2jxy",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/mlrsuxrfwd6uzmap2jxy",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/mlrsuxrfwd6uzmap2jxy",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/mlrsuxrfwd6uzmap2jxy",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/dpwgo4wgwbhmz6vllfvi",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/dpwgo4wgwbhmz6vllfvi",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/dpwgo4wgwbhmz6vllfvi",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/dpwgo4wgwbhmz6vllfvi",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/dpwgo4wgwbhmz6vllfvi",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ipg7oeufmppwmyswl2xt",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ipg7oeufmppwmyswl2xt",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ipg7oeufmppwmyswl2xt",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ipg7oeufmppwmyswl2xt",
+                        "width": 1920
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ipg7oeufmppwmyswl2xt",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/media/110f21ae-d11e-4ab4-a5bf-c0c3fb073c58",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/media/110f21ae-d11e-4ab4-a5bf-c0c3fb073c58"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://media-production.lp-cdn.com/media/110f21ae-d11e-4ab4-a5bf-c0c3fb073c58",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#ed5565",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Open Sans",
+                "headingFontFamily": "Playfair Display",
+                "layout": "portrait-split",
+                "spacing": 16,
+                "radius": 32,
+                "headingSize": 52,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#ed5565",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Open Sans",
+                "headingFontFamily": "Playfair Display",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 32,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://fonts.googleapis.com/css?family=Open%20Sans:300,400,500,600,700,800,300i,400i,500i,600i,700i,800i",
+                  "https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css",
+                  "https://styles.luxurypresence.com/producer/index.css"
+                ],
+                "colors": [
+                  "#000000",
+                  "#e1e4e9",
+                  "#ed5565",
+                  "#da4453",
+                  "#a43540",
+                  "#999999",
+                  "#dddddd",
+                  "#cccccc",
+                  "#92bce0",
+                  "#428bca",
+                  "#ffffff",
+                  "#b9d4ec",
+                  "#cbcfd5",
+                  "#b4b9be",
+                  "#939ba7",
+                  "#919ba5",
+                  "#9f9f9f",
+                  "#3071a9",
+                  "#d1d6e0",
+                  "#e0e4ea",
+                  "#a3adc1",
+                  "#20b426",
+                  "#18891d",
+                  "#e9e6e6",
+                  "#7685a2",
+                  "#c3c7cd",
+                  "#48536a",
+                  "#dedede",
+                  "#ee22fa",
+                  "#a804b2"
+                ],
+                "fonts": [
+                  "Open Sans",
+                  "Arial",
+                  "Montserrat",
+                  "sans-serif",
+                  "monospace",
+                  "slick",
+                  "Marmelad",
+                  "Playfair Display"
+                ],
+                "routing": [
+                  {
+                    "source": "ACTIVE",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Featured Properties",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Open Houses",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Events",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "SOCIAL MEDIA",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "FACEBOOK",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "YOUTUBE",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "INSTAGRAM",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Marketing",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "CANADAY TV",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Resources",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sellers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Valuation",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Testimonials",
+                    "intent": "testimonials",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Blog",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Privacy Policy",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "LEARN MORE",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Download",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "EXPLORE Laguna Beach",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "EXPLORE Newport Beach",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "EXPLORE Newport Coast",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Leave a Message",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Thank you for your message. We will be in touch with you shortly.",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "What is Your Home Really Worth?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Download Our Canaday Group App!",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Canaday TV Show",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Featured Video",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Find Us at",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "2801 E. Coast Hwy. Ste D",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "ONLINE INQUIRY",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Thanks, please provide more information to help serve you",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Orange County Luxury Home Specialists",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Testimonials",
+                    "intent": "testimonials",
+                    "canonical": "card:testimonials",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Stylish Blufftop Penthouse Dana Point",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://canadaygroup.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://canadaygroup.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "c7778d68-8ac6-4e62-81a2-521ae3842c44",
+              "kind": "url",
+              "label": "canadaygroup.com",
+              "uri": "https://canadaygroup.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "canaday-group-00-url.png",
+    "canaday-group-01-review.png",
+    "canaday-group-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 3253,
+  "reviewMs": 10481,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Canaday Group\nFound 6 active listings\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 23 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Corona del Mar, CA",
+  "reviewText": "Back\nAPP BUILDER\ncanadaygroup.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCORONA DEL MAR, CA\nCanaday Group\nRE/MAX Fine Homes - Canaday Group | Orange County Luxury Home Specialists. 949-249-2424\nView listings\nABOUT\nStylish Blufftop Penthouse Dana Point\nExperience the 3D floor plan, take measurements and walk through the private home at your convenience.\nTHE AREA\nCanaday Group\nMiddle Name Email Address Sent! RE/MAX Fine Homes sales specialists enjoy access to a network of more than 87,500 RE/MAX Associates in over 89 countries, enabling us to connect buyers and sellers from virtually anywhere. MONARCH BEACH LAGUNA BEACH\nCLIENTS\n- Kelly R.\n\"I had the good fortune to select The Canaday Group as my listing agent for a home in south county. From start to finish the service was outstanding. Lee Ann and team are masters at gaining exposure through print, web, TV advertising and social media. They marketed the property at a professional level I hadn't experienced in the past. Her extended team was diligent about finding a buyer, creating quality foot traffic, and negotiating a fair price for the home.\nTHE AREA\nWelcome to Laguna Beach\nLaguna Beach in the opinion of many travelers is one the most beautiful beach cities in the world, featuring 27 beaches and coves, 7 miles of coastline, and ubiquitous trails. When looking out at the crystal blue waters of Laguna it's not uncommon to see whales as well as dolphins and other sea life. At low tide you can get an up close look at various sea creatures from starfish to anemones in the tide pools.\nFROM THE SITE\nOrange County Luxury Home Specialists\nAs the #1 RE/MAX Team in Orange County, and one of the most successful real estate teams in the world, Canaday Group provides the knowledge and experience that you expect from a top-flight real estate group. We've closed over $2 Billion in sales and approach each challenge with an energy and enthusiasm that is only matched by our level of expertise.\nProperties in the Area\n$3,999,900\n23011 Java Sea Drive, Dana Point, CA 92629\n4 beds · 2 baths · 2,516\n$730,000\n82768 Kingsboro Ln, Indio, CA 92201\n2 beds · 2 baths · 1,920\n$5,695,000\n30602 Hunt Club Dr, San Juan Capistrano, CA 92675\n6 beds · 5 baths · 5,459\n$6,999,000\n32121 Cook Ln, San Juan Capistrano, CA 92675\n4 beds · 5 baths · 6,528\n$4,752,000\n28690 Martingale Dr, San Juan Capistrano, CA 92675\n5 beds · 5.5 baths · 4,437\n$3,588,800\n30821 Hunt Club Drive, San Juan Capistrano, CA 92675\n5 beds · 5.5 baths · 7,188\n949-249-2424\nRE/MAX Fine Homes\n01526370\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nOrange County Luxury Real Estate Expertise\nTry another opening line\nYOUR INTRODUCTION\nAt Canaday Group, we believe in more than just real estate transactions—we foster relationships built on trust, expertise, and collaboration. As Orange County’s luxury home specialists, our mission is to deliver swift, professional results backed by decades of market insight and a passion for service. Anchored by RE/MAX Fine Homes, our team combines innovative marketing with personal dedication to ensure your experience is seamless from start to finish. We pride ourselves on our deep roots in the community and a legacy of exceeding expectations for distinguished buyers and sellers throughout the region.\nTry another introduction\n6 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nJust a few more details\nWe couldn’t find these on your website.\nYour name\nYour business contact details — this is how clients reach you from the app.\nEmail address — where would you like clients to email you?\n▸ Brokerage & license (optional)\n✓ RE/MAX Fine Homes · 01526370 · CA\nStill needed: Your name, Business phone & email\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCORONA DEL MAR, CA\nCanaday Group\nRE/MAX Fine Homes - Canaday Group | Orange County Luxury Home Specialists. 949-249-2424\nView listings\nABOUT\nStylish Blufftop Penthouse Dana Point\nExperience the 3D floor plan, take measurements and walk through the private home at your convenience.\nTHE AREA\nCanaday Group\nMiddle Name Email Address Sent! RE/MAX Fine Homes sales specialists enjoy access to a network of more than 87,500 RE/MAX Associates in over 89 countries, enabling us to connect buyers and sellers from virtually anywhere. MONARCH BEACH LAGUNA BEACH\nCLIENTS\n- Kelly R.\n\"I had the good fortune to select The Canaday Group as my listing agent for a home in south county. From start to finish the service was outstanding. Lee Ann and team are masters at gaining exposure through print, web, TV advertising and social media. They marketed the property at a professional level I hadn't experienced in the past. Her extended team was diligent about finding a buyer, creating quality foot traffic, and negotiating a fair price for the home.\nTHE AREA\nWelcome to Laguna Beach\nLaguna Beach in the opinion of many travelers is one the most beautiful beach cities in the world, featuring 27 beaches and coves, 7 miles of coastline, and ubiquitous trails. When looking out at the crystal blue waters of Laguna it's not uncommon to see whales as well as dolphins and other sea life. At low tide you can get an up close look at various sea creatures from starfish to anemones in the tide pools.\nFROM THE SITE\nOrange County Luxury Home Specialists\nAs the #1 RE/MAX Team in Orange County, and one of the most successful real estate teams in the world, Canaday Group provides the knowledge and experience that you expect from a top-flight real estate group. We've closed over $2 Billion in sales and approach each challenge with an energy and enthusiasm that is only matched by our level of expertise.\nProperties in the Area\n$3,999,900\n23011 Java Sea Drive, Dana Point, CA 92629\n4 beds · 2 baths · 2,516\n$730,000\n82768 Kingsboro Ln, Indio, CA 92201\n2 beds · 2 baths · 1,920\n$5,695,000\n30602 Hunt Club Dr, San Juan Capistrano, CA 92675\n6 beds · 5 baths · 5,459\n$6,999,000\n32121 Cook Ln, San Juan Capistrano, CA 92675\n4 beds · 5 baths · 6,528\n$4,752,000\n28690 Martingale Dr, San Juan Capistrano, CA 92675\n5 beds · 5.5 baths · 4,437\n$3,588,800\n30821 Hunt Club Drive, San Juan Capistrano, CA 92675\n5 beds · 5.5 baths · 7,188\n949-249-2424\nRE/MAX Fine Homes\n01526370\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings CURATED FOR YOU Homes I picked for you. View all LISTING 23011 Java Sea Drive, Dana Point, CA 92629 $3,999,900 4 2 2,516 LISTING 82768 Kingsboro Ln, Indio, CA 92201 $730,000 2 ",
+        "textLength": 579,
+        "stillHome": false
+      },
+      {
+        "label": "23011 Java Sea Drive, Dana Point, CA 92629",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 31 photos 23011 Java Sea Drive, Dana Point, CA 92629 $3,999,900 4 beds · 2 baths 2,516 What an incredible opportunity to live in the prestigious Monarch ay Terrace Community! The",
+        "textLength": 1940,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "82768 Kingsboro Ln, Indio, CA 92201",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 17 photos 82768 Kingsboro Ln, Indio, CA 92201 $730,000 2 beds · 2 baths 1,920 Like a model! Located inside the gates of Trilogy at The Polo Club, this popular Nice Plan offers 2 ",
+        "textLength": 1629,
+        "stillHome": false
+      },
+      {
+        "label": "30602 Hunt Club Dr, San Juan Capistrano, CA 92675",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 71 photos 30602 Hunt Club Dr, San Juan Capistrano, CA 92675 $5,695,000 6 beds · 5 baths 5,459 This elegant custom estate which sits behind the guarded gates of San Juan Capistran",
+        "textLength": 1693,
+        "stillHome": false
+      },
+      {
+        "label": "32121 Cook Ln, San Juan Capistrano, CA 92675",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 11 photos 32121 Cook Ln, San Juan Capistrano, CA 92675 $6,999,000 4 beds · 5 baths 6,528 Authentic Provencal gated estate in San Juan Capistrano, with world-class beaches, shoppi",
+        "textLength": 913,
+        "stillHome": false
+      },
+      {
+        "label": "28690 Martingale Dr, San Juan Capistrano, CA 92675",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 54 photos 28690 Martingale Dr, San Juan Capistrano, CA 92675 $4,752,000 5 beds · 5.5 baths 4,437 Discover the captivating elegance of this remarkable Zen Farmhouse, enhanced by $",
+        "textLength": 1166,
+        "stillHome": false
+      },
+      {
+        "label": "30821 Hunt Club Drive, San Juan Capistrano, CA 92675",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 21 photos 30821 Hunt Club Drive, San Juan Capistrano, CA 92675 $3,588,800 5 beds · 5.5 baths 7,188 This exquisite residence embodies timeless elegance and is now offered at the l",
+        "textLength": 920,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app CORONA DEL MAR, CA Canaday Group RE/MAX Fine Homes - Canaday Group | Orange County Luxury Home Specialists. 949-249-2424 View listings ABOUT Stylish Blufftop Penthouse Dana Point Experience the 3D fl",
+        "textLength": 2499,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings CURATED FOR YOU Homes I picked for you. View all LISTING 23011 Java Sea Drive, Dana Point, CA 92629 $3,999,900 4 2 2,516 LISTING 82768 Kingsboro Ln, Indio, CA 92201 $730,000 2 ",
+        "textLength": 579,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://canadaygroup.com/",
+      "status": 200,
+      "finalUrl": "https://canadaygroup.com/",
+      "title": "Canaday Group | Orange County Luxury Home Specialists",
+      "textLength": 4986,
+      "priceCount": 6,
+      "uniquePrices": 6,
+      "propertyLinkCount": 1,
+      "sample": "ACTIVE\nFEATURED PROPERTIES\nOPEN HOUSES\nEVENTS\nSOLDS\nSOCIAL MEDIA\nMARKETING\nCANADAY TV\n949.249.2424\nLET'S CONNECT\nCanaday Group\nCLOSED OVER $2 BILLION IN SALES | CA DRE# 01526370\nSEARCH\nMeet Canaday Group\n\n\nOrange County Luxury Home Specialists\n\n\n\nAs the #1 RE/MAX Team in Orange County, and one of the most successful real estate teams in the world, Canaday Group provides the knowledge and experience that you expect from a top-flight real estate group. We've closed over $2 Billion in sales and approach each challenge with an energy and enthusiasm that is only matched by our level of expertise. Canaday Group is committed to handling your sale or purchase with speed, professionalism, and our incomparable understanding of marketing and real estate in the Orange County region.\n\n\n\nLEARN MORE\nProperties in the Area\nCanaday Group® find your place with the most Listings, including things you won't find anywhere else.\nHOME SEARCH\nWhat is Your Home Really Worth?\nCanaday Group® features Orange County’s finest real estate homes, land and other fabulous properties for sale.\nHOME VALUATION\nFeatured Properties\n\nPREVIOUS NEXT\nFOR LEASE\nLuxury Executive Condominium\n\n601 LIDO PARK DRIVE, UNIT 2E , NEW",
+      "challenge": false,
+      "screenshot": "canaday-group-source-0.png"
+    }
+  ],
+  "wallMs": 46025,
+  "window": {
+    "startedAt": "2026-10-08T20:45:39.581Z",
+    "endedAt": "2026-10-08T20:46:25.606Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.019532,
+    "inputTokens": 6542,
+    "outputTokens": 806
+  }
+}

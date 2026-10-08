@@ -1,0 +1,1675 @@
+{
+  "id": "the-cameron-team",
+  "url": "https://thecameronteam.net/",
+  "category": "AgentFire + /idx/ plugin",
+  "timeline": [
+    {
+      "at": 35,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 637,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 836,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 3038,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 1 listing so far · 1 page checked\nReading your website\nReading listing details · 0 of 1"
+    },
+    {
+      "at": 3238,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3439,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings"
+    },
+    {
+      "at": 3639,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nReading linked pages · 0 of 6"
+    },
+    {
+      "at": 3839,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nReading linked pages · 1 of 6"
+    },
+    {
+      "at": 4239,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nReading linked pages · 3 of 6"
+    },
+    {
+      "at": 4440,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nReading linked pages · 5 of 6"
+    },
+    {
+      "at": 5044,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nRead 6 linked pages\nIdentified your profile photo and logo\nSorted 44 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 12046,
+      "screen": "Building your app\nIMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nRead 6 linked pages\nIdentified your profile photo and logo\nSorted 44 website images by role\nWriting your profile and app copy\nFound Melanie Cameron · Wilmington, NC"
+    },
+    {
+      "at": 12248,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 433,
+      "totalMs": 11914,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "The Cameron Team",
+          "host": "thecameronteam.net",
+          "at": 2516
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 2516
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 6,
+          "at": 2847
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 6,
+          "at": 3170
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 6,
+          "at": 3390
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 6,
+          "at": 3569
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 6,
+          "at": 3589
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 6,
+          "at": 3653
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 6,
+          "total": 6,
+          "at": 4129
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 6,
+          "total": 6,
+          "at": 4270
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 44,
+          "sections": 11,
+          "at": 4272
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 4272
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 4285
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 4286
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 4286
+        },
+        {
+          "kind": "profile",
+          "name": "Melanie Cameron",
+          "city": "Wilmington, NC",
+          "at": 11291
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 11291
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 1423,
+            "design": 1756,
+            "site": 4285,
+            "profile": 7005,
+            "total": 11291
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 12047,
+            "outputTokens": 1077,
+            "estimatedUsd": 0.03271,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.03271
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 12047,
+                "cachedInputTokens": 0,
+                "outputTokens": 1077,
+                "estimatedUsd": 0.03271,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "Melanie Cameron",
+              "confidence": 1,
+              "locator": "LINKED PAGE (about-us/wilmington-nc-luxury-realtor/), intro and main content"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "Coldwell Banker Global Luxury Specialist, REALTOR®",
+              "confidence": 1,
+              "locator": "LINKED PAGE (about-us/wilmington-nc-luxury-realtor/), page headings and paragraphs"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "Wilmington, NC",
+              "confidence": 1,
+              "locator": "Structured data (RealEstateAgent), addressLocality, plus repeated in multiple areas served and content"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "910-202-2546",
+              "confidence": 1,
+              "locator": "Structured data (RealEstateAgent), telephone; also in footer and contact sections across both pages"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "The Cameron Team",
+              "confidence": 1,
+              "locator": "Structured data (Organization, RealEstateAgent), og:site_name, throughout page"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "Coldwell Banker Sea Coast Advantage",
+              "confidence": 1,
+              "locator": "Structured data (RealEstateAgent), footer on all site pages"
+            },
+            {
+              "field": "credentials.license.state",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "NC",
+              "confidence": 0.95,
+              "locator": "Structured data (addressRegion: NC), agent descriptions mentioning license #NC209100"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "value": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Melanie-Cameron-Web-1-Mid.jpg",
+              "confidence": 1,
+              "locator": "Images: Melanie Cameron portrait (file name, on about-us/wilmington-nc-luxury-realtor/)"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Wilmington’s Trusted Luxury Real Estate Expert",
+            "welcomeNote": "Welcome to your next chapter with Melanie Cameron and The Cameron Team—helping buyers and sellers navigate Wilmington and coastal NC’s finest homes with integrity and attention to detail.",
+            "tagline": "Confidential. Professional. Connected in Coastal Luxury.",
+            "aboutParagraph": "Melanie Cameron leads The Cameron Team at Coldwell Banker Sea Coast Advantage, where luxury isn’t just a price point—it’s a standard for service. Recognized for her honesty, steady negotiating, and deep area insight, Melanie has established a reputation as one of Wilmington’s premier luxury property specialists. She combines refined market knowledge with genuine local connections, making each real estate journey rewarding and discreet. From the beaches to the golf course communities, trust Melanie to match your lifestyle and priorities while protecting your privacy.",
+            "conciergeLine": "Let’s talk about your goals. Schedule your confidential consultation with Melanie Cameron today.",
+            "contactLine": "Call 910-202-2546 to connect with Melanie or The Cameron Team.",
+            "tone": "professional, discreet, and local-expert voice that’s focused on service, market mastery, and client trust—avoiding hype and emphasizing relationships and subtl",
+            "layoutId": "private-collection",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "cf4ff98c-ff48-401a-b045-edb8c8dc08d6"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://thecameronteam.net/",
+              "analyzedAt": 1791492392318,
+              "logoUrl": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx180.fit.png",
+              "heroImageUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg",
+              "portraitImageUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+              "heroTitle": "Results With Outstanding Service.",
+              "heroSubtitle": "Discover the latest Wilmington NC homes for sale. Get comprehensive neighborhood information and learn how to list your home with The Cameron Team.",
+              "sections": [
+                {
+                  "kind": "services",
+                  "title": "Selling",
+                  "body": "© 2021 Coldwell Banker Sea Coast Advantage. All Rights Reserved. Coldwell Banker&reg; and the Coldwell Banker Logo are registered service marks owned by Coldwell Banker Real Estate LLC. Coldwell Banker Sea Coast Advantage fully supports the principles of the Fair Housing Act and Equal Opportunity Act. Each franchise is independently owned and operated.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "about",
+                  "title": "Melanie Cameron",
+                  "body": "Coldwell Banker Global Luxury Specialist Melanie Cameron and The Cameron Team specialize in luxury real estate in Wilmington, NC, and the surrounding coastal areas of Southeastern North Carolina. Among her colleagues and clients, Melanie is known for her professionalism, honesty, and integrity. She aims to make every transaction as lucrative as possible for her clients and believes the best way to do that is by taking a sensible, even-keeled approach to negotiations.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "The Oaks at Boca Bay – Surf City",
+                  "body": "Explore If you're interested in any additional information on these communities, call us at 910.202.2546 or send us a message through our Contact page. Share My QR &times; Success!",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Airlie Road Area",
+                  "body": "The communities located along Airlie Road remain among Wilmington’s most desirable residential corridors due to their proximity to Wrightsville Beach and the Intracoastal Waterway. Positioned just before the bridge to the beach, this location offers convenient access to waterfront dining, marinas, and the popular beach Loop.",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "testimonials",
+                  "title": "Wilmington, NC",
+                  "body": "“I bought a home in North Carolina yesterday. Heather Lindquist-Bull was my buyers agent. Since I made this purchase while living in Massachusetts, it is more of a difficult way of doing business. Heather went above and beyond to keep me informed about everything being done all through the process. She was readily available whenever I needed her. She made a difficult situation much easier. I would not hesitate to recommend Heather to handle your real estate needs.” Valerie Letourneau",
+                  "intent": "testimonials",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "intent": "services",
+                  "destination": "unique",
+                  "title": "Buy With Us",
+                  "body": "From finding a reputable lender to negotiating home repairs, we protect our buyer's best interests with years of experience and professional knowledge of our local real estate market.",
+                  "imageUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/large-divider.svg",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Let's Get Social!",
+                  "body": "🏡 More homes for sale = more negotiating power? Not always! Wilmington's housing inventory is growing, giving buyers more options. But that doesn't mean every seller is ready to make a deal! 💰 From days on market to price reductions and property condition, knowing where you have leverage can make all the difference."
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Get in touch",
+                  "body": "110 Dungannon Blvd Ste 100, Wilmington, NC 28403 910-202-2546 [email protected]"
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "About",
+                  "body": ""
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Compliance status",
+                  "body": "We firmly believe that the internet should be available and accessible to anyone, and are committed to providing a website that is accessible to the widest possible audience, regardless of circumstance and ability. To fulfill this, we aim to adhere as strictly as possible to the World Wide Web Consortium’s (W3C) Web Content Accessibility Guidelines 2.1 (WCAG 2.1) at the AA level. These guidelines explain how to make web content accessible to people with a wide array of disabilities."
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Browser and assistive technology compatibility",
+                  "body": "We aim to support the widest array of browsers and assistive technologies as possible, so our users can choose the best fitting tools for them, with as few limitations as possible. Therefore, we have worked very hard to be able to support all major systems that comprise over 95% of the user market share including Google Chrome, Mozilla Firefox, Apple Safari, Opera and Microsoft Edge, JAWS and NVDA (screen readers), both for Windows and for MAC users."
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx90.fit.png",
+                  "variants": [
+                    {
+                      "url": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx180.fit.png"
+                    },
+                    {
+                      "url": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx90.fit.png"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx180.fit.png",
+                  "width": 148,
+                  "height": 90,
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 100,
+                  "renderedHeight": 61,
+                  "upscaleRatio": 1.35,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                  "variants": [
+                    {
+                      "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                  "width": 1100,
+                  "height": 800,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 204,
+                  "upscaleRatio": 0.51,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "hero": {
+                  "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg",
+                  "variants": [
+                    {
+                      "url": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg"
+                    }
+                  ],
+                  "role": "hero",
+                  "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg",
+                  "destination": "hero",
+                  "fit": "cover",
+                  "renderedWidth": 390,
+                  "renderedHeight": 220,
+                  "upscaleRatio": 1,
+                  "crop": "modest",
+                  "rank": 3
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://www.facebook.com/tr?id=1697259617249122&ev=PageView&noscript=1",
+                    "variants": [
+                      {
+                        "url": "https://www.facebook.com/tr?id=1697259617249122&ev=PageView&noscript=1"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.facebook.com/tr?id=1697259617249122&ev=PageView&noscript=1",
+                    "width": 1,
+                    "height": 1,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 1,
+                    "renderedHeight": 1,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx90.fit.png",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx180.fit.png"
+                      },
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx90.fit.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2015/05/Cameron-Logo-Cleaned-Up-Transparent-White-Lettering-545669-AUTOx180.fit.png",
+                    "width": 148,
+                    "height": 90,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 100,
+                    "renderedHeight": 61,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "width": 1100,
+                    "height": 800,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 204,
+                    "upscaleRatio": 0.51,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-2-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-2-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Buy-with-Us-2-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "width": 1100,
+                    "height": 800,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 204,
+                    "upscaleRatio": 0.51,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/large-divider.svg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/05/large-divider.svg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/large-divider.svg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Sell-with-Us-2-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Sell-with-Us-2-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Sell-with-Us-2-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "width": 1100,
+                    "height": 800,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 204,
+                    "upscaleRatio": 0.51,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Sell-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Sell-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Sell-with-Us-1-Wilmington-NC-Real-Estate-The-Cameron-Team.jpg",
+                    "width": 1100,
+                    "height": 800,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 204,
+                    "upscaleRatio": 0.51,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Reviews-The-Cameron-Team-Wilmington-NC-Realtors.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Reviews-The-Cameron-Team-Wilmington-NC-Realtors.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/Reviews-The-Cameron-Team-Wilmington-NC-Realtors.jpg",
+                    "width": 1100,
+                    "height": 800,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 204,
+                    "upscaleRatio": 0.51,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2026/10/Does-Higher-Inventory-Mean-Buyers-Should-Wait-to-Purchase-500x300.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2026/10/Does-Higher-Inventory-Mean-Buyers-Should-Wait-to-Purchase-500x300.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2026/10/Does-Higher-Inventory-Mean-Buyers-Should-Wait-to-Purchase-500x300.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2026/10/Avoid-AI-Closing-Scams-How-Buyers-and-Sellers-Can-Verify-Every-Closing-500x300.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2026/10/Avoid-AI-Closing-Scams-How-Buyers-and-Sellers-Can-Verify-Every-Closing-500x300.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2026/10/Avoid-AI-Closing-Scams-How-Buyers-and-Sellers-Can-Verify-Every-Closing-500x300.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2026/10/What-Stays-With-The-House-When-You-Move-Fixtures-Appliances-And-Personal-Property-Explained-500x300.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2026/10/What-Stays-With-The-House-When-You-Move-Fixtures-Appliances-And-Personal-Property-Explained-500x300.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2026/10/What-Stays-With-The-House-When-You-Move-Fixtures-Appliances-And-Personal-Property-Explained-500x300.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/839883762_2080846416203405_4622529571487737551_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=iaMUreso980Q7kNvwGk8Hv8&_nc_oc=Adpowlmv-nMAI-HPh5GXZWKH6OB3qP8BRNw3kktw9OSBzMmgZRt9Rm1l66loHObJ6dZmrHikkRQCzpyHYAGSCcTk&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQPC2TkgHxdrKIw_Vltc3R3kl87DIIw2wtiEb1ef_2lv1Q&oe=6ACDC63B",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/839883762_2080846416203405_4622529571487737551_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=iaMUreso980Q7kNvwGk8Hv8&_nc_oc=Adpowlmv-nMAI-HPh5GXZWKH6OB3qP8BRNw3kktw9OSBzMmgZRt9Rm1l66loHObJ6dZmrHikkRQCzpyHYAGSCcTk&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQPC2TkgHxdrKIw_Vltc3R3kl87DIIw2wtiEb1ef_2lv1Q&oe=6ACDC63B"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/839883762_2080846416203405_4622529571487737551_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=iaMUreso980Q7kNvwGk8Hv8&_nc_oc=Adpowlmv-nMAI-HPh5GXZWKH6OB3qP8BRNw3kktw9OSBzMmgZRt9Rm1l66loHObJ6dZmrHikkRQCzpyHYAGSCcTk&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQPC2TkgHxdrKIw_Vltc3R3kl87DIIw2wtiEb1ef_2lv1Q&oe=6ACDC63B",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/836117684_2078210256467021_4236793766578197500_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=PBsQnMii1MQQ7kNvwG42BCY&_nc_oc=AdquE9kx86BDHv2eeUETfRh83Cz52jCwaprMYwsdCOj-KKGKJcsavO5rYo5OLbay7XgBKShQ1n-B8gslHFvlXKz-&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQOpzkyit4l6rIK_-62BXN7AIw_tjsiTtFa-41CJ5ELPKQ&oe=6ACDE117",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/836117684_2078210256467021_4236793766578197500_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=PBsQnMii1MQQ7kNvwG42BCY&_nc_oc=AdquE9kx86BDHv2eeUETfRh83Cz52jCwaprMYwsdCOj-KKGKJcsavO5rYo5OLbay7XgBKShQ1n-B8gslHFvlXKz-&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQOpzkyit4l6rIK_-62BXN7AIw_tjsiTtFa-41CJ5ELPKQ&oe=6ACDE117"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/836117684_2078210256467021_4236793766578197500_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=PBsQnMii1MQQ7kNvwG42BCY&_nc_oc=AdquE9kx86BDHv2eeUETfRh83Cz52jCwaprMYwsdCOj-KKGKJcsavO5rYo5OLbay7XgBKShQ1n-B8gslHFvlXKz-&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQOpzkyit4l6rIK_-62BXN7AIw_tjsiTtFa-41CJ5ELPKQ&oe=6ACDE117",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/836458502_2078074923147221_8583670385766782941_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=GXoC_DP_7XgQ7kNvwEZwU7v&_nc_oc=AdpJrxOoSglXS1HEqMvNmMmBGHNGziLtSV6cLJgUsM4wANQ4iqcBwvNtTz2DH8Sg4eBL6ijlcb_fjYZ1mORbjQM5&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQM7heHUFNPGlj0QJe8aQ5mHq24NlmHTOSH7BUu9bnvCxQ&oe=6ACDE997",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/836458502_2078074923147221_8583670385766782941_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=GXoC_DP_7XgQ7kNvwEZwU7v&_nc_oc=AdpJrxOoSglXS1HEqMvNmMmBGHNGziLtSV6cLJgUsM4wANQ4iqcBwvNtTz2DH8Sg4eBL6ijlcb_fjYZ1mORbjQM5&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQM7heHUFNPGlj0QJe8aQ5mHq24NlmHTOSH7BUu9bnvCxQ&oe=6ACDE997"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/836458502_2078074923147221_8583670385766782941_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=GXoC_DP_7XgQ7kNvwEZwU7v&_nc_oc=AdpJrxOoSglXS1HEqMvNmMmBGHNGziLtSV6cLJgUsM4wANQ4iqcBwvNtTz2DH8Sg4eBL6ijlcb_fjYZ1mORbjQM5&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQM7heHUFNPGlj0QJe8aQ5mHq24NlmHTOSH7BUu9bnvCxQ&oe=6ACDE997",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/830119226_2075281290093251_2461467716040652950_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=rU-TSSJhnwgQ7kNvwG_aSNk&_nc_oc=AdpzwliWvna-x7tfSSZgVxJdgHwduqFwQ2mB_6VYO8xJfEJfzwTdWI6TGeZ0_-Dj_Rs9Cyf7OSgGCO3dzMixaUDj&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQPJnzBxGCvpUz7g89I24h-ysF_YHT36aCFMVnRDhlZb3w&oe=6ACDC2B6",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/830119226_2075281290093251_2461467716040652950_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=rU-TSSJhnwgQ7kNvwG_aSNk&_nc_oc=AdpzwliWvna-x7tfSSZgVxJdgHwduqFwQ2mB_6VYO8xJfEJfzwTdWI6TGeZ0_-Dj_Rs9Cyf7OSgGCO3dzMixaUDj&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQPJnzBxGCvpUz7g89I24h-ysF_YHT36aCFMVnRDhlZb3w&oe=6ACDC2B6"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/830119226_2075281290093251_2461467716040652950_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=rU-TSSJhnwgQ7kNvwG_aSNk&_nc_oc=AdpzwliWvna-x7tfSSZgVxJdgHwduqFwQ2mB_6VYO8xJfEJfzwTdWI6TGeZ0_-Dj_Rs9Cyf7OSgGCO3dzMixaUDj&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQPJnzBxGCvpUz7g89I24h-ysF_YHT36aCFMVnRDhlZb3w&oe=6ACDC2B6",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/833276142_2075100653444648_6343968184299656739_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=bMsnUza39JgQ7kNvwEFqDtV&_nc_oc=Adob8Oo3XslqtaVoveZO8xetue9VNgz8Xi8rH6Kc6ECWAtMKKPZ_LWeEnQ_GYj9BKMJrZYqoFPpG88qToGgeJ3bq&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQM8fT4ImWWBmtOiiMD9NEipU20oTwBe5sUhO6NNCAFw7Q&oe=6ACDC31C",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/833276142_2075100653444648_6343968184299656739_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=bMsnUza39JgQ7kNvwEFqDtV&_nc_oc=Adob8Oo3XslqtaVoveZO8xetue9VNgz8Xi8rH6Kc6ECWAtMKKPZ_LWeEnQ_GYj9BKMJrZYqoFPpG88qToGgeJ3bq&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQM8fT4ImWWBmtOiiMD9NEipU20oTwBe5sUhO6NNCAFw7Q&oe=6ACDC31C"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/833276142_2075100653444648_6343968184299656739_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=bMsnUza39JgQ7kNvwEFqDtV&_nc_oc=Adob8Oo3XslqtaVoveZO8xetue9VNgz8Xi8rH6Kc6ECWAtMKKPZ_LWeEnQ_GYj9BKMJrZYqoFPpG88qToGgeJ3bq&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQM8fT4ImWWBmtOiiMD9NEipU20oTwBe5sUhO6NNCAFw7Q&oe=6ACDC31C",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/831342116_2074290136859033_421233032227325545_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=VCXhkz5Ma1AQ7kNvwHNZOhm&_nc_oc=AdrRJI4hcbOa_nDhb7sNKhAvsvua3_Kj9sfBfMMF65d-Zg1hLTYgu1p7L-ZE42TG7szNh9E90tyGDYtaceEuwKzZ&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQOzlVxQwis9eJpxfhqu4k14bipmFRz391gbOI2PhpqNOw&oe=6ACDB71C",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/831342116_2074290136859033_421233032227325545_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=VCXhkz5Ma1AQ7kNvwHNZOhm&_nc_oc=AdrRJI4hcbOa_nDhb7sNKhAvsvua3_Kj9sfBfMMF65d-Zg1hLTYgu1p7L-ZE42TG7szNh9E90tyGDYtaceEuwKzZ&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQOzlVxQwis9eJpxfhqu4k14bipmFRz391gbOI2PhpqNOw&oe=6ACDB71C"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/831342116_2074290136859033_421233032227325545_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=VCXhkz5Ma1AQ7kNvwHNZOhm&_nc_oc=AdrRJI4hcbOa_nDhb7sNKhAvsvua3_Kj9sfBfMMF65d-Zg1hLTYgu1p7L-ZE42TG7szNh9E90tyGDYtaceEuwKzZ&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQOzlVxQwis9eJpxfhqu4k14bipmFRz391gbOI2PhpqNOw&oe=6ACDB71C",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/825293010_2070970917190955_6583578523198250363_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=m-v2gJNG8WkQ7kNvwGNNELz&_nc_oc=AdrjSdSHt3CKJN7nl2Bw6iaHX7q9DcDcVfpqTYDA7NtuNI7wh0GSoW4r9kJavefXq6MYXrVQNKK-CBi9189STzWb&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQMV0Cmlrwf0S_SCMQhrkopuj_jlFOSk-ZEPvG-tipLFtg&oe=6ACDBEE6",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/825293010_2070970917190955_6583578523198250363_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=m-v2gJNG8WkQ7kNvwGNNELz&_nc_oc=AdrjSdSHt3CKJN7nl2Bw6iaHX7q9DcDcVfpqTYDA7NtuNI7wh0GSoW4r9kJavefXq6MYXrVQNKK-CBi9189STzWb&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQMV0Cmlrwf0S_SCMQhrkopuj_jlFOSk-ZEPvG-tipLFtg&oe=6ACDBEE6"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/825293010_2070970917190955_6583578523198250363_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=m-v2gJNG8WkQ7kNvwGNNELz&_nc_oc=AdrjSdSHt3CKJN7nl2Bw6iaHX7q9DcDcVfpqTYDA7NtuNI7wh0GSoW4r9kJavefXq6MYXrVQNKK-CBi9189STzWb&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQMV0Cmlrwf0S_SCMQhrkopuj_jlFOSk-ZEPvG-tipLFtg&oe=6ACDBEE6",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/827774881_2071160037172043_3460986346686855558_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=cP2uOdM7sccQ7kNvwGIbD6U&_nc_oc=AdqXDOEsTxlWM4ilH35ykj4YQ_xLUTC-Y-sxlSSZKmJVY2kcksN77VCwC3HmWIsQ01NTz1ylRDhBSgzIkxbcUKj5&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQN81E0sS7IsNtPEE2hOjnENFiTTfRjhz3JWfZ3PRb33wQ&oe=6ACDD7FD",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/827774881_2071160037172043_3460986346686855558_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=cP2uOdM7sccQ7kNvwGIbD6U&_nc_oc=AdqXDOEsTxlWM4ilH35ykj4YQ_xLUTC-Y-sxlSSZKmJVY2kcksN77VCwC3HmWIsQ01NTz1ylRDhBSgzIkxbcUKj5&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQN81E0sS7IsNtPEE2hOjnENFiTTfRjhz3JWfZ3PRb33wQ&oe=6ACDD7FD"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/827774881_2071160037172043_3460986346686855558_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=cP2uOdM7sccQ7kNvwGIbD6U&_nc_oc=AdqXDOEsTxlWM4ilH35ykj4YQ_xLUTC-Y-sxlSSZKmJVY2kcksN77VCwC3HmWIsQ01NTz1ylRDhBSgzIkxbcUKj5&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQN81E0sS7IsNtPEE2hOjnENFiTTfRjhz3JWfZ3PRb33wQ&oe=6ACDD7FD",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t51.71878-15/825324197_1644586340645442_5837510793684791005_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=3a64VgWTQZkQ7kNvwFqJyb8&_nc_oc=Adp3-Onb5u6ZvJgWZObM8xogmL2JnFvZizgUIH0kYUP0gdWGL3DdtrtVBE3--wqIrL54yPswAFI8mxUPr35TK50G&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&_nc_tpa=Q5bMBQLR8ZefBFG4-IoUsimN8UaVLZJJ6sU1mPqN_Z3dEzQLWaVZPQuapXAwj88JoG0tQswyhs-AAGP_&oh=00_AQMUs61BLdNFD_9ZOAe9LHgRHnpvK_Juv0cZcUWSBeUPEA&oe=6ACDDD59",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t51.71878-15/825324197_1644586340645442_5837510793684791005_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=3a64VgWTQZkQ7kNvwFqJyb8&_nc_oc=Adp3-Onb5u6ZvJgWZObM8xogmL2JnFvZizgUIH0kYUP0gdWGL3DdtrtVBE3--wqIrL54yPswAFI8mxUPr35TK50G&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&_nc_tpa=Q5bMBQLR8ZefBFG4-IoUsimN8UaVLZJJ6sU1mPqN_Z3dEzQLWaVZPQuapXAwj88JoG0tQswyhs-AAGP_&oh=00_AQMUs61BLdNFD_9ZOAe9LHgRHnpvK_Juv0cZcUWSBeUPEA&oe=6ACDDD59"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t51.71878-15/825324197_1644586340645442_5837510793684791005_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=3a64VgWTQZkQ7kNvwFqJyb8&_nc_oc=Adp3-Onb5u6ZvJgWZObM8xogmL2JnFvZizgUIH0kYUP0gdWGL3DdtrtVBE3--wqIrL54yPswAFI8mxUPr35TK50G&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&_nc_tpa=Q5bMBQLR8ZefBFG4-IoUsimN8UaVLZJJ6sU1mPqN_Z3dEzQLWaVZPQuapXAwj88JoG0tQswyhs-AAGP_&oh=00_AQMUs61BLdNFD_9ZOAe9LHgRHnpvK_Juv0cZcUWSBeUPEA&oe=6ACDDD59",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/825292080_2067939084160805_8661793195000731341_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8y0HR44duM4Q7kNvwGT4soE&_nc_oc=AdpHqtZI_7FjLeKtqdgpVCBs5eFO7up2JUITEsQq159gwQxIrqnoJ7Cnuk1g5VUQUYHyaI6E-PMuOdxSrKs-xmWL&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQNQ9KrW8SLasakAhgxfIQl4RAnDDPdhOcRlFX58obgO8A&oe=6ACDE38D",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/825292080_2067939084160805_8661793195000731341_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8y0HR44duM4Q7kNvwGT4soE&_nc_oc=AdpHqtZI_7FjLeKtqdgpVCBs5eFO7up2JUITEsQq159gwQxIrqnoJ7Cnuk1g5VUQUYHyaI6E-PMuOdxSrKs-xmWL&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQNQ9KrW8SLasakAhgxfIQl4RAnDDPdhOcRlFX58obgO8A&oe=6ACDE38D"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/825292080_2067939084160805_8661793195000731341_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8y0HR44duM4Q7kNvwGT4soE&_nc_oc=AdpHqtZI_7FjLeKtqdgpVCBs5eFO7up2JUITEsQq159gwQxIrqnoJ7Cnuk1g5VUQUYHyaI6E-PMuOdxSrKs-xmWL&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQNQ9KrW8SLasakAhgxfIQl4RAnDDPdhOcRlFX58obgO8A&oe=6ACDE38D",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/820166065_2067788354175878_5258642375309643035_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=Glv-SuG_QvIQ7kNvwE7q9AB&_nc_oc=AdqUqzihUDHvtR2-Dzx7a4qeCOBj3X6i05PK7gjQiLwJkeXXuKPqdA8Lf5RTQnbn1w4hVvx03V73eQN-bdw5e_9p&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQN42vCMS2MEfbO3QfY3Id5E7c_wmsHZfAbteFoElg9XbQ&oe=6ACDC46A",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t39.30808-6/820166065_2067788354175878_5258642375309643035_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=Glv-SuG_QvIQ7kNvwE7q9AB&_nc_oc=AdqUqzihUDHvtR2-Dzx7a4qeCOBj3X6i05PK7gjQiLwJkeXXuKPqdA8Lf5RTQnbn1w4hVvx03V73eQN-bdw5e_9p&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQN42vCMS2MEfbO3QfY3Id5E7c_wmsHZfAbteFoElg9XbQ&oe=6ACDC46A"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t39.30808-6/820166065_2067788354175878_5258642375309643035_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=Glv-SuG_QvIQ7kNvwE7q9AB&_nc_oc=AdqUqzihUDHvtR2-Dzx7a4qeCOBj3X6i05PK7gjQiLwJkeXXuKPqdA8Lf5RTQnbn1w4hVvx03V73eQN-bdw5e_9p&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&oh=00_AQN42vCMS2MEfbO3QfY3Id5E7c_wmsHZfAbteFoElg9XbQ&oe=6ACDC46A",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.cdninstagram.com/v/t51.71878-15/825276661_1240584898255789_5665299318006141956_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=FvBOlf1JldAQ7kNvwHk8U1R&_nc_oc=AdrmLlc8juXpttbULGbo8KC_-Lut203GCgSAAbzKM6sjWnj93cEy9LjetG_vsSP4oUPzaFwmmivYhHSryObxx5ii&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&_nc_tpa=Q5bMBQJpR09trD9_jAYyvGW_tPCAG5UbTxi62YFtSumweiT3KXAee-_0qXtuxVsmoqDib3IOU9ij1T3m&oh=00_AQMMIem4L7UfI8fwsNnnrg2bPGViGC1r6Lbkg6pRDDFVjw&oe=6ACDE6FA",
+                    "variants": [
+                      {
+                        "url": "https://scontent.cdninstagram.com/v/t51.71878-15/825276661_1240584898255789_5665299318006141956_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=FvBOlf1JldAQ7kNvwHk8U1R&_nc_oc=AdrmLlc8juXpttbULGbo8KC_-Lut203GCgSAAbzKM6sjWnj93cEy9LjetG_vsSP4oUPzaFwmmivYhHSryObxx5ii&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&_nc_tpa=Q5bMBQJpR09trD9_jAYyvGW_tPCAG5UbTxi62YFtSumweiT3KXAee-_0qXtuxVsmoqDib3IOU9ij1T3m&oh=00_AQMMIem4L7UfI8fwsNnnrg2bPGViGC1r6Lbkg6pRDDFVjw&oe=6ACDE6FA"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://scontent.cdninstagram.com/v/t51.71878-15/825276661_1240584898255789_5665299318006141956_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=FvBOlf1JldAQ7kNvwHk8U1R&_nc_oc=AdrmLlc8juXpttbULGbo8KC_-Lut203GCgSAAbzKM6sjWnj93cEy9LjetG_vsSP4oUPzaFwmmivYhHSryObxx5ii&_nc_zt=23&_nc_ht=scontent.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=XjsT0V6DDyWQ7ToC_R0ujA&_nc_tpa=Q5bMBQJpR09trD9_jAYyvGW_tPCAG5UbTxi62YFtSumweiT3KXAee-_0qXtuxVsmoqDib3IOU9ij1T3m&oh=00_AQMMIem4L7UfI8fwsNnnrg2bPGViGC1r6Lbkg6pRDDFVjw&oe=6ACDE6FA",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://scontent.xx.fbcdn.net/v/t51.2885-15/10810028_1520608104892484_1991997415_a.jpg?_nc_cat=103&ccb=1-7&_nc_sid=7d201b&_nc_ohc=GFgp-xF_cZQQ7kNvwECH9Q1&_nc_oc=AdqzqDhyfvG1--kQKfcQsbRrdX3t0STUemC_reIjdT-8FwrMgCJQxAZDztuR4-UimcK0H3dqJ3RibKfrgES5-AHJ&_nc_zt=23&_nc_ht=scontent.xx&edm=AJ-jyNUEAAAA&oh=00_AQOtdPZumfilIFFQ9GZ6qFkuMoidmSuBR-kRD8f6yuqcRg&oe=6AC81DB3",
+                    "variants": [
+                      {
+                        "url": "https://scontent.xx.fbcdn.net/v/t51.2885-15/10810028_1520608104892484_1991997415_a.jpg?_nc_cat=103&ccb=1-7&_nc_sid=7d201b&_nc_ohc=GFgp-xF_cZQQ7kNvwECH9Q1&_nc_oc=AdqzqDhyfvG1--kQKfcQsbRrdX3t0STUemC_reIjdT-8FwrMgCJQxAZDztuR4-UimcK0H3dqJ3RibKfrgES5-AHJ&_nc_zt=23&_nc_ht=scontent.xx&edm=AJ-jyNUEAAAA&oh=00_AQOtdPZumfilIFFQ9GZ6qFkuMoidmSuBR-kRD8f6yuqcRg&oe=6AC81DB3"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://scontent.xx.fbcdn.net/v/t51.2885-15/10810028_1520608104892484_1991997415_a.jpg?_nc_cat=103&ccb=1-7&_nc_sid=7d201b&_nc_ohc=GFgp-xF_cZQQ7kNvwECH9Q1&_nc_oc=AdqzqDhyfvG1--kQKfcQsbRrdX3t0STUemC_reIjdT-8FwrMgCJQxAZDztuR4-UimcK0H3dqJ3RibKfrgES5-AHJ&_nc_zt=23&_nc_ht=scontent.xx&edm=AJ-jyNUEAAAA&oh=00_AQOtdPZumfilIFFQ9GZ6qFkuMoidmSuBR-kRD8f6yuqcRg&oe=6AC81DB3",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/newipl-AUTOx100.fit.max.png",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/newipl-AUTOx100.fit.max.png"
+                      },
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/06/newipl-AUTOx200.fit.max.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/06/newipl-AUTOx100.fit.max.png",
+                    "width": 300,
+                    "height": 100,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 68,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thecameronteam.net/wp-content/plugins/gdpr-cookie-compliance/dist/images/gdpr-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thecameronteam.net/wp-content/plugins/gdpr-cookie-compliance/dist/images/gdpr-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thecameronteam.net/wp-content/plugins/gdpr-cookie-compliance/dist/images/gdpr-logo.png",
+                    "width": 350,
+                    "height": 233,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 96,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 0.55,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Wilmington-ready-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2019/03/Bolivia-Forest-pexels-photo-1009402-Photo-by-Pille-Kirsi-from-Pexels-800x500.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2019/03/Bolivia-Forest-pexels-photo-1009402-Photo-by-Pille-Kirsi-from-Pexels-800x500.jpeg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2019/03/Bolivia-Forest-pexels-photo-1009402-Photo-by-Pille-Kirsi-from-Pexels-800x500.jpeg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Carolina-Beach-ICWW-Web-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Carolina-Beach-ICWW-Web-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Carolina-Beach-ICWW-Web-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Castle-Hayne-1-min-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Castle-Hayne-1-min-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Castle-Hayne-1-min-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Hampstead-1-min-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Hampstead-1-min-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Hampstead-1-min-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2019/08/Holly-Ridge-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2019/08/Holly-Ridge-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2019/08/Holly-Ridge-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2019/08/Jacksonville-NC-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2019/08/Jacksonville-NC-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2019/08/Jacksonville-NC-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Kure-Beach-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Kure-Beach-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Kure-Beach-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Leland-North-Carolina-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Leland-North-Carolina-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/03/Leland-North-Carolina-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/North-Topsail-Beach-Web-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/10/North-Topsail-Beach-Web-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/North-Topsail-Beach-Web-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2018/08/Rocky-Point-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2018/08/Rocky-Point-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2018/08/Rocky-Point-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/08/Sneads-Ferry-800x500.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2017/08/Sneads-Ferry-800x500.jpeg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2017/08/Sneads-Ferry-800x500.jpeg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Surf-City-Web-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Surf-City-Web-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Surf-City-Web-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Topsail-Beach-Web-800x500.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Topsail-Beach-Web-800x500.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/10/Topsail-Beach-Web-800x500.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://api-idx.diversesolutions.com/images/dsidxpress/map-hover-divet.png",
+                    "variants": [
+                      {
+                        "url": "https://api-idx.diversesolutions.com/images/dsidxpress/map-hover-divet.png"
+                      }
+                    ],
+                    "role": "background",
+                    "selectedUrl": "https://api-idx.diversesolutions.com/images/dsidxpress/map-hover-divet.png",
+                    "destination": "background",
+                    "fit": "contain",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/slider-buttons-divider.svg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/05/slider-buttons-divider.svg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/slider-buttons-divider.svg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/testimonial-arrow-left.svg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/05/testimonial-arrow-left.svg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/testimonial-arrow-left.svg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/testimonial-arrow-right.svg",
+                    "variants": [
+                      {
+                        "url": "https://assets.agentfire4.com/uploads/sites/106/2021/05/testimonial-arrow-right.svg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://assets.agentfire4.com/uploads/sites/106/2021/05/testimonial-arrow-right.svg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#0c4da2",
+                "background": "#ffffff",
+                "ink": "#15191d",
+                "panel": "#fffdf9",
+                "muted": "#15191d",
+                "fontFamily": "Inter",
+                "headingFontFamily": "Inter",
+                "layout": "image-overlay",
+                "spacing": 16,
+                "radius": 32,
+                "headingSize": 38,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#0c4da2",
+                "background": "#ffffff",
+                "ink": "#15191d",
+                "panel": "#fffdf9",
+                "muted": "#15191d",
+                "fontFamily": "Inter",
+                "headingFontFamily": "Inter",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 32,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://thecameronteam.net/scss/diverse/combo-css-pro-modern.css?ver=1.0.9&rev=13.376",
+                  "https://static.agentfire4.com/wp-content/mu-plugins/agentfire-shared-library/css/bundle/bundle.min.css?ver=1.3.13",
+                  "https://static.agentfire4.com/wp-content/mu-plugins/agentfire-shared-library/bower_components/animate.css/animate.css",
+                  "https://thecameronteam.net/scss/plugin/gdpr/client.css?ver=1.0.1&rev=13.376",
+                  "https://thecameronteam.net/scss/plugin/guide-covers/client.css?ver=1.3.3&rev=13.376",
+                  "https://static.agentfire4.com/wp-content/plugins/gdpr-cookie-compliance/dist/styles/gdpr-main.css?ver=4.15.10"
+                ],
+                "colors": [
+                  "#000000",
+                  "#aaaaaa",
+                  "#ffffff",
+                  "#222222",
+                  "#cccccc",
+                  "#d3d3d3",
+                  "#e6e6e6",
+                  "#555555",
+                  "#999999",
+                  "#dadada",
+                  "#212121",
+                  "#fcefa1",
+                  "#fbf9ee",
+                  "#363636",
+                  "#cd0a0a",
+                  "#fef1ec",
+                  "#ededed",
+                  "#f3f3f3",
+                  "#666666",
+                  "#ffd489",
+                  "#faf8c2",
+                  "#fdf98e",
+                  "#5fb520",
+                  "#86d42d",
+                  "#389613",
+                  "#dedede",
+                  "#ebebeb",
+                  "#949494",
+                  "#0092ef",
+                  "#e5e5e5"
+                ],
+                "fonts": [
+                  "Verdana",
+                  "Arial",
+                  "Helvetica Neue",
+                  "SFMono-Regular",
+                  "FontAwesome",
+                  "Museo-Slab",
+                  "fontawesome",
+                  "sans-serif",
+                  "Nunito",
+                  "Georgia"
+                ],
+                "routing": [
+                  {
+                    "source": "Privacy Policy \",\"oauth2_initial_urls\":{\"facebook\":\"https:\\/\\/www.facebook.com\\/",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Why work with us",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buy With Us",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sell With Us",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Luxury Real Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Search",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Lifestyles",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Retirement Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Luxury Neighborhoods in Wilmington",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Homes by School District",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Area Info",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Featured Areas",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Brunswick County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "New Hanover County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Onslow County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Pender County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Resources",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Frequently Asked Questions (FAQ)",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Perfect Home Finder",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Valuation",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Schedule in-person Home Valuation",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Guides",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buyer & Seller Guides",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "First-Time Home Buyer Guide",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Explore the area with a local expert!",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Get in touch",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Buying",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Accessibility",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Accessibility Statement",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Screen-reader and keyboard navigation",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Disability profiles supported in our website",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Additional UI, design, and readability adjustments",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Notes, comments, and feedback",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "About The Cameron Team",
+                    "intent": "profile",
+                    "canonical": "card:profile",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Buy With Us",
+                    "intent": "services",
+                    "canonical": "card:services",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Let's Get Social!",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Selling",
+                    "intent": "services",
+                    "canonical": "card:services",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Compliance status",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Browser and assistive technology compatibility",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://thecameronteam.net/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://thecameronteam.net/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "cf4ff98c-ff48-401a-b045-edb8c8dc08d6",
+              "kind": "url",
+              "label": "thecameronteam.net",
+              "uri": "https://thecameronteam.net/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "the-cameron-team-00-url.png",
+    "the-cameron-team-01-review.png",
+    "the-cameron-team-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 26,
+    "text": []
+  },
+  "submittedAt": 3199,
+  "reviewMs": 12248,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nNo active listings were found on this page\nReading The Cameron Team\nFull details weren’t available for this listing\nMatching your website’s design and imagery\nSaved 0 listings\nRead 6 linked pages\nIdentified your profile photo and logo\nSorted 44 website images by role\nWriting your profile and app copy\nFound Melanie Cameron · Wilmington, NC",
+  "reviewText": "Back\nAPP BUILDER\nthecameronteam.net\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nWILMINGTON, NC\nResults With Outstanding Service.\nDiscover the latest Wilmington NC homes for sale. Get comprehensive neighborhood information and learn how to list your home with The Cameron Team.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\nSelling\n© 2021 Coldwell Banker Sea Coast Advantage. All Rights Reserved. Coldwell Banker&reg; and the Coldwell Banker Logo are registered service marks owned by Coldwell Banker Real Estate LLC. Coldwell Banker Sea Coast Advantage fully supports the principles of the Fair Housing Act and Equal Opportunity Act. Each franchise is independently owned and operated.\nABOUT\nMelanie Cameron\nColdwell Banker Global Luxury Specialist Melanie Cameron and The Cameron Team specialize in luxury real estate in Wilmington, NC, and the surrounding coastal areas of Southeastern North Carolina. Among her colleagues and clients, Melanie is known for her professionalism, honesty, and integrity. She aims to make every transaction as lucrative as possible for her clients and believes the best way to do that is by taking a sensible, even-keeled approach to negotiations.\nTHE AREA\nThe Oaks at Boca Bay – Surf City\nExplore If you're interested in any additional information on these communities, call us at 910.202.2546 or send us a message through our Contact page. Share My QR &times; Success!\nTHE AREA\nAirlie Road Area\nThe communities located along Airlie Road remain among Wilmington’s most desirable residential corridors due to their proximity to Wrightsville Beach and the Intracoastal Waterway. Positioned just before the bridge to the beach, this location offers convenient access to waterfront dining, marinas, and the popular beach Loop.\nCLIENTS\nWilmington, NC\n“I bought a home in North Carolina yesterday. Heather Lindquist-Bull was my buyers agent. Since I made this purchase while living in Massachusetts, it is more of a difficult way of doing business. Heather went above and beyond to keep me informed about everything being done all through the process. She was readily available whenever I needed her. She made a difficult situation much easier. I would not hesitate to recommend Heather to handle your real estate needs.” Valerie Letourneau\nSERVICES\nBuy With Us\nFrom finding a reputable lender to negotiating home repairs, we protect our buyer's best interests with years of experience and professional knowledge of our local real estate market.\n910-202-2546\nColdwell Banker Sea Coast Advantage\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nWilmington’s Trusted Luxury Real Estate Expert\nTry another opening line\nYOUR INTRODUCTION\nMelanie Cameron leads The Cameron Team at Coldwell Banker Sea Coast Advantage, where luxury isn’t just a price point—it’s a standard for service. Recognized for her honesty, steady negotiating, and deep area insight, Melanie has established a reputation as one of Wilmington’s premier luxury property specialists. She combines refined market knowledge with genuine local connections, making each real estate journey rewarding and discreet. From the beaches to the golf course communities, trust Melanie to match your lifestyle and priorities while protecting your privacy.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\nJust a few more details\nWe couldn’t find these on your website.\nYour business contact details — this is how clients reach you from the app.\nEmail address — where would you like clients to email you?\n▸ Brokerage & license (optional)\n✓ Coldwell Banker Sea Coast Advantage · NC\nStill needed: Business phone & email\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nWILMINGTON, NC\nResults With Outstanding Service.\nDiscover the latest Wilmington NC homes for sale. Get comprehensive neighborhood information and learn how to list your home with The Cameron Team.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\nSelling\n© 2021 Coldwell Banker Sea Coast Advantage. All Rights Reserved. Coldwell Banker&reg; and the Coldwell Banker Logo are registered service marks owned by Coldwell Banker Real Estate LLC. Coldwell Banker Sea Coast Advantage fully supports the principles of the Fair Housing Act and Equal Opportunity Act. Each franchise is independently owned and operated.\nABOUT\nMelanie Cameron\nColdwell Banker Global Luxury Specialist Melanie Cameron and The Cameron Team specialize in luxury real estate in Wilmington, NC, and the surrounding coastal areas of Southeastern North Carolina. Among her colleagues and clients, Melanie is known for her professionalism, honesty, and integrity. She aims to make every transaction as lucrative as possible for her clients and believes the best way to do that is by taking a sensible, even-keeled approach to negotiations.\nTHE AREA\nThe Oaks at Boca Bay – Surf City\nExplore If you're interested in any additional information on these communities, call us at 910.202.2546 or send us a message through our Contact page. Share My QR &times; Success!\nTHE AREA\nAirlie Road Area\nThe communities located along Airlie Road remain among Wilmington’s most desirable residential corridors due to their proximity to Wrightsville Beach and the Intracoastal Waterway. Positioned just before the bridge to the beach, this location offers convenient access to waterfront dining, marinas, and the popular beach Loop.\nCLIENTS\nWilmington, NC\n“I bought a home in North Carolina yesterday. Heather Lindquist-Bull was my buyers agent. Since I made this purchase while living in Massachusetts, it is more of a difficult way of doing business. Heather went above and beyond to keep me informed about everything being done all through the process. She was readily available whenever I needed her. She made a difficult situation much easier. I would not hesitate to recommend Heather to handle your real estate needs.” Valerie Letourneau\nSERVICES\nBuy With Us\nFrom finding a reputable lender to negotiating home repairs, we protect our buyer's best interests with years of experience and professional knowledge of our local real estate market.\n910-202-2546\nColdwell Banker Sea Coast Advantage\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app WILMINGTON, NC Results With Outstanding Service. Discover the latest Wilmington NC homes for sale. Get comprehensive neighborhood information and learn how to list your home with The Cameron Team. Vi",
+        "textLength": 2590,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://thecameronteam.net/",
+      "status": 200,
+      "finalUrl": "https://thecameronteam.net/",
+      "title": "The Cameron Team | Wilmington NC Realtors & Homes for Sale",
+      "textLength": 11474,
+      "priceCount": 2,
+      "uniquePrices": 2,
+      "propertyLinkCount": 5,
+      "sample": "Skip to main content\nWHY WORK WITH US \nSEARCH \nAREA INFO \nRESOURCES \nABOUT \nBLOG\n\nTALK TO AN EXPERT\n\n \nMENU\nWHY WORK WITH US\nSEARCH\nAREA INFO\nRESOURCES\nABOUT\nBLOG\nResults With\nOutstanding Service.\n\nWe help home buyers and sellers achieve their real estate goals. Our years of experience make the process as smooth as possible.\n\nI'M BUYING I'M SELLING\n0\n+\n\nyears in business\n\nEXPERIENCE\n\n0\n%\n\nlist-to-sale price ratio\n\nSKILL\n\n0\n\nexperienced professionals\n\nTEAMWORK\n\nAbout The Cameron Team\n\nMelanie and all of us on The Cameron Team pride ourselves on getting results and providing outstanding service for our clients! Each of us understand that there is no more important business than the business our clients have provided us. We make every effort possible to exceed their expectations! So if you are looking for real estate professionals that will make your goals a #1 priority, call us today. We are so confident you will be satisfied with the service you receive, it’s guaranteed in writing!\n\nWHO WE ARE\nFEATURED AREAS\nExplore The Area With A Local Expert!\nVIEW ALL AREAS\nEXPLORE\nSneads Ferry\nVIEW AREA\nEXPLORE\nSurf City\nVIEW AREA\nEXPLORE\nTopsail Beach\nVIEW AREA\nEXPLORE\nWilmington\nVIEW AREA\nEXPL",
+      "challenge": false,
+      "screenshot": "the-cameron-team-source-0.png"
+    }
+  ],
+  "wallMs": 37546,
+  "window": {
+    "startedAt": "2026-10-08T20:46:25.607Z",
+    "endedAt": "2026-10-08T20:47:03.153Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.03271,
+    "inputTokens": 12047,
+    "outputTokens": 1077
+  }
+}

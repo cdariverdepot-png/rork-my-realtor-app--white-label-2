@@ -1,0 +1,1589 @@
+{
+  "id": "chatman-realty-group",
+  "url": "https://www.chatmanrealtygroup.com/",
+  "category": "Real Geeks",
+  "timeline": [
+    {
+      "at": 50,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 851,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1050,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1454,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading your website\nOpening chatmanrealtygroup.com in a browser (it requires one)"
+    },
+    {
+      "at": 1654,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Sascha Chatman, REALTOR®\nOpening chatmanrealtygroup.com in a browser (it requires one)\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2055,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Sascha Chatman, REALTOR®\nOpening chatmanrealtygroup.com in a browser (it requires one)\nMatching your website’s design and imagery\nReading linked pages · 1 of 3"
+    },
+    {
+      "at": 2456,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Sascha Chatman, REALTOR®\nOpening chatmanrealtygroup.com in a browser (it requires one)\nMatching your website’s design and imagery\nReading linked pages · 2 of 3"
+    },
+    {
+      "at": 3058,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Sascha Chatman, REALTOR®\nOpened chatmanrealtygroup.com in a browser\nMatching your website’s design and imagery\nReading linked pages · 2 of 3"
+    },
+    {
+      "at": 3258,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Sascha Chatman, REALTOR®\nOpened chatmanrealtygroup.com in a browser\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo\nSorted 39 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 11477,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 506,
+      "totalMs": 2885,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 78
+        },
+        {
+          "kind": "listings",
+          "host": "chatmanrealtygroup.com",
+          "pages": 1,
+          "found": 0,
+          "at": 745
+        },
+        {
+          "kind": "render",
+          "host": "chatmanrealtygroup.com",
+          "state": "start",
+          "at": 758
+        },
+        {
+          "kind": "render",
+          "host": "chatmanrealtygroup.com",
+          "state": "done",
+          "at": 2263
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "failed",
+          "at": 2267
+        }
+      ],
+      "result": {
+        "status": 422,
+        "body": {
+          "ok": false,
+          "error": "This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.",
+          "code": "unreadable",
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 0,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedUsd": 0,
+            "byStage": {},
+            "records": []
+          },
+          "timings": {
+            "listings": 2189,
+            "total": 2268
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 737,
+      "totalMs": 11391,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Sascha Chatman, REALTOR®",
+          "host": "chatmanrealtygroup.com",
+          "at": 481
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 481
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 3,
+          "at": 992
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 3,
+          "at": 1000
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 3,
+          "at": 1314
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 3,
+          "at": 2216
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 2,
+          "total": 3,
+          "at": 2241
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": false,
+          "images": 39,
+          "sections": 3,
+          "at": 2241
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 2241
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 2246
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 2246
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 2246
+        },
+        {
+          "kind": "profile",
+          "name": "Sascha Chatman",
+          "city": "Fort Worth, TX",
+          "at": 10463
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 10463
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 1249,
+            "design": 1760,
+            "site": 2246,
+            "profile": 8217,
+            "total": 10463
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 5019,
+            "outputTokens": 1013,
+            "estimatedUsd": 0.018142,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.018142
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 5019,
+                "cachedInputTokens": 0,
+                "outputTokens": 1013,
+                "estimatedUsd": 0.018142,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "Sascha Chatman",
+              "confidence": 1,
+              "locator": "Structured data and page text (homepage, about page)"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "REALTOR®",
+              "confidence": 1,
+              "locator": "Structured data and meta og:site_name"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "Fort Worth, TX",
+              "confidence": 0.95,
+              "locator": "About page: \"Chatman Realty Group is based in North Fort Worth, TX\""
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "(817) 383-2423",
+              "confidence": 1,
+              "locator": "Structured data; homepage and about page phone links"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "817-668-0311",
+              "confidence": 0.95,
+              "locator": "About and homepage footer"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "info@carltonbell.com",
+              "confidence": 0.7,
+              "locator": "Homepage email link"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "Chatman Realty Group",
+              "confidence": 1,
+              "locator": "About page, site branding, structured data"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "value": "https://u.realgeeks.media/northforworthhomes/headshot/Sascha_Chatman.png",
+              "confidence": 1,
+              "locator": "About page team section and image files"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Guiding Fort Worth families to new beginnings—your real estate journey starts here.",
+            "welcomeNote": "Welcome! I’m Sascha Chatman, your dedicated REALTOR® serving the Greater Fort Worth area. Whether you're buying your first home or selling your third, I’m here to provide steady guidance and market expertise every step of the way.",
+            "tagline": "Clear Guidance. Strong Partnership. Fort Worth Focused.",
+            "aboutParagraph": "Since 2017, Chatman Realty Group has proudly served as a trusted advisor for families across Fort Worth and the DFW area. My mission is simple: put your needs first, deliver professional service, and ensure you are informed from start to finish. With a wealth of knowledge and a caring team beside me, I strive to make your real estate transactions straightforward and successful—so you can focus on what matters most, your future. Let’s achieve your real estate goals together.",
+            "conciergeLine": "Curious about the Fort Worth market or need help finding your next home? Reach out—I'm always ready to offer honest advice and hands-on support.",
+            "contactLine": "Contact me anytime at (817) 383-2423 or 817-668-0311 to discuss your home buying or selling needs.",
+            "tone": "Warm, professional, community-focused, with an approachable and trustworthy voice.",
+            "layoutId": "warm-concierge",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "11edd5c4-b37f-4b09-bce0-73152812cbd8"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://www.chatmanrealtygroup.com/",
+              "analyzedAt": 1791492023820,
+              "portraitImageUrl": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg",
+              "introImage": {
+                "url": "https://t2.realgeeks.media/thumbnail/3YOh1Mcn9e1Vw1ITjKwXH6TgE0Y=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Fort_Worth.jpg",
+                "fit": "cover",
+                "role": "article",
+                "width": 500,
+                "height": 300
+              },
+              "heroTitle": "Local Searches",
+              "heroSubtitle": "Search all area real estate for sale on one easy-to-use site. Including homes, condos, townhomes, land, and foreclosure properties for sale.",
+              "sections": [
+                {
+                  "kind": "services",
+                  "title": "Things to Think About When Selling Your Home",
+                  "body": "Once we've determined the price, I can give you advice about the little things that you can do to stage your home to get you the highest possible price! You'd be surprised by the simple measures you can take to dress up your home to attract more qualified buyers. I have a marketing plan that is designed to get maximum exposure to the buyers that are currently looking, and all agents that have buyers.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Owning a Home is More Affordable Than You Think",
+                  "body": "Contrary to belief owning a home is much more affordable than it has been a a very long time. Interest rates are much lower than they have been in the past, which is a huge benefit to you.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Address Search",
+                  "body": ""
+                }
+              ],
+              "imagery": {
+                "portrait": {
+                  "sourceUrl": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg",
+                  "variants": [
+                    {
+                      "url": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg",
+                  "width": 600,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://www.facebook.com/tr?id=150038802216526&ev=PageView&noscript=1",
+                    "variants": [
+                      {
+                        "url": "https://www.facebook.com/tr?id=150038802216526&ev=PageView&noscript=1"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.facebook.com/tr?id=150038802216526&ev=PageView&noscript=1",
+                    "width": 1,
+                    "height": 1,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 1,
+                    "renderedHeight": 1,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.facebook.com/tr?id=294471718641787&ev=PageView&noscript=1",
+                    "variants": [
+                      {
+                        "url": "https://www.facebook.com/tr?id=294471718641787&ev=PageView&noscript=1"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.facebook.com/tr?id=294471718641787&ev=PageView&noscript=1",
+                    "width": 1,
+                    "height": 1,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 1,
+                    "renderedHeight": 1,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.facebook.com/tr?id=318619979035202&ev=PageView&noscript=1",
+                    "variants": [
+                      {
+                        "url": "https://www.facebook.com/tr?id=318619979035202&ev=PageView&noscript=1"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.facebook.com/tr?id=318619979035202&ev=PageView&noscript=1",
+                    "width": 1,
+                    "height": 1,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 1,
+                    "renderedHeight": 1,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.facebook.com/tr?id=883109217643679&ev=PageView&noscript=1",
+                    "variants": [
+                      {
+                        "url": "https://www.facebook.com/tr?id=883109217643679&ev=PageView&noscript=1"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.facebook.com/tr?id=883109217643679&ev=PageView&noscript=1",
+                    "width": 1,
+                    "height": 1,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 1,
+                    "renderedHeight": 1,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/ACFlSc-hKfCCUxizyRgmz2y9W7A=/fit-in/200x43/filters:format(png)/u.realgeeks.media/northforworthhomes/chapmanrealty-removebg-preview.png",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/ACFlSc-hKfCCUxizyRgmz2y9W7A=/fit-in/200x43/filters:format(png)/u.realgeeks.media/northforworthhomes/chapmanrealty-removebg-preview.png"
+                      },
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/ZcoyLpR_KcOMIUEJGlpFWcrUo6w=/fit-in/400x86/filters:format(png)/u.realgeeks.media/northforworthhomes/chapmanrealty-removebg-preview.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/ACFlSc-hKfCCUxizyRgmz2y9W7A=/fit-in/200x43/filters:format(png)/u.realgeeks.media/northforworthhomes/chapmanrealty-removebg-preview.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/3YOh1Mcn9e1Vw1ITjKwXH6TgE0Y=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Fort_Worth.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/3YOh1Mcn9e1Vw1ITjKwXH6TgE0Y=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Fort_Worth.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/3YOh1Mcn9e1Vw1ITjKwXH6TgE0Y=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Fort_Worth.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/Bdzu4S8OZZhtGNz19mEAthz3gTg=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Alliance_Town_Center_080813.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/Bdzu4S8OZZhtGNz19mEAthz3gTg=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Alliance_Town_Center_080813.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/Bdzu4S8OZZhtGNz19mEAthz3gTg=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Alliance_Town_Center_080813.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/_7oFridXfjwaFb5VeyiFoIil5P4=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Saginaw.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/_7oFridXfjwaFb5VeyiFoIil5P4=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Saginaw.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/_7oFridXfjwaFb5VeyiFoIil5P4=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Saginaw.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "listing",
+                    "fit": "cover",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1.33,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/qRpfhVpn6VG7OeaUHgFYijq7cMY=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_159028481.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/qRpfhVpn6VG7OeaUHgFYijq7cMY=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_159028481.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/qRpfhVpn6VG7OeaUHgFYijq7cMY=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_159028481.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/AOEfiAHRVWosoL8LLVitagYs9Kw=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Keller.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/AOEfiAHRVWosoL8LLVitagYs9Kw=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Keller.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/AOEfiAHRVWosoL8LLVitagYs9Kw=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Keller.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/cwcsTb8u1vsSQPkP4jhMJMV4tc4=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Roanoke.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/cwcsTb8u1vsSQPkP4jhMJMV4tc4=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Roanoke.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/cwcsTb8u1vsSQPkP4jhMJMV4tc4=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Roanoke.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/apByJRZbDS2GW9rRFJPQrgam3NQ=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Haslet_2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/apByJRZbDS2GW9rRFJPQrgam3NQ=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Haslet_2.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/apByJRZbDS2GW9rRFJPQrgam3NQ=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Haslet_2.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/NQqMZkr2gEWDl8q4KRVwV4vbric=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Justin.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/NQqMZkr2gEWDl8q4KRVwV4vbric=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Justin.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/NQqMZkr2gEWDl8q4KRVwV4vbric=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Justin.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/RVXtdFBuD8M_nvI7pEiSb81U9OA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Southlake.png",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/RVXtdFBuD8M_nvI7pEiSb81U9OA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Southlake.png"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/RVXtdFBuD8M_nvI7pEiSb81U9OA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Southlake.png",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/H7eIaA30BsHQ1RLp95KJyJ-kjTI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_557515918.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/H7eIaA30BsHQ1RLp95KJyJ-kjTI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_557515918.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/H7eIaA30BsHQ1RLp95KJyJ-kjTI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_557515918.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/WWQWAs0ldlSzbJ4zPNq6SxQbFxA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/trophy_club.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/WWQWAs0ldlSzbJ4zPNq6SxQbFxA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/trophy_club.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/WWQWAs0ldlSzbJ4zPNq6SxQbFxA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/trophy_club.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/tKFyjRNvvVMsCEIKdgqh1JJo5NI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Northlake.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/tKFyjRNvvVMsCEIKdgqh1JJo5NI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Northlake.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/tKFyjRNvvVMsCEIKdgqh1JJo5NI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Northlake.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/jgTYc1mHgRlBcydUf-wDfKlVkiw=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/NorthRichlandHills.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/jgTYc1mHgRlBcydUf-wDfKlVkiw=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/NorthRichlandHills.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/jgTYc1mHgRlBcydUf-wDfKlVkiw=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/NorthRichlandHills.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/3Pq9uBrrKOWd1Ewolt3vzNlsuBQ=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Hurst.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/3Pq9uBrrKOWd1Ewolt3vzNlsuBQ=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Hurst.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/3Pq9uBrrKOWd1Ewolt3vzNlsuBQ=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Hurst.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/lH7KsvkXyta1PXSmDGbLhujuXIA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_639915670.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/lH7KsvkXyta1PXSmDGbLhujuXIA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_639915670.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/lH7KsvkXyta1PXSmDGbLhujuXIA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_639915670.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/pgdr3FP0BhZGvZPDJAtYWwr5GUM=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_1210676974.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/pgdr3FP0BhZGvZPDJAtYWwr5GUM=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_1210676974.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/pgdr3FP0BhZGvZPDJAtYWwr5GUM=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_1210676974.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/x_NDADi6zUMyLs2RrAw-y8njpW8=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/dallas.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/x_NDADi6zUMyLs2RrAw-y8njpW8=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/dallas.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/x_NDADi6zUMyLs2RrAw-y8njpW8=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/dallas.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/k-oQWUVyPQP8qoQyRFMbMWLHcYY=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Arlington1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/k-oQWUVyPQP8qoQyRFMbMWLHcYY=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Arlington1.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/k-oQWUVyPQP8qoQyRFMbMWLHcYY=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Arlington1.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/WatPkUMtz4r0cwhxnMvXmuwYFpI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Irving.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/WatPkUMtz4r0cwhxnMvXmuwYFpI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Irving.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/WatPkUMtz4r0cwhxnMvXmuwYFpI=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/areas/Irving.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/1s8GpVZ9mThqxtnFWiOv0nXFiCc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_704943520.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/1s8GpVZ9mThqxtnFWiOv0nXFiCc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_704943520.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/1s8GpVZ9mThqxtnFWiOv0nXFiCc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/shutterstock/shutterstock_704943520.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/Us81hBEJVNM7gnuAMmjlv4DpL70=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/school_search.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/Us81hBEJVNM7gnuAMmjlv4DpL70=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/school_search.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/Us81hBEJVNM7gnuAMmjlv4DpL70=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/school_search.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/q1hx9W3ceqBqQg2hzz1RyLP7o90=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/dfw-county-map.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/q1hx9W3ceqBqQg2hzz1RyLP7o90=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/dfw-county-map.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/q1hx9W3ceqBqQg2hzz1RyLP7o90=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/dfw-county-map.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/22KLn8ClM-1OYIz55VfwFjnc1kM=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/1_story_homes.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/22KLn8ClM-1OYIz55VfwFjnc1kM=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/1_story_homes.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/22KLn8ClM-1OYIz55VfwFjnc1kM=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/1_story_homes.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/-Iu9rmKHEnxdLpjr4X7pT0Xmnqc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/no-hoa.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/-Iu9rmKHEnxdLpjr4X7pT0Xmnqc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/no-hoa.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/-Iu9rmKHEnxdLpjr4X7pT0Xmnqc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/no-hoa.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/1vcvl2R8gh5ux1KuRDjU6P_jCQc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/NewConstruction.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/1vcvl2R8gh5ux1KuRDjU6P_jCQc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/NewConstruction.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/1vcvl2R8gh5ux1KuRDjU6P_jCQc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/NewConstruction.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/V3LfHSMsqVN_v63i7IrYk6Hfdtg=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/5-bedroom-home-fort-worth.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/V3LfHSMsqVN_v63i7IrYk6Hfdtg=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/5-bedroom-home-fort-worth.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/V3LfHSMsqVN_v63i7IrYk6Hfdtg=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/5-bedroom-home-fort-worth.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/4kGiOL8vnlcpIuRL_ueTi-U5rSA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/4_Bedrooms_2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/4kGiOL8vnlcpIuRL_ueTi-U5rSA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/4_Bedrooms_2.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/4kGiOL8vnlcpIuRL_ueTi-U5rSA=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/4_Bedrooms_2.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/YXHRhZyrTMxPgz5ryi8ortbN3mc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/3_Bedroom.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/YXHRhZyrTMxPgz5ryi8ortbN3mc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/3_Bedroom.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/YXHRhZyrTMxPgz5ryi8ortbN3mc=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/3_Bedroom.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/Gw5bIWD5VXjbZn_ULfyx53_rp5U=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/3_car_garage_2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/Gw5bIWD5VXjbZn_ULfyx53_rp5U=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/3_car_garage_2.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/Gw5bIWD5VXjbZn_ULfyx53_rp5U=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/3_car_garage_2.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/St75bpyloydHrCuWTFxSu7pTaoo=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/poolhome.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/St75bpyloydHrCuWTFxSu7pTaoo=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/poolhome.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/St75bpyloydHrCuWTFxSu7pTaoo=/fit-in/1000x1000/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/specialty/poolhome.jpg",
+                    "width": 500,
+                    "height": 300,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 338,
+                    "renderedHeight": 203,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/Uf1F8HLB9MYKCp-qdQAXROhFoXg=/fit-in/1600x1600/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/map-search.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/Uf1F8HLB9MYKCp-qdQAXROhFoXg=/fit-in/1600x1600/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/map-search.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/Uf1F8HLB9MYKCp-qdQAXROhFoXg=/fit-in/1600x1600/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/map-search.jpg",
+                    "width": 1200,
+                    "height": 460,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 390,
+                    "renderedHeight": 150,
+                    "upscaleRatio": 0.65,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/M0g_MKKLaAP4YZwPuclJXtzsjC0=/fit-in/1200x1200/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/team-homepage.jpg",
+                    "width": 600,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/cNq66-hf9625JiMiNDFnu-uiMFQ=/fit-in/400x400/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/stars-large.png",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/cNq66-hf9625JiMiNDFnu-uiMFQ=/fit-in/400x400/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/stars-large.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/cNq66-hf9625JiMiNDFnu-uiMFQ=/fit-in/400x400/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/northforworthhomes/custom/stars-large.png",
+                    "width": 200,
+                    "height": 40,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 135,
+                    "renderedHeight": 27,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://t2.realgeeks.media/thumbnail/qsxmeoTLOj4D1xAtC0gVyF_EtJc=/fit-in/1600x1600/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/rgtemplate/Market-Report-2.png",
+                    "variants": [
+                      {
+                        "url": "https://t2.realgeeks.media/thumbnail/qsxmeoTLOj4D1xAtC0gVyF_EtJc=/fit-in/1600x1600/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/rgtemplate/Market-Report-2.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://t2.realgeeks.media/thumbnail/qsxmeoTLOj4D1xAtC0gVyF_EtJc=/fit-in/1600x1600/filters:no_upscale():format(webp):quality(80)/u.realgeeks.media/rgtemplate/Market-Report-2.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#0dac02",
+                "background": "#ffffff",
+                "ink": "#222222",
+                "panel": "#fffdf9",
+                "muted": "#222222",
+                "fontFamily": "Helvetica Neue",
+                "headingFontFamily": "Helvetica Neue",
+                "layout": "portrait-split",
+                "spacing": 16,
+                "radius": 4,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "optimized": {
+                "accent": "#0dac02",
+                "background": "#ffffff",
+                "ink": "#222222",
+                "panel": "#fffdf9",
+                "muted": "#222222",
+                "fontFamily": "Helvetica Neue",
+                "headingFontFamily": "Helvetica Neue",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://www.chatmanrealtygroup.com/ss/miranda-thin.css?hash=9d9dbc349ffef3310e070fd0a10dc008:9b885bc4e1c495b2ebccfba7445bb843",
+                  "https://cdn.realgeeks.com/static/designs/css/ie8.css?v=4",
+                  "https://cdn.realgeeks.com/static/designs/css/ie9.css?v=4",
+                  "https://u.realgeeks.media/northforworthhomes/custom/chatman.css",
+                  "https://u.realgeeks.media/northforworthhomes/custom/chatman-pages.css",
+                  "https://u.realgeeks.media/northforworthhomes/custom/testimonials.css"
+                ],
+                "colors": [
+                  "#333333",
+                  "#ffffff",
+                  "#bbbbbb",
+                  "#eeeeee",
+                  "#0099cc",
+                  "#888888",
+                  "#669900",
+                  "#ff8800",
+                  "#ff4444",
+                  "#0086b3",
+                  "#558000",
+                  "#e67a00",
+                  "#ff2b2b",
+                  "#fafafa",
+                  "#000000",
+                  "#bec3c8",
+                  "#cccccc",
+                  "#f4f4f4",
+                  "#666666",
+                  "#0080a3",
+                  "#005870",
+                  "#999999",
+                  "#e5e5e5",
+                  "#fff5f5",
+                  "#ffcccc",
+                  "#d9534f",
+                  "#2e7d32",
+                  "#d2322d",
+                  "#28a745",
+                  "#ced5da"
+                ],
+                "fonts": [
+                  "Helvetica Neue",
+                  "Lato",
+                  "/5.4.7/",
+                  "/only screen/",
+                  "/only screen and (min-width:46.063em)/",
+                  "/only screen and (min-width:64.063em)/",
+                  "/only screen and (min-width:90.063em)/",
+                  "/only screen and (min-width:120.063em)/",
+                  "false",
+                  "Consolas",
+                  "Times",
+                  "Inter"
+                ],
+                "routing": [
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Advanced Search",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "New Construction",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "About",
+                    "intent": "profile",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Blog",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Click here to sign up.",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Search Now",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "View More",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Like or Share",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Share on Facebook",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Share on X (Twitter)",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Share on LinkedIn",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Tarrant County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Denton County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Johnson County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Dallas County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Collin County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Ellis County",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Selling",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buying",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Information About Brokerage Services",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Consumer Notice",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "For Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Book a Call",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Greater Fort Worth Is Awesome!",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Fort Worth",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Alliance",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Saginaw",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Watauga",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Keller",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Roanoke",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Haslet",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Justin",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Southlake",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Argyle",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Trophy Club",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Northlake",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "North Richland Hills",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Hurst",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Euless",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.chatmanrealtygroup.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.chatmanrealtygroup.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "11edd5c4-b37f-4b09-bce0-73152812cbd8",
+              "kind": "url",
+              "label": "www.chatmanrealtygroup.com",
+              "uri": "https://www.chatmanrealtygroup.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "chatman-realty-group-00-url.png",
+    "chatman-realty-group-01-review.png",
+    "chatman-realty-group-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 24,
+    "text": []
+  },
+  "submittedAt": 3451,
+  "reviewMs": 11477,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Sascha Chatman, REALTOR®\nOpened chatmanrealtygroup.com in a browser\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo\nSorted 39 website images by role\nWriting your profile and app copy",
+  "reviewText": "Back\nAPP BUILDER\nwww.chatmanrealtygroup.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nChatman Realty Group\nFORT WORTH, TX\nLocal Searches\nSearch all area real estate for sale on one easy-to-use site. Including homes, condos, townhomes, land, and foreclosure properties for sale.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\nThings to Think About When Selling Your Home\nOnce we've determined the price, I can give you advice about the little things that you can do to stage your home to get you the highest possible price! You'd be surprised by the simple measures you can take to dress up your home to attract more qualified buyers. I have a marketing plan that is designed to get maximum exposure to the buyers that are currently looking, and all agents that have buyers.\nSERVICES\nOwning a Home is More Affordable Than You Think\nContrary to belief owning a home is much more affordable than it has been a a very long time. Interest rates are much lower than they have been in the past, which is a huge benefit to you.\n(817) 383-2423\ninfo@carltonbell.com\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nGuiding Fort Worth families to new beginnings—your real estate journey starts here.\nTry another opening line\nYOUR INTRODUCTION\nSince 2017, Chatman Realty Group has proudly served as a trusted advisor for families across Fort Worth and the DFW area. My mission is simple: put your needs first, deliver professional service, and ensure you are informed from start to finish. With a wealth of knowledge and a caring team beside me, I strive to make your real estate transactions straightforward and successful—so you can focus on what matters most, your future. Let’s achieve your real estate goals together.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nThis site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\nPlease confirm\nWe found these — fix anything that’s wrong.\nPhone\nAlso found: 817-668-0311\n▸ Brokerage & license (optional)\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nChatman Realty Group\nFORT WORTH, TX\nLocal Searches\nSearch all area real estate for sale on one easy-to-use site. Including homes, condos, townhomes, land, and foreclosure properties for sale.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\nThings to Think About When Selling Your Home\nOnce we've determined the price, I can give you advice about the little things that you can do to stage your home to get you the highest possible price! You'd be surprised by the simple measures you can take to dress up your home to attract more qualified buyers. I have a marketing plan that is designed to get maximum exposure to the buyers that are currently looking, and all agents that have buyers.\nSERVICES\nOwning a Home is More Affordable Than You Think\nContrary to belief owning a home is much more affordable than it has been a a very long time. Interest rates are much lower than they have been in the past, which is a huge benefit to you.\n(817) 383-2423\ninfo@carltonbell.com\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app Chatman Realty Group FORT WORTH, TX Local Searches Search all area real estate for sale on one easy-to-use site. Including homes, condos, townhomes, land, and foreclosure properties for sale. View li",
+        "textLength": 1117,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "error": "This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved."
+    }
+  ],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.chatmanrealtygroup.com/",
+      "status": 200,
+      "finalUrl": "https://www.chatmanrealtygroup.com/",
+      "title": "Greater Fort Worth Homes",
+      "textLength": 11073,
+      "priceCount": 38,
+      "uniquePrices": 19,
+      "propertyLinkCount": 1,
+      "sample": "HOME ADVANCED SEARCH MARKET REPORTS NEW CONSTRUCTION ABOUT BLOG CONTACT US\n   \nGREATER FORT WORTH IS AWESOME!\nFOR BUYERSFOR SELLERSMARKET REPORTS\nCOUNTY\nAll\nAllen\nAnderson\nAndrews\nAngelina\nAransas\nArcher\nAtascosa\nAustin\nBailey\nBandera\nBastrop\nBaylor\nBeauregard\nBee\nBell\nBexar\nBienville\nBlanco\nBosque\nBossier\nBowie\nBrazoria\nBrazos\nBrewster\nBrown\nBurleson\nBurnet\nCaddo\nCalcasieu\nCaldwell (Tx)\nCalhoun\nCallahan\nCameron (Tx)\nCamp\nCass\nCatahoula\nCherokee\nChildress\nClaiborne\nClay\nCoke\nColeman\nCollin\nCollingsworth\nColorado\nColumbia (Ar)\nComal\nComanche\nConcho\nCooke\nCoryell\nCottle\nCounty In Country Of Belize\nCounty In Country Of Mexico\nCounty In State Of Arkansas\nCounty In State Of Colorado\nCounty In State Of Louisiana\nCounty In State Of Oklahoma\nDallas\nDawson\nDelta\nDenton\nDesoto\nDewitt\nDickens\nDonley\nEastland\nEctor\nEdwards\nEl Paso\nEllis\nErath\nFalls\nFannin\nFisher\nFoard\nFort Bend\nFranklin (Tx)\nFreestone\nFrio\nGaines\nGalveston\nGarza\nGillespie\nGonzales\nGray\nGrayson\nGregg\nGrimes\nGuadalupe\nHale\nHall\nHamilton\nHansford\nHardeman\nHardin\nHarris\nHarrison\nHaskell\nHays\nHemphill\nHenderson\nHidalgo\nHill\nHockley\nHood\nHopkins\nHouston\nHoward\nHudspeth\nHunt\nHutchinson\nJack\nJackson (La)\nJackson (Tx)\nJasper\nJefferson ",
+      "challenge": false,
+      "screenshot": "chatman-realty-group-source-0.png"
+    }
+  ],
+  "wallMs": 35071,
+  "window": {
+    "startedAt": "2026-10-08T20:40:18.398Z",
+    "endedAt": "2026-10-08T20:40:53.469Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.018142,
+    "inputTokens": 5019,
+    "outputTokens": 1013
+  }
+}

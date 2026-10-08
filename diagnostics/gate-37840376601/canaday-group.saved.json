@@ -1,0 +1,115 @@
+[
+  {
+    "realtorId": "4b852955-4843-4786-b3b4-c28bc77b218a",
+    "createdAt": "2026-10-08 20:45:41.331144+00",
+    "sources": [
+      {
+        "id": "source-1tlf71u",
+        "url": "https://canadaygroup.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "canadaygroup",
+            "canaday",
+            "orange",
+            "specialists"
+          ],
+          "phrases": [
+            "canadaygroup",
+            "orangecountyluxuryhomespecialists"
+          ]
+        },
+        "nextSyncAt": 1791499546524,
+        "connectedAt": 1791492346524,
+        "listingCount": 6,
+        "submittedUrl": "https://canadaygroup.com/",
+        "inventoryUrls": [
+          "https://canadaygroup.com/"
+        ],
+        "lastCheckedAt": 1791492346524
+      }
+    ],
+    "listings": [
+      {
+        "title": "23011 Java Sea Drive, Dana Point, CA 92629",
+        "price": "$3,999,900",
+        "sourceUrl": "https://canadaygroup.com/properties/monarch-bay-terrace",
+        "photos": 31,
+        "descriptionLength": 1661,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 2,
+        "sqft": "2,516"
+      },
+      {
+        "title": "82768 Kingsboro Ln, Indio, CA 92201",
+        "price": "$730,000",
+        "sourceUrl": "https://canadaygroup.com/properties/polo-club-indio-retreat",
+        "photos": 17,
+        "descriptionLength": 1359,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 2,
+        "sqft": "1,920"
+      },
+      {
+        "title": "30602 Hunt Club Dr, San Juan Capistrano, CA 92675",
+        "price": "$5,695,000",
+        "sourceUrl": "https://canadaygroup.com/properties/hunt-club-estate",
+        "photos": 71,
+        "descriptionLength": 1407,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 6,
+        "baths": 5,
+        "sqft": "5,459"
+      },
+      {
+        "title": "32121 Cook Ln, San Juan Capistrano, CA 92675",
+        "price": "$6,999,000",
+        "sourceUrl": "https://canadaygroup.com/properties/gated-estate",
+        "photos": 11,
+        "descriptionLength": 632,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 5,
+        "sqft": "6,528"
+      },
+      {
+        "title": "28690 Martingale Dr, San Juan Capistrano, CA 92675",
+        "price": "$4,752,000",
+        "sourceUrl": "https://canadaygroup.com/properties/new-in-the-oaks-farms",
+        "photos": 54,
+        "descriptionLength": 877,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 5,
+        "baths": 5.5,
+        "sqft": "4,437"
+      },
+      {
+        "title": "30821 Hunt Club Drive, San Juan Capistrano, CA 92675",
+        "price": "$3,588,800",
+        "sourceUrl": "https://canadaygroup.com/properties/gated-hunt-club-estate",
+        "photos": 21,
+        "descriptionLength": 629,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 5,
+        "baths": 5.5,
+        "sqft": "7,188"
+      }
+    ]
+  }
+]
