@@ -16,7 +16,7 @@ fs.mkdirSync(out, { recursive: true });
 async function request(cases) {
   const bcrypt = require('bcryptjs');
   const secrets = {}, ask = [];
-  for (const item of cases) {
+  for (const item of cases.filter(entry => !entry.guest)) {
     const password = crypto.randomBytes(24).toString('base64url');
     const email = `import-probe-${item.name}-${process.env.GITHUB_RUN_ID ?? Date.now()}@example.com`;
     secrets[item.name] = { email, password };
@@ -58,16 +58,28 @@ async function run(item, credentials, realtorId) {
   page.on('request', req => { if (req.url().includes('/functions/v1/')) calls.set(req, { fn: req.url().split('/functions/v1/')[1], start: Date.now() - t0, accept: req.headers()['accept'] }); });
   page.on('response', res => { const entry = calls.get(res.request()); if (entry) { entry.status = res.status(); entry.headersAt = Date.now() - t0; entry.contentType = res.headers()['content-type']; } });
   page.on('requestfinished', req => { const entry = calls.get(req); if (entry) { entry.end = Date.now() - t0; result.network.push(entry); } });
+  page.on('response', res => { if (res.status() >= 400) result.failedResources = [...(result.failedResources ?? []), { at: Date.now() - t0, status: res.status(), url: res.url().slice(0, 200) }].slice(0, 30); });
   page.on('requestfailed', req => { const entry = calls.get(req); if (entry) { entry.failed = req.failure()?.errorText; entry.end = Date.now() - t0; result.network.push(entry); } });
   try {
-    await page.goto(`${APP}/portal?entry=realtor`, { waitUntil: 'networkidle', timeout: 60_000 });
-    await page.getByPlaceholder('you@example.com').fill(credentials.email);
-    await page.getByPlaceholder('••••••••').fill(credentials.password);
-    await shot('signin');
-    await page.getByText('SIGN IN', { exact: true }).click();
-    await page.waitForURL(url => !String(url).includes('/portal'), { timeout: 60_000 });
+    if (item.guest) {
+      // Owner-test access code: the same path Jerrod uses to try a site without an account.
+      await page.goto(`${APP}/portal?entry=client`, { waitUntil: 'networkidle', timeout: 60_000 });
+      await page.getByLabel('Access code').fill('REALTOR');
+      await page.getByLabel('Access code').press('Enter');
+      await page.waitForURL(url => String(url).includes('/admin'), { timeout: 60_000 });
+      await page.getByLabel('Page 5').click({ timeout: 30_000 });
+      await page.getByText('BUILD MY APP', { exact: true }).click({ timeout: 30_000 });
+      await page.waitForURL(url => String(url).includes('/admin/build'), { timeout: 60_000 });
+    } else {
+      await page.goto(`${APP}/portal?entry=realtor`, { waitUntil: 'networkidle', timeout: 60_000 });
+      await page.getByPlaceholder('you@example.com').fill(credentials.email);
+      await page.getByPlaceholder('••••••••').fill(credentials.password);
+      await shot('signin');
+      await page.getByText('SIGN IN', { exact: true }).click();
+      await page.waitForURL(url => !String(url).includes('/portal'), { timeout: 60_000 });
+      await page.goto(`${APP}/admin/build`, { waitUntil: 'networkidle', timeout: 60_000 });
+    }
     result.signedInAt = Date.now() - t0;
-    await page.goto(`${APP}/admin/build`, { waitUntil: 'networkidle', timeout: 60_000 });
     const field = page.getByPlaceholder('https://your-website.com');
     await field.waitFor({ timeout: 60_000 });
     await field.fill(item.url);
@@ -96,6 +108,26 @@ async function run(item, credentials, realtorId) {
     await shot(done ? 'review' : 'timeout');
     result.finalText = (await page.evaluate(() => document.body.innerText).catch(() => '')).slice(0, 4000);
     result.outcome = done ? 'review' : 'did-not-finish';
+    if (done && item.publish) {
+      // Finish the way a realtor would: answer whatever the review asks for, then publish.
+      const answers = { 'Your name': 'Import Probe', 'City or region (e.g. Coeur d’Alene, ID)': 'Kellogg, ID',
+        'Phone number — where would you like clients to call or text you?': '208-555-0100',
+        'Email address — where would you like clients to email you?': 'probe@example.com', 'Opening line': 'Welcome home' };
+      for (const [label, value] of Object.entries(answers)) {
+        const input = page.getByLabel(label, { exact: true });
+        if (await input.count() && !(await input.first().inputValue())) await input.first().fill(value);
+      }
+      result.reviewText = (await page.evaluate(() => document.body.innerText)).slice(0, 3000);
+      const publishAt = Date.now();
+      await page.getByText('Publish My App', { exact: true }).click({ timeout: 30_000 });
+      const ready = await page.getByText('Congratulations! Your app is live.').waitFor({ timeout: 90_000 }).then(() => true, () => false);
+      result.publishMs = Date.now() - publishAt;
+      result.completedScreen = ready;
+      await page.waitForTimeout(2500); // the listing count line loads after the screen appears
+      await shot(ready ? 'completed' : 'publish-stuck');
+      result.completedText = (await page.evaluate(() => document.body.innerText)).slice(0, 3000);
+      result.outcome = ready ? 'completed' : 'publish-did-not-finish';
+    }
   } catch (error) {
     result.outcome = 'error';
     result.error = String(error.stack ?? error).slice(0, 1500);
@@ -117,6 +149,7 @@ async function run(item, credentials, realtorId) {
   const secrets = JSON.parse(fs.readFileSync(path.join(process.env.RUNNER_TEMP ?? out, 'secrets.json'), 'utf8'));
   const report = { app: APP, ranAt: new Date().toISOString(), results: [] };
   for (const item of cases) {
+    if (item.guest) { report.results.push(await run(item, { email: 'access-code' }, 'guest')); fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2)); continue; }
     const ready = await waitForAccount(secrets[item.name], Number(process.env.WAIT_MINUTES ?? 25));
     report.results.push(ready ? await run(item, secrets[item.name], ready) : { site: item.name, outcome: 'account-not-provisioned' });
     fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));

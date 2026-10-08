@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      CASES: '[{"name":"cindy-existing","url":"https://cindycarlsonrealty.com/"},{"name":"gethomenow","url":"https://www.gethomenow.com/"},{"name":"northidahofreedom","url":"https://northidahofreedom.com/"}]'
+      CASES: '[{"name":"cindy-existing","url":"https://cindycarlsonrealty.com/","publish":true},{"name":"gethomenow","url":"https://www.gethomenow.com/","publish":true},{"name":"northidahofreedom","url":"https://northidahofreedom.com/","publish":true},{"name":"guest-cindy","url":"https://cindycarlsonrealty.com/","guest":true}]'
       OUT_DIR: ${{ github.workspace }}/e2e-out
     steps:
       - uses: actions/checkout@v4
