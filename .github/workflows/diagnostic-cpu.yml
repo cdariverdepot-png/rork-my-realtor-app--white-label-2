@@ -1,0 +1,32 @@
+name: Importer CPU attribution diagnostic
+on:
+  push:
+    branches: [probe/live-import]
+    paths: [diagnostics/run-cpu.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      OUT_DIR: ${{ github.workspace }}/cpu-out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --prefix "$RUNNER_TEMP/cpu" --ignore-scripts --no-audit --no-fund typescript@6.0.3
+      - name: Measure CPU per stage on each live site (AI stubbed, no app, no database)
+        working-directory: expo
+        run: SITES="$(cat ../diagnostics/sites-25.json)" NODE_PATH="$RUNNER_TEMP/cpu/node_modules" node scripts/diagnostic-cpu.cjs
+      - name: Commit results
+        if: always()
+        run: |
+          dest="diagnostics/cpu-${GITHUB_RUN_ID}"
+          mkdir -p "$dest" && cp -r cpu-out/* "$dest"/ || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics && git commit -m "CPU attribution results ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin probe/live-import && git push origin HEAD:probe/live-import && break; sleep 5; done
