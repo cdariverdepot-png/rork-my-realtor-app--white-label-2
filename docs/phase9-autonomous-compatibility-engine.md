@@ -78,14 +78,17 @@ Ownership did not change for any surviving record (gate rule). Full replay CPU 5
 - Needs review: 9 sites importing nothing via navigation-only pages (several are correct scope exclusions from earlier stages); 8 Redman land records whose titles are road names only ("ON REED RD"); 108 regression and 77 held-out records unattributed (no office signal published).
 - Gate defects found and fixed during the demonstration: test-summary parsing on Node 24, duplicate groups truncated to examples, results lost to a push race. A latent risk in the title repair (office PostalAddress) was found by review and fixed as a reviewed change (`0675a9e`) — a hardening with no corpus decrease cannot pass the autonomous gate by design.
 
-## 7. Dependencies not available
+## 7. Dependencies and switches
 
-- **Coding agent in CI**: repository secret `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`) is not set
-  (`diagnostics/improvement/agent-status.json`). The repair step therefore did not run unattended; in this
-  phase Claude performed it in-session from the same briefs, and the gate, integration, remember and live
-  verification ran unattended in GitHub Actions. The `claude-code-action` step itself has not yet executed.
-- **Staging AI key**: `OPENAI_API_KEY_STAGING` is not set, so staging AI steps are switched off by default.
-- **OpenAI credit**: exhausted since Oct 8 06:46 UTC; no Level C/D run was made or justified in this phase.
+- **Coding agent in CI** (updated at final integration): the repair step uses OpenAI Codex
+  (`openai/codex-action@v1`, workspace-write sandbox without network, sudo dropped, cannot push) on the
+  existing OpenAI account; no Anthropic key is needed. It stays **disabled** until the repository variable
+  `AUTONOMOUS_REPAIR=enabled` is set, and it also needs the GitHub Actions secret `OPENAI_API_KEY`. Until then
+  the loop evaluates, gates, integrates candidate branches and verifies, but writes no code unattended.
+  The Codex step has not executed yet.
+- **Staging AI**: staging uses `OPENAI_API_KEY_STAGING` when present; the final release gate set
+  `AI_STAGING_ALLOW_SHARED_KEY=1` (via `staging-ai: shared-key` in `diagnostics/stage-gate.txt`) so staging
+  uses the existing key within its per-request limits (4 calls, $0.25; the last call is reserved for the profile).
 - **Renderer in Level B**: browser-drawn inventories need the staging renderer to be evaluated.
 
 ## 8. Release readiness
