@@ -35,6 +35,19 @@ const REVIEWED_SCOPE_CHANGES = {
   'zillow-leland-reed': { listings: 0, why: 'the 100 came from Zillow FSBO/rental/marketing pages and followupboss.com, outside the agent profile' },
 };
 
+// Repair stage 6 (generic detail reader), reviewed: the same listings, titles and prices; details
+// only added, read from each property's own page (gallery/description containers). Photos stay on
+// the MLS image hosts and never carry another listing's number (checked during review).
+const REVIEWED_DETAIL_GAINS = {
+  'elevate-realty-granbury': { complete: 20, described: 20 },
+  'freestone-properties': { complete: 3, described: 3 },
+  'katerina-sayles': { complete: 12, described: 12 },
+  'the-battle-group': { complete: 6, described: 6 },
+  'woods-n-water-real-estate': { complete: 1, described: 1 },
+  'mount-snow-palmiter': { complete: 0, described: 10 }, // 2 pages publish only a contact-form prompt; gallery endpoint not captured
+  'houses-of-kansas-city': { complete: 0, described: 10 }, // remarks now from the description container
+};
+
 let engine;
 const cpu = () => { const u = process.cpuUsage(); return (u.user + u.system) / 1000; };
 for (const file of files) {
@@ -50,6 +63,14 @@ for (const file of files) {
       assert.equal(now.listings.length, reviewed.listings, reviewed.why);
       const before = new Set(was.listings.map(item => item.sourceUrl));
       for (const item of now.listings) assert.ok(before.has(item.sourceUrl), `scope rules never add listings: ${item.sourceUrl}`);
+    } else if (REVIEWED_DETAIL_GAINS[id]) {
+      const gains = REVIEWED_DETAIL_GAINS[id];
+      const key = item => [item.sourceUrl, item.title, item.price, item.beds, item.baths].join('|');
+      assert.deepEqual(now.listings.map(key), was.listings.map(key), 'the same listings, titles and prices');
+      now.listings.forEach((item, i) => assert.ok(item.images.length >= was.listings[i].images.length || item.detailsComplete, `no photos lost: ${item.sourceUrl}`));
+      assert.equal(now.listings.filter(item => item.detailsComplete).length, gains.complete);
+      assert.equal(now.listings.filter(item => item.description).length, gains.described);
+      assert.ok(now.listings.every(item => !/<[a-z][^>]*>/i.test(item.description)), 'descriptions are text');
     } else {
       assert.deepEqual(now.listings, was.listings);
       assert.equal(now.outcome, was.outcome);

@@ -1953,10 +1953,21 @@ function classifyCollection(listings: DiscoveredListing[], offices: Map<string, 
   return { kind: "market", keep, excluded: listings.length - keep.length, offices: distinct.size };
 }
 
-/** The highest page number this collection's own pager links reach (0 when it publishes none). */
-function pagerExtent(html: string, base: URL): number {
+/**
+ * The highest page number this collection's own pager reaches (0 when it publishes none). With the
+ * collection's cards given, only a pager that follows them counts: a blog or testimonials pager
+ * elsewhere on the page says nothing about the listings.
+ */
+function pagerExtent(html: string, base: URL, cards?: string[]): number {
   let extent = 0;
+  let from = 0, to = html.length;
+  if (cards?.length) {
+    const at = cards.flatMap(url => { try { const u = new URL(url); const i = html.indexOf(u.pathname.length > 1 ? u.pathname : u.pathname + u.search); return i >= 0 ? [i] : []; } catch { return []; } });
+    if (at.length) { from = Math.min(...at); to = Math.min(html.length, Math.max(...at) + 30_000); }
+  }
+  const near = (index: number | undefined) => index !== undefined && index >= from && index <= to;
   for (const match of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+    if (!near(match.index)) continue;
     const href = absolutize(attr(`<a ${match[1]}>`, "href"), base);
     const label = stripTags(match[2]);
     if (!href || !isPagerOf(href, base, label)) continue;
@@ -1966,6 +1977,7 @@ function pagerExtent(html: string, base: URL): number {
   }
   // A pagination control may page through another URL (a widget on /buyers/ paging via /?pg=N).
   for (const match of html.matchAll(/<(?:div|nav|ul|ol|p|section)\b[^>]*(?:class|id)=["'][^"']*(?:pagination|pager|paging|page-numbers)[^"']*["'][^>]*>([\s\S]{0,4000}?)<\/(?:div|nav|ul|ol|p|section)>/gi)) {
+    if (!near(match.index)) continue;
     for (const token of decodeEntities(match[1].replace(/<[^>]+>/g, " ")).split(/\s+/)) if (/^\d{1,7}$/.test(token)) extent = Math.max(extent, Number(token));
   }
   return extent;
@@ -2448,6 +2460,147 @@ function providerPropertyFacts(html:string,base:URL):Record<string,string>{
   return facts;
 }
 
+
+// ── Generic property detail reader (repair campaign stage 6) ────────────────────────────────────
+// IDX and listing platforms publish a property's photos inside a gallery container (Showcase
+// "sidx-photo-array", IDX Broker "IDX-detailsPhotosWrap", iHomefinder "ihf-image-carousel", Flexmls
+// "flexmls_connect__photos", WordPress gallery plugins…) and its remarks inside a description
+// container. The container's role is in its class or id; platform names are not needed. Photos are
+// read only inside those containers (never the site header, logo or a "similar homes" carousel), and
+// lazy-load attributes, srcset and lightbox links are honoured so the full-size photo is taken.
+const detailDecode = (value: string) => value.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
+  .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)));
+const detailAttr = (tag: string, name: string) => detailDecode(tag.match(new RegExp(`\\s${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, "i"))?.[2] ?? "").trim();
+
+const GALLERY_ROLE = /photo|gallery|carousel|slider|slideshow|swiper|slides|media-viewer|image-viewer|lightbox/i;
+const NOT_THIS_PROPERTY = /similar|related|recommended|nearby|featured|recent|other|agent|team|logo|header|footer|nav(?!igation-?arrow)|menu|sidebar|testimonial|partner|sponsor|banner|map-info|thumb-?nav/i;
+const DESCRIPTION_ROLE = /description|remarks|property-?(?:details?-?text|summary|overview)|listing-?(?:details?-?text|summary)/i;
+const NOT_DESCRIPTION = /gfield|form|field_|meta|seo|wpcf7|input|label|validation|sublabel/i;
+const CHROME_IMAGE = /logo|icon|sprite|avatar|badge|placeholder|spinner|loading|blank|pixel|spacer|marker|\bmaps?\b|agent|headshot|no-photo|nophoto|idx-logos|equal-housing|\/assets\/images\/|\/(?:left|right|prev|next|arrow|close|print|share)[\w-]*\.(?:png|gif|svg)|\.svg(?:$|\?)|^data:/i;
+
+/** The markup of the element that starts at `start`, bounded by its balanced closing tag. */
+function detailElementAt(html: string, start: number, limit = 250_000): string {
+  const name = html.slice(start).match(/^<([a-z][a-z0-9-]*)/i)?.[1]?.toLowerCase();
+  if (!name) return "";
+  const pattern = new RegExp(`<(/?)${name}\\b[^>]*?(/?)>`, "gi");
+  pattern.lastIndex = start;
+  let depth = 0;
+  for (let match = pattern.exec(html); match; match = pattern.exec(html)) {
+    if (match.index - start > limit) break;
+    if (match[1]) depth--; else if (!match[2]) depth++;
+    if (depth === 0) return html.slice(start, pattern.lastIndex);
+  }
+  return html.slice(start, Math.min(html.length, start + 20_000));
+}
+
+/** Containers whose class or id names a role, outermost first, without nested duplicates. */
+function roleContainers(html: string, role: RegExp, exclude: RegExp): string[] {
+  const found: { start: number; end: number; markup: string }[] = [];
+  // Page chrome by position: anything inside the site's header, navigation or footer is not the property.
+  const chrome = [...html.matchAll(/<(?:header|nav|footer)\b[^>]*>/gi)].map(match => ({ start: match.index!, end: match.index! + detailElementAt(html, match.index!).length }));
+  for (const match of html.matchAll(/<(?:div|section|ul|ol|figure|article|aside|span|p)\b[^>]*>/gi)) {
+    if (chrome.some(range => match.index! >= range.start && match.index! < range.end)) continue;
+    const tag = match[0];
+    const label = `${detailAttr(tag, "class")} ${detailAttr(tag, "id")}`;
+    if (!role.test(` ${label} `) || exclude.test(label)) continue;
+    const start = match.index!;
+    if (found.some(item => start >= item.start && start < item.end)) continue;
+    const markup = detailElementAt(html, start);
+    found.push({ start, end: start + markup.length, markup });
+  }
+  return found.map(item => item.markup);
+}
+
+function detailLargestFromSrcset(srcset: string): string {
+  let best = "", width = 0;
+  for (const part of srcset.split(",")) {
+    const [url, size] = part.trim().split(/\s+/);
+    const value = Number((size ?? "").replace(/[wx]$/i, "")) || 1;
+    if (url && value >= width) { best = url; width = value; }
+  }
+  return best;
+}
+
+const detailAbsolute = (raw: string, base: URL) => { try { const url = new URL(raw, base); return url.protocol === "https:" || url.protocol === "http:" ? url.toString().replace(/^http:/, "https:") : null; } catch { return null; } };
+
+const IMAGE_URL = /^(?:https?:)?\/\/|^\/(?!\/)/;
+const IMAGE_FILE = /\.(?:jpe?g|png|webp|avif)(?:$|[?#])|\/images?\/|\/photos?\//i;
+
+/**
+ * The photo an <img> really shows. Lazy loaders keep it in a data attribute whose name says so
+ * (data-src, data-full, data-ihf-main-source, data-zoom-image…); placeholders and fallbacks are not it.
+ */
+function imageSource(tag: string): string {
+  let best = "", score = 0;
+  for (const match of tag.matchAll(/\s([\w:-]+)\s*=\s*(["'])([\s\S]*?)\2/g)) {
+    const name = match[1].toLowerCase();
+    let value = detailDecode(match[3]).trim();
+    if (name === "alt" || name === "class" || name === "style" || /alternate|placeholder|fallback|thumb|blank|lowres|lqip|tiny|preview/.test(name)) continue;
+    if (/srcset$/.test(name)) value = detailLargestFromSrcset(value);
+    if (!IMAGE_URL.test(value) || !IMAGE_FILE.test(value) || /^data:/i.test(value)) continue;
+    const rank = /full|large|zoom|hires|high|main|original/.test(name) ? 4 : /srcset$/.test(name) ? 3 : /^data-.*(?:src|source|image|url)/.test(name) ? 2 : name === "src" ? 1 : 0;
+    if (rank > score) { best = value; score = rank; }
+  }
+  return best;
+}
+
+/** Full-size photos published inside the page's gallery containers. */
+function detailGalleryImages(html: string, base: URL): string[] {
+  const urls: string[] = [];
+  for (const markup of roleContainers(html, GALLERY_ROLE, NOT_THIS_PROPERTY)) {
+    // Lightbox links point at the full-size photo; when a gallery has them, its <img>s are thumbnails.
+    const links = (markup.match(/<a\b[^>]*>/gi) ?? []).map(tag => detailAttr(tag, "href")).filter(href => /\.(?:jpe?g|png|webp)(?:$|[?#])/i.test(href));
+    const sources = links.length ? links : (markup.match(/<(?:img|source)\b[^>]*>/gi) ?? []).flatMap(tag => {
+      const width = Number(detailAttr(tag, "width")), height = Number(detailAttr(tag, "height"));
+      if ((width && width < 120) || (height && height < 90) || CHROME_IMAGE.test(detailAttr(tag, "alt"))) return [];
+      const source = imageSource(tag);
+      return source ? [source] : [];
+    });
+    for (const raw of sources) {
+      const url = detailAbsolute(raw, base);
+      // Site chrome is recognized by its path, never by the host ("agent.example", "agentimage.com").
+      if (url && !CHROME_IMAGE.test(new URL(url).pathname)) urls.push(url);
+    }
+  }
+  return [...new Set(urls)].slice(0, 200);
+}
+
+/** The property's remarks from its description container (forms and SEO blocks excluded). */
+function detailDescription(html: string): string {
+  let best = "";
+  for (const markup of roleContainers(html, DESCRIPTION_ROLE, NOT_DESCRIPTION)) {
+    const text = detailDecode(markup.replace(/<(?:script|style)\b[\s\S]*?<\/(?:script|style)>/gi, " ").replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>/gi, "\n\n").replace(/<[^>]+>/g, " "))
+      .replace(/[ \t]+/g, " ").replace(/\s*\n\s*/g, "\n").replace(/\n{3,}/g, "\n\n").trim()
+      .replace(/^(?:description|remarks|property description|about this (?:home|property))\s*:?\s*/i, "");
+    // Header lines above the remarks ("Overview", "Listed Oct 15", "Updated 1h ago") are not remarks.
+    const lines = text.split("\n");
+    const first = lines.findIndex(line => line.length >= 60 && /[a-z]{3,}.*[.!?,]/i.test(line));
+    const remarks = (first > 0 ? lines.slice(first) : lines).join("\n").trim();
+    if (remarks.length > best.length) best = remarks;
+  }
+  return best.length >= 80 ? best.slice(0, 16000) : "";
+}
+
+/** Street number + street name keys for a listing, from its card text and its URL's address slug. */
+function propertyNameKeys(item: Pick<DiscoveredListing, "title" | "sourceUrl">): string[] {
+  const key = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const keys = [key(item.title)];
+  const street = decodeEntities(item.title).match(/\b\d{1,6}[a-z]?\s+(?:[nsew]\.?\s+)?[a-z0-9'.-]+(?:\s+[a-z0-9'.-]+)?/i)?.[0];
+  if (street) keys.push(key(street));
+  try {
+    for (const segment of new URL(item.sourceUrl).pathname.split("/").reverse()) {
+      const words = decodeURIComponent(segment).split(/[-_+]+/).filter(Boolean);
+      if (words.length >= 3 && /^\d{1,6}[a-z]?$/i.test(words[0]) && /^[a-z]/i.test(words[1])) { keys.push(key(words.slice(0, 3).join(""))); break; }
+    }
+  } catch { /* no URL key */ }
+  return [...new Set(keys.filter(value => value.length >= 7 && /\d/.test(value) && /[a-z]/.test(value)))];
+}
+
+function pageNamesProperty(text: string, item: Pick<DiscoveredListing, "title" | "sourceUrl">): boolean {
+  const page = text.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return text.toLowerCase().includes(item.title.toLowerCase()) || propertyNameKeys(item).some(value => page.includes(value));
+}
+
 /** Enrich an already evidenced property without replacing its address with an agency title. */
 function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
   if (isRobotChallenge(html)) throw new Error("Detail page requires human verification");
@@ -2476,7 +2629,10 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
   }
   const structured=listingsFromJsonLd(html,base).find(l=>l.sourceUrl===item.sourceUrl||l.title.toLowerCase()===item.title.toLowerCase());
   const detail = listingFromDsidxDetail(html,base) ?? listingsFromMoxi(html,base).find(l=>l.sourceUrl===item.sourceUrl) ?? listingFromIdxDetail(html, base) ?? listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
-  if(!detail&&!decodeEntities(stripTags(html)).toLowerCase().includes(item.title.toLowerCase()))return item;
+  // The page must name this property. Card text is rarely repeated verbatim ("view property+ 1017 Minor
+  // Avenue #1401 … 2 beds $699,000"), so its street number and street name, from the card text or the
+  // URL's address slug, are what must appear. A page naming another property is never used.
+  if(!detail&&!pageNamesProperty(decodeEntities(stripTags(html)),item))return item;
   const meta = (name: string) => {
     for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
       if ((attr(tag, "property") || attr(tag, "name")) === name) return attr(tag, "content");
@@ -2484,7 +2640,12 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
     return "";
   };
   const remarks=html.match(/<(?:div|section|p)\b[^>]*(?:id|class)=["'][^"']*(?:property-description|listing-description|ihf-description|dsidx-remarks)[^"']*["'][^>]*>([\s\S]*?)<\/(?:div|section|p)>/i)?.[1];
-  const description = detail?.description || (remarks?decodeEntities(stripTags(remarks)):"") || meta("og:description") || meta("description");
+  // Remarks are text: escaped markup is removed and calls to action are not remarks.
+  const cleanRemarks = (value: string) => decodeEntities(stripTags(decodeEntities(value))).split(/(?<=[.!?])\s+/)
+    .filter(sentence => !/please (?:fill out|contact|call|click)|contact us|click here|request (?:more )?info|schedule a (?:showing|tour)|fill out the form/i.test(sentence)).join(" ").trim();
+  const remarksText = remarks ? cleanRemarks(remarks) : "";
+  // A meta description is used only for its factual sentences; calls to action are not remarks.
+  const description = cleanRemarks(detail?.description || (remarksText.length >= 80 ? remarksText : "") || detailDescription(html) || remarksText || meta("og:description") || meta("description"));
   const cover = absolutize(meta("og:image"), base);
   // Explicit gallery images only; exclude related-home cards and site chrome.
   const gallery:string[]=[];
@@ -2493,6 +2654,7 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
     const url=absolutize(attr(tag,"data-full")||attr(tag,"data-src")||attr(tag,"src"),base);
     if(url&&!looksLikeChrome(url))gallery.push(url);
   }
+  if (!(detail?.images.length) && !gallery.length) gallery.push(...detailGalleryImages(html, base));
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
   const office = item.listingOffice ?? detailAttribution(html);
@@ -2909,7 +3071,7 @@ async function discoverListings(
     let marketPage = false;
     if (found.length) {
       const published = Number(html.match(/data-(?:search-results-search-count|listings-count|results-count)\s*=\s*["']?(\d+)/i)?.[1] ?? 0);
-      const extent = documentOnce(html, `pagerExtent|${finalUrl.href}`, () => pagerExtent(visibleDocument(html), finalUrl));
+      const extent = pagerExtent(visibleDocument(html), finalUrl, found.map(item => item.sourceUrl));
       const paginated = !!next.continuation || published > found.length || extent > 1 || paginationLinks(visibleDocument(html), finalUrl).length > 0;
       const large = extent >= 20 || published >= 300;
       // An agent/office-filtered request is the agent's inventory; it is never classified as a market.
