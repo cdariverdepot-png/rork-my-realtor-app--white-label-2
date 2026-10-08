@@ -13,7 +13,10 @@ async function plain(url, extra = {}) {
   try {
     const res = await fetch(url, { headers: { 'User-Agent': 'MyRealtorAppBuilder/1.0', Accept: 'text/html', ...extra }, signal: AbortSignal.timeout(20000) });
     const html = await res.text();
-    return { status: res.status, ms: Date.now() - started, finalUrl: res.url, ...summary(html) };
+    const frames = [...html.matchAll(/<iframe\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].slice(0, 200));
+    const scripts = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].slice(0, 160)).filter(u => !/wp-includes|jquery|wp-content\/themes/.test(u));
+    const links = [...new Set([...html.matchAll(/href=["'](https?:\/\/[^"']+)["']/gi)].map(m => m[1]).filter(u => !/wp-content|wordpress|studiopress|fonts/.test(u)))].slice(0, 40);
+    return { status: res.status, ms: Date.now() - started, finalUrl: res.url, ...summary(html), frames, scripts, links };
   } catch (error) { return { error: String(error.message), ms: Date.now() - started }; }
 }
 

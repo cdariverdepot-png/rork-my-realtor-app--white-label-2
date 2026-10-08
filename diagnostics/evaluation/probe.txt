@@ -1,3 +1,3 @@
-Probe requested Thu Oct  8 23:38:37 UTC 2026: Cindy Carlson's Flexmls office listings (Client Challenge).
-probe: https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings
-probe: https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24
+Probe requested Thu Oct  8 23:44:08 UTC 2026: Cindy Carlson alternative published sources (item 7).
+probe: https://cindycarlsonrealty.com/property-search/
+probe: https://cindycarlsonrealty.com/about-us/
