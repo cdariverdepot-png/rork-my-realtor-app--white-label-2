@@ -1,0 +1,759 @@
+{
+  "app": "https://cdariverdepot-my-realtor.expo.app",
+  "ranAt": "2026-10-08T01:34:40.383Z",
+  "results": [
+    {
+      "site": "cindy-existing",
+      "url": "https://cindycarlsonrealty.com/",
+      "email": "import-probe-cindy-existing-37713564142@example.com",
+      "timeline": [
+        {
+          "at": 49,
+          "screen": "MY REALTOR / STUDIO\nBring in\nyour listings\nPaste the page where your listings live. We’ll figure out the rest.\nListings page URL\nUse your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.\nConnecting…\n9 listings already saved · View listings"
+        },
+        {
+          "at": 400,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+        },
+        {
+          "at": 1158,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+        },
+        {
+          "at": 1462,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 1918,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2221,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nOpening my.flexmls.com in a browser (it requires one)"
+        },
+        {
+          "at": 2373,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nOpening my.flexmls.com in a browser (it requires one)\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 7604,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nOpening my.flexmls.com in a browser (it requires one)\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nFound Cindy Carlson · Kellogg, ID\nSaving your app draft"
+        },
+        {
+          "at": 32246,
+          "screen": "Building your app\nIMPORT ACTIVITY\nYour listings could not be read from this page\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nmy.flexmls.com did not finish loading in the browser\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nFound Cindy Carlson · Kellogg, ID\nSaving your app draft"
+        },
+        {
+          "at": 32413,
+          "screen": "REVIEW"
+        }
+      ],
+      "network": [
+        {
+          "fn": "analyze-realtor-build",
+          "start": 8364,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 9083,
+          "contentType": "text/event-stream; charset=utf-8",
+          "end": 15693
+        },
+        {
+          "fn": "refresh-listings",
+          "start": 8307,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 9080,
+          "contentType": "text/event-stream; charset=utf-8",
+          "end": 40402
+        }
+      ],
+      "console": [
+        {
+          "at": 1830,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 1960,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 2012,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 5130,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:notifs.v1 "
+        },
+        {
+          "at": 5130,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:brand.previous-published.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:clients.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:brand.design-draft.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:listings.v2 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:docs.v2 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:clientFeed.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:client-self:chat.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:brand.v2 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:clientProfiles.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:tx.v1 "
+        },
+        {
+          "at": 5131,
+          "type": "log",
+          "text": "[kv] get error 85be4868-fa6e-498f-b8ad-09680c299051:appointments.v1 "
+        },
+        {
+          "at": 5305,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 5340,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 5358,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 41080,
+          "type": "warning",
+          "text": "Realtime send() is automatically falling back to REST API. This behavior will be deprecated in the future. Please use httpSend() explicitly for REST delivery."
+        }
+      ],
+      "screenshots": [
+        "cindy-existing-00-signin.png",
+        "cindy-existing-01-url.png",
+        "cindy-existing-02-progress.png",
+        "cindy-existing-03-progress.png",
+        "cindy-existing-04-review.png",
+        "cindy-existing-05-completed.png"
+      ],
+      "signedInAt": 6339,
+      "submittedAt": 8047,
+      "reviewAt": 32413,
+      "finalText": "Back\nAPP BUILDER\ncindycarlsonrealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\n$374,000\n119 Pine St\n2 beds · 1 baths · 2,056\n$1,299,999\n483 Paradise Lane\n3 beds · 1.5 baths · 3,183\n$447,000\n409 Emerald Dr\n4 beds · 2.5 baths · 2,129\n$325,000\n6113 Prichard Creek ST\n3 beds · 1 baths · 1,472\n$64,000\n50 S Breeden Ave\n2 beds · 1 baths · 624\n$388,000\n604 W Cameron Ave\n4 beds · 1.5 baths · 2,382\n$220,000\n301 S Division St\n1 baths · 792\n$130,000\nNKA May Court\nCataldo, ID\n$99,500\n11 & 13 Kingston WAY\nKingston, ID\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nExpertise Rooted in North Idaho’s Silver Valley\nTry another opening line\nYOUR INTRODUCTION\nCindy Carlson is more than a Broker—she is a lifelong advocate for living in North Idaho, combining a wealth of local knowledge with a passion for serving her clients and her community. As the Broker/owner of Cindy Carlson Realty, Cindy specializes in residential and commercial properties throughout the Silver Valley. Her story is deeply connected to the area, where she and her family have lived for over four decades. With professional designations such as ABR, CRS, GRI, and RSPS, and a well-earned reputation for integrity, Cindy ensures every client experience is handled with utmost sincerity and expertise.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nThis site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Cindy Carlson Realty\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+      "outcome": "completed",
+      "reviewText": "Back\nAPP BUILDER\ncindycarlsonrealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\n$374,000\n119 Pine St\n2 beds · 1 baths · 2,056\n$1,299,999\n483 Paradise Lane\n3 beds · 1.5 baths · 3,183\n$447,000\n409 Emerald Dr\n4 beds · 2.5 baths · 2,129\n$325,000\n6113 Prichard Creek ST\n3 beds · 1 baths · 1,472\n$64,000\n50 S Breeden Ave\n2 beds · 1 baths · 624\n$388,000\n604 W Cameron Ave\n4 beds · 1.5 baths · 2,382\n$220,000\n301 S Division St\n1 baths · 792\n$130,000\nNKA May Court\nCataldo, ID\n$99,500\n11 & 13 Kingston WAY\nKingston, ID\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nExpertise Rooted in North Idaho’s Silver Valley\nTry another opening line\nYOUR INTRODUCTION\nCindy Carlson is more than a Broker—she is a lifelong advocate for living in North Idaho, combining a wealth of local knowledge with a passion for serving her clients and her community. As the Broker/owner of Cindy Carlson Realty, Cindy specializes in residential and commercial properties throughout the Silver Valley. Her story is deeply connected to the area, where she and her family have lived for over four decades. With professional designations such as ABR, CRS, GRI, and RSPS, and a well-earned reputation for integrity, Cindy ensures every client experience is handled with utmost sincerity and expertise.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nThis site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.\nYour po",
+      "publishMs": 947,
+      "completedScreen": true,
+      "completedText": "PUBLISHED SUCCESSFULLY\nCongratulations! Your app is live.\nInvite your first client using your permanent link or QR code. These stay the same when you publish future design changes.\nView My App\nGo to Dashboard\nInvite Clients\nhttps://cdariverdepot-my-realtor.expo.app/portal?entry=client&invite=180122\nCopy link\nSave QR image\nShare invitation\n9 listings imported from your site — review them on your dashboard."
+    },
+    {
+      "site": "gethomenow",
+      "url": "https://www.gethomenow.com/",
+      "email": "import-probe-gethomenow-37713564142@example.com",
+      "timeline": [
+        {
+          "at": 55,
+          "screen": "MY REALTOR / STUDIO\nBring in\nyour listings\nPaste the page where your listings live. We’ll figure out the rest.\nListings page URL\nUse your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.\nConnecting…"
+        },
+        {
+          "at": 457,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+        },
+        {
+          "at": 911,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+        },
+        {
+          "at": 1063,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+        },
+        {
+          "at": 1368,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 0 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 1519,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 1 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 1671,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 7 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 1882,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 13 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2034,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 17 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2186,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 19 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2338,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 25 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2491,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 29 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2642,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 31 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 2863,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 37 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 3014,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 43 of 94\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 3166,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 44 of 94\nMatching your website’s design and imagery\nReading linked pages · 0 of 3"
+        },
+        {
+          "at": 3317,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 49 of 94\nMatching your website’s design and imagery\nReading linked pages · 2 of 3"
+        },
+        {
+          "at": 3468,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 55 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 3620,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 56 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 3836,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 62 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 3988,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 67 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 4139,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 71 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 4290,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 74 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 4441,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 79 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 4592,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 83 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 4817,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 90 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 4969,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 listings so far · 2 pages checked\nReading The Jason Walker Team\nReading listing details · 92 of 94\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 5120,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 active listings\nReading The Jason Walker Team\nRead full details for all 94 listings\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 5271,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 active listings\nReading The Jason Walker Team\nRead full details for all 94 listings\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy\nSaving 94 listings"
+        },
+        {
+          "at": 5574,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 94 active listings\nReading The Jason Walker Team\nRead full details for all 94 listings\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy\nSaved 94 listings"
+        },
+        {
+          "at": 7392,
+          "screen": "Building your app\nIMPORT ACTIVITY\nFound 94 active listings\nReading The Jason Walker Team\nRead full details for all 94 listings\nMatching your website’s design and imagery\nRead 3 linked pages\nIdentified your profile photo and logo\nSorted 4 website images by role\nWriting your profile and app copy\nSaved 94 listings\nFound Jason Walker · Coeur d'Alene, ID\nSaving your app draft"
+        },
+        {
+          "at": 8094,
+          "screen": "REVIEW"
+        }
+      ],
+      "network": [
+        {
+          "fn": "refresh-listings",
+          "start": 5995,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 6480,
+          "contentType": "text/event-stream; charset=utf-8",
+          "end": 11284
+        },
+        {
+          "fn": "analyze-realtor-build",
+          "start": 5996,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 6727,
+          "contentType": "text/event-stream; charset=utf-8",
+          "failed": "net::ERR_ABORTED",
+          "end": 13057
+        }
+      ],
+      "console": [
+        {
+          "at": 804,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 936,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 988,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:clientProfiles.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:docs.v2 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:listings.v2 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:client-self:chat.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:notifs.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:brand.v2 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:tx.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:clients.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:brand.design-draft.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:clientFeed.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:brand.previous-published.v1 "
+        },
+        {
+          "at": 2794,
+          "type": "log",
+          "text": "[kv] get error 3a4a8adb-3b5a-4f95-80d1-4a8512c379be:appointments.v1 "
+        },
+        {
+          "at": 2976,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 3011,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 3031,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 13684,
+          "type": "warning",
+          "text": "Realtime send() is automatically falling back to REST API. This behavior will be deprecated in the future. Please use httpSend() explicitly for REST delivery."
+        },
+        {
+          "at": 13812,
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 422 ()"
+        },
+        {
+          "at": 14754,
+          "type": "warning",
+          "text": "Realtime send() is automatically falling back to REST API. This behavior will be deprecated in the future. Please use httpSend() explicitly for REST delivery."
+        }
+      ],
+      "screenshots": [
+        "gethomenow-00-signin.png",
+        "gethomenow-01-url.png",
+        "gethomenow-02-progress.png",
+        "gethomenow-03-progress.png",
+        "gethomenow-04-progress.png",
+        "gethomenow-05-progress.png",
+        "gethomenow-06-progress.png",
+        "gethomenow-07-progress.png",
+        "gethomenow-08-review.png",
+        "gethomenow-09-completed.png"
+      ],
+      "signedInAt": 3999,
+      "submittedAt": 5717,
+      "reviewAt": 8094,
+      "failedResources": [
+        {
+          "at": 13812,
+          "status": 422,
+          "url": "https://xdcqjaodcvnlawqcunrr.supabase.co/realtime/v1/api/broadcast?apikey=sb_publishable_yAEO6l9LfHPccsDDPUR-uQ_5pRbv4Dt&eventsPerSecond=5&vsn=2.0.0"
+        }
+      ],
+      "finalText": "Back\nAPP BUILDER\nwww.gethomenow.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCOEUR D'ALENE, ID\nLet's Find Home.\nSearch for real estate in Coeur d'Alene, ID with The Jason Walker Team. Buy or sell homes, see your home value, and view listings in the Coeur d'Alene Area.\nView listings\nSERVICES\nJason Walker\nThese communications may be delivered using an automatic telephone dialing system or by using an artificial or prerecorded voice. Message and data rates may apply. To opt out of text messages, reply STOP. Your consent is not required as a condition of any purchase. By continuing, you also agree to our Terms of Use and Privacy Policy .\nSERVICES\nBuying a home is a big step!\nWhether you're buying your first home, dream home, or tenth investment property, buying real estate is a major decision, and who you choose to work with is important. Working with the right agent ensures that you will find the perfect property for your unique circumstances – someone who takes the time to understand your goals, knows the market, loves real estate, and educates you throughout the buying experience. Finding the perfect property is one part of your real estate purchase.\nFeatured Listings\n$575,000\n2675 N Sparrow Loop\n5 beds · 4 baths · 2,729\n$335,000\n614 Telemark Rd\nSandpoint, ID\n$4,497,700\n505 E Hawthorne Rd\nSpokane, WA\n$2,999,999\n22829 E Red Feather Ln\n6 beds · 6 baths · 5,500\n$1,949,900\n1791 Pup Paw Trl\n4 beds · 2 baths · 2,050\n$1,399,900\n1791 Pup Paw Trl\n4 beds · 2 baths · 2,050\n$1,299,000\n22292 N Leclerc Rd\n3 beds · 3 baths · 2,472\n$1,250,000\n6472 Enterprise Rd\n3 beds · 1 baths · 4,608\n$1,095,000\n2327 S Fairmont Estates Dr\n4 beds · 4 baths · 4,437\n$965,000\n16111 N Yale Rd\n5 beds · 3 baths · 3,824\nFROM THE SITE\n\"They are amazing!\"\nThe Jason Walker Team helped me buy my first home! Working with Will Rhodes with the Jason Walker Team was impeccable. They took incredible care of my needs, paid close attention to my budget, had outstanding communication, and made home buying so much less stressful than I anticipated. Their knowledge of the home-buying process made it easy for me to understand every step. They were available to coach me through the process and quickly answer my questions.\nFROM THE SITE\n\"Great job Jason Walker Team!\"\nThe Jason Walker Team and especially Will Rhodes did an exceptional job with the sale of our home. Communication and professionalism were outstanding! Will also helped us find an out-of-state agent to assist us on the purchase side. Jim C.\nFROM THE SITE\n\"FIVE STARS!\"\nThank you to Jason Walker and the entire team! Jason pulled a miracle during one of the worst times for real estate. He was strategic, responsive, and communicated every step of the way. His over 20 years as an agent shined through in how he proactively communicated with other agents. We can’t say enough and absolutely recommend Jason and his team!! Rex S.\n(208) 691-4477\nimport-probe-gethomenow-37713564142@example.com\nKeller Williams Realty Coeur d'Alene\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nLet’s Find Home. Discover Your Next Chapter in Coeur d’Alene.\nTry another opening line\nYOUR INTRODUCTION\nFor over two decades, Jason Walker has helped guide buyers and sellers throughout Coeur d’Alene and the surrounding areas with a steadfast commitment to communication and personal care. The Jason Walker Team prides itself on clear guidance, expert local insight, and truly listening—whether you’re buying your first home, moving up, or making a change across state lines. Our approach blends market strategy with a genuine dedication to your goals, making each transaction seamless and supported at every step.\nTry another introduction\n94 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Keller Williams Realty Coeur d'Alene\nM",
+      "outcome": "completed",
+      "reviewText": "Back\nAPP BUILDER\nwww.gethomenow.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCOEUR D'ALENE, ID\nLet's Find Home.\nSearch for real estate in Coeur d'Alene, ID with The Jason Walker Team. Buy or sell homes, see your home value, and view listings in the Coeur d'Alene Area.\nView listings\nSERVICES\nJason Walker\nThese communications may be delivered using an automatic telephone dialing system or by using an artificial or prerecorded voice. Message and data rates may apply. To opt out of text messages, reply STOP. Your consent is not required as a condition of any purchase. By continuing, you also agree to our Terms of Use and Privacy Policy .\nSERVICES\nBuying a home is a big step!\nWhether you're buying your first home, dream home, or tenth investment property, buying real estate is a major decision, and who you choose to work with is important. Working with the right agent ensures that you will find the perfect property for your unique circumstances – someone who takes the time to understand your goals, knows the market, loves real estate, and educates you throughout the buying experience. Finding the perfect property is one part of your real estate purchase.\nFeatured Listings\n$575,000\n2675 N Sparrow Loop\n5 beds · 4 baths · 2,729\n$335,000\n614 Telemark Rd\nSandpoint, ID\n$4,497,700\n505 E Hawthorne Rd\nSpokane, WA\n$2,999,999\n22829 E Red Feather Ln\n6 beds · 6 baths · 5,500\n$1,949,900\n1791 Pup Paw Trl\n4 beds · 2 baths · 2,050\n$1,399,900\n1791 Pup Paw Trl\n4 beds · 2 baths · 2,050\n$1,299,000\n22292 N Leclerc Rd\n3 beds · 3 baths · 2,472\n$1,250,000\n6472 Enterprise Rd\n3 beds · 1 baths · 4,608\n$1,095,000\n2327 S Fairmont Estates Dr\n4 beds · 4 baths · 4,437\n$965,000\n16111 N Yale Rd\n5 beds · 3 baths · 3,824\nFROM THE SITE\n\"They are amazing!\"\nThe Jason Walker Team helped me buy my first home! Working with Will Rhodes with the Jason Walker Team was impeccable. They took incredible care of my needs, paid close attention to my budget, had outstanding communication, and made home buying so much less stressful than I anticipated. Their knowledge of the home-buying process made it easy for me to understand every step. They were available to coach me through the process and quickly answer my questions.\nFROM THE SITE\n\"Great job Jason Walker Team!\"\nThe Jason Walker Team and especially Will Rhodes did an exceptional job with the sale of our home. Communication and professionalism were outstanding! Will also helped us find an out-of-state agent to assist us on the purchase side. Jim C.\nFROM THE SITE\n\"FIVE STARS!\"\nThank you to Jason Walker and the entire team! Jason pulled a miracle during one of the worst times for real estate. He was strategic, responsive, and communicated every step of the way. His over 20 years as an agent shined through in how he proactively communicated with other agents. We can’t say enough and absolutely recommend Jason and his team!! Rex S.\n(208) 691-4477\nimport-probe-ge",
+      "publishMs": 1138,
+      "completedScreen": true,
+      "completedText": "PUBLISHED SUCCESSFULLY\nCongratulations! Your app is live.\nInvite your first client using your permanent link or QR code. These stay the same when you publish future design changes.\nView My App\nGo to Dashboard\nInvite Clients\nhttps://cdariverdepot-my-realtor.expo.app/portal?entry=client&invite=552214\nCopy link\nSave QR image\nShare invitation\n94 listings imported from your site — review them on your dashboard."
+    },
+    {
+      "site": "northidahofreedom",
+      "url": "https://northidahofreedom.com/",
+      "email": "import-probe-northidahofreedom-37713564142@example.com",
+      "timeline": [
+        {
+          "at": 57,
+          "screen": "MY REALTOR / STUDIO\nBring in\nyour listings\nPaste the page where your listings live. We’ll figure out the rest.\nListings page URL\nUse your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.\nConnecting…"
+        },
+        {
+          "at": 411,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+        },
+        {
+          "at": 713,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+        },
+        {
+          "at": 865,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for listings · 2 pages checked"
+        },
+        {
+          "at": 1168,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+        },
+        {
+          "at": 1320,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Janna McRoy Homes\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 1471,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 2 pages checked\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nReading linked pages · 1 of 7\nReading listing details · 0 of 6"
+        },
+        {
+          "at": 1683,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 2 pages checked\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nReading linked pages · 6 of 7\nReading listing details · 0 of 6"
+        },
+        {
+          "at": 1986,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 2 pages checked\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nRead 7 linked pages\nReading listing details · 2 of 6\nIdentified your logo\nSorted 11 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 2138,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 6 listings\nIdentified your logo\nSorted 11 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 2291,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 6 listings\nIdentified your logo\nSorted 11 website images by role\nWriting your profile and app copy\nSaving 6 listings"
+        },
+        {
+          "at": 2594,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 6 listings\nIdentified your logo\nSorted 11 website images by role\nWriting your profile and app copy\nSaved 6 listings"
+        },
+        {
+          "at": 9719,
+          "screen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Janna McRoy Homes\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 6 listings\nIdentified your logo\nSorted 11 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Janna McRoy · Post Falls, ID\nSaving your app draft"
+        },
+        {
+          "at": 9955,
+          "screen": "REVIEW"
+        }
+      ],
+      "network": [
+        {
+          "fn": "refresh-listings",
+          "start": 5968,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 6404,
+          "contentType": "text/event-stream; charset=utf-8",
+          "end": 8153
+        },
+        {
+          "fn": "analyze-realtor-build",
+          "start": 5968,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 6728,
+          "contentType": "text/event-stream; charset=utf-8",
+          "end": 15371
+        }
+      ],
+      "console": [
+        {
+          "at": 729,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 861,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 918,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 2827,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:tx.v1 "
+        },
+        {
+          "at": 2828,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:notifs.v1 "
+        },
+        {
+          "at": 2828,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:appointments.v1 "
+        },
+        {
+          "at": 2828,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:clients.v1 "
+        },
+        {
+          "at": 2829,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:client-self:chat.v1 "
+        },
+        {
+          "at": 2829,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:docs.v2 "
+        },
+        {
+          "at": 2829,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:listings.v2 "
+        },
+        {
+          "at": 2829,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:clientProfiles.v1 "
+        },
+        {
+          "at": 2829,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:clientFeed.v1 "
+        },
+        {
+          "at": 2829,
+          "type": "log",
+          "text": "[kv] get error e223cd66-fea3-482b-8141-21c046961edd:brand.v2 "
+        },
+        {
+          "at": 3008,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 3035,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 3055,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 15525,
+          "type": "warning",
+          "text": "Realtime send() is automatically falling back to REST API. This behavior will be deprecated in the future. Please use httpSend() explicitly for REST delivery."
+        },
+        {
+          "at": 16150,
+          "type": "warning",
+          "text": "Realtime send() is automatically falling back to REST API. This behavior will be deprecated in the future. Please use httpSend() explicitly for REST delivery."
+        }
+      ],
+      "screenshots": [
+        "northidahofreedom-00-signin.png",
+        "northidahofreedom-01-url.png",
+        "northidahofreedom-02-progress.png",
+        "northidahofreedom-03-progress.png",
+        "northidahofreedom-04-progress.png",
+        "northidahofreedom-05-review.png",
+        "northidahofreedom-06-completed.png"
+      ],
+      "signedInAt": 3999,
+      "submittedAt": 5710,
+      "reviewAt": 9955,
+      "finalText": "Back\nAPP BUILDER\nnorthidahofreedom.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nPOST FALLS, ID\nLocal knowledge. Trusted results. Experience real estate in North Idaho with Janna McRoy.\nNorth Idaho’s #1 Realtor. Janna McRoy is a trusted Realtor who cares about your family, while providing excellent service. Get started today!\nView listings\nSERVICES\nNavigating the North Idaho Fall Market: Is Autumn a Smart Time to Buy or Sell?\nNorth Idaho fall real estate market insights for 2026. See what buyers and sellers should know before making a move this autumn. Continue Reading Buying\nSERVICES\nPrice It Right\nStatistics show that homes that sell in the first 30 days sell for an average of 10% to 15% more than homes that are on the market long term. Homes priced at market value get more social media hits and heavier foot traffic. Remember buyers are also looking at competing homes and prices. If your home is priced over the market value, it often gets taken off of the list of homes to see.\nABOUT\nJanna McRoy\nReal Estate Broker in Idaho, Washington & California. She owns two real estate firms, located in Post Falls, ID and Spokane, WA. Janna is a member of the Washington, Idaho, and California Association of Realtors and the National Association of Realtors, and is held to a strict code of ethics. Janna serves on the Idaho forms committee.\nTHE AREA\nBest Post Falls Neighborhoods for Commuters: Areas to Consider\nThere isn’t one universally best neighborhood for every commuter. A buyer traveling east toward Coeur d’Alene has different priorities from someone traveling west toward Spokane. Someone who works north of Post Falls may have an entirely different route. Here are several areas worth exploring as you narrow your search.\nFROM THE SITE\nNorth Idaho Real Estate\nBuyers Sellers Search All Properties Start your search here to find the perfect home for you and your family. Locate properties by price, size, location, and more! Browse Homes Now\nFeatured Listings\n$290,000\n1724 Cleveland\n3 beds · 1 baths · 1,013\n$344,900\n2803 Sanson\n3 beds · 1 baths · 1,880\n$335,000\n3503 Dale\n2 beds · 2 baths · 936\n$829,000\n7040 15th\n5 beds · 3 baths · 2,532\n$214,500\n2043 Lady Anne\n3 beds · 2 baths · 1,331\n$199,000\nNNA Schilling Loop\nPost Falls, ID\n208-889-9242\nJanna@SolidGroundRealEstate.com\nSolid Ground Real Estate\nDB47292- ID, DRE #01722608- CA, 21018280- WA\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nLocal knowledge. Trusted results. Experience real estate in North Idaho with Janna McRoy.\nTry another opening line\nYOUR INTRODUCTION\nWith 25+ years of experience and a background in real estate finance, I believe your experience should be informed, honest, and led with care. As Designated Broker and owner of Solid Ground Real Estate, I serve clients across Idaho, Washington, and California, backed by local insight, strong professional ethics, and a commitment to your goals. My passion is helping you move forward, whether you’re investing, downsizing, or finding your next place to call home.\nTry another introduction\n6 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Solid Ground Real Estate · DB47292- ID, DRE #01722608- CA, 21018280- WA · ID, WA, CA\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+      "outcome": "completed",
+      "reviewText": "Back\nAPP BUILDER\nnorthidahofreedom.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nPOST FALLS, ID\nLocal knowledge. Trusted results. Experience real estate in North Idaho with Janna McRoy.\nNorth Idaho’s #1 Realtor. Janna McRoy is a trusted Realtor who cares about your family, while providing excellent service. Get started today!\nView listings\nSERVICES\nNavigating the North Idaho Fall Market: Is Autumn a Smart Time to Buy or Sell?\nNorth Idaho fall real estate market insights for 2026. See what buyers and sellers should know before making a move this autumn. Continue Reading Buying\nSERVICES\nPrice It Right\nStatistics show that homes that sell in the first 30 days sell for an average of 10% to 15% more than homes that are on the market long term. Homes priced at market value get more social media hits and heavier foot traffic. Remember buyers are also looking at competing homes and prices. If your home is priced over the market value, it often gets taken off of the list of homes to see.\nABOUT\nJanna McRoy\nReal Estate Broker in Idaho, Washington & California. She owns two real estate firms, located in Post Falls, ID and Spokane, WA. Janna is a member of the Washington, Idaho, and California Association of Realtors and the National Association of Realtors, and is held to a strict code of ethics. Janna serves on the Idaho forms committee.\nTHE AREA\nBest Post Falls Neighborhoods for Commuters: Areas to Consider\nThere isn’t one universally best neighborhood for every commuter. A buyer traveling east toward Coeur d’Alene has different priorities from someone traveling west toward Spokane. Someone who works north of Post Falls may have an entirely different route. Here are several areas worth exploring as you narrow your search.\nFROM THE SITE\nNorth Idaho Real Estate\nBuyers Sellers Search All Properties Start your search here to find the perfect home for you and your family. Locate properties by price, size, location, and more! Browse Homes Now\nFeatured Listings\n$290,000\n1724 Cleveland\n3 beds · 1 baths · 1,013\n$344,900\n2803 Sanson\n3 beds · 1 baths · 1,880\n$335,000\n3503 Dale\n2 beds · 2 baths · 936\n$829,000\n7040 15th\n5 beds · 3 baths · 2,532\n$214,500\n2043 Lady Anne\n3 beds · 2 baths · 1,331\n$199,000\nNNA Schilling Loop\nPost Falls, ID\n208-889-9242\nJanna@SolidGroundRealEstate.com\nSolid Ground Real Estate\nDB47292- ID, DRE #01722608- CA, 21018280- WA\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nLocal knowledge. Trusted results. Experience real estate in North Idaho with Janna McRoy.\nTry another opening line\nYOUR INTRODUCTION\nWith 25+ years of experience and a background in real estate finance, I believe your experience should be informed, honest, and led with care. As Designated Broker and owner of Solid Ground Real Estate, I serve clients across Idaho, Washington, and California, backed by local insight, strong professiona",
+      "publishMs": 965,
+      "completedScreen": true,
+      "completedText": "PUBLISHED SUCCESSFULLY\nCongratulations! Your app is live.\nInvite your first client using your permanent link or QR code. These stay the same when you publish future design changes.\nView My App\nGo to Dashboard\nInvite Clients\nhttps://cdariverdepot-my-realtor.expo.app/portal?entry=client&invite=304534\nCopy link\nSave QR image\nShare invitation\n6 listings imported from your site — review them on your dashboard."
+    },
+    {
+      "site": "guest-cindy",
+      "url": "https://cindycarlsonrealty.com/",
+      "email": "access-code",
+      "timeline": [
+        {
+          "at": 47,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+        },
+        {
+          "at": 721,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+        },
+        {
+          "at": 872,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+        },
+        {
+          "at": 1024,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery"
+        },
+        {
+          "at": 1631,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+        },
+        {
+          "at": 1934,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)"
+        },
+        {
+          "at": 7241,
+          "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)\nFound Cindy Carlson · Kellogg, ID"
+        },
+        {
+          "at": 31994,
+          "screen": "REVIEW"
+        }
+      ],
+      "network": [
+        {
+          "fn": "analyze-realtor-build",
+          "start": 4905,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 5547,
+          "contentType": "text/event-stream; charset=utf-8",
+          "failed": "net::ERR_ABORTED",
+          "end": 12064
+        },
+        {
+          "fn": "refresh-listings",
+          "start": 4905,
+          "accept": "text/event-stream",
+          "status": 200,
+          "headersAt": 5525,
+          "contentType": "text/event-stream; charset=utf-8",
+          "end": 36775
+        }
+      ],
+      "console": [
+        {
+          "at": 695,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 826,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 881,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        }
+      ],
+      "screenshots": [
+        "guest-cindy-00-url.png",
+        "guest-cindy-01-progress.png",
+        "guest-cindy-02-progress.png",
+        "guest-cindy-03-review.png"
+      ],
+      "signedInAt": 3159,
+      "submittedAt": 4862,
+      "reviewAt": 31994,
+      "finalText": "Back\nAPP BUILDER\ncindycarlsonrealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nTrusted Local Expertise in North Idaho Real Estate.\nTry another opening line\nYOUR INTRODUCTION\nAs Broker/Owner of Cindy Carlson Realty, Cindy Carlson brings over 18 years of local, hands-on experience in both residential and commercial markets throughout Kellogg and North Idaho. With advanced real estate designations and steadfast community involvement, Cindy is dedicated to providing honest guidance, local insight, and exceptional results for all her clients. Whether you’re searching for your dream home, an investment property, or unique land and recreational opportunities, Cindy’s knowledge and integrity ensure you're in the best hands.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nThis site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Cindy Carlson Realty\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+      "outcome": "review"
+    }
+  ]
+}
