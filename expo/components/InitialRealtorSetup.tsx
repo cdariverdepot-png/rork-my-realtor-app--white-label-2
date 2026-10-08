@@ -84,6 +84,8 @@ export default function InitialRealtorSetup() {
   const [extraUrl, setExtraUrl] = useState("");
   const [showExtraUrl, setShowExtraUrl] = useState(false);
   const [building, setBuilding] = useState(false);
+  /** Why the last build stopped and what it had already saved; shown on the build screen with Retry. */
+  const [buildFailure, setBuildFailure] = useState<{ message: string; kept: string[] } | null>(null);
   const [editingSources, setEditingSources] = useState(false);
   const [regenerating, setRegenerating] = useState<"heroMessage" | "aboutParagraph" | null>(null);
   const [showLicense, setShowLicense] = useState(false);
@@ -333,8 +335,11 @@ export default function InitialRealtorSetup() {
     }
     if (!current.some(source => source.kind !== "contacts")) throw new Error("Paste the public page where your listings live.");
     setEditingSources(false);
+    setBuildFailure(null);
     setBuilding(true);
     let buildSucceeded = false;
+    let savedListings: number | null = null;
+    let listingWarning = "";
     try {
       if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
       const listingUrl = websiteUri ?? current.find(source => source.kind === "url")!.uri;
@@ -349,11 +354,11 @@ export default function InitialRealtorSetup() {
         .then(saved => { setActivity(lines => requestFinished(lines, "build", true)); return saved; },
           error => { setActivity(lines => requestFinished(lines, "build", false)); throw error; });
       const [listingOutcome, buildOutcome] = await Promise.allSettled([listingImport, profileBuild]);
-      let listingWarning = "";
       if (listingOutcome.status === "fulfilled") {
         const connected = listingOutcome.value;
         const connectedItems = connected.items ?? [];
-        setImportedListingCount(connected.imported ?? connectedItems.length);
+        savedListings = connected.imported ?? connectedItems.length;
+        setImportedListingCount(savedListings);
         setHasConnectedSource(true);
         // The sync endpoint already returns the authoritative collection. Save it
         // locally immediately so the review preview cannot open one render early
@@ -365,11 +370,11 @@ export default function InitialRealtorSetup() {
           await refreshListings();
         }
       } else {
-        // A site with no readable inventory can still build the existing profile.
-        // Account/session and save failures must stop the workflow.
+        // The profile can still be built when listings could not be imported (no readable inventory,
+        // a blocked listing site, an interrupted import). Only account/ownership errors stop the build.
         const error = listingOutcome.reason;
-        if (!(error instanceof ListingImportError) || error.status !== 422) throw error;
-        listingWarning = error.message;
+        if (error instanceof ListingImportError && (error.status === 401 || error.status === 403)) throw error;
+        listingWarning = error instanceof Error && error.message ? error.message : "Your listings could not be imported this time.";
       }
       if (buildOutcome.status === "rejected") throw buildOutcome.reason;
       const saved = buildOutcome.value;
@@ -386,9 +391,13 @@ export default function InitialRealtorSetup() {
       buildSucceeded = true;
       // The shared importer has already persisted the authoritative collection.
     } catch (e) {
-      // Preserve the in-progress screen and surface the failing stage in place.
-      // `act` owns the user-facing error; rethrow without resetting navigation state.
-      throw e;
+      // Stay on the build screen with the activity so far, the real reason, what was already saved,
+      // and a way forward (Retry / Change website). Sign-in problems still go through `act`.
+      const message = e instanceof Error && e.message ? e.message : "The build could not finish.";
+      if (message === BUILDER_AUTH_MESSAGE || /^Sign in|Sign in to save/.test(message)) throw e;
+      const kept = savedListings ? [`${savedListings} listing${savedListings === 1 ? " was" : "s were"} imported and saved. They are kept.`]
+        : listingWarning ? [`Listings: ${listingWarning}`] : [];
+      setBuildFailure({ message, kept });
     } finally {
       // Leave `building` true on failure so BuildProgress remains visible and the
       // source URL/session are preserved for retry instead of snapping backward.
@@ -570,7 +579,9 @@ export default function InitialRealtorSetup() {
       </Pressable>}
     </View>}
 
-    {loaded && phase === "building" && <BuildProgress lines={activity} />}
+    {loaded && phase === "building" && <BuildProgress lines={activity} failure={buildFailure}
+      onRetry={() => { setBuildFailure(null); analyze(); }}
+      onChangeWebsite={() => { setBuildFailure(null); setBuilding(false); setEditingSources(true); }} />}
 
     {loaded && phase === "review" && result && draft && <>
       <Text style={{ color: "white", fontSize: 24, fontWeight: "600", marginTop: 28 }}>Here’s your app</Text>

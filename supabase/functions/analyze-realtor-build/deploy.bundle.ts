@@ -4453,6 +4453,22 @@ const reply = (body: unknown, status = 200) => Response.json(body, {
   status, headers: { ...corsHeaders, "Cache-Control": "no-store" },
 });
 
+/**
+ * Why a website source could not be read, in words a realtor can act on. Raw network errors
+ * ("signal timed out", "error sending request") say nothing about what to do next.
+ */
+function readableSourceFailure(uri: string, error: string | undefined): string {
+  let host = uri;
+  try { host = new URL(uri).hostname.replace(/^www\./, ""); } catch { /* keep the raw value */ }
+  const reason = error ?? "";
+  if (/timed? ?out|aborted/i.test(reason)) return `${host} did not respond in time.`;
+  if (/returned 40[13]/.test(reason)) return `${host} refused our request (${reason.match(/\d{3}/)?.[0]}). The site may block automated readers.`;
+  if (/returned 404/.test(reason)) return `${host} says that page does not exist (404). Check the address.`;
+  if (/returned 5\d\d/.test(reason)) return `${host} had a server error (${reason.match(/\d{3}/)?.[0]}). It may be temporary.`;
+  if (/resolve|dns|lookup|error sending request|connect/i.test(reason)) return `${host} could not be reached. Check the address.`;
+  return reason ? `${host}: ${reason}` : `${host} could not be read.`;
+}
+
 /** Semantic navigation fallback; accepts only observed candidate ids, never generated URLs. */
 async function selectInventoryLinks(page: string, candidates: NavigationCandidate[]): Promise<string[]> {
   const key = Deno.env.get("OPENAI_API_KEY");
@@ -5293,7 +5309,10 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const imageIds = new Set(processed.filter(source => source.status === "ready" && source.kind === "image").map(source => source.id));
   if (!readyIds.size) {
     if (!guest) await admin.from("realtor_builds").update({ sources: processed, status: "collecting" }).eq("auth_user_id", userId);
-    return reply({ error: "None of the profile sources could be read.", sources: processed }, 422);
+    const failures = processed.filter(source => source.status === "failed").map(source => readableSourceFailure(source.uri, source.error));
+    console.log("[build] timings", progress.timings());
+    return reply({ code: "sources_unreadable", sources: processed,
+      error: `${failures.length ? failures.join(" ") : "None of the profile sources could be read."} Nothing was changed${guest ? "" : " and your sources are saved"}; retry, or use a different page such as your About page.` }, 422);
   }
   let ai: Response;
   progress.start("profile");
@@ -5331,7 +5350,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     console.error("[build] OpenAI request failed to connect", e instanceof Error ? e.message : String(e));
     progress.finish("profile", "failed");
     console.log("[build] timings", progress.timings());
-    return reply({ error: "Analysis could not connect. Your sources are still saved." }, 502);
+    return reply({ code: "ai_unreachable", error: "The profile writer could not be reached. Your sources are still saved; please retry." }, 502);
   }
   if (!ai.ok) {
     // Log OpenAI's reason (bad key, no credit, unknown model…) so it shows in function logs.
@@ -5341,7 +5360,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
       ai.status === 404 ? " (AI model unavailable)" : "";
     progress.finish("profile", "failed");
     console.log("[build] timings", progress.timings());
-    return reply({ error: `Analysis failed${reason}. Your sources are still saved.` }, 502);
+    return reply({ code: "ai_rejected", error: `Analysis failed${reason}. Your sources are still saved; please retry.` }, 502);
   }
   let result;
   try { result = validate(JSON.parse(responseText(await ai.json())), readyIds, imageIds); }
@@ -5349,12 +5368,12 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     console.error("[build] could not parse model output", e instanceof Error ? e.message : String(e));
     progress.finish("profile", "failed");
     console.log("[build] timings", progress.timings());
-    return reply({ error: "Analysis was incomplete. Your sources are still saved." }, 502);
+    return reply({ code: "ai_incomplete", error: "Analysis was incomplete. Your sources are still saved; please retry." }, 502);
   }
   if (!result.evidence.length || !result.draft.heroMessage || !result.draft.aboutParagraph) {
     progress.finish("profile", "failed");
     console.log("[build] timings", progress.timings());
-    return reply({ error: "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page." }, 422);
+    return reply({ code: "profile_empty", error: "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page." }, 422);
   }
   const stated = (field: string) => result.evidence.find((fact: { field: string; value: string }) => fact.field === field)?.value?.trim() || undefined;
   progress.emit({ kind: "profile", name: stated("realtor.name"), city: stated("realtor.city") });
@@ -5373,7 +5392,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   if (!guest) progress.finish("save", saveError ? "failed" : "done");
   const timings = progress.timings();
   console.log("[build] timings", timings);
-  if (saveError) return reply({ error: "Analysis finished but could not be saved." }, 503);
+  if (saveError) return reply({ code: "save_failed", error: "Analysis finished but could not be saved. Please retry." }, 503);
   return reply({
     timings,
     ...result,

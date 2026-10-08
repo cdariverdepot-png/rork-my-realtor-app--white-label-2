@@ -44,16 +44,20 @@ export async function invokeWithProgress(name: string, body: unknown, onEvent: (
   if (reader) {
     const decode = utf8Decoder();
     let buffer = "";
-    for (;;) {
-      const { done, value } = await reader.read();
-      buffer = deliver(buffer + decode(value));
-      if (done) break;
-    }
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        buffer = deliver(buffer + decode(value));
+        if (done) break;
+      }
+    } catch { /* the connection dropped mid-stream: handled below as an interruption */ }
     deliver(buffer + "\n\n");
   } else {
     deliver((await response.text()) + "\n\n");
   }
-  if (!result) throw new Error("The importer stopped before it finished. Please try again.");
+  // The connection ended without the function's final answer (a network drop, or the function was
+  // stopped). Server writes are atomic, so anything it reported as saved stays saved.
+  if (!result) throw new Error("The import was interrupted before it finished. Anything already saved is kept.");
   return result;
 }
 
