@@ -47,7 +47,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))),
       progress ? discoveryReporter(progress) : undefined);
     const enrichment = inventory.meta.enrichment;
-    if (progress?.isOpen("details")) progress.finish("details", "done", { count: (enrichment?.enriched ?? 0) + (enrichment?.failed ?? 0), total: enrichment?.scheduled });
+    if (progress?.isOpen("details")) progress.finish("details", "done", { count: (enrichment?.enriched ?? 0) + (enrichment?.failed ?? 0), total: enrichment?.scheduled, succeeded: enrichment?.enriched ?? 0 });
     progress?.finish("listings", "done", { count: inventory.listings.length });
   } catch (error) {
     if (progress?.isOpen("details")) progress.finish("details", "failed");

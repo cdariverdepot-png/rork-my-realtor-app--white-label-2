@@ -25,7 +25,8 @@ type NavigationCandidate = { url: string; label: string };
 type ImportStage = "site" | "design" | "pages" | "listings" | "details" | "verify" | "profile" | "save";
 type ImportEvent =
   /** A pipeline stage started, finished, failed, or was not needed. count/total are real tallies. */
-  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; reason?: string; at: number }
+  /** For "details", succeeded counts listings whose full details were actually read (count = pages handled). */
+  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; succeeded?: number; reason?: string; at: number }
   /** The page title / site name the realtor's own website published. */
   | { kind: "site"; name: string; host: string; at: number }
   /** What the design reader identified in the source markup. */
@@ -2241,7 +2242,8 @@ const THROTTLED_DETAIL_CONCURRENCY = 3;
 type DiscoveryProgress =
   | { phase: "inventory"; url: string; pages: number; found: number }
   | { phase: "render"; url: string; state: "start" | "done" | "failed" }
-  | { phase: "details"; url: string; done: number; total: number };
+  /** done = detail pages handled; enriched = listings whose full details were actually read. */
+  | { phase: "details"; url: string; done: number; total: number; enriched: number };
 
 async function discoverListings(
   seedUris: string[],
@@ -2764,8 +2766,8 @@ async function discoverListings(
   let detailIndex=0;
   const detailLimit = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
   let detailsHandled = 0;
-  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit }); };
-  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit });
+  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit, enriched: enrichmentEnriched }); };
+  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit, enriched: 0 });
   let enrichmentAttempted = 0, enrichmentEnriched = 0, enrichmentFailed = 0;
   let detailThrottled = false;
   const detailFetch:FetchHtml=async (uri,opts)=>{
@@ -3206,7 +3208,8 @@ const { createImportProgress, discoveryReporter, respondWithProgress } = (() => 
 type ImportStage = "site" | "design" | "pages" | "listings" | "details" | "verify" | "profile" | "save";
 type ImportEvent =
   /** A pipeline stage started, finished, failed, or was not needed. count/total are real tallies. */
-  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; reason?: string; at: number }
+  /** For "details", succeeded counts listings whose full details were actually read (count = pages handled). */
+  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; succeeded?: number; reason?: string; at: number }
   /** The page title / site name the realtor's own website published. */
   | { kind: "site"; name: string; host: string; at: number }
   /** What the design reader identified in the source markup. */
@@ -3239,11 +3242,11 @@ function createImportProgress(sink?: (event: ImportEvent) => void) {
   };
   return {
     emit,
-    start(stage: ImportStage, extra?: { count?: number; total?: number }) {
+    start(stage: ImportStage, extra?: { count?: number; total?: number; succeeded?: number }) {
       if (!opened.has(stage)) opened.set(stage, Date.now());
       emit({ kind: "stage", stage, state: "start", ...extra });
     },
-    finish(stage: ImportStage, state: "done" | "failed" | "skipped" = "done", extra?: { count?: number; total?: number; reason?: string }) {
+    finish(stage: ImportStage, state: "done" | "failed" | "skipped" = "done", extra?: { count?: number; total?: number; succeeded?: number; reason?: string }) {
       close(stage);
       emit({ kind: "stage", stage, state, ...extra });
     },
@@ -3267,15 +3270,15 @@ function discoveryReporter(progress: ImportProgress) {
       if (event.pages === lastPages && event.found === lastFound) return;
       lastPages = event.pages; lastFound = event.found;
       progress.emit({ kind: "listings", host, pages: event.pages, found: event.found });
-    } else if (event.done < event.total) progress.start("details", { count: event.done, total: event.total });
-    else progress.finish("details", "done", { count: event.done, total: event.total });
+    } else if (event.done < event.total) progress.start("details", { count: event.done, total: event.total, succeeded: event.enriched });
+    else progress.finish("details", "done", { count: event.done, total: event.total, succeeded: event.enriched });
   };
 }
 /** Mirrors the engine's onProgress events (kept structural so this module has no imports). */
 type DiscoveryProgressEvent =
   | { phase: "inventory"; url: string; pages: number; found: number }
   | { phase: "render"; url: string; state: "start" | "done" | "failed" }
-  | { phase: "details"; url: string; done: number; total: number };
+  | { phase: "details"; url: string; done: number; total: number; enriched: number };
 
 /**
  * Serve a handler either as ordinary JSON or, when the client asks for an event stream, as
@@ -5202,7 +5205,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
       if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discoveredListings.length;
       listingDiscovery = discovery.meta;
       console.log("[build] listing discovery", listingDiscovery);
-      if (progress.isOpen("details")) progress.finish("details", "done", { count: (discovery.meta.enrichment?.enriched ?? 0) + (discovery.meta.enrichment?.failed ?? 0), total: discovery.meta.enrichment?.scheduled });
+      if (progress.isOpen("details")) progress.finish("details", "done", { count: (discovery.meta.enrichment?.enriched ?? 0) + (discovery.meta.enrichment?.failed ?? 0), total: discovery.meta.enrichment?.scheduled, succeeded: discovery.meta.enrichment?.enriched ?? 0 });
       progress.finish("listings", "done", { count: discoveredListings.length });
     } catch (error) {
       console.error("[build] listing discovery error", error instanceof Error ? error.message : String(error));
