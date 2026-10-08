@@ -16,9 +16,10 @@ fs.mkdirSync(out, { recursive: true });
   const engine = await loadEngine();
   const { discoverListings, publicListingRequestHeaders, decodePublicListingResponse, isRobotChallenge, isPublishedScriptGate } = engine;
   const backend = engine.listingRenderBackendFromEnv(name => process.env[name]);
-  const renderer = backend ? engine.createListingRenderer(backend) : undefined;
-  if (renderer) console.log('rendering through the configured renderer service');
+  if (backend) console.log('rendering through the configured renderer service');
   for (const { id, url } of pairs) {
+    // One renderer per site: the per-import render budget is the one a real import of this site would get.
+    const renderer = backend ? engine.createListingRenderer(backend) : undefined;
     const recorder = createRecorder(async (target, options) => {
       const response = await fetch(target, { headers: { 'User-Agent': 'MyRealtorAppBuilder/1.0',
         ...(options?.cookie ? { Cookie: options.cookie } : {}),
