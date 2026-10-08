@@ -117,10 +117,26 @@ staging key, and a justification line) followed by your review.
   record and QR code in `diagnostics/preview-deployed.json` and `diagnostics/preview-qr.png`.
 - Rork / Expo dev previews of `main` call the staging importer automatically (`__DEV__`); release builds
   still call production.
-- Note: the existing workflows `deploy-functions` and `deploy-web` still deploy to production on the next push
-  to `main` that touches `supabase/functions/**` or `expo/**` (including Rork syncs). Such a push would put
-  this importer and client into production.
-- Known gaps: duplicates whose shared remarks arrive only in later detail jobs are not merged on the
-  production job-split path (Redman: 13 pairs live; merged offline); Real Geeks served the Supabase edge a
-  script-rendered page (Chatman: 0 listings live, 50 from GitHub runners); 5 of 16 held-out sites need a
-  rendered check; Century 21, Redfin, RE/MAX and one iFoundAgent site block automated readers.
+- Production deploy workflows (`deploy-functions`, `deploy-web`, `deploy-listing-renderer`) are manual-only
+  (workflow_dispatch). A push to `main`, including a Rork sync, no longer deploys to production.
+
+## 10. Final consolidation (Oct 8 2026, evening)
+
+- Duplicates: detail jobs reconcile the saved inventory with the normalizer's duplicate rules, record the merge
+  on the source (`mergedDuplicates`), and later syncs do not republish a merged copy while its kept record is
+  published. Hidden, tagged or annotated listings are never removed by a merge. Staging: Redman 12 merges
+  recorded during the first import.
+- Real Geeks / Chatman: the existing Fly.io renderer is refused by Real Geeks ("Request Blocked"); a refused
+  render no longer replaces the readable plain page. Staging: 50 listings, all named, described, with photos.
+- Rendered checks (existing renderer, no new cost): Sierra (Tom Toole) cards bounded by their URL-keyed
+  container (0 -> 56 on staging); Lauer 6 and Magic Valley 15 import; the kvCORE/BoldTrail site (Idaho Perfect
+  Home) renders an empty map search and Howard Hanna's render times out (0 listings, reported as such).
+- Thin details: hook-named galleries, numbered streets in URL slugs, and one-line structured summaries
+  (record `docs/compatibility-knowledge/detail-incomplete.md`); 52 recorded records gain photos/remarks, none lose any.
+- Blocked sites: restrictions kept; the message names the supported import methods (public listings page,
+  listing file upload, adding properties from the dashboard).
+- Validation: full suite 614/614; final stage gate 37851686298 on staging (9 sites, $0.44 metered): 8 reached
+  review, RE/MAX stopped with its 403 explanation.
+- Known limits: a relisted property whose remarks and photos were edited stays two listings (Katerina: 4411
+  21st Ave SW); Sierra imports are limited by the render budget (4 per import); kvCORE map searches and Howard
+  Hanna are not read; Century 21, Redfin, RE/MAX and one iFoundAgent site block automated readers.
