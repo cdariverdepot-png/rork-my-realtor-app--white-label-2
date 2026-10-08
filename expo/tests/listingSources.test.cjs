@@ -416,3 +416,15 @@ test('saved listings keep their attribution and ownership label', () => {
   assert.equal(next.listingOffice, 'Other Brokers Inc');
   assert.equal(next.ownership, 'featured');
 });
+
+test('the listing import retries its first page once after a timeout', async () => {
+  let calls = 0;
+  const pages = { [source.url]: html([home(), home(25)]) };
+  const result = await sources.readSource(source.url, async uri => {
+    if (uri === source.url && calls++ === 0) throw Error('Signal timed out.');
+    if (!(uri in pages)) throw Error('Cannot read page');
+    return { html: pages[uri], finalUrl: new URL(uri) };
+  }, undefined, async () => []);
+  assert.equal(calls, 2);
+  assert.equal(result.listings.length, 2);
+});

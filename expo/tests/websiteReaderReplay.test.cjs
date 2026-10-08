@@ -28,6 +28,11 @@ test('the website-reader corpus covers the 25 diagnostic sites', () => {
   for (const id of ids) assert.equal(loadCapture(path.join(dir, `${id}.capture.json.gz`)).provenance, 'public-response-capture');
 });
 
+// Repair stage 3, reviewed: from the runner's network these two sites answered with a CloudFront
+// "Request blocked" 403 page, which the reader used to accept as the website (baselines recorded that).
+// An error page is never the website: the build stops with the reason and the model is never called.
+const REVIEWED_BLOCKED = new Set(['century21-barbara-patterson', 'remax-alexis-kemp-sagert']);
+
 const bundle = currentBundle();
 for (const id of ids) {
   test(`${id}: reader output is unchanged and stays within the CPU allowance`, () => quiet(async () => {
@@ -35,6 +40,12 @@ for (const id of ids) {
     const expected = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(dir, `${id}.expected.json.gz`))).toString('utf8'));
     await replayCapture(bundle, capture); // warm-up: JIT and module evaluation are not the import's work
     const run = await replayCapture(bundle, capture);
+    if (REVIEWED_BLOCKED.has(id)) {
+      assert.equal(run.status, 422);
+      assert.equal(run.aiRequest, undefined, 'no profile is written from an error page');
+      assert.ok(run.cpuMs < CPU_CEILING_MS);
+      return;
+    }
     const json = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
     assert.equal(run.status, expected.status);
     assert.deepEqual(json(run.aiRequest), expected.ai, 'the profile model must receive exactly the same source text');

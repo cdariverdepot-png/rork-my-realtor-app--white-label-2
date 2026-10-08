@@ -46,7 +46,13 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     return pages.get(cacheKey)!;
   };
   let uri = existing?.url ?? submittedUrl;
-  const firstPage = await cachedFetch(uri);
+  // One retry after a transient failure (timeout, rate limit, overloaded server) on the first page.
+  const firstPage = await cachedFetch(uri).catch(async error => {
+    if (!/timed? ?out|aborted|returned (?:408|429|50[0234])\b|error sending request|connection (?:reset|closed|refused)/i.test(error instanceof Error ? error.message : String(error))) throw error;
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    pages.delete(`${uri}|false`);
+    return cachedFetch(uri);
+  });
   const firstUrl = firstPage.finalUrl;
   const firstArchitecture = describeListingArchitecture(firstPage.html, firstPage.finalUrl);
   const firstProperties = extractListingsFromPage(firstPage.html, firstPage.finalUrl, firstArchitecture.attempts);
