@@ -142,5 +142,77 @@
   "category": "iFoundAgent (WordPress)",
   "holdout": true,
   "addedFor": "Phase 9 unseen evaluation (Oct 8 2026); not used to develop any repair"
+ },
+ {
+  "id": "chatman-realty-group--rendered",
+  "url": "https://www.chatmanrealtygroup.com/",
+  "category": "Real Geeks",
+  "market": "Fort Worth, TX",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of chatman-realty-group"
+ },
+ {
+  "id": "tom-toole--rendered",
+  "url": "https://www.tomtoole.com/",
+  "category": "Sierra Interactive",
+  "market": "West Chester, PA",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of tom-toole"
+ },
+ {
+  "id": "idaho-perfect-home--rendered",
+  "url": "https://www.idahoperfecthome.com/",
+  "category": "kvCORE / BoldTrail",
+  "market": "Idaho Falls, ID",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of idaho-perfect-home"
+ },
+ {
+  "id": "lauer-realty-group--rendered",
+  "url": "https://lauerrealtygroup.com/",
+  "category": "Lofty (Chime)",
+  "market": "Madison, WI",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of lauer-realty-group"
+ },
+ {
+  "id": "magic-valley-homes--rendered",
+  "url": "https://magicvalley.homes/",
+  "category": "AgentFire (Home Junction data)",
+  "market": "Burley, ID",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of magic-valley-homes"
+ },
+ {
+  "id": "howard-hanna-daniel-torri--rendered",
+  "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053",
+  "category": "Howard Hanna brokerage profile",
+  "market": "Greensburg, PA",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of howard-hanna-daniel-torri"
+ },
+ {
+  "id": "houses-of-kansas-city--recapture",
+  "url": "https://housesofkansascity.com/",
+  "category": "independent-agent",
+  "market": "Mission Woods, KS",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of houses-of-kansas-city"
+ },
+ {
+  "id": "mount-snow-palmiter--recapture",
+  "url": "https://www.mountsnowpalmiter.com/",
+  "category": "independent-agent",
+  "market": "West Dover, VT",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of mount-snow-palmiter"
+ },
+ {
+  "id": "skilled-real-estate-miami--recapture",
+  "url": "https://miamidadebrowardliving.com/",
+  "category": "Showcase IDX (WordPress)",
+  "market": "Pembroke Pines, FL",
+  "holdout": false,
+  "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of skilled-real-estate-miami"
  }
 ]
