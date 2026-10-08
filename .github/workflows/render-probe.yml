@@ -44,7 +44,7 @@ jobs:
       - name: Probe
         run: |
           urls=$(grep -E '^probe:' diagnostics/evaluation/probe.txt | awk '{print $2}')
-          NODE_PATH="$RUNNER_TEMP/pw/node_modules" node expo/scripts/diagnostics/render-probe.cjs diagnostics/evaluation/probe-results.json $urls
+          PROBE_SAVE_DIR=diagnostics/evaluation/probe-pages NODE_PATH="$RUNNER_TEMP/pw/node_modules" node expo/scripts/diagnostics/render-probe.cjs diagnostics/evaluation/probe-results.json $urls
           export PATH="$HOME/.fly/bin:$PATH"
           fly logs --app cdariver-listing-renderer --no-tail 2>/dev/null | tail -n 80 > diagnostics/evaluation/probe-renderer.log || true
       - name: Commit results

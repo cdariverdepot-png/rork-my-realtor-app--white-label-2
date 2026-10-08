@@ -1,3 +1,4 @@
-Probe requested Thu Oct  8 23:44:08 UTC 2026: Cindy Carlson alternative published sources (item 7).
-probe: https://cindycarlsonrealty.com/property-search/
-probe: https://cindycarlsonrealty.com/about-us/
+Probe requested Thu Oct  8 23:53:24 UTC 2026: Tom Toole (Sierra) search-result pages that added other brokerages' listings on staging.
+probe: https://www.tomtoole.com/property-search/results/
+probe: https://www.tomtoole.com/property-search/results/?searchid=2460824
+probe: https://www.tomtoole.com/

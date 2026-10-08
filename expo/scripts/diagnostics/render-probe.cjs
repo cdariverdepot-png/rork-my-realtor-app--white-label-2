@@ -26,6 +26,11 @@ async function service(url) {
     const res = await fetch(process.env.LISTING_RENDER_URL, { method: 'POST', headers: { authorization: 'Bearer ' + process.env.LISTING_RENDER_TOKEN, 'content-type': 'application/json' },
       body: JSON.stringify({ url }), signal: AbortSignal.timeout(90000) });
     const body = await res.json().catch(() => ({}));
+    if (body.html && process.env.PROBE_SAVE_DIR) {
+      const name = url.replace(/^https?:\/\//, '').replace(/[^a-z0-9]+/gi, '_').slice(0, 120) + '.html.gz';
+      fs.mkdirSync(process.env.PROBE_SAVE_DIR, { recursive: true });
+      fs.writeFileSync(require('node:path').join(process.env.PROBE_SAVE_DIR, name), require('node:zlib').gzipSync(body.html));
+    }
     return { status: res.status, ms: Date.now() - started, error: body.error, finalUrl: body.finalUrl, ...(body.html ? summary(body.html) : {}),
       network: (body.network ?? []).map(n => ({ url: n.url.slice(0, 160), ...summary(n.html) })) };
   } catch (error) { return { error: String(error.message), ms: Date.now() - started }; }
