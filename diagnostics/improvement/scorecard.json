@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-08T19:41:18.539Z",
-  "evaluation": "2026-10-08T19:40:34.762Z",
+  "at": "2026-10-08T19:44:38.451Z",
+  "evaluation": "2026-10-08T19:43:35.572Z",
   "regression": {
     "sites": 25,
     "sitesImporting": 11,
@@ -43,8 +43,8 @@
     "architecturesSupported": [
       "ihomefinder"
     ],
-    "cpuMsTotal": 4771,
-    "cpuMsMax": 996
+    "cpuMsTotal": 4719,
+    "cpuMsMax": 977
   },
   "unseen": {
     "sites": 16,
@@ -61,7 +61,7 @@
       "unattributed": 77
     },
     "defects": {
-      "titleNotProperty": 1,
+      "titleNotProperty": 0,
       "duplicateProperty": 0,
       "detailIncomplete": 3,
       "needsStrategy": 0,
@@ -73,7 +73,7 @@
       "harness": 0,
       "marketOnly": 0
     },
-    "needsReview": 9,
+    "needsReview": 10,
     "architecturesEncountered": [
       "agentfire-dsidx",
       "attribute-cards",
@@ -86,12 +86,10 @@
     "architecturesSupported": [
       "attribute-cards"
     ],
-    "cpuMsTotal": 3825,
-    "cpuMsMax": 1778
+    "cpuMsTotal": 3835,
+    "cpuMsMax": 1815
   },
-  "newlySupportedArchitectures": [
-    "ihomefinder"
-  ],
+  "newlySupportedArchitectures": [],
   "strategies": [
     "flexmls-detail@1",
     "structured-cards@1",
@@ -104,8 +102,8 @@
   "failures": {
     "not_code": 4,
     "needs_review": 5,
-    "open": 2,
-    "integrated": 3
+    "open": 1,
+    "integrated": 4
   },
   "repairs": {
     "attempts": 5,
@@ -123,19 +121,19 @@
   "delta": {
     "regressionDefects": {
       "titleNotProperty": 0,
-      "duplicateProperty": -12,
+      "duplicateProperty": 0,
       "detailIncomplete": 0,
       "needsStrategy": 0,
       "engineErrors": 0
     },
     "unseenDefects": {
-      "titleNotProperty": -30,
-      "duplicateProperty": -1,
-      "detailIncomplete": -30,
+      "titleNotProperty": -1,
+      "duplicateProperty": 0,
+      "detailIncomplete": 0,
       "needsStrategy": 0,
       "engineErrors": 0
     },
-    "regressionRecordsNamed": -12,
+    "regressionRecordsNamed": 0,
     "strategiesAdded": []
   }
 }
