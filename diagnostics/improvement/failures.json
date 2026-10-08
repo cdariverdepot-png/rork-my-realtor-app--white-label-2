@@ -10,7 +10,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "d5329ba394858001",
       "sites": [
         {
@@ -43,7 +43,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "88df7a337168ae31",
       "sites": [
         {
@@ -119,7 +119,7 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "7cd585b7fe3604dd",
       "sites": [
         {
@@ -324,7 +324,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "aea556c8b113eb29",
       "sites": [
         {
@@ -581,9 +581,9 @@
         "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
         "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
       ],
-      "status": "open",
+      "status": "integrated",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:40:34.848Z",
       "evidenceHash": "53d199883278363a",
       "sites": [
         {
@@ -603,7 +603,7 @@
           "detail": "The property detail page names the property, but the imported title is a price, card text or label."
         }
       ],
-      "siteCount": 1,
+      "siteCount": 0,
       "listingsAffected": 1,
       "architectures": [
         "property-cards"
@@ -639,7 +639,8 @@
           }
         }
       ],
-      "knowledge": "docs/compatibility-knowledge/title-not-property.md"
+      "knowledge": "docs/compatibility-knowledge/title-not-property.md",
+      "resolvedAt": "2026-10-08T19:43:47.846Z"
     },
     "title-not-property--temporary-outage": {
       "id": "title-not-property--temporary-outage",
@@ -653,7 +654,7 @@
       ],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "ad1098bc29198b26",
       "sites": [
         {
@@ -698,8 +699,8 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
-      "evidenceHash": "88935e90db8f6ebb",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "18fff4034a42f88c",
       "sites": [
         {
           "id": "redman-realty-group",
@@ -742,15 +743,15 @@
           "detail": "Neither the card nor a recorded detail page names the property."
         },
         {
-          "id": "the-cameron-team",
+          "id": "skilled-real-estate-miami",
           "set": "unseen",
-          "category": "AgentFire + /idx/ plugin",
-          "architecture": "agentfire-dsidx",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
           "count": 1,
           "examples": [
             {
-              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
-              "title": "cameronteam",
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
               "detailPageNames": null,
               "detailPage": "recorded"
             }
@@ -761,8 +762,8 @@
       "siteCount": 2,
       "listingsAffected": 9,
       "architectures": [
-        "agentfire-dsidx",
-        "ihomefinder"
+        "ihomefinder",
+        "property-cards"
       ],
       "attempts": []
     },
@@ -775,7 +776,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "89f4e5443044d67d",
       "sites": [
         {
@@ -819,8 +820,8 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
-      "evidenceHash": "50c61de848c2b20d",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "93cc68c78153b2ba",
       "sites": [
         {
           "id": "woods-n-water-real-estate",
@@ -857,30 +858,11 @@
             }
           ],
           "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
-        },
-        {
-          "id": "the-cameron-team",
-          "set": "unseen",
-          "category": "AgentFire + /idx/ plugin",
-          "architecture": "agentfire-dsidx",
-          "count": 1,
-          "examples": [
-            {
-              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
-              "title": "cameronteam",
-              "description": 583,
-              "photos": 1,
-              "pagePhotos": 18,
-              "pageDescription": false
-            }
-          ],
-          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
         }
       ],
-      "siteCount": 3,
-      "listingsAffected": 3,
+      "siteCount": 2,
+      "listingsAffected": 2,
       "architectures": [
-        "agentfire-dsidx",
         "property-cards"
       ],
       "attempts": []
@@ -894,7 +876,7 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T19:22:34.206Z",
-      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
       "evidenceHash": "2f61ac6a29cfa941",
       "sites": [
         {
@@ -1170,7 +1152,49 @@
         }
       ],
       "knowledge": "docs/compatibility-knowledge/mirrored-listing.md"
+    },
+    "all-filtered--needs-review": {
+      "id": "all-filtered--needs-review",
+      "code": "ALL_FILTERED",
+      "defectKind": "needs_review",
+      "severity": 2,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T19:40:34.848Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "ec5d4622eba0793d",
+      "sites": [
+        {
+          "id": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "count": 1,
+          "examples": [
+            {
+              "discovered": 1,
+              "reasons": {
+                "normalizer": 1
+              },
+              "sample": [
+                {
+                  "title": "cameronteam",
+                  "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/"
+                }
+              ]
+            }
+          ],
+          "detail": "Listings were discovered but none survived the save-boundary status and normalizer rules."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 1,
+      "architectures": [
+        "agentfire-dsidx"
+      ],
+      "attempts": []
     }
   },
-  "lastEvaluation": "2026-10-08T19:37:11.142Z"
+  "lastEvaluation": "2026-10-08T19:43:35.572Z"
 }

@@ -51,6 +51,8 @@ function namesProperty(title) {
 function detailPageName(html) {
   if (!html) return null;
   for (const block of html.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    // An office or agent address (Place/Organization) is not the property's name.
+    if (!/"@type"\s*:\s*\[?\s*"(?:RealEstateListing|SingleFamilyResidence|House|Apartment|Residence|Accommodation|Condominium|Townhouse)"/i.test(block[1])) continue;
     const street = block[1].match(/"streetAddress"\s*:\s*"([^"]{3,120})"/)?.[1];
     if (street) {
       const locality = block[1].match(/"addressLocality"\s*:\s*"([^"]{2,60})"/)?.[1];

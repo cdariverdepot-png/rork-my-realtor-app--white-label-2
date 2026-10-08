@@ -2656,6 +2656,7 @@ function pageNamesProperty(text: string, item: Pick<DiscoveredListing, "title" |
  * ("802 Sandpoint Ave #8404, Sandpoint, ID 83864"; "Cottage Island, Hope, ID 83836"). Nothing is invented,
  * and a title that already names something is never replaced. (Autonomous repair: title-not-property.)
  */
+const LISTING_LD_TYPE = /"@type"\s*:\s*\[?\s*"(?:RealEstateListing|SingleFamilyResidence|House|Apartment|Residence|Accommodation|Condominium|Townhouse)"/i;
 function detailPageTitle(item: Pick<DiscoveredListing, "title" | "sourceUrl">, html: string, base: URL): string | undefined {
   const residue = decodeEntities(item.title ?? "")
     .replace(/\$\s?\d[\d,.]*(?:\s?(?:[KkMm]|million)\b)?/g, " ")
@@ -2676,6 +2677,9 @@ function detailPageTitle(item: Pick<DiscoveredListing, "title" | "sourceUrl">, h
     (/^[NSEW]?\d{1,6}[A-Z]?\s+[A-Za-z0-9]/.test(text) || /,\s*[A-Za-z .'-]+,?\s+[A-Z]{2}\b/.test(text) || /\b\d{5}(?:-\d{4})?\b/.test(text));
   const streets = new Map<string, string>();
   for (const block of html.matchAll(/<script\b[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    // Only a listing's own structured data names the property; an agent's or office's Place/Organization
+    // address (SEO plugins publish one on every page) never does.
+    if (!LISTING_LD_TYPE.test(block[1])) continue;
     for (const match of block[1].matchAll(/"streetAddress"\s*:\s*"((?:[^"\\]|\\.){2,120})"/g)) {
       const street = clean(match[1]);
       const rest = block[1].slice(match.index ?? 0, (match.index ?? 0) + 600);

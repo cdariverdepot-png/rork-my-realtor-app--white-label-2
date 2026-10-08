@@ -1,5 +1,5 @@
 {
-  "evaluatedAt": "2026-10-08T19:37:11.142Z",
+  "evaluatedAt": "2026-10-08T19:43:35.572Z",
   "engine": "working tree",
   "sites": [
     {
@@ -9,7 +9,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:28:24.722Z",
-      "cpuMs": 125,
+      "cpuMs": 260,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -39,7 +39,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:31.687Z",
-      "cpuMs": 0,
+      "cpuMs": 2,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -70,7 +70,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:09.958Z",
-      "cpuMs": 3,
+      "cpuMs": 5,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -101,7 +101,7 @@
       "holdout": false,
       "architecture": "candidate:flexmls",
       "capturedAt": "2026-10-08T04:24:58.470Z",
-      "cpuMs": 9,
+      "cpuMs": 15,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -132,7 +132,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:31.496Z",
-      "cpuMs": 8,
+      "cpuMs": 14,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -168,7 +168,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:35.755Z",
-      "cpuMs": 24,
+      "cpuMs": 37,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -203,7 +203,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:09.828Z",
-      "cpuMs": 393,
+      "cpuMs": 696,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -397,7 +397,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:22.303Z",
-      "cpuMs": 29,
+      "cpuMs": 60,
       "imported": 3,
       "missing": 0,
       "listings": [
@@ -438,7 +438,7 @@
       "holdout": false,
       "architecture": "property-cards+public-json",
       "capturedAt": "2026-10-08T04:27:20.976Z",
-      "cpuMs": 93,
+      "cpuMs": 206,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -614,7 +614,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:17.303Z",
-      "cpuMs": 274,
+      "cpuMs": 519,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -637,7 +637,7 @@
       "holdout": false,
       "architecture": "candidate:wordpress",
       "capturedAt": "2026-10-08T04:27:21.799Z",
-      "cpuMs": 4,
+      "cpuMs": 8,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -672,7 +672,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:54.552Z",
-      "cpuMs": 102,
+      "cpuMs": 176,
       "imported": 10,
       "missing": 0,
       "listings": [
@@ -776,7 +776,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:11.021Z",
-      "cpuMs": 516,
+      "cpuMs": 977,
       "imported": 7,
       "missing": 0,
       "listings": [
@@ -883,7 +883,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:25.319Z",
-      "cpuMs": 380,
+      "cpuMs": 709,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -954,7 +954,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:38.249Z",
-      "cpuMs": 34,
+      "cpuMs": 53,
       "imported": 15,
       "missing": 0,
       "listings": [
@@ -1160,7 +1160,7 @@
       "holdout": false,
       "architecture": "ihomefinder",
       "capturedAt": "2026-10-08T04:27:27.234Z",
-      "cpuMs": 34,
+      "cpuMs": 94,
       "imported": 90,
       "missing": 0,
       "listings": [
@@ -2059,7 +2059,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:26:49.820Z",
-      "cpuMs": 26,
+      "cpuMs": 54,
       "imported": 0,
       "missing": 4,
       "listings": [],
@@ -2123,7 +2123,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:55.391Z",
-      "cpuMs": 252,
+      "cpuMs": 524,
       "imported": 36,
       "missing": 0,
       "listings": [
@@ -2461,7 +2461,7 @@
       "holdout": false,
       "architecture": "candidate:wix",
       "capturedAt": "2026-10-08T04:29:58.580Z",
-      "cpuMs": 81,
+      "cpuMs": 149,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2499,7 +2499,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:03.893Z",
-      "cpuMs": 46,
+      "cpuMs": 90,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -2567,7 +2567,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:25:01.164Z",
-      "cpuMs": 14,
+      "cpuMs": 36,
       "imported": 2,
       "missing": 0,
       "listings": [
@@ -2621,7 +2621,7 @@
       "holdout": false,
       "architecture": "candidate:next",
       "capturedAt": "2026-10-08T04:29:45.911Z",
-      "cpuMs": 20,
+      "cpuMs": 34,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2656,7 +2656,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:44.547Z",
-      "cpuMs": 174,
+      "cpuMs": 302,
       "imported": 10,
       "missing": 0,
       "listings": [
@@ -2760,7 +2760,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:38.708Z",
-      "cpuMs": 102,
+      "cpuMs": 180,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -2828,7 +2828,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:37.044Z",
-      "cpuMs": 267,
+      "cpuMs": 588,
       "imported": 50,
       "missing": 0,
       "listings": [
@@ -3325,7 +3325,7 @@
       "holdout": true,
       "architecture": "attribute-cards",
       "capturedAt": "2026-10-08T19:20:13.553Z",
-      "cpuMs": 29,
+      "cpuMs": 62,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -3379,7 +3379,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:35.591Z",
-      "cpuMs": 962,
+      "cpuMs": 1815,
       "imported": 55,
       "missing": 0,
       "listings": [
@@ -3888,7 +3888,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:20.911Z",
-      "cpuMs": 109,
+      "cpuMs": 215,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -4094,7 +4094,7 @@
       "holdout": true,
       "architecture": "candidate:lofty_chime",
       "capturedAt": "2026-10-08T19:19:39.733Z",
-      "cpuMs": 33,
+      "cpuMs": 66,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4125,7 +4125,7 @@
       "holdout": true,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T19:19:40.096Z",
-      "cpuMs": 3,
+      "cpuMs": 2,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4156,7 +4156,7 @@
       "holdout": true,
       "architecture": "candidate:idx_broker",
       "capturedAt": "2026-10-08T19:20:38.476Z",
-      "cpuMs": 44,
+      "cpuMs": 83,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4195,7 +4195,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:13.012Z",
-      "cpuMs": 278,
+      "cpuMs": 411,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -4387,18 +4387,18 @@
           "category": "Showcase IDX (WordPress)",
           "architecture": "property-cards",
           "code": "TITLE_NOT_PROPERTY",
-          "defectKind": "code_defect",
-          "severity": 3,
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
               "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
               "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
-              "detailPageNames": "1001 NW 193rd Ave, Pembroke Pines, FL",
+              "detailPageNames": null,
               "detailPage": "recorded"
             }
           ],
-          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+          "detail": "Neither the card nor a recorded detail page names the property."
         },
         {
           "site": "skilled-real-estate-miami",
@@ -4446,80 +4446,35 @@
       "holdout": true,
       "architecture": "agentfire-dsidx",
       "capturedAt": "2026-10-08T19:19:43.140Z",
-      "cpuMs": 41,
-      "imported": 1,
+      "cpuMs": 109,
+      "imported": 0,
       "missing": 0,
-      "listings": [
-        {
-          "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
-          "title": "cameronteam",
-          "ownership": null,
-          "listingOffice": null,
-          "description": 583,
-          "photos": 1,
-          "price": "$849,900"
-        }
-      ],
+      "listings": [],
       "findings": [
         {
           "site": "the-cameron-team",
           "set": "unseen",
           "category": "AgentFire + /idx/ plugin",
           "architecture": "agentfire-dsidx",
-          "code": "NOT_A_PROPERTY",
-          "defectKind": "code_defect",
-          "severity": 4,
-          "count": 1,
-          "examples": [
-            {
-              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
-              "title": "cameronteam"
-            }
-          ],
-          "detail": "A social-media post or profile was imported as a property listing.",
-          "all": [
-            "https://www.instagram.com/p/DeAMNvJjKI7/"
-          ]
-        },
-        {
-          "site": "the-cameron-team",
-          "set": "unseen",
-          "category": "AgentFire + /idx/ plugin",
-          "architecture": "agentfire-dsidx",
-          "code": "TITLE_NOT_PROPERTY",
-          "defectKind": "needs_review",
-          "severity": 1,
-          "count": 1,
-          "examples": [
-            {
-              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
-              "title": "cameronteam",
-              "detailPageNames": null,
-              "detailPage": "recorded"
-            }
-          ],
-          "detail": "Neither the card nor a recorded detail page names the property."
-        },
-        {
-          "site": "the-cameron-team",
-          "set": "unseen",
-          "category": "AgentFire + /idx/ plugin",
-          "architecture": "agentfire-dsidx",
-          "code": "DETAIL_INCOMPLETE",
+          "code": "ALL_FILTERED",
           "defectKind": "needs_review",
           "severity": 2,
           "count": 1,
           "examples": [
             {
-              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
-              "title": "cameronteam",
-              "description": 583,
-              "photos": 1,
-              "pagePhotos": 18,
-              "pageDescription": false
+              "discovered": 1,
+              "reasons": {
+                "normalizer": 1
+              },
+              "sample": [
+                {
+                  "title": "cameronteam",
+                  "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/"
+                }
+              ]
             }
           ],
-          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+          "detail": "Listings were discovered but none survived the save-boundary status and normalizer rules."
         }
       ]
     },
@@ -4530,7 +4485,7 @@
       "holdout": true,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T19:19:39.032Z",
-      "cpuMs": 0,
+      "cpuMs": 1,
       "imported": 0,
       "missing": 0,
       "listings": [],

@@ -62,3 +62,14 @@ test('title-not-property: the recorded Realm Partners inventory (live capture, O
   assert.equal(byUrl['https://www.realmidaho.com/property/20261373/'], 'Cottage Island, Hope, ID 83836');
   assert.equal(byUrl['https://www.realmidaho.com/property/20261912/'], '802 Sandpoint Ave #8404, Sandpoint, ID 83864');
 });
+
+test('title-not-property: an office or agent address published by an SEO plugin never names a listing (hardening)', async () => {
+  // Found by review of a held-out Showcase IDX page (Oct 2026): its only PostalAddress belongs to a schema.org
+  // Place for the brokerage office, and its listing headings are split across two <h1> elements.
+  const { detailPageTitle } = await loadEngine();
+  const url = 'https://agent.example/properties/listing/SEF/A12103137/FL/Ocala/';
+  const office = '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Place","address":{"@type":"PostalAddress","streetAddress":"1001 NW 193rd Ave","addressLocality":"Pembroke Pines","addressRegion":"FL"}},{"@type":"WebSite"}]}</script>';
+  assert.equal(detailPageTitle({ title: '$249,900', sourceUrl: url }, `${office}<h1>Property Search</h1><h1>Ocala, FL 34473</h1>`, new URL(url)), undefined);
+  const agent = '<script type="application/ld+json">{"@type":"RealEstateAgent","address":{"@type":"PostalAddress","streetAddress":"500 Main St","addressLocality":"Boise","addressRegion":"ID"}}</script>';
+  assert.equal(detailPageTitle({ title: '$249,900', sourceUrl: url }, `${agent}<h1>Featured</h1>`, new URL(url)), undefined);
+});

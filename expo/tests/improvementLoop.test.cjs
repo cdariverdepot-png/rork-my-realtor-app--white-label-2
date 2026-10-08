@@ -25,7 +25,7 @@ test('titles name a property only when they read as an address or a located plac
 });
 
 test('a detail page names its property from structured address data or an address heading, never from page chrome', () => {
-  assert.equal(detailPageName('<script type="application/ld+json">{"address":{"@type":"PostalAddress","streetAddress":"Cottage Island","addressLocality":"Hope","addressRegion":"ID"}}</script>'), 'Cottage Island, Hope, ID');
+  assert.equal(detailPageName('<script type="application/ld+json">{"@type":"RealEstateListing","address":{"@type":"PostalAddress","streetAddress":"Cottage Island","addressLocality":"Hope","addressRegion":"ID"}}</script>'), 'Cottage Island, Hope, ID');
   assert.equal(detailPageName('<h1>412 Pine Street, Sandpoint, ID 83864</h1>'), '412 Pine Street, Sandpoint, ID 83864');
   assert.equal(detailPageName('<h1>Welcome to our listings</h1>'), null);
 });
@@ -221,4 +221,8 @@ test('improvement loop: removing a site\'s only wrong record may leave an explai
   assert.equal(compare(before, empty, failureFor('NOT_A_PROPERTY')).ok, true);
   const worse = evaluation([site('a', [finding('ALL_FILTERED', 'needs_review', 1), finding('DETAIL_INCOMPLETE', 'code_defect', 1)], [])]);
   assert.equal(compare(before, worse, failureFor('NOT_A_PROPERTY')).ok, false);
+});
+
+test('improvement loop: an office address in structured data is not evidence of the property\'s name', () => {
+  assert.equal(detailPageName('<script type="application/ld+json">{"@type":"Place","address":{"@type":"PostalAddress","streetAddress":"1001 NW 193rd Ave"}}</script><h1>Property Search</h1>'), null);
 });
