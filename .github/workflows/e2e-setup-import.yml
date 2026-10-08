@@ -1,0 +1,40 @@
+name: Production setup-import E2E
+on:
+  push:
+    branches: [probe/live-import]
+    paths: [e2e-run.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CASES: '[{"name":"cindy-existing","url":"https://cindycarlsonrealty.com/"},{"name":"gethomenow","url":"https://www.gethomenow.com/"},{"name":"northidahofreedom","url":"https://northidahofreedom.com/"}]'
+      OUT_DIR: ${{ github.workspace }}/e2e-out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: |
+          npm install --prefix "$RUNNER_TEMP/e2e" --no-audit --no-fund playwright@1.55.0 bcryptjs@2.4.3
+          "$RUNNER_TEMP/e2e/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Request throwaway test realtors (email + bcrypt hash only)
+        run: |
+          NODE_PATH="$RUNNER_TEMP/e2e/node_modules" node expo/scripts/e2e-setup-import.cjs request
+          mkdir -p probe-results/e2e && cp e2e-out/request.json "probe-results/e2e/request-${GITHUB_RUN_ID}.json"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add probe-results/e2e && git commit -m "E2E account request ${GITHUB_RUN_ID} [skip ci]" && git push origin HEAD:probe/live-import
+      - name: Run setup import in the deployed app
+        run: NODE_PATH="$RUNNER_TEMP/e2e/node_modules" node expo/scripts/e2e-setup-import.cjs run
+      - name: Commit results
+        if: always()
+        run: |
+          dest="probe-results/e2e/run-${GITHUB_RUN_ID}"
+          mkdir -p "$dest" && cp -r e2e-out/* "$dest"/ || true
+          git add probe-results/e2e && git commit -m "E2E results ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin probe/live-import && git push origin HEAD:probe/live-import && break; sleep 5; done
