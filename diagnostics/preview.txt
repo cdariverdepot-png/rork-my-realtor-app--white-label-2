@@ -1,1 +1,1 @@
-Preview deploy requested Thu Oct  8 21:09:48 UTC 2026 (retry: tests now run without the preview suffix)
+Preview deploy requested Thu Oct  8 21:19:02 UTC 2026 (retry with recorded deploy output)

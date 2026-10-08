@@ -70,24 +70,46 @@ jobs:
           printf '{"commit":"%s","builtAt":"%s","importer":"staging","entry":"%s"}\n' "$GITHUB_SHA" "$(date -u +%FT%TZ)" "$entry" > dist/build.json
           echo "ENTRY=$entry" >> "$GITHUB_ENV"
       - name: Deploy the preview alias (never production)
-        run: eas deploy --alias preview --non-interactive
-      - name: Verify the live preview serves this build
         run: |
+          set -o pipefail
+          eas deploy --alias preview --non-interactive 2>&1 | tee "$RUNNER_TEMP/deploy.log"
+      - name: Verify the live preview serves this build
+        id: verify
+        run: |
+          # The URLs EAS reports for this deployment (alias first), then the conventional alias URL.
+          urls="$(grep -oE 'https://[a-z0-9-]+\.expo\.app' "$RUNNER_TEMP/deploy.log" | awk '!seen[$0]++' | sort -t- -k3 | tr '\n' ' ')"
+          urls="$(echo $urls | tr ' ' '\n' | grep -- '--preview' ; echo $urls | tr ' ' '\n' | grep -v -- '--preview'; echo "$PREVIEW_URL")"
+          echo "$urls" > "$RUNNER_TEMP/urls.txt"
+          found=""
           for i in $(seq 1 20); do
-            live="$(curl -fsSL --max-time 20 "$PREVIEW_URL/build.json" || true)"
-            echo "$live" | grep -q "$GITHUB_SHA" && curl -fsSL --max-time 20 "$PREVIEW_URL/" | grep -q "$ENTRY" && break
+            for url in $(cat "$RUNNER_TEMP/urls.txt"); do
+              live="$(curl -fsSL --max-time 20 "$url/build.json" || true)"
+              if echo "$live" | grep -q "$GITHUB_SHA" && curl -fsSL --max-time 20 "$url/" | grep -q "$ENTRY"; then found="$url"; break 2; fi
+            done
             sleep 15
           done
-          echo "$live" | grep -q "$GITHUB_SHA" || { echo "::error::preview does not serve commit $GITHUB_SHA"; exit 1; }
-          for route in / /welcome /auth/callback; do curl -fsS --max-time 20 -o /dev/null "$PREVIEW_URL$route"; done
-          printf 'Preview: %s\nCommit: %s\nImporter: staging functions\n' "$PREVIEW_URL" "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
-      - name: Record the preview
+          echo "verified=$found" >> "$GITHUB_OUTPUT"
+          test -n "$found" || { echo "::error::no deployed URL serves commit $GITHUB_SHA"; exit 1; }
+          for route in / /welcome /auth/callback; do curl -fsS --max-time 20 -o /dev/null "$found$route"; done
+          echo "PREVIEW_URL=$found" >> "$GITHUB_ENV"
+          printf 'Preview: %s\nCommit: %s\nImporter: staging functions\n' "$found" "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Record the preview (always, so a failure is diagnosable from the repository)
+        if: always()
         working-directory: .
         run: |
           mkdir -p diagnostics
-          printf '{"url":"%s","commit":"%s","entry":"%s","verifiedAt":"%s","importer":"staging"}\n' "$PREVIEW_URL" "$GITHUB_SHA" "$ENTRY" "$(date -u +%FT%TZ)" > diagnostics/preview-deployed.json
-          npx --yes qrcode@1.5.4 -w 480 -o diagnostics/preview-qr.png "$PREVIEW_URL"
+          node -e '
+            const fs = require("fs"), t = process.env.RUNNER_TEMP;
+            const read = f => fs.existsSync(f) ? fs.readFileSync(f, "utf8") : "";
+            fs.writeFileSync("diagnostics/preview-deployed.json", JSON.stringify({
+              verified: process.env.VERIFIED || null, commit: process.env.GITHUB_SHA, entry: process.env.ENTRY || null,
+              importer: "staging", at: new Date().toISOString(), triedUrls: read(t + "/urls.txt").split("\n").filter(Boolean),
+              deployLog: read(t + "/deploy.log").split("\n").filter(l => l.trim()).slice(-40) }, null, 2) + "\n");'
+          if [ -n "$VERIFIED" ]; then npx --yes qrcode@1.5.4 -w 480 -o diagnostics/preview-qr.png "$VERIFIED"; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add diagnostics/preview-deployed.json diagnostics/preview-qr.png && git commit -m "Preview deployed and verified for ${GITHUB_SHA} [skip ci]" || exit 0
+          git add diagnostics/preview-deployed.json diagnostics/preview-qr.png 2>/dev/null; git add diagnostics/preview-deployed.json
+          git commit -m "Preview deployment record for ${GITHUB_SHA} [skip ci]" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ]
+        env:
+          VERIFIED: ${{ steps.verify.outputs.verified }}
