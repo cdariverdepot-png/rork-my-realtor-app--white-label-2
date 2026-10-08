@@ -111,8 +111,9 @@ function staticChecks() {
 function suite() {
   const run = spawnSync('npm', ['test', '--silent'], { cwd: path.join(repoRoot, 'expo'), encoding: 'utf8', maxBuffer: 512 * 1024 * 1024, env: { ...process.env } });
   const out = run.stdout + run.stderr;
-  const pass = Number(out.match(/^# pass (\d+)/m)?.[1] ?? 0), fail = Number(out.match(/^# fail (\d+)/m)?.[1] ?? NaN);
-  const failing = [...out.matchAll(/^not ok \d+ - (.*)$/gm)].map(m => m[1]).slice(0, 20);
+  // TAP ("# pass 583", Node 22 without a TTY) or spec ("ℹ pass 583", Node 23+) summaries.
+  const pass = Number(out.match(/^(?:#|ℹ) pass (\d+)/m)?.[1] ?? 0), fail = Number(out.match(/^(?:#|ℹ) fail (\d+)/m)?.[1] ?? NaN);
+  const failing = [...out.matchAll(/^not ok \d+ - (.*)$/gm), ...out.matchAll(/^✖ (.*?)(?: \(\d[\d.]*ms\))?$/gm)].map(m => m[1]).slice(0, 20);
   const blocked = /Level A guard: \d+ unexpected network request/.test(out);
   return { ok: run.status === 0 && fail === 0 && !blocked, pass, fail, failing, guard: blocked ? 'network or AI request attempted' : 'clean' };
 }
