@@ -1,0 +1,1911 @@
+{
+  "evaluatedAt": "2026-10-08T19:24:50.970Z",
+  "engine": "working tree",
+  "sites": [
+    {
+      "id": "chatman-realty-group",
+      "set": "verify",
+      "category": "Real Geeks",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:24:50.105Z",
+      "cpuMs": 442,
+      "imported": 99,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21400828/",
+          "title": "9652 Calaveras Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Christie Cannon from LPT Realty LLC. Contact:",
+          "description": 1054,
+          "photos": 5,
+          "price": "$499,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21404560/",
+          "title": "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Jeff Abate from Orchard Brokerage. Contact:",
+          "description": 911,
+          "photos": 5,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21402334/",
+          "title": "5752 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 860,
+          "photos": 4,
+          "price": "$714,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21402340/",
+          "title": "5768 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1725,
+          "photos": 4,
+          "price": "$704,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21398837/",
+          "title": "2110 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1415,
+          "photos": 5,
+          "price": "$1,173,930"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21389782/",
+          "title": "9801 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Spencer Mulgrew from Walnut Hill Realty. Contact:",
+          "description": 935,
+          "photos": 5,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21383579/",
+          "title": "813 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1012,
+          "photos": 4,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21386087/",
+          "title": "2037 Waterleaf Rd, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Trevon Tate from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 1659,
+          "photos": 5,
+          "price": "$949,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21382178/",
+          "title": "7124 Chelsea Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ana Zavala from Regal, REALTORS. Contact:",
+          "description": 840,
+          "photos": 5,
+          "price": "$594,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21381715/",
+          "title": "4868 Nickeldale Ct, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Joe McCalip from LPT Realty, LLC. Contact:",
+          "description": 1095,
+          "photos": 5,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21376990/",
+          "title": "1613 Fiddleneck St, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Tonya Green from Orchard Brokerage. Contact:",
+          "description": 732,
+          "photos": 5,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21363978/",
+          "title": "6749 Cambridge Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Deanna Chavez from Real Broker, LLC. Contact:",
+          "description": 1714,
+          "photos": 5,
+          "price": "$639,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375297/",
+          "title": "9200 Brittlebrush Trl, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Rochelle Howey from Keller Williams Realty. Contact:",
+          "description": 1995,
+          "photos": 5,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375749/",
+          "title": "531 Syracuse St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Vinh Pham from Rendon Realty, LLC. Contact:",
+          "description": 856,
+          "photos": 5,
+          "price": "$795,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375808/",
+          "title": "8105 Kurgan Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Chandler Crouch from Chandler Crouch, REALTORS. Contact:",
+          "description": 1063,
+          "photos": 5,
+          "price": "$395,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21373564/",
+          "title": "9828 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Jennifer Palma from Peak Realty and Associates LLC. Contact:",
+          "description": 1000,
+          "photos": 5,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21371983/",
+          "title": "817 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1065,
+          "photos": 3,
+          "price": "$978,720"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21370065/",
+          "title": "7640 Rhyner Way, Fort Worth, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Donna Leibow from Keller Williams Central. Contact:",
+          "description": 1000,
+          "photos": 5,
+          "price": "$512,500"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21361236/",
+          "title": "6820 Westbury Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "James Sales from Compass RE Texas, LLC.. Contact:",
+          "description": 1043,
+          "photos": 5,
+          "price": "$549,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21367554/",
+          "title": "1201 Timberhurst Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Krishna Kodali from Swagruha LLC. Contact:",
+          "description": 1478,
+          "photos": 5,
+          "price": "$464,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21366848/",
+          "title": "11428 Colonial Trace Ln, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Andrew Kempka from Caple & Company. Contact:",
+          "description": 1855,
+          "photos": 5,
+          "price": "$547,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21333972/",
+          "title": "212 Utopia Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Christopher Ondarza from Power House Real Estate. Contact:",
+          "description": 88,
+          "photos": 12,
+          "price": "$1,300,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21348958/",
+          "title": "459 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Telly Dearmore from Orchard Brokerage. Contact:",
+          "description": 1944,
+          "photos": 5,
+          "price": "$630,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21358260/",
+          "title": "5732 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1756,
+          "photos": 4,
+          "price": "$729,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21347230/",
+          "title": "2109 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Julia Telligman from Texas Best Properties. Contact:",
+          "description": 1729,
+          "photos": 5,
+          "price": "$915,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21346991/",
+          "title": "499 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ryan Ebersole from Compass RE Texas, LLC.. Contact:",
+          "description": 1601,
+          "photos": 5,
+          "price": "$750,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21335778/",
+          "title": "4008 Knollbrook Ln, Fort Worth, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Trey Shadwick from eXp Realty LLC. Contact:",
+          "description": 1221,
+          "photos": 5,
+          "price": "$479,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21346416/",
+          "title": "2193 Cloverfern Way, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Brian Mattingly from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 575,
+          "photos": 5,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21340717/",
+          "title": "2141 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Mey-Ling Pauri from Ultima Real Estate. Contact:",
+          "description": 1662,
+          "photos": 5,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21296945/",
+          "title": "2042 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 436,
+          "photos": 5,
+          "price": "$1,249,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21332222/",
+          "title": "824 Lemongrass Ct, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Julia Lugo from Monument Realty. Contact:",
+          "description": 703,
+          "photos": 5,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21323149/",
+          "title": "412 Harmony Way, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Mark Zhen from Loyalty Realty, LLC. Contact:",
+          "description": 1637,
+          "photos": 5,
+          "price": "$639,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21325284/",
+          "title": "7257 Laguna Del Campo Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Mandy Linthicum from HomeSmart. Contact:",
+          "description": 1507,
+          "photos": 5,
+          "price": "$474,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21302163/",
+          "title": "1317 Naples Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1122,
+          "photos": 5,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21300735/",
+          "title": "9828 Milkweed Ln, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Xiaonan Xiang from Letshine Realty LLC. Contact:",
+          "description": 645,
+          "photos": 5,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21287592/",
+          "title": "8120 Horseman Rd, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Benjamin Deanda from RE/MAX Trinity. Contact:",
+          "description": 1059,
+          "photos": 5,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21285865/",
+          "title": "2132 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Angela Gilchrist from Radius Agent LLC, A Limited Li. Contact:",
+          "description": 1546,
+          "photos": 5,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21279404/",
+          "title": "2043 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Charles Brown from Keller Williams Realty. Contact:",
+          "description": 1930,
+          "photos": 5,
+          "price": "$1,199,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21273381/",
+          "title": "6717 Serenity Dr, Fort Worth, TX 76135",
+          "ownership": "featured",
+          "listingOffice": "James Cianelli from Tx Land & Legacy Realty, LLC. Contact:",
+          "description": 527,
+          "photos": 5,
+          "price": "$483,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21259747/",
+          "title": "917 Cushing Dr, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Shannon Byrd from Charitable Realty. Contact:",
+          "description": 1980,
+          "photos": 5,
+          "price": "$449,995"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21240443/",
+          "title": "4727 Bluffview Dr, Haltom City, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Lana Cline from The Property Shop. Contact:",
+          "description": 1150,
+          "photos": 5,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21246536/",
+          "title": "7120 Shady Grove Rd, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Colin Pair from Keller Williams Realty. Contact:",
+          "description": 1812,
+          "photos": 5,
+          "price": "$4,200,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21230831/",
+          "title": "7305 Howling Coyote Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "James Lian from Fathom Realty, LLC. Contact:",
+          "description": 901,
+          "photos": 5,
+          "price": "$429,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21241721/",
+          "title": "1929 Brahorn Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Ariel Gabriel from Compass RE Texas, LLC.. Contact:",
+          "description": 1431,
+          "photos": 5,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21241759/",
+          "title": "8025 Ponwar Dr, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Elizabeth Tormoehlen from Christie's Lone Star. Contact:",
+          "description": 1384,
+          "photos": 5,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21239094/",
+          "title": "3732 Trillium Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Kristen Mackey from Better Homes and Gardens Real. Contact:",
+          "description": 1900,
+          "photos": 5,
+          "price": "$464,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21234358/",
+          "title": "204 Townsend Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Jennifer Garcia from Elite Real Estate Texas. Contact:",
+          "description": 869,
+          "photos": 5,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21193615/",
+          "title": "2337 Buelingo Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Dilip Subedi from Beam Real Estate, LLC. Contact:",
+          "description": 1182,
+          "photos": 5,
+          "price": "$519,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21142672/",
+          "title": "2148 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 1136,
+          "photos": 5,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21125741/",
+          "title": "5716 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1972,
+          "photos": 5,
+          "price": "$724,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21400828/",
+          "title": "9652 Calaveras Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Christie Cannon from LPT Realty LLC. Contact:",
+          "description": 96,
+          "photos": 26,
+          "price": "$499,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21404560/",
+          "title": "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Jeff Abate from Orchard Brokerage. Contact:",
+          "description": 102,
+          "photos": 31,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21402334/",
+          "title": "5752 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 103,
+          "photos": 4,
+          "price": "$714,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21402340/",
+          "title": "5768 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 103,
+          "photos": 4,
+          "price": "$704,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21398837/",
+          "title": "2110 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 89,
+          "photos": 29,
+          "price": "$1,173,930"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21389782/",
+          "title": "9801 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Spencer Mulgrew from Walnut Hill Realty. Contact:",
+          "description": 96,
+          "photos": 37,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21383579/",
+          "title": "813 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 92,
+          "photos": 4,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21386087/",
+          "title": "2037 Waterleaf Rd, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Trevon Tate from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 92,
+          "photos": 28,
+          "price": "$949,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+          "title": "$594,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$594,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21381715/",
+          "title": "4868 Nickeldale Ct, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Joe McCalip from LPT Realty, LLC. Contact:",
+          "description": 97,
+          "photos": 38,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+          "title": "$495,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+          "title": "$639,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$639,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+          "title": "$650,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+          "title": "$795,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$795,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375808/",
+          "title": "8105 Kurgan Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Chandler Crouch from Chandler Crouch, REALTORS. Contact:",
+          "description": 94,
+          "photos": 40,
+          "price": "$395,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21373564/",
+          "title": "$475,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21371983/",
+          "title": "817 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 92,
+          "photos": 3,
+          "price": "$978,720"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21370065/",
+          "title": "$512,500 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$512,500"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21361236/",
+          "title": "$549,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$549,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21367554/",
+          "title": "$464,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$464,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21366848/",
+          "title": "$547,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$547,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21348958/",
+          "title": "$630,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$630,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21358260/",
+          "title": "$729,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$729,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21347230/",
+          "title": "2109 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Julia Telligman from Texas Best Properties. Contact:",
+          "description": 92,
+          "photos": 40,
+          "price": "$915,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21346991/",
+          "title": "499 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ryan Ebersole from Compass RE Texas, LLC.. Contact:",
+          "description": 93,
+          "photos": 40,
+          "price": "$750,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21335778/",
+          "title": "$479,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$479,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21346416/",
+          "title": "$649,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21340717/",
+          "title": "$850,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21296945/",
+          "title": "2042 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 89,
+          "photos": 6,
+          "price": "$1,249,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21332222/",
+          "title": "$399,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21323149/",
+          "title": "$639,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$639,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21325284/",
+          "title": "$474,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$474,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21302163/",
+          "title": "1317 Naples Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 89,
+          "photos": 28,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21300735/",
+          "title": "$599,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21287592/",
+          "title": "$415,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21285865/",
+          "title": "2132 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Angela Gilchrist from Radius Agent LLC, A Limited Li. Contact:",
+          "description": 89,
+          "photos": 32,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21279404/",
+          "title": "$1,199,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$1,199,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21273381/",
+          "title": "6717 Serenity Dr, Fort Worth, TX 76135",
+          "ownership": "featured",
+          "listingOffice": "James Cianelli from Tx Land & Legacy Realty, LLC. Contact:",
+          "description": 95,
+          "photos": 30,
+          "price": "$483,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21259747/",
+          "title": "$449,995 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$449,995"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21240443/",
+          "title": "$450,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21246536/",
+          "title": "7120 Shady Grove Rd, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Colin Pair from Keller Williams Realty. Contact:",
+          "description": 94,
+          "photos": 40,
+          "price": "$4,200,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21230831/",
+          "title": "$429,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$429,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21241721/",
+          "title": "$500,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21241759/",
+          "title": "$525,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21239094/",
+          "title": "$464,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$464,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21234358/",
+          "title": "$799,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21193615/",
+          "title": "2337 Buelingo Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Dilip Subedi from Beam Real Estate, LLC. Contact:",
+          "description": 95,
+          "photos": 22,
+          "price": "$519,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21142672/",
+          "title": "$1,175,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21125741/",
+          "title": "$724,900 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$724,900"
+        }
+      ],
+      "findings": [
+        {
+          "site": "chatman-realty-group",
+          "set": "verify",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 3,
+          "count": 30,
+          "examples": [
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+              "title": "$594,900 ▼",
+              "detailPageNames": "7124 Chelsea Dr, North Richland Hills, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+              "title": "$495,000 ▼",
+              "detailPageNames": "1613 Fiddleneck St, Fort Worth, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+              "title": "$639,900 ▼",
+              "detailPageNames": "6749 Cambridge Dr, North Richland Hills, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+              "title": "$650,000 ▼",
+              "detailPageNames": "9200 Brittlebrush Trl, Fort Worth, TX",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+              "title": "$795,000 ▼",
+              "detailPageNames": "531 Syracuse St, Haslet, TX",
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+        },
+        {
+          "site": "chatman-realty-group",
+          "set": "verify",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 30,
+          "examples": [
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21382178/",
+              "title": "$594,900 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 31,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21376990/",
+              "title": "$495,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 26,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21363978/",
+              "title": "$639,900 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 46,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375297/",
+              "title": "$650,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 46,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375749/",
+              "title": "$795,000 ▼",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 40,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "katerina-sayles",
+      "set": "verify",
+      "category": "unknown",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T19:24:41.636Z",
+      "cpuMs": 1,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "katerina-sayles",
+          "set": "verify",
+          "category": "unknown",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 2,
+          "examples": [
+            {
+              "obstacle": "temporarily_unavailable",
+              "url": "https://www.katerinasaylesrealtor.com/"
+            },
+            {
+              "obstacle": "temporarily_unavailable",
+              "url": "https://www.katerinasaylesrealtor.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "redman-realty-group",
+      "set": "verify",
+      "category": "unknown",
+      "holdout": false,
+      "architecture": "ihomefinder",
+      "capturedAt": "2026-10-08T19:24:45.713Z",
+      "cpuMs": 54,
+      "imported": 90,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7220-ROCKOW-RD-MERCER-WI-54547/219953/309/",
+          "title": "7220 ROCKOW RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1890,
+          "photos": 46,
+          "price": "$899,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-REED-RD-THREE-LAKES-WI-54562/219950/309/",
+          "title": "ON REED RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 775,
+          "photos": 28,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/9864-MUD-LAKE-DR-PRESQUE-ISLE-WI-54557/219941/309/",
+          "title": "9864 MUD LAKE DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 920,
+          "photos": 21,
+          "price": "$348,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/320-AC-RIVER-RD-IRON-RIVER-MI-49935/219922/309/",
+          "title": "320 AC RIVER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 818,
+          "photos": 2,
+          "price": "$250,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-NO-4-RD-MONTREAL-WI-54550/219912/309/",
+          "title": "Lot on NO 4 RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 237,
+          "photos": 9,
+          "price": "$14,750"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3197-STAWICKI-LN-EAGLE-RIVER-WI-54521/219900/309/",
+          "title": "3197 STAWICKI LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1142,
+          "photos": 33,
+          "price": "$829,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5256-HWY-51-MANITOWISH-WATERS-WI-54545/219897/309/",
+          "title": "5256 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1848,
+          "photos": 52,
+          "price": "$897,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5256-HWY-51-51-MANITOWISH-WATERS-WI-54545/219896/309/",
+          "title": "5256 HWY 51 #51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1848,
+          "photos": 55,
+          "price": "$897,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/727-ELM-ST-WOODRUFF-WI-54568/219881/309/",
+          "title": "727 ELM ST",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1751,
+          "photos": 24,
+          "price": "$350,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2421-GOLDFINCH-LN-LAC-DU-FLAMBEAU-WI-54538/219872/309/",
+          "title": "2421 GOLDFINCH LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1953,
+          "photos": 50,
+          "price": "$549,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/13563-STATELINE-LAKE-RD-MARENISCO-MI-49947/219863/309/",
+          "title": "13563 STATELINE LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1154,
+          "photos": 23,
+          "price": "$274,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-SUGAR-CAMP-WI-54521/219861/309/",
+          "title": "ON HWY 17",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 424,
+          "photos": 19,
+          "price": "$425,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-EAGLE-RIVER-WI-54521/219860/309/",
+          "title": "ON HWY 17",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 449,
+          "photos": 19,
+          "price": "$425,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11121-ALTERRA-WAY-WOODRUFF-WI-54568/219858/309/",
+          "title": "11121 ALTERRA WAY",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1021,
+          "photos": 31,
+          "price": "$1,299,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11113-ALTERRA-WAY-ARBOR-VITAE-WI-54568/219857/309/",
+          "title": "11113 ALTERRA WAY",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1024,
+          "photos": 44,
+          "price": "$1,299,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3160-NINE-MILE-RD-EAGLE-RIVER-WI-54521/219855/309/",
+          "title": "3160 NINE MILE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1560,
+          "photos": 39,
+          "price": "$465,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/W5342-ROAD-LAKE-RD-TOMAHAWK-WI-54487/219850/309/",
+          "title": "W5342 ROAD LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 643,
+          "photos": 39,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1580-BRANDENBURG-RD-ST-GERMAIN-WI-54558/219844/309/",
+          "title": "1580 BRANDENBURG RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1525,
+          "photos": 78,
+          "price": "$1,099,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CONNORS-RD-THREE-LAKES-WI-54562/219840/309/",
+          "title": "ON CONNORS RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 545,
+          "photos": 13,
+          "price": "$150,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5-AC-ON-TOWER-RD-PHILLIPS-WI-54555/219795/309/",
+          "title": "5 AC ON TOWER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 759,
+          "photos": 6,
+          "price": "$39,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2380-MUD-CREEK-RD-RHINELANDER-WI-54501/219794/309/",
+          "title": "2380 MUD CREEK RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 584,
+          "photos": 16,
+          "price": "$149,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2431-NORWAY-POINT-RD-PELICAN-LAKE-WI-54463/219787/309/",
+          "title": "2431 NORWAY POINT RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 670,
+          "photos": 19,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7563-HWY-51-MINOCQUA-WI-54548/219783/309/",
+          "title": "7563 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 795,
+          "photos": 16,
+          "price": "$494,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
+          "title": "Lot 9 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
+          "title": "Lot 2 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
+          "title": "Lot 1 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
+          "title": "Lot 10 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$47,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
+          "title": "Lot 8 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219758/309/",
+          "title": "Lot 7 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219757/309/",
+          "title": "Lot 6 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-39-PEGGY-LN-MINOCQUA-WI-54548/219755/309/",
+          "title": "Lot 39 PEGGY LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 597,
+          "photos": 10,
+          "price": "$67,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219754/309/",
+          "title": "Lot 5 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219753/309/",
+          "title": "Lot 13 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$40,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219752/309/",
+          "title": "Lot 12 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 736,
+          "photos": 7,
+          "price": "$125,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/9091-SHISHEBOGAMA-DR-MINOCQUA-WI-54548/219746/309/",
+          "title": "9091 SHISHEBOGAMA DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1067,
+          "photos": 24,
+          "price": "$409,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/8100-HWY-45-THREE-LAKES-WI-54562/219732/309/",
+          "title": "8100 HWY 45",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1145,
+          "photos": 18,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11079-WOODLAND-DR-WOODRUFF-WI-54568/219724/309/",
+          "title": "11079 WOODLAND DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 670,
+          "photos": 8,
+          "price": "$199,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6714-C-W-SMITH-RD-THREE-LAKES-WI-54562/219708/309/",
+          "title": "6714 C W SMITH RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1195,
+          "photos": 60,
+          "price": "$2,290,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/8582-BAKELY-CIR-E-MINOCQUA-WI-54548/219701/309/",
+          "title": "8582 BAKELY CIR E",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1276,
+          "photos": 44,
+          "price": "$1,150,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/977-BUNDO-RD-THREE-LAKES-WI-54562/219700/309/",
+          "title": "977 BUNDO RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1612,
+          "photos": 43,
+          "price": "$695,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10380-LAKE-RD-N-IRONWOOD-MI-49938/219696/309/",
+          "title": "10380 LAKE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1319,
+          "photos": 38,
+          "price": "$234,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-SUTTON-RD-MINOCQUA-WI-54548/219674/309/",
+          "title": "Lot #5 SUTTON RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1420,
+          "photos": 15,
+          "price": "$79,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1604-BILLS-LAKE-RD-LAC-DU-FLAMBEAU-WI-54538/219657/309/",
+          "title": "1604 BILLS LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1316,
+          "photos": 55,
+          "price": "$239,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1574-MARY-LN-ARBOR-VITAE-WI-54568/219653/309/",
+          "title": "1574 MARY LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 637,
+          "photos": 27,
+          "price": "$489,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10971-SNYDER-RD-WOODRUFF-WI-54568/219651/309/",
+          "title": "10971 SNYDER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1904,
+          "photos": 51,
+          "price": "$799,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6922-CONNORS-RD-THREE-LAKES-WI-54562/219646/309/",
+          "title": "6922 CONNORS RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1124,
+          "photos": 35,
+          "price": "$835,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7376-PINE-GROVE-CIR-MINOCQUA-WI-54548/219634/309/",
+          "title": "7376 PINE GROVE CIR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1270,
+          "photos": 29,
+          "price": "$699,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-TOWNLINE-RD-N-WOODRUFF-WI-54568/219595/309/",
+          "title": "Lot 1 TOWNLINE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 572,
+          "photos": 9,
+          "price": "$79,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-3-TOWNLINE-RD-N-WOODRUFF-WI-54568/219594/309/",
+          "title": "Lot 3 TOWNLINE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 411,
+          "photos": 16,
+          "price": "$59,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/9247-TOWNLINE-RD-N-WOODRUFF-WI-54568/219593/309/",
+          "title": "9247 TOWNLINE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 642,
+          "photos": 13,
+          "price": "$299,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/4984-WILLOW-DAM-RD-HAZELHURST-WI-54531/219591/309/",
+          "title": "4984 WILLOW DAM RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1989,
+          "photos": 38,
+          "price": "$429,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1187-LOON-LN-LAC-DU-FLAMBEAU-WI-54538/219577/309/",
+          "title": "1187 LOON LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1006,
+          "photos": 57,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/13909-BAY-RD-W-WINCHESTER-WI-54557/219566/309/",
+          "title": "13909 BAY RD W",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1112,
+          "photos": 45,
+          "price": "$847,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6119-CTH-Y-HAZELHURST-WI-54531/219564/309/",
+          "title": "6119 CTH Y",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1003,
+          "photos": 49,
+          "price": "$1,495,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/217-DIVISION-ST-W-EAGLE-RIVER-WI-54521/219559/309/",
+          "title": "217 DIVISION ST W",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 912,
+          "photos": 17,
+          "price": "$250,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5673-POINT-O-PINES-RD-MANITOWISH-WATERS-WI-54545/219550/309/",
+          "title": "5673 POINT O PINES RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1991,
+          "photos": 50,
+          "price": "$4,950,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/4772-JIMMY-LN-HARSHAW-WI-54529/219545/309/",
+          "title": "4772 JIMMY LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 955,
+          "photos": 21,
+          "price": "$269,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/441-LAKE-ST-RHINELANDER-WI-54501/219534/309/",
+          "title": "441 LAKE ST",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 458,
+          "photos": 19,
+          "price": "$100,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-MOONSHINE-VALLEY-RD-PRESQUE-ISLE-WI-54557/219489/309/",
+          "title": "Lot ON MOONSHINE VALLEY RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1333,
+          "photos": 17,
+          "price": "$30,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/810-RANDALL-AVE-RHINELANDER-WI-54501/219481/309/",
+          "title": "810 RANDALL AVE",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 950,
+          "photos": 26,
+          "price": "$199,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7563-HWY-51-MINOCQUA-WI-54548/219476/309/",
+          "title": "7563 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 795,
+          "photos": 15,
+          "price": "$494,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3825-HARSHAW-RD-HARSHAW-WI-54529/219475/309/",
+          "title": "3825 HARSHAW RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1481,
+          "photos": 33,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/8573-HOWER-RD-MINOCQUA-WI-54548/219474/309/",
+          "title": "8573 HOWER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 808,
+          "photos": 22,
+          "price": "$48,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/N11777-DEER-LAKE-RD-TOMAHAWK-WI-54487/219465/309/",
+          "title": "N11777 DEER LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1036,
+          "photos": 42,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7651-TROUT-RD-LAKE-TOMAHAWK-WI-54539/219458/309/",
+          "title": "7651 TROUT RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1868,
+          "photos": 74,
+          "price": "$669,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3160-NINE-MILE-RD-EAGLE-RIVER-WI-54521/219441/309/",
+          "title": "3160 NINE MILE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1756,
+          "photos": 39,
+          "price": "$465,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2594-SOUTH-SHORE-RD-PHELPS-WI-54554/219426/309/",
+          "title": "2594 SOUTH SHORE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1999,
+          "photos": 48,
+          "price": "$1,700,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7389-DEERWOOD-RD-MINOCQUA-WI-54548/219414/309/",
+          "title": "7389 DEERWOOD RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 826,
+          "photos": 33,
+          "price": "$339,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1280-BOETTCHER-RD-LOT-5-PARK-FALLS-WI-54552/219397/309/",
+          "title": "1280 BOETTCHER RD #Lot 5",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 545,
+          "photos": 12,
+          "price": "$65,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/110-2ND-ST-S-EAGLE-RIVER-WI-54521/219380/309/",
+          "title": "110 2ND ST S",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1010,
+          "photos": 46,
+          "price": "$325,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CHIPPEWA-FIRE-LN-PARK-FALLS-WI-54536/219374/309/",
+          "title": "ON CHIPPEWA FIRE LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1221,
+          "photos": 43,
+          "price": "$669,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-16-GREEN-APPLE-CT-WOODRUFF-WI-54568/219344/309/",
+          "title": "Lot 16 GREEN APPLE CT",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 883,
+          "photos": 10,
+          "price": "$64,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-PINE-SQUARE-RD-N-CASSIAN-WI-54501/219326/309/",
+          "title": "ON PINE SQUARE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 727,
+          "photos": 9,
+          "price": "$79,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11215-FOX-FIRE-RD-WOODRUFF-WI-54568/219325/309/",
+          "title": "11215 FOX FIRE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1692,
+          "photos": 40,
+          "price": "$362,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1002-HWY-32-THREE-LAKES-WI-54562/219316/309/",
+          "title": "1002 HWY 32",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1994,
+          "photos": 37,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3369-MURMURING-PINES-TRL-RHINELANDER-WI-54501/219310/309/",
+          "title": "3369 MURMURING PINES TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1891,
+          "photos": 45,
+          "price": "$362,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/OFF-HWY-47-RHINELANDER-WI-54501/219306/309/",
+          "title": "Off HWY 47",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 459,
+          "photos": 5,
+          "price": "$64,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5678-HWY-51-MANITOWISH-WATERS-WI-54545/219302/309/",
+          "title": "5678 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1008,
+          "photos": 41,
+          "price": "$350,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1630-PINE-TREE-LN-SAINT-GERMAIN-WI-54558/219301/309/",
+          "title": "1630 PINE TREE LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 566,
+          "photos": 42,
+          "price": "$324,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1835-TIPPECANOE-RD-E-LAC-DU-FLAMBEAU-WI-54538/219297/309/",
+          "title": "1835 TIPPECANOE RD E",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1618,
+          "photos": 36,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/4418-TOWERING-PINE-TRL-CONOVER-WI-54519/219289/309/",
+          "title": "4418 TOWERING PINE TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1190,
+          "photos": 26,
+          "price": "$419,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/13-AC-ON-HWY-17-PHELPS-WI-54554/219281/309/",
+          "title": "13 AC ON HWY 17",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 872,
+          "photos": 8,
+          "price": "$75,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6322-PAINT-POND-RIVER-RD-FLORENCE-WI-54121/219267/309/",
+          "title": "6322 PAINT POND RIVER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1465,
+          "photos": 38,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/12720-EAGLE-CLAW-TRL-LAC-DU-FLAMBEAU-WI-54538/219255/309/",
+          "title": "12720 EAGLE CLAW TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1910,
+          "photos": 43,
+          "price": "$975,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10997-PATRICE-PINES-LN-MINOCQUA-WI-54548/219245/309/",
+          "title": "10997 PATRICE PINES LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1316,
+          "photos": 40,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10993-PATRICE-PINES-LN-MINOCQUA-WI-54548/219244/309/",
+          "title": "10993 PATRICE PINES LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 674,
+          "photos": 11,
+          "price": "$84,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1456-CRANBERRY-LAKE-RD-E-EAGLE-RIVER-WI-54521/219238/309/",
+          "title": "1456 CRANBERRY LAKE RD E",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1374,
+          "photos": 46,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7960-BO-DI-LAC-DR-S-MINOCQUA-WI-54548/219225/309/",
+          "title": "7960 BO DI LAC DR S",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1992,
+          "photos": 30,
+          "price": "$649,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7330-W-BIRCH-LAKE-RD-WINCHESTER-WI-54557/219224/309/",
+          "title": "7330 W BIRCH LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 798,
+          "photos": 39,
+          "price": "$617,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-SECLUDED-ACRES-TRL-LAC-DU-FLAMBEAU-WI-54538/219206/309/",
+          "title": "Lot 2 SECLUDED ACRES TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 893,
+          "photos": 10,
+          "price": "$85,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "redman-realty-group",
+          "set": "verify",
+          "category": "unknown",
+          "architecture": "ihomefinder",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 8,
+          "examples": [
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-REED-RD-THREE-LAKES-WI-54562/219950/309/",
+              "title": "ON REED RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-SUGAR-CAMP-WI-54521/219861/309/",
+              "title": "ON HWY 17",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-EAGLE-RIVER-WI-54521/219860/309/",
+              "title": "ON HWY 17",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CONNORS-RD-THREE-LAKES-WI-54562/219840/309/",
+              "title": "ON CONNORS RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-MOONSHINE-VALLEY-RD-PRESQUE-ISLE-WI-54557/219489/309/",
+              "title": "Lot ON MOONSHINE VALLEY RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            }
+          ],
+          "detail": "Neither the card nor a recorded detail page names the property."
+        }
+      ]
+    }
+  ]
+}
