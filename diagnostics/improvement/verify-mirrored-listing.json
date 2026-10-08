@@ -1,0 +1,490 @@
+{
+  "evaluatedAt": "2026-10-08T19:34:12.323Z",
+  "engine": "working tree",
+  "sites": [
+    {
+      "id": "chatman-realty-group",
+      "set": "verify",
+      "category": "Real Geeks",
+      "holdout": true,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T19:34:11.405Z",
+      "cpuMs": 556,
+      "imported": 50,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21400828/",
+          "title": "9652 Calaveras Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Christie Cannon from LPT Realty LLC. Contact:",
+          "description": 1054,
+          "photos": 5,
+          "price": "$499,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21404560/",
+          "title": "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Jeff Abate from Orchard Brokerage. Contact:",
+          "description": 911,
+          "photos": 31,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21402334/",
+          "title": "5752 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 860,
+          "photos": 4,
+          "price": "$714,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21402340/",
+          "title": "5768 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1725,
+          "photos": 4,
+          "price": "$704,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21398837/",
+          "title": "2110 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1415,
+          "photos": 29,
+          "price": "$1,173,930"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21389782/",
+          "title": "9801 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Spencer Mulgrew from Walnut Hill Realty. Contact:",
+          "description": 935,
+          "photos": 37,
+          "price": "$499,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21383579/",
+          "title": "813 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1012,
+          "photos": 4,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21386087/",
+          "title": "2037 Waterleaf Rd, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Trevon Tate from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 1659,
+          "photos": 28,
+          "price": "$949,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21382178/",
+          "title": "7124 Chelsea Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ana Zavala from Regal, REALTORS. Contact:",
+          "description": 840,
+          "photos": 5,
+          "price": "$594,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21381715/",
+          "title": "4868 Nickeldale Ct, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Joe McCalip from LPT Realty, LLC. Contact:",
+          "description": 1095,
+          "photos": 38,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21376990/",
+          "title": "1613 Fiddleneck St, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Tonya Green from Orchard Brokerage. Contact:",
+          "description": 732,
+          "photos": 5,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21363978/",
+          "title": "6749 Cambridge Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Deanna Chavez from Real Broker, LLC. Contact:",
+          "description": 1714,
+          "photos": 5,
+          "price": "$639,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375297/",
+          "title": "9200 Brittlebrush Trl, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Rochelle Howey from Keller Williams Realty. Contact:",
+          "description": 1995,
+          "photos": 5,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21375749/",
+          "title": "531 Syracuse St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Vinh Pham from Rendon Realty, LLC. Contact:",
+          "description": 856,
+          "photos": 5,
+          "price": "$795,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21375808/",
+          "title": "8105 Kurgan Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Chandler Crouch from Chandler Crouch, REALTORS. Contact:",
+          "description": 1063,
+          "photos": 40,
+          "price": "$395,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21373564/",
+          "title": "9828 Tule Lake Rd, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Jennifer Palma from Peak Realty and Associates LLC. Contact:",
+          "description": 1000,
+          "photos": 5,
+          "price": "$475,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21371983/",
+          "title": "817 Bella Casa Dr, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1065,
+          "photos": 3,
+          "price": "$978,720"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21370065/",
+          "title": "7640 Rhyner Way, Fort Worth, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Donna Leibow from Keller Williams Central. Contact:",
+          "description": 1000,
+          "photos": 5,
+          "price": "$512,500"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21361236/",
+          "title": "6820 Westbury Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "James Sales from Compass RE Texas, LLC.. Contact:",
+          "description": 1043,
+          "photos": 5,
+          "price": "$549,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21367554/",
+          "title": "1201 Timberhurst Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Krishna Kodali from Swagruha LLC. Contact:",
+          "description": 1478,
+          "photos": 5,
+          "price": "$464,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21366848/",
+          "title": "11428 Colonial Trace Ln, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Andrew Kempka from Caple & Company. Contact:",
+          "description": 1855,
+          "photos": 5,
+          "price": "$547,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21333972/",
+          "title": "212 Utopia Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Christopher Ondarza from Power House Real Estate. Contact:",
+          "description": 88,
+          "photos": 12,
+          "price": "$1,300,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21348958/",
+          "title": "459 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Telly Dearmore from Orchard Brokerage. Contact:",
+          "description": 1944,
+          "photos": 5,
+          "price": "$630,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21358260/",
+          "title": "5732 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1756,
+          "photos": 4,
+          "price": "$729,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21347230/",
+          "title": "2109 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Julia Telligman from Texas Best Properties. Contact:",
+          "description": 1729,
+          "photos": 40,
+          "price": "$915,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21346991/",
+          "title": "499 Peppercress Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Ryan Ebersole from Compass RE Texas, LLC.. Contact:",
+          "description": 1601,
+          "photos": 40,
+          "price": "$750,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21335778/",
+          "title": "4008 Knollbrook Ln, Fort Worth, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Trey Shadwick from eXp Realty LLC. Contact:",
+          "description": 1221,
+          "photos": 5,
+          "price": "$479,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21346416/",
+          "title": "2193 Cloverfern Way, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Brian Mattingly from Century 21 Mike Bowman, Inc.. Contact:",
+          "description": 575,
+          "photos": 5,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21340717/",
+          "title": "2141 Glenbrook St, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Mey-Ling Pauri from Ultima Real Estate. Contact:",
+          "description": 1662,
+          "photos": 5,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21296945/",
+          "title": "2042 Verona Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Dona Robinson from Allie Beth Allman & Associates. Contact:",
+          "description": 436,
+          "photos": 6,
+          "price": "$1,249,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21332222/",
+          "title": "824 Lemongrass Ct, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Julia Lugo from Monument Realty. Contact:",
+          "description": 703,
+          "photos": 5,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21323149/",
+          "title": "412 Harmony Way, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Mark Zhen from Loyalty Realty, LLC. Contact:",
+          "description": 1637,
+          "photos": 5,
+          "price": "$639,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21325284/",
+          "title": "7257 Laguna Del Campo Trl, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Mandy Linthicum from HomeSmart. Contact:",
+          "description": 1507,
+          "photos": 5,
+          "price": "$474,900"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21302163/",
+          "title": "1317 Naples Ct, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "CCB Realty Stanley from American Legend Homes. Contact:",
+          "description": 1122,
+          "photos": 28,
+          "price": "$1,099,990"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21300735/",
+          "title": "9828 Milkweed Ln, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Xiaonan Xiang from Letshine Realty LLC. Contact:",
+          "description": 645,
+          "photos": 5,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21287592/",
+          "title": "8120 Horseman Rd, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Benjamin Deanda from RE/MAX Trinity. Contact:",
+          "description": 1059,
+          "photos": 5,
+          "price": "$415,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21285865/",
+          "title": "2132 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Angela Gilchrist from Radius Agent LLC, A Limited Li. Contact:",
+          "description": 1546,
+          "photos": 32,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21279404/",
+          "title": "2043 Sicily Ln, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Charles Brown from Keller Williams Realty. Contact:",
+          "description": 1930,
+          "photos": 5,
+          "price": "$1,199,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21273381/",
+          "title": "6717 Serenity Dr, Fort Worth, TX 76135",
+          "ownership": "featured",
+          "listingOffice": "James Cianelli from Tx Land & Legacy Realty, LLC. Contact:",
+          "description": 527,
+          "photos": 30,
+          "price": "$483,900"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21259747/",
+          "title": "917 Cushing Dr, Fort Worth, TX 76177",
+          "ownership": "featured",
+          "listingOffice": "Shannon Byrd from Charitable Realty. Contact:",
+          "description": 1980,
+          "photos": 5,
+          "price": "$449,995"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21240443/",
+          "title": "4727 Bluffview Dr, Haltom City, TX 76137",
+          "ownership": "featured",
+          "listingOffice": "Lana Cline from The Property Shop. Contact:",
+          "description": 1150,
+          "photos": 5,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21246536/",
+          "title": "7120 Shady Grove Rd, Keller, TX 76248",
+          "ownership": "featured",
+          "listingOffice": "Colin Pair from Keller Williams Realty. Contact:",
+          "description": 1812,
+          "photos": 40,
+          "price": "$4,200,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21230831/",
+          "title": "7305 Howling Coyote Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "James Lian from Fathom Realty, LLC. Contact:",
+          "description": 901,
+          "photos": 5,
+          "price": "$429,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21241721/",
+          "title": "1929 Brahorn Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Ariel Gabriel from Compass RE Texas, LLC.. Contact:",
+          "description": 1431,
+          "photos": 5,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21241759/",
+          "title": "8025 Ponwar Dr, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Elizabeth Tormoehlen from Christie's Lone Star. Contact:",
+          "description": 1384,
+          "photos": 5,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21239094/",
+          "title": "3732 Trillium Dr, Fort Worth, TX 76244",
+          "ownership": "featured",
+          "listingOffice": "Kristen Mackey from Better Homes and Gardens Real. Contact:",
+          "description": 1900,
+          "photos": 5,
+          "price": "$464,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21234358/",
+          "title": "204 Townsend Dr, Haslet, TX 76052",
+          "ownership": "featured",
+          "listingOffice": "Jennifer Garcia from Elite Real Estate Texas. Contact:",
+          "description": 869,
+          "photos": 5,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://northforworthhomes.realgeeks.com/property/21193615/",
+          "title": "2337 Buelingo Ln, Fort Worth, TX 76131",
+          "ownership": "featured",
+          "listingOffice": "Dilip Subedi from Beam Real Estate, LLC. Contact:",
+          "description": 1182,
+          "photos": 22,
+          "price": "$519,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21142672/",
+          "title": "$1,175,000 ▼",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$1,175,000"
+        },
+        {
+          "sourceUrl": "https://www.chatmanrealtygroup.com/property/21125741/",
+          "title": "5716 Glynda Dr, North Richland Hills, TX 76180",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero from HomesUSA.com. Contact:",
+          "description": 1972,
+          "photos": 5,
+          "price": "$724,900"
+        }
+      ],
+      "findings": [
+        {
+          "site": "chatman-realty-group",
+          "set": "verify",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "temporary_outage",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.chatmanrealtygroup.com/property/21142672/",
+              "title": "$1,175,000 ▼",
+              "detailPageNames": null,
+              "detailPage": "error: The operation was aborted due to timeout"
+            }
+          ],
+          "detail": "The detail page could not be read in this recording, so the property name is unknown."
+        }
+      ]
+    }
+  ]
+}
