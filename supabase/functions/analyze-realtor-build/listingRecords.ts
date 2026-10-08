@@ -37,6 +37,13 @@ const SEARCH_LINK_TITLE = /^(?:(?:residential|land|lots?|commercial|condos?|town
 const SEARCH_RESULTS_URL = /\/(?:results|search|search-results)(?:\/listings)?\/?$/i;
 const NOT_A_PROPERTY = /^(?:\d+\s+(?:listings?|properties|homes|results|matches))$|\b(?:houses|homes|properties|condos)\s+for\s+sale\b.*\bmedian\b|^(?:subscription|pricing|plans?)\b|\bsubscription cost\b/i;
 
+/**
+ * A social post, profile or video is never a property record, whatever page or widget linked to it (an
+ * Instagram feed on a listings page reads like a card: an image, a caption and a link). (Autonomous repair:
+ * not-a-property.)
+ */
+const SOCIAL_HOST = /(?:^|\.)(?:instagram\.com|facebook\.com|fb\.com|fb\.watch|youtube\.com|youtu\.be|tiktok\.com|pinterest\.com|twitter\.com|x\.com|linkedin\.com|threads\.net|vimeo\.com)$/i;
+
 const US_STATES = new Set("AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split(" "));
 function titleCase(value: string): string {
   return value.toLowerCase().replace(/\b([a-z])/g, (_, c) => c.toUpperCase())
@@ -200,8 +207,9 @@ export function normalizeListingRecords(items: DiscoveredListing[]): NormalizedR
     const fromText = repair ? propertyTitle(item.title ?? "") : undefined;
     const fromUrl = addressFromUrl(item.sourceUrl);
     const title = repair ? (fromText ?? fromUrl ?? rawTitle) : rawTitle;
-    let searchUrl = false;
-    try { searchUrl = SEARCH_RESULTS_URL.test(new URL(item.sourceUrl).pathname); } catch { /* not a URL */ }
+    let searchUrl = false, social = false;
+    try { const url = new URL(item.sourceUrl); searchUrl = SEARCH_RESULTS_URL.test(url.pathname); social = SOCIAL_HOST.test(url.hostname); } catch { /* not a URL */ }
+    if (social) { dropped.push({ sourceUrl: item.sourceUrl, title: rawTitle, reason: "not_a_property" }); continue; }
     if ((NOT_A_PROPERTY.test(rawTitle) && !fromUrl) || SEARCH_LINK_TITLE.test(rawTitle) || (searchUrl && !fromUrl && !/^\s*[NSEW]?\d{1,6}\s+\S/.test(fromText ?? rawTitle))) {
       dropped.push({ sourceUrl: item.sourceUrl, title: rawTitle, reason: "not_a_property" });
       continue;
