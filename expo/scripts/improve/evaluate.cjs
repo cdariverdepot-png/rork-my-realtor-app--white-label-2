@@ -44,6 +44,8 @@ const STATE = /\b(?:A[LKZR]|C[AOT]|D[EC]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N
 function namesProperty(title) {
   const t = String(title ?? '').trim();
   if (!t || PRICE_ONLY.test(t) || GENERIC.test(t) || CARD_TEXT.test(t)) return false;
+  // Grid addresses ("1280 E 4340 N", "W 1234 S 500") are street addresses too.
+  if (/^\s*(?:[NSEW]\s+)?\d{1,6}\s+[NSEW]\.?\s+\d{1,6}\s*[NSEW]?\b/i.test(t)) return true;
   return /\d+\s+\S+/.test(t) && /[a-z]{2,}/i.test(t) || /,/.test(t) && (STATE.test(t) || /\b\d{5}\b/.test(t));
 }
 
@@ -66,12 +68,17 @@ function detailPageName(html) {
 }
 
 /** Evidence that a captured detail page publishes a description / a gallery. */
-function detailPublishes(html) {
+function pagePhotoUrls(html) {
+  return new Set([...(html ?? '').matchAll(/(?:src|data-src|data-lazy|href|content)=["'](https?:\/\/[^"']+\.(?:jpe?g|webp|png)(?:\?[^"']*)?)["']/gi)]
+    .map(m => m[1]).filter(url => !/logo|icon|avatar|sprite|placeholder|agent|headshot|favicon/i.test(url)));
+}
+
+/** siteChrome: images repeated on other properties' detail pages (site decoration), never this property's photos. */
+function detailPublishes(html, siteChrome = new Set()) {
   if (!html) return { description: false, photos: 0 };
   const ldDescription = [...html.matchAll(/"description"\s*:\s*"((?:[^"\\]|\\.){120,})"/g)].length > 0;
   const longParagraph = [...html.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)].some(m => stripTags(m[1]).length >= 300);
-  const photos = new Set([...html.matchAll(/(?:src|data-src|data-lazy|href|content)=["'](https?:\/\/[^"']+\.(?:jpe?g|webp|png)(?:\?[^"']*)?)["']/gi)]
-    .map(m => m[1]).filter(url => !/logo|icon|avatar|sprite|placeholder|agent|headshot|favicon/i.test(url))).size;
+  const photos = [...pagePhotoUrls(html)].filter(url => !siteChrome.has(url)).length;
   return { description: ldDescription || longParagraph, photos };
 }
 
@@ -176,10 +183,17 @@ function findingsFor(entry, capture, replay) {
 
   // Details: a recorded detail page that publishes a description or gallery the record does not have.
   const thin = [];
+  const seenOn = new Map();
   for (const item of listings) {
     const page = pageFor(item.sourceUrl);
     if (!page || page.error) continue;
-    const published = detailPublishes(page.html);
+    for (const url of pagePhotoUrls(page.html)) seenOn.set(url, (seenOn.get(url) ?? 0) + 1);
+  }
+  const siteChrome = new Set([...seenOn].filter(([, pages]) => pages > 1).map(([url]) => url));
+  for (const item of listings) {
+    const page = pageFor(item.sourceUrl);
+    if (!page || page.error) continue;
+    const published = detailPublishes(page.html, siteChrome);
     const lacksDescription = !item.description && published.description;
     const lacksPhotos = (item.images?.length ?? 0) < 2 && published.photos >= 3;
     if (lacksDescription || lacksPhotos) thin.push({ sourceUrl: item.sourceUrl, title: item.title, description: (item.description ?? '').length, photos: item.images?.length ?? 0, pagePhotos: published.photos, pageDescription: published.description });

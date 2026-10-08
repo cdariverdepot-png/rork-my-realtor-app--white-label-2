@@ -47,5 +47,19 @@
     "integratedAt": "2026-10-08T19:33:38.653Z",
     "commit": "f7f39d5f4cc50badb9e4b85fe9a4041e5f30b977",
     "gate": "49 -> 0"
+  },
+  {
+    "failure": "detail-incomplete",
+    "symptom": "DETAIL_INCOMPLETE",
+    "stage": "detail enrichment (gallery and remarks)",
+    "record": "docs/compatibility-knowledge/detail-incomplete.md",
+    "architectures": [
+      "property-cards",
+      "property-cards+public-json",
+      "sierra-interactive"
+    ],
+    "integratedAt": "2026-10-08T22:01:40.518Z",
+    "commit": null,
+    "gate": "reviewed change; corpus 52 records improved, 0 degraded"
   }
 ]

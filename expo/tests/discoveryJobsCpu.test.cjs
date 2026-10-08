@@ -76,7 +76,8 @@ const REVIEWED_DETAIL_GAINS = {
   'the-battle-group': { complete: 6, described: 6 },
   'woods-n-water-real-estate': { complete: 1, described: 1 },
   'mount-snow-palmiter': { complete: 0, described: 10 }, // 2 pages publish only a contact-form prompt; gallery endpoint not captured
-  'houses-of-kansas-city': { complete: 0, described: 10 }, // remarks now from the description container
+  // remarks from the description container; galleries (data-testid="carousel-container") at final integration
+  'houses-of-kansas-city': { complete: 10, described: 10 },
 };
 
 let engine;

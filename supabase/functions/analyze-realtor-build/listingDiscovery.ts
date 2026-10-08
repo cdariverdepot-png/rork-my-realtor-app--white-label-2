@@ -2426,7 +2426,8 @@ function roleContainers(html: string, role: RegExp, exclude: RegExp): string[] {
   for (const match of html.matchAll(/<(?:div|section|ul|ol|figure|article|aside|span|p)\b[^>]*>/gi)) {
     if (chrome.some(range => match.index! >= range.start && match.index! < range.end)) continue;
     const tag = match[0];
-    const label = `${detailAttr(tag, "class")} ${detailAttr(tag, "id")}`;
+    // Component libraries name the role in a test or slot hook (data-testid="carousel-container") instead of a class.
+    const label = `${detailAttr(tag, "class")} ${detailAttr(tag, "id")} ${detailAttr(tag, "data-testid")} ${detailAttr(tag, "data-slot")}`;
     if (!role.test(` ${label} `) || exclude.test(label)) continue;
     const start = match.index!;
     if (found.some(item => start >= item.start && start < item.end)) continue;
@@ -2515,7 +2516,8 @@ function propertyNameKeys(item: Pick<DiscoveredListing, "title" | "sourceUrl">):
   try {
     for (const segment of new URL(item.sourceUrl).pathname.split("/").reverse()) {
       const words = decodeURIComponent(segment).split(/[-_+]+/).filter(Boolean);
-      if (words.length >= 3 && /^\d{1,6}[a-z]?$/i.test(words[0]) && /^[a-z]/i.test(words[1])) { keys.push(key(words.slice(0, 3).join(""))); break; }
+      // The street name may be a numbered one ("1270-42nd-Avenue", "730-47TH-Street").
+      if (words.length >= 3 && /^\d{1,6}[a-z]?$/i.test(words[0]) && (/^[a-z]/i.test(words[1]) || /^\d{1,4}(?:st|nd|rd|th)$/i.test(words[1]))) { keys.push(key(words.slice(0, 3).join(""))); break; }
     }
   } catch { /* no URL key */ }
   return [...new Set(keys.filter(value => value.length >= 7 && /\d/.test(value) && /[a-z]/.test(value)))];
@@ -2619,7 +2621,10 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
     .filter(sentence => !/please (?:fill out|contact|call|click)|contact us|click here|request (?:more )?info|schedule a (?:showing|tour)|fill out the form/i.test(sentence)).join(" ").trim();
   const remarksText = remarks ? cleanRemarks(remarks) : "";
   // A meta description is used only for its factual sentences; calls to action are not remarks.
-  const description = cleanRemarks(detail?.description || (remarksText.length >= 80 ? remarksText : "") || detailDescription(html) || remarksText || meta("og:description") || meta("description"));
+  const pageRemarks = (remarksText.length >= 80 ? remarksText : "") || detailDescription(html);
+  // A structured summary ("Property for lease at <address>…") does not stand in for the page's own remarks.
+  const structuredRemarks = detail?.description && (detail.description.length >= 200 || pageRemarks.length <= detail.description.length) ? detail.description : "";
+  const description = cleanRemarks(structuredRemarks || pageRemarks || detail?.description || remarksText || meta("og:description") || meta("description"));
   const cover = absolutize(meta("og:image"), base);
   // Explicit gallery images only; exclude related-home cards and site chrome.
   const gallery:string[]=[];
@@ -2628,7 +2633,8 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
     const url=absolutize(attr(tag,"data-full")||attr(tag,"data-src")||attr(tag,"src"),base);
     if(url&&!looksLikeChrome(url))gallery.push(url);
   }
-  if (!(detail?.images.length) && !gallery.length) gallery.push(...detailGalleryImages(html, base));
+  // A structured record with a single cover photo does not stand in for the page's gallery either.
+  if ((detail?.images.length ?? 0) <= 1 && !gallery.length) gallery.push(...detailGalleryImages(html, base));
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
   const office = item.listingOffice ?? detailAttribution(html);

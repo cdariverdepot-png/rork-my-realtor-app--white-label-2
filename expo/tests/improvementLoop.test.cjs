@@ -20,7 +20,7 @@ const entry = { id: 'site-a', set: 'regression', category: 'test' };
 const replay = (listings, meta = {}) => ({ result: { listings, meta: { compatibility: { pages: [{ attempts: [{ id: 'property-cards', outcome: 'extracted' }] }] }, ...meta } }, listings, missing: [] });
 
 test('titles name a property only when they read as an address or a located place name', () => {
-  for (const title of ['123 Main St, Boise, ID', 'Cottage Island, Hope, ID 83836', 'Lot 9 Cator Dr', '0 Allie LN Salem VA 24153']) assert.ok(namesProperty(title), title);
+  for (const title of ['123 Main St, Boise, ID', 'Cottage Island, Hope, ID 83836', 'Lot 9 Cator Dr', '0 Allie LN Salem VA 24153', '1280 E 4340 N', '3444 N 4500 E']) assert.ok(namesProperty(title), title);
   for (const title of ['$20,000,000', '', 'View Details', '3 beds 2 baths', 'Featured Listing', '$1.2M']) assert.ok(!namesProperty(title), title);
 });
 
