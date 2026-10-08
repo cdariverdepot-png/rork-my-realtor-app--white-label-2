@@ -83,11 +83,22 @@ async function run(browser, site) {
     })());
   });
   try {
-    await page.goto(`${APP}/portal?entry=client`, { waitUntil: 'networkidle', timeout: 60000 });
-    const code = page.getByLabel('Access code', { exact: true });
-    await code.fill('REALTOR');
-    await code.press('Enter');
-    await page.waitForURL(u => String(u).includes('/admin'), { timeout: 60000 });
+    // Owner-test sign-in, retried once after a pause: a transient sign-in limit is a harness failure,
+    // not an import outcome, and is reported separately when both attempts fail.
+    for (let attempt = 1; ; attempt++) {
+      try {
+        await page.goto(`${APP}/portal?entry=client`, { waitUntil: 'networkidle', timeout: 60000 });
+        const code = page.getByLabel('Access code', { exact: true });
+        await code.fill('REALTOR');
+        await code.press('Enter');
+        await page.waitForURL(u => String(u).includes('/admin'), { timeout: 60000 });
+        break;
+      } catch (error) {
+        if (attempt >= 2) throw error;
+        r.signInRetried = true;
+        await page.waitForTimeout(30000);
+      }
+    }
     await page.getByLabel('Page 5').click({ timeout: 30000 });
     await page.getByText('BUILD MY APP', { exact: true }).click({ timeout: 30000 });
     await page.waitForURL(u => String(u).includes('/admin/build'), { timeout: 60000 });
