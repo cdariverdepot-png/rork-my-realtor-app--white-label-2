@@ -1,0 +1,35 @@
+name: Live import probe
+on:
+  push:
+    branches: [probe/live-import]
+    paths: [.github/workflows/live-import-probe.yml, expo/scripts/live-import-probe.cjs, probe-request.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --prefix "$RUNNER_TEMP/probe" --ignore-scripts --no-audit --no-fund typescript@6.0.3
+      - name: Probe live realtor websites
+        working-directory: expo
+        run: |
+          NODE_PATH="$RUNNER_TEMP/probe/node_modules" node scripts/live-import-probe.cjs --before af4fe13 --out "$RUNNER_TEMP/report.json" \
+            https://cindycarlsonrealty.com/ https://www.gethomenow.com/ https://www.mckenzie-realty.com/ https://northidahofreedom.com/
+          curl -sS -o /dev/null -w "flexmls direct: %{http_code}\n" "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings" || true
+      - name: Commit report
+        run: |
+          mkdir -p probe-results
+          cp "$RUNNER_TEMP/report.json" "probe-results/$(date -u +%Y%m%dT%H%M%SZ).json"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add probe-results
+          git commit -m "Live import probe results [skip ci]"
+          git push origin HEAD:probe/live-import
