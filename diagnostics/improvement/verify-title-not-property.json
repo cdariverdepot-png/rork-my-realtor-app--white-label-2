@@ -1,0 +1,155 @@
+{
+  "evaluatedAt": "2026-10-08T17:25:42.015Z",
+  "engine": "working tree",
+  "sites": [
+    {
+      "id": "realm-partners-idaho",
+      "set": "verify",
+      "category": "unknown",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T17:25:41.743Z",
+      "cpuMs": 114,
+      "imported": 15,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261536/",
+          "title": "825 Winter Ridge Rd., Hope, ID 83836",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1859,
+          "photos": 5,
+          "price": "$20,000,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261373/",
+          "title": "Cottage Island, Hope, ID 83836",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1284,
+          "photos": 5,
+          "price": "$8,500,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20262172/",
+          "title": "717 Olson Dr., Dover, ID 83825",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2025,
+          "photos": 5,
+          "price": "$6,970,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261646/",
+          "title": "802 Sandpoint Ave #8201 & 8202, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1463,
+          "photos": 5,
+          "price": "$6,490,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261912/",
+          "title": "802 Sandpoint Ave #8404, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1319,
+          "photos": 5,
+          "price": "$4,990,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261623/",
+          "title": "172 Elk Hills Rd, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 3066,
+          "photos": 5,
+          "price": "$4,950,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261626/",
+          "title": "Lot 2 Basin Express, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1033,
+          "photos": 5,
+          "price": "$4,800,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261740/",
+          "title": "802 Sandpoint Ave #8403, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1381,
+          "photos": 5,
+          "price": "$4,500,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261661/",
+          "title": "802 Sandpoint Ave #8304, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1846,
+          "photos": 5,
+          "price": "$4,490,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261961/",
+          "title": "5033 E Dodd Rd., Hayden, ID 83835",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2446,
+          "photos": 5,
+          "price": "$4,150,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20262164/",
+          "title": "417 Ravenwood Dr, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2019,
+          "photos": 5,
+          "price": "$3,970,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261425/",
+          "title": "802 Sandpoint Ave #8306, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1279,
+          "photos": 5,
+          "price": "$3,797,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261649/",
+          "title": "37 Birch Haven, Sagle, ID 83860-8803",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1439,
+          "photos": 5,
+          "price": "$3,200,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261624/",
+          "title": "172 Elk Hills Rd, Sandpoint, ID 83864",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2406,
+          "photos": 5,
+          "price": "$3,200,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261081/",
+          "title": "239 Pierce Ln, Sagle, ID 83860",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1425,
+          "photos": 5,
+          "price": "$2,500,000"
+        }
+      ],
+      "findings": []
+    }
+  ]
+}

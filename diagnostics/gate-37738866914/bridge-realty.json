@@ -1,0 +1,109 @@
+{
+  "id": "bridge-realty",
+  "url": "https://www.thebridgerealty.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 53,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1060,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 2066,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+    },
+    {
+      "at": 2267,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2669,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nReading linked pages · 0 of 5"
+    },
+    {
+      "at": 2870,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nReading linked pages · 1 of 5"
+    },
+    {
+      "at": 3475,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nReading linked pages · 3 of 5"
+    },
+    {
+      "at": 3676,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nReading linked pages · 4 of 5"
+    },
+    {
+      "at": 3877,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4280,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4683,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 5086,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 4 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 6093,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 5 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 7301,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 6 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 8510,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 7 pages checked\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 10331,
+      "screen": "Building your app\nBUILD STOPPED\nNo active listings were found on this page\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "bridge-realty-00-url.png",
+    "bridge-realty-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 4182,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nNo active listings were found on this page\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.thebridgerealty.com\nBuilding your app\nBUILD STOPPED\nNo active listings were found on this page\nReading Bridge Realty\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.thebridgerealty.com/",
+      "status": 200,
+      "finalUrl": "https://www.thebridgerealty.com/",
+      "title": "Bridge Realty – Twin Cities Real Estate",
+      "textLength": 4923,
+      "priceCount": 13,
+      "uniquePrices": 5,
+      "propertyLinkCount": 3,
+      "sample": "About Us\nBuyers\nSellers\nContact\nAgents\nSearch\nLog In / Sign Up\nFind Your Dream Home in Minneapolis & Twin Cities with Bridge Realty\nBuy\nSell\nSearch\nAdvanced Search\nAbout Bridge Realty\n\nBrokerage founded in 2006, Bridge Realty is the largest family-owned real estate company in the Twin Cities. We specialize in residential and commercial properties, including single-family homes, condos, multi-family investments, and new construction. Client satisfaction is our top priority, and we work with buyers and sellers across all price ranges. As Minnesota’s first 100% commission brokerage, we’re backed by a strong culture of honesty, excellence, integrity, and open communication. By connecting sellers and buyers and supporting the professional growth of our brokers, we help our community thrive.\n\nAbout Us\nSingle-Family Homes\nNew Construction\nCondos & Townhomes\nActive Adult & 55+ Communities\nMulti-Family Homes\nRental & Investment Properties\nExplore Real Estate in Minneapolis, St. Paul, Maple Grove, Mankato & Bloomington\nPrevious\nMankato\n429 Properties listed for sale\n$404,125 Average listing home price\nMaple Grove\n340 Properties listed for sale\n$619,453 Average listing home price\nBloomington\n",
+      "challenge": false,
+      "screenshot": "bridge-realty-source-0.png"
+    }
+  ],
+  "wallMs": 431041,
+  "window": {
+    "startedAt": "2026-10-08T07:29:49.627Z",
+    "endedAt": "2026-10-08T07:37:00.668Z"
+  }
+}

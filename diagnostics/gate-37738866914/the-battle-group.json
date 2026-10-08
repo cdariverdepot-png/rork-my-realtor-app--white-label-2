@@ -1,0 +1,212 @@
+{
+  "id": "the-battle-group",
+  "url": "https://www.thebattlegroup.com/",
+  "category": "custom",
+  "timeline": [
+    {
+      "at": 63,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1069,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1873,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6"
+    },
+    {
+      "at": 2075,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 4086,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 5496,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 5698,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 2 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6102,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 3 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6303,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 3 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 6504,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 4 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 6706,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 5 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 7108,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 7309,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written\nSaving 6 listings"
+    },
+    {
+      "at": 7511,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written\nSaved 6 listings"
+    },
+    {
+      "at": 7712,
+      "screen": "Building your app\nBUILD STOPPED\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written\nSaved 6 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n6 listings were imported and saved. They are kept.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 568,
+      "totalMs": 6113,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Homes for Sale Arlington VA",
+          "host": "thebattlegroup.com",
+          "at": 762
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 762
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 2,
+          "at": 970
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 2,
+          "at": 3098
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 2,
+          "at": 4312
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 0,
+          "total": 2,
+          "at": 4383
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 33,
+          "sections": 4,
+          "at": 4384
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 4384
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 4384
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 4385
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 4385
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "failed",
+          "at": 5258
+        }
+      ],
+      "result": {
+        "status": 502,
+        "body": {
+          "code": "ai_rejected",
+          "error": "Analysis failed (AI quota or rate limit). Your sources are still saved; please retry."
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "the-battle-group-00-url.png",
+    "the-battle-group-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 4032,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written\nSaved 6 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n6 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.thebattlegroup.com\nBuilding your app\nBUILD STOPPED\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nYour profile could not be written\nSaved 6 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n6 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.thebattlegroup.com/",
+      "status": 200,
+      "finalUrl": "https://thebattlegroup.com/",
+      "title": "Real Estate in Arlington Virginia | Homes for Sale Arlington VA",
+      "textLength": 2807,
+      "priceCount": 15,
+      "uniquePrices": 6,
+      "propertyLinkCount": 8,
+      "sample": "HOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n703.999.8108\nHOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n \n703.999.8108\nReal Estate in Arlington VA\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nVIDEO\nMARKETING\n\nWe sell your home by telling your home's story through unique 4K video.\n\nSHARE\nWHO\nWE\nARE\nSHAWN BATTLE\nTEAM LEAD\nMATT LEIGHTON\nREALTOR\nPATRICIA GIL\nREALTOR\nMIGUEL MOSCOL\nREALTOR\nMIKE LANCZYCKI\nREALTOR\nALISON PIERRE\nCONTRACT COORDINATOR\nCHERRY LANCISO\nTEAM ASSISTANT\n\nWe are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads. Our goal is to get you the best contract possible backed up with a smooth transaction from contract to close. Our team of real estat",
+      "challenge": false,
+      "screenshot": "the-battle-group-source-0.png"
+    }
+  ],
+  "wallMs": 430918,
+  "window": {
+    "startedAt": "2026-10-08T09:03:35.550Z",
+    "endedAt": "2026-10-08T09:10:46.468Z"
+  }
+}

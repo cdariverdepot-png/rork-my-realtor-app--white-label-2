@@ -25,8 +25,44 @@ export type DiscoveredListing = {
   importKey?: string;
   /** True only when a property detail/gallery, rather than a collection card, was read. */
   detailsComplete?: boolean;
+  /** Listing brokerage/agent attribution published with the property (IDX attribution). */
+  listingOffice?: string;
+  /**
+   * "own": attributed to the site's own agent/office. "featured": shown on the agent's site but
+   * attributed to another office (kept, and labelled so it is never presented as the agent's own).
+   * Absent: the source published no attribution.
+   */
+  ownership?: "own" | "featured";
   facts?: Record<string, string>;
 };
+
+/**
+ * Per-document memo. One fetched page is examined by several readers (architecture, interface
+ * detection, public fragments, navigation, extraction, per-property status) and several of them
+ * used to re-scan the same HTML from scratch, once per caller or once per listing on the page.
+ * Each pure derivation of (html, base URL) is now computed once. Bounded to the most recent
+ * documents so a 160-page crawl never retains every page; results are returned as copies so no
+ * caller can alter what another caller sees.
+ */
+const DOCUMENT_MEMO_LIMIT = 8;
+const documentMemos = new Map<string, Map<string, unknown>>();
+function documentOnce<T>(html: string, key: string, compute: () => T): T {
+  let memo = documentMemos.get(html);
+  if (memo) { documentMemos.delete(html); documentMemos.set(html, memo); }
+  else {
+    memo = new Map();
+    documentMemos.set(html, memo);
+    if (documentMemos.size > DOCUMENT_MEMO_LIMIT) documentMemos.delete(documentMemos.keys().next().value as string);
+  }
+  if (memo.has(key)) return memo.get(key) as T;
+  const value = compute();
+  memo.set(key, value);
+  return value;
+}
+/** Strategy and adapter applicability is a property of the document; it is decided once per id. */
+function documentMatches(id: string, matches: (html: string, base: URL) => boolean, html: string, base: URL): boolean {
+  return documentOnce(html, `matches:${id}|${base.href}`, () => matches(html, base));
+}
 
 export type ListingDiscoveryMeta = {
   /** Versioned architectural evidence, including failed/empty attempts, never widget credentials. */
@@ -61,7 +97,17 @@ export type ListingDiscoveryMeta = {
     importedEligible: number;
     eligibleImportComplete: boolean;
   };
-  enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number };
+  enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number;
+    /** Listings (source URLs) whose details were left for follow-up detail jobs (detailBudget). */
+    deferred?: string[] };
+  /**
+   * Ownership scope: the person page the import was limited to, collection pages recognized as market
+   * feeds (only own-office listings kept), how many other offices' listings were excluded, and how many
+   * navigation links were outside the scope.
+   */
+  scope?: { person?: string; marketPages: string[]; excludedOtherOffice: number; outOfScopeLinks: number };
+  /** What the site published about itself; decides whether a listing attribution is the site's own. */
+  identity?: SiteIdentity;
   /** Machine-readable obstacles. Never a substitute for extracted listings. */
   obstacles?: { code: string; url?: string; detail?: string }[];
   stages?: string[];
@@ -175,6 +221,10 @@ export function scoreInventoryLink(href: string, label: string, seed: URL): numb
 
 /** Collect outbound inventory CTAs from a page. */
 export function collectInventoryLinks(html: string, base: URL, limit = 8): { url: string; score: number; label: string }[] {
+  return documentOnce(html, `inventoryLinks|${base.href}`, () => rankedInventoryLinks(html, base)).slice(0, limit).map(link => ({ ...link }));
+}
+
+function rankedInventoryLinks(html: string, base: URL): { url: string; score: number; label: string }[] {
   const seen = new Set<string>();
   const out: { url: string; score: number; label: string }[] = [];
   const hrefs = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
@@ -219,10 +269,15 @@ export function collectInventoryLinks(html: string, base: URL, limit = 8): { url
     const url = raw ? absolutize(raw, base) : null;
     if (url && !seen.has(url) && !LOGIN_PATH.test(new URL(url).pathname)) out.push({ url, score: 160, label: "Page redirect" });
   }
-  return out.sort((a, b) => b.score - a.score).slice(0, limit);
+  return out.sort((a, b) => b.score - a.score);
 }
 
+/** Parsed JSON-LD blocks, parsed once per document (readers only walk them, never modify them). */
 function jsonLdBlocks(html: string): unknown[] {
+  return documentOnce(html, "jsonLd", () => parseJsonLdBlocks(html)).slice();
+}
+
+function parseJsonLdBlocks(html: string): unknown[] {
   const out: unknown[] = [];
   const re = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
   let m: RegExpExecArray | null;
@@ -628,7 +683,7 @@ function extractPropertyRecords(html: string, base: URL, attempts?: StrategyAtte
   const seen = new Set<string>();
   for (const strategy of LISTING_EXTRACTION_STRATEGIES) {
     if (strategy.phase === "fallback" && merged.length) break;
-    if (!strategy.matches(html, base)) continue;
+    if (!documentMatches(strategy.id, strategy.matches, html, base)) continue;
     let rows: DiscoveredListing[];
     try { rows = strategy.extract(html, base); }
     catch { attempts?.push({ id: strategy.id, version: strategy.version, evidence: strategy.evidence, outcome: "error", records: 0 }); continue; }
@@ -706,6 +761,34 @@ export function isProductEligible(item: Pick<DiscoveredListing, "status" | "sour
 
 const propertyIdentity = (value: unknown) => typeof value === "string" ? value.toLowerCase().replace(/[^a-z0-9]/g, "") : "";
 
+/** Document-level status evidence shared by every listing read from the same page. */
+function statusEvidenceOf(html: string) {
+  const nodes = jsonLdBlocks(html);
+  for (const m of html.matchAll(/<script\b[^>]*type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { nodes.push(JSON.parse(m[1])); } catch { /* malformed hydration */ }
+  }
+  const cards: Record<string, unknown>[] = [];
+  for (const m of html.matchAll(/<[^>]+\bdata-listing=["'][^>]+>/gi)) {
+    try { cards.push(JSON.parse(attr(m[0], "data-listing"))); } catch { /* malformed card */ }
+  }
+  const metas = html.match(/<meta\b[^>]*>/gi) ?? [];
+  const headings = [...html.matchAll(/<(?:h1|title)\b[^>]*>([\s\S]*?)<\/(?:h1|title)>/gi)].map(m => stripTags(m[1]));
+  for (const tag of metas) if (attr(tag, "property") === "og:title") headings.push(attr(tag, "content"));
+  const metaStatuses = metas.filter(tag => /^(?:listing:status|property:status|listingstatus|standardstatus)$/i.test(attr(tag, "property") || attr(tag, "name")))
+    .map(tag => attr(tag, "content"));
+  // Read only on an identified detail page, then kept: the main column (status badges of recommended
+  // properties farther down the page are not this property's) and its text.
+  let column: { badges: string[]; text: () => string } | undefined;
+  const mainColumn = () => column ??= (() => {
+    let main = html.replace(/<(?:script|style|nav|footer)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer)>/gi, "");
+    main = main.split(/<(?:h2|h3)\b|(?:related|similar|recommended|recently sold)\s+(?:homes|properties|listings)/i)[0];
+    const badges = [...main.matchAll(/<(?:span|div|p|strong)\b[^>]*(?:class|id)=["'][^"']*(?:listing-status|property-status|standard-status)[^"']*["'][^>]*>([^<]*)<\//gi)].map(m => m[1]);
+    let text: string | undefined;
+    return { badges, text: () => text ??= stripTags(main) };
+  })();
+  return { nodes, cards, headings, metaStatuses, mainColumn };
+}
+
 /** Only use status attached to the matching property; recommendations and navigation are excluded. */
 export function statusForProperty(html: string, item: Pick<DiscoveredListing, "title" | "sourceUrl">, base: URL): DiscoveredListing["status"] {
   const expected = propertyIdentity(item.title);
@@ -725,33 +808,22 @@ export function statusForProperty(html: string, item: Pick<DiscoveredListing, "t
     return [obj.StreetAddress, obj.streetAddress, obj.UnparsedAddress, obj.addressLine1, address, obj.name, obj.title]
       .some(value => propertyIdentity(value) === expected);
   };
-  const nodes = jsonLdBlocks(html);
-  for (const m of html.matchAll(/<script\b[^>]*type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
-    try { nodes.push(JSON.parse(m[1])); } catch { /* malformed hydration */ }
-  }
-  walkLd(nodes, obj => { if (!matched && matches(obj)) matched = statusFrom(obj); });
+  // The page's structured data is parsed once per document, not once per listing on the page.
+  const page = documentOnce(html, "statusEvidence", () => statusEvidenceOf(html));
+  walkLd(page.nodes, obj => { if (!matched && matches(obj)) matched = statusFrom(obj); });
   if (matched) return matched;
-  for (const m of html.matchAll(/<[^>]+\bdata-listing=["'][^>]+>/gi)) {
-    try { const obj = JSON.parse(attr(m[0], "data-listing")); if (matches(obj)) { const status = statusFrom(obj); if (status) return status; } } catch { /* malformed card */ }
+  for (const obj of page.cards) {
+    try { if (matches(obj)) { const status = statusFrom(obj); if (status) return status; } } catch { /* malformed card */ }
   }
   // Visible labels are accepted only on an identified property detail page.
-  const headings = [...html.matchAll(/<(?:h1|title)\b[^>]*>([\s\S]*?)<\/(?:h1|title)>/gi)].map(m => stripTags(m[1]));
-  for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) if (attr(tag, "property") === "og:title") headings.push(attr(tag, "content"));
-  const identified = headings.some(title => propertyIdentity(title) === expected ||
+  const identified = page.headings.some(title => propertyIdentity(title) === expected ||
     title.split(/\s[|–—]\s/).some(part => propertyIdentity(part) === expected));
   if (identified) {
-    for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
-      if (/^(?:listing:status|property:status|listingstatus|standardstatus)$/i.test(attr(tag, "property") || attr(tag, "name"))) {
-        const status = normalizeListingStatus(attr(tag, "content")); if (status) return status;
-      }
+    for (const value of page.metaStatuses) { const status = normalizeListingStatus(value); if (status) return status; }
+    for (const badge of page.mainColumn().badges) {
+      const status = normalizeListingStatus(stripTags(badge).replace(/^status\s*:\s*/i, "")); if (status) return status;
     }
-    let main = html.replace(/<(?:script|style|nav|footer)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer)>/gi, "");
-    // Do not consume status badges belonging to recommended properties farther down the page.
-    main = main.split(/<(?:h2|h3)\b|(?:related|similar|recommended|recently sold)\s+(?:homes|properties|listings)/i)[0];
-    for (const m of main.matchAll(/<(?:span|div|p|strong)\b[^>]*(?:class|id)=["'][^"']*(?:listing-status|property-status|standard-status)[^"']*["'][^>]*>([^<]*)<\//gi)) {
-      const status = normalizeListingStatus(stripTags(m[1]).replace(/^status\s*:\s*/i, "")); if (status) return status;
-    }
-    const label = stripTags(main).match(/\b(?:listing status|property status|standard status|MLS status)\s*:\s*(active under contract|active contingent|off[- ]market|for sale|active|pending|contingent|sold|closed|withdrawn|expired|cancelled)\b/i);
+    const label = page.mainColumn().text().match(/\b(?:listing status|property status|standard status|MLS status)\s*:\s*(active under contract|active contingent|off[- ]market|for sale|active|pending|contingent|sold|closed|withdrawn|expired|cancelled)\b/i);
     const status = normalizeListingStatus(label?.[1]); if (status) return status;
   }
   return undefined;
@@ -1071,6 +1143,10 @@ export function architectureCandidates(html: string, base?: URL): { id: string; 
  * An unscoped "all listings" source is the market, not the agent's collection.
  */
 export function chimeListingSearchRequests(html: string, base: URL): string[] {
+  return documentOnce(html, `chimeRequests|${base.href}`, () => chimeListingSearchRequestsOf(html, base)).slice();
+}
+
+function chimeListingSearchRequestsOf(html: string, base: URL): string[] {
   if (!/static\.chimeroi\.com|cdn\.chime\.me|sitePageJSON|pageJsonAndGlobalData/i.test(html)) return [];
   const sources = new Set<string>();
   for (const match of decodeScriptLiterals(html).matchAll(/listingSource["']?\s*[:=]\s*["']([^"']+)["']/g)) {
@@ -1274,6 +1350,10 @@ export function listingsFromPublicJson(text: string, base: URL): DiscoveredListi
 
 /** Public Kestrel widget requests: retain featured scope and never use a general MLS search. */
 export function kestrelInventoryRequests(html: string): { url: string; activationToken: string }[] {
+  return documentOnce(html, "kestrelRequests", () => kestrelInventoryRequestsOf(html)).map(request => ({ ...request }));
+}
+
+function kestrelInventoryRequestsOf(html: string): { url: string; activationToken: string }[] {
   if (!/kestrel\.idxhome\.com\/ihf-kestrel\.js/i.test(html)) return [];
   const raw = html.match(/ihfKestrel\.config\s*=\s*(\{[^;]+\})\s*;/)?.[1];
   let activationToken = "";
@@ -1413,7 +1493,7 @@ export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
 ];
 
 export function detectListingInterfaces(html: string, base: URL): string[] {
-  return LISTING_INTERFACE_ADAPTERS.filter(a => a.matches(html,base)).map(a => a.id);
+  return LISTING_INTERFACE_ADAPTERS.filter(a => documentMatches(a.id, a.matches, html, base)).map(a => a.id);
 }
 
 export type StrategyAttempt = {
@@ -1486,6 +1566,10 @@ export function describeListingArchitecture(html: string, base: URL, rendering: 
 
 /** Recognize unsupported dynamic providers without pretending their data was read. */
 function dynamicInterfaceHint(html: string): string | undefined {
+  return documentOnce(html, "dynamicHint", () => dynamicInterfaceHintOf(html));
+}
+
+function dynamicInterfaceHintOf(html: string): string | undefined {
   if (/static\.chimeroi\.com|cdn\.chime\.me|sitePageJSON|pageJsonAndGlobalData/i.test(html)) return "chime-site-search";
   for (const [id, pattern] of [
     ["ihomefinder", /ihomefinder|idxhome\.com|ihf-container|ihf-main-container/i],
@@ -1502,7 +1586,11 @@ function dynamicInterfaceHint(html: string): string | undefined {
 
 /** Public fragments keep the exact agent/category/filter instead of broadening the search. */
 export function collectInventoryFragments(html: string, base: URL): string[] {
-  const out = LISTING_INTERFACE_ADAPTERS.filter(adapter => adapter.matches(html,base)).flatMap(adapter => adapter.fragments?.(html,base) ?? []);
+  return documentOnce(html, `fragments|${base.href}`, () => inventoryFragmentsOf(html, base)).slice();
+}
+
+function inventoryFragmentsOf(html: string, base: URL): string[] {
+  const out = LISTING_INTERFACE_ADAPTERS.filter(adapter => documentMatches(adapter.id, adapter.matches, html, base)).flatMap(adapter => adapter.fragments?.(html,base) ?? []);
   for (const url of chimeListingSearchRequests(html, base)) out.push(url);
   for (const tag of html.match(/<[^>]+\bdata-(?:listings|results|inventory)-(?:url|src)=["'][^>]+>/gi) ?? []) {
     const raw = attr(tag, "data-listings-url") || attr(tag, "data-results-url") || attr(tag, "data-inventory-url") ||
@@ -1525,7 +1613,259 @@ export function collectInventoryFragments(html: string, base: URL): string[] {
 }
 
 function visibleDocument(html: string): string {
+  return documentOnce(html, "visible", () => visibleDocumentOf(html));
+}
+
+function visibleDocumentOf(html: string): string {
   return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ");
+}
+
+const PAGER_PARAM = /^(?:page(?:_\d+)?|pageNumber|offset|limit|per_page|q_offset|cursor|after|start)$/i;
+const PAGER_LABEL = /^\s*(?:\d{1,4}|next|prev(?:ious)?|first|last|more|[»«›‹>]+|…)\s*(?:page)?\s*$/i;
+
+/**
+ * A pager link of the document being read (same address, only page position or pager-only scope
+ * changed). It is a continuation of this collection, never a step toward the agent's inventory:
+ * continuations are followed only from a page that produced listings (inspectCollectionDocument).
+ * Following them as navigation crawls every page × pager combination of collections we cannot read.
+ */
+export function isPagerOf(target: string, base: URL, label: string): boolean {
+  let next: URL;
+  try { next = new URL(target); } catch { return false; }
+  if (next.protocol !== base.protocol || !sameSite(next, base) || next.pathname.replace(/\/+$/, "") !== base.pathname.replace(/\/+$/, "")) return false;
+  const keys = new Set([...next.searchParams.keys(), ...base.searchParams.keys()]);
+  const changed = [...keys].filter(key => next.searchParams.getAll(key).join("\u0000") !== base.searchParams.getAll(key).join("\u0000"));
+  if (!changed.length) return false;
+  return changed.every(key => PAGER_PARAM.test(key)) || (PAGER_LABEL.test(label) && changed.some(key => PAGER_PARAM.test(key)));
+}
+
+// ── Ownership and scope ─────────────────────────────────────────────────────────────────────────
+// Importing another agent's inventory is worse than importing nothing. These rules use structural
+// signals only (URL scope of the seed, IDX listing attribution, collection shape), never customer names.
+
+/** Registrable domain (example.com, example.co.uk): the boundary of "the agent's own site". */
+export function registrableDomain(host: string): string {
+  const labels = host.toLowerCase().replace(/^www\./, "").split(".");
+  const n = labels.length >= 3 && /^(?:co|com|org|net|ac|gov)$/.test(labels[labels.length - 2]) && labels[labels.length - 1].length === 2 ? 3 : 2;
+  return labels.slice(-n).join(".");
+}
+
+export type SeedScope = { domain: string; person?: { prefix: string; tokens: string[] } };
+
+/**
+ * A seed that is one person's page on a multi-agent platform (/agents/<name>, /profile/<name>,
+ * /…/agent/<name>/<id>) scopes the import to that person. Pages elsewhere on the platform are the
+ * platform's market, not the person's inventory.
+ */
+export function seedScope(seed: URL): SeedScope {
+  const segments = seed.pathname.split("/").filter(Boolean);
+  const at = segments.findIndex(part => /^(?:agents?|profiles?|realtors?|people|team-members?|our-agents|associates?|brokers?)$/i.test(part));
+  const domain = registrableDomain(seed.hostname);
+  if (at < 0 || !segments[at + 1]) return { domain };
+  const slug = decodeURIComponent(segments[at + 1]);
+  const id = segments[at + 2] && /\d{4,}/.test(segments[at + 2]) ? segments[at + 2] : undefined;
+  const prefix = "/" + segments.slice(0, id ? at + 3 : at + 2).join("/");
+  const tokens = [slug.toLowerCase(), ...(id ? [id.toLowerCase(), ...(id.match(/\d{4,}/g) ?? [])] : [])].filter(token => token.length >= 4);
+  return { domain, person: { prefix: prefix.toLowerCase(), tokens } };
+}
+
+/** A link that itself claims the agent's own inventory ("My listings", "Our properties"). */
+const OWN_INVENTORY_LABEL = /\b(?:my|our)\s+(?:active\s+|current\s+|featured\s+|exclusive\s+)?(?:listings?|properties|homes|inventory)\b/i;
+
+/**
+ * Navigation (not transports, fragments or details) must stay within the seed's scope:
+ * - a person page on a multi-agent platform: that person's pages, links carrying the person's
+ *   identifier, or links that themselves claim the person's own inventory;
+ * - anywhere: another company's homepage (a bare domain's root) is never inventory. That is where
+ *   vendor credits ("Powered by…") and brokerage home links lead.
+ */
+export function navigationInScope(target: string, scope: SeedScope | undefined, label = ""): boolean {
+  if (!scope) return true;
+  let url: URL;
+  try { url = new URL(target); } catch { return false; }
+  const domain = registrableDomain(url.hostname);
+  const bareHost = url.hostname.toLowerCase().replace(/^www\./, "") === domain;
+  const homepage = /^\/?(?:index\.(?:html?|php|aspx?))?$/i.test(url.pathname.replace(/\/+$/, "")) && !url.search;
+  if (domain !== scope.domain && bareHost && homepage) return false;
+  if (!scope.person) return true;
+  const scoped = scope.person.tokens.some(token => decodeURIComponent(url.pathname + url.search).toLowerCase().includes(token));
+  const path = url.pathname.toLowerCase().replace(/\/+$/, "");
+  const inside = domain === scope.domain && (path === scope.person.prefix || path.startsWith(scope.person.prefix + "/"));
+  return inside || scoped || OWN_INVENTORY_LABEL.test(label);
+}
+
+const GENERIC_IDENTITY_WORDS = new Set(["real", "estate", "realty", "realtor", "realtors", "homes", "home", "sale", "sales", "for", "the", "and", "group",
+  "team", "agent", "agents", "broker", "brokerage", "properties", "property", "llc", "inc", "co", "company", "listings", "listing", "search", "your",
+  "best", "top", "luxury", "island", "city", "county", "north", "south", "east", "west", "international", "associates", "partners", "services"]);
+const identityKey = (value: string) => decodeEntities(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+const identityWords = (value: string) => decodeEntities(value).toLowerCase().split(/[^a-z0-9]+/).filter(word => word.length >= 5 && !GENERIC_IDENTITY_WORDS.has(word));
+
+export type SiteIdentity = { phrases: string[]; words: string[] };
+
+/** What the site publishes about itself: its domain label, site name and title segments. */
+export function siteIdentity(html: string, base: URL): SiteIdentity {
+  const parts = [registrableDomain(base.hostname).split(".")[0]];
+  for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
+    if (/^(?:og:site_name|application-name|author)$/i.test(attr(tag, "property") || attr(tag, "name"))) parts.push(...attr(tag, "content").split(/\s[|–—\-:]\s/));
+  }
+  const title = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1];
+  if (title) parts.push(...decodeEntities(stripTags(title)).split(/\s[|–—\-:]\s/));
+  const phrases = [...new Set(parts.map(identityKey).filter(key => key.length >= 6))];
+  return { phrases, words: [...new Set(parts.flatMap(identityWords))] };
+}
+
+/** "strong": the attribution names the site's own agent or office. "brand": only a shared brand word. */
+export function officeMatch(office: string, identity: SiteIdentity | undefined): "strong" | "brand" | "none" {
+  if (!identity) return "none";
+  const key = identityKey(office);
+  if (key.length >= 6 && identity.phrases.some(phrase => key.includes(phrase) || phrase.includes(key))) return "strong";
+  return identityWords(office).some(word => identity.words.includes(word)) ? "brand" : "none";
+}
+
+const ATTRIBUTION_TEXT = /\b(?:listing office|listing courtesy of|courtesy of|listed by|listing provided by|listing brokerage|brokered by|offered by)\s*:?\s*([^|•\n]{3,90})/i;
+const ATTRIBUTION_JSON = /"(?:brokerName|brokerageName|listOfficeName|ListOfficeName|listingOfficeName|listingOffice|officeName|listingBrokerName|ListOfficeFullName)"\s*:\s*"([^"]{2,90})"/;
+
+function cleanAttribution(raw: string): string | undefined {
+  let value = decodeEntities(raw).replace(/\\u0026/g, "&").replace(/\s+/g, " ").trim();
+  value = value.split(/\s--\s|\s\|\s|,?\s*(?:phone|tel|off|office|cell|mobile)\s*:|\s\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|\s[\w.+-]+@[\w-]+\./i)[0].replace(/[.,;\s]+$/, "").trim();
+  if (value.length < 3 || /mls|multiple listing|information|deemed|reliable|presenting|copyright|©|__|\[\[|\{\{|\$\{/i.test(value)) return undefined;
+  return value.slice(0, 80);
+}
+
+/**
+ * IDX attribution for each listing, read only from that listing's own card: the markup from the
+ * listing's link up to the next listing's link (IDX rules require the attribution on every card).
+ */
+export function attributeListingOffices(html: string, listings: DiscoveredListing[]): Map<string, string> {
+  const positions: { url: string; at: number }[] = [];
+  for (const item of listings) {
+    let path = "";
+    try { const url = new URL(item.sourceUrl); path = url.pathname.length > 1 ? url.pathname : url.pathname + url.search; } catch { continue; }
+    // The card starts at the listing's link (href / JSON url field), not wherever the URL is first mentioned.
+    const escaped = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const link = new RegExp(`(?:href\\s*=\\s*["'][^"']*|"(?:url|detailUrl|href|link|permalink|listingUrl)"\\s*:\\s*"[^"]*)(?:${escaped(path)}|${escaped(path.replace(/\//g, "\\/"))})`, "i");
+    const at = html.search(link);
+    if (at >= 0) positions.push({ url: item.sourceUrl, at });
+  }
+  positions.sort((a, b) => a.at - b.at);
+  const offices = new Map<string, string>();
+  positions.forEach((position, i) => {
+    const end = Math.min(positions.slice(i + 1).find(next => next.at > position.at)?.at ?? html.length, position.at + 8000);
+    const card = html.slice(position.at, end);
+    const fromJson = card.match(ATTRIBUTION_JSON)?.[1];
+    // Tag boundaries end a value: an attribution never runs on into the next element's text.
+    const fromText = decodeEntities(card.replace(/<(?:script|style)\b[\s\S]*?<\/(?:script|style)>/gi, "\n").replace(/<[^>]+>/g, "\n")).match(ATTRIBUTION_TEXT)?.[1];
+    const office = (fromJson && cleanAttribution(fromJson)) || (fromText && cleanAttribution(fromText));
+    if (office && !offices.has(position.url)) offices.set(position.url, office);
+  });
+  return offices;
+}
+
+/**
+ * A collection request that publishes an agent or office filter (agentIds, officeId, My=listings,
+ * agent_listing_categories…) is the agent's own inventory by construction, whatever offices co-list.
+ */
+export function agentScopedRequest(raw: string): boolean {
+  let url: URL;
+  try { url = new URL(raw); } catch { return false; }
+  if (/\/(?:office|agent)_listing_categories\/|\/(?:my|our)[-_](?:active[-_])?listings\b/i.test(url.pathname)) return true;
+  const decoded = decodeURIComponent(url.search).toLowerCase();
+  if (/[?&]my=listings\b/.test(decoded)) return true;
+  for (const [key, value] of url.searchParams) {
+    if (/^(?:agent_?ids?|agentid|office_?ids?|officeid|list_?agent(?:_?mls)?_?id|listagentmlsid|listofficemlsid|aid|agent)$/i.test(key) && value.trim() && value !== "[]") return true;
+  }
+  return /"(?:agentIds|officeIds|agentId|officeId|listAgentMlsId|listOfficeMlsId)"\s*:\s*(?:\[\s*"[^"]+|"[^"]+)/i.test(decodeURIComponent(url.search));
+}
+
+/** IDX attribution on a property's own detail page (the first one: recommendations come later). */
+export function detailAttribution(html: string): string | undefined {
+  const fromJson = html.match(ATTRIBUTION_JSON)?.[1];
+  if (fromJson && cleanAttribution(fromJson)) return cleanAttribution(fromJson);
+  const text = decodeEntities(html.replace(/<(?:script|style|nav|header)\b[\s\S]*?<\/(?:script|style|nav|header)>/gi, "\n").replace(/<[^>]+>/g, "\n"));
+  const fromText = text.match(ATTRIBUTION_TEXT)?.[1];
+  return fromText ? cleanAttribution(fromText) : undefined;
+}
+
+/** own when the attribution names the site's own agent or office; otherwise shown as featured. */
+export function ownershipFor(office: string | undefined, identity: SiteIdentity | undefined): "own" | "featured" | undefined {
+  if (!office || !identity) return undefined;
+  return officeMatch(office, identity) === "strong" ? "own" : "featured";
+}
+
+/**
+ * Labels attributed listings that no collection rule labelled: one or two brokerages across the
+ * inventory is the brokerage the agent or team lists under (own); with several, listings not
+ * attributed to the site's own agent or office are featured. Unattributed listings stay unlabelled.
+ */
+export function labelInventoryOwnership<T extends object>(items: T[], identity: SiteIdentity | undefined): T[] {
+  const fields = (item: T) => item as { listingOffice?: unknown; ownership?: unknown };
+  const officeOf = (item: T) => typeof fields(item).listingOffice === "string" ? fields(item).listingOffice as string : "";
+  const unlabeled = items.filter(item => !fields(item).ownership && officeOf(item));
+  const brokerages = new Set(unlabeled.map(item => identityKey(officeOf(item)))).size;
+  return items.map(item => {
+    if (fields(item).ownership || !officeOf(item)) return item;
+    const ownership = brokerages <= 2 ? "own" : ownershipFor(officeOf(item), identity);
+    return ownership ? { ...item, ownership } : item;
+  });
+}
+
+export type CollectionScope = {
+  kind: "single-office" | "featured" | "market" | "unattributed";
+  keep: DiscoveredListing[]; excluded: number; offices: number;
+};
+
+/**
+ * Scope of one collection page from its listings' IDX attribution. A page whose cards name several
+ * offices is either a bounded featured showcase (kept, other offices labelled "featured") or a market
+ * feed/search (paginated or counted beyond the page): only listings attributed to the site's own
+ * agent or office are kept, and the feed is not paginated further.
+ */
+export function classifyCollection(listings: DiscoveredListing[], offices: Map<string, string>, identity: SiteIdentity | undefined,
+  paginated: boolean, large = false): CollectionScope {
+  const attributed = listings.filter(item => offices.has(item.sourceUrl));
+  const distinct = new Set(attributed.map(item => identityKey(offices.get(item.sourceUrl)!)));
+  const label = (item: DiscoveredListing, ownership?: "own" | "featured") => ({ ...item, listingOffice: offices.get(item.sourceUrl) ?? item.listingOffice,
+    ...(ownership ? { ownership } : {}) });
+  if (attributed.length < 3 || attributed.length < listings.length * 0.6) {
+    return { kind: "unattributed", keep: listings.map(item => label(item, offices.has(item.sourceUrl) && officeMatch(offices.get(item.sourceUrl)!, identity) === "strong" ? "own" : undefined)), excluded: 0, offices: distinct.size };
+  }
+  const own = (item: DiscoveredListing) => offices.has(item.sourceUrl) && officeMatch(offices.get(item.sourceUrl)!, identity) === "strong";
+  // One or two offices on a bounded collection: the brokerage the agent or team lists under.
+  // A large paginated collection is a market feed even when one page happens to show one office.
+  if (distinct.size <= 2 && !large) return { kind: "single-office", keep: listings.map(item => label(item, "own")), excluded: 0, offices: distinct.size };
+  if (!paginated && !large) return { kind: "featured", keep: listings.map(item => label(item, own(item) ? "own" : "featured")), excluded: 0, offices: distinct.size };
+  const keep = listings.filter(own).map(item => label(item, "own"));
+  return { kind: "market", keep, excluded: listings.length - keep.length, offices: distinct.size };
+}
+
+/**
+ * The highest page number this collection's own pager reaches (0 when it publishes none). With the
+ * collection's cards given, only a pager that follows them counts: a blog or testimonials pager
+ * elsewhere on the page says nothing about the listings.
+ */
+export function pagerExtent(html: string, base: URL, cards?: string[]): number {
+  let extent = 0;
+  let from = 0, to = html.length;
+  if (cards?.length) {
+    const at = cards.flatMap(url => { try { const u = new URL(url); const i = html.indexOf(u.pathname.length > 1 ? u.pathname : u.pathname + u.search); return i >= 0 ? [i] : []; } catch { return []; } });
+    if (at.length) { from = Math.min(...at); to = Math.min(html.length, Math.max(...at) + 30_000); }
+  }
+  const near = (index: number | undefined) => index !== undefined && index >= from && index <= to;
+  for (const match of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+    if (!near(match.index)) continue;
+    const href = absolutize(attr(`<a ${match[1]}>`, "href"), base);
+    const label = stripTags(match[2]);
+    if (!href || !isPagerOf(href, base, label)) continue;
+    const url = new URL(href);
+    for (const [key, value] of url.searchParams) if (PAGER_PARAM.test(key) && /^\d{1,7}$/.test(value) && !/offset|limit|per_page|start/i.test(key)) extent = Math.max(extent, Number(value));
+    if (/^\d{1,7}$/.test(label.trim())) extent = Math.max(extent, Number(label.trim()));
+  }
+  // A pagination control may page through another URL (a widget on /buyers/ paging via /?pg=N).
+  for (const match of html.matchAll(/<(?:div|nav|ul|ol|p|section)\b[^>]*(?:class|id)=["'][^"']*(?:pagination|pager|paging|page-numbers)[^"']*["'][^>]*>([\s\S]{0,4000}?)<\/(?:div|nav|ul|ol|p|section)>/gi)) {
+    if (!near(match.index)) continue;
+    for (const token of decodeEntities(match[1].replace(/<[^>]+>/g, " ")).split(/\s+/)) if (/^\d{1,7}$/.test(token)) extent = Math.max(extent, Number(token));
+  }
+  return extent;
 }
 
 function sameCollectionQuery(next: URL, base: URL): boolean {
@@ -1849,6 +2189,10 @@ function nextPublishedOffsetUrl(current: URL, total: number, rows: number): stri
 }
 
 function paginationLinks(html: string, base: URL): string[] {
+  return documentOnce(html, `pagination|${base.href}`, () => paginationLinksOf(html, base)).slice();
+}
+
+function paginationLinksOf(html: string, base: URL): string[] {
   const out: string[] = [];
   try {
     const payload=JSON.parse(html), raw=payload.nextUrl ?? payload["@odata.nextLink"] ?? payload.links?.next ?? payload.pagination?.nextUrl;
@@ -2001,7 +2345,197 @@ function providerPropertyFacts(html:string,base:URL):Record<string,string>{
   return facts;
 }
 
+
+// ── Generic property detail reader (repair campaign stage 6) ────────────────────────────────────
+// IDX and listing platforms publish a property's photos inside a gallery container (Showcase
+// "sidx-photo-array", IDX Broker "IDX-detailsPhotosWrap", iHomefinder "ihf-image-carousel", Flexmls
+// "flexmls_connect__photos", WordPress gallery plugins…) and its remarks inside a description
+// container. The container's role is in its class or id; platform names are not needed. Photos are
+// read only inside those containers (never the site header, logo or a "similar homes" carousel), and
+// lazy-load attributes, srcset and lightbox links are honoured so the full-size photo is taken.
+const detailDecode = (value: string) => value.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
+  .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)));
+const detailAttr = (tag: string, name: string) => detailDecode(tag.match(new RegExp(`\\s${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, "i"))?.[2] ?? "").trim();
+
+const GALLERY_ROLE = /photo|gallery|carousel|slider|slideshow|swiper|slides|media-viewer|image-viewer|lightbox/i;
+const NOT_THIS_PROPERTY = /similar|related|recommended|nearby|featured|recent|other|agent|team|logo|header|footer|nav(?!igation-?arrow)|menu|sidebar|testimonial|partner|sponsor|banner|map-info|thumb-?nav/i;
+const DESCRIPTION_ROLE = /description|remarks|property-?(?:details?-?text|summary|overview)|listing-?(?:details?-?text|summary)/i;
+const NOT_DESCRIPTION = /gfield|form|field_|meta|seo|wpcf7|input|label|validation|sublabel/i;
+const CHROME_IMAGE = /logo|icon|sprite|avatar|badge|placeholder|spinner|loading|blank|pixel|spacer|marker|\bmaps?\b|agent|headshot|no-photo|nophoto|idx-logos|equal-housing|\/assets\/images\/|\/(?:left|right|prev|next|arrow|close|print|share)[\w-]*\.(?:png|gif|svg)|\.svg(?:$|\?)|^data:/i;
+
+/** The markup of the element that starts at `start`, bounded by its balanced closing tag. */
+function detailElementAt(html: string, start: number, limit = 250_000): string {
+  const name = html.slice(start).match(/^<([a-z][a-z0-9-]*)/i)?.[1]?.toLowerCase();
+  if (!name) return "";
+  const pattern = new RegExp(`<(/?)${name}\\b[^>]*?(/?)>`, "gi");
+  pattern.lastIndex = start;
+  let depth = 0;
+  for (let match = pattern.exec(html); match; match = pattern.exec(html)) {
+    if (match.index - start > limit) break;
+    if (match[1]) depth--; else if (!match[2]) depth++;
+    if (depth === 0) return html.slice(start, pattern.lastIndex);
+  }
+  return html.slice(start, Math.min(html.length, start + 20_000));
+}
+
+/** Containers whose class or id names a role, outermost first, without nested duplicates. */
+function roleContainers(html: string, role: RegExp, exclude: RegExp): string[] {
+  const found: { start: number; end: number; markup: string }[] = [];
+  // Page chrome by position: anything inside the site's header, navigation or footer is not the property.
+  const chrome = [...html.matchAll(/<(?:header|nav|footer)\b[^>]*>/gi)].map(match => ({ start: match.index!, end: match.index! + detailElementAt(html, match.index!).length }));
+  for (const match of html.matchAll(/<(?:div|section|ul|ol|figure|article|aside|span|p)\b[^>]*>/gi)) {
+    if (chrome.some(range => match.index! >= range.start && match.index! < range.end)) continue;
+    const tag = match[0];
+    const label = `${detailAttr(tag, "class")} ${detailAttr(tag, "id")}`;
+    if (!role.test(` ${label} `) || exclude.test(label)) continue;
+    const start = match.index!;
+    if (found.some(item => start >= item.start && start < item.end)) continue;
+    const markup = detailElementAt(html, start);
+    found.push({ start, end: start + markup.length, markup });
+  }
+  return found.map(item => item.markup);
+}
+
+function detailLargestFromSrcset(srcset: string): string {
+  let best = "", width = 0;
+  for (const part of srcset.split(",")) {
+    const [url, size] = part.trim().split(/\s+/);
+    const value = Number((size ?? "").replace(/[wx]$/i, "")) || 1;
+    if (url && value >= width) { best = url; width = value; }
+  }
+  return best;
+}
+
+const detailAbsolute = (raw: string, base: URL) => { try { const url = new URL(raw, base); return url.protocol === "https:" || url.protocol === "http:" ? url.toString().replace(/^http:/, "https:") : null; } catch { return null; } };
+
+const IMAGE_URL = /^(?:https?:)?\/\/|^\/(?!\/)/;
+const IMAGE_FILE = /\.(?:jpe?g|png|webp|avif)(?:$|[?#])|\/images?\/|\/photos?\//i;
+
+/**
+ * The photo an <img> really shows. Lazy loaders keep it in a data attribute whose name says so
+ * (data-src, data-full, data-ihf-main-source, data-zoom-image…); placeholders and fallbacks are not it.
+ */
+export function imageSource(tag: string): string {
+  let best = "", score = 0;
+  for (const match of tag.matchAll(/\s([\w:-]+)\s*=\s*(["'])([\s\S]*?)\2/g)) {
+    const name = match[1].toLowerCase();
+    let value = detailDecode(match[3]).trim();
+    if (name === "alt" || name === "class" || name === "style" || /alternate|placeholder|fallback|thumb|blank|lowres|lqip|tiny|preview/.test(name)) continue;
+    if (/srcset$/.test(name)) value = detailLargestFromSrcset(value);
+    if (!IMAGE_URL.test(value) || !IMAGE_FILE.test(value) || /^data:/i.test(value)) continue;
+    const rank = /full|large|zoom|hires|high|main|original/.test(name) ? 4 : /srcset$/.test(name) ? 3 : /^data-.*(?:src|source|image|url)/.test(name) ? 2 : name === "src" ? 1 : 0;
+    if (rank > score) { best = value; score = rank; }
+  }
+  return best;
+}
+
+/** Full-size photos published inside the page's gallery containers. */
+export function detailGalleryImages(html: string, base: URL): string[] {
+  const urls: string[] = [];
+  for (const markup of roleContainers(html, GALLERY_ROLE, NOT_THIS_PROPERTY)) {
+    // Lightbox links point at the full-size photo; when a gallery has them, its <img>s are thumbnails.
+    const links = (markup.match(/<a\b[^>]*>/gi) ?? []).map(tag => detailAttr(tag, "href")).filter(href => /\.(?:jpe?g|png|webp)(?:$|[?#])/i.test(href));
+    const sources = links.length ? links : (markup.match(/<(?:img|source)\b[^>]*>/gi) ?? []).flatMap(tag => {
+      const width = Number(detailAttr(tag, "width")), height = Number(detailAttr(tag, "height"));
+      if ((width && width < 120) || (height && height < 90) || CHROME_IMAGE.test(detailAttr(tag, "alt"))) return [];
+      const source = imageSource(tag);
+      return source ? [source] : [];
+    });
+    for (const raw of sources) {
+      const url = detailAbsolute(raw, base);
+      // Site chrome is recognized by its path, never by the host ("agent.example", "agentimage.com").
+      if (url && !CHROME_IMAGE.test(new URL(url).pathname)) urls.push(url);
+    }
+  }
+  return [...new Set(urls)].slice(0, 200);
+}
+
+/** The property's remarks from its description container (forms and SEO blocks excluded). */
+export function detailDescription(html: string): string {
+  let best = "";
+  for (const markup of roleContainers(html, DESCRIPTION_ROLE, NOT_DESCRIPTION)) {
+    const text = detailDecode(markup.replace(/<(?:script|style)\b[\s\S]*?<\/(?:script|style)>/gi, " ").replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>/gi, "\n\n").replace(/<[^>]+>/g, " "))
+      .replace(/[ \t]+/g, " ").replace(/\s*\n\s*/g, "\n").replace(/\n{3,}/g, "\n\n").trim()
+      .replace(/^(?:description|remarks|property description|about this (?:home|property))\s*:?\s*/i, "");
+    // Header lines above the remarks ("Overview", "Listed Oct 15", "Updated 1h ago") are not remarks.
+    const lines = text.split("\n");
+    const first = lines.findIndex(line => line.length >= 60 && /[a-z]{3,}.*[.!?,]/i.test(line));
+    const remarks = (first > 0 ? lines.slice(first) : lines).join("\n").trim();
+    if (remarks.length > best.length) best = remarks;
+  }
+  return best.length >= 80 ? best.slice(0, 16000) : "";
+}
+
+/** Street number + street name keys for a listing, from its card text and its URL's address slug. */
+function propertyNameKeys(item: Pick<DiscoveredListing, "title" | "sourceUrl">): string[] {
+  const key = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const keys = [key(item.title)];
+  const street = decodeEntities(item.title).match(/\b\d{1,6}[a-z]?\s+(?:[nsew]\.?\s+)?[a-z0-9'.-]+(?:\s+[a-z0-9'.-]+)?/i)?.[0];
+  if (street) keys.push(key(street));
+  try {
+    for (const segment of new URL(item.sourceUrl).pathname.split("/").reverse()) {
+      const words = decodeURIComponent(segment).split(/[-_+]+/).filter(Boolean);
+      if (words.length >= 3 && /^\d{1,6}[a-z]?$/i.test(words[0]) && /^[a-z]/i.test(words[1])) { keys.push(key(words.slice(0, 3).join(""))); break; }
+    }
+  } catch { /* no URL key */ }
+  return [...new Set(keys.filter(value => value.length >= 7 && /\d/.test(value) && /[a-z]/.test(value)))];
+}
+
+function pageNamesProperty(text: string, item: Pick<DiscoveredListing, "title" | "sourceUrl">): boolean {
+  const page = text.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return text.toLowerCase().includes(item.title.toLowerCase()) || propertyNameKeys(item).some(value => page.includes(value));
+}
+
 /** Enrich an already evidenced property without replacing its address with an agency title. */
+/**
+ * A card can name its property only by its price or badges ("$8,500,000", "Featured 4 Beds"). The
+ * property's own detail page usually names it: one structured PostalAddress for the listing, and/or one
+ * main heading. When the card's title names nothing, that name becomes the title. Guards: the page must
+ * be this listing's own document (not a redirect elsewhere), a structured address must be the only one on
+ * the page (related-home cards carry others), and a heading is used only when it reads as a located place
+ * ("802 Sandpoint Ave #8404, Sandpoint, ID 83864"; "Cottage Island, Hope, ID 83836"). Nothing is invented,
+ * and a title that already names something is never replaced. (Autonomous repair: title-not-property.)
+ */
+const LISTING_LD_TYPE = /"@type"\s*:\s*\[?\s*"(?:RealEstateListing|SingleFamilyResidence|House|Apartment|Residence|Accommodation|Condominium|Townhouse)"/i;
+export function detailPageTitle(item: Pick<DiscoveredListing, "title" | "sourceUrl">, html: string, base: URL): string | undefined {
+  const residue = decodeEntities(item.title ?? "")
+    .replace(/\$\s?\d[\d,.]*(?:\s?(?:[KkMm]|million)\b)?/g, " ")
+    .replace(/\b\d+(?:\.\d+)?\s*(?:beds?|bd|br|baths?|ba|sq\.?\s*ft|sqft|acres?)\b/gi, " ")
+    .replace(/\b(?:new|active|pending|sold|featured|just listed|for sale|listing|property|home|view|details?|price|reduced|mls|add to favou?rites)\b/gi, " ")
+    .replace(/[^a-z]/gi, "");
+  if (residue.length >= 3) return undefined;
+  const sameDocument = (() => {
+    try {
+      const a = new URL(item.sourceUrl), b = base;
+      const host = (h: string) => h.replace(/^www\./, "");
+      return host(a.hostname) === host(b.hostname) && a.pathname.replace(/\/+$/, "") === b.pathname.replace(/\/+$/, "");
+    } catch { return false; }
+  })();
+  if (!sameDocument) return undefined;
+  const clean = (value: string) => decodeEntities(decodeEntities(value.replace(/\\u0026/g, "&"))).replace(/\s+/g, " ").replace(/\s+,/g, ",").trim();
+  const located = (text: string) => text.length >= 6 && text.length <= 140 && /[a-z]{2,}/i.test(text) &&
+    (/^[NSEW]?\d{1,6}[A-Z]?\s+[A-Za-z0-9]/.test(text) || /,\s*[A-Za-z .'-]+,?\s+[A-Z]{2}\b/.test(text) || /\b\d{5}(?:-\d{4})?\b/.test(text));
+  const streets = new Map<string, string>();
+  for (const block of html.matchAll(/<script\b[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    // Only a listing's own structured data names the property; an agent's or office's Place/Organization
+    // address (SEO plugins publish one on every page) never does.
+    if (!LISTING_LD_TYPE.test(block[1])) continue;
+    for (const match of block[1].matchAll(/"streetAddress"\s*:\s*"((?:[^"\\]|\\.){2,120})"/g)) {
+      const street = clean(match[1]);
+      const rest = block[1].slice(match.index ?? 0, (match.index ?? 0) + 600);
+      const field = (name: string) => clean(rest.match(new RegExp(`"${name}"\\s*:\\s*"((?:[^"\\\\]|\\\\.){1,60})"`))?.[1] ?? "");
+      if (street) streets.set(street.toLowerCase(), [street, field("addressLocality"), [field("addressRegion"), field("postalCode")].filter(Boolean).join(" ")].filter(Boolean).join(", "));
+    }
+  }
+  const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map(m => clean(stripTags(m[1])));
+  const heading = headings.length === 1 ? headings[0] : "";
+  const structured = streets.size === 1 ? [...streets.values()][0] : "";
+  const street = streets.size === 1 ? [...streets.keys()][0] : "";
+  if (heading && located(heading) && (!street || heading.toLowerCase().includes(street))) return heading.slice(0, 160);
+  if (structured && /[a-z]{2,}/i.test(street)) return structured.slice(0, 160);
+  return undefined;
+}
+
 export function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
   if (isRobotChallenge(html)) throw new Error("Detail page requires human verification");
   if (isPublishedScriptGate(html)) throw new Error("Detail page script gate did not unlock");
@@ -2029,7 +2563,10 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
   }
   const structured=listingsFromJsonLd(html,base).find(l=>l.sourceUrl===item.sourceUrl||l.title.toLowerCase()===item.title.toLowerCase());
   const detail = listingFromDsidxDetail(html,base) ?? listingsFromMoxi(html,base).find(l=>l.sourceUrl===item.sourceUrl) ?? listingFromIdxDetail(html, base) ?? listingsFromJsonLd(html, base).find(l => l.sourceUrl === item.sourceUrl || l.title === item.title);
-  if(!detail&&!decodeEntities(stripTags(html)).toLowerCase().includes(item.title.toLowerCase()))return item;
+  // The page must name this property. Card text is rarely repeated verbatim ("view property+ 1017 Minor
+  // Avenue #1401 … 2 beds $699,000"), so its street number and street name, from the card text or the
+  // URL's address slug, are what must appear. A page naming another property is never used.
+  if(!detail&&!pageNamesProperty(decodeEntities(stripTags(html)),item))return item;
   const meta = (name: string) => {
     for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
       if ((attr(tag, "property") || attr(tag, "name")) === name) return attr(tag, "content");
@@ -2037,7 +2574,12 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
     return "";
   };
   const remarks=html.match(/<(?:div|section|p)\b[^>]*(?:id|class)=["'][^"']*(?:property-description|listing-description|ihf-description|dsidx-remarks)[^"']*["'][^>]*>([\s\S]*?)<\/(?:div|section|p)>/i)?.[1];
-  const description = detail?.description || (remarks?decodeEntities(stripTags(remarks)):"") || meta("og:description") || meta("description");
+  // Remarks are text: escaped markup is removed and calls to action are not remarks.
+  const cleanRemarks = (value: string) => decodeEntities(stripTags(decodeEntities(value))).split(/(?<=[.!?])\s+/)
+    .filter(sentence => !/please (?:fill out|contact|call|click)|contact us|click here|request (?:more )?info|schedule a (?:showing|tour)|fill out the form/i.test(sentence)).join(" ").trim();
+  const remarksText = remarks ? cleanRemarks(remarks) : "";
+  // A meta description is used only for its factual sentences; calls to action are not remarks.
+  const description = cleanRemarks(detail?.description || (remarksText.length >= 80 ? remarksText : "") || detailDescription(html) || remarksText || meta("og:description") || meta("description"));
   const cover = absolutize(meta("og:image"), base);
   // Explicit gallery images only; exclude related-home cards and site chrome.
   const gallery:string[]=[];
@@ -2046,9 +2588,12 @@ export function enrichListingFromPage(item: DiscoveredListing, html: string, bas
     const url=absolutize(attr(tag,"data-full")||attr(tag,"data-src")||attr(tag,"src"),base);
     if(url&&!looksLikeChrome(url))gallery.push(url);
   }
+  if (!(detail?.images.length) && !gallery.length) gallery.push(...detailGalleryImages(html, base));
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
-  return { ...item, facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
+  const office = item.listingOffice ?? detailAttribution(html);
+  const named = detailPageTitle(item, html, base);
+  return { ...item, ...(named ? { title: named } : {}), ...(office ? { listingOffice: office } : {}), facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }
@@ -2151,6 +2696,11 @@ export async function discoverListings(
     maxRenders?: number;
     /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
     enrichAll?: boolean;
+    /**
+     * With enrichAll: read details for at most this many listings in this job. The rest are reported
+     * as deferred (meta.enrichment.deferred) for follow-up detail jobs; nothing is skipped or marked read.
+     */
+    detailBudget?: number;
     /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
     sessionCookie?: string;
     /** Observes real progress (pages examined, listings found, renders, detail pages). Never alters discovery. */
@@ -2234,8 +2784,18 @@ export async function discoverListings(
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
+  /** claimed: a link on the path to this page claimed the agent's own inventory, or the request is agent-scoped. */
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean; claimed?: boolean };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
+  // Ownership and scope: navigation stays inside the seed's scope; market feeds keep only own listings.
+  const seedScopes = [...new Set(seedUris.filter(Boolean))].flatMap(url => { try { return [seedScope(new URL(url))]; } catch { return []; } });
+  const inScope = (url: string, label?: string) => !seedScopes.length || seedScopes.some(scope => navigationInScope(url, scope, label));
+  let identity: SiteIdentity | undefined;
+  const marketPages: string[] = [];
+  /** Listings that came from a paginated or large collection (candidates for detail-level market evidence). */
+  const pagedCollectionListings = new Set<string>();
+  let largeCollectionSeen = false;
+  let excludedOtherOffice = 0, outOfScopeLinks = 0;
 
   const pushListing = (item: DiscoveredListing) => {
     const sourceUrl = canonicalListingUrl(item.sourceUrl);
@@ -2251,6 +2811,8 @@ export async function discoverListings(
         status: old.status ?? normalized.status, image: images[0] || old.image, images,
         listingNumber: old.listingNumber || normalized.listingNumber, neighborhood: old.neighborhood || normalized.neighborhood,
         sourceStatus: old.sourceStatus && old.sourceStatus !== "unspecified" ? old.sourceStatus : normalized.sourceStatus,
+        ...(old.listingOffice || normalized.listingOffice ? { listingOffice: old.listingOffice || normalized.listingOffice } : {}),
+        ...(old.ownership || normalized.ownership ? { ownership: old.ownership === "own" || normalized.ownership === "own" ? "own" as const : "featured" as const } : {}),
         sourceUrl: canonicalListingUrl(old.sourceUrl) };
       return;
     }
@@ -2312,7 +2874,8 @@ export async function discoverListings(
       const framed = soleFrameDocument(html, finalUrl);
       if (framed && framed !== finalUrl.toString() && !visitedSet.has(framed) && !queue.some(item => item.url === framed)) {
         stages.push("frame_document");
-        queue.unshift({ url: framed, depth: next.depth, priority: 250, parent: finalUrl.toString() });
+        // A page that is only a frame around another document presents that document as its own.
+        queue.unshift({ url: framed, depth: next.depth, priority: 250, parent: finalUrl.toString(), claimed: true });
         continue;
       }
     }
@@ -2440,7 +3003,42 @@ export async function discoverListings(
     const listingTemplate = publishedListingUrlTemplate(html);
     if (listingTemplate) listingUrlTemplates.set(finalUrl.origin, listingTemplate);
     if (/\/graphql$/i.test(finalUrl.pathname)) html = applyPublishedListingUrls(html, listingUrlTemplates.get(finalUrl.origin) ?? null);
+    if (next.depth === 0 && !identity) identity = siteIdentity(html, finalUrl);
+    const claimedNow = !!next.claimed || agentScopedRequest(next.url) || agentScopedRequest(finalUrl.toString());
     let found = excluded ? [] : extractListingsFromPage(html, finalUrl, observation.attempts);
+    // A collection on another company's website is the agent's inventory only when the path claimed it
+    // ("Our properties", "My listings"), the request is agent/office-filtered, or it is a listing transport.
+    // Public fragments and provider APIs are transport by construction; only navigated pages are judged.
+    const offSite = !next.fragment && seedScopes.length > 0 && !seedScopes.some(scope => registrableDomain(finalUrl.hostname) === scope.domain) && !MLS_INVENTORY_HOST.test(finalUrl.hostname);
+    let unscopedOffSite = false;
+    if (found.length && offSite && !claimedNow) {
+      unscopedOffSite = true;
+      excludedOtherOffice += found.length;
+      marketPages.push(finalUrl.toString());
+      stages.push("unscoped_offsite_collection");
+      found = [];
+    }
+    let marketPage = unscopedOffSite;
+    if (found.length) {
+      const published = Number(html.match(/data-(?:search-results-search-count|listings-count|results-count)\s*=\s*["']?(\d+)/i)?.[1] ?? 0);
+      const extent = pagerExtent(visibleDocument(html), finalUrl, found.map(item => item.sourceUrl));
+      const paginated = !!next.continuation || published > found.length || extent > 1 || paginationLinks(visibleDocument(html), finalUrl).length > 0;
+      const large = extent >= 20 || published >= 300;
+      // An agent/office-filtered request is the agent's inventory; it is never classified as a market.
+      const agentScoped = agentScopedRequest(finalUrl.toString()) || agentScopedRequest(next.url);
+      if ((paginated || large) && !agentScoped) for (const item of found) pagedCollectionListings.add(canonicalListingUrl(item.sourceUrl));
+      if (large && !agentScoped) largeCollectionSeen = true;
+      if (found.length >= 3 && !agentScoped) {
+      const collection = classifyCollection(found, attributeListingOffices(html, found), identity, paginated, large);
+      if (collection.kind === "market") {
+        marketPage = true;
+        marketPages.push(finalUrl.toString());
+        excludedOtherOffice += collection.excluded;
+        stages.push("market_feed_scoped");
+      }
+      found = collection.keep;
+      }
+    }
     if (found.length) observation.resolution = "known-pattern";
     const activeFound = found.filter(item => !historicalListing(item));
     if (found.length && !activeFound.length) stages.push("historical_inventory_ignored");
@@ -2501,7 +3099,7 @@ export async function discoverListings(
               stages.push("api_discovered");
               observation.resolution = "known-pattern";
             } else if (!historicalInventoryUrl(entry.url) && /\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
-              queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString() });
+              queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString(), claimed: claimedNow });
               stages.push("api_discovered");
             }
           }
@@ -2561,16 +3159,16 @@ export async function discoverListings(
       continue;
     }
     if (!broad) {
-      for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString()}); }
+      for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString(),claimed:claimedNow}); }
       for (const url of collectInventoryFragments(html, finalUrl)) {
         if (historicalInventoryUrl(url) || visitedSet.has(url) || queue.some(q => q.url === url)) continue;
-        queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
+        queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString(), claimed: claimedNow });
       }
       for (const url of publishedQueries) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) {
           sawContinuation = true;
           continuationMechanism = continuationMechanism || "offset-query";
-          queue.push({ url, depth: next.depth, priority: 205, fragment: true, parent: finalUrl.toString(), continuation: true });
+          queue.push({ url, depth: next.depth, priority: 205, fragment: true, parent: finalUrl.toString(), continuation: true, claimed: claimedNow });
         }
       }
       if (found.length) {
@@ -2589,9 +3187,9 @@ export async function discoverListings(
           if (!boundary.open && !boundary.continuations.length && boundary.singlePageConfirmed) singlePagePages++;
           if (!boundary.open && boundary.cursorTerminal) cursorTerminalPages++;
           if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
-          for (const url of boundary.continuations) {
+          for (const url of marketPage ? [] : boundary.continuations) {
             if (url === finalUrl.toString()) { openContinuation = true; continue; }
-            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true });
+            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, claimed: claimedNow });
           }
         }
         // Flexmls uses public paged fragments without a Next anchor.
@@ -2602,7 +3200,7 @@ export async function discoverListings(
           if (!visitedSet.has(nextUrl) && !queue.some(q => q.url === nextUrl)) {
             sawContinuation = true;
             continuationMechanism = continuationMechanism || "numbered-pagination";
-            queue.push({ url: nextUrl, depth: next.depth, priority: 180, fragment: true, continuation: true });
+            queue.push({ url: nextUrl, depth: next.depth, priority: 180, fragment: true, continuation: true, claimed: claimedNow });
           }
         } else if (next.fragment && finalUrl.searchParams.get("list_view") === "photo" && found.length > 0 && found.length < 24) {
           providerTerminalPages++;
@@ -2615,7 +3213,7 @@ export async function discoverListings(
           if (nextUrl && !visitedSet.has(nextUrl) && !queue.some(q => q.url === nextUrl)) {
             sawContinuation = true;
             continuationMechanism = continuationMechanism || "offset-query";
-            queue.push({ url: nextUrl, depth: next.depth, priority: 190, fragment: true, continuation: true });
+            queue.push({ url: nextUrl, depth: next.depth, priority: 190, fragment: true, continuation: true, claimed: claimedNow });
           }
         } catch { /* not a collection payload */ }
       }
@@ -2625,10 +3223,12 @@ export async function discoverListings(
     const ctas = found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
+      if (isPagerOf(cta.url, finalUrl, cta.label)) continue;
+      if (!inScope(cta.url, cta.label)) { outOfScopeLinks++; continue; }
       if (queue.some((q) => q.url === cta.url)) continue;
       const broad = /property\s+search|search\s+(?:all\s+)?(?:homes|properties)|all\s+(?:homes|properties|listings)/i.test(cta.label) &&
         !/\bmy\b|\bour\b|featured|exclusive|office_listing_categories|agent_listing_categories/i.test(cta.label + cta.url);
-      queue.push({ url: cta.url, depth: next.depth + 1, priority: cta.score, broad, parent: finalUrl.toString() });
+      queue.push({ url: cta.url, depth: next.depth + 1, priority: cta.score, broad, parent: finalUrl.toString(), claimed: claimedNow || OWN_INVENTORY_LABEL.test(cta.label) || cta.label === "embedded listings" || agentScopedRequest(cta.url) });
     }
 
     if (!listings.length && !queue.length && options?.selectLinks && aiRoutes < 2 && Date.now() < deadline) {
@@ -2639,7 +3239,7 @@ export async function discoverListings(
           const selected = await options.selectLinks(finalUrl.toString(), candidates);
           // Never fetch a URL invented by the model, or follow its page-supplied instructions.
           for (const url of [...new Set(selected)].slice(0, 4)) {
-            if (candidates.some(c => c.url === url)) queue.push({ url, depth: next.depth + 1, priority: 100 });
+            if (candidates.some(c => c.url === url) && inScope(url, candidates.find(c => c.url === url)?.label)) queue.push({ url, depth: next.depth + 1, priority: 100, claimed: claimedNow || OWN_INVENTORY_LABEL.test(candidates.find(c => c.url === url)?.label ?? "") });
           }
         } catch { /* navigation remains useful when AI is unavailable */ }
       }
@@ -2650,7 +3250,7 @@ export async function discoverListings(
       for (const item of found.slice(0, 4)) {
         if (visitedSet.has(item.sourceUrl)) continue;
         if (item.images.length && item.price) continue;
-        queue.push({ url: item.sourceUrl, depth: next.depth + 1, priority: 20 });
+        queue.push({ url: item.sourceUrl, depth: next.depth + 1, priority: 20, claimed: claimedNow });
       }
     }
   }
@@ -2659,10 +3259,14 @@ export async function discoverListings(
   // Detail enrichment keeps collection provenance. enrichAll does not spend the collection page budget.
   const enrichAll = options?.enrichAll === true;
   let detailIndex=0;
-  const detailLimit = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
+  const budgeted = enrichAll && typeof options?.detailBudget === "number" && options.detailBudget >= 0;
+  const requestedDetails = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
+  const detailLimit = budgeted ? Math.min(requestedDetails, maxListings, options!.detailBudget!) : requestedDetails;
+  // Progress counts against every listing that needs details, including those deferred to later jobs.
+  const detailTotal = budgeted ? listings.slice(0, maxListings).length : detailLimit;
   let detailsHandled = 0;
-  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit, enriched: enrichmentEnriched }); };
-  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit, enriched: 0 });
+  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailTotal, enriched: enrichmentEnriched }); };
+  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailTotal, enriched: 0 });
   let enrichmentAttempted = 0, enrichmentEnriched = 0, enrichmentFailed = 0;
   let detailThrottled = false;
   const detailFetch:FetchHtml=async (uri,opts)=>{
@@ -2720,6 +3324,23 @@ export async function discoverListings(
     }
   }));
 
+  // Detail pages carry most IDX attribution. Listings from paginated collections whose detail pages
+  // show a multi-office market keep only the site's own; everything attributed is labelled own/featured.
+  {
+    const paged = listings.filter(item => pagedCollectionListings.has(canonicalListingUrl(item.sourceUrl)) && !item.ownership);
+    const offices = new Map(paged.filter(item => item.listingOffice).map(item => [item.sourceUrl, item.listingOffice!] as const));
+    const collection = classifyCollection(paged, offices, identity, true, largeCollectionSeen);
+    if (collection.kind === "market" && collection.excluded) {
+      const kept = new Set(collection.keep.map(item => item.sourceUrl));
+      const drop = new Set(paged.filter(item => !kept.has(item.sourceUrl)).map(item => item.sourceUrl));
+      for (let i = listings.length - 1; i >= 0; i--) if (drop.has(listings[i].sourceUrl)) listings.splice(i, 1);
+      excludedOtherOffice += drop.size;
+      stages.push("market_feed_scoped_by_details");
+    }
+    // Same rule as for cards: one or two brokerages across the inventory is the brokerage the agent or
+    // team lists under (own); with several, listings not attributed to the site's own office are featured.
+    labelInventoryOwnership(listings, identity).forEach((item, i) => { listings[i] = item; });
+  }
   const unfinishedDetails=detailLimit>0&&listings.some(l=>!l.detailsComplete);
   if (queue.some(item => item.continuation)) openContinuation = true;
   for (const item of queue) if (item.continuation) pendingContinuations.add(item.url);
@@ -2787,7 +3408,11 @@ export async function discoverListings(
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
       failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome,
-      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests, continuationAvailable }, accounting, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
+      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests, continuationAvailable }, accounting, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed,
+        ...(budgeted ? { deferred: listings.slice(detailLimit, maxListings).map(item => item.sourceUrl) } : {}) },
+      ...(identity ? { identity } : {}),
+      ...(marketPages.length || excludedOtherOffice || outOfScopeLinks || seedScopes.some(scope => scope.person) ? { scope: {
+        person: seedScopes.find(scope => scope.person)?.person?.prefix, marketPages, excludedOtherOffice, outOfScopeLinks } } : {}),
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
       resume: (!listings.length || verificationPending.length || continuationAvailable) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : continuationAvailable ? "collection_continuation" : "discovery_blocked" } : undefined },
   };

@@ -1,0 +1,29 @@
+name: Repair campaign discovery captures
+on:
+  push:
+    branches: [repair/compatibility-engine]
+    paths: [diagnostics/discovery-capture.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Capture listing discovery for all 25 diagnostic sites (production options)
+        working-directory: expo
+        run: |
+          args=$(python3 -c "import json;print(' '.join('--id %s %s'%(s['id'],s['url']) for s in json.load(open('../diagnostics/sites-25.json'))))")
+          node scripts/capture-discovery.cjs --out "$RUNNER_TEMP/discovery" $args
+          mkdir -p ../diagnostics/discovery && for f in "$RUNNER_TEMP"/discovery/*.json; do gzip -9 -c "$f" > "../diagnostics/discovery/$(basename "$f").gz"; done
+      - name: Commit captures
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/discovery && git commit -m "Discovery captures ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && break; sleep 5; done

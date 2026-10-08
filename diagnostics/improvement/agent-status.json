@@ -1,0 +1,1 @@
+{"checkedAt":"2026-10-08T19:37:11Z","run":"37833272504","codingAgent":false,"missing":"Repository secret ANTHROPIC_API_KEY (or CLAUDE_CODE_OAUTH_TOKEN) is not set; unattended repair cannot run. Gate, integration and verification still run for candidate branches."}

@@ -1,0 +1,79 @@
+[
+  {
+    "realtorId": "361f6a2c-62ed-4a48-a103-69b8956008b1",
+    "createdAt": "2026-10-08 07:15:19.461315+00",
+    "sources": [
+      {
+        "id": "source-nkdipb",
+        "url": "https://www.freestoneproperties.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "freestoneproperties",
+            "freestone",
+            "asheville",
+            "black",
+            "mountain"
+          ],
+          "phrases": [
+            "freestoneproperties",
+            "ashevillerealestate",
+            "blackmountainncrealestate",
+            "freestone"
+          ]
+        },
+        "nextSyncAt": 1791450923851,
+        "connectedAt": 1791443723851,
+        "listingCount": 3,
+        "submittedUrl": "https://www.freestoneproperties.com/",
+        "inventoryUrls": [
+          "https://www.freestoneproperties.com/"
+        ],
+        "lastCheckedAt": 1791443723851
+      }
+    ],
+    "listings": [
+      {
+        "title": "518 Sweet Birch Park Lane Black Mountain",
+        "price": "$575,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/518-sweet-birch-park-lane-black-mountain/",
+        "photos": 63,
+        "descriptionLength": 135,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "554 Sweet Birch Park Lane Black Mountain",
+        "price": "$615,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/554-sweet-birch-park-lane-black-mountain/",
+        "photos": 78,
+        "descriptionLength": 414,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "277 Debbies Branch Drive Old Fort",
+        "price": "$324,500",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/277-debbies-branch-drive-old-fort/",
+        "photos": 60,
+        "descriptionLength": 132,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

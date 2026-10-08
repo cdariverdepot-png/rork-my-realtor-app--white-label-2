@@ -41,6 +41,8 @@ export function applyObservation(item: SyncListing, result: Observation): SyncLi
     ...(p?.detailsComplete ? {detailsComplete:true} : {}),
     ...(p?.facts ? {facts:{...((item.facts as Record<string,string>)??{}),...p.facts}} : {}),
     ...(p?.listingNumber ? {listingNumber:p.listingNumber} : {}),
+    ...(p?.listingOffice ? {listingOffice:p.listingOffice} : {}),
+    ...(p?.ownership ? {ownership:p.ownership} : {}),
     ...(p?.propertyType ? {propertyType:p.propertyType} : {}),
     ...(p?.beds ? { beds: p.beds } : {}), ...(p?.baths ? { baths: p.baths } : {}),
     ...(p?.sqft ? { sqft: p.sqft } : {}), ...(p?.neighborhood ? { neighborhood: p.neighborhood } : {}),

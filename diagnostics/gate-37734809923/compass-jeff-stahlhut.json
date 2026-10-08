@@ -1,0 +1,115 @@
+{
+  "id": "compass-jeff-stahlhut",
+  "url": "https://www.compass.com/agents/jeff-stahlhut/",
+  "category": "third-party-profile",
+  "timeline": [
+    {
+      "at": 49,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1256,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1657,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Compass\nLooking for listings · 1 page checked\nMatching your website’s design and imagery\nReading linked pages · 2 of 4"
+    },
+    {
+      "at": 1859,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Compass\nLooking for listings · 1 page checked\nMatching your website’s design and imagery\nReading linked pages · 3 of 4"
+    },
+    {
+      "at": 2061,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Compass\nLooking for listings · 1 page checked\nMatching your website’s design and imagery\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 10 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2664,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Compass\nYour listings could not be read from this page\nMatching your website’s design and imagery\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 10 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 7088,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "compass-jeff-stahlhut-00-url.png",
+    "compass-jeff-stahlhut-01-review.png",
+    "compass-jeff-stahlhut-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3911,
+  "reviewMs": 7088,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Compass\nYour listings could not be read from this page\nMatching your website’s design and imagery\nRead 4 linked pages\nIdentified your profile photo and logo\nSorted 10 website images by role\nWriting your profile and app copy",
+  "reviewText": "Back\nAPP BUILDER\nwww.compass.com/agents/jeff-stahlhut\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nDENVER, CO\nJeff Stahlhut, J.D.\nBuy, sell, and rent smarter with Jeff Stahlhut, J.D. at Compass. Partner with a local real estate agent to find the home or apartment that's right for you\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\nSell With Us\nStay in control of how, when, and where your home is marketed with a strategy tailored to fit your needs. Submit By submitting this form you agree that Compass, its affiliates including affiliated real estate agents, or associated third parties may contact you, including with calls or texts by automated means. You also agree to our Terms of Service and Privacy Policy . Message/data rates may apply. Message frequency varies. Text 'Help' for Help. Consent is not a condition to access real estate services.\n720-937-3970\njeff.stahlhut@compass.com\nCompass\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour Trusted Advisor for the Denver Metro Real Estate Market\nTry another opening line\nYOUR INTRODUCTION\nWith over 25 years of professional real estate and legal experience, I’ve dedicated my career to serving clients in the Denver Metro area with integrity, deep market insight, and a commitment to exceptional results. Whether you’re buying or selling, you’ll benefit from my background as an experienced real estate attorney and my tenure leading Compass’s DTC team. My approach combines strategic negotiation, industry knowledge, and personalized support to help you navigate Denver’s ever-evolving marketplace with confidence.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nWe couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Compass\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nDENVER, CO\nJeff Stahlhut, J.D.\nBuy, sell, and rent smarter with Jeff Stahlhut, J.D. at Compass. Partner with a local real estate agent to find the home or apartment that's right for you\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\nSell With Us\nStay in control of how, when, and where your home is marketed with a strategy tailored to fit your needs. Submit By submitting this form you agree that Compass, its affiliates including affiliated real estate agents, or associated third parties may contact you, including with calls or texts by automated means. You also agree to our Terms of Service and Privacy Policy . Message/data rates may apply. Message frequency varies. Text 'Help' for Help. Consent is not a condition to access real estate services.\n720-937-3970\njeff.stahlhut@compass.com\nCompass\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app DENVER, CO Jeff Stahlhut, J.D. Buy, sell, and rent smarter with Jeff Stahlhut, J.D. at Compass. Partner with a local real estate agent to find the home or apartment that's right for you View listings",
+        "textLength": 949,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.compass.com/agents/jeff-stahlhut/",
+      "status": 200,
+      "finalUrl": "https://www.compass.com/agents/jeff-stahlhut/",
+      "title": "Jeff Stahlhut, J.D., Real Estate Agent - Compass",
+      "textLength": 4849,
+      "priceCount": 4,
+      "uniquePrices": 4,
+      "propertyLinkCount": 8,
+      "sample": "Buy\nRent\nSell\nCompass Exclusives\nNew Development\nAgents\nRegister/Sign In\nJeff Stahlhut, J.D.\nSales Manager\njeff.stahlhut@compass.com\nM: 720-937-3970\nWork with Jeff Stahlhut, J.D.\nSocial Media\n   Jeff’s Concierge Page\n\nAbout Jeff\nJeff is the Sales Manger for the COMPASS Denver Tech Center Office, where he manages over 175 agents serving the entire Denver Metro area.  With nearly One Billion Dollars in annual sales volume, the COMPASS DTC office, is the second largest COMPASS office in the State of Colorado.\n\n\nJeff has over 25 years of experience as a real estate professional in a variety of roles.  Following his graduation from law school, Jeff served as a real estate attorney for Holland & Hart, the largest Colorado-based law firm. He left Holland & Hart to join Quiznos, an international Denver-based franchisor, as Associate Real Estate Counsel eventually joining their senior management team as Executive Vice President and General Counsel.\n\n\nHe became a licensed real estate broker in 2011 and devoted his time and talents to helping his clients negotiate and complete residential and commercial real estate transactions with efficient and timely advice and support. After joining COMPA",
+      "challenge": false,
+      "screenshot": "compass-jeff-stahlhut-source-0.png"
+    }
+  ],
+  "wallMs": 30616,
+  "window": {
+    "startedAt": "2026-10-08T06:26:05.539Z",
+    "endedAt": "2026-10-08T06:26:36.155Z"
+  }
+}

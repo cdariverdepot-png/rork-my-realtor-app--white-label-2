@@ -43,6 +43,7 @@ import ScreenBackdrop from "@/components/ScreenBackdrop";
 import { bustedUri } from "@/lib/imageUri";
 import { bookConsultation } from "@/lib/contact";
 import { deleteClientAccount } from "@/lib/accountDelete";
+import { specLine } from "@/lib/listingSpecs";
 
 export default function ClientAccount() {
   const router = useRouter();
@@ -320,7 +321,7 @@ export default function ClientAccount() {
                     {l.title}
                   </Text>
                   <Text style={styles.rowMeta}>
-                    {l.price} · {l.beds} bd · {l.baths} ba
+                    {[l.price, specLine(l, "short", false)].filter(Boolean).join(" · ")}
                   </Text>
                 </View>
                 <ArrowRight size={14} color={brand.goldLight} strokeWidth={1.6} />

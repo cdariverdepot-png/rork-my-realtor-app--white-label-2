@@ -22,4 +22,4 @@ jobs:
         run: node "$RUNNER_TEMP/import-tests/node_modules/typescript/bin/tsc" --noEmit --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom,dom.iterable --skipLibCheck --types node --typeRoots "$RUNNER_TEMP/import-tests/node_modules/@types" supabase/functions/analyze-realtor-build/listingDiscovery.ts
       - name: Run all app and offline compatibility regressions
         working-directory: expo
-        run: NODE_PATH="$RUNNER_TEMP/import-tests/node_modules" node --test tests/*.test.cjs
+        run: NODE_PATH="$RUNNER_TEMP/import-tests/node_modules" node --test --require ./tests/setup/offline-guard.cjs tests/*.test.cjs

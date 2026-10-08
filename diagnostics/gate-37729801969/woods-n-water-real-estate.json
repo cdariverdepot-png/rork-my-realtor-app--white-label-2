@@ -1,0 +1,995 @@
+{
+  "id": "woods-n-water-real-estate",
+  "url": "https://www.woodsnwaterrealestate.com/",
+  "category": "flexmls",
+  "timeline": [
+    {
+      "at": 54,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1662,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nLooking for your listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1863,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nLooking for your listings\nMatching your website’s design and imagery\nReading linked pages · 1 of 4"
+    },
+    {
+      "at": 2065,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 listings so far · 1 page checked\nMatching your website’s design and imagery\nRead 4 linked pages\nReading listing details · 0 of 3\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3473,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 listings so far · 1 page checked\nMatching your website’s design and imagery\nRead 4 linked pages\nReading listing details · 2 of 3\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3673,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 active listings\nMatching your website’s design and imagery\nRead 4 linked pages\nFull details weren’t available for these 3 listings\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3875,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 active listings\nMatching your website’s design and imagery\nRead 4 linked pages\nFull details weren’t available for these 3 listings\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy\nSaving 3 listings"
+    },
+    {
+      "at": 4076,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 active listings\nMatching your website’s design and imagery\nRead 4 linked pages\nFull details weren’t available for these 3 listings\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy\nSaved 3 listings"
+    },
+    {
+      "at": 9301,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 active listings\nMatching your website’s design and imagery\nRead 4 linked pages\nFull details weren’t available for these 3 listings\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy\nSaved 3 listings\nFound Valerie J Streeter · Curtis, MI"
+    },
+    {
+      "at": 9503,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 454,
+      "totalMs": 9214,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Wood n Water Real Estate",
+          "host": "woodsnwaterrealestate.com",
+          "at": 900
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 900
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 4,
+          "at": 1110
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 4,
+          "at": 1137
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 4,
+          "at": 1246
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 4,
+          "at": 1261
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 4,
+          "at": 1322
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 3,
+          "total": 4,
+          "at": 1354
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 8,
+          "sections": 6,
+          "at": 1355
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 1355
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 1360
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 1360
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 1360
+        },
+        {
+          "kind": "profile",
+          "name": "Valerie J Streeter",
+          "city": "Curtis, MI",
+          "at": 8575
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 8575
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 244,
+            "design": 455,
+            "site": 1360,
+            "profile": 7215,
+            "total": 8576
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "Valerie J Streeter",
+              "confidence": 1,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/about/"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "Broker/Owner",
+              "confidence": 1,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/contact/"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "906-235-1288",
+              "confidence": 1,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/contact/"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "906-586-9445",
+              "confidence": 1,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/contact/"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "valstreeter@sbcglobal.net",
+              "confidence": 1,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/about/"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "Wood n Water Real Estate",
+              "confidence": 1,
+              "locator": "Structured Data, https://woodsnwaterrealestate.com/"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "Woods N Water Real Estate LLC",
+              "confidence": 0.95,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/about/"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "Curtis, MI",
+              "confidence": 1,
+              "locator": "PAGE TEXT, https://woodsnwaterrealestate.com/about/"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "value": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/Profile.jpg",
+              "confidence": 1,
+              "locator": "Structured data og:image and Images, https://woodsnwaterrealestate.com/about/"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Serving the Beautiful Manistique Lakes Area Since 2005",
+            "welcomeNote": "Welcome! I'm Valerie J Streeter, Broker/Owner of Wood n Water Real Estate. I take pride in helping buyers and sellers find success in Curtis and throughout the Manistique Lakes region.",
+            "tagline": "The Right Realtor® Gets the Right Results.",
+            "aboutParagraph": "As the Broker/Owner of Wood n Water Real Estate, I am dedicated to making your real estate experience in the Manistique Lakes area as smooth and enjoyable as possible. Since 2005, our friendly and knowledgeable team has helped countless clients achieve their goals, fostering repeat relationships and happy outcomes. Whether you’re buying your very first property, looking to sell, or searching for the perfect waterfront retreat, my mission is to minimize your stress every step of the way.",
+            "conciergeLine": "Looking for advice or ready to start your property search? Reach out at 906-235-1288—I'm here to help.",
+            "contactLine": "Contact Valerie J Streeter directly at 906-235-1288 or valstreeter@sbcglobal.net for personal guidance on your real estate journey.",
+            "tone": "Warm, knowledgeable, focused on local service and relationships.",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://woodsnwaterrealestate.com/",
+              "analyzedAt": 1791435562902,
+              "logoUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg",
+              "portraitImageUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+              "heroTitle": "Valerie J Streeter",
+              "heroSubtitle": "",
+              "sections": [
+                {
+                  "kind": "content",
+                  "title": "McMillan",
+                  "body": "HOMES FOR SALE VIEW LISTINGS Valerie J Streeter Mobile: 906-235-1288 Office: 906-586-9445 Fax: 906-586-9447 P.O. Box 202 W17168 Main Street Curtis, MI 49820 Woods N Water Real Estate LLC valstreeter@sbcglobal.net Contact Us j6ac71882e2faf Submit © Copyright 2026 Valerie J Streeter | Woods N Water Real Estate l Rights Reserved.",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "about",
+                  "title": "The Right Realtor® Gets the Right Results",
+                  "body": "We strive to make the process of either buying or selling property as stress free as possible with our friendly and knowledgeable sales staff.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Financing requirements.",
+                  "body": "Lenders typically look at your credit history, credit score, debt to income ratio, and how long you have had the same job to determine your eligibility for certain loan programs. The higher your credit score and the better your credit history, the more favorable the terms. But even if you have poor credit, it doesn’t mean that you won’t qualify for a home loan. There are several options available even with low down payment, down payment assistance programs, and grants.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Featured Properties",
+                  "body": "12 Listings $64,900 8112 M-77 Germfask, MI 49836 $179,000 W18572 H-42 Curtis, MI 49820 previous next"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Curb Appeal is the First Impression",
+                  "body": "December 2, 2020 No Comments When listing and selling a property, chances are your home will be listed on the local multiple listing service or MLS. Most MLS require the"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "The Importance of a Buyer’s Agent",
+                  "body": "December 2, 2020 No Comments When buying a home having your own buyer representation is crucial to getting the home you want at the price you need. Did you know"
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg",
+                  "variants": [
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg",
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+                  "variants": [
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+                      "width": 300
+                    },
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-1024x737.jpg",
+                      "width": 1024
+                    },
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-768x553.jpg",
+                      "width": 768
+                    },
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-1536x1105.jpg",
+                      "width": 1536
+                    },
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-600x432.jpg",
+                      "width": 600
+                    },
+                    {
+                      "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o.jpg",
+                      "width": 1944
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+                  "width": 300,
+                  "height": 216,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 203,
+                  "renderedHeight": 146,
+                  "upscaleRatio": 1.35,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg",
+                    "variants": [
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1-300x100.jpg",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/curtis_map.jpg",
+                    "variants": [
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/curtis_map.jpg",
+                        "width": 600
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/curtis_map-300x300.jpg",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/curtis_map-150x150.jpg",
+                        "width": 150
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/curtis_map.jpg",
+                    "width": 600,
+                    "height": 600,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 200,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 0.67,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.resize.sparkplatform.com/eup/640x480/true/20250805185232465329000000-o.jpg",
+                    "variants": [
+                      {
+                        "url": "https://cdn.resize.sparkplatform.com/eup/640x480/true/20250805185232465329000000-o.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://cdn.resize.sparkplatform.com/eup/640x480/true/20250805185232465329000000-o.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.resize.sparkplatform.com/eup/640x480/true/20260826170438755397000000-o.jpg",
+                    "variants": [
+                      {
+                        "url": "https://cdn.resize.sparkplatform.com/eup/640x480/true/20260826170438755397000000-o.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://cdn.resize.sparkplatform.com/eup/640x480/true/20260826170438755397000000-o.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx-300x200.jpg",
+                    "variants": [
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx-300x200.jpg",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx-1024x683.jpg",
+                        "width": 1024
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx-768x512.jpg",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx-600x400.jpg",
+                        "width": 600
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx.jpg",
+                        "width": 1041
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/young-family-is-holding-toy-house-in-hands-cozy-man-people-home-finance-property-buy-sale-concept_t20_a8kKEx-300x200.jpg",
+                    "width": 300,
+                    "height": 200,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 135,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv-300x190.jpg",
+                    "variants": [
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv-300x190.jpg",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv-1024x649.jpg",
+                        "width": 1024
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv-768x487.jpg",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv-600x380.jpg",
+                        "width": 600
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv.jpg",
+                        "width": 1062
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/picture-perfect-beautiful-house-on-the-island-of-coronado-in-sunny-california-beautifully-landscaped_t20_6lJOrv-300x190.jpg",
+                    "width": 300,
+                    "height": 190,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 128,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+                    "variants": [
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-1024x737.jpg",
+                        "width": 1024
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-768x553.jpg",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-1536x1105.jpg",
+                        "width": 1536
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-600x432.jpg",
+                        "width": 600
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o.jpg",
+                        "width": 1944
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2020/12/wooden-blocks-with-the-word-sale-and-miniature-house-in-the-hands-of-a-real-estate-agent-real-estate_t20_Lzvg0o-300x216.jpg",
+                    "width": 300,
+                    "height": 216,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 146,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1.jpg",
+                        "width": 1627
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-300x103.jpg",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1024x350.jpg",
+                        "width": 1024
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-768x262.jpg",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-1536x525.jpg",
+                        "width": 1536
+                      },
+                      {
+                        "url": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-600x205.jpg",
+                        "width": 600
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/2021/01/cropped-WoodsnWaterlogo1-600x205.jpg",
+                    "width": 1627,
+                    "height": 556,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 187,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 0.23,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#6ec1e4",
+                "background": "#ffffff",
+                "ink": "#333333",
+                "panel": "#fffdf9",
+                "muted": "#333333",
+                "fontFamily": "-apple-system",
+                "headingFontFamily": "inherit",
+                "layout": "portrait-split",
+                "spacing": 16,
+                "radius": 3,
+                "headingSize": 28,
+                "motion": "rise"
+              },
+              "optimized": {
+                "accent": "#6ec1e4",
+                "background": "#ffffff",
+                "ink": "#333333",
+                "panel": "#fffdf9",
+                "muted": "#333333",
+                "fontFamily": "-apple-system",
+                "headingFontFamily": "inherit",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/elementor/css/post-3.css?ver=1790370262",
+                  "https://woodsnwaterrealestate.com/wp-content/uploads/sites/14/elementor/css/post-512.css?ver=1790370320",
+                  "https://woodsnwaterrealestate.com/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.5.1",
+                  "https://woodsnwaterrealestate.com/wp-content/themes/hello-elementor/assets/css/theme.css?ver=3.5.1",
+                  "https://woodsnwaterrealestate.com/wp-content/themes/hello-elementor/assets/css/header-footer.css?ver=3.5.1",
+                  "https://woodsnwaterrealestate.com/wp-content/themes/hello-theme-child-master/style.css?ver=1.0.1"
+                ],
+                "colors": [
+                  "#6ec1e4",
+                  "#54595f",
+                  "#7a7a7a",
+                  "#61ce70",
+                  "#ffbc7d",
+                  "#ffffff",
+                  "#333333",
+                  "#000000",
+                  "#cc3366",
+                  "#333366",
+                  "#cccccc",
+                  "#666666",
+                  "#eeeeee",
+                  "#494c4f",
+                  "#222222",
+                  "#55595c",
+                  "#045db9",
+                  "#0073aa",
+                  "#9a0b0a",
+                  "#d7d2d2"
+                ],
+                "fonts": [
+                  "Roboto",
+                  "Roboto Slab",
+                  "Prata",
+                  "Muli",
+                  "-apple-system",
+                  "monospace"
+                ],
+                "routing": [
+                  {
+                    "source": "Skip to main content",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Wood n Water Real Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Properties",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Advanced Search",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Map Search",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sellers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Value",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Curtis",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Germfask",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "McMillan",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Newberry",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Naubinway",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Blog",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Contact",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "buyer",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "estimate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "seller",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "previous",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "next",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Financing Options When Buying a Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Read More »",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Woods N Water Real Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Woods n Water Real Estate has been serving the Manistique Lakes area since 2005 and has many satisfied and repeat customers. We strive to make the process of either buying or selli",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "feature communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Latest Real Estate News",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Curb Appeal is the First Impression",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "The Importance of a Buyer’s Agent",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.woodsnwaterrealestate.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.woodsnwaterrealestate.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "dd77b08b-d42a-4a36-b1b4-eeea5a5b976e",
+              "kind": "url",
+              "label": "www.woodsnwaterrealestate.com",
+              "uri": "https://www.woodsnwaterrealestate.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "woods-n-water-real-estate-00-url.png",
+    "woods-n-water-real-estate-01-review.png",
+    "woods-n-water-real-estate-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 3717,
+  "reviewMs": 9503,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Wood n Water Real Estate\nFound 3 active listings\nMatching your website’s design and imagery\nRead 4 linked pages\nFull details weren’t available for these 3 listings\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy\nSaved 3 listings\nFound Valerie J Streeter · Curtis, MI",
+  "reviewText": "Back\nAPP BUILDER\nwww.woodsnwaterrealestate.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCURTIS, MI\nValerie J Streeter\nWelcome! I'm Valerie J Streeter, Broker/Owner of Wood n Water Real Estate. I take pride in helping buyers and sellers find success in Curtis and throughout the Manistique Lakes region.\nView listings\nTHE AREA\nMcMillan\nHOMES FOR SALE VIEW LISTINGS Valerie J Streeter Mobile: 906-235-1288 Office: 906-586-9445 Fax: 906-586-9447 P.O. Box 202 W17168 Main Street Curtis, MI 49820 Woods N Water Real Estate LLC valstreeter@sbcglobal.net Contact Us j6ac71882e2faf Submit © Copyright 2026 Valerie J Streeter | Woods N Water Real Estate l Rights Reserved.\nABOUT\nThe Right Realtor® Gets the Right Results\nWe strive to make the process of either buying or selling property as stress free as possible with our friendly and knowledgeable sales staff.\nFROM THE SITE\nFinancing requirements.\nLenders typically look at your credit history, credit score, debt to income ratio, and how long you have had the same job to determine your eligibility for certain loan programs. The higher your credit score and the better your credit history, the more favorable the terms. But even if you have poor credit, it doesn’t mean that you won’t qualify for a home loan. There are several options available even with low down payment, down payment assistance programs, and grants.\nFeatured Properties\n$64,900\n12 Listings\n$64,900\n$64,900 8112 M-77 Germfask, MI 49836\n$179,000\n$179,000 W18572 H-42 Curtis, MI 49820\nFROM THE SITE\nCurb Appeal is the First Impression\nDecember 2, 2020 No Comments When listing and selling a property, chances are your home will be listed on the local multiple listing service or MLS. Most MLS require the\nFROM THE SITE\nThe Importance of a Buyer’s Agent\nDecember 2, 2020 No Comments When buying a home having your own buyer representation is crucial to getting the home you want at the price you need. Did you know\n906-235-1288\nvalstreeter@sbcglobal.net\nWoods N Water Real Estate LLC\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nServing the Beautiful Manistique Lakes Area Since 2005\nTry another opening line\nYOUR INTRODUCTION\nAs the Broker/Owner of Wood n Water Real Estate, I am dedicated to making your real estate experience in the Manistique Lakes area as smooth and enjoyable as possible. Since 2005, our friendly and knowledgeable team has helped countless clients achieve their goals, fostering repeat relationships and happy outcomes. Whether you’re buying your very first property, looking to sell, or searching for the perfect waterfront retreat, my mission is to minimize your stress every step of the way.\nTry another introduction\n3 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\nPlease confirm\nWe found these — fix anything that’s wrong.\nPhone\nAlso found: 906-586-9445\n▸ Brokerage & license (optional)\n✓ Woods N Water Real Estate LLC\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCURTIS, MI\nValerie J Streeter\nWelcome! I'm Valerie J Streeter, Broker/Owner of Wood n Water Real Estate. I take pride in helping buyers and sellers find success in Curtis and throughout the Manistique Lakes region.\nView listings\nTHE AREA\nMcMillan\nHOMES FOR SALE VIEW LISTINGS Valerie J Streeter Mobile: 906-235-1288 Office: 906-586-9445 Fax: 906-586-9447 P.O. Box 202 W17168 Main Street Curtis, MI 49820 Woods N Water Real Estate LLC valstreeter@sbcglobal.net Contact Us j6ac71882e2faf Submit © Copyright 2026 Valerie J Streeter | Woods N Water Real Estate l Rights Reserved.\nABOUT\nThe Right Realtor® Gets the Right Results\nWe strive to make the process of either buying or selling property as stress free as possible with our friendly and knowledgeable sales staff.\nFROM THE SITE\nFinancing requirements.\nLenders typically look at your credit history, credit score, debt to income ratio, and how long you have had the same job to determine your eligibility for certain loan programs. The higher your credit score and the better your credit history, the more favorable the terms. But even if you have poor credit, it doesn’t mean that you won’t qualify for a home loan. There are several options available even with low down payment, down payment assistance programs, and grants.\nFeatured Properties\n$64,900\n12 Listings\n$64,900\n$64,900 8112 M-77 Germfask, MI 49836\n$179,000\n$179,000 W18572 H-42 Curtis, MI 49820\nFROM THE SITE\nCurb Appeal is the First Impression\nDecember 2, 2020 No Comments When listing and selling a property, chances are your home will be listed on the local multiple listing service or MLS. Most MLS require the\nFROM THE SITE\nThe Importance of a Buyer’s Agent\nDecember 2, 2020 No Comments When buying a home having your own buyer representation is crucial to getting the home you want at the price you need. Did you know\n906-235-1288\nvalstreeter@sbcglobal.net\nWoods N Water Real Estate LLC\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 12 Listings $64,900 STATUS UNCONFIRMED $64,900 8112 M-77 Germfask, MI 49836 $64,900 STATUS UNCONFIRMED $179,000 W18572 H-42 ",
+        "textLength": 278,
+        "stillHome": false
+      },
+      {
+        "label": "12 Listings",
+        "opens": "Back Your client app PROPERTY PREVIEW 12 Listings $64,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client data is changed. Home Listings Saved Chat Pro",
+        "textLength": 224,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "$64,900 8112 M-77 Germfask, MI 49836",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos $64,900 8112 M-77 Germfask, MI 49836 $64,900 0 beds · 0 baths This is your chance to own over 1.5 acres with 250' of pristine Manistique River frontage. Located in Germf",
+        "textLength": 463,
+        "stillHome": false
+      },
+      {
+        "label": "$179,000 W18572 H-42 Curtis, MI 49820",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos $179,000 W18572 H-42 Curtis, MI 49820 $179,000 0 beds · 0 baths Here's your chance to own a charming two-bedroom, one bath cottage on a 50-foot waterfront lot on beautif",
+        "textLength": 464,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app CURTIS, MI Valerie J Streeter Welcome! I'm Valerie J Streeter, Broker/Owner of Wood n Water Real Estate. I take pride in helping buyers and sellers find success in Curtis and throughout the Manistiqu",
+        "textLength": 1962,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 12 Listings $64,900 STATUS UNCONFIRMED $64,900 8112 M-77 Germfask, MI 49836 $64,900 STATUS UNCONFIRMED $179,000 W18572 H-42 ",
+        "textLength": 278,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.woodsnwaterrealestate.com/",
+      "status": 200,
+      "finalUrl": "https://woodsnwaterrealestate.com/",
+      "title": "Home - Wood n Water Real Estate",
+      "textLength": 1863,
+      "priceCount": 2,
+      "uniquePrices": 2,
+      "propertyLinkCount": 5,
+      "sample": "Skip to main content\nProperties\nBuyers\nSellers\nCommunities\nBlog\nContact\nAbout\nProperties\nBuyers\nSellers\nCommunities\nBlog\nContact\nAbout\nVALERIE J STREETER\nWOODS N WATER REAL ESTATE\nBUYER\nHOME\nESTIMATE\nSELLER\nLocation\nSelect one or more locations to search for properties\nMore Search Options\nWoods n Water Real Estate has been serving the Manistique Lakes area since 2005 and has many satisfied and repeat customers. We strive to make the process of either buying or selling property as stress free as possible with our friendly and knowledgeable sales staff.\n\nFEATURED PROPERTIES\n12 Listings\n\n$64,900\n8112 M-77\nGermfask, MI 49836\n\n$179,000\nW18572 H-42\nCurtis, MI 49820\n\nprevious\nnext\n1\nFEATURE COMMUNITIES\nCurtis\nHOMES FOR SALE\nVIEW LISTINGS\nNewberry\nHOMES FOR SALE\nVIEW LISTINGS\nGermfask\nHOMES FOR SALE\nVIEW LISTINGS\nNaubinway\nHOMES FOR SALE\nVIEW LISTINGS\nMcMillan\nHOMES FOR SALE\nVIEW LISTINGS\nLATEST REAL ESTATE NEWS\nFinancing Options When Buying a Home\nDecember 2, 2020  No Comments\n\nUnless you’re planning on buying a house with all cash, and a lot of people do, chances are you’re going to need financing in some\n\nRead More »\nCurb Appeal is the First Impression\nDecember 2, 2020  No Comments\n\nWhe",
+      "challenge": false,
+      "screenshot": "woods-n-water-real-estate-source-0.png"
+    }
+  ],
+  "wallMs": 40272,
+  "window": {
+    "startedAt": "2026-10-08T04:59:17.375Z",
+    "endedAt": "2026-10-08T04:59:57.647Z"
+  }
+}

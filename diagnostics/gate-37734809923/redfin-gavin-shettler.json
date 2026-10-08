@@ -1,0 +1,1522 @@
+{
+  "id": "redfin-gavin-shettler",
+  "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+  "category": "third-party-profile",
+  "timeline": [
+    {
+      "at": 70,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 878,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nReading your website"
+    },
+    {
+      "at": 1080,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1481,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nLooking for your listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1683,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nLooking for your listings\nMatching your website’s design and imagery\nReading linked pages · 2 of 7"
+    },
+    {
+      "at": 1885,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nLooking for your listings\nMatching your website’s design and imagery\nReading linked pages · 6 of 7"
+    },
+    {
+      "at": 2086,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nFound 5 active listings\nMatching your website’s design and imagery\nReading linked pages · 6 of 7\nFull details weren’t available for these 5 listings"
+    },
+    {
+      "at": 2289,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nFound 5 active listings\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 5 listings\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2490,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nFound 5 active listings\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 5 listings\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy\nSaving 5 listings"
+    },
+    {
+      "at": 2893,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Redfin\nFound 5 active listings\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 5 listings\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy\nSaved 5 listings"
+    },
+    {
+      "at": 7525,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Redfin\nFound 5 active listings\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 5 listings\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy\nSaved 5 listings\nFound Gavin Shettler · Portland, OR"
+    },
+    {
+      "at": 7736,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 691,
+      "totalMs": 2754,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 106
+        },
+        {
+          "kind": "listings",
+          "host": "redfin.com",
+          "pages": 1,
+          "found": 0,
+          "at": 1059
+        },
+        {
+          "kind": "listings",
+          "host": "redfin.com",
+          "pages": 1,
+          "found": 5,
+          "at": 1103
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 5,
+          "succeeded": 0,
+          "at": 1103
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 5,
+          "succeeded": 0,
+          "at": 1120
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 5,
+          "succeeded": 0,
+          "at": 1121
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 5,
+          "succeeded": 0,
+          "at": 1121
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 5,
+          "succeeded": 0,
+          "at": 1122
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 5,
+          "total": 5,
+          "succeeded": 0,
+          "at": 1122
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 5,
+          "at": 1129
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 5,
+          "at": 1565
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 5,
+          "at": 2005
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-1asba0h",
+            "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+            "submittedUrl": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://www.redfin.com/real-estate-agents/gavin-shettler"
+            ],
+            "connectedAt": 1791440802176,
+            "lastCheckedAt": 1791440802176,
+            "nextSyncAt": 1791448002176,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 5,
+            "identity": {
+              "phrases": [
+                "redfin",
+                "gavinshettler",
+                "realestateagent"
+              ],
+              "words": [
+                "redfin",
+                "gavin",
+                "shettler"
+              ]
+            }
+          },
+          "imported": 5,
+          "warning": "5 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 5,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1y8acmg",
+              "title": "900 NE 81st Ave #402, Portland, OR 97213",
+              "neighborhood": "",
+              "price": "$285,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [],
+              "image": "",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.redfin.com/OR/Portland/900-NE-81st-Ave-97213/unit-402/home/25791331",
+              "facts": {},
+              "lastRefreshedAt": 1791440801159,
+              "lastSyncAttemptAt": 1791440801159,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791448001159,
+              "updatedAt": 1791440801159,
+              "sourceId": "source-1asba0h",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791440801159
+            },
+            {
+              "id": "listing-14grhp5",
+              "title": "4966 Evie Jean St, Salem, OR 97305",
+              "neighborhood": "",
+              "price": "$390,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [],
+              "image": "",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.redfin.com/OR/Salem/4966-Evie-Jean-St-NE-97305/home/26412741",
+              "facts": {},
+              "lastRefreshedAt": 1791440801159,
+              "lastSyncAttemptAt": 1791440801159,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791448001159,
+              "updatedAt": 1791440801159,
+              "sourceId": "source-1asba0h",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791440801159
+            },
+            {
+              "id": "listing-54jnw6",
+              "title": "1833 SE Exeter Dr, Portland, OR 97202",
+              "neighborhood": "",
+              "price": "$1,600,000",
+              "beds": 4,
+              "baths": 4,
+              "sqft": "4,788",
+              "images": [
+                "https://ssl.cdn-redfin.com/photo/84/ismphoto/053/genIsm.143226053_0.jpg"
+              ],
+              "image": "https://ssl.cdn-redfin.com/photo/84/ismphoto/053/genIsm.143226053_0.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.redfin.com/OR/Portland/1833-SE-Exeter-Dr-97202/home/25759570",
+              "lastRefreshedAt": 1791440801159,
+              "lastSyncAttemptAt": 1791440801159,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791448001159,
+              "updatedAt": 1791440801159,
+              "sourceId": "source-1asba0h",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791440801159
+            },
+            {
+              "id": "listing-1fwfq05",
+              "title": "12035 SE Wintercress Ct, Happy Valley, OR 97086",
+              "neighborhood": "",
+              "price": "$1,400,000",
+              "beds": 5,
+              "baths": 4,
+              "sqft": "3,826",
+              "images": [
+                "https://ssl.cdn-redfin.com/photo/84/ismphoto/197/genIsm.520010197_0.jpg"
+              ],
+              "image": "https://ssl.cdn-redfin.com/photo/84/ismphoto/197/genIsm.520010197_0.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.redfin.com/OR/Happy-Valley/12035-SE-Wintercress-Ct-97086/home/25888076",
+              "lastRefreshedAt": 1791440801159,
+              "lastSyncAttemptAt": 1791440801159,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791448001159,
+              "updatedAt": 1791440801159,
+              "sourceId": "source-1asba0h",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791440801159
+            },
+            {
+              "id": "listing-1ngk8s6",
+              "title": "4421 SW Melville Ave, Portland, OR 97239",
+              "neighborhood": "",
+              "price": "$1,076,000",
+              "beds": 5,
+              "baths": 3,
+              "sqft": "3,281",
+              "images": [
+                "https://ssl.cdn-redfin.com/photo/84/ismphoto/620/genIsm.106733620_2.jpg"
+              ],
+              "image": "https://ssl.cdn-redfin.com/photo/84/ismphoto/620/genIsm.106733620_2.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.redfin.com/OR/Portland/4421-SW-Melville-Ave-97239/home/26300616",
+              "lastRefreshedAt": 1791440801159,
+              "lastSyncAttemptAt": 1791440801159,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791448001159,
+              "updatedAt": 1791440801159,
+              "sourceId": "source-1asba0h",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791440801159
+            }
+          ],
+          "timings": {
+            "details": 19,
+            "listings": 1023,
+            "save": 440,
+            "total": 2005
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 465,
+      "totalMs": 7340,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 1
+        },
+        {
+          "kind": "site",
+          "name": "Redfin",
+          "host": "redfin.com",
+          "at": 694
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 695
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 7,
+          "at": 870
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 7,
+          "at": 888
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 7,
+          "at": 938
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 7,
+          "at": 989
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 7,
+          "at": 1034
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 7,
+          "at": 1052
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 6,
+          "total": 7,
+          "at": 1063
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 7,
+          "total": 7,
+          "at": 1278
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 4,
+          "total": 7,
+          "at": 1389
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 20,
+          "sections": 8,
+          "at": 1390
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 1390
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 1408
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 1408
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 1408
+        },
+        {
+          "kind": "profile",
+          "name": "Gavin Shettler",
+          "city": "Portland, OR",
+          "at": 6685
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 6685
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 519,
+            "design": 696,
+            "site": 1407,
+            "profile": 5277,
+            "total": 6685
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "Gavin Shettler",
+              "confidence": 1,
+              "locator": "structured data and page text"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "Real Estate Broker",
+              "confidence": 0.95,
+              "locator": "structured data ('I am a residential real estate broker serving Portland, Oregon')"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "Portland, OR",
+              "confidence": 1,
+              "locator": "structured data and page text"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "(509) 219-9672",
+              "confidence": 1,
+              "locator": "telephone in structured data and phone links"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "Redfin",
+              "confidence": 1,
+              "locator": "structured data: organization name"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "Redfin",
+              "confidence": 0.98,
+              "locator": "footer and page header"
+            },
+            {
+              "field": "credentials.license.number",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "WA: 26023889, OR: 201103091",
+              "confidence": 1,
+              "locator": "page text under agent profile"
+            },
+            {
+              "field": "credentials.license.state",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "WA, OR",
+              "confidence": 1,
+              "locator": "page text under agent profile: License # WA: 26023889, OR: 201103091"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "value": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg",
+              "confidence": 1,
+              "locator": "structured data: image, hero image on page"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Honest. Informed. On Your Side in Portland Real Estate.",
+            "welcomeNote": "Welcome—I'm Gavin Shettler, your dedicated Portland real estate broker. My approach is rooted in transparency and thoughtful communication, ensuring you always feel supported, informed, and confident.",
+            "tagline": "Building lasting relationships, one home at a time.",
+            "aboutParagraph": "Serving Portland, Oregon and surrounding areas, I believe real estate is about more than transactions—it’s about shaping communities and creating meaningful relationships. I bring you experience as a certified Earth Advantage Broker, Energy Trust Ally, and ADU Specialist, with a passion for high efficiency homes and green technology. Whether buying, selling, or considering an ADU, I’ll be your advisor and advocate every step of the way.",
+            "conciergeLine": "Looking for guidance on efficient homes or adding more space? I specialize in sustainability and creative living solutions.",
+            "contactLine": "Ready to start your journey? Let’s connect at (509) 219-9672.",
+            "tone": "Welcoming, transparent, and knowledgeable—with a focus on personalized guidance and sustainability.",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "555813c5-033a-4f7d-bc7c-93703d0e9fbf"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+              "analyzedAt": 1791440801823,
+              "logoUrl": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg",
+              "heroImageUrl": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg",
+              "portraitImageUrl": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg",
+              "introImage": {
+                "url": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Insignia_Final_light.svg",
+                "fit": "contain",
+                "role": "article"
+              },
+              "heroTitle": "Gavin Shettler",
+              "heroSubtitle": "Gavin Shettler is an experienced Redfin real estate agent. Discover their reviews, listings, and bio on Redfin.",
+              "sections": [
+                {
+                  "kind": "services",
+                  "title": "Popular Searches Near Me",
+                  "body": "Condos for sale near me Land for sale near me Open Houses near me Join us Become an Agent Get referrals Careers Find homes faster About us Why Redfin? Community Impact Inclusion Culture Press Investors Blog Real Estate News Find us Contact Us Help Center Advertise Subsidiaries Rent. ApartmentGuide Affiliated Business Rocket Close Rocket Mortgage Countries United States Canada Copyright: © 2026 Redfin. All rights reserved. Updated September 2025: By searching, you agree to the Terms of Use , and Privacy Policy .",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Redfin helps you home.",
+                  "body": "We’ve combined the industry’s most experienced agents with cutting-edge technology and financing from Rocket Mortgage®, to make your home buying experience seamless. With our top-rated app, you’ll see updated listings every two minutes and book same-day home tours to stay ahead of other buyers.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "The Single-Family Rental Is On the Decline",
+                  "body": "January 29, 2026 A record 33% of U.S. rentals are in large multifamily buildings, while 31% are single-family homes—a record low. As recently as 2021, single-family homes made",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Key takeaways",
+                  "body": "Selling your house may be the right option if you need the proceeds to purchase your next home or you plan to move permanently. Renting out your house may be the right option if you plan to live in your home again, have a low mortgage rate, or want to generate rental income. Your local housing and rental markets, financial situation, and long-term goals are major factors in deciding whether to sell or rent out your house. Deciding whether to sell or rent out your house can be complicated in today’s housing market.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "unique",
+                  "title": "About Gavin",
+                  "body": "I am a residential real estate broker serving Portland, Oregon and the surrounding areas. My clients love working with me for my honesty, integrity, and good communication. Real estate is more than just buying or selling a home, it’s about building authentic and lasting relationships between individuals, families, neighborhoods, and communities. My role as your agent includes facilitator, negotiator, advocate, advisor, and expert in the Portland Metro housing market."
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Gavin's Listings & Sales",
+                  "body": "Active Listings (2) Sold with Gavin (121) Bought with Gavin (182)",
+                  "imageUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_29.jpg",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "The best homes deserve the best agents",
+                  "body": "Redfin Premier agents are local luxury experts with years of experience buying and selling high-end homes. Only our best agents qualify to become Redfin Premier agents. When you're ready to buy, your agent will know what it takes to write a winning offer for the most highly sought-after homes. And when it's time to sell, they will know how to price, prepare, and market your home, so it attracts qualified buyers and sells for top dollar."
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Meet Gavin's Team",
+                  "body": "When you work with Redfin, one agent is responsible for your success, but you really get a whole team. Redfin agents work closely with a team of real estate professionals to ensure every sale closes without a hitch. Michael Mata Listing Coordinator Beth Wilkerson Transaction Coordinator See all Portland Agents , Beaverton Agents , West Linn Agents"
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg",
+                  "variants": [
+                    {
+                      "url": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg",
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg",
+                  "variants": [
+                    {
+                      "url": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg",
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "hero": {
+                  "sourceUrl": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg",
+                  "variants": [
+                    {
+                      "url": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg"
+                    }
+                  ],
+                  "role": "hero",
+                  "selectedUrl": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg",
+                  "destination": "hero",
+                  "fit": "cover",
+                  "renderedWidth": 390,
+                  "renderedHeight": 220,
+                  "upscaleRatio": 1,
+                  "crop": "modest",
+                  "rank": 2
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/logos/rocket-mortgage-logo.svg",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Insignia_Final_light.svg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Insignia_Final_light.svg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Insignia_Final_light.svg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/images/61410/500x500/8_11.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 2
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_29.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_29.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_29.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_31.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_31.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_31.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_32.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_32.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/media/1270843_JPG/genDesktopMapHomeCardUrl/item_32.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_2.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_2.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_7.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_7.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_7.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_8.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_8.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/media/1276532_JPG/genDesktopMapHomeCardUrl/item_8.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/photo/84/ismphoto/053/genIsm.143226053_0.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/photo/84/ismphoto/053/genIsm.143226053_0.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/photo/84/ismphoto/053/genIsm.143226053_0.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/photo/84/ismphoto/197/genIsm.520010197_0.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/photo/84/ismphoto/197/genIsm.520010197_0.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/photo/84/ismphoto/197/genIsm.520010197_0.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/photo/84/ismphoto/620/genIsm.106733620_2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/photo/84/ismphoto/620/genIsm.106733620_2.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/photo/84/ismphoto/620/genIsm.106733620_2.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Redfin_Premier_Logotype_Putty_RGB.svg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Redfin_Premier_Logotype_Putty_RGB.svg"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/premier/Redfin_Premier_Logotype_Putty_RGB.svg",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/images/55107/640x460/genAgentThumb/640x460/150/6_71.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/system_files/images/70632/640x460/genAgentThumb/640x460/150/6_21.jpg",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/system_files/images/70632/640x460/genAgentThumb/640x460/150/6_21.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/system_files/images/70632/640x460/genAgentThumb/640x460/150/6_21.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/apple-app-download-badge-284x84.png",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/apple-app-download-badge-284x84.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/apple-app-download-badge-284x84.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/google-app-download-badge-284x84.png",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/google-app-download-badge-284x84.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/google-app-download-badge-284x84.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/footer/flags/united-states.png",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/footer/flags/united-states.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/footer/flags/united-states.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/footer/flags/canada.png",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/footer/flags/canada.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/footer/flags/canada.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://ssl.cdn-redfin.com/vLATEST/images/footer/equal-housing.png",
+                    "variants": [
+                      {
+                        "url": "https://ssl.cdn-redfin.com/vLATEST/images/footer/equal-housing.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://ssl.cdn-redfin.com/vLATEST/images/footer/equal-housing.png",
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#a3202b",
+                "background": "#ffffff",
+                "ink": "#333333",
+                "panel": "#fffdf9",
+                "muted": "#333333",
+                "fontFamily": "Inter",
+                "headingFontFamily": "Bowtie Display Light",
+                "layout": "image-overlay",
+                "spacing": 16,
+                "radius": 2,
+                "headingSize": 28,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#a3202b",
+                "background": "#ffffff",
+                "ink": "#333333",
+                "panel": "#fffdf9",
+                "muted": "#333333",
+                "fontFamily": "Inter",
+                "headingFontFamily": "Bowtie Display Light",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://prod.cdn-redfin.com/bundles/agents-public-pages/5600220bf8582d1575e9.css",
+                  "https://prod.cdn-redfin.com/bundles/agents-public-pages/daecee2263e66c044b35.css",
+                  "https://prod.cdn-redfin.com/bundles/agents-public-pages/1ffecc887eebfe731694.css",
+                  "https://prod.cdn-redfin.com/bundles/agents-public-pages/298f1a4f177fd1af9a85.css",
+                  "https://prod.cdn-redfin.com/bundles/agents-public-pages/26d516fbe90b1c16f8d6.css",
+                  "https://prod.cdn-redfin.com/bundles/agents-public-pages/c04921ac473cecbd69cb.css"
+                ],
+                "colors": [
+                  "#131313",
+                  "#686868",
+                  "#15727a",
+                  "#c98600",
+                  "#fefefe",
+                  "#b5b5b5",
+                  "#757575",
+                  "#d1d1d1",
+                  "#95dee4",
+                  "#ccf1f5",
+                  "#e9e9e9",
+                  "#d8ecff",
+                  "#4f4f4f",
+                  "#222222",
+                  "#949494",
+                  "#fffaf2",
+                  "#3b98ed",
+                  "#91bdfa",
+                  "#5ea0f7",
+                  "#5aa8ae",
+                  "#1a5f65",
+                  "#de3341",
+                  "#a3202b",
+                  "#c12a36",
+                  "#00828c",
+                  "#026ab1",
+                  "#c9f3d7",
+                  "#01783e",
+                  "#fee6c2",
+                  "#915c00"
+                ],
+                "fonts": [
+                  "Inter",
+                  "WNTL",
+                  "Nyse",
+                  "Bowtie Display Light",
+                  "WNTL Text",
+                  "Libre Franklin",
+                  "Georgia",
+                  "Google Sans"
+                ],
+                "routing": [
+                  {
+                    "source": "Open app",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Feed",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Favorites & comments",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Saved searches",
+                    "intent": "saved",
+                    "canonical": "saved",
+                    "render": "native"
+                  },
+                  {
+                    "source": "My homes",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Renter dashboard",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "My Redfin agent",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Appointments",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Open house schedule",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Search for sale",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Search rentals",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sell my home",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "List my home for rent",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Redfin Premier",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Be a Redfin agent",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Notification settings",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buy ▾",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Open houses",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buy with Redfin",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Redfin Early Access",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Affordability calculator",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home buying guide",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Free home buying classes",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "US housing market",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Meet Gavin's Team",
+                    "intent": "profile",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Popular searches",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Popular cities",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "About Gavin",
+                    "intent": "profile",
+                    "canonical": "card:profile",
+                    "render": "card"
+                  },
+                  {
+                    "source": "The best homes deserve the best agents",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Near me searches",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.redfin.com/real-estate-agents/gavin-shettler"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.redfin.com/real-estate-agents/gavin-shettler"
+            ]
+          },
+          "sources": [
+            {
+              "id": "555813c5-033a-4f7d-bc7c-93703d0e9fbf",
+              "kind": "url",
+              "label": "www.redfin.com",
+              "uri": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "redfin-gavin-shettler-00-url.png",
+    "redfin-gavin-shettler-01-review.png",
+    "redfin-gavin-shettler-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 4084,
+  "reviewMs": 7736,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Redfin\nFound 5 active listings\nMatching your website’s design and imagery\nRead 7 linked pages\nFull details weren’t available for these 5 listings\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy\nSaved 5 listings\nFound Gavin Shettler · Portland, OR",
+  "reviewText": "Back\nAPP BUILDER\nwww.redfin.com/real-estate-agents/gavin-shettler\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nPORTLAND, OR\nGavin Shettler\nGavin Shettler is an experienced Redfin real estate agent. Discover their reviews, listings, and bio on Redfin.\nView listings\nSERVICES\nPopular Searches Near Me\nCondos for sale near me Land for sale near me Open Houses near me Join us Become an Agent Get referrals Careers Find homes faster About us Why Redfin? Community Impact Inclusion Culture Press Investors Blog Real Estate News Find us Contact Us Help Center Advertise Subsidiaries Rent. ApartmentGuide Affiliated Business Rocket Close Rocket Mortgage Countries United States Canada Copyright: © 2026 Redfin. All rights reserved. Updated September 2025: By searching, you agree to the Terms of Use , and Privacy Policy .\nSERVICES\nRedfin helps you home.\nWe’ve combined the industry’s most experienced agents with cutting-edge technology and financing from Rocket Mortgage®, to make your home buying experience seamless. With our top-rated app, you’ll see updated listings every two minutes and book same-day home tours to stay ahead of other buyers.\nFROM THE SITE\nThe Single-Family Rental Is On the Decline\nJanuary 29, 2026 A record 33% of U.S. rentals are in large multifamily buildings, while 31% are single-family homes—a record low. As recently as 2021, single-family homes made\nFROM THE SITE\nKey takeaways\nSelling your house may be the right option if you need the proceeds to purchase your next home or you plan to move permanently. Renting out your house may be the right option if you plan to live in your home again, have a low mortgage rate, or want to generate rental income. Your local housing and rental markets, financial situation, and long-term goals are major factors in deciding whether to sell or rent out your house. Deciding whether to sell or rent out your house can be complicated in today’s housing market.\nABOUT\nAbout Gavin\nI am a residential real estate broker serving Portland, Oregon and the surrounding areas. My clients love working with me for my honesty, integrity, and good communication. Real estate is more than just buying or selling a home, it’s about building authentic and lasting relationships between individuals, families, neighborhoods, and communities. My role as your agent includes facilitator, negotiator, advocate, advisor, and expert in the Portland Metro housing market.\nGavin's Listings & Sales\n$285,000\n900 NE 81st Ave #402, Portland, OR 97213\n$390,000\n4966 Evie Jean St, Salem, OR 97305\n$1,600,000\n1833 SE Exeter Dr, Portland, OR 97202\n4 beds · 4 baths · 4,788\n$1,400,000\n12035 SE Wintercress Ct, Happy Valley, OR 97086\n5 beds · 4 baths · 3,826\n$1,076,000\n4421 SW Melville Ave, Portland, OR 97239\n5 beds · 3 baths · 3,281\n(509) 219-9672\nguest+realtor+e836d552-b4ab-4e0c-9921-45e0e96d06f4@guest.myrealtor.app\nRedfin\nWA: 26023889, OR: 201103091\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nHonest. Informed. On Your Side in Portland Real Estate.\nTry another opening line\nYOUR INTRODUCTION\nServing Portland, Oregon and surrounding areas, I believe real estate is about more than transactions—it’s about shaping communities and creating meaningful relationships. I bring you experience as a certified Earth Advantage Broker, Energy Trust Ally, and ADU Specialist, with a passion for high efficiency homes and green technology. Whether buying, selling, or considering an ADU, I’ll be your advisor and advocate every step of the way.\nTry another introduction\n5 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Redfin · WA: 26023889, OR: 201103091 · WA, OR\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nPORTLAND, OR\nGavin Shettler\nGavin Shettler is an experienced Redfin real estate agent. Discover their reviews, listings, and bio on Redfin.\nView listings\nSERVICES\nPopular Searches Near Me\nCondos for sale near me Land for sale near me Open Houses near me Join us Become an Agent Get referrals Careers Find homes faster About us Why Redfin? Community Impact Inclusion Culture Press Investors Blog Real Estate News Find us Contact Us Help Center Advertise Subsidiaries Rent. ApartmentGuide Affiliated Business Rocket Close Rocket Mortgage Countries United States Canada Copyright: © 2026 Redfin. All rights reserved. Updated September 2025: By searching, you agree to the Terms of Use , and Privacy Policy .\nSERVICES\nRedfin helps you home.\nWe’ve combined the industry’s most experienced agents with cutting-edge technology and financing from Rocket Mortgage®, to make your home buying experience seamless. With our top-rated app, you’ll see updated listings every two minutes and book same-day home tours to stay ahead of other buyers.\nFROM THE SITE\nThe Single-Family Rental Is On the Decline\nJanuary 29, 2026 A record 33% of U.S. rentals are in large multifamily buildings, while 31% are single-family homes—a record low. As recently as 2021, single-family homes made\nFROM THE SITE\nKey takeaways\nSelling your house may be the right option if you need the proceeds to purchase your next home or you plan to move permanently. Renting out your house may be the right option if you plan to live in your home again, have a low mortgage rate, or want to generate rental income. Your local housing and rental markets, financial situation, and long-term goals are major factors in deciding whether to sell or rent out your house. Deciding whether to sell or rent out your house can be complicated in today’s housing market.\nABOUT\nAbout Gavin\nI am a residential real estate broker serving Portland, Oregon and the surrounding areas. My clients love working with me for my honesty, integrity, and good communication. Real estate is more than just buying or selling a home, it’s about building authentic and lasting relationships between individuals, families, neighborhoods, and communities. My role as your agent includes facilitator, negotiator, advocate, advisor, and expert in the Portland Metro housing market.\nGavin's Listings & Sales\n$285,000\n900 NE 81st Ave #402, Portland, OR 97213\n$390,000\n4966 Evie Jean St, Salem, OR 97305\n$1,600,000\n1833 SE Exeter Dr, Portland, OR 97202\n4 beds · 4 baths · 4,788\n$1,400,000\n12035 SE Wintercress Ct, Happy Valley, OR 97086\n5 beds · 4 baths · 3,826\n$1,076,000\n4421 SW Melville Ave, Portland, OR 97239\n5 beds · 3 baths · 3,281\n(509) 219-9672\nguest+realtor+e836d552-b4ab-4e0c-9921-45e0e96d06f4@guest.myrealtor.app\nRedfin\nWA: 26023889, OR: 201103091\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 900 NE 81st Ave #402, Portland, OR 97213 $285,000 STATUS UNCONFIRMED 4966 Evie Jean St, Salem, OR 97305 $390,000 STATUS UNCO",
+        "textLength": 458,
+        "stillHome": false
+      },
+      {
+        "label": "900 NE 81st Ave #402, Portland, OR 97213",
+        "opens": "Back Your client app PROPERTY PREVIEW 900 NE 81st Ave #402, Portland, OR 97213 $285,000 Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client data is changed. Home Listings S",
+        "textLength": 237,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "4966 Evie Jean St, Salem, OR 97305",
+        "opens": "Back Your client app PROPERTY PREVIEW 4966 Evie Jean St, Salem, OR 97305 $390,000 Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client data is changed. Home Listings Saved C",
+        "textLength": 231,
+        "stillHome": false
+      },
+      {
+        "label": "1833 SE Exeter Dr, Portland, OR 97202",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 1833 SE Exeter Dr, Portland, OR 97202 $1,600,000 4 beds · 4 baths 4,788 Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no clie",
+        "textLength": 272,
+        "stillHome": false
+      },
+      {
+        "label": "12035 SE Wintercress Ct, Happy Valley, OR 97086",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 12035 SE Wintercress Ct, Happy Valley, OR 97086 $1,400,000 5 beds · 4 baths 3,826 Save this home Request a showing → Layout preview only. Saved homes stay in this previe",
+        "textLength": 282,
+        "stillHome": false
+      },
+      {
+        "label": "4421 SW Melville Ave, Portland, OR 97239",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 4421 SW Melville Ave, Portland, OR 97239 $1,076,000 5 beds · 3 baths 3,281 Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no c",
+        "textLength": 275,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app PORTLAND, OR Gavin Shettler Gavin Shettler is an experienced Redfin real estate agent. Discover their reviews, listings, and bio on Redfin. View listings SERVICES Popular Searches Near Me Condos for ",
+        "textLength": 2832,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 900 NE 81st Ave #402, Portland, OR 97213 $285,000 STATUS UNCONFIRMED 4966 Evie Jean St, Salem, OR 97305 $390,000 STATUS UNCO",
+        "textLength": 458,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 5
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "900 NE 81st Ave #402, Portland, OR 97213",
+      "photos": 0,
+      "size": null
+    },
+    {
+      "title": "4966 Evie Jean St, Salem, OR 97305",
+      "photos": 0,
+      "size": null
+    },
+    {
+      "title": "1833 SE Exeter Dr, Portland, OR 97202",
+      "photos": 1,
+      "first": "https://ssl.cdn-redfin.com/photo/84/ismphoto/053/genIsm.143226053_0.jpg",
+      "size": {
+        "status": 200,
+        "width": 640,
+        "height": 350,
+        "type": "jpg",
+        "bytes": 50397
+      }
+    },
+    {
+      "title": "12035 SE Wintercress Ct, Happy Valley, OR 97086",
+      "photos": 1,
+      "first": "https://ssl.cdn-redfin.com/photo/84/ismphoto/197/genIsm.520010197_0.jpg",
+      "size": {
+        "status": 200,
+        "width": 640,
+        "height": 350,
+        "type": "jpg",
+        "bytes": 37231
+      }
+    },
+    {
+      "title": "4421 SW Melville Ave, Portland, OR 97239",
+      "photos": 1,
+      "first": "https://ssl.cdn-redfin.com/photo/84/ismphoto/620/genIsm.106733620_2.jpg",
+      "size": {
+        "status": 200,
+        "width": 640,
+        "height": 350,
+        "type": "jpg",
+        "bytes": 42969
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+      "status": 429,
+      "finalUrl": "https://ratelimited.redfin.com/",
+      "title": "Are You a Robot? | Redfin",
+      "textLength": 402,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "There seems to be an issue...\nOur usage behavior algorithm thinks you might be a robot.\n\nEnsure you are accessing Redfin.com according to our terms of usage.\n\nTips:\nIf you are using a VPN, pause it while browsing Redfin.com.\nMake sure you have Javascript enabled in your web browser.\nEnsure your browser is up to date.\nPlease email techsupport@redfin.com for help and include the following information:",
+      "challenge": false,
+      "screenshot": "redfin-gavin-shettler-source-0.png"
+    },
+    {
+      "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+      "status": 429,
+      "finalUrl": "https://ratelimited.redfin.com/",
+      "title": "Are You a Robot? | Redfin",
+      "textLength": 402,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "There seems to be an issue...\nOur usage behavior algorithm thinks you might be a robot.\n\nEnsure you are accessing Redfin.com according to our terms of usage.\n\nTips:\nIf you are using a VPN, pause it while browsing Redfin.com.\nMake sure you have Javascript enabled in your web browser.\nEnsure your browser is up to date.\nPlease email techsupport@redfin.com for help and include the following information:",
+      "challenge": false,
+      "screenshot": "redfin-gavin-shettler-source-1.png"
+    }
+  ],
+  "wallMs": 47234,
+  "window": {
+    "startedAt": "2026-10-08T06:26:36.156Z",
+    "endedAt": "2026-10-08T06:27:23.390Z"
+  }
+}

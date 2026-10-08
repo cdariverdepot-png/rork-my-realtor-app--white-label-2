@@ -23,6 +23,7 @@ import { bustedUri } from "@/lib/imageUri";
 import EditableText from "./EditableText";
 import SectionLabel from "./SectionLabel";
 import PressableScale from "./PressableScale";
+import { specLine } from "@/lib/listingSpecs";
 
 const { width: W } = Dimensions.get("window");
 const CARD_W = W * 0.84;
@@ -122,8 +123,11 @@ const ListingCard = React.memo(function ListingCard({
       {/* Slim editorial copy block — paper, hairline, no extra borders */}
       <View style={styles.body}>
         <Text style={[styles.neighborhood, { color: theme.accent.deep }]} numberOfLines={1}>
-          {item.neighborhood.toUpperCase()}
+          {item.ownership === "featured" ? `FEATURED${item.neighborhood ? ` · ${item.neighborhood.toUpperCase()}` : ""}` : item.neighborhood.toUpperCase()}
         </Text>
+        {item.ownership === "featured" && item.listingOffice ? (
+          <Text style={styles.courtesy} numberOfLines={1}>Listing courtesy of {item.listingOffice}</Text>
+        ) : null}
         <EditableText
           editing={editing}
           value={item.title}
@@ -134,7 +138,7 @@ const ListingCard = React.memo(function ListingCard({
         />
         <View style={styles.metaRow}>
           <Text style={styles.specs}>
-            {item.beds} bd · {item.baths} ba · {item.sqft}
+            {specLine(item)}
           </Text>
           <View style={[styles.arrow, { backgroundColor: theme.band.deep }]}>
             <ArrowUpRight size={13} color={theme.onBand.text} strokeWidth={2} />
@@ -274,6 +278,14 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 14,
     justifyContent: "space-between",
+  },
+  courtesy: {
+    fontFamily: fonts.sansMedium,
+    fontSize: 11,
+    color: brand.ink,
+    opacity: 0.6,
+    marginTop: -2,
+    marginBottom: 6,
   },
   neighborhood: {
     fontFamily: fonts.sansMedium,

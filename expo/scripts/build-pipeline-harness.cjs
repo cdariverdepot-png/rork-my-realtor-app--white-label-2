@@ -9,6 +9,7 @@ const { requestKey } = require('./listing-compatibility.cjs');
 
 const functionsRoot = path.resolve(__dirname, '../../supabase/functions');
 const compile = source => ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+const compiledBundles = new Map();
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /** A fetch that serves recorded pages (and 404s anything unrecorded) after `latencyMs`. */
@@ -53,7 +54,7 @@ function replayNetwork(fixture, { latencyMs = 25, aiLatencyMs = 50, profile } = 
 }
 
 /** Loads the single-file Edge Function with Supabase and the network replaced by fixtures. */
-function loadBuildFunction(bundleSource, { fetch, sources, guest = false }) {
+function loadBuildFunction(bundleSource, { fetch, sources, guest = false, env: envOverride }) {
   let handler;
   const saved = [];
   const admin = {
@@ -64,8 +65,10 @@ function loadBuildFunction(bundleSource, { fetch, sources, guest = false }) {
       : { select: () => ({ eq: () => ({ single: async () => ({ data: { sources, evidence: [], draft: {}, status: 'collecting' } }) }) }),
           update: value => ({ eq: async () => { saved.push(value); return { error: null }; } }) },
   };
-  const env = name => name.startsWith('LISTING_RENDER') ? undefined : 'fixture';
-  const code = compile(bundleSource.replace(/^import .*createClient.*;\r?\n/, ''));
+  // Every configured value reads as 'fixture'; a test can override individual names (undefined = unset).
+  const env = name => envOverride && name in envOverride ? envOverride[name] : name.startsWith('LISTING_RENDER') ? undefined : 'fixture';
+  let code = compiledBundles.get(bundleSource);
+  if (!code) { code = compile(bundleSource.replace(/^import .*createClient.*;\r?\n/, '')); compiledBundles.set(bundleSource, code); }
   new Function('Deno', 'createClient', 'fetch', code)({
     env: { get: env }, resolveDns: async (_, type) => type === 'A' ? ['8.8.8.8'] : [], serve: fn => { handler = fn; },
   }, () => admin, fetch);
@@ -97,11 +100,11 @@ async function readEventStream(response, onEvent) {
 }
 
 /** Runs one build request; returns elapsed time, response body and (when streamed) the events. */
-async function runBuild(bundleSource, fixture, { stream = false, connected = [], latencyMs, aiLatencyMs, profile } = {}) {
+async function runBuild(bundleSource, fixture, { stream = false, connected = [], latencyMs, aiLatencyMs, profile, env } = {}) {
   const seed = fixture.seeds[0];
   const sources = [{ id: 'website', kind: 'url', label: 'Website', uri: seed, status: 'queued' }];
   const network = replayNetwork(fixture, { latencyMs, aiLatencyMs, profile: profile ?? defaultProfile() });
-  const { handler, saved } = loadBuildFunction(bundleSource, { fetch: network.fetch, sources });
+  const { handler, saved } = loadBuildFunction(bundleSource, { fetch: network.fetch, sources, env });
   const started = Date.now();
   const response = await handler(new Request('https://fixture.invalid/functions/v1/analyze-realtor-build', {
     method: 'POST',

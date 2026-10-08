@@ -1,0 +1,115 @@
+[
+  {
+    "realtorId": "cbd14e65-ba35-4afe-a8d7-4bceec441ec7",
+    "createdAt": "2026-10-08 06:30:20.262575+00",
+    "sources": [
+      {
+        "id": "source-har6xf",
+        "url": "https://www.thebattlegroup.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "thebattlegroup",
+            "arlington",
+            "virginia"
+          ],
+          "phrases": [
+            "thebattlegroup",
+            "realestateinarlingtonvirginia",
+            "homesforsalearlingtonva"
+          ]
+        },
+        "nextSyncAt": 1791448228648,
+        "connectedAt": 1791441028648,
+        "listingCount": 6,
+        "submittedUrl": "https://www.thebattlegroup.com/",
+        "inventoryUrls": [
+          "https://thebattlegroup.com/"
+        ],
+        "lastCheckedAt": 1791441028648
+      }
+    ],
+    "listings": [
+      {
+        "title": "2165 CABOTS POINT LN RESTON",
+        "price": "$849,900",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/2165-CABOTS-POINT-LN-RESTON-VA-20191/VAFX2341822/530/",
+        "photos": 40,
+        "descriptionLength": 2692,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1530 KEY BLVD #520 ARLINGTON",
+        "price": "$759,900",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1530-KEY-BLVD-520-ARLINGTON-VA-22209/VAAR2079436/530/",
+        "photos": 26,
+        "descriptionLength": 1480,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1111 19TH ST N #2110 ARLINGTON",
+        "price": "$699,900",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1111-19TH-ST-N-2110-ARLINGTON-VA-22209/VAAR2069906/530/",
+        "photos": 31,
+        "descriptionLength": 1279,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "900 N STAFFORD ST #1805 ARLINGTON",
+        "price": "$625,000",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1805-ARLINGTON-VA-22203/VAAR2079614/530/",
+        "photos": 33,
+        "descriptionLength": 2135,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "900 N STAFFORD ST #1719 ARLINGTON",
+        "price": "$575,000",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1719-ARLINGTON-VA-22203/VAAR2079526/530/",
+        "photos": 36,
+        "descriptionLength": 1786,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "888 N QUINCY ST #1105 ARLINGTON",
+        "price": "$482,500",
+        "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/888-N-QUINCY-ST-1105-ARLINGTON-VA-22203/VAAR2079448/530/",
+        "photos": 40,
+        "descriptionLength": 1762,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

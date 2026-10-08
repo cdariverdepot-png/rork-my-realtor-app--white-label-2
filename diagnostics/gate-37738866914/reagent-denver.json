@@ -1,0 +1,61 @@
+{
+  "id": "reagent-denver",
+  "url": "https://www.reagentdenver.com/",
+  "category": "edge",
+  "timeline": [
+    {
+      "at": 57,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1065,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website\nWriting your profile and app copy"
+    },
+    {
+      "at": 1266,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading your website\nWriting your profile and app copy"
+    },
+    {
+      "at": 2070,
+      "screen": "Building your app\nBUILD STOPPED\nYour listings could not be read from this page\nReading your website\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "reagent-denver-00-url.png",
+    "reagent-denver-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 5,
+    "text": []
+  },
+  "submittedAt": 4167,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nYour listings could not be read from this page\nReading your website\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.reagentdenver.com\nBuilding your app\nBUILD STOPPED\nYour listings could not be read from this page\nReading your website\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.reagentdenver.com/",
+      "status": 403,
+      "finalUrl": "https://www.reagentdenver.com/",
+      "title": "Just a moment...",
+      "textLength": 269,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "www.reagentdenver.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a4740e0a2fe9e3a4\nPerformance and Security by Cloudflare\nPrivacy",
+      "challenge": true,
+      "screenshot": "reagent-denver-source-0.png"
+    }
+  ],
+  "wallMs": 429705,
+  "window": {
+    "startedAt": "2026-10-08T09:10:46.468Z",
+    "endedAt": "2026-10-08T09:17:56.173Z"
+  }
+}

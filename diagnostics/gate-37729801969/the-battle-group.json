@@ -1,0 +1,588 @@
+{
+  "id": "the-battle-group",
+  "url": "https://www.thebattlegroup.com/",
+  "category": "custom",
+  "timeline": [
+    {
+      "at": 54,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1661,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1863,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading linked pages · 0 of 2\nReading listing details · 0 of 6"
+    },
+    {
+      "at": 3670,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading linked pages · 1 of 2\nReading listing details · 0 of 6"
+    },
+    {
+      "at": 4072,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nReading listing details · 0 of 6\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 5881,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nReading listing details · 2 of 6\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6082,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nReading listing details · 3 of 6\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6485,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nReading listing details · 4 of 6\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6686,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nReading listing details · 5 of 6\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6887,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nFull details weren’t available for these 6 listings\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 7289,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nFull details weren’t available for these 6 listings\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaving 6 listings"
+    },
+    {
+      "at": 7490,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nFull details weren’t available for these 6 listings\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings"
+    },
+    {
+      "at": 8295,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nFull details weren’t available for these 6 listings\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Shawn Battle · Arlington, VA"
+    },
+    {
+      "at": 8497,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 441,
+      "totalMs": 7257,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 100
+        },
+        {
+          "kind": "listings",
+          "host": "thebattlegroup.com",
+          "pages": 1,
+          "found": 0,
+          "at": 1209
+        },
+        {
+          "kind": "listings",
+          "host": "thebattlegroup.com",
+          "pages": 1,
+          "found": 6,
+          "at": 1231
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 6,
+          "succeeded": 0,
+          "at": 1231
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 6,
+          "succeeded": 0,
+          "at": 5103
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 6,
+          "succeeded": 0,
+          "at": 5263
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 6,
+          "succeeded": 0,
+          "at": 5407
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 6,
+          "succeeded": 0,
+          "at": 5765
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 6,
+          "succeeded": 0,
+          "at": 6034
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 6,
+          "total": 6,
+          "succeeded": 0,
+          "at": 6225
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 6,
+          "at": 6226
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 6,
+          "at": 6564
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 6,
+          "at": 6726
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-har6xf",
+            "url": "https://www.thebattlegroup.com/",
+            "submittedUrl": "https://www.thebattlegroup.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://thebattlegroup.com/"
+            ],
+            "connectedAt": 1791437618529,
+            "lastCheckedAt": 1791437618529,
+            "nextSyncAt": 1791444818529,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 6
+          },
+          "imported": 6,
+          "warning": "6 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 6,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-vs1a7m",
+              "title": "2165 CABOTS POINT LN RESTON View Details",
+              "neighborhood": "",
+              "price": "$849,900",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg"
+              ],
+              "image": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/2165-CABOTS-POINT-LN-RESTON-VA-20191/VAFX2341822/530/",
+              "lastRefreshedAt": 1791437612402,
+              "lastSyncAttemptAt": 1791437612402,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791444812402,
+              "updatedAt": 1791437612402,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791437612402
+            },
+            {
+              "id": "listing-1u26qxp",
+              "title": "1530 KEY BLVD #520 ARLINGTON View Details",
+              "neighborhood": "",
+              "price": "$759,900",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg"
+              ],
+              "image": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1530-KEY-BLVD-520-ARLINGTON-VA-22209/VAAR2079436/530/",
+              "lastRefreshedAt": 1791437612402,
+              "lastSyncAttemptAt": 1791437612402,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791444812402,
+              "updatedAt": 1791437612402,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791437612402
+            },
+            {
+              "id": "listing-laasj3",
+              "title": "1111 19TH ST N #2110 ARLINGTON View Details",
+              "neighborhood": "",
+              "price": "$699,900",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg"
+              ],
+              "image": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1111-19TH-ST-N-2110-ARLINGTON-VA-22209/VAAR2069906/530/",
+              "lastRefreshedAt": 1791437612402,
+              "lastSyncAttemptAt": 1791437612402,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791444812402,
+              "updatedAt": 1791437612402,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791437612402
+            },
+            {
+              "id": "listing-1pdiabm",
+              "title": "900 N STAFFORD ST #1805 ARLINGTON View Details",
+              "neighborhood": "",
+              "price": "$625,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg"
+              ],
+              "image": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1805-ARLINGTON-VA-22203/VAAR2079614/530/",
+              "lastRefreshedAt": 1791437612402,
+              "lastSyncAttemptAt": 1791437612402,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791444812402,
+              "updatedAt": 1791437612402,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791437612402
+            },
+            {
+              "id": "listing-e4pm16",
+              "title": "900 N STAFFORD ST #1719 ARLINGTON View Details",
+              "neighborhood": "",
+              "price": "$575,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg"
+              ],
+              "image": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1719-ARLINGTON-VA-22203/VAAR2079526/530/",
+              "lastRefreshedAt": 1791437612402,
+              "lastSyncAttemptAt": 1791437612402,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791444812402,
+              "updatedAt": 1791437612402,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791437612402
+            },
+            {
+              "id": "listing-2qqg5v",
+              "title": "888 N QUINCY ST #1105 ARLINGTON View Details",
+              "neighborhood": "",
+              "price": "$482,500",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg"
+              ],
+              "image": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/888-N-QUINCY-ST-1105-ARLINGTON-VA-22203/VAAR2079448/530/",
+              "lastRefreshedAt": 1791437612402,
+              "lastSyncAttemptAt": 1791437612402,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791444812402,
+              "updatedAt": 1791437612402,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791437612402
+            }
+          ],
+          "timings": {
+            "details": 4994,
+            "listings": 6126,
+            "save": 162,
+            "total": 6726
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "the-battle-group-00-url.png",
+    "the-battle-group-01-review.png",
+    "the-battle-group-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 2926,
+  "reviewMs": 8497,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead 2 linked pages\nFull details weren’t available for these 6 listings\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Shawn Battle · Arlington, VA",
+  "reviewText": "Back\nAPP BUILDER\nwww.thebattlegroup.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nARLINGTON, VA\nHomes for Sale Arlington VA\nWelcome to The Battle Group, led by Shawn Battle—your trusted partner for buying and selling homes across Arlington and the Northern Virginia region.\nView listings\nFROM THE SITE\nOur Stories\n--> We sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound --> All Stories --> All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ([our-stories-count type=\"active\"] Videos) Pending Stories ([our-stories-count type=\"pending\"] Videos) Sold Stories ([our-stories-count type=\"sold\"] Videos) -->\nABOUT\nWho We Are\nFacebook Twitter Instagram Youtube Sound --> Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.\nOur Listings\n$849,900\n2165 CABOTS POINT LN RESTON View Details\n$759,900\n1530 KEY BLVD #520 ARLINGTON View Details\n$699,900\n1111 19TH ST N #2110 ARLINGTON View Details\n$625,000\n900 N STAFFORD ST #1805 ARLINGTON View Details\n$575,000\n900 N STAFFORD ST #1719 ARLINGTON View Details\n$482,500\n888 N QUINCY ST #1105 ARLINGTON View Details\nFROM THE SITE\nThe Shawn & Matt Show\nEpisodes + View All Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video --> --> --> <!--\n+1.703.999.8108\nShawn@TheBattleGroup.com\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nArlington Real Estate, Tailored For You\nTry another opening line\nYOUR INTRODUCTION\nThe Battle Group is dedicated to making your real estate experience effortless, transparent, and successful. Led by Shawn Battle, our team’s commitment goes beyond simple transactions—we specialize in telling every home’s unique story and utilizing impactful marketing to stand out in the busy Arlington and DC market. Whether you’re a first-time buyer, a seasoned investor, or making a major move, we provide personal attention and proven strategies from start to finish.\nTry another introduction\n6 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\n▸ Brokerage & license (optional)\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nARLINGTON, VA\nHomes for Sale Arlington VA\nWelcome to The Battle Group, led by Shawn Battle—your trusted partner for buying and selling homes across Arlington and the Northern Virginia region.\nView listings\nFROM THE SITE\nOur Stories\n--> We sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound --> All Stories --> All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ([our-stories-count type=\"active\"] Videos) Pending Stories ([our-stories-count type=\"pending\"] Videos) Sold Stories ([our-stories-count type=\"sold\"] Videos) -->\nABOUT\nWho We Are\nFacebook Twitter Instagram Youtube Sound --> Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.\nOur Listings\n$849,900\n2165 CABOTS POINT LN RESTON View Details\n$759,900\n1530 KEY BLVD #520 ARLINGTON View Details\n$699,900\n1111 19TH ST N #2110 ARLINGTON View Details\n$625,000\n900 N STAFFORD ST #1805 ARLINGTON View Details\n$575,000\n900 N STAFFORD ST #1719 ARLINGTON View Details\n$482,500\n888 N QUINCY ST #1105 ARLINGTON View Details\nFROM THE SITE\nThe Shawn & Matt Show\nEpisodes + View All Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video Ts Video --> --> --> <!--\n+1.703.999.8108\nShawn@TheBattleGroup.com\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings CURATED FOR YOU View all STATUS UNCONFIRMED 2165 CABOTS POINT LN RESTON View Details $849,900 STATUS UNCONFIRMED 1530 KEY BLVD #520 ARLINGTON View Details $759,900 STATUS UNCON",
+        "textLength": 535,
+        "stillHome": false
+      },
+      {
+        "label": "2165 CABOTS POINT LN RESTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 2165 CABOTS POINT LN RESTON View Details $849,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client da",
+        "textLength": 267,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "1530 KEY BLVD #520 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 1530 KEY BLVD #520 ARLINGTON View Details $759,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client d",
+        "textLength": 268,
+        "stillHome": false
+      },
+      {
+        "label": "1111 19TH ST N #2110 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 1111 19TH ST N #2110 ARLINGTON View Details $699,900 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no client",
+        "textLength": 270,
+        "stillHome": false
+      },
+      {
+        "label": "900 N STAFFORD ST #1805 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 900 N STAFFORD ST #1805 ARLINGTON View Details $625,000 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no cli",
+        "textLength": 273,
+        "stillHome": false
+      },
+      {
+        "label": "900 N STAFFORD ST #1719 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 900 N STAFFORD ST #1719 ARLINGTON View Details $575,000 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no cli",
+        "textLength": 273,
+        "stillHome": false
+      },
+      {
+        "label": "888 N QUINCY ST #1105 ARLINGTON View Details",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 1 photos 888 N QUINCY ST #1105 ARLINGTON View Details $482,500 0 beds · 0 baths Save this home Request a showing → Layout preview only. Saved homes stay in this preview; no clien",
+        "textLength": 271,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app ARLINGTON, VA Homes for Sale Arlington VA Welcome to The Battle Group, led by Shawn Battle—your trusted partner for buying and selling homes across Arlington and the Northern Virginia region. View li",
+        "textLength": 1736,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings CURATED FOR YOU View all STATUS UNCONFIRMED 2165 CABOTS POINT LN RESTON View Details $849,900 STATUS UNCONFIRMED 1530 KEY BLVD #520 ARLINGTON View Details $759,900 STATUS UNCON",
+        "textLength": 535,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 6
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "2165 CABOTS POINT LN RESTON View Details",
+      "photos": 1,
+      "first": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 959,
+        "type": "jpg",
+        "bytes": 289253
+      }
+    },
+    {
+      "title": "1530 KEY BLVD #520 ARLINGTON View Details",
+      "photos": 1,
+      "first": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 962,
+        "type": "jpg",
+        "bytes": 354595
+      }
+    },
+    {
+      "title": "1111 19TH ST N #2110 ARLINGTON View Details",
+      "photos": 1,
+      "first": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 1080,
+        "type": "jpg",
+        "bytes": 225950
+      }
+    },
+    {
+      "title": "900 N STAFFORD ST #1805 ARLINGTON View Details",
+      "photos": 1,
+      "first": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 959,
+        "type": "jpg",
+        "bytes": 130959
+      }
+    },
+    {
+      "title": "900 N STAFFORD ST #1719 ARLINGTON View Details",
+      "photos": 1,
+      "first": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 960,
+        "type": "jpg",
+        "bytes": 136309
+      }
+    },
+    {
+      "title": "888 N QUINCY ST #1105 ARLINGTON View Details",
+      "photos": 1,
+      "first": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 962,
+        "type": "jpg",
+        "bytes": 146140
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.thebattlegroup.com/",
+      "status": 200,
+      "finalUrl": "https://thebattlegroup.com/",
+      "title": "Real Estate in Arlington Virginia | Homes for Sale Arlington VA",
+      "textLength": 2807,
+      "priceCount": 15,
+      "uniquePrices": 6,
+      "propertyLinkCount": 8,
+      "sample": "HOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n703.999.8108\nHOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n \n703.999.8108\nReal Estate in Arlington VA\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nVIDEO\nMARKETING\n\nWe sell your home by telling your home's story through unique 4K video.\n\nSHARE\nWHO\nWE\nARE\nSHAWN BATTLE\nTEAM LEAD\nMATT LEIGHTON\nREALTOR\nPATRICIA GIL\nREALTOR\nMIGUEL MOSCOL\nREALTOR\nMIKE LANCZYCKI\nREALTOR\nALISON PIERRE\nCONTRACT COORDINATOR\nCHERRY LANCISO\nTEAM ASSISTANT\n\nWe are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads. Our goal is to get you the best contract possible backed up with a smooth transaction from contract to close. Our team of real estat",
+      "challenge": false,
+      "screenshot": "the-battle-group-source-0.png"
+    },
+    {
+      "url": "https://thebattlegroup.com/",
+      "status": 200,
+      "finalUrl": "https://thebattlegroup.com/",
+      "title": "Real Estate in Arlington Virginia | Homes for Sale Arlington VA",
+      "textLength": 2807,
+      "priceCount": 15,
+      "uniquePrices": 6,
+      "propertyLinkCount": 8,
+      "sample": "HOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n703.999.8108\nHOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n \n703.999.8108\nReal Estate in Arlington VA\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nVIDEO\nMARKETING\n\nWe sell your home by telling your home's story through unique 4K video.\n\nSHARE\nWHO\nWE\nARE\nSHAWN BATTLE\nTEAM LEAD\nMATT LEIGHTON\nREALTOR\nPATRICIA GIL\nREALTOR\nMIGUEL MOSCOL\nREALTOR\nMIKE LANCZYCKI\nREALTOR\nALISON PIERRE\nCONTRACT COORDINATOR\nCHERRY LANCISO\nTEAM ASSISTANT\n\nWe are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads. Our goal is to get you the best contract possible backed up with a smooth transaction from contract to close. Our team of real estat",
+      "challenge": false,
+      "screenshot": "the-battle-group-source-1.png"
+    }
+  ],
+  "wallMs": 50720,
+  "window": {
+    "startedAt": "2026-10-08T05:33:28.781Z",
+    "endedAt": "2026-10-08T05:34:19.501Z"
+  }
+}

@@ -360,3 +360,109 @@ test('split structured house records retain facts only for the matching property
  const result=discovery.enrichListingFromPage(item,page,new URL(item.sourceUrl));
  assert.equal(result.facts['Year Built'],'1986');
 });
+
+// Repair campaign stage 1 (synthetic contract): property details are read in bounded jobs. The
+// inventory job saves every listing and reads the first details; each detail job reads the next
+// batch for the same import. Every listing is attempted exactly once and each batch is saved.
+test('a large import saves its inventory first, then reads every listing’s details in bounded jobs', async () => {
+  const scope = '11111111-1111-1111-1111-111111111111';
+  const { INVENTORY_JOB_DETAILS, DETAIL_JOB_SIZE } = pure.load('refresh-listings/sourceHandler.ts');
+  const numbers = Array.from({ length: 30 }, (_, i) => 100 + i);
+  const pages = { [source.url]: html(numbers.map(n => home(n))) };
+  for (const n of numbers) pages[home(n).url] = html(home(n));
+  const rows = {};
+  const first = await endpoint({ body: { mode: 'connect', url: source.url }, pages, rows });
+  assert.equal(first.status, 200);
+  assert.equal(first.result.imported, 30, 'the whole inventory is saved by the first job');
+  assert.equal(first.result.detailsPending, 30 - INVENTORY_JOB_DETAILS);
+  const since = first.result.detailsSince;
+  const attempted = () => rows[scope + ':listings.v2'].value.items.filter(item => item.detailAttemptAt >= since).length;
+  assert.equal(rows[scope + ':listings.v2'].value.items.length, 30);
+  assert.equal(attempted(), INVENTORY_JOB_DETAILS);
+  assert.equal(first.result.warning, undefined, 'unread details are pending, not reported as unavailable');
+
+  const second = await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since }, pages, rows });
+  assert.equal(second.status, 200);
+  assert.equal(second.result.attempted, Math.min(DETAIL_JOB_SIZE, 30 - INVENTORY_JOB_DETAILS));
+  assert.equal(second.result.remaining, 0);
+  assert.equal(second.fetched, second.result.attempted + 1 /* robots.txt */, 'only this batch’s detail pages are read');
+  assert.equal(attempted(), 30, 'every listing was attempted exactly once across the jobs');
+
+  const third = await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since }, pages, rows });
+  assert.equal(third.result.attempted, 0, 'a finished import has nothing left to read');
+  assert.equal(third.fetched, 0);
+});
+
+test('a detail job needs the import it belongs to', async () => {
+  const result = await endpoint({ body: { mode: 'details', sourceId: 'source' } });
+  assert.equal(result.status, 400);
+  assert.equal(result.fetched, 0);
+});
+
+// Repair stage 4 (synthetic contract): a market feed never becomes the agent's inventory.
+test('a market page with none of the agent\'s own listings imports nothing and says why', async () => {
+  const office = n => ['Other Brokers Inc', 'Third Office Group', 'Fourth Homes Co', 'Fifth Realty'][n % 4];
+  const cards = [1, 2, 3, 4].map(n => `<div class="card"><a href="https://agent.example/property/${n}-elm"><img src="https://photos.example/${n}.jpg"><h3>${n} Elm St</h3><span>$${400 + n},000</span></a><p><span>Listing Office:</span> ${office(n)}</p></div>`).join('');
+  const page = `<html><head><title>Pine Realty</title></head><body>${cards}<div class="pagination"><a href="/?page=2">2</a><a href="/?page=900">900</a></div></body></html>`;
+  await assert.rejects(sources.readSource('https://agent.example/', fetchPages({ 'https://agent.example/': page })),
+    /many different brokerages.*none of the 4 we checked were\. Nothing was imported/);
+});
+
+test('saved listings keep their attribution and ownership label', () => {
+  const item = { id: 'x', title: '1 Elm St', sourceUrl: 'https://agent.example/property/1' };
+  const property = { title: '1 Elm St', description: '', price: '', beds: 0, baths: 0, sqft: '', neighborhood: '', image: '', images: [], sourceUrl: item.sourceUrl,
+    listingOffice: 'Other Brokers Inc', ownership: 'featured' };
+  const next = sync.applyObservation(item, { sourceUrl: item.sourceUrl, checkedAt: 5, property });
+  assert.equal(next.listingOffice, 'Other Brokers Inc');
+  assert.equal(next.ownership, 'featured');
+});
+
+test('the listing import retries its first page once after a timeout', async () => {
+  let calls = 0;
+  const pages = { [source.url]: html([home(), home(25)]) };
+  const result = await sources.readSource(source.url, async uri => {
+    if (uri === source.url && calls++ === 0) throw Error('Signal timed out.');
+    if (!(uri in pages)) throw Error('Cannot read page');
+    return { html: pages[uri], finalUrl: new URL(uri) };
+  }, undefined, async () => []);
+  assert.equal(calls, 2);
+  assert.equal(result.listings.length, 2);
+});
+
+// Repair stage 8 (synthetic contracts): "no listings" is a finished read; unreadable pages are a failure.
+test('a site that publishes no listings is reported as such, not as unreadable', async () => {
+  const result = await endpoint({ body: { mode: 'connect', url: 'https://empty.example/' }, pages: { 'https://empty.example/': '<h1>Welcome</h1><p>About our team.</p>' } });
+  assert.equal(result.status, 422);
+  assert.equal(result.result.code, 'no_listings');
+  assert.match(result.result.error, /couldn’t find any active listings on it/);
+});
+
+test('pages that could not be opened are unreadable, never evidence of an empty inventory', async () => {
+  const result = await endpoint({ body: { mode: 'connect', url: 'https://agent.example/' },
+    pages: { 'https://agent.example/': '<h1>Agent</h1><a href="/my-listings">My Listings</a>' } });
+  assert.equal(result.status, 422);
+  assert.equal(result.result.code, 'unreadable');
+  assert.match(result.result.error, /some of its pages could not be opened/);
+});
+
+// title-not-property, production job-split path (found by the final release gate, Oct 8 2026): listings
+// whose details are read by a later detail job must get their detail page's property name too, exactly as
+// the first job's listings do. Synthetic contract.
+test('title-not-property: detail jobs name price-titled listings from their own detail pages', async () => {
+  const scope = '11111111-1111-1111-1111-111111111111';
+  const numbers = Array.from({ length: 16 }, (_, i) => 200 + i);
+  const card = n => ({ ...home(n), name: '$350,000' });
+  const detailPage = n => `<html><head>${html({ ...card(n), address: { '@type': 'PostalAddress', streetAddress: `${n} Pine St`, addressLocality: 'Hope', addressRegion: 'ID', postalCode: '83836' } })}</head>` +
+    `<body><h1>${n} Pine St, Hope, ID 83836</h1><div class="property-description">${'A lake cabin with a dock and mountain views. '.repeat(4)}</div></body></html>`;
+  const pages = { [source.url]: html(numbers.map(card)) };
+  for (const n of numbers) pages[home(n).url] = detailPage(n);
+  const rows = {};
+  const first = await endpoint({ body: { mode: 'connect', url: source.url }, pages, rows });
+  assert.equal(first.status, 200);
+  const since = first.result.detailsSince;
+  assert.ok(first.result.detailsPending > 0, 'some details are left for a detail job');
+  await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since }, pages, rows });
+  const titles = rows[scope + ':listings.v2'].value.items.map(item => item.title);
+  assert.equal(titles.filter(title => /^\$/.test(title)).length, 0, titles.join(' | '));
+  assert.ok(titles.includes('215 Pine St, Hope, ID 83836'));
+});

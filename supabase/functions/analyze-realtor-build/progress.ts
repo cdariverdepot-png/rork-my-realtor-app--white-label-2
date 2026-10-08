@@ -16,6 +16,8 @@ export type ImportEvent =
   | { kind: "profile"; name?: string; city?: string; at: number }
   /** Listing discovery tallies: pages examined and distinct listings found so far. */
   | { kind: "listings"; host: string; pages: number; found: number; at: number }
+  /** Ownership scope: other brokerages' listings left out of a market feed, and other offices' listings featured on the site. */
+  | { kind: "scope"; excluded: number; featured: number; at: number }
   /** A browser render was requested because the public page needs one. */
   | { kind: "render"; host: string; state: "start" | "done" | "failed"; at: number };
 

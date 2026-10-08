@@ -1,0 +1,81 @@
+{
+  "id": "zillow-leland-reed",
+  "url": "https://www.zillow.com/profile/Leland-Reed",
+  "category": "third-party-profile",
+  "timeline": [
+    {
+      "at": 81,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 888,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1090,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1694,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Zillow\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2097,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 1 of 6"
+    },
+    {
+      "at": 2299,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 3 of 6"
+    },
+    {
+      "at": 2500,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 5 of 6"
+    },
+    {
+      "at": 2700,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nNo active listings were found on this page\nReading Zillow\nMatching your website’s design and imagery\nRead 6 linked pages\nIdentified your logo\nSorted 22 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3504,
+      "screen": "Building your app\nBUILD STOPPED\nNo active listings were found on this page\nReading Zillow\nMatching your website’s design and imagery\nRead 6 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "zillow-leland-reed-00-url.png",
+    "zillow-leland-reed-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 4026,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nNo active listings were found on this page\nReading Zillow\nMatching your website’s design and imagery\nRead 6 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.zillow.com/profile/Leland-Reed\nBuilding your app\nBUILD STOPPED\nNo active listings were found on this page\nReading Zillow\nMatching your website’s design and imagery\nRead 6 linked pages\nIdentified your logo\nSorted 22 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.zillow.com/profile/Leland-Reed",
+      "status": 403,
+      "finalUrl": "https://www.zillow.com/profile/Leland-Reed",
+      "title": "Access to this page has been denied",
+      "textLength": 106,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Press & Hold to confirm you are\na human (and not a bot).\nReference ID 20ae4aa3-c2f5-11f1-be8d-4a04470d4e99",
+      "challenge": false,
+      "screenshot": "zillow-leland-reed-source-0.png"
+    }
+  ],
+  "wallMs": 429491,
+  "window": {
+    "startedAt": "2026-10-08T08:42:05.261Z",
+    "endedAt": "2026-10-08T08:49:14.752Z"
+  }
+}

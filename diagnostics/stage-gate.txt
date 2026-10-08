@@ -1,0 +1,4 @@
+Stage gate requested Thu Oct  8 20:58:43 UTC 2026: live recheck after the detail-job title fix found by run 37840376601.
+justification: release gate recheck of the detail-job title fix before merging into main
+staging-ai: shared-key
+sites: realm-partners-idaho, katerina-sayles, the-battle-group

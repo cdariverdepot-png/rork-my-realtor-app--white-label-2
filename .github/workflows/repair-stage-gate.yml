@@ -1,0 +1,105 @@
+name: Repair campaign stage gate (staging functions + 25 sites)
+# Gate A: full regression suite and type check from the repair branch.
+# Gate B: deploy STAGING copies (analyze-realtor-build-staging, refresh-listings-staging; production
+# functions are untouched), build the branch's web app pointed at them, and run the same 25 sites
+# through the real setup import, one isolated owner-test session per site. Results are committed back.
+on:
+  push:
+    branches: [repair/compatibility-engine]
+    paths: [diagnostics/stage-gate.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF || 'xdcqjaodcvnlawqcunrr' }}
+      OUT_DIR: ${{ github.workspace }}/diag-out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: expo/pnpm-lock.yaml
+      - name: Install locked dependencies
+        working-directory: expo
+        run: pnpm install --frozen-lockfile
+      - name: Gate A - full regression suite
+        working-directory: expo
+        run: pnpm test
+      - name: Gate A - type check
+        working-directory: expo
+        run: pnpm exec tsc --noEmit
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: "Gate B - choose the sites (a sites line in stage-gate.txt selects ids; default all 25)"
+        run: |
+          node -e '
+            const fs = require("fs");
+            const all = [...JSON.parse(fs.readFileSync("diagnostics/sites-25.json", "utf8")),
+              ...(fs.existsSync("diagnostics/evaluation/sites.json") ? JSON.parse(fs.readFileSync("diagnostics/evaluation/sites.json", "utf8")) : [])];
+            const line = fs.readFileSync("diagnostics/stage-gate.txt", "utf8").split("\n").find(l => /^sites:/i.test(l));
+            const ids = line ? line.slice(6).split(",").map(s => s.trim()).filter(Boolean) : JSON.parse(fs.readFileSync("diagnostics/sites-25.json", "utf8")).map(s => s.id);
+            const sites = ids.map(id => all.find(s => s.id === id) ?? (() => { throw new Error("unknown site " + id); })());
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/gate-sites.json", JSON.stringify(sites));
+            console.log(sites.map(s => s.id).join(", "));'
+      - name: "Gate B - staging AI key policy (a staging-ai shared-key line lets staging use the existing OpenAI key, within its per-request limits)"
+        run: |
+          if grep -qi '^staging-ai: *shared-key' diagnostics/stage-gate.txt; then
+            supabase secrets set AI_STAGING_ALLOW_SHARED_KEY=1 --project-ref "$SUPABASE_PROJECT_REF"
+          fi
+      - name: Gate B - deploy staging copies of the importer functions
+        run: |
+          set -e
+          cp -r supabase/functions/analyze-realtor-build supabase/functions/analyze-realtor-build-staging
+          cp -r supabase/functions/refresh-listings supabase/functions/refresh-listings-staging
+          # Staging copies run under the staging AI policy (own key, hard per-request limits).
+          sed -i 's/= "production";/= "staging";/' supabase/functions/analyze-realtor-build-staging/deployment.ts supabase/functions/refresh-listings-staging/deployment.ts
+          grep -q '= "staging";' supabase/functions/analyze-realtor-build-staging/deployment.ts
+          grep -q '= "staging";' supabase/functions/refresh-listings-staging/deployment.ts
+          supabase functions deploy analyze-realtor-build-staging --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
+          supabase functions deploy refresh-listings-staging --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
+      - name: Gate B - build the branch web app against the staging functions
+        working-directory: expo
+        env:
+          EXPO_PUBLIC_FUNCTION_SUFFIX: '-staging'
+        run: pnpm exec expo export --platform web --clear
+      - name: Install browser
+        run: |
+          npm install --prefix "$RUNNER_TEMP/diag" --no-audit --no-fund playwright@1.55.0 image-size@2.0.2
+          "$RUNNER_TEMP/diag/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Gate B - AI budget plan (refuses the campaign without a justification and budget room)
+        run: |
+          mkdir -p "$OUT_DIR"
+          JUSTIFICATION="$(grep -i '^justification:' diagnostics/stage-gate.txt | head -1 | cut -d: -f2-)"
+          echo "CAMPAIGN_JUSTIFICATION=$JUSTIFICATION" >> "$GITHUB_ENV"
+          echo "CAMPAIGN_ID=gate-${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
+          (cd expo && CAMPAIGN_JUSTIFICATION="$JUSTIFICATION" node scripts/ai-budget.cjs plan --level D --sites "$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.env.RUNNER_TEMP + "/gate-sites.json","utf8")).length)')" --justification "$JUSTIFICATION")
+      - name: Gate B - 25 sites through the branch app (sequential, isolated sessions)
+        run: |
+          (cd expo && pnpm exec expo serve --port 8081 > "$RUNNER_TEMP/serve.log" 2>&1 &)
+          for i in $(seq 1 60); do curl -sf http://localhost:8081/ >/dev/null && break; sleep 2; done
+          APP_URL=http://localhost:8081 SITES="$(cat "$RUNNER_TEMP/gate-sites.json")" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
+      - name: Saved listings per site (read-only)
+        if: always()
+        run: node expo/scripts/diagnostic-saved-listings.cjs diag-out || true
+      - name: Commit results
+        if: always()
+        run: |
+          dest="diagnostics/gate-${GITHUB_RUN_ID}"
+          mkdir -p "$dest" && cp -r diag-out/* "$dest"/ || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics && git commit -m "Stage gate results ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          # diagnostics/ai-ledger.jsonl travels with the results, so daily totals accumulate across runs.
+          for i in 1 2 3; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && break; sleep 5; done

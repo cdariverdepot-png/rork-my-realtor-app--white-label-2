@@ -1,12 +1,22 @@
 import { discoverListings, describeListingArchitecture, collectInventoryLinks, extractListingsFromPage, enrichPublicProperty, type DiscoveredListing, type DiscoveryProgress, type ListingDiscoveryMeta, type FetchHtml, type SelectInventoryLinks } from "../analyze-realtor-build/listingDiscovery.ts";
 import { applyObservation, observeListing, type SyncListing } from "./sync.ts";
-import { normalizePublicPage, selectInventoryLinks } from "./normalizePage.ts";
+import { normalizePublicPage, selectInventoryLinks, type pageAi } from "./normalizePage.ts";
 
 export type ListingSource = {
   id: string; url: string; submittedUrl: string; kind: string; inventoryUrls: string[];
+  /** What the site published about itself; detail jobs use it to label ownership. */
+  identity?: { phrases: string[]; words: string[] };
   connectedAt: number; lastCheckedAt?: number; lastCompleteSyncAt?: number; nextSyncAt: number;
   state: "connected" | "unavailable"; error?: string; failures?: number; listingCount: number;
 };
+/**
+ * Why a source produced no listings. "no_listings": the pages were read and publish no listings (a site
+ * without inventory is not a failure). "unreadable": pages failed or need a browser. "market_only": only
+ * other brokerages' listings were found.
+ */
+export class SourceReadError extends Error {
+  constructor(message: string, readonly code: "no_listings" | "unreadable" | "market_only") { super(message); this.name = "SourceReadError"; }
+}
 export type SourceInventory = { source: ListingSource; listings: DiscoveredListing[]; complete: boolean; meta: ListingDiscoveryMeta };
 const TWO_HOURS = 7_200_000;
 const key = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -31,7 +41,8 @@ export function isPropertyUrl(raw: string) {
 
 /** Connect the inventory behind an observed public URL, rather than bookmarking one home. */
 export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: ListingSource,
-  selectLinks: SelectInventoryLinks = selectInventoryLinks, renderPage?: FetchHtml, onProgress?: (event: DiscoveryProgress) => void): Promise<SourceInventory> {
+  selectLinks: SelectInventoryLinks = selectInventoryLinks, renderPage?: FetchHtml, onProgress?: (event: DiscoveryProgress) => void,
+  detailBudget?: number, normalizePage: ReturnType<typeof pageAi>["normalizePublicPage"] = normalizePublicPage): Promise<SourceInventory> {
   const submittedUrl = normalizedUrl(raw);
   const pages = new Map<string, Promise<Awaited<ReturnType<FetchHtml>>>>();
   const deadline = Date.now() + 45_000;
@@ -43,7 +54,13 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     return pages.get(cacheKey)!;
   };
   let uri = existing?.url ?? submittedUrl;
-  const firstPage = await cachedFetch(uri);
+  // One retry after a transient failure (timeout, rate limit, overloaded server) on the first page.
+  const firstPage = await cachedFetch(uri).catch(async error => {
+    if (!/timed? ?out|aborted|returned (?:408|429|50[0234])\b|error sending request|connection (?:reset|closed|refused)/i.test(error instanceof Error ? error.message : String(error))) throw error;
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    pages.delete(`${uri}|false`);
+    return cachedFetch(uri);
+  });
   const firstUrl = firstPage.finalUrl;
   const firstArchitecture = describeListingArchitecture(firstPage.html, firstPage.finalUrl);
   const firstProperties = extractListingsFromPage(firstPage.html, firstPage.finalUrl, firstArchitecture.attempts);
@@ -75,7 +92,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
     if (associated) uri = associated;
     else directProperty = await Promise.all(original.map(async item=>{try{return await enrichPublicProperty(item,cachedFetch,page);}catch{return item;}}));
   }
-  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks, normalizePage: normalizePublicPage, renderPage, onProgress });
+  const discovery = directProperty?.length ? { listings: directProperty, meta: { visited: [firstUrl.toString()], hops: 0, found: directProperty.length, maxDepth: 0, inventoryUrls: [], outcome: "found", coverage: "showcase", compatibility: { version: 1, pages: [firstArchitecture] } } as ListingDiscoveryMeta } : await discoverListings([uri], cachedFetch, { maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, detailBudget, selectLinks, normalizePage, renderPage, onProgress });
   // Empty is trustworthy only when the known inventory explicitly reports zero properties.
   let explicitEmpty = false;
   if (existing && !discovery.listings.length && !discovery.meta.failed?.length) {
@@ -86,13 +103,21 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       } catch { /* disappearance or blocked pages cannot establish sold status */ }
     }
   }
-  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new Error("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.");
-  if (!discovery.listings.length && !explicitEmpty) throw new Error("We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.");
+  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new SourceReadError("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.", "unreadable");
+  const excludedOtherOffice = discovery.meta.scope?.excludedOtherOffice ?? 0;
+  if (!discovery.listings.length && !explicitEmpty && excludedOtherOffice) throw new SourceReadError(`That page shows homes listed by many different brokerages (a market search), not only yours. We import only listings attributed to you or your office, and none of the ${excludedOtherOffice} we checked were. Nothing was imported. Paste the page that shows your own listings.`, "market_only");
+  if (!discovery.listings.length && !explicitEmpty) {
+    // Pages that failed or were blocked are not evidence that the site has no listings.
+    const unreadable = (discovery.meta.failed?.length ?? 0) > 0 || (discovery.meta.obstacles?.length ?? 0) > 0;
+    if (unreadable) throw new SourceReadError("We couldn’t read your listings from that page: some of its pages could not be opened. Try pasting the page where all of your active listings are shown. The page must open without signing in.", "unreadable");
+    throw new SourceReadError("We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.", "no_listings");
+  }
   const now = Date.now();
   const source: ListingSource = { ...existing, id: existing?.id ?? `source-${hash(uri)}`, url: uri, submittedUrl: existing?.submittedUrl ?? submittedUrl,
     kind: detectSourceKind(uri), inventoryUrls: [...new Set([...discovery.meta.inventoryUrls ?? [], ...existing?.inventoryUrls ?? []])].filter(u => !isPropertyUrl(u) && !(new URL(u).hostname === "www.idxhome.com" && new URL(u).pathname.startsWith("/api/kestrel/"))),
     connectedAt: existing?.connectedAt ?? now, lastCheckedAt: now, nextSyncAt: now + TWO_HOURS,
-    state: "connected", error: undefined, failures: 0, listingCount: discovery.listings.length };
+    state: "connected", error: undefined, failures: 0, listingCount: discovery.listings.length,
+    ...(discovery.meta.identity ? { identity: discovery.meta.identity } : {}) };
   const inventoryComplete = discovery.meta.inventoryStatus === "inventory_complete" || (!discovery.meta.inventoryStatus && discovery.meta.outcome === "found");
   const complete = explicitEmpty || discovery.meta.coverage === "collection" && inventoryComplete && discovery.listings.length < 100;
   if (complete) source.lastCompleteSyncAt = now;

@@ -1,0 +1,2555 @@
+{
+  "id": "katerina-sayles",
+  "url": "https://www.katerinasaylesrealtor.com/",
+  "category": "idx",
+  "timeline": [
+    {
+      "at": 53,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 859,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 8728,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 12"
+    },
+    {
+      "at": 8929,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 12\nReading linked pages · 0 of 11"
+    },
+    {
+      "at": 11956,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 12\nReading linked pages · 1 of 11"
+    },
+    {
+      "at": 12158,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 3 of 12\nReading linked pages · 2 of 11"
+    },
+    {
+      "at": 12359,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 6 of 12\nReading linked pages · 6 of 11"
+    },
+    {
+      "at": 14171,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 6 of 12\nReading linked pages · 7 of 11"
+    },
+    {
+      "at": 14977,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 8 of 12\nReading linked pages · 7 of 11"
+    },
+    {
+      "at": 15178,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 11 of 12\nReading linked pages · 10 of 11"
+    },
+    {
+      "at": 15380,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 15582,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy\nSaving 12 listings"
+    },
+    {
+      "at": 15784,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy\nSaved 12 listings"
+    },
+    {
+      "at": 21827,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy\nSaved 12 listings\nFound Katerina Sayles · Seattle, WA"
+    },
+    {
+      "at": 22030,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 503,
+      "totalMs": 15699,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 111
+        },
+        {
+          "kind": "listings",
+          "host": "katerinasaylesrealtor.com",
+          "pages": 1,
+          "found": 0,
+          "at": 8049
+        },
+        {
+          "kind": "listings",
+          "host": "katerinasaylesrealtor.com",
+          "pages": 1,
+          "found": 12,
+          "at": 8081
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 12,
+          "succeeded": 0,
+          "at": 8081
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 12,
+          "succeeded": 0,
+          "at": 11380
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 12,
+          "succeeded": 0,
+          "at": 11496
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 12,
+          "succeeded": 0,
+          "at": 11501
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 12,
+          "succeeded": 0,
+          "at": 11556
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 12,
+          "succeeded": 0,
+          "at": 11569
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 12,
+          "succeeded": 0,
+          "at": 11572
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 7,
+          "total": 12,
+          "succeeded": 0,
+          "at": 14266
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 8,
+          "total": 12,
+          "succeeded": 0,
+          "at": 14326
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 9,
+          "total": 12,
+          "succeeded": 0,
+          "at": 14385
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 10,
+          "total": 12,
+          "succeeded": 0,
+          "at": 14390
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 11,
+          "total": 12,
+          "succeeded": 0,
+          "at": 14444
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 12,
+          "total": 12,
+          "succeeded": 0,
+          "at": 14636
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 12,
+          "at": 14637
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 12,
+          "at": 14939
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 12,
+          "at": 15111
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-12427zc",
+            "url": "https://www.katerinasaylesrealtor.com/",
+            "submittedUrl": "https://www.katerinasaylesrealtor.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://www.katerinasaylesrealtor.com/"
+            ],
+            "connectedAt": 1791436206137,
+            "lastCheckedAt": 1791436206137,
+            "nextSyncAt": 1791443406137,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 12
+          },
+          "imported": 12,
+          "warning": "12 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 12,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1a4y54r",
+              "title": "view property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900",
+              "neighborhood": "",
+              "price": "$679,900",
+              "beds": 2,
+              "baths": 1,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158783900/85903634-5b94-443b-805f-b7f50f5b8ff4.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158783900/85903634-5b94-443b-805f-b7f50f5b8ff4.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-tm426w",
+              "title": "view property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900",
+              "neighborhood": "",
+              "price": "$679,900",
+              "beds": 2,
+              "baths": 1,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM157423493/69f08010-4517-40e5-9236-1a0372c50b75.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM157423493/69f08010-4517-40e5-9236-1a0372c50b75.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-1uu544c",
+              "title": "view property+ 7916 Renton Avenue S Seattle, WA 98118 2 beds 1 baths $685,000",
+              "neighborhood": "",
+              "price": "$685,000",
+              "beds": 2,
+              "baths": 1,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM163112875/14f9416f-6d23-44da-acf1-e6eddd1875a0.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM163112875/14f9416f-6d23-44da-acf1-e6eddd1875a0.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/7916-RENTON-AVENUE-S-SEATTLE-WA-98118/2586856/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-snmkbx",
+              "title": "view property+ 18002 B 10th Avenue NE Shoreline, WA 98155 3 beds 1 | 2 baths $694,950",
+              "neighborhood": "",
+              "price": "$694,950",
+              "beds": 3,
+              "baths": 2,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM161069248/227c30f8-87d0-454e-b0ae-157ed7e8a395.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM161069248/227c30f8-87d0-454e-b0ae-157ed7e8a395.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/18002-B-10TH-AVENUE-NE-SHORELINE-WA-98155/2552373/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-1dnwjwt",
+              "title": "view property+ 583 Battery Street #508N Seattle, WA 98121 2 beds 1 | 1 baths $699,000",
+              "neighborhood": "",
+              "price": "$699,000",
+              "beds": 2,
+              "baths": 1,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162389876/fafc79a9-7e22-4fb1-9624-2ca8f43da0b3.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162389876/fafc79a9-7e22-4fb1-9624-2ca8f43da0b3.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/583-BATTERY-STREET-508N-SEATTLE-WA-98121/2574763/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-hsfzj0",
+              "title": "view property+ 1017 Minor Avenue #1401 Seattle, WA 98104 2 beds 2 baths $699,000",
+              "neighborhood": "",
+              "price": "$699,000",
+              "beds": 2,
+              "baths": 2,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160416216/cfb037a9-8d3b-4422-b820-b9b5109b696c.jpg?width=1200&height=1200"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160416216/cfb037a9-8d3b-4422-b820-b9b5109b696c.jpg?width=1200&height=1200",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/1017-MINOR-AVENUE-1401-SEATTLE-WA-98104/2541335/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-iob4xo",
+              "title": "view property+ 4411 21st Avenue SW Seattle, WA 98106 2 beds 1 | 2 baths $699,900",
+              "neighborhood": "",
+              "price": "$699,900",
+              "beds": 2,
+              "baths": 2,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159678402/bb5c6d59-8443-4e79-a116-9be07fafc163.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159678402/bb5c6d59-8443-4e79-a116-9be07fafc163.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/4411-21ST-AVENUE-SW-SEATTLE-WA-98106/2528630/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-y58rut",
+              "title": "view property+ 4411 21st Avenue SW Seattle, WA 98106 2 beds 1 | 2 baths $699,900",
+              "neighborhood": "",
+              "price": "$699,900",
+              "beds": 2,
+              "baths": 2,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159389614/43a68439-bb7f-4a8e-bbf5-9b32ab375ce2.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159389614/43a68439-bb7f-4a8e-bbf5-9b32ab375ce2.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/4411-21ST-AVENUE-SW-SEATTLE-WA-98106/2523876/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-glxrta",
+              "title": "view property+ 906 A 28th Avenue S Seattle, WA 98144 3 beds 1 | 1 baths $699,950",
+              "neighborhood": "",
+              "price": "$699,950",
+              "beds": 3,
+              "baths": 1,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158256018/6d8e7e12-5967-4b7c-acf7-4fe446fa88cc.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158256018/6d8e7e12-5967-4b7c-acf7-4fe446fa88cc.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-A-28TH-AVENUE-S-SEATTLE-WA-98144/2504265/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-1imqr1y",
+              "title": "view property+ 320 NE 156th Street Shoreline, WA 98155 4 beds 2 baths $725,000",
+              "neighborhood": "",
+              "price": "$725,000",
+              "beds": 4,
+              "baths": 2,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162743016/9b4200b3-f09e-49b5-b2cc-c40b319665f3.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162743016/9b4200b3-f09e-49b5-b2cc-c40b319665f3.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-zurrmn",
+              "title": "view property+ 320 NE 156th Street Shoreline, WA 98155 4 beds 2 baths $725,000",
+              "neighborhood": "",
+              "price": "$725,000",
+              "beds": 4,
+              "baths": 2,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162574734/c2c58b81-b763-40e6-87e9-832f09b0cb4f.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162574734/c2c58b81-b763-40e6-87e9-832f09b0cb4f.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            },
+            {
+              "id": "listing-1yq0qsv",
+              "title": "view property+ 906 B 28th Avenue S Seattle, WA 98144 3 beds 1 | 1 baths $739,950",
+              "neighborhood": "",
+              "price": "$739,950",
+              "beds": 3,
+              "baths": 1,
+              "sqft": "",
+              "images": [
+                "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160871753/d6867125-60ae-41ea-a1e5-a88293589a19.jpg"
+              ],
+              "image": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160871753/d6867125-60ae-41ea-a1e5-a88293589a19.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-B-28TH-AVENUE-S-SEATTLE-WA-98144/2548957/26/",
+              "lastRefreshedAt": 1791436191611,
+              "lastSyncAttemptAt": 1791436191611,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791443391611,
+              "updatedAt": 1791436191611,
+              "sourceId": "source-12427zc",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791436191611
+            }
+          ],
+          "timings": {
+            "details": 6555,
+            "listings": 14526,
+            "save": 172,
+            "total": 15111
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 425,
+      "totalMs": 21749,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 1
+        },
+        {
+          "kind": "site",
+          "name": "Katerina Sayles",
+          "host": "katerinasaylesrealtor.com",
+          "at": 7907
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 7907
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 11,
+          "at": 8198
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 11,
+          "at": 11272
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 11,
+          "at": 11411
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 11,
+          "at": 11533
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 11,
+          "at": 11582
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 11,
+          "at": 11606
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 6,
+          "total": 11,
+          "at": 11631
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 7,
+          "total": 11,
+          "at": 13457
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 8,
+          "total": 11,
+          "at": 14395
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 9,
+          "total": 11,
+          "at": 14445
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 10,
+          "total": 11,
+          "at": 14493
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 11,
+          "total": 11,
+          "at": 14494
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 9,
+          "total": 11,
+          "at": 14685
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 57,
+          "sections": 6,
+          "at": 14688
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 14688
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 14688
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 14688
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 14688
+        },
+        {
+          "kind": "profile",
+          "name": "Katerina Sayles",
+          "city": "Seattle, WA",
+          "at": 21125
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 21125
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 6487,
+            "design": 6781,
+            "site": 14687,
+            "profile": 6437,
+            "total": 21125
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "Katerina Sayles",
+              "confidence": 1,
+              "locator": "Structured data: {\"@type\":\"RealEstateAgent\",\"name\":\"Katerina Sayles\"}"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "Realtor®",
+              "confidence": 1,
+              "locator": "PAGE TEXT: 'Meet Katerina Sayles... her dedication as a Realtor®...'"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "Seattle, WA",
+              "confidence": 1,
+              "locator": "Structured data: addressLocality: 'Seattle', addressRegion: 'WA'"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "425.466.5578",
+              "confidence": 1,
+              "locator": "PAGE TEXT, Meta, Contact Info: '425.466.5578'"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "206-324-8900",
+              "confidence": 0.95,
+              "locator": "PAGE TEXT, Contact Info: '206-324-8900'"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "Windermere Real Estate/Capitol Hill",
+              "confidence": 1,
+              "locator": "Meta og:title: 'Katerina Sayles | Windermere Real Estate/Capitol Hill'"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "Windermere Real Estate/Capitol Hill",
+              "confidence": 0.9,
+              "locator": "Meta og:title: 'Katerina Sayles | Windermere Real Estate/Capitol Hill'"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "katerina@windermere.com",
+              "confidence": 1,
+              "locator": "PAGE TEXT, Contact Info: 'katerina(at)windermere(dotted)com'"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "katerinasayles@kw.com",
+              "confidence": 0.85,
+              "locator": "PAGE TEXT: 'katerinasayles(at)kw(dotted)com'"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "value": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+              "confidence": 0.9,
+              "locator": "Meta og:image"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Your Seattle Real Estate Resource for Sustainable Living",
+            "welcomeNote": "Welcome! I’m Katerina Sayles, a lifelong resident of the Pacific Northwest with a deep commitment to service, sustainability, and personalized real estate guidance throughout Seattle and the surrounding communities.",
+            "tagline": "Discover Homes – Discover Balance",
+            "aboutParagraph": "My approach as a Realtor® is rooted in local experience and environmental awareness. With specialized designations in green real estate and strong ties to the US Green Building Council, I help buyers and sellers make smart, sustainable choices in Seattle’s vibrant market. Whether you’re searching for an eco-friendly house, selling your family home, or curious about Seattle neighborhoods, I offer detailed market knowledge, a genuine focus on your goals, and clear guidance at every stage. Let’s find solutions that fit your life and values—while building a greener future in the place we love to call home.",
+            "conciergeLine": "Have a question about Seattle homes or green living? Reach out for thoughtful, prompt support as you navigate your next real estate step.",
+            "contactLine": "Call 425.466.5578 or email katerina@windermere.com to start your Seattle home journey today.",
+            "tone": "Warm, knowledgeable, and sustainability-focused with a friendly, locally-rooted voice.",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "efe73c8c-fa0a-4dfa-952d-974527c1ee20"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://www.katerinasaylesrealtor.com/",
+              "analyzedAt": 1791436199729,
+              "logoUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png",
+              "heroImageUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+              "portraitImageUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+              "heroTitle": "Discover Your Perfect Home",
+              "heroSubtitle": "From informative content to resources, blogs, and even eco-friendly house listings- this website is your resource for everything real estate in Seattle.",
+              "sections": [
+                {
+                  "kind": "content",
+                  "title": "Attractions and activities in West Seattle",
+                  "body": "Alki Beach Park is one of West Seattle’s most popular destinations, with its well-maintained amenities including a scenic multi-purpose trail, picnic areas, beach volleyball courts, and 2.5-mile sandy beach surrounded by picture-perfect views of the Olympic Mountains and the Puget Sound. Avid golfers can enjoy a top-quality playing experience at the West Seattle Golf Course, a public 18-hole championship golf course with a classic layout that challenges players of all skill levels.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Attractions and activities in Greater Seattle",
+                  "body": "Seattle has a reputation for being one of the top art cities in the world. It is, after all, the home of rock music icons like Jimi Hendrix, Nirvana, Soundgarden, the Foo Fighters, and Pearl Jam, just to name a few. And that’s precisely why you’ll find an array of concert halls, live music stages, and avant-garde performance venues scattered throughout the city. Head to this page to find the best theaters and music venues in Seattle.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Attractions and activities in Magnolia",
+                  "body": "Magnolia is home to Discovery Park, the city’s largest park at 534 acres. The expansive park features two miles of shoreline, vast meadows and forests, a historic lighthouse, and a network of scenic hiking trails. Magnolia Village, the neighborhood’s central hub, is a vibrant urban center filled with cafés, pubs, grocery stores, bakeries, and restaurants offering delicious cuisine from all over the world. If you have any questions about a property or the area in general, please don’t hesitate to contact me .",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "about",
+                  "title": "A Place Like No Other",
+                  "body": "If you were to ask Katerina what she loves about the Pacific Northwest – she would reply, “Everything.” Living here has underscored for her the importance of making environmentally-conscious decisions. As someone drawn to the beauty of the outdoors, she appreciates the Pacific Northwest for the countless amenities it has to offer. Each aspect of her home — from the breathtaking mountains, pristine waters, vast hiking trails, and natural wildlife — allows her to stay grounded and focused on what matters.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "HP: Search Properties",
+                  "body": ""
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "HP: Social Media",
+                  "body": ""
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png",
+                  "variants": [
+                    {
+                      "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png",
+                  "width": 400,
+                  "height": 83,
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 39,
+                  "upscaleRatio": 0.95,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                  "variants": [
+                    {
+                      "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "hero": {
+                  "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                  "variants": [
+                    {
+                      "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg"
+                    }
+                  ],
+                  "role": "hero",
+                  "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                  "destination": "hero",
+                  "fit": "cover",
+                  "renderedWidth": 390,
+                  "renderedHeight": 220,
+                  "upscaleRatio": 1,
+                  "crop": "modest",
+                  "rank": 3
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/header-logo_alt.png",
+                    "width": 400,
+                    "height": 83,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 39,
+                    "upscaleRatio": 0.95,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/burger-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/burger-logo.png"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/burger-logo.png",
+                    "width": 335,
+                    "height": 60,
+                    "destination": "hero",
+                    "fit": "contain",
+                    "renderedWidth": 226,
+                    "renderedHeight": 41,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-1050307304.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-1050307304.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-1050307304.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-939283180-e1644280434723.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-939283180-e1644280434723.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-939283180-e1644280434723.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-929639690.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-929639690.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-929639690.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Shutterstock-living-room-staged-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Shutterstock-living-room-staged-1.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Shutterstock-living-room-staged-1.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-4.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-4.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-4.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-824581444-e1644280498119.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-824581444-e1644280498119.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-824581444-e1644280498119.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-183313516.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-183313516.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-183313516.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-639638990.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-639638990.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://imageproxy.agentimage.com/1600x729/https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/iStock-639638990.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/21-04_Sayles-046-scaled-e1639423713103.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/21-04_Sayles-046-scaled-e1639423713103.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/21-04_Sayles-046-scaled-e1639423713103.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/greenhome-e1644872552958.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/greenhome-e1644872552958.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/greenhome-e1644872552958.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-solar-new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-solar-new.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-solar-new.png",
+                    "width": 40,
+                    "height": 40,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 27,
+                    "renderedHeight": 27,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-materials-new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-materials-new.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-materials-new.png",
+                    "width": 40,
+                    "height": 40,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 27,
+                    "renderedHeight": 27,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-lotus-new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-lotus-new.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-lotus-new.png",
+                    "width": 39,
+                    "height": 32,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 26,
+                    "renderedHeight": 22,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-innovation-new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-innovation-new.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-innovation-new.png",
+                    "width": 37,
+                    "height": 38,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 25,
+                    "renderedHeight": 26,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-water-new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-water-new.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-water-new.png",
+                    "width": 36,
+                    "height": 37,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 24,
+                    "renderedHeight": 25,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-leaves-new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-leaves-new.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/icon-leaves-new.png",
+                    "width": 35,
+                    "height": 35,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 24,
+                    "renderedHeight": 24,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/07/10-My-Location-icon-2.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/07/10-My-Location-icon-2.png"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/07/10-My-Location-icon-2.png",
+                    "width": 40,
+                    "height": 39,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 27,
+                    "renderedHeight": 26,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/shutterstock_653264821-scaled.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/shutterstock_653264821-scaled.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/shutterstock_653264821-scaled.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Website_Sellers-Homepage-scaled.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Website_Sellers-Homepage-scaled.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Website_Sellers-Homepage-scaled.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-1339955922.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-1339955922.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-1339955922.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Website-shutterstock_Dream-Home-scaled.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Website-shutterstock_Dream-Home-scaled.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2022/02/Website-shutterstock_Dream-Home-scaled.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/West-Seattle.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/West-Seattle.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/West-Seattle.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-Lake-union.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-Lake-union.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-Lake-union.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/Magnolia-iStock-1236220582.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/Magnolia-iStock-1236220582.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/Magnolia-iStock-1236220582.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-Queen-Anne.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-Queen-Anne.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-Queen-Anne.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Madison-Park-iStock-1180885326.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Madison-Park-iStock-1180885326.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Madison-Park-iStock-1180885326.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-610122300-Columbia-city.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-610122300-Columbia-city.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/iStock-610122300-Columbia-city.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Normandy-Park.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Normandy-Park.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Normandy-Park.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Issaquah.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Issaquah.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/12/Issaquah.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/Website-Vacation-Image-Home-Page.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/Website-Vacation-Image-Home-Page.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/Website-Vacation-Image-Home-Page.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158783900/85903634-5b94-443b-805f-b7f50f5b8ff4.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158783900/85903634-5b94-443b-805f-b7f50f5b8ff4.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158783900/85903634-5b94-443b-805f-b7f50f5b8ff4.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM157423493/69f08010-4517-40e5-9236-1a0372c50b75.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM157423493/69f08010-4517-40e5-9236-1a0372c50b75.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM157423493/69f08010-4517-40e5-9236-1a0372c50b75.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM163112875/14f9416f-6d23-44da-acf1-e6eddd1875a0.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM163112875/14f9416f-6d23-44da-acf1-e6eddd1875a0.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM163112875/14f9416f-6d23-44da-acf1-e6eddd1875a0.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM161069248/227c30f8-87d0-454e-b0ae-157ed7e8a395.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM161069248/227c30f8-87d0-454e-b0ae-157ed7e8a395.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM161069248/227c30f8-87d0-454e-b0ae-157ed7e8a395.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162389876/fafc79a9-7e22-4fb1-9624-2ca8f43da0b3.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162389876/fafc79a9-7e22-4fb1-9624-2ca8f43da0b3.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162389876/fafc79a9-7e22-4fb1-9624-2ca8f43da0b3.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160416216/cfb037a9-8d3b-4422-b820-b9b5109b696c.jpg?width=1200&height=1200",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160416216/cfb037a9-8d3b-4422-b820-b9b5109b696c.jpg?width=1200&height=1200"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160416216/cfb037a9-8d3b-4422-b820-b9b5109b696c.jpg?width=1200&height=1200",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159678402/bb5c6d59-8443-4e79-a116-9be07fafc163.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159678402/bb5c6d59-8443-4e79-a116-9be07fafc163.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159678402/bb5c6d59-8443-4e79-a116-9be07fafc163.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159389614/43a68439-bb7f-4a8e-bbf5-9b32ab375ce2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159389614/43a68439-bb7f-4a8e-bbf5-9b32ab375ce2.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159389614/43a68439-bb7f-4a8e-bbf5-9b32ab375ce2.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158256018/6d8e7e12-5967-4b7c-acf7-4fe446fa88cc.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158256018/6d8e7e12-5967-4b7c-acf7-4fe446fa88cc.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158256018/6d8e7e12-5967-4b7c-acf7-4fe446fa88cc.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162743016/9b4200b3-f09e-49b5-b2cc-c40b319665f3.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162743016/9b4200b3-f09e-49b5-b2cc-c40b319665f3.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162743016/9b4200b3-f09e-49b5-b2cc-c40b319665f3.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162574734/c2c58b81-b763-40e6-87e9-832f09b0cb4f.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162574734/c2c58b81-b763-40e6-87e9-832f09b0cb4f.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162574734/c2c58b81-b763-40e6-87e9-832f09b0cb4f.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160871753/d6867125-60ae-41ea-a1e5-a88293589a19.jpg",
+                    "variants": [
+                      {
+                        "url": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160871753/d6867125-60ae-41ea-a1e5-a88293589a19.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160871753/d6867125-60ae-41ea-a1e5-a88293589a19.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/07/iStock-1319318435-1024x683.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/07/iStock-1319318435-1024x683.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/07/iStock-1319318435-1024x683.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/02/iStock-greenroof-1024x683.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/02/iStock-greenroof-1024x683.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/02/iStock-greenroof-1024x683.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-1-thumb.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-1-thumb.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-1-thumb.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-1.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-1.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-2.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-2.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-3.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-3.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-3.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-4.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-4.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/fv-4.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/02/footer-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/02/footer-logo.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2023/02/footer-logo.png",
+                    "width": 263,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/CapHill-color_new.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/CapHill-color_new.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/CapHill-color_new.png",
+                    "width": 165,
+                    "height": 53,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 111,
+                    "renderedHeight": 36,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/green-logo-2b.png",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/green-logo-2b.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/images/green-logo-2b.png",
+                    "width": 266,
+                    "height": 95,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 180,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/uploads/2021/11/ss-1.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/cycloneslider/cyclone-slider2-responsive/images/preloader.gif",
+                    "variants": [
+                      {
+                        "url": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/cycloneslider/cyclone-slider2-responsive/images/preloader.gif"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/cycloneslider/cyclone-slider2-responsive/images/preloader.gif",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#098b8b",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Arial",
+                "headingFontFamily": "Arial",
+                "layout": "image-overlay",
+                "spacing": 48,
+                "radius": 32,
+                "headingSize": 28,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#098b8b",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Arial",
+                "headingFontFamily": "Arial",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 32,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://www.katerinasaylesrealtor.com/wp-content/plugins/aios-initial-setup/app/modules/various-css-fixes/css/various-css-fixes.css",
+                  "https://www.katerinasaylesrealtor.com/wp-content/themes/aios-starter-theme/style.css",
+                  "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/style.css",
+                  "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/style-media-queries.css",
+                  "https://static.agentimage.com/g1bk9hko5/resources.min.css?sort=22012026200712",
+                  "https://www.katerinasaylesrealtor.com/wp-content/themes/katerinsaylesrealtor.com/cycloneslider/cyclone-slider2-responsive/style.css"
+                ],
+                "colors": [
+                  "#ffffff",
+                  "#d7d7d7",
+                  "#f3f3f3",
+                  "#000000",
+                  "#333333",
+                  "#b2b2b2",
+                  "#076e83",
+                  "#329db3",
+                  "#4d6baa",
+                  "#4fc6f8",
+                  "#dc4e41",
+                  "#ff0000",
+                  "#007bb6",
+                  "#cb2027",
+                  "#3f729b",
+                  "#be2f25",
+                  "#666666",
+                  "#6c757d",
+                  "#767676",
+                  "#098b8b",
+                  "#245f95",
+                  "#28a745",
+                  "#17a2b8",
+                  "#ffc107",
+                  "#dc3545",
+                  "#f8f9fa",
+                  "#343a40",
+                  "#cacaca",
+                  "#d5d5d5",
+                  "#999999"
+                ],
+                "fonts": [
+                  "monospace",
+                  "Arial",
+                  "Open Sans",
+                  "Rota",
+                  "Montserrat",
+                  "Verdana"
+                ],
+                "routing": [
+                  {
+                    "source": "425.466.5578",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "katerinasayles(at)kw(dotted)com",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Search",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Market Reports",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "West Seattle",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Seattle",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Magnolia",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Queen Anne",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Madison Park",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Columbia City",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Normandy Park",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Issaquah",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Greater Eastside",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Bellevue",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lake Sammamish",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Northbend Snoqualmie Valley",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Recreational/ Vacation Lifestyle",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Interactive Map",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Buying Process",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Why You Need a Real Estate Professional",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Affordability Calculator",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Main Content",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: Welcome",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: Green Living",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: CTA",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: Feartured Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Featured Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: Testimobials",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: Blogs",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "HP: Featured Videos",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Meet Katerina Sayles",
+                    "intent": "profile",
+                    "canonical": "card:profile",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Featuring Northwest Green Living",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "In the headlines",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Featured Videos",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.katerinasaylesrealtor.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.katerinasaylesrealtor.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "efe73c8c-fa0a-4dfa-952d-974527c1ee20",
+              "kind": "url",
+              "label": "www.katerinasaylesrealtor.com",
+              "uri": "https://www.katerinasaylesrealtor.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "katerina-sayles-00-url.png",
+    "katerina-sayles-01-review.png",
+    "katerina-sayles-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 3801,
+  "reviewMs": 22030,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Katerina Sayles\nFound 12 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy\nSaved 12 listings\nFound Katerina Sayles · Seattle, WA",
+  "reviewText": "Back\nAPP BUILDER\nwww.katerinasaylesrealtor.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nSEATTLE, WA\nDiscover Your Perfect Home\nFrom informative content to resources, blogs, and even eco-friendly house listings- this website is your resource for everything real estate in Seattle.\nView listings\nFROM THE SITE\nAttractions and activities in West Seattle\nAlki Beach Park is one of West Seattle’s most popular destinations, with its well-maintained amenities including a scenic multi-purpose trail, picnic areas, beach volleyball courts, and 2.5-mile sandy beach surrounded by picture-perfect views of the Olympic Mountains and the Puget Sound. Avid golfers can enjoy a top-quality playing experience at the West Seattle Golf Course, a public 18-hole championship golf course with a classic layout that challenges players of all skill levels.\nFROM THE SITE\nAttractions and activities in Greater Seattle\nSeattle has a reputation for being one of the top art cities in the world. It is, after all, the home of rock music icons like Jimi Hendrix, Nirvana, Soundgarden, the Foo Fighters, and Pearl Jam, just to name a few. And that’s precisely why you’ll find an array of concert halls, live music stages, and avant-garde performance venues scattered throughout the city. Head to this page to find the best theaters and music venues in Seattle.\nFROM THE SITE\nAttractions and activities in Magnolia\nMagnolia is home to Discovery Park, the city’s largest park at 534 acres. The expansive park features two miles of shoreline, vast meadows and forests, a historic lighthouse, and a network of scenic hiking trails. Magnolia Village, the neighborhood’s central hub, is a vibrant urban center filled with cafés, pubs, grocery stores, bakeries, and restaurants offering delicious cuisine from all over the world. If you have any questions about a property or the area in general, please don’t hesitate to contact me .\nABOUT\nA Place Like No Other\nIf you were to ask Katerina what she loves about the Pacific Northwest – she would reply, “Everything.” Living here has underscored for her the importance of making environmentally-conscious decisions. As someone drawn to the beauty of the outdoors, she appreciates the Pacific Northwest for the countless amenities it has to offer. Each aspect of her home — from the breathtaking mountains, pristine waters, vast hiking trails, and natural wildlife — allows her to stay grounded and focused on what matters.\nHP: Search Properties\n$679,900\nview property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900\n2 beds · 1 baths\n$679,900\nview property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900\n2 beds · 1 baths\n$685,000\nview property+ 7916 Renton Avenue S Seattle, WA 98118 2 beds 1 baths $685,000\n2 beds · 1 baths\n$694,950\nview property+ 18002 B 10th Avenue NE Shoreline, WA 98155 3 beds 1 | 2 baths $694,950\n3 beds · 2 baths\n$699,000\nview property+ 583 Battery Street #508N Seattle, WA 98121 2 beds 1 | 1 baths $699,000\n2 beds · 1 baths\n$699,000\nview property+ 1017 Minor Avenue #1401 Seattle, WA 98104 2 beds 2 baths $699,000\n2 beds · 2 baths\n$699,900\nview property+ 4411 21st Avenue SW Seattle, WA 98106 2 beds 1 | 2 baths $699,900\n2 beds · 2 baths\n$699,900\nview property+ 4411 21st Avenue SW Seattle, WA 98106 2 beds 1 | 2 baths $699,900\n2 beds · 2 baths\n$699,950\nview property+ 906 A 28th Avenue S Seattle, WA 98144 3 beds 1 | 1 baths $699,950\n3 beds · 1 baths\n$725,000\nview property+ 320 NE 156th Street Shoreline, WA 98155 4 beds 2 baths $725,000\n4 beds · 2 baths\n425.466.5578\nkaterina@windermere.com\nWindermere Real Estate/Capitol Hill\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour Seattle Real Estate Resource for Sustainable Living\nTry another opening line\nYOUR INTRODUCTION\nMy approach as a Realtor® is rooted in local experience and environmental awareness. With specialized designations in green real estate and strong ties to the US Green Building Council, I help buyers and sellers make smart, sustainable choices in Seattle’s vibrant market. Whether you’re searching for an eco-friendly house, selling your family home, or curious about Seattle neighborhoods, I offer detailed market knowledge, a genuine focus on your goals, and clear guidance at every stage. Let’s find solutions that fit your life and values—while building a greener future in the place we love to call home.\nTry another introduction\n12 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\nPlease confirm\nWe found these — fix anything that’s wrong.\nPhone\nAlso found: 206-324-8900\nEmail\nAlso found: katerinasayles@kw.com\n▸ Brokerage & license (optional)\n✓ Windermere Real Estate/Capitol Hill\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nSEATTLE, WA\nDiscover Your Perfect Home\nFrom informative content to resources, blogs, and even eco-friendly house listings- this website is your resource for everything real estate in Seattle.\nView listings\nFROM THE SITE\nAttractions and activities in West Seattle\nAlki Beach Park is one of West Seattle’s most popular destinations, with its well-maintained amenities including a scenic multi-purpose trail, picnic areas, beach volleyball courts, and 2.5-mile sandy beach surrounded by picture-perfect views of the Olympic Mountains and the Puget Sound. Avid golfers can enjoy a top-quality playing experience at the West Seattle Golf Course, a public 18-hole championship golf course with a classic layout that challenges players of all skill levels.\nFROM THE SITE\nAttractions and activities in Greater Seattle\nSeattle has a reputation for being one of the top art cities in the world. It is, after all, the home of rock music icons like Jimi Hendrix, Nirvana, Soundgarden, the Foo Fighters, and Pearl Jam, just to name a few. And that’s precisely why you’ll find an array of concert halls, live music stages, and avant-garde performance venues scattered throughout the city. Head to this page to find the best theaters and music venues in Seattle.\nFROM THE SITE\nAttractions and activities in Magnolia\nMagnolia is home to Discovery Park, the city’s largest park at 534 acres. The expansive park features two miles of shoreline, vast meadows and forests, a historic lighthouse, and a network of scenic hiking trails. Magnolia Village, the neighborhood’s central hub, is a vibrant urban center filled with cafés, pubs, grocery stores, bakeries, and restaurants offering delicious cuisine from all over the world. If you have any questions about a property or the area in general, please don’t hesitate to contact me .\nABOUT\nA Place Like No Other\nIf you were to ask Katerina what she loves about the Pacific Northwest – she would reply, “Everything.” Living here has underscored for her the importance of making environmentally-conscious decisions. As someone drawn to the beauty of the outdoors, she appreciates the Pacific Northwest for the countless amenities it has to offer. Each aspect of her home — from the breathtaking mountains, pristine waters, vast hiking trails, and natural wildlife — allows her to stay grounded and focused on what matters.\nHP: Search Properties\n$679,900\nview property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900\n2 beds · 1 baths\n$679,900\nview property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900\n2 beds · 1 baths\n$685,000\nview property+ 7916 Renton Avenue S Seattle, WA 98118 2 beds 1 baths $685,000\n2 beds · 1 baths\n$694,950\nview property+ 18002 B 10th Avenue NE Shoreline, WA 98155 3 beds 1 | 2 baths $694,950\n3 beds · 2 baths\n$699,000\nview property+ 583 Battery Street #508N Seattle, WA 98121 2 beds 1 | 1 baths $699,000\n2 beds · 1 baths\n$699,000\nview property+ 1017 Minor Avenue #1401 Seattle",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED view property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900 $679,900 STATUS UNCONFIRMED view proper",
+        "textLength": 1428,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app SEATTLE, WA Discover Your Perfect Home From informative content to resources, blogs, and even eco-friendly house listings- this website is your resource for everything real estate in Seattle. View li",
+        "textLength": 3583,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED view property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900 $679,900 STATUS UNCONFIRMED view proper",
+        "textLength": 1428,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 12
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "view property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158783900/85903634-5b94-443b-805f-b7f50f5b8ff4.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 61932
+      }
+    },
+    {
+      "title": "view property+ 14035 Densmore Avenue N Seattle, WA 98133 2 beds 1 | 1 baths $679,900",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM157423493/69f08010-4517-40e5-9236-1a0372c50b75.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 61932
+      }
+    },
+    {
+      "title": "view property+ 7916 Renton Avenue S Seattle, WA 98118 2 beds 1 baths $685,000",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM163112875/14f9416f-6d23-44da-acf1-e6eddd1875a0.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 85441
+      }
+    },
+    {
+      "title": "view property+ 18002 B 10th Avenue NE Shoreline, WA 98155 3 beds 1 | 2 baths $694,950",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM161069248/227c30f8-87d0-454e-b0ae-157ed7e8a395.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 75622
+      }
+    },
+    {
+      "title": "view property+ 583 Battery Street #508N Seattle, WA 98121 2 beds 1 | 1 baths $699,000",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162389876/fafc79a9-7e22-4fb1-9624-2ca8f43da0b3.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 55028
+      }
+    },
+    {
+      "title": "view property+ 1017 Minor Avenue #1401 Seattle, WA 98104 2 beds 2 baths $699,000",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160416216/cfb037a9-8d3b-4422-b820-b9b5109b696c.jpg?width=1200&height=1200",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 102527
+      }
+    },
+    {
+      "title": "view property+ 4411 21st Avenue SW Seattle, WA 98106 2 beds 1 | 2 baths $699,900",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159678402/bb5c6d59-8443-4e79-a116-9be07fafc163.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 82494
+      }
+    },
+    {
+      "title": "view property+ 4411 21st Avenue SW Seattle, WA 98106 2 beds 1 | 2 baths $699,900",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM159389614/43a68439-bb7f-4a8e-bbf5-9b32ab375ce2.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 82494
+      }
+    },
+    {
+      "title": "view property+ 906 A 28th Avenue S Seattle, WA 98144 3 beds 1 | 1 baths $699,950",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM158256018/6d8e7e12-5967-4b7c-acf7-4fe446fa88cc.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 52827
+      }
+    },
+    {
+      "title": "view property+ 320 NE 156th Street Shoreline, WA 98155 4 beds 2 baths $725,000",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162743016/9b4200b3-f09e-49b5-b2cc-c40b319665f3.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 113078
+      }
+    },
+    {
+      "title": "view property+ 320 NE 156th Street Shoreline, WA 98155 4 beds 2 baths $725,000",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM162574734/c2c58b81-b763-40e6-87e9-832f09b0cb4f.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 113078
+      }
+    },
+    {
+      "title": "view property+ 906 B 28th Avenue S Seattle, WA 98144 3 beds 1 | 1 baths $739,950",
+      "photos": 1,
+      "first": "https://imageproxy.agentimage.com/760x464/https://mgrid.idxhome.com/images/NWM160871753/d6867125-60ae-41ea-a1e5-a88293589a19.jpg",
+      "size": {
+        "status": 200,
+        "width": 760,
+        "height": 464,
+        "type": "jpg",
+        "bytes": 47208
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.katerinasaylesrealtor.com/",
+      "status": 200,
+      "finalUrl": "https://www.katerinasaylesrealtor.com/",
+      "title": "Explore Seattle Real Estate Today | Katerina Sayles, Realtor",
+      "textLength": 6562,
+      "priceCount": 25,
+      "uniquePrices": 8,
+      "propertyLinkCount": 15,
+      "sample": "HOMESEARCHMARKET REPORTSCOMMUNITIES\nWEST SEATTLE\nSEATTLE\nMAGNOLIA\nQUEEN ANNE\nMADISON PARK\nCOLUMBIA CITY\nNORMANDY PARK\nISSAQUAH\nGREATER EASTSIDE\nBELLEVUE\nLAKE SAMMAMISH\nNORTHBEND\nSNOQUALMIE VALLEY\nRECREATIONAL/\nVACATION LIFESTYLE\nINTERACTIVE MAP\nBUYERS\nHOME BUYING PROCESS\nWHY YOU NEED A REAL ESTATE PROFESSIONAL\nHOME AFFORDABILITY CALCULATOR\nSIGN-UP FOR LISTING ALERTS\nSELLERS\nREQUEST YOUR HOME VALUATION\nMARKET STRATEGY PLAN\nSELLER SUGGESTIONS\nNW GREEN LIVING\nLEED GREEN\nNAR GREEN DESIGNATION\nGREEN HOME BUYER’S GUIDE\nTHE CERTIFIED HIGH-PERFORMANCE HOME\nNET-ZERO ENERGY HOMES\nGREEN HOME CERTIFICATIONS\nRESOURCES\nCONTACT\nx\nABOUT\nMeet Katerina – Seattle Realtor\nPROPERTIESMARKET REPORTS\nCOMMUNITIES\nWest Seattle\nSeattle\nMagnolia\nQueen Anne\nMadison Park\nColumbia City\nNormandy Park\nIssaquah\nGreater Eastside\nBellevue\nLake Sammamish\nNorth Bend/\nSnoqualmie Valley\nRecreational/\nVacation Lifestyle\nBUYERS\nHome Buying Process\nWhy You Need\na Real Estate Professional\nHome Affordability Calculator\nSign-Up for Listing Alerts\nSELLERS\nRequest Your Home Valuation\nMarket Strategy Plan\nSeller Suggestions\nBLOGNW GREEN LIVING\nLEED Green Associate & NAR Green Designation\nGreen Home Buyer’s Guide\nThe Certified Hig",
+      "challenge": false,
+      "screenshot": "katerina-sayles-source-0.png"
+    },
+    {
+      "url": "https://www.katerinasaylesrealtor.com/",
+      "status": 200,
+      "finalUrl": "https://www.katerinasaylesrealtor.com/",
+      "title": "Explore Seattle Real Estate Today | Katerina Sayles, Realtor",
+      "textLength": 6562,
+      "priceCount": 25,
+      "uniquePrices": 8,
+      "propertyLinkCount": 15,
+      "sample": "HOMESEARCHMARKET REPORTSCOMMUNITIES\nWEST SEATTLE\nSEATTLE\nMAGNOLIA\nQUEEN ANNE\nMADISON PARK\nCOLUMBIA CITY\nNORMANDY PARK\nISSAQUAH\nGREATER EASTSIDE\nBELLEVUE\nLAKE SAMMAMISH\nNORTHBEND\nSNOQUALMIE VALLEY\nRECREATIONAL/\nVACATION LIFESTYLE\nINTERACTIVE MAP\nBUYERS\nHOME BUYING PROCESS\nWHY YOU NEED A REAL ESTATE PROFESSIONAL\nHOME AFFORDABILITY CALCULATOR\nSIGN-UP FOR LISTING ALERTS\nSELLERS\nREQUEST YOUR HOME VALUATION\nMARKET STRATEGY PLAN\nSELLER SUGGESTIONS\nNW GREEN LIVING\nLEED GREEN\nNAR GREEN DESIGNATION\nGREEN HOME BUYER’S GUIDE\nTHE CERTIFIED HIGH-PERFORMANCE HOME\nNET-ZERO ENERGY HOMES\nGREEN HOME CERTIFICATIONS\nRESOURCES\nCONTACT\nx\nABOUT\nMeet Katerina – Seattle Realtor\nPROPERTIESMARKET REPORTS\nCOMMUNITIES\nWest Seattle\nSeattle\nMagnolia\nQueen Anne\nMadison Park\nColumbia City\nNormandy Park\nIssaquah\nGreater Eastside\nBellevue\nLake Sammamish\nNorth Bend/\nSnoqualmie Valley\nRecreational/\nVacation Lifestyle\nBUYERS\nHome Buying Process\nWhy You Need\na Real Estate Professional\nHome Affordability Calculator\nSign-Up for Listing Alerts\nSELLERS\nRequest Your Home Valuation\nMarket Strategy Plan\nSeller Suggestions\nBLOGNW GREEN LIVING\nLEED Green Associate & NAR Green Designation\nGreen Home Buyer’s Guide\nThe Certified Hig",
+      "challenge": false,
+      "screenshot": "katerina-sayles-source-1.png"
+    }
+  ],
+  "wallMs": 53793,
+  "window": {
+    "startedAt": "2026-10-08T05:09:47.049Z",
+    "endedAt": "2026-10-08T05:10:40.842Z"
+  }
+}

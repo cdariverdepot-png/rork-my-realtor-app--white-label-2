@@ -1,0 +1,71 @@
+[
+  {
+    "realtorId": "26af9565-964a-4bae-9567-c8fe541b56be",
+    "createdAt": "2026-10-08 06:01:53.844258+00",
+    "sources": [
+      {
+        "id": "source-1bqbnbb",
+        "url": "https://www.ireneonwhidbey.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "ireneonwhidbey",
+            "whidbey",
+            "windermere",
+            "irene",
+            "echenique"
+          ],
+          "phrases": [
+            "ireneonwhidbey",
+            "whidbeyislandrealestate",
+            "windermereagentireneechenique"
+          ]
+        },
+        "nextSyncAt": 1791446527536,
+        "connectedAt": 1791439327536,
+        "listingCount": 1,
+        "submittedUrl": "https://www.ireneonwhidbey.com/",
+        "inventoryUrls": [
+          "https://search.ireneonwhidbey.com/idx/map/mapsearch",
+          "https://search.ireneonwhidbey.com/idx/search/advanced",
+          "https://search.ireneonwhidbey.com/idx/search/listingid",
+          "https://search.ireneonwhidbey.com/idx/search/address",
+          "https://search.ireneonwhidbey.com/idx/results/listings?idxID=b045",
+          "https://search.ireneonwhidbey.com/idx/results/listings",
+          "https://search.ireneonwhidbey.com/idx/search/advanced?modifySearch=true",
+          "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+          "https://search.ireneonwhidbey.com/idx/photogallery/b045/2554926",
+          "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926",
+          "https://search.ireneonwhidbey.com/idx/mortgage",
+          "https://search.ireneonwhidbey.com/idx/search",
+          "https://www.ireneonwhidbey.com/home-valuation",
+          "https://www.ireneonwhidbey.com/home"
+        ],
+        "lastCheckedAt": 1791439327536
+      }
+    ],
+    "listings": [
+      {
+        "title": "550 Wanamaker Coupeville WA 98239",
+        "price": "$1,650,000",
+        "sourceUrl": "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+        "photos": 40,
+        "descriptionLength": 1485,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Composition, Metal",
+          "Sewer": "Sewer Septic Tank",
+          "Water": "Water Source Individual Well, See Remarks",
+          "Year Built": "Year Built 1958",
+          "Subdivision": "Subdivision Central Whidbey"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

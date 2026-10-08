@@ -1,0 +1,105 @@
+{
+  "id": "katerina-sayles",
+  "url": "https://www.katerinasaylesrealtor.com/",
+  "category": "idx",
+  "timeline": [
+    {
+      "at": 61,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1063,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 8492,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 0 of 12"
+    },
+    {
+      "at": 8693,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 0 of 12\nReading linked pages · 0 of 11"
+    },
+    {
+      "at": 11699,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 0 of 12\nReading linked pages · 1 of 11"
+    },
+    {
+      "at": 11900,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 1 of 12\nReading linked pages · 5 of 11"
+    },
+    {
+      "at": 12101,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 6 of 12\nReading linked pages · 6 of 11"
+    },
+    {
+      "at": 14109,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 6 of 12\nReading linked pages · 7 of 11"
+    },
+    {
+      "at": 14510,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 6 of 12\nReading linked pages · 8 of 11"
+    },
+    {
+      "at": 15114,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 1 page checked\nReading Katerina Sayles\nMatching your website’s design and imagery\nReading listing details · 9 of 12\nReading linked pages · 10 of 11"
+    },
+    {
+      "at": 15314,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 15716,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy\nSaving 12 listings"
+    },
+    {
+      "at": 15916,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nWriting your profile and app copy\nSaved 12 listings"
+    },
+    {
+      "at": 16116,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nYour profile could not be written\nSaved 12 listings"
+    },
+    {
+      "at": 16317,
+      "screen": "Building your app\nBUILD STOPPED\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nYour profile could not be written\nSaved 12 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n12 listings were imported and saved. They are kept.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "katerina-sayles-00-url.png",
+    "katerina-sayles-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 4318,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nYour profile could not be written\nSaved 12 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n12 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.katerinasaylesrealtor.com\nBuilding your app\nBUILD STOPPED\nFound 12 active listings\nReading Katerina Sayles\nMatching your website’s design and imagery\nRead full details for all 12 listings\nRead 11 linked pages\nIdentified your profile photo and logo\nSorted 57 website images by role\nYour profile could not be written\nSaved 12 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n12 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.katerinasaylesrealtor.com/",
+      "status": 200,
+      "finalUrl": "https://www.katerinasaylesrealtor.com/",
+      "title": "Explore Seattle Real Estate Today | Katerina Sayles, Realtor",
+      "textLength": 6562,
+      "priceCount": 25,
+      "uniquePrices": 8,
+      "propertyLinkCount": 15,
+      "sample": "HOMESEARCHMARKET REPORTSCOMMUNITIES\nWEST SEATTLE\nSEATTLE\nMAGNOLIA\nQUEEN ANNE\nMADISON PARK\nCOLUMBIA CITY\nNORMANDY PARK\nISSAQUAH\nGREATER EASTSIDE\nBELLEVUE\nLAKE SAMMAMISH\nNORTHBEND\nSNOQUALMIE VALLEY\nRECREATIONAL/\nVACATION LIFESTYLE\nINTERACTIVE MAP\nBUYERS\nHOME BUYING PROCESS\nWHY YOU NEED A REAL ESTATE PROFESSIONAL\nHOME AFFORDABILITY CALCULATOR\nSIGN-UP FOR LISTING ALERTS\nSELLERS\nREQUEST YOUR HOME VALUATION\nMARKET STRATEGY PLAN\nSELLER SUGGESTIONS\nNW GREEN LIVING\nLEED GREEN\nNAR GREEN DESIGNATION\nGREEN HOME BUYER’S GUIDE\nTHE CERTIFIED HIGH-PERFORMANCE HOME\nNET-ZERO ENERGY HOMES\nGREEN HOME CERTIFICATIONS\nRESOURCES\nCONTACT\nx\nABOUT\nMeet Katerina – Seattle Realtor\nPROPERTIESMARKET REPORTS\nCOMMUNITIES\nWest Seattle\nSeattle\nMagnolia\nQueen Anne\nMadison Park\nColumbia City\nNormandy Park\nIssaquah\nGreater Eastside\nBellevue\nLake Sammamish\nNorth Bend/\nSnoqualmie Valley\nRecreational/\nVacation Lifestyle\nBUYERS\nHome Buying Process\nWhy You Need\na Real Estate Professional\nHome Affordability Calculator\nSign-Up for Listing Alerts\nSELLERS\nRequest Your Home Valuation\nMarket Strategy Plan\nSeller Suggestions\nBLOGNW GREEN LIVING\nLEED Green Associate & NAR Green Designation\nGreen Home Buyer’s Guide\nThe Certified Hig",
+      "challenge": false,
+      "screenshot": "katerina-sayles-source-0.png"
+    }
+  ],
+  "wallMs": 437674,
+  "window": {
+    "startedAt": "2026-10-08T07:44:33.141Z",
+    "endedAt": "2026-10-08T07:51:50.815Z"
+  }
+}

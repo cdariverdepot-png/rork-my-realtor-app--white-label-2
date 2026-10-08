@@ -1,0 +1,245 @@
+name: Autonomous compatibility improvement
+# Discover -> Diagnose -> Generalize -> Repair -> Validate -> Integrate -> Remember, on the nonproduction
+# branch repair/compatibility-engine. Production is never touched: no deploy, no merge into main, no
+# production database access, and no Supabase or OpenAI credentials in any job.
+#
+#   select  Level A (offline, free): evaluate the recorded corpus, update the failure registry, pick the
+#           highest-priority code defect that has new evidence. Reports whether a coding agent is configured.
+#   repair  The coding agent (OpenAI Codex, openai/codex-action, using the existing OpenAI account) works on an
+#           isolated improve/* branch from a written brief, in Codex's workspace-write sandbox (no network) with
+#           sudo dropped. It cannot push; the workflow commits. DISABLED unless the repository variable
+#           AUTONOMOUS_REPAIR is set to "enabled" (explicit authorization) and the secret OPENAI_API_KEY exists.
+#   gate    The protected acceptance gate from the BASE branch judges the candidate (the agent cannot edit it).
+#           Accepted: merged into repair/compatibility-engine with --no-ff (one revertable merge commit).
+#           Rejected: the candidate branch and the gate report are kept for reproduction.
+#   verify  Level B (live sites, no AI): re-reads only the affected sites with the integrated engine.
+# Limits: one failure per run, one run at a time, fixed time limits, no retry without new evidence.
+on:
+  schedule:
+    - cron: '23 10 * * 1'
+  workflow_dispatch:
+    inputs:
+      failure:
+        description: Failure id to repair (default the top of the queue)
+        required: false
+      candidate:
+        description: Gate an existing improve/* branch instead of running the agent
+        required: false
+  push:
+    branches: [repair/compatibility-engine]
+    paths: [diagnostics/improvement/trigger.txt]
+permissions:
+  contents: write
+concurrency:
+  group: autonomous-improvement
+  cancel-in-progress: false
+env:
+  BASE_BRANCH: repair/compatibility-engine
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      failure: ${{ steps.pick.outputs.failure }}
+      candidate: ${{ steps.pick.outputs.candidate }}
+      verify_only: ${{ steps.pick.outputs.verify_only }}
+      agent: ${{ steps.agent.outputs.available }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Discover (Level A, offline replay of the recorded corpus)
+        working-directory: expo
+        run: node scripts/improve/evaluate.cjs --out ../diagnostics/improvement/evaluation-latest.json
+      - name: Diagnose and rank
+        working-directory: expo
+        run: |
+          node scripts/improve/failures.cjs diagnose ../diagnostics/improvement/evaluation-latest.json
+          node scripts/improve/failures.cjs queue | tee "$RUNNER_TEMP/queue.json"
+      - name: Choose one failure (trigger file, manual input, or top of the queue)
+        id: pick
+        env:
+          INPUT_FAILURE: ${{ github.event.inputs.failure }}
+          INPUT_CANDIDATE: ${{ github.event.inputs.candidate }}
+        run: |
+          trigger_failure="$(grep -i '^failure:' diagnostics/improvement/trigger.txt 2>/dev/null | head -1 | cut -d: -f2- | tr -d ' ')"
+          trigger_candidate="$(grep -i '^candidate:' diagnostics/improvement/trigger.txt 2>/dev/null | head -1 | cut -d: -f2- | tr -d ' ')"
+          # "verify: <failure>" re-reads an integrated failure's sites live (Level B) without repairing or gating.
+          verify_only="$(grep -i '^verify:' diagnostics/improvement/trigger.txt 2>/dev/null | head -1 | cut -d: -f2- | tr -d ' ')"
+          if [ -n "$verify_only" ]; then trigger_failure="$verify_only"; trigger_candidate=""; fi
+          failure="${INPUT_FAILURE:-$trigger_failure}"
+          candidate="${INPUT_CANDIDATE:-$trigger_candidate}"
+          if [ -z "$failure" ]; then failure="$(node -e 'const q=require(process.argv[1]);console.log(q[0]?.id??"")' "$RUNNER_TEMP/queue.json")"; fi
+          if [ -n "$candidate" ] && ! echo "$candidate" | grep -Eq '^improve/[A-Za-z0-9._-]+$'; then echo "::error::candidate must be an improve/* branch"; exit 1; fi
+          if [ -n "$failure" ] && ! echo "$failure" | grep -Eq '^[a-z0-9-]+$'; then echo "::error::invalid failure id"; exit 1; fi
+          echo "failure=$failure" >> "$GITHUB_OUTPUT"
+          echo "candidate=$candidate" >> "$GITHUB_OUTPUT"
+          echo "verify_only=$([ -n "$verify_only" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "Selected failure: ${failure:-none}; candidate: ${candidate:-agent}"
+      - name: Is unattended repair authorized and configured?
+        id: agent
+        env:
+          HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+          AUTHORIZED: ${{ vars.AUTONOMOUS_REPAIR == 'enabled' }}
+        run: |
+          if [ "$HAS_OPENAI_KEY" = "true" ] && [ "$AUTHORIZED" = "true" ]; then available=true; else available=false; fi
+          echo "available=$available" >> "$GITHUB_OUTPUT"
+          reason=null
+          if [ "$AUTHORIZED" != "true" ]; then reason='"Unattended repair is disabled: set the repository variable AUTONOMOUS_REPAIR=enabled to authorize it. Gate, integration and verification still run for candidate branches."'
+          elif [ "$HAS_OPENAI_KEY" != "true" ]; then reason='"Repository secret OPENAI_API_KEY is not set; the Codex repair step cannot run."'; fi
+          printf '{"checkedAt":"%s","run":"%s","codingAgent":"openai-codex","enabled":%s,"missing":%s}\n' "$(date -u +%FT%TZ)" "$GITHUB_RUN_ID" "$available" "$reason" \
+            > diagnostics/improvement/agent-status.json
+          cat diagnostics/improvement/agent-status.json
+      - name: Save registry
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/improvement && git commit -m "Improvement loop: evaluation and registry ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }
+
+  repair:
+    needs: select
+    if: needs.select.outputs.failure != '' && needs.select.outputs.candidate == '' && needs.select.outputs.verify_only != 'true' && needs.select.outputs.agent == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      branch: ${{ steps.push.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Isolated test compiler (same as the regression workflow)
+        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0
+      - name: Write the brief
+        id: brief
+        working-directory: expo
+        run: |
+          # The brief sits in the workspace for the agent and is removed before the candidate is committed.
+          node scripts/improve/failures.cjs brief "${{ needs.select.outputs.failure }}" --out ../.codex-brief.md
+          printf '\nTest command (offline, guarded): cd expo && NODE_PATH=%s npm test\n' "$RUNNER_TEMP/import-tests/node_modules" >> ../.codex-brief.md
+          git switch -c "improve/${{ needs.select.outputs.failure }}-${GITHUB_RUN_ID}"
+      - name: Coding agent (OpenAI Codex) repairs the failure class
+        uses: openai/codex-action@v1
+        env:
+          NODE_PATH: ${{ runner.temp }}/import-tests/node_modules
+          LEVEL_A_GUARD: 'on'
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .codex-brief.md
+          sandbox: workspace-write
+          safety-strategy: drop-sudo
+          output-file: ${{ runner.temp }}/codex-final.md
+      - name: Commit the candidate (the workflow commits; the agent cannot push)
+        id: push
+        run: |
+          branch="improve/${{ needs.select.outputs.failure }}-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .codex-brief.md
+          git add -A
+          git commit -m "Autonomous repair candidate: ${{ needs.select.outputs.failure }} (run ${GITHUB_RUN_ID})" || { echo "::warning::agent produced no change"; exit 1; }
+          git push origin "HEAD:refs/heads/$branch"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+  gate:
+    needs: [select, repair]
+    if: always() && needs.select.outputs.failure != '' && needs.select.outputs.verify_only != 'true' && (needs.repair.result == 'success' || needs.select.outputs.candidate != '')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      accepted: ${{ steps.judge.outputs.accepted }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.repair.outputs.branch || needs.select.outputs.candidate }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Isolated test compiler
+        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0
+      - name: Protected gate from the base branch
+        run: |
+          git fetch origin "$BASE_BRANCH"
+          mkdir -p "$RUNNER_TEMP/protected"
+          git archive "origin/$BASE_BRANCH" expo/scripts/improve diagnostics/improvement/failures.json | tar -x -C "$RUNNER_TEMP/protected"
+      - name: Acceptance gate
+        id: judge
+        env:
+          NODE_PATH: ${{ runner.temp }}/import-tests/node_modules
+          IMPROVE_REPO_ROOT: ${{ github.workspace }}
+        run: |
+          set +e
+          cp "$RUNNER_TEMP/protected/diagnostics/improvement/failures.json" diagnostics/improvement/failures.json
+          node "$RUNNER_TEMP/protected/expo/scripts/improve/gate.cjs" --failure "${{ needs.select.outputs.failure }}" --base "origin/$BASE_BRANCH" --out "$RUNNER_TEMP/gate"
+          status=$?
+          git checkout -- diagnostics/improvement/failures.json
+          echo "accepted=$([ $status = 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          exit 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gate-${{ needs.select.outputs.failure }}
+          path: ${{ runner.temp }}/gate
+      - name: Integrate (accepted) or record the rejection; the candidate branch is kept either way
+        env:
+          CANDIDATE: ${{ needs.repair.outputs.branch || needs.select.outputs.candidate }}
+          FAILURE: ${{ needs.select.outputs.failure }}
+          ACCEPTED: ${{ steps.judge.outputs.accepted }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          head="$(git rev-parse HEAD)"
+          git checkout -B integrate "origin/$BASE_BRANCH"
+          mkdir -p diagnostics/improvement/gate && cp "$RUNNER_TEMP"/gate/* diagnostics/improvement/gate/
+          gatefile="$(ls diagnostics/improvement/gate/"$FAILURE"-"${head:0:10}".json)"
+          if [ "$ACCEPTED" = "true" ]; then
+            git merge --no-ff "$head" -m "Integrate $FAILURE: autonomous repair accepted by the gate (candidate $CANDIDATE, run $GITHUB_RUN_ID)"
+            (cd expo && node scripts/improve/remember.cjs --failure "$FAILURE" --outcome integrated --gate "../$gatefile" --branch "$CANDIDATE" --commit "$head")
+            git add diagnostics/improvement docs/compatibility-knowledge
+            git commit -m "Remember $FAILURE: integrated (gate report, registry, knowledge index) [skip ci]"
+          else
+            (cd expo && node scripts/improve/remember.cjs --failure "$FAILURE" --outcome rejected --gate "../$gatefile" --branch "$CANDIDATE" --commit "$head")
+            git add diagnostics/improvement docs/compatibility-knowledge
+            git commit -m "Remember $FAILURE: candidate rejected by the gate; branch $CANDIDATE kept for reproduction [skip ci]"
+          fi
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase=merges origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }
+
+  verify:
+    needs: [select, gate]
+    # always(): the skipped repair job (candidate or verify-only runs) must not skip verification.
+    if: always() && needs.select.result == 'success' && (needs.gate.outputs.accepted == 'true' || needs.select.outputs.verify_only == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Level B - re-read only the affected sites live with the integrated engine (no AI, no app build)
+        working-directory: expo
+        run: |
+          args=$(node -e '
+            const r=require("../diagnostics/improvement/failures.json").failures[process.argv[1]];
+            const sites=JSON.parse(require("fs").readFileSync("../diagnostics/sites-25.json","utf8"));
+            const extra=require("fs").existsSync("../diagnostics/evaluation/sites.json")?JSON.parse(require("fs").readFileSync("../diagnostics/evaluation/sites.json","utf8")):[];
+            const all=[...sites,...extra];
+            console.log(r.sites.map(s=>all.find(x=>x.id===s.id)).filter(Boolean).slice(0,6).map(s=>`--id ${s.id} ${s.url}`).join(" "));' "${{ needs.select.outputs.failure }}")
+          node scripts/capture-discovery.cjs --out "$RUNNER_TEMP/verify" $args
+          node scripts/improve/evaluate.cjs --captures "$RUNNER_TEMP/verify" --out "../diagnostics/improvement/verify-${{ needs.select.outputs.failure }}.json"
+      - name: Save the live verification
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/improvement && git commit -m "Live verification of ${{ needs.select.outputs.failure }} (Level B) [skip ci]" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }

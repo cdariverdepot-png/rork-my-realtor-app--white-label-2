@@ -1,0 +1,265 @@
+[
+  {
+    "realtorId": "206c02fd-efb3-4ff3-8da2-7388bee7e85b",
+    "createdAt": "2026-10-08 05:10:43.108909+00",
+    "sources": [
+      {
+        "id": "source-1qie17m",
+        "url": "https://www.granburyrelocationexperts.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791443458788,
+        "connectedAt": 1791436258788,
+        "listingCount": 20,
+        "submittedUrl": "https://www.granburyrelocationexperts.com/",
+        "inventoryUrls": [
+          "https://granburyrelocationexperts.com/"
+        ],
+        "lastCheckedAt": 1791436258788
+      }
+    ],
+    "listings": [
+      {
+        "title": "New Listing &#8211; yesterday 1 / 40 $510,000 Single Family Residence For Sale Active 4 BEDS 3 TOTAL BATHS 2,212 SQFT 4304 Acoma Court Granbury, TX 76048 Indian",
+        "price": "$510,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403980/Granbury/4304-Acoma-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "2,212"
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 30 $170,000 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,464 SQFT 4647 Lyndi Lane Granbury, TX 76049 Blue Wa",
+        "price": "$170,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21404665/Granbury/4647-Lyndi-Lane",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,464"
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 40 $468,500 Single Family Residence For Sale Active 3 BEDS 3 TOTAL BATHS 2,636 SQFT 9508 Nutcracker Court Granbury, TX 76049 P",
+        "price": "$468,500",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403928/Granbury/9508-Nutcracker-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "2,636"
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 40 $249,999 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,447 SQFT 3904 Country Meadows Road Granbury, TX 760",
+        "price": "$249,999",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398139/Granbury/3904-Country-Meadows-Road",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,447"
+      },
+      {
+        "title": "New Listing &#8211; yesterday 1 / 17 $418,000 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,840 SQFT 157 Ponce De Leon Road Granbury, TX 76048 ",
+        "price": "$418,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398791/Granbury/157-Ponce-De-Leon-Road",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,840"
+      },
+      {
+        "title": "New Listing &#8211; 5 days on site 1 / 12 $324,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,758 SQFT 3205 Windcrest Drive Granbury, TX 760",
+        "price": "$324,900",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21402501/Granbury/3205-Windcrest-Drive",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,758"
+      },
+      {
+        "title": "New Listing &#8211; 5 days on site 1 / 25 $245,000 Single Family Residence For Sale Active 3 BEDS 1 TOTAL BATH 988 SQFT 113 W Arnold Street Granbury, TX 76048 B",
+        "price": "$245,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21402449/Granbury/113-W-Arnold-Street",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "988"
+      },
+      {
+        "title": "New Listing &#8211; 5 days on site 1 / 19 $419,950 Single Family Residence For Sale Active 4 BEDS 4 TOTAL BATHS 2,140 SQFT 700 Aqua Vista Drive Granbury, TX 760",
+        "price": "$419,950",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401040/Granbury/700-Aqua-Vista-Drive",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "2,140"
+      },
+      {
+        "title": "New Listing &#8211; 5 days on site 1 / 40 $575,000 Single Family Residence For Sale Active 4 BEDS 3 TOTAL BATHS 2,532 SQFT 2105 Wood Duck Lane Granbury, TX 7604",
+        "price": "$575,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21380359/Granbury/2105-Wood-Duck-Lane",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "2,532"
+      },
+      {
+        "title": "Open House Sat, Oct 10, 2 PM 1 / 40 $800,000 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 2,840 SQFT 6343 Weatherby Road Granbury, TX 76049 Peca",
+        "price": "$800,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21397972/Granbury/6343-Weatherby-Road",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "2,840"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 38 $150,000 Manufactured Home For Sale Active 3 BEDS 2 TOTAL BATHS 1,216 SQFT 5703 N Sunchase Drive Granbury, TX 76049 Su",
+        "price": "$150,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401713/Granbury/5703-N-Sunchase-Drive",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,216"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 37 $620,000 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,996 SQFT 4101 Newport Bay Court Granbury, TX 7",
+        "price": "$620,000",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21393472/Granbury/4101-Newport-Bay-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,996"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 5 $250,990 Single Family Residence For Sale Active 5 BEDS 3 TOTAL BATHS 1,804 SQFT 408 Cactus Court Granbury, TX 76048 Tr",
+        "price": "$250,990",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401268/Granbury/408-Cactus-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 5,
+        "baths": 0,
+        "sqft": "1,804"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 5 $252,990 Single Family Residence For Sale Active 5 BEDS 3 TOTAL BATHS 1,804 SQFT 400 Cactus Court Granbury, TX 76048 Tr",
+        "price": "$252,990",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401246/Granbury/400-Cactus-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 5,
+        "baths": 0,
+        "sqft": "1,804"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 8 $208,990 Single Family Residence For Sale Active 4 BEDS 2 TOTAL BATHS 1,401 SQFT 419 Cactus Court Granbury, TX 76048 Tr",
+        "price": "$208,990",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401250/Granbury/419-Cactus-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "1,401"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 6 $424,766 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 2,065 SQFT 237 Coronado Court Granbury, TX 76048 ",
+        "price": "$424,766",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401449/Granbury/237-Coronado-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "2,065"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 6 $402,864 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS 1,868 SQFT 441 Carnero Drive Granbury, TX 76048 E",
+        "price": "$402,864",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401447/Granbury/441-Carnero-Drive",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 3,
+        "baths": 0,
+        "sqft": "1,868"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 7 $210,990 Single Family Residence For Sale Active 4 BEDS 2 TOTAL BATHS 1,401 SQFT 411 Cactus Court Granbury, TX 76048 Tr",
+        "price": "$210,990",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401235/Granbury/411-Cactus-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "1,401"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 9 $206,990 Single Family Residence For Sale Active 4 BEDS 2 TOTAL BATHS 1,401 SQFT 404 Cactus Court Granbury, TX 76048 Tr",
+        "price": "$206,990",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401232/Granbury/404-Cactus-Court",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "1,401"
+      },
+      {
+        "title": "New Listing &#8211; 6 days on site 1 / 8 $208,990 Single Family Residence For Sale Active 4 BEDS 2 TOTAL BATHS 1,401 SQFT 8001 Mesquite Trail Granbury, TX 76048",
+        "price": "$208,990",
+        "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401231/Granbury/8001-Mesquite-Trail",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 0,
+        "sqft": "1,401"
+      }
+    ]
+  }
+]

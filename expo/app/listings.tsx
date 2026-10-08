@@ -25,6 +25,7 @@ import { useBrand } from "@/contexts/BrandContext";
 import { bustedUri } from "@/lib/imageUri";
 import PressableScale from "@/components/PressableScale";
 import ScreenBackdrop from "@/components/ScreenBackdrop";
+import { specLine } from "@/lib/listingSpecs";
 
 const ACCENT = SCREEN_ACCENT.listings;
 
@@ -91,7 +92,7 @@ function Card({ item, recommended, recommendationLabel }: { item: ManagedListing
           {item.title}
         </Text>
         <Text style={styles.specs} numberOfLines={1}>
-          {item.beds} bd · {item.baths} ba · {item.sqft}
+          {specLine(item)}
         </Text>
       </View>
     </PressableScale>

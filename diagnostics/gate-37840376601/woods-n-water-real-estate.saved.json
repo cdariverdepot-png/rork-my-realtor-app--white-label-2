@@ -1,0 +1,65 @@
+[
+  {
+    "realtorId": "d9d37d36-c5cb-4700-af97-a5479eb37ae5",
+    "createdAt": "2026-10-08 20:41:50.616454+00",
+    "sources": [
+      {
+        "id": "source-3h79ow",
+        "url": "https://www.woodsnwaterrealestate.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "woodsnwaterrealestate",
+            "water"
+          ],
+          "phrases": [
+            "woodsnwaterrealestate",
+            "woodnwaterrealestate"
+          ]
+        },
+        "nextSyncAt": 1791499315719,
+        "connectedAt": 1791492115719,
+        "listingCount": 2,
+        "submittedUrl": "https://www.woodsnwaterrealestate.com/",
+        "inventoryUrls": [
+          "https://woodsnwaterrealestate.com/"
+        ],
+        "lastCheckedAt": 1791492115719
+      }
+    ],
+    "listings": [
+      {
+        "title": "8112 M-77 Germfask, MI 49836",
+        "price": "$64,900",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+        "photos": 1,
+        "descriptionLength": 200,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Woods N Water Real Estate",
+        "ownership": "own"
+      },
+      {
+        "title": "W18572 H-42 Curtis, MI 49820",
+        "price": "$179,000",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/W18572-H-42-Curtis-MI-49820-mls_26-887?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=y&pg=1&SavedSearch=20210102172055451402000000",
+        "photos": 1,
+        "descriptionLength": 199,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Woods N Water Real Estate",
+        "ownership": "own"
+      }
+    ]
+  }
+]

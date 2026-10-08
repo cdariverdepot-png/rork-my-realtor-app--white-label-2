@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { Check, Sparkles, X } from "lucide-react-native";
 import type { ActivityLine } from "@/lib/importProgress";
 
@@ -9,8 +9,17 @@ import type { ActivityLine } from "@/lib/importProgress";
  * the list changes only when a real event arrives, so it can move quickly or wait as long as
  * the work does, and whatever is still running stays visibly active.
  */
-export default function BuildProgress({ lines }: { lines: ActivityLine[] }) {
-  const running = lines.some(line => line.state === "active");
+/**
+ * failure: the build stopped. The panel gives the server's reason, what was already saved, and a way
+ * forward; it never replaces the activity above it, so the realtor can see where it stopped.
+ */
+export default function BuildProgress({ lines, failure, onRetry, onChangeWebsite }: {
+  lines: ActivityLine[];
+  failure?: { message: string; kept: string[] } | null;
+  onRetry?: () => void;
+  onChangeWebsite?: () => void;
+}) {
+  const running = !failure && lines.some(line => line.state === "active");
   return (
     <View
       accessibilityLiveRegion="polite"
@@ -45,12 +54,12 @@ export default function BuildProgress({ lines }: { lines: ActivityLine[] }) {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={{ color: "#F7F4EB", fontSize: 18, fontWeight: "600" }}>Building your app</Text>
-          <Text style={{ color: "#9EAAA7", fontSize: 12, marginTop: 2, letterSpacing: 0.5 }}>{running ? "LIVE IMPORT ACTIVITY" : "IMPORT ACTIVITY"}</Text>
+          <Text style={{ color: "#9EAAA7", fontSize: 12, marginTop: 2, letterSpacing: 0.5 }}>{failure ? "BUILD STOPPED" : running ? "LIVE IMPORT ACTIVITY" : "IMPORT ACTIVITY"}</Text>
         </View>
       </View>
 
       {lines.map(line => {
-        const active = line.state === "active";
+        const active = !failure && line.state === "active";
         return (
           <View key={line.id} style={{ minHeight: 34, flexDirection: "row", alignItems: "center", gap: 11, opacity: active ? 1 : 0.8 }}>
             <View style={{ width: 22, alignItems: "center" }}>
@@ -70,6 +79,23 @@ export default function BuildProgress({ lines }: { lines: ActivityLine[] }) {
           </View>
         );
       })}
+      {failure ? (
+        <View accessibilityRole="alert" style={{ marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.08)", gap: 8 }}>
+          <Text style={{ color: "#F7F4EB", fontSize: 15.5, fontWeight: "600" }}>The build stopped</Text>
+          <Text style={{ color: "#FFBAA9", fontSize: 14, lineHeight: 20 }}>{failure.message}</Text>
+          {failure.kept.map(note => <Text key={note} style={{ color: "#BCC5C1", fontSize: 13.5, lineHeight: 19 }}>{note}</Text>)}
+          <View style={{ flexDirection: "row", gap: 10, marginTop: 6 }}>
+            {onRetry ? <Pressable accessibilityRole="button" accessibilityLabel="Retry the build" onPress={onRetry}
+              style={{ flex: 1, minHeight: 46, borderRadius: 11, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center" }}>
+              <Text style={{ color: "#172027", fontWeight: "700" }}>Retry</Text>
+            </Pressable> : null}
+            {onChangeWebsite ? <Pressable accessibilityRole="button" accessibilityLabel="Change website" onPress={onChangeWebsite}
+              style={{ flex: 1, minHeight: 46, borderRadius: 11, borderWidth: 1, borderColor: "#657079", alignItems: "center", justifyContent: "center" }}>
+              <Text style={{ color: "#F7F4EB", fontWeight: "600" }}>Change website</Text>
+            </Pressable> : null}
+          </View>
+        </View>
+      ) : null}
     </View>
   );
 }

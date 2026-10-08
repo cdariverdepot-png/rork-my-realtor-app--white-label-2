@@ -17,7 +17,7 @@ function importer(session, response) {
   const code = ts.transpileModule(fs.readFileSync(path.join(__dirname, '../lib/listingSourceService.ts'), 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
-  new Function('require', 'module', 'exports', code)(() => ({ supabase }), module, module.exports);
+  new Function('require', 'module', 'exports', code)(id => id === '@/lib/importerFunctions' ? { LISTING_FUNCTION: 'refresh-listings' } : { supabase }, module, module.exports);
   return { ...module.exports, calls };
 }
 

@@ -1,0 +1,724 @@
+{
+  "id": "john-holden-homes",
+  "url": "https://johnholdenhomes.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 56,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1061,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1661,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nLooking for your listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2062,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nLooking for listings · 1 page checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2664,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nYour listings could not be read from this page\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2864,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nYour listings could not be read from this page\nMatching your website’s design and imagery\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 14891,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nYour listings could not be read from this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 19908,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 668,
+      "totalMs": 19766,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "John Holden Homes",
+          "host": "johnholdenhomes.com",
+          "at": 598
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 598
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 2,
+          "at": 1804
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 2,
+          "at": 1922
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 2,
+          "at": 13828
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 0,
+          "total": 2,
+          "at": 13839
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 8,
+          "sections": 0,
+          "at": 13839
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 13839
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 13839
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 13839
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 13839
+        },
+        {
+          "kind": "profile",
+          "name": "John Holden",
+          "city": "Chattanooga, TN",
+          "at": 18905
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 18906
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 12035,
+            "design": 13241,
+            "site": 13839,
+            "profile": 5067,
+            "total": 18906
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "John Holden",
+              "confidence": 1,
+              "locator": "Home page heading and testimonials"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "Affiliate Broker",
+              "confidence": 1,
+              "locator": "Page text: 'John Holden Affiliate Broker'"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "Chattanooga, TN",
+              "confidence": 1,
+              "locator": "Meta title and multiple mentions"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "(423) 314-8761",
+              "confidence": 1,
+              "locator": "Page text and contact section"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "(423) 541-0100",
+              "confidence": 1,
+              "locator": "Page text and contact section"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "John Holden Homes",
+              "confidence": 1,
+              "locator": "Site branding, title, in structured data"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "value": "Realty One Group Experts",
+              "confidence": 1,
+              "locator": "Text: 'the backing of a trusted company, Realty One Group Experts'"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Helping You Buy and Sell Homes in the Chattanooga Area",
+            "welcomeNote": "Welcome! I’m John Holden, a Chattanooga local who’s proudly called this area home for 30 years. I’m passionate about making your real estate journey as smooth and enjoyable as possible.",
+            "tagline": "Dedicated. Energetic. Focused on your goals.",
+            "aboutParagraph": "As an Affiliate Broker with Realty One Group Experts, I bring a unique blend of experience—from serving in the Marine Corps, to managing a beloved local restaurant, to guiding clients seamlessly through buying and selling their homes. My commitment is to provide you with professional expertise, responsive communication, and a deep knowledge of Chattanooga’s neighborhoods. Whether you’re searching for your dream home or looking to sell, I leverage cutting-edge technology and my personal attentiveness to deliver results that exceed your expectations.",
+            "conciergeLine": "Get in touch for a no-obligation consultation—let’s talk about your Chattanooga real estate goals today.",
+            "contactLine": "Call me at (423) 314-8761 or (423) 541-0100. I look forward to working with you!",
+            "tone": "Warm, local, and approachable with a personal commitment to service.",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "3c79f6bc-6bb0-4fb6-9750-d8c35f841155"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://johnholdenhomes.com/",
+              "analyzedAt": 1791439415056,
+              "logoUrl": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-400x164.png",
+              "portraitImageUrl": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%271067%27%20viewBox%3D%270%200%20800%201067%27%3E%3Crect%20width%3D%27800%27%20height%3D%271067%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E",
+              "heroTitle": "Find Your Dream Home in Chattanooga",
+              "heroSubtitle": "Chattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards.",
+              "sections": [],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH.png",
+                  "variants": [
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-200x82.png",
+                      "width": 200
+                    },
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-400x164.png",
+                      "width": 400
+                    },
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-600x245.png",
+                      "width": 600
+                    },
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-800x327.png",
+                      "width": 800
+                    },
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-1200x491.png",
+                      "width": 1200
+                    },
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH.png",
+                      "width": 3334
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-400x164.png",
+                  "width": 3334,
+                  "height": 1363,
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 157,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 0.09,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://johnholdenhomes.com/wp-content/uploads/2023/09/john-holden-chattanooga.jpg",
+                  "variants": [
+                    {
+                      "url": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%271067%27%20viewBox%3D%270%200%20800%201067%27%3E%3Crect%20width%3D%27800%27%20height%3D%271067%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E"
+                    },
+                    {
+                      "url": "https://johnholdenhomes.com/wp-content/uploads/2023/09/john-holden-chattanooga.jpg"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%271067%27%20viewBox%3D%270%200%20800%201067%27%3E%3Crect%20width%3D%27800%27%20height%3D%271067%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E",
+                  "width": 800,
+                  "height": 1067,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 270,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 0.67,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH.png",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-200x82.png",
+                        "width": 200
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-400x164.png",
+                        "width": 400
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-600x245.png",
+                        "width": 600
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-800x327.png",
+                        "width": 800
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-1200x491.png",
+                        "width": 1200
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH.png",
+                        "width": 3334
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://johnholdenhomes.com/wp-content/uploads/2024/02/LineLogoJH-400x164.png",
+                    "width": 3334,
+                    "height": 1363,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 157,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 0.09,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://johnholdenhomes.com/wp-content/uploads/2023/09/john-holden-chattanooga.jpg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%271067%27%20viewBox%3D%270%200%20800%201067%27%3E%3Crect%20width%3D%27800%27%20height%3D%271067%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E"
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2023/09/john-holden-chattanooga.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27800%27%20height%3D%271067%27%20viewBox%3D%270%200%20800%201067%27%3E%3Crect%20width%3D%27800%27%20height%3D%271067%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E",
+                    "width": 800,
+                    "height": 1067,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 270,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 0.67,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://johnholdenhomes.com/wp-content/uploads/2024/02/footer-logo.jpg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27350%27%20height%3D%2780%27%20viewBox%3D%270%200%20350%2080%27%3E%3Crect%20width%3D%27350%27%20height%3D%2780%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E"
+                      },
+                      {
+                        "url": "https://johnholdenhomes.com/wp-content/uploads/2024/02/footer-logo.jpg"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://johnholdenhomes.com/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27350%27%20height%3D%2780%27%20viewBox%3D%270%200%20350%2080%27%3E%3Crect%20width%3D%27350%27%20height%3D%2780%27%20fill-opacity%3D%220%22%2F%3E%3C%2Fsvg%3E",
+                    "width": 350,
+                    "height": 80,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 43,
+                    "upscaleRatio": 1.09,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.trustindex.io/assets/default-avatar/noprofile-09.svg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                      },
+                      {
+                        "url": "https://cdn.trustindex.io/assets/default-avatar/noprofile-09.svg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.trustindex.io/assets/default-avatar/noprofile-02.svg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                      },
+                      {
+                        "url": "https://cdn.trustindex.io/assets/default-avatar/noprofile-02.svg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.trustindex.io/assets/default-avatar/noprofile-08.svg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                      },
+                      {
+                        "url": "https://cdn.trustindex.io/assets/default-avatar/noprofile-08.svg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.trustindex.io/assets/default-avatar/noprofile-01.svg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                      },
+                      {
+                        "url": "https://cdn.trustindex.io/assets/default-avatar/noprofile-01.svg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cdn.trustindex.io/assets/default-avatar/noprofile-03.svg",
+                    "variants": [
+                      {
+                        "url": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                      },
+                      {
+                        "url": "https://cdn.trustindex.io/assets/default-avatar/noprofile-03.svg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://johnholdenhomes.com/R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#c6aa60",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Poppins",
+                "headingFontFamily": "DM Sans",
+                "layout": "portrait-split",
+                "spacing": 16,
+                "radius": 10,
+                "headingSize": 52,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#c6aa60",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Poppins",
+                "headingFontFamily": "DM Sans",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://johnholdenhomes.com/wp-content/uploads/fusion-styles/cec4e5494985a915607dd291398e8334.min.css?ver=3.11.2",
+                  "https://johnholdenhomes.com/wp-content/uploads/trustindex-zillow-widget.css?1787119029"
+                ],
+                "colors": [
+                  "#ffffff",
+                  "#f4f4f6",
+                  "#f8cc23",
+                  "#3bc77b",
+                  "#c6aa60",
+                  "#777777",
+                  "#0064fe",
+                  "#000000",
+                  "#e9eaee",
+                  "#333333",
+                  "#e7e6e6",
+                  "#747474",
+                  "#d2d2d2",
+                  "#e0284f",
+                  "#3d3c3c",
+                  "#65bc7b",
+                  "#ededed",
+                  "#e8e6e6",
+                  "#f5f5f5",
+                  "#444444",
+                  "#f2efef",
+                  "#f0f0f0",
+                  "#d3d3d3",
+                  "#aaa9a9",
+                  "#e6e5e6",
+                  "#666666",
+                  "#aad75d",
+                  "#d1e990",
+                  "#f6f6f6",
+                  "#e2e0e0"
+                ],
+                "fonts": [
+                  "DM Sans",
+                  "Poppins",
+                  "Marketing-Bold",
+                  "Marketing-Bold !important",
+                  "awb-icons!important",
+                  "awb-icons",
+                  "PT Sans",
+                  "Font Awesome 5 Brands",
+                  "Font Awesome 5 Free",
+                  "Trustindex Poppins",
+                  "unset"
+                ],
+                "routing": [
+                  {
+                    "source": "Skip to content",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buying",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Selling",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Contact John",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "jhh",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Colourscope",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Page load link",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://johnholdenhomes.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://johnholdenhomes.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "3c79f6bc-6bb0-4fb6-9750-d8c35f841155",
+              "kind": "url",
+              "label": "johnholdenhomes.com",
+              "uri": "https://johnholdenhomes.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "john-holden-homes-00-url.png",
+    "john-holden-homes-01-review.png",
+    "john-holden-homes-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3115,
+  "reviewMs": 19908,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nYour listings could not be read from this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy",
+  "reviewText": "Back\nAPP BUILDER\njohnholdenhomes.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCHATTANOOGA, TN\nFind Your Dream Home in Chattanooga\nChattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(423) 314-8761\nguest+realtor+a6ebf07f-8d47-4d81-b193-9969b3ea27e9@guest.myrealtor.app\nRealty One Group Experts\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nHelping You Buy and Sell Homes in the Chattanooga Area\nTry another opening line\nYOUR INTRODUCTION\nAs an Affiliate Broker with Realty One Group Experts, I bring a unique blend of experience—from serving in the Marine Corps, to managing a beloved local restaurant, to guiding clients seamlessly through buying and selling their homes. My commitment is to provide you with professional expertise, responsive communication, and a deep knowledge of Chattanooga’s neighborhoods. Whether you’re searching for your dream home or looking to sell, I leverage cutting-edge technology and my personal attentiveness to deliver results that exceed your expectations.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nWe couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nPlease confirm\nWe found these — fix anything that’s wrong.\nPhone\nAlso found: (423) 541-0100\n▸ Brokerage & license (optional)\n✓ Realty One Group Experts\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCHATTANOOGA, TN\nFind Your Dream Home in Chattanooga\nChattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(423) 314-8761\nguest+realtor+a6ebf07f-8d47-4d81-b193-9969b3ea27e9@guest.myrealtor.app\nRealty One Group Experts\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app CHATTANOOGA, TN Find Your Dream Home in Chattanooga Chattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards. View l",
+        "textLength": 489,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://johnholdenhomes.com/",
+      "status": 200,
+      "finalUrl": "https://johnholdenhomes.com/",
+      "title": "Chattanooga Real Estate Broker / Realtor - John Holden Homes",
+      "textLength": 2834,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Skip to content\nHome\nBuying\nSelling\nContact John\n(423) 314-8761\n\n(423) 541-0100\n\nFind Your Dream Home in Chattanooga\n\nHelping you buy and sell homes in the Chattanooga, Tennessee area\n\nJohn Holden\nAffiliate Broker\n423-314-8761\n423-541-0100\nGet A Callback\n\nBy submitting my data I agree to be contacted\n\n2 Timothy 4:7: “I have fought the good fight, I have finished the race, I have kept the faith.”\nCONTACT\n\n5959 Shallowford Rd #225,\nChattanooga, TN 37421 .\n\nPhone: (423) 314-8761 or (423) 541-0100 \n\n© 2025 • Website designed & built by Colourscope\n\nEXCELLENT\nBased on 7 reviews\nMike Canto\nJohn was amazing from the start to closing. Very attentive of our needs, friendly and very professional. John made the process smooth and constantly checked in to ensure if we needed anything or had any questions. I would highly recommend working with John. Thanks again for helping make our home buying experience exceptional!\najrose98\nJohn was amazing from the first initial phone calls to the closing. He was definitely \"Johnny on the spot!\" My husband was out of the country for most of the process. However, John made sure to stay in contact with both of us every step of the way.\nJeremiah B McCain\nJohn ",
+      "challenge": false,
+      "screenshot": "john-holden-homes-source-0.png"
+    }
+  ],
+  "wallMs": 44191,
+  "window": {
+    "startedAt": "2026-10-08T06:03:29.213Z",
+    "endedAt": "2026-10-08T06:04:13.404Z"
+  }
+}

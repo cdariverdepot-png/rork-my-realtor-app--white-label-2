@@ -1,0 +1,35 @@
+[
+  {
+    "realtorId": "738768e4-17c9-4547-a7df-7fd190c17671",
+    "createdAt": "2026-10-08 20:46:27.356605+00",
+    "sources": [
+      {
+        "id": "source-zit1ij",
+        "url": "https://thecameronteam.net/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "thecameronteam",
+            "cameron",
+            "wilmington"
+          ],
+          "phrases": [
+            "thecameronteam",
+            "wilmingtonncrealtorsandhomesforsale"
+          ]
+        },
+        "nextSyncAt": 1791499591929,
+        "connectedAt": 1791492391929,
+        "listingCount": 0,
+        "submittedUrl": "https://thecameronteam.net/",
+        "inventoryUrls": [
+          "https://thecameronteam.net/"
+        ],
+        "lastCheckedAt": 1791492391929
+      }
+    ],
+    "listings": []
+  }
+]

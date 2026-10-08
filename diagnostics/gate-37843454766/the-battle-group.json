@@ -1,0 +1,2046 @@
+{
+  "id": "the-battle-group",
+  "url": "https://www.thebattlegroup.com/",
+  "category": "custom",
+  "timeline": [
+    {
+      "at": 42,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1050,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1654,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1856,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 5076,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 5676,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 0 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 5876,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 1 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6077,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 2 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6678,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 3 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 6879,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 listings so far · 1 page checked\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nReading listing details · 5 of 6\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 7080,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 7281,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaving 6 listings"
+    },
+    {
+      "at": 7683,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings"
+    },
+    {
+      "at": 12304,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Shawn Battle · Arlington, VA"
+    },
+    {
+      "at": 12508,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 590,
+      "totalMs": 7483,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 90
+        },
+        {
+          "kind": "listings",
+          "host": "thebattlegroup.com",
+          "pages": 1,
+          "found": 0,
+          "at": 819
+        },
+        {
+          "kind": "listings",
+          "host": "thebattlegroup.com",
+          "pages": 1,
+          "found": 6,
+          "at": 857
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 6,
+          "succeeded": 0,
+          "at": 857
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 6,
+          "succeeded": 1,
+          "at": 4875
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 6,
+          "succeeded": 2,
+          "at": 5175
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 6,
+          "succeeded": 3,
+          "at": 5679
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 6,
+          "succeeded": 4,
+          "at": 5920
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 6,
+          "succeeded": 5,
+          "at": 5930
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 6,
+          "total": 6,
+          "succeeded": 6,
+          "at": 6104
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 6,
+          "at": 6115
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 6,
+          "at": 6398
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 6,
+          "at": 6708
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-har6xf",
+            "url": "https://www.thebattlegroup.com/",
+            "submittedUrl": "https://www.thebattlegroup.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://thebattlegroup.com/"
+            ],
+            "connectedAt": 1791493470084,
+            "lastCheckedAt": 1791493470084,
+            "nextSyncAt": 1791500670084,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 6,
+            "identity": {
+              "phrases": [
+                "thebattlegroup",
+                "realestateinarlingtonvirginia",
+                "homesforsalearlingtonva"
+              ],
+              "words": [
+                "thebattlegroup",
+                "arlington",
+                "virginia"
+              ]
+            }
+          },
+          "imported": 6,
+          "checked": 6,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-rixnjf",
+              "title": "2165 CABOTS POINT LN RESTON",
+              "neighborhood": "",
+              "price": "$849,900",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3618/805396833618_1440_1080_WM_5U_hJCwzGn-v05tV.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3652/805396833652_1440_1080_WM_h_90vugZEYCMR04V.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3664/805396833664_1440_1080_WM_2e-56hQcpqXUzzG6.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3588/805396833588_1440_1080_WM_zkAYRlXsF5B4H0kz.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3572/805396833572_1440_1080_WM_eSAdEW7C4UY_wGAw.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3610/805396833610_1440_1080_WM_PgE7SC4F7rIQvdgS.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3632/805396833632_1440_1080_WM_Kq_pAYhIYsxDkkns.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3646/805396833646_1440_1080_WM_eOXu2x_xN4T3SxiQ.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3692/805396833692_1440_1080_WM_qPoA26bEMOXJzxX4.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3660/805396833660_1440_1080_WM_mE2PnODbVzNCbBLN.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3582/805396833582_1440_1080_WM_bLSy1OAqgEjKnf5P.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3640/805396833640_1440_1080_WM_XuGHnMMVVXiKZcxL.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3628/805396833628_1440_1080_WM_ipgZRmB2w8EenY8O.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3604/805396833604_1440_1080_WM_ut40QWypqivY8EaS.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3592/805396833592_1440_1080_WM_Cnrgknm4-kyE_FGx.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3622/805396833622_1440_1080_WM_Zaahj2-_mIuQZxhQ.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3788/805396833788_1440_1080_WM_mpV1qhPJTaqS6mUo.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3780/805396833780_1440_1080_WM_PKPj1dsqnkrMbF1B.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/4300/805396834300_1440_1080_WM_ekWn58vpEiwoQiA7.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3794/805396833794_1440_1080_WM_wC69f3YnOhEjBCDX.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3768/805396833768_1440_1080_WM_keyEPZH4jMAMXt65.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3830/805396833830_1440_1080_WM_nIZqvrmfYAkPluzq.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3872/805396833872_1440_1080_WM_Wyf97m1n4GcWsyso.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3868/805396833868_1440_1080_WM_qd4EheQLasuU2T6K.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3748/805396833748_1440_1080_WM_WudEGOJvk-ZNr_WY.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3746/805396833746_1440_1080_WM_R2-Xd-emJtkL0PGK.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3760/805396833760_1440_1080_WM_V-qfyHhA6KAeEbrw.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3754/805396833754_1440_1080_WM_UrpEjEiAUMYIgnw9.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3882/805396833882_1440_1080_WM_US_RqiQuhF4MUaXW.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3776/805396833776_1440_1080_WM_PSiDbJJYIaa-L7l4.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3826/805396833826_1440_1080_WM_FAsI52yXHNExPhng.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/3876/805396833876_1440_1080_WM_acmBKhP3VV11A2wh.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/4176/805396834176_1440_1080_WM_Z1hTtnaYhHA-j6vn.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/4290/805396834290_1440_1080_WM_g7WHrf235vHexhyp.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/4246/805396834246_1440_1080_WM_CHMj7dEkTDOKrayQ.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/4252/805396834252_1440_1080_WM_cHOw8xRtJThWGMQo.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9683/4076/805396834076_1440_1080_WM_u4CwcR1K73dsIGwj.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/4362/805396834362_1440_1080_WM_FVN_-PpAxsD9AZTs.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/4062/805396834062_1440_1080_WM_wbY8NgklxOoQqNDs.jpg"
+              ],
+              "image": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/2165-CABOTS-POINT-LN-RESTON-VA-20191/VAFX2341822/530/",
+              "description": "This striking contemporary end-unit townhouse in Cabots Point captures the architectural character that makes Reston so distinctive. Wrapped in cedar siding and surrounded by mature trees, the home offers a dramatic, light-filled interior with multiple levels, open sight lines and three private decks that bring the outdoors into everyday living. Step inside to a showstopping open staircase that immediately sets the tone. The main level features an expansive, open-concept living and dining area with views into the lower level and access to two separate outdoor living spaces, perfect for morning coffee, grilling or relaxing beneath the trees. Walls of windows fill the home with natural light while preserving the peaceful, tucked-away feeling of its wooded setting. The kitchen combines warmth and function with rich wood cabinetry, granite countertops, pendant lighting, a white tile backsplash and stainless-steel appliances. An adjoining eat-in area is wrapped in windows overlooking the landscaped, fenced front courtyard with stonework and mature plantings, creating a charming place for casual meals. Upstairs, an open gallery-style hallway is lined with railings and overlooks the levels below, reinforcing the home's dramatic contemporary design. Three generously sized bedrooms feature large windows with leafy, nature-filled views. The primary suite includes a private bathroom with a quartz-topped vanities and walk-in shower, while a second full bathroom is conveniently located between the two additional bedrooms. The walk-out lower level offers even more flexible living space. A spacious family room with a wood-burning fireplace opens through sliding glass doors to the third deck, providing a private outdoor retreat surrounded by greenery. The fourth bedroom also features sliding glass doors to the same deck, making it ideal for guests, a home office or a quiet secondary living space. A half bathroom and access to the two-car garage are half way up the staircase between the main and lower levels. Cabots Point is a distinctive enclave set around beautiful Lake Audubon, known for contemporary cedar homes designed to blend naturally into their surroundings. While this property is not lakefront, it enjoys the peaceful atmosphere and wooded beauty of the lakeside community. South Lakes Village Center, with Safeway, restaurants, coffee and everyday conveniences is nearby, along with the Wiehle--Reston East Metro station and the Silver Line. Residents also enjoy the extensive amenities of Reston Association, including more than 1,300 acres of open space, four lakes, miles of pathways, swimming, tennis, pickleball, recreation programs and community events.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Real Broker, LLC - Arlington",
+              "ownership": "own",
+              "lastRefreshedAt": 1791493464068,
+              "lastSyncAttemptAt": 1791493464068,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791500664068,
+              "updatedAt": 1791493464068,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791493464068
+            },
+            {
+              "id": "listing-1hy12kq",
+              "title": "1530 KEY BLVD #520 ARLINGTON",
+              "neighborhood": "",
+              "price": "$759,900",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2084/805355042084_1440_1080_WM_qgklUNfa05bDN6dL.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2058/805355042058_1440_1080_WM_ogkkHwWK17BVZNyg.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1994/805355041994_1440_1080_WM_eVWKKf2z2-NL36ST.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2078/805355042078_1440_1080_WM_M6Oy1kDAJ_fUZZtp.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2002/805355042002_1440_1080_WM_dHW-lCDcJmNV2eLy.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2018/805355042018_1440_1080_WM_yVfYe-DCyA8dX5UW.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2066/805355042066_1440_1080_WM_y5cc2HYWIcewxzOs.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2580/805355042580_1440_1080_WM_uTJm-yVrY7HcDHyp.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2054/805355042054_1440_1080_WM_7CCAmtzJhu4BDcOh.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2062/805355042062_1440_1080_WM_mEH3VwBM-HJOltt_.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2044/805355042044_1440_1080_WM_0b1hH3GQjqp0TOyD.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2074/805355042074_1440_1080_WM_xYHdW9OJAjVNCu11.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2082/805355042082_1440_1080_WM_BOLncAMsuNJKqufz.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2050/805355042050_1440_1080_WM_1Mg-tmtX4nBtcTQ5.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2574/805355042574_1440_1080_WM_Nxf4W3XDYGy5Fr3L.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2562/805355042562_1440_1080_WM_WrpBkQPoIVCfdO2J.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/2128/805355042128_1440_1080_WM_T_wvCcKmQGn4uFoo.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2608/805355042608_1440_1080_WM_C8b1XeS3V520noM9.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2566/805355042566_1440_1080_WM_FOu5btHswVjaZo1d.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/2134/805355042134_1440_1080_WM_rtsGP7m-pCNWqTAN.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5504/1986/805355041986_1440_1080_WM_7Q7xqAf7YYhT3oTt.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5505/1514/805355051514_1440_1080_WM_EGHUeVIz3WnUAVU-.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/5505/1500/805355051500_1440_1080_WM_TSpbcpoU52hMr1N5.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5505/1518/805355051518_1440_1080_WM_4Ji7dkTCYbbhuBjC.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5505/1496/805355051496_1440_1080_WM_2aFOg7ES7Ka7kVB1.jpg"
+              ],
+              "image": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1530-KEY-BLVD-520-ARLINGTON-VA-22209/VAAR2079436/530/",
+              "description": "Offering $10k in buyer closing costs for a successful settlement by 10/31! Rarely available two-level residence at The Atrium offering two bedrooms, two full bathrooms, and exceptional flexibility in the heart of Rosslyn. Walls of glass fill the open main level with spectacular treetop views of Northwest DC and The National Cathedral. The spacious living and dining areas flow directly onto a private balcony - an inviting spot for morning coffee, evening drinks, or simply enjoying the view. The upgraded kitchen features granite countertops, stainless steel appliances, generous cabinetry, and breakfast-bar seating. A bedroom and full bathroom on the main level provide an ideal arrangement for guests, a home office, or a nursery. Upstairs, the expansive primary suite enjoys its own full bathroom, abundant closet space, elevated views, and a separate hallway entrance, creating a remarkable degree of privacy and separation. Additional conveniences include a newer washer and dryer, HVAC (2023), tankless water heater, assigned garage parking space, and separate storage unit. The Atrium offers 24-hour front-desk service, an outdoor pool, tennis courts, fitness center, sauna, hot tub, party room, and on-site dry cleaning. Just blocks from the Rosslyn Metro, with easy access to Georgetown, Reagan National Airport, and the GW Parkway. A distinctive, move-in-ready home combining the space of a townhouse with the amenities and convenience of a full-service condominium.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Real Broker, LLC - Arlington",
+              "ownership": "own",
+              "lastRefreshedAt": 1791493464068,
+              "lastSyncAttemptAt": 1791493464068,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791500664068,
+              "updatedAt": 1791493464068,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791493464068
+            },
+            {
+              "id": "listing-3wpygc",
+              "title": "1111 19TH ST N #2110 ARLINGTON",
+              "neighborhood": "",
+              "price": "$699,900",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2366/804657122366_1440_1080_WM_gGgutpsKgGz7I7fX.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2320/804657122320_1440_1080_WM_uy6Mwyu1Pvnl25UX.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2330/804657122330_1440_1080_WM_8LXqRks2p3S5u3s1.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/2638/804657122638_1440_1080_WM_lVIrTRGdoh40SCdG.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/2286/804657122286_1440_1080_WM_8TB9JN7ei6Ak7ZoL.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/2420/804657122420_1440_1080_WM_YdT-ura2wxD_izDq.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2738/804657122738_1440_1080_WM_YJriqJA81y5avZzw.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2876/804657122876_1440_1080_WM_ZArlVTBIlobs1cL4.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2798/804657122798_1440_1080_WM_CIa5OxDXx8KWha7t.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/2934/804657122934_1440_1080_WM_POZJso377OSjviwZ.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/2830/804657122830_1440_1080_WM_TEe9DB2UR3FT6r4X.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/2994/804657122994_1440_1080_WM_Rc5XTbkKzoDedHeS.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/3138/804657123138_1440_1080_WM_zpEukXu5otGrx7Oi.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/3494/804657123494_1440_1080_WM_Irs1hZJVE-s9GqAi.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/4584/804657124584_1440_1080_WM_US7RfhocbbRL-GB5.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/3576/804657123576_1440_1080_WM_qjrsEhbJFO-gzaK2.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/4256/804657124256_1440_1080_WM_T0WIKjCUZeo1m3P3.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/4550/804657124550_1440_1080_WM_ZBCqve3OORB5KlWs.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/4680/804657124680_1440_1080_WM_bL-W7npA1XFMgOHq.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/4982/804657124982_1440_1080_WM_Iy8Mp1-cWaxzFinw.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/5610/804657125610_1440_1080_WM_ZKpiK0d86lD0kqw7.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/2214/804657122214_1440_1080_WM_IZUCMuEKN9fbSZlU.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5719/3614/804657193614_1440_1080_WM_dM2WNIpYUyQD0eJ8.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/8072/804657128072_1440_1080_WM_lIrmT0o1S2hSpCey.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8046/5712/7922/804657127922_1440_1080_WM_4zhyTrx4qQ2JPpys.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/7790/804657127790_1440_1080_WM_JxvqKiPwtthZ_4EF.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5713/6922/804657136922_1440_1080_WM_VrdIplES_7Z2WV01.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5713/7136/804657137136_1440_1080_WM_N9tmjl8xExhGxdxJ.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5713/6284/804657136284_1440_1080_WM_Ysmlsj1OTLcgF67b.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8046/5712/7970/804657127970_1440_1080_WM_8Oc6T3SBYYofqiKP.jpg"
+              ],
+              "image": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1111-19TH-ST-N-2110-ARLINGTON-VA-22209/VAAR2069906/530/",
+              "description": "Walk into breathtaking views of the Potomac River from the 21st floor of The Waterview in Rosslyn. This 1 bedroom + den residence features floor-to-ceiling windows that fill the home with natural light and showcase dramatic river and Georgetown views. The open kitchen includes a large island, granite countertops, and high-end appliances including SubZero, Viking, and Bosch. Hardwood floors run through the main living areas, creating a seamless space for everyday living and entertaining. The den, located just off the foyer, is perfect for a home office. The spacious bedroom features floor-to-ceiling windows, generous closet space, and brand new carpet. Gas, heat, water, and sewer are included in the condo fee, leaving only electricity and internet as additional utilities. The Waterview offers luxury, hotel-style living with a 24-hour concierge, fitness center, and a spectacular residents-only rooftop terrace with panoramic views of the Potomac River and Washington, DC monuments. Residents also have access to select services from the Le Méridien Hotel located in the building. Located just steps from the Rosslyn Metro, Key Bridge, Georgetown, riverfront trails, restaurants, and shops, this condo offers a rare combination of luxury, convenience, and iconic views.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Real Broker, LLC - Arlington",
+              "ownership": "own",
+              "lastRefreshedAt": 1791493464068,
+              "lastSyncAttemptAt": 1791493464068,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791500664068,
+              "updatedAt": 1791493464068,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791493464068
+            },
+            {
+              "id": "listing-h9yvh7",
+              "title": "900 N STAFFORD ST #1805 ARLINGTON",
+              "neighborhood": "",
+              "price": "$625,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8582/805396538582_1440_1080_WM_94IyDz4axjeBpzjK.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8724/805396538724_1440_1080_WM_1BRAbHPcDLLubDHy.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8434/805396538434_1440_1080_WM_ZaN_E4oZRAHgsvfN.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8510/805396538510_1440_1080_WM_bhw7ZX097fC2LldD.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8520/805396538520_1440_1080_WM_BG-GUVDEP1yoHEzI.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8714/805396538714_1440_1080_WM_Wrqi4fcfZUWnInvQ.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8742/805396538742_1440_1080_WM_ehx7KIhndQjVTNPp.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8652/805396538652_1440_1080_WM_IAOh2wY0tccV-cP6.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8504/805396538504_1440_1080_WM_P3sWD1bJ1fI92Mrx.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8570/805396538570_1440_1080_WM_WJ3dLIMSN0gXYyVB.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8456/805396538456_1440_1080_WM_Kyg3LUVe-3mCfqnx.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8600/805396538600_1440_1080_WM_mlMVh22p9wNygW-0.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8614/805396538614_1440_1080_WM_HArsUJzvA-oNBhJ4.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8848/805396538848_1440_1080_WM_MjlTJX93Cvdmzu35.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8736/805396538736_1440_1080_WM_uOXDDJVpblntXWaZ.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8806/805396538806_1440_1080_WM_wlRsAEr7o1uPv4v5.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8718/805396538718_1440_1080_WM_WMqRFFxizwczn1RY.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8628/805396538628_1440_1080_WM_aOISn57fhlineiMq.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8560/805396538560_1440_1080_WM_p8KhBaEFJD-_5u2y.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8574/805396538574_1440_1080_WM_pT1irlBOIMo3aSz3.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8700/805396538700_1440_1080_WM_M5O-zCJIq9J2FyrB.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8644/805396538644_1440_1080_WM_02Gm7n0BNyvIobNq.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9653/8852/805396538852_1440_1080_WM_6UpRz2CJguqBiXEB.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8770/805396538770_1440_1080_WM_7eufZnHZW6XfieQN.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9655/1206/805396551206_1440_1080_WM_50WbYM3V5XtVQowt.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9655/1182/805396551182_1440_1080_WM_ayNH4n2HQbejUAVA.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9655/1228/805396551228_1440_1080_WM_Xh9DqfURkrGojCVj.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9655/1186/805396551186_1440_1080_WM_Y9PKsQoptqATO1_M.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9655/1190/805396551190_1440_1080_WM_Gh_J-tIorM3DOyNc.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9655/1218/805396551218_1440_1080_WM_E0qWxQFLMLRPskrb.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9655/1104/805396551104_1440_1080_WM_RZnYaaOoDanjSWtm.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9655/1160/805396551160_1440_1080_WM_FpZ2mOgXAyYBRDiZ.jpg"
+              ],
+              "image": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1805-ARLINGTON-VA-22203/VAAR2079614/530/",
+              "description": "High above the heart of Ballston, Unit 1805 at the Alta Vista offers a spacious three-bedroom, two-bath layout with stylish finishes, flexible living spaces and sweeping western views. The kitchen features black granite countertops, black appliances and beautiful medium-stained Shaker-style cabinetry. A striking blue-green glass tile backsplash adds color and personality, while the breakfast bar opens directly to the main living area, keeping the kitchen connected while providing ample workspace. Wood laminate floors extend throughout the expansive living room and dedicated dining area, creating plenty of room for everyday living and entertaining. The living space flows into the west-facing sunroom, where large windows capture abundant afternoon light and colorful evening sunsets. Whether used as a sitting area, home office or quiet place to unwind, the sunroom adds another dimension to the home. The first bedroom is conveniently located just off the dining area and features newly installed luxury vinyl flooring. Down the hallway, a second bedroom also offers new luxury vinyl floors along with direct access to the sunroom. A full bathroom is located just across the hall, making this versatile room ideal for guests, a home office or a combination of both. At the end of the hallway, the private primary suite provides a comfortable retreat with new luxury vinyl flooring and multiple closets, including a walk-in closet. The en-suite bathroom features a modern vessel sink set above a black granite countertop. One assigned garage parking space and a private extra-storage unit convey. Additional garage parking is also available to rent, offering valuable flexibility for a multi-car household. Residents of the Altavista enjoy a 24-hour front desk, fitness center, community room and direct access to the Ballston Metro without having to step outside. Ballston Quarter, restaurants, shopping, entertainment and everyday conveniences are all just moments away. With three true bedrooms, generous living space and beautiful western exposure, Unit 1805 offers a rare combination of space, convenience and city living.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Real Broker, LLC - Arlington",
+              "ownership": "own",
+              "lastRefreshedAt": 1791493464068,
+              "lastSyncAttemptAt": 1791493464068,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791500664068,
+              "updatedAt": 1791493464068,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791493464068
+            },
+            {
+              "id": "listing-jlrf7n",
+              "title": "900 N STAFFORD ST #1719 ARLINGTON",
+              "neighborhood": "",
+              "price": "$575,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2672/805396752672_1440_1080_WM_KpjeEwTgJ075opX7.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2598/805396752598_1440_1080_WM_ENEWW2os_Yr5HZP3.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2656/805396752656_1440_1080_WM_kRf5Aw-1LsOZ3dog.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2646/805396752646_1440_1080_WM_gbvChyk9p6aoNBey.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2754/805396752754_1440_1080_WM_pTOZa46Nv8XPLJww.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2680/805396752680_1440_1080_WM_p0Adx8XEFTOriLaA.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2734/805396752734_1440_1080_WM_wr3jc01GQE1qJv_M.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2632/805396752632_1440_1080_WM_OdgtKXYyTV20kG1O.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2792/805396752792_1440_1080_WM_5cleTbaGV3u2r1UD.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2706/805396752706_1440_1080_WM_Fe81lb43cut2vHwb.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2638/805396752638_1440_1080_WM_oS4HW9gSJ0C_mYn7.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2738/805396752738_1440_1080_WM_jFIUHpJhwSoajl6c.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2686/805396752686_1440_1080_WM_yn6nnqJAwOgF4QmP.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2744/805396752744_1440_1080_WM_sb6eG7jyK4cIVeWW.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2666/805396752666_1440_1080_WM_Tc8Snfkw09rrAdY4.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2750/805396752750_1440_1080_WM_nbjPfRx1ROyFTk4w.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2832/805396752832_1440_1080_WM_Ad264LUYmoTqFSmz.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2846/805396752846_1440_1080_WM_4jjDLb4Z_LSHyAPr.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2824/805396752824_1440_1080_WM_bQky1mVPjuuOD6Qd.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2710/805396752710_1440_1080_WM_tRiyb2m-q2WaMNwO.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2816/805396752816_1440_1080_WM_V0qGSSDMufwR6fJQ.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2836/805396752836_1440_1080_WM_aFqpjtSkLjdGwiC5.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2716/805396752716_1440_1080_WM_wlUS2v6ZF0JqHuc8.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/9552/805396759552_1440_1080_WM_mLwlc16KD0fFAUaQ.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/2670/805396752670_1440_1080_WM_coyb6SfYGFXtGW5d.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/9734/805396759734_1440_1080_WM_tSd-JG71QUxG6hLf.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/9730/805396759730_1440_1080_WM_v7ZIIq9AVfhPZb7T.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/9670/805396759670_1440_1080_WM_ARsl4T6RWC06QP4x.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/9722/805396759722_1440_1080_WM_FkFuCDKA0LQPRr81.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/9748/805396759748_1440_1080_WM_CAed75se-cwPkYp2.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/9692/805396759692_1440_1080_WM_GgBQYAtPYE8c1lJf.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/9496/805396759496_1440_1080_WM_6i-wie3V3AFYLPbf.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/9460/805396759460_1440_1080_WM_GmVMbKcz6-xFkB4w.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/9548/805396759548_1440_1080_WM_cjDO-1bVaBzmgpaN.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9675/9664/805396759664_1440_1080_WM_554HZGNrAKVeuA8j.jpg"
+              ],
+              "image": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1719-ARLINGTON-VA-22203/VAAR2079526/530/",
+              "description": "Welcome to Unit 1719 at the Alta Vista, a beautifully updated corner unit two-bedroom, two-bath residence offering 1,005 square feet of comfortable living space in the heart of Ballston. Light bamboo hardwood floors and fresh paint create a bright, inviting feel throughout the main living areas. The kitchen features abundant cabinetry, generous counter space and a breakfast bar that opens to the living and dining areas, perfect for casual meals and entertaining alike. Just beyond the living room, the enclosed sunroom provides valuable additional living space and showcases northern and eastern panoramic views overlooking the Ballston Metro. It is an ideal setting for a home office, reading nook or a quiet place to unwind above the activity of the neighborhood. Bedrooms are thoughtfully positioned on opposite sides of the living space, creating privacy and flexibility for guests, roommates or working from home. Each bedroom is conveniently paired with its own updated full bathroom, making the split-bedroom floor plan especially functional. One amazing garage parking space next to the elevator and a private extra-storage unit #1719 on the same floor as the condo convey. Additional garage parking is also available to rent in the garage. Residents of the Altavista enjoy a secure building with a 24-hour front desk, fitness center, community room and one of Ballston's most convenient locations. Direct access to the Ballston Metro means you can begin your commute without stepping outside, while Ballston Quarter, restaurants, shopping, fitness studios and everyday conveniences are all just moments away. Unit 1719 combines an efficient two-bedroom layout, elevated views and an unbeatable Metro-connected location, offering the ease and energy of true Ballston living.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Real Broker, LLC - Arlington",
+              "ownership": "own",
+              "lastRefreshedAt": 1791493464068,
+              "lastSyncAttemptAt": 1791493464068,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791500664068,
+              "updatedAt": 1791493464068,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791493464068
+            },
+            {
+              "id": "listing-1fciclc",
+              "title": "888 N QUINCY ST #1105 ARLINGTON",
+              "neighborhood": "",
+              "price": "$482,500",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/1972/805362381972_1440_1080_WM_ELvLx3z9Oq6LtHIO.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2808/805362382808_1440_1080_WM_URsPEEsdhE70GMpN.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/3482/805362383482_1440_1080_WM_y3JD6x4HQsxEZfA1.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2054/805362382054_1440_1080_WM_3cawKTjp_t3rr2w9.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2598/805362382598_1440_1080_WM_6Vjl-VIfR0aNp9kq.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2642/805362382642_1440_1080_WM_O7ms9wwXxBVguTi6.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2620/805362382620_1440_1080_WM_YrbET3Cz7bLDTohV.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2028/805362382028_1440_1080_WM_T9TXg2D-OJkWpsl1.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2744/805362382744_1440_1080_WM_x96vQU0pLNwb48tD.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2044/805362382044_1440_1080_WM_ST8WCL_7e9UM47gI.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/3224/805362383224_1440_1080_WM_byQDDj9OGtwoJGLP.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2660/805362382660_1440_1080_WM_atl7qx6ScwQeGf8l.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/1978/805362381978_1440_1080_WM_7HqYV0iBUzG8x_2l.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2644/805362382644_1440_1080_WM_0zMgDTisSqB83wm7.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2708/805362382708_1440_1080_WM_TE_WykCbpeSHpSZT.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2892/805362382892_1440_1080_WM_hbVftSoTR96H6e4v.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2048/805362382048_1440_1080_WM_YgmiDznatWf-6SCS.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2408/805362382408_1440_1080_WM_F5bLYN3d8uyubHJp.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2770/805362382770_1440_1080_WM_Ruy3t8ebghkX8Hty.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2634/805362382634_1440_1080_WM_iNI38iCE5OWjzvSX.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2698/805362382698_1440_1080_WM_VQZdUj1z9roloF6J.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2492/805362382492_1440_1080_WM_ViDrcI_V1mJFhbFb.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6238/2382/805362382382_1440_1080_WM_9d5ylz9tSWEdOGe_.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/2734/805362382734_1440_1080_WM_Fp8c_UoN8s5JPS_x.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5906/805362395906_1440_1080_WM_X1fKjcqq86dw62XP.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5908/805362395908_1440_1080_WM_x34VPzHKVF2_8Gen.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5898/805362395898_1440_1080_WM_5KDnW-M9804NtjZM.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5916/805362395916_1440_1080_WM__ItcGil7W88sFm1x.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5984/805362395984_1440_1080_WM__tWp6qKjACK_MbLF.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5902/805362395902_1440_1080_WM_62C3qaJE1xLblmQP.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5850/805362395850_1440_1080_WM_M1W2dk7qak_IlXV7.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5930/805362395930_1440_1080_WM_3JnH2nMmVEpksRpH.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5956/805362395956_1440_1080_WM_8U0A6IcfU1vbK_2W.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5950/805362395950_1440_1080_WM_OFys2IaVvrasiCsl.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5994/805362395994_1440_1080_WM_3Rc6QYV0S2Lsrz9D.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/6004/805362396004_1440_1080_WM_-OheWxc190QLJrVf.jpg",
+                "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6239/5970/805362395970_1440_1080_WM_FW5eVy4ACkvs--CT.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5980/805362395980_1440_1080_WM_jMjEOuMbb5eqgDp-.jpg",
+                "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/6239/5750/805362395750_1440_1080_WM_NbtBCSgWETK-nhE5.jpg"
+              ],
+              "image": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/888-N-QUINCY-ST-1105-ARLINGTON-VA-22203/VAAR2079448/530/",
+              "description": "Welcome to Unit 1105, a beautifully appointed one-bedroom Revere model in the sought-after Residences at Liberty Center. Light oak hardwood floors create a bright, contemporary feel throughout the main living area, complemented by floor-to-ceiling glass and abundant natural light. The gourmet kitchen features granite countertops, stainless steel appliances, abundant light maple cabinetry, and a breakfast bar accented by pendant lighting. The open layout flows seamlessly into a dedicated dining area and spacious living room, where floor-to-ceiling sliding glass doors open to a private 11th-floor balcony--an ideal extension of the living space. The generously sized bedroom is comfortably carpeted with plenty of room for a king-size bed and features both a large walk-in closet and an additional secondary closet. The bedroom connects directly to the dual-entry bathroom, complete with a spacious granite-topped vanity and a tub/shower combination, while also providing convenient access from the main living area. Garage parking space #466 and private storage unit #313 convey. Residents of Liberty Center enjoy one of Ballston's premier luxury condominium lifestyles, with amenities including 24-hour concierge service, a spectacular rooftop terrace with panoramic views of Washington, DC and its monuments, a rooftop pool, and a state-of-the-art fitness center. Ideally located just three blocks from the Ballston Metro and surrounded by restaurants, shopping, entertainment, and everything the Ballston-Rosslyn corridor has to offer, Unit #1105 combines comfort, convenience, and contemporary style in one of Arlington's most desirable locations. Modern, refined, and exceptionally well located, this is elevated urban living in the heart of Ballston.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Real Broker, LLC - Arlington",
+              "ownership": "own",
+              "lastRefreshedAt": 1791493464068,
+              "lastSyncAttemptAt": 1791493464068,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791500664068,
+              "updatedAt": 1791493464068,
+              "sourceId": "source-har6xf",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791493464068
+            }
+          ],
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 0,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedUsd": 0,
+            "byStage": {},
+            "records": []
+          },
+          "timings": {
+            "details": 5247,
+            "listings": 6025,
+            "save": 310,
+            "total": 6709
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 715,
+      "totalMs": 12243,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Homes for Sale Arlington VA",
+          "host": "thebattlegroup.com",
+          "at": 446
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 446
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 2,
+          "at": 724
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 2,
+          "at": 4026
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 2,
+          "at": 4443
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 0,
+          "total": 2,
+          "at": 4509
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 33,
+          "sections": 4,
+          "at": 4510
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 4510
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 4510
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 4511
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 4511
+        },
+        {
+          "kind": "profile",
+          "name": "Shawn Battle",
+          "city": "Arlington, VA",
+          "at": 11244
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 11244
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 3785,
+            "design": 4064,
+            "site": 4510,
+            "profile": 6733,
+            "total": 11244
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 3070,
+            "outputTokens": 759,
+            "estimatedUsd": 0.012212,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.012212
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 3070,
+                "cachedInputTokens": 0,
+                "outputTokens": 759,
+                "estimatedUsd": 0.012212,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.phone",
+              "sourceId": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "value": "+1.703.999.8108",
+              "confidence": 1,
+              "locator": "PAGE TEXT and Phone links"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "value": "Shawn@TheBattleGroup.com",
+              "confidence": 0.95,
+              "locator": "PAGE TEXT (format Shawn(at)TheBattleGroup(dotted)com)"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "value": "The Battle Group",
+              "confidence": 1,
+              "locator": "PAGE TEXT (\"We are The Battle Group\")"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "value": "Arlington, VA",
+              "confidence": 0.9,
+              "locator": "PAGE TITLE, text \"specializing in home sales in the Northern Virginia and DC Market\" and repeated focus on Arlington"
+            },
+            {
+              "field": "realtor.name",
+              "sourceId": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "value": "Shawn Battle",
+              "confidence": 1,
+              "locator": "PAGE TEXT (\"Shawn Battle Team Lead\")"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "value": "Team Lead",
+              "confidence": 1,
+              "locator": "PAGE TEXT (\"Shawn Battle Team Lead\")"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Real Estate in Arlington, VA — Guided by Shawn Battle, The Battle Group",
+            "welcomeNote": "Welcome to The Battle Group, where local expertise meets exceptional client care in Arlington and throughout Northern Virginia.",
+            "tagline": "Your story-driven real estate team in Arlington.",
+            "aboutParagraph": "Led by Shawn Battle, The Battle Group specializes in making your Arlington and Northern Virginia real estate goals a reality. Our approach combines creative property marketing—including unique 4K video tours and targeted social media—with step-by-step guidance from contract to close. Whether buying, selling, or exploring market trends, our priority is a smooth, positive experience for every client.",
+            "conciergeLine": "Have a question or ready to take the next step in Arlington real estate? Call us directly at 703.999.8108 for personalized support.",
+            "contactLine": "Connect with Shawn Battle and The Battle Group: Shawn@TheBattleGroup.com | 703.999.8108",
+            "tone": "approachable local expertise with a focus on storytelling and smooth transactions",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://thebattlegroup.com/",
+              "analyzedAt": 1791493464922,
+              "logoUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+              "portraitImageUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+              "heroTitle": "Homes for Sale Arlington VA",
+              "heroSubtitle": "",
+              "sections": [
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Our Stories",
+                  "body": "We sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound All Stories All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ( Videos) Pending Stories ( Videos) Sold Stories ( Videos)"
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "unique",
+                  "title": "Who We Are",
+                  "body": "Facebook Twitter Instagram Youtube Sound Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.",
+                  "imageUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Our Listings",
+                  "body": "Browse Our Homes for Sale in Northern Virginia and DC."
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Sell your home through proven marketing system Contact Us",
+                  "body": "Facebook Twitter Instagram Youtube Sound Home Our Stories Who We Are Our Listings The Shawn & Matt Show Home Value Contact Us Neighborhoods Blog Contact Us 703.999.8108 Shawn(at)TheBattleGroup(dotted)com 1765 Greensboro Station Place Suite 900 McLean, Virginia 22102 Translate"
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                  "variants": [
+                    {
+                      "url": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                  "variants": [
+                    {
+                      "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/[stylesheet_directory]/images/main-logo-w.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/fixed-h-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2024/01/fixed-h-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/fixed-h-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/main-logo-w.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/main-logo-w.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/main-logo-w.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/THE-BATTLE-GROUP.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-1.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-3.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-3.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-3.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-2.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-2.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-2.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-4.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-4.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-4.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-5.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-5.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-5.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-6.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-6.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-6.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-7.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-7.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2025/09/hp-agent-7.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/GSw4BkTmON4/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/GSw4BkTmON4/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/GSw4BkTmON4/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/kbp7dgR6l_g/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/kbp7dgR6l_g/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/kbp7dgR6l_g/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/K5bt5yU4eHk/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/K5bt5yU4eHk/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/K5bt5yU4eHk/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/Fn7ZpxFvYuc/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/Fn7ZpxFvYuc/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/Fn7ZpxFvYuc/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/4Cc15Rev6XQ/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/4Cc15Rev6XQ/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/4Cc15Rev6XQ/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/ChKDS7WVWYE/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/ChKDS7WVWYE/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/ChKDS7WVWYE/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/QENBul1ABsQ/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/QENBul1ABsQ/sddefault.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://i.ytimg.com/vi/QENBul1ABsQ/sddefault.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/iXaDGxhTFL8/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/iXaDGxhTFL8/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/iXaDGxhTFL8/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/OIQ5v8fU374/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/OIQ5v8fU374/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/OIQ5v8fU374/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/YOmnNUG8064/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/YOmnNUG8064/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/YOmnNUG8064/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/LNxBC9ZAn7k/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/LNxBC9ZAn7k/sddefault.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i.ytimg.com/vi/LNxBC9ZAn7k/sddefault.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i.ytimg.com/vi/ZIHV1iAeVrw/sddefault.jpg",
+                    "variants": [
+                      {
+                        "url": "https://i.ytimg.com/vi/ZIHV1iAeVrw/sddefault.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://i.ytimg.com/vi/ZIHV1iAeVrw/sddefault.jpg",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.thebattlegroup.com/wp-content/themes/shawnbattle.com/images/hp-listing-overlay.png",
+                    "variants": [
+                      {
+                        "url": "https://www.thebattlegroup.com/wp-content/themes/shawnbattle.com/images/hp-listing-overlay.png"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebattlegroup.com/wp-content/themes/shawnbattle.com/images/hp-listing-overlay.png",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+                    "variants": [
+                      {
+                        "url": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/homebot-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/uploads/2024/01/homebot-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/uploads/2024/01/homebot-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/agent-headshot-v1.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/agent-headshot-v1.png"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/agent-headshot-v1.png",
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/broker-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/broker-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/images/broker-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#05c3f9",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Montserrat",
+                "headingFontFamily": "Montserrat",
+                "layout": "portrait-split",
+                "spacing": 30,
+                "radius": 15,
+                "headingSize": 52,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#05c3f9",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Montserrat",
+                "headingFontFamily": "Montserrat",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 15,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://resources.agentimage.com/libraries/css/aios-popup.min.css",
+                  "https://resources.agentimage.com/libraries/css/frontend.min.css",
+                  "https://thebattlegroup.com/wp-content/themes/aios-starter-theme/style.css",
+                  "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/style.css",
+                  "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/style-media-queries.css",
+                  "https://thebattlegroup.com/wp-content/themes/shawnbattle.com/css/onepage-scroll.css"
+                ],
+                "colors": [
+                  "#ffffff",
+                  "#000000",
+                  "#0b0b0b",
+                  "#cccccc",
+                  "#333333",
+                  "#3f3f3f",
+                  "#444444",
+                  "#bdbdbd",
+                  "#f3f3f3",
+                  "#969696",
+                  "#afafaf",
+                  "#5b5b5b",
+                  "#898989",
+                  "#636363",
+                  "#6d6d6d",
+                  "#484848",
+                  "#595959",
+                  "#c2c2c2",
+                  "#707070",
+                  "#e1e1e1",
+                  "#cacaca",
+                  "#d7d7d7",
+                  "#b2b2b2",
+                  "#076e83",
+                  "#329db3",
+                  "#4d6baa",
+                  "#4fc6f8",
+                  "#dc4e41",
+                  "#ff0000",
+                  "#007bb6"
+                ],
+                "fonts": [
+                  "Arial",
+                  "Verdana",
+                  "Open Sans",
+                  "monospace",
+                  "Montserrat"
+                ],
+                "routing": [
+                  {
+                    "source": "703.999.8108",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Shawn(at)TheBattleGroup(dotted)com",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Our Stories",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Shawn Battle",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Matt Leighton",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Our Listings",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "The Shawn & Matt Show",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Value",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Neighborhoods",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Arlington",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lyon Village",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lyon Park",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Ashton Heights",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Cherrydale",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Waverly Hills",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Waycroft Woodlawn",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Tara Leeway Heights",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Alexandria",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Del Ray",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Hollin Hills",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Falls Church",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Lake Barcroft",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Falls Church City",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Join Our VIP List",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Arlington VA Real Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Your Home's Story",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Through Proven",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Trending Videos",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Video Marketing",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Top 5 Best Deals in Arlington VA Right Now",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "5 Predictions for the Arlington Real Estate Market This Fall",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Condo Financing Just Changed. Here's What Buyers and Sellers Need to Know",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "The Top 5 Most Expensive Rentals in Arlington, VA",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "These are the top 5 most expensive houses in Arlington in 2026",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Top 10 Biggest Arlington Price Drops of 2026",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Does This MLS Status Hurt Home Sellers?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Is Arlington’s Spring Market Finally Slowing Down?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "We Ranked Arlington’s Craziest Bidding Wars",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Ramit Sethi's Homebuying Guidelines | Top Affordable Beach Towns | $65M TN Estate",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.thebattlegroup.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.thebattlegroup.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "ccdc8fc2-d837-435a-ba5b-bbbc3cf82801",
+              "kind": "url",
+              "label": "www.thebattlegroup.com",
+              "uri": "https://www.thebattlegroup.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "the-battle-group-00-url.png",
+    "the-battle-group-01-review.png",
+    "the-battle-group-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 4552,
+  "reviewMs": 12508,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 6 active listings\nReading Homes for Sale Arlington VA\nMatching your website’s design and imagery\nRead full details for all 6 listings\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 33 website images by role\nWriting your profile and app copy\nSaved 6 listings\nFound Shawn Battle · Arlington, VA",
+  "reviewText": "Back\nAPP BUILDER\nwww.thebattlegroup.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nARLINGTON, VA\nHomes for Sale Arlington VA\nWelcome to The Battle Group, where local expertise meets exceptional client care in Arlington and throughout Northern Virginia.\nView listings\nFROM THE SITE\nOur Stories\nWe sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound All Stories All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ( Videos) Pending Stories ( Videos) Sold Stories ( Videos)\nABOUT\nWho We Are\nFacebook Twitter Instagram Youtube Sound Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.\nOur Listings\n$849,900\n2165 CABOTS POINT LN RESTON\n$759,900\n1530 KEY BLVD #520 ARLINGTON\n$699,900\n1111 19TH ST N #2110 ARLINGTON\n$625,000\n900 N STAFFORD ST #1805 ARLINGTON\n$575,000\n900 N STAFFORD ST #1719 ARLINGTON\n$482,500\n888 N QUINCY ST #1105 ARLINGTON\n+1.703.999.8108\nShawn@TheBattleGroup.com\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nReal Estate in Arlington, VA — Guided by Shawn Battle, The Battle Group\nTry another opening line\nYOUR INTRODUCTION\nLed by Shawn Battle, The Battle Group specializes in making your Arlington and Northern Virginia real estate goals a reality. Our approach combines creative property marketing—including unique 4K video tours and targeted social media—with step-by-step guidance from contract to close. Whether buying, selling, or exploring market trends, our priority is a smooth, positive experience for every client.\nTry another introduction\n6 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\n▸ Brokerage & license (optional)\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nARLINGTON, VA\nHomes for Sale Arlington VA\nWelcome to The Battle Group, where local expertise meets exceptional client care in Arlington and throughout Northern Virginia.\nView listings\nFROM THE SITE\nOur Stories\nWe sell your home by telling your home's story through unique 4K video. Share Facebook Twitter Instagram Youtube Sound All Stories All Stories ( 25 Videos ) Trending Stories ( 2 Videos ) All Stories Select Stories Active Stories ( Videos) Pending Stories ( Videos) Sold Stories ( Videos)\nABOUT\nWho We Are\nFacebook Twitter Instagram Youtube Sound Shawn Battle Team Lead Matt Leighton Realtor Patricia Gil Realtor Miguel Moscol Realtor Mike Lanczycki Realtor Alison Pierre Contract Coordinator Cherry Lanciso Team Assistant We are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads.\nOur Listings\n$849,900\n2165 CABOTS POINT LN RESTON\n$759,900\n1530 KEY BLVD #520 ARLINGTON\n$699,900\n1111 19TH ST N #2110 ARLINGTON\n$625,000\n900 N STAFFORD ST #1805 ARLINGTON\n$575,000\n900 N STAFFORD ST #1719 ARLINGTON\n$482,500\n888 N QUINCY ST #1105 ARLINGTON\n+1.703.999.8108\nShawn@TheBattleGroup.com\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all LISTING 2165 CABOTS POINT LN RESTON $849,900 LISTING 1530 KEY BLVD #520 ARLINGTON $759,900 LISTING 1111 19TH ST N #2110 ARLINGTON $699,900 LIST",
+        "textLength": 399,
+        "stillHome": false
+      },
+      {
+        "label": "2165 CABOTS POINT LN RESTON",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 40 photos 2165 CABOTS POINT LN RESTON $849,900 This striking contemporary end-unit townhouse in Cabots Point captures the architectural character that makes Reston so distinctive",
+        "textLength": 2931,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "1530 KEY BLVD #520 ARLINGTON",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 26 photos 1530 KEY BLVD #520 ARLINGTON $759,900 Offering $10k in buyer closing costs for a successful settlement by 10/31! Rarely available two-level residence at The Atrium offe",
+        "textLength": 1720,
+        "stillHome": false
+      },
+      {
+        "label": "1111 19TH ST N #2110 ARLINGTON",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 31 photos 1111 19TH ST N #2110 ARLINGTON $699,900 Walk into breathtaking views of the Potomac River from the 21st floor of The Waterview in Rosslyn. This 1 bedroom + den residenc",
+        "textLength": 1521,
+        "stillHome": false
+      },
+      {
+        "label": "900 N STAFFORD ST #1805 ARLINGTON",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 33 photos 900 N STAFFORD ST #1805 ARLINGTON $625,000 High above the heart of Ballston, Unit 1805 at the Alta Vista offers a spacious three-bedroom, two-bath layout with stylish f",
+        "textLength": 2380,
+        "stillHome": false
+      },
+      {
+        "label": "900 N STAFFORD ST #1719 ARLINGTON",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 36 photos 900 N STAFFORD ST #1719 ARLINGTON $575,000 Welcome to Unit 1719 at the Alta Vista, a beautifully updated corner unit two-bedroom, two-bath residence offering 1,005 squa",
+        "textLength": 2031,
+        "stillHome": false
+      },
+      {
+        "label": "888 N QUINCY ST #1105 ARLINGTON",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 40 photos 888 N QUINCY ST #1105 ARLINGTON $482,500 Welcome to Unit 1105, a beautifully appointed one-bedroom Revere model in the sought-after Residences at Liberty Center. Light ",
+        "textLength": 2005,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app ARLINGTON, VA Homes for Sale Arlington VA Welcome to The Battle Group, where local expertise meets exceptional client care in Arlington and throughout Northern Virginia. View listings FROM THE SITE O",
+        "textLength": 1346,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all LISTING 2165 CABOTS POINT LN RESTON $849,900 LISTING 1530 KEY BLVD #520 ARLINGTON $759,900 LISTING 1111 19TH ST N #2110 ARLINGTON $699,900 LIST",
+        "textLength": 399,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 6
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "2165 CABOTS POINT LN RESTON",
+      "photos": 40,
+      "first": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9683/3674/805396833674_1440_1080_WM_xlSfZJx_gHc_6Tt6.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 959,
+        "type": "jpg",
+        "bytes": 289253
+      }
+    },
+    {
+      "title": "1530 KEY BLVD #520 ARLINGTON",
+      "photos": 26,
+      "first": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/5504/1990/805355041990_1440_1080_WM_qiF4XoQU2RRFfnAM.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 962,
+        "type": "jpg",
+        "bytes": 354595
+      }
+    },
+    {
+      "title": "1111 19TH ST N #2110 ARLINGTON",
+      "photos": 31,
+      "first": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/3007/3570/805330073570_1440_1080_WM_pnqVD-LCI4r8p_sI.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 1080,
+        "type": "jpg",
+        "bytes": 225950
+      }
+    },
+    {
+      "title": "900 N STAFFORD ST #1805 ARLINGTON",
+      "photos": 33,
+      "first": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/9653/8706/805396538706_1440_1080_WM_bIBsRHQS5HJXKpy4.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 959,
+        "type": "jpg",
+        "bytes": 130959
+      }
+    },
+    {
+      "title": "900 N STAFFORD ST #1719 ARLINGTON",
+      "photos": 36,
+      "first": "https://bright-media01.prd.brightmls.com/bright/images/0000/8053/9675/2700/805396752700_1440_1080_WM_bY1FGvjl9NGTwgJ7.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 960,
+        "type": "jpg",
+        "bytes": 136309
+      }
+    },
+    {
+      "title": "888 N QUINCY ST #1105 ARLINGTON",
+      "photos": 40,
+      "first": "https://bright-media02.prd.brightmls.com/bright/images/0000/8053/6238/3262/805362383262_1440_1080_WM_rI3BSSOl7bjxVMB3.jpg",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 962,
+        "type": "jpg",
+        "bytes": 146140
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.thebattlegroup.com/",
+      "status": 200,
+      "finalUrl": "https://thebattlegroup.com/",
+      "title": "Real Estate in Arlington Virginia | Homes for Sale Arlington VA",
+      "textLength": 2807,
+      "priceCount": 15,
+      "uniquePrices": 6,
+      "propertyLinkCount": 8,
+      "sample": "HOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n703.999.8108\nHOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n \n703.999.8108\nReal Estate in Arlington VA\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nVIDEO\nMARKETING\n\nWe sell your home by telling your home's story through unique 4K video.\n\nSHARE\nWHO\nWE\nARE\nSHAWN BATTLE\nTEAM LEAD\nMATT LEIGHTON\nREALTOR\nPATRICIA GIL\nREALTOR\nMIGUEL MOSCOL\nREALTOR\nMIKE LANCZYCKI\nREALTOR\nALISON PIERRE\nCONTRACT COORDINATOR\nCHERRY LANCISO\nTEAM ASSISTANT\n\nWe are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads. Our goal is to get you the best contract possible backed up with a smooth transaction from contract to close. Our team of real estat",
+      "challenge": false,
+      "screenshot": "the-battle-group-source-0.png"
+    },
+    {
+      "url": "https://thebattlegroup.com/",
+      "status": 200,
+      "finalUrl": "https://thebattlegroup.com/",
+      "title": "Real Estate in Arlington Virginia | Homes for Sale Arlington VA",
+      "textLength": 2807,
+      "priceCount": 15,
+      "uniquePrices": 6,
+      "propertyLinkCount": 8,
+      "sample": "HOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n703.999.8108\nHOME OUR STORIES WHO WE ARE OUR LISTINGS THE SHAWN & MATT SHOW HOME VALUE CONTACT US NEIGHBORHOODS BLOG\n \n703.999.8108\nReal Estate in Arlington VA\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nSELL YOUR\nHOME\nTHROUGH PROVEN\nMARKETING STRATEGIES\nVIDEO\nMARKETING\n\nWe sell your home by telling your home's story through unique 4K video.\n\nSHARE\nWHO\nWE\nARE\nSHAWN BATTLE\nTEAM LEAD\nMATT LEIGHTON\nREALTOR\nPATRICIA GIL\nREALTOR\nMIGUEL MOSCOL\nREALTOR\nMIKE LANCZYCKI\nREALTOR\nALISON PIERRE\nCONTRACT COORDINATOR\nCHERRY LANCISO\nTEAM ASSISTANT\n\nWe are The Battle Group, specializing in home sales in the Northern Virginia and DC Market. We don’t just list your home, we actually market it by telling your home’s story through unique property videos, intense social media campaigns, direct mail and google ads. Our goal is to get you the best contract possible backed up with a smooth transaction from contract to close. Our team of real estat",
+      "challenge": false,
+      "screenshot": "the-battle-group-source-1.png"
+    }
+  ],
+  "wallMs": 56528,
+  "window": {
+    "startedAt": "2026-10-08T21:04:18.609Z",
+    "endedAt": "2026-10-08T21:05:15.137Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.012212,
+    "inputTokens": 3070,
+    "outputTokens": 759
+  }
+}

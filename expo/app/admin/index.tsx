@@ -78,6 +78,7 @@ import { useClients } from "@/contexts/ClientsContext";
 import { useCalendarFeeds } from "@/contexts/CalendarFeedsContext";
 import { useClientFeed } from "@/contexts/ClientFeedContext";
 import { useEngagement } from "@/contexts/EngagementContext";
+import { specLine } from "@/lib/listingSpecs";
 import { useGoLive } from "@/contexts/GoLiveContext";
 import { realtor } from "@/constants/realtor";
 import { requiredStatus } from "@/constants/sections";
@@ -1247,7 +1248,7 @@ function MagazineHeroCard({
           <View style={styles.magazineMeta}>
             <Text style={styles.magazinePrice}>{item.price}</Text>
             <Text style={styles.magazineDot}>·</Text>
-            <Text style={styles.magazineSpec}>{item.beds} BD · {item.baths} BA</Text>
+            <Text style={styles.magazineSpec}>{specLine(item, "upper", false)}</Text>
           </View>
         </View>
         {/* Contextual action hint */}

@@ -1,0 +1,123 @@
+[
+  {
+    "realtorId": "04d7e8d0-2cb3-4748-a721-4dff2fd2e920",
+    "createdAt": "2026-10-08 05:41:30.434268+00",
+    "sources": [
+      {
+        "id": "source-zb4go1",
+        "url": "https://raleighrealty.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791445326916,
+        "connectedAt": 1791438126916,
+        "listingCount": 7,
+        "submittedUrl": "https://raleighrealty.com/",
+        "inventoryUrls": [
+          "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+          "https://raleighrealty.com/raleigh/homes-with-first-floor-master?page=2",
+          "https://raleighrealty.com/raleigh/homes-with-basement",
+          "https://raleighrealty.com/raleigh/homes-with-basement?page=2",
+          "https://raleighrealty.com/raleigh/ranch-homes",
+          "https://raleighrealty.com/raleigh/townhomes",
+          "https://raleighrealty.com/raleigh/townhomes?page=2",
+          "https://raleighrealty.com/raleigh/single-family"
+        ],
+        "lastCheckedAt": 1791438126916
+      }
+    ],
+    "listings": [
+      {
+        "title": "5716 N Hills Dr, Raleigh, NC 27612",
+        "price": "$484,000",
+        "sourceUrl": "https://raleighrealty.com/home/5716-hills-dr-raleigh-nc-27612-9d7520da",
+        "photos": 1,
+        "descriptionLength": 267,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,078"
+      },
+      {
+        "title": "3417 Makers Cir, Raleigh, NC 27612",
+        "price": "$1,831,388",
+        "sourceUrl": "https://raleighrealty.com/home/3417-makers-cir-raleigh-nc-27612-bdec8775",
+        "photos": 1,
+        "descriptionLength": 273,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 5,
+        "sqft": "3,943"
+      },
+      {
+        "title": "2619 Marchmont St, Raleigh, NC 27608",
+        "price": "$2,069,837",
+        "sourceUrl": "https://raleighrealty.com/home/2619-marchmont-st-raleigh-nc-27608-692f427f",
+        "photos": 1,
+        "descriptionLength": 259,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 5,
+        "sqft": "3,543"
+      },
+      {
+        "title": "2611 Marchmont St, Raleigh, NC 27608",
+        "price": "$2,494,088",
+        "sourceUrl": "https://raleighrealty.com/home/2611-marchmont-st-raleigh-nc-27608-28f2f8a6",
+        "photos": 1,
+        "descriptionLength": 259,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 5,
+        "sqft": "4,096"
+      },
+      {
+        "title": "4453 Hillsgrove Rd, Wake Forest, NC 27587",
+        "price": "$295,995",
+        "sourceUrl": "https://raleighrealty.com/home/4453-hillsgrove-rd-wake-forest-nc-27587-1785f8bd",
+        "photos": 1,
+        "descriptionLength": 273,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,572"
+      },
+      {
+        "title": "1015 Breadsell Ln, Wake Forest, NC 27587",
+        "price": "$359,900",
+        "sourceUrl": "https://raleighrealty.com/home/1015-breadsell-ln-wake-forest-nc-27587-6ff8974e",
+        "photos": 1,
+        "descriptionLength": 275,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 4,
+        "sqft": "2,336"
+      },
+      {
+        "title": "401 Hallingsfield Way, Zebulon, NC 27597",
+        "price": "$369,990",
+        "sourceUrl": "https://raleighrealty.com/home/401-hallingsfield-way-zebulon-nc-27597-7edc084c",
+        "photos": 1,
+        "descriptionLength": 268,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,428"
+      }
+    ]
+  }
+]

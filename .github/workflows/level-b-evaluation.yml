@@ -1,0 +1,63 @@
+name: Level B evaluation (live listing extraction, no AI)
+# Reads unfamiliar realtor websites with the branch's discovery engine directly (no Supabase, no OpenAI,
+# no app build), records every public response for offline replay, and evaluates the result. New
+# recordings are added under diagnostics/evaluation/captures; existing recordings are never overwritten.
+# Cost: no AI calls are possible (the engine runs without AI fallbacks; AI_MODE=offline).
+on:
+  push:
+    branches: [repair/compatibility-engine]
+    paths: [diagnostics/evaluation/trigger.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: level-b-evaluation
+  cancel-in-progress: false
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      AI_MODE: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/compatibility-engine
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Budget plan (Level B is free; refuses nothing but records the campaign)
+        working-directory: expo
+        run: node scripts/ai-budget.cjs plan --level B --sites "$(node -e 'console.log(require("../diagnostics/evaluation/sites.json").length)')"
+      - name: Capture sites without a recording (production discovery options)
+        working-directory: expo
+        run: |
+          mkdir -p ../diagnostics/evaluation/captures
+          args=$(node -e '
+            const fs=require("fs");
+            const sites=require("../diagnostics/evaluation/sites.json");
+            console.log(sites.filter(s=>!fs.existsSync(`../diagnostics/evaluation/captures/${s.id}.json.gz`)).map(s=>`--id ${s.id} ${s.url}`).join(" "));')
+          if [ -n "$args" ]; then
+            node scripts/capture-discovery.cjs --out "$RUNNER_TEMP/captures" $args
+            for f in "$RUNNER_TEMP"/captures/*.json; do gzip -9 -c "$f" > "../diagnostics/evaluation/captures/$(basename "$f").gz"; done
+          fi
+      - name: Evaluate the whole corpus offline and update the scorecard
+        working-directory: expo
+        run: |
+          node scripts/improve/evaluate.cjs --out ../diagnostics/improvement/evaluation-latest.json
+          node scripts/improve/failures.cjs diagnose ../diagnostics/improvement/evaluation-latest.json
+          node scripts/improve/scorecard.cjs --evaluation ../diagnostics/improvement/evaluation-latest.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: level-b-${{ github.run_id }}
+          path: |
+            diagnostics/evaluation/captures
+            diagnostics/improvement/evaluation-latest.json
+            diagnostics/improvement/scorecard.json
+      - name: Commit recordings and results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics && git commit -m "Level B evaluation ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }

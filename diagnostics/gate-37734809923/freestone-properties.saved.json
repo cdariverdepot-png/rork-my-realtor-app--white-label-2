@@ -1,0 +1,79 @@
+[
+  {
+    "realtorId": "7bbec48a-426e-45e8-846b-7948c042fad1",
+    "createdAt": "2026-10-08 06:04:15.461224+00",
+    "sources": [
+      {
+        "id": "source-nkdipb",
+        "url": "https://www.freestoneproperties.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "freestoneproperties",
+            "freestone",
+            "asheville",
+            "black",
+            "mountain"
+          ],
+          "phrases": [
+            "freestoneproperties",
+            "ashevillerealestate",
+            "blackmountainncrealestate",
+            "freestone"
+          ]
+        },
+        "nextSyncAt": 1791446659200,
+        "connectedAt": 1791439459200,
+        "listingCount": 3,
+        "submittedUrl": "https://www.freestoneproperties.com/",
+        "inventoryUrls": [
+          "https://www.freestoneproperties.com/"
+        ],
+        "lastCheckedAt": 1791439459200
+      }
+    ],
+    "listings": [
+      {
+        "title": "213 Old State Ten Road Black Mountain",
+        "price": "$335,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/213-old-state-ten-road-black-mountain/",
+        "photos": 40,
+        "descriptionLength": 138,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "5 Chaucer Road Black Mountain",
+        "price": "$1,900,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/5-chaucer-road-black-mountain/",
+        "photos": 171,
+        "descriptionLength": 140,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "051 Very desirable Llama Vista condo for sale in Black Mountain",
+        "price": "$289,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/102-llama-way-black-mountain/",
+        "photos": 50,
+        "descriptionLength": 112,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

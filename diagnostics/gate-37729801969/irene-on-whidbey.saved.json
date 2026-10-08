@@ -1,0 +1,90 @@
+[
+  {
+    "realtorId": "9357b263-b789-4415-bc0b-7bb99eac61f0",
+    "createdAt": "2026-10-08 05:03:30.920978+00",
+    "sources": [
+      {
+        "id": "source-1bqbnbb",
+        "url": "https://www.ireneonwhidbey.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791443024636,
+        "connectedAt": 1791435824636,
+        "listingCount": 3,
+        "submittedUrl": "https://www.ireneonwhidbey.com/",
+        "inventoryUrls": [
+          "https://search.ireneonwhidbey.com/idx/map/mapsearch",
+          "https://search.ireneonwhidbey.com/idx/search/advanced",
+          "https://search.ireneonwhidbey.com/idx/search/listingid",
+          "https://search.ireneonwhidbey.com/idx/search/address",
+          "https://search.ireneonwhidbey.com/idx/results/listings?idxID=b045",
+          "https://search.ireneonwhidbey.com/idx/results/listings",
+          "https://search.ireneonwhidbey.com/idx/search/advanced?modifySearch=true",
+          "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+          "https://search.ireneonwhidbey.com/idx/photogallery/b045/2554926",
+          "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926",
+          "https://search.ireneonwhidbey.com/idx/mortgage",
+          "https://search.ireneonwhidbey.com/idx/search",
+          "https://www.idxbroker.com/",
+          "https://www.ireneonwhidbey.com/home-valuation",
+          "https://www.ireneonwhidbey.com/home"
+        ],
+        "lastCheckedAt": 1791435824636
+      }
+    ],
+    "listings": [
+      {
+        "title": "Add to Favorites",
+        "price": "$1,650,000",
+        "sourceUrl": "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+        "photos": 1,
+        "descriptionLength": 1485,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Composition, Metal",
+          "Sewer": "Sewer Septic Tank",
+          "Water": "Water Source Individual Well, See Remarks",
+          "Year Built": "Year Built 1958",
+          "Subdivision": "Subdivision Central Whidbey"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "Add to Favorites",
+        "price": "$1,650,000",
+        "sourceUrl": "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926",
+        "photos": 1,
+        "descriptionLength": 1485,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Composition, Metal",
+          "Sewer": "Sewer Septic Tank",
+          "Water": "Water Source Individual Well, See Remarks",
+          "Year Built": "Year Built 1958",
+          "Subdivision": "Subdivision Central Whidbey"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "Subscription cost",
+        "price": "$50",
+        "sourceUrl": "https://www.idxbroker.com/",
+        "photos": 0,
+        "descriptionLength": 135,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

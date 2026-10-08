@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { isKvEnabled, kvSet } from "@/lib/kvStore";
 import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
-import { invokeListingSync } from "@/lib/listingSourceService";
+import { invokeListingSync, readRemainingDetails } from "@/lib/listingSourceService";
 import { sameJson } from "@/lib/sameJson";
 
 export type ListingStatus = "active" | "pending" | "contingent" | "sold" | "off_market";
@@ -33,6 +33,10 @@ export type ManagedListing = Omit<SeedListing, "tag"> & {
   propertyType?: string;
   detailsComplete?: boolean;
   facts?: Record<string, string>;
+  /** Listing brokerage/agent attribution published with the property (IDX attribution). */
+  listingOffice?: string;
+  /** "featured": another office's listing shown on the agent's site; never presented as the agent's own. */
+  ownership?: "own" | "featured";
   /** Optional long-form copy pulled in when a listing is imported/refreshed from a source URL. */
   description?: string;
 };
@@ -357,7 +361,9 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     async (id?: string): Promise<{ ok: boolean; error?: string }> => {
       if (demoViewMode || isDemoScope) return { ok: false, error: "The demo is read-only." };
       try {
-        const result = await invokeListingSync(id ? { listingId: id } : {});
+        const synced = await invokeListingSync(id ? { listingId: id } : {});
+        // A source sync reads details in follow-up jobs; finish them before reporting the result.
+        const result = id ? synced : await readRemainingDetails(synced);
         await refreshKv();
         return result.warning ? { ok: false, error: result.warning } : { ok: true };
       } catch (e) { return { ok: false, error: e instanceof Error ? e.message : "We couldn't check that source. Please retry." }; }

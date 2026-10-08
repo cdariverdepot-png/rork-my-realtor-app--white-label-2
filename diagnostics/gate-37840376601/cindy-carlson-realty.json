@@ -1,0 +1,130 @@
+{
+  "id": "cindy-carlson-realty",
+  "url": "https://cindycarlsonrealty.com/",
+  "category": "flexmls",
+  "timeline": [
+    {
+      "at": 36,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 838,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1037,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1237,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 1439,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2640,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3041,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)"
+    },
+    {
+      "at": 11247,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)\nFound Cindy Carlson · Kellogg, ID"
+    },
+    {
+      "at": 32903,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "cindy-carlson-realty-00-url.png",
+    "cindy-carlson-realty-01-review.png",
+    "cindy-carlson-realty-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 2733,
+  "reviewMs": 32903,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)\nFound Cindy Carlson · Kellogg, ID",
+  "reviewText": "Back\nAPP BUILDER\ncindycarlsonrealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nExperience Real Estate With Local Expertise in North Idaho’s Silver Valley.\nTry another opening line\nYOUR INTRODUCTION\nAs the broker and owner of Cindy Carlson Realty, I bring over 18 years of real estate insight combined with a lifelong passion for helping others thrive in North Idaho. My approach has always been founded on integrity, constant learning, and genuine care for this community. Having raised my family here and served on local boards, I value giving back and believe in leading the market through knowledge and service. My team and I are proud to serve buyers and sellers across the Silver Valley, offering attentive guidance and seasoned advice at every step.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nThis site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Cindy Carlson Realty\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app Cindy Carlson Realty KELLOGG, ID Welcome To Cindy Carlson Realty Cindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho. View listings THE AREA North Idaho’s Silver Valley Ne",
+        "textLength": 1422,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://cindycarlsonrealty.com/",
+      "status": 200,
+      "finalUrl": "https://cindycarlsonrealty.com/",
+      "title": "Cindy Carlson Realty – A Full Service Real Estate Agency",
+      "textLength": 1177,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 2,
+      "sample": "Skip to primary navigation\nSkip to main content\nSkip to primary sidebar\nCINDY CARLSON REALTY\n\nA Full Service Real Estate Agency\n\nHOME\n \nFEATURED LISTINGS\n \nPROPERTY SEARCH\n \nABOUT THE AREA\n \nABOUT US\n \nCONTACT US\nHome\nCindy Carlson Broker, Realtor®, ABR, CRS, GRI, RSPS\n\n                           Welcome To Cindy Carlson Realty\n\n\nWe specialize in Real Estate in the Silver Valley and North Idaho. The Silver Valley offers a wealth of opportunity and an outstanding quality of life!  Whether you are looking for land, recreational property, development property, a business opportunity or your dream home, we can help.\n\n\n\nPrimary Sidebar\nSTAY IN TOUCH:\n\n\n\nPROPERTY SEARCH:\nProperty Search\nFeatured Listings\nWE ARE LOCATED AT:\n\n202 W Cameron Avenue\nKellogg, ID 83837\nOffice: (208) 783-2544\nFax: (208) 783-2941\n\nFACEBOOK FEED\n\nCopyright © 2026 · Metro Pro On Genesis Framework · WordPress · Log in\n\nAll Rights Reserved © 2017 Cindy Carlson Realty. | A Full Service Real Estate Agency. All information provided is deemed reliable but is not guaranteed and should be independently verified. Properties subject to prior sale or rental. | Website Designed By: Opportunity Designs",
+      "challenge": false,
+      "screenshot": "cindy-carlson-realty-source-0.png"
+    }
+  ],
+  "wallMs": 55470,
+  "window": {
+    "startedAt": "2026-10-08T20:40:53.470Z",
+    "endedAt": "2026-10-08T20:41:48.940Z"
+  },
+  "aiUsage": {
+    "calls": 0,
+    "blocked": 0,
+    "estimatedUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

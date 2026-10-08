@@ -1,0 +1,109 @@
+{
+  "failure": "not-a-property",
+  "base": "origin/repair/compatibility-engine",
+  "head": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+  "baseSha": "5803976279f14aefef077f1c074f03b93b8de18f",
+  "at": "2026-10-08T19:37:33.382Z",
+  "checks": {
+    "policy": {
+      "ok": true,
+      "problems": [],
+      "notes": [
+        "4 files changed; 5 tests added."
+      ],
+      "files": [
+        {
+          "status": "A",
+          "file": "docs/compatibility-knowledge/not-a-property.md"
+        },
+        {
+          "status": "A",
+          "file": "expo/tests/notAProperty.test.cjs"
+        },
+        {
+          "status": "M",
+          "file": "supabase/functions/analyze-realtor-build/deploy.bundle.ts"
+        },
+        {
+          "status": "M",
+          "file": "supabase/functions/analyze-realtor-build/listingRecords.ts"
+        }
+      ],
+      "declaredChanges": []
+    },
+    "static": {
+      "ok": true,
+      "problems": []
+    },
+    "suite": {
+      "ok": true,
+      "pass": 598,
+      "fail": 0,
+      "failing": [],
+      "guard": "clean"
+    },
+    "corpus": {
+      "ok": true,
+      "problems": [],
+      "improvements": [
+        "NOT_A_PROPERTY: 1 -> 0 code-defect records across the corpus."
+      ],
+      "notes": [
+        "the-cameron-team: now imports nothing; ALL_FILTERED|needs_review explains it (expected).",
+        "Corpus CPU 5660 ms -> 5285 ms."
+      ],
+      "targetBefore": 1,
+      "targetAfter": 0
+    },
+    "declarations": {
+      "ok": true,
+      "problems": [],
+      "notes": [
+        "0 declared baseline changes verified."
+      ]
+    }
+  },
+  "holdout": [
+    "bridge-realty",
+    "century21-barbara-patterson",
+    "chattanooga-property-shop",
+    "cindy-carlson-realty",
+    "coldwell-banker-alena-goncharov",
+    "compass-jeff-stahlhut",
+    "elevate-realty-granbury",
+    "freestone-properties",
+    "houses-of-kansas-city",
+    "irene-on-whidbey",
+    "john-holden-homes",
+    "katerina-sayles",
+    "mount-snow-palmiter",
+    "raleigh-realty",
+    "reagent-denver",
+    "realm-partners-idaho",
+    "redfin-gavin-shettler",
+    "redman-realty-group",
+    "remax-alexis-kemp-sagert",
+    "rockys-mom-realty",
+    "ryan-realty",
+    "scott-a-jacobs-realtor",
+    "the-battle-group",
+    "woods-n-water-real-estate",
+    "zillow-leland-reed",
+    "bernard-real-estate-group",
+    "canaday-group",
+    "chatman-realty-group",
+    "craft-bauer",
+    "eddie-and-laura",
+    "finch-and-gable",
+    "find-estes-park-homes",
+    "georgina-jacobson",
+    "howard-hanna-daniel-torri",
+    "idaho-perfect-home",
+    "lauer-realty-group",
+    "magic-valley-homes",
+    "remington-crispeno-team",
+    "skilled-real-estate-miami",
+    "tom-toole"
+  ],
+  "accepted": true
+}

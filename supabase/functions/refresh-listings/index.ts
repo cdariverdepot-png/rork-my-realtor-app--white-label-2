@@ -30,7 +30,7 @@ async function handle(req: Request, sink?: (event: ImportEvent) => void): Promis
     const provided = req.headers.get("x-listing-sync-token");
     const scheduled = !!secret && !!provided && await sameSecret(secret, provided);
     if (provided && !scheduled) return reply({ ok: false, error: "Invalid sync credential." }, 401);
-    let body: { realtorId?: string; listingId?: string; mode?: string; url?: string; sourceId?: string };
+    let body: { realtorId?: string; listingId?: string; mode?: string; url?: string; sourceId?: string; since?: number };
     try { body = await req.json(); } catch { return reply({ ok: false, error: "Use a JSON request." }, 400); }
     if (!body || typeof body !== "object") return reply({ ok: false, error: "Use a JSON request." }, 400);
     let realtorId: string;

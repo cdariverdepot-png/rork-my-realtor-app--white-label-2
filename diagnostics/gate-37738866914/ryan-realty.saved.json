@@ -1,0 +1,682 @@
+[
+  {
+    "realtorId": "514b59c9-4a0c-41d4-9dbc-3ed6ee7407e2",
+    "createdAt": "2026-10-08 08:49:16.798953+00",
+    "sources": [
+      {
+        "id": "source-1jrxsis",
+        "url": "https://ryan-realty.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "oregon"
+          ],
+          "phrases": [
+            "ryanrealty",
+            "bendoregonrealestateandhomesforsale"
+          ]
+        },
+        "nextSyncAt": 1791456566543,
+        "connectedAt": 1791449366543,
+        "listingCount": 36,
+        "submittedUrl": "https://ryan-realty.com/",
+        "inventoryUrls": [
+          "https://ryan-realty.com/"
+        ],
+        "lastCheckedAt": 1791449366543
+      }
+    ],
+    "listings": [
+      {
+        "title": "21729 Stromboli Lane Bend 97702",
+        "price": "$591,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21729-stromboli-220224057",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4356",
+          "Year Built": "2026"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": "2,045",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "19052 Mt. Shasta Drive Bend 97703",
+        "price": "$1,295,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/three-pines/19052-mt-shasta-220228186",
+        "photos": 5,
+        "descriptionLength": 65,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6969.6",
+          "Year Built": "2006"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,870",
+        "listingOffice": "Varsity Real Estate",
+        "ownership": "featured"
+      },
+      {
+        "title": "21545 Etna Place Bend 97702",
+        "price": "$634,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21545-etna-220215553",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,038",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "21816 Stromboli Court Bend 97702",
+        "price": "$639,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21816-stromboli-220220864",
+        "photos": 2,
+        "descriptionLength": 65,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4356",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,754",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "62617 Lawler Place Bend 97701",
+        "price": "$399,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/ponderosa-phase-1/62617-lawler-220224895",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "1742.4",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,413",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "2966 Meldrum Court Bend 97703",
+        "price": "$1,525,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/awbrey-butte/2966-meldrum-220227377",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "29185.2",
+          "Year Built": "2018"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,849",
+        "listingOffice": "Cascade Hasson SIR",
+        "ownership": "featured"
+      },
+      {
+        "title": "2563 Crossing Drive Bend 97703",
+        "price": "$1,297,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2563-crossing-220221404",
+        "photos": 5,
+        "descriptionLength": 65,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3920.4",
+          "Year Built": "2008"
+        },
+        "beds": 3,
+        "baths": 4,
+        "sqft": "2,943",
+        "listingOffice": "Engel & Voelkers Bend",
+        "ownership": "featured"
+      },
+      {
+        "title": "56964 Dancing Rock Loop Bend 97707",
+        "price": "$1,695,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/caldera-springs/56964-dancing-rock-220223844",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "10018.8",
+          "Year Built": "2022"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": "2,714",
+        "listingOffice": "Cascade Hasson SIR",
+        "ownership": "featured"
+      },
+      {
+        "title": "62720 Ridge Rock Court Bend 97703",
+        "price": "$1,475,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/shevlin-bluffs/62720-ridge-rock-220228438",
+        "photos": 5,
+        "descriptionLength": 68,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "11325.6",
+          "Year Built": "2021"
+        },
+        "beds": 4,
+        "baths": 5,
+        "sqft": "2,480",
+        "listingOffice": "Bend Premier Real Estate LLC",
+        "ownership": "featured"
+      },
+      {
+        "title": "2765 High Lakes Loop Bend 97703",
+        "price": "$915,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2765-high-lakes-220227670",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3049.2",
+          "Year Built": "2018"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": "992",
+        "listingOffice": "Harcourts The Garner Group Real Estate",
+        "ownership": "featured"
+      },
+      {
+        "title": "3333 Leavitt Lane Bend 97703",
+        "price": "$1,695,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/discovery-west-phase-6-7/3333-leavitt-220227817",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "9147.6",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,304",
+        "listingOffice": "Harcourts The Garner Group Real Estate",
+        "ownership": "featured"
+      },
+      {
+        "title": "3301 Antler Ridge Lane Redmond 97756",
+        "price": "$435,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/antler-ridge/3301-antler-ridge-220226153",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "8712",
+          "Year Built": "2012"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,201",
+        "listingOffice": "Windermere Realty Trust",
+        "ownership": "featured"
+      },
+      {
+        "title": "21548 Etna Place Bend 97702",
+        "price": "$667,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21548-etna-220211571",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,230",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "21404 Krakatoa Court Bend 97702",
+        "price": "$689,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21404-krakatoa-220217276",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2025"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,402",
+        "listingOffice": "Stellar Realty Northwest",
+        "ownership": "featured"
+      },
+      {
+        "title": "21549 Etna Place Bend 97702",
+        "price": "$652,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21549-etna-220215554",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3920.4",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,230",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "2621 Sky Vista Court Bend 97703",
+        "price": "$1,299,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/marken-summit/2621-sky-vista-220227658",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4791.6",
+          "Year Built": "2021"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,778",
+        "listingOffice": "Varsity Real Estate",
+        "ownership": "featured"
+      },
+      {
+        "title": "62615 Lawler Place Bend 97701",
+        "price": "$395,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/ponderosa-phase-1/62615-lawler-220223086",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "1742.4",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,413",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "21357 Kilimanjaro Loop Bend 97702",
+        "price": "$599,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21357-kilimanjaro-220222798",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2025"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,332",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "21717 Stromboli Lane Bend 97702",
+        "price": "$584,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21717-stromboli-220226905",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4356",
+          "Year Built": "2026"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": "2,045",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "883 Highland View Loop Redmond 97756",
+        "price": "$1,195,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/ridge-at-eagle-crest/883-highland-view-220228720",
+        "photos": 5,
+        "descriptionLength": 65,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "19602",
+          "Year Built": "2021"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,347",
+        "listingOffice": "Varsity Real Estate",
+        "ownership": "featured"
+      },
+      {
+        "title": "21416 Krakatoa Court Bend 97702",
+        "price": "$694,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21416-krakatoa-220215617",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2025"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,432",
+        "listingOffice": "Stellar Realty Northwest",
+        "ownership": "featured"
+      },
+      {
+        "title": "20892 Caldera Drive Bend 97702",
+        "price": "$684,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20892-caldera-220214438",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "5227.2",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,141",
+        "listingOffice": "Pahlisch Real Estate, Inc",
+        "ownership": "featured"
+      },
+      {
+        "title": "21560 Etna Place Bend 97702",
+        "price": "$649,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21560-etna-220221393",
+        "photos": 4,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6534",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,754",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "21709 Stromboli Lane Bend 97702",
+        "price": "$559,995",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21709-stromboli-220226910",
+        "photos": 2,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4791.6",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "1,860",
+        "listingOffice": "D.R. Horton, Inc.-Portland",
+        "ownership": "featured"
+      },
+      {
+        "title": "508 Lafayette Avenue Bend 97701",
+        "price": "$650,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/wiestoria/508-lafayette-220229658",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "7405.2",
+          "Year Built": "1975"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,365",
+        "listingOffice": "Shelton Kelley Realty",
+        "ownership": "featured"
+      },
+      {
+        "title": "778 Varnish Place Redmond 97756",
+        "price": "$411,500",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/121-west-phase-3/778-varnish-220229711",
+        "photos": 5,
+        "descriptionLength": 61,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3049.2",
+          "Year Built": "2027"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,627",
+        "listingOffice": "Lennar Sales Corp",
+        "ownership": "featured"
+      },
+      {
+        "title": "712 Walnut Avenue Redmond 97756",
+        "price": "$441,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/121-west-phase-3/712-walnut-220229712",
+        "photos": 5,
+        "descriptionLength": 61,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3049.2",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,772",
+        "listingOffice": "Lennar Sales Corp",
+        "ownership": "featured"
+      },
+      {
+        "title": "15226 Easy Street Prineville 97754",
+        "price": "$349,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/prineville/idleway-acres/15226-easy-220229671",
+        "photos": 5,
+        "descriptionLength": 61,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "21780",
+          "Year Built": "1998"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,264",
+        "listingOffice": "Keller Williams Realty Central Oregon",
+        "ownership": "featured"
+      },
+      {
+        "title": "60349 Sage Stone Loop Bend 97702",
+        "price": "$779,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stonegate/60349-sage-stone-220229456",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4791.6",
+          "Year Built": "2007"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,324",
+        "listingOffice": "HomeSmart Realty Group",
+        "ownership": "featured"
+      },
+      {
+        "title": "4020 Pumice Avenue Redmond 97756",
+        "price": "$435,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/feather-ridge-phase-1/4020-pumice-220229723",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,102",
+        "listingOffice": "Pacwest Realty Group",
+        "ownership": "featured"
+      },
+      {
+        "title": "1204 Ithaca Avenue Bend 97703",
+        "price": "$999,990",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-townsite/1204-ithaca-220229547",
+        "photos": 5,
+        "descriptionLength": 46,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "10890",
+          "Year Built": "1972"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "2,024",
+        "listingOffice": "Burkley Realty LLC",
+        "ownership": "featured"
+      },
+      {
+        "title": "3119 Hidden Ridge Drive Bend 97703",
+        "price": "$1,049,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/rivers-edge-village/3119-hidden-ridge-220229593",
+        "photos": 5,
+        "descriptionLength": 69,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6098.4",
+          "Year Built": "2019"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,989",
+        "listingOffice": "Harcourts The Garner Group Real Estate",
+        "ownership": "featured"
+      },
+      {
+        "title": "1055 Leonel Lane Bend 97702",
+        "price": "$535,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/1055-leonel-220229717",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "2613.6",
+          "Year Built": "2015"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,967",
+        "listingOffice": "Redfin",
+        "ownership": "featured"
+      },
+      {
+        "title": "20534 Empire Avenue Bend 97701",
+        "price": "$459,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/calaveras/20534-empire-220226617",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "1742.4",
+          "Year Built": "2022"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,751",
+        "listingOffice": "Mariposa Real Estate Corp",
+        "ownership": "featured"
+      },
+      {
+        "title": "1575 Perspective Drive Prineville 97754",
+        "price": "$474,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/prineville/ironhorse/1575-perspective-220229362",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6534",
+          "Year Built": "2013"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,318",
+        "listingOffice": "Cascade Hasson SIR",
+        "ownership": "featured"
+      },
+      {
+        "title": "3348 Hoona Drive Bend 97701",
+        "price": "$435,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/glacier-ridge/3348-hoona-220229721",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6098.4",
+          "Year Built": "2000"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,366",
+        "listingOffice": "Central Oregon Real Estate Pro",
+        "ownership": "featured"
+      }
+    ]
+  }
+]

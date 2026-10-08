@@ -1,0 +1,238 @@
+[
+  {
+    "realtorId": "95cb7818-fe8d-4e95-85eb-5fc772d87668",
+    "createdAt": "2026-10-08 06:46:18.116358+00",
+    "sources": [
+      {
+        "id": "source-ks6t99",
+        "url": "https://www.mountsnowpalmiter.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "mountsnowpalmiter",
+            "mount",
+            "palmiter"
+          ],
+          "phrases": [
+            "mountsnowpalmiter",
+            "mountsnowrealestate",
+            "adampalmiter",
+            "adampalmiter1insales"
+          ]
+        },
+        "nextSyncAt": 1791449199409,
+        "connectedAt": 1791441999409,
+        "listingCount": 7,
+        "submittedUrl": "https://www.mountsnowpalmiter.com/",
+        "inventoryUrls": [
+          "https://realestatevt.mountsnowpalmiter.com/idx/featured",
+          "https://realestatevt.mountsnowpalmiter.com/idx/search/advanced",
+          "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?idxID=b027&ciID=&coID=&pcID=",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+          "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5089881",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153/121-Fannie-Hill-Road-Wilmington-VT-05363",
+          "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5095153",
+          "https://realestatevt.mountsnowpalmiter.com/idx/search/listingid",
+          "https://realestatevt.mountsnowpalmiter.com/idx/search/address",
+          "https://realestatevt.mountsnowpalmiter.com/idx/map/mapsearch",
+          "https://realestatevt.mountsnowpalmiter.com/idx/search/advanced?modifySearch=true",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208/650-Francis-Road-Barnard-VT-05031",
+          "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5066208",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208",
+          "https://realestatevt.mountsnowpalmiter.com/idx/search/basic",
+          "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?stp=basic&pt=1&city%5B%5D=31580&city%5B%5D=53181&lp=100000&hp=10000000&bd=0&ba=0&srt=prd&start=0&per=25",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5107096/21-Sundance-Village-Loop-Dover-VT-05356",
+          "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5107096",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5107096",
+          "https://realestatevt.mountsnowpalmiter.com/idx/homevaluation",
+          "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?ciID=50&ccz=city&per=10&pt=1&a_propSubType%5B%5D=Single+Family&city%5B%5D=53181&srt=prd&lp=0&hp=10000000&start=0&per=25",
+          "https://realestatevt.mountsnowpalmiter.com/idx/soldpending",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092/20-Carinthia-Road-Dover-VT-05356",
+          "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/4984092",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5046444/56-Coldbrook-Crossing-Wilmington-VT-05363",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092",
+          "https://realestatevt.mountsnowpalmiter.com/idx/searchbycity",
+          "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Acton-186",
+          "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Acton-185",
+          "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Acworth-190",
+          "https://realestatevt.mountsnowpalmiter.com/idx/city-b027-Addison-260",
+          "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?ciID=50&ccz=city&per=10&pt=1&a_propSubType%5B%5D=Single+Family&city%5B%5D=53181&city%5B%5D=52041&city%5B%5D=29515&city%5B%5D=51685&city%5B%5D=22981&srt=prd&lp=0&hp=10000000&start=0&per=25",
+          "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?ciID=50&ccz=city&per=10&pt=1&a_propSubType%5B%5D=Condo&city%5B%5D=53181&srt=prd&lp=0&hp=10000000&start=0&per=25",
+          "https://realestatevt.mountsnowpalmiter.com/idx/results/listings?city%5B%5D=186&hp=550000&idxID=b027&lp=0&pt=1",
+          "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089212/80-Maple-Street-Acton-ME-04001",
+          "https://realestatevt.mountsnowpalmiter.com/idx/photogallery/b027/5089212"
+        ],
+        "lastCheckedAt": 1791441999409
+      }
+    ],
+    "listings": [
+      {
+        "title": "392 Lake Raponda Road, Wilmington, Vermont VT 05363",
+        "price": "$2,195,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+        "photos": 39,
+        "descriptionLength": 1976,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Shingle",
+          "Sewer": "Sewer Septic",
+          "Zoning": "Zoning Residential",
+          "Cooling": "Cooling Mini Split",
+          "Heating": "Heating Propane, Baseboard, Hot Water, Mini Split",
+          "Lot Acres": "Acres 0.5",
+          "Year Built": "Year Built 2015"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+        "ownership": "own"
+      },
+      {
+        "title": "121 Fannie Hill Road, Wilmington, Vermont VT 05363",
+        "price": "$2,100,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153/121-Fannie-Hill-Road-Wilmington-VT-05363",
+        "photos": 33,
+        "descriptionLength": 1523,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Shingle",
+          "Sewer": "Sewer Public",
+          "Zoning": "Zoning Residential",
+          "Cooling": "Cooling None",
+          "Heating": "Heating Propane, Baseboard, Hot Water",
+          "Lot Acres": "Acres 0.55",
+          "Year Built": "Year Built 1972"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+        "ownership": "own"
+      },
+      {
+        "title": "650 Francis Road, Barnard, Vermont VT 05031",
+        "price": "$25,000,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208/650-Francis-Road-Barnard-VT-05031",
+        "photos": 60,
+        "descriptionLength": 1497,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Slate",
+          "Sewer": "Sewer 1000 Gallon, Leach Field, Septic Design Available, Septic",
+          "Zoning": "Zoning Rural Residential",
+          "Cooling": "Cooling Central AC",
+          "Heating": "Heating Propane, Radiant, Radiator",
+          "Lot Acres": "Acres 395.91",
+          "Year Built": "Year Built 2009"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Christopher Lang - Bravynia",
+        "ownership": "featured"
+      },
+      {
+        "title": "21 Sundance Village Loop, Dover, Vermont VT 05356",
+        "price": "$3,400,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5107096/21-Sundance-Village-Loop-Dover-VT-05356",
+        "photos": 51,
+        "descriptionLength": 1568,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Asphalt Shingle",
+          "Sewer": "Sewer Public Sewer at Street",
+          "Zoning": "Zoning Resort residential",
+          "Cooling": "Cooling Ductless",
+          "Heating": "Heating Natural Gas, Radiant Floor",
+          "Lot Acres": "Acres 0.39",
+          "Year Built": "Year Built 2022",
+          "Subdivision": "Subdivision Sundance Village"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Meghan Buckley - Skihome Realty",
+        "ownership": "featured"
+      },
+      {
+        "title": "20 Carinthia Road, Dover, Vermont VT 05356",
+        "price": "$3,035,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092/20-Carinthia-Road-Dover-VT-05356",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Shingle",
+          "Sewer": "Sewer Public",
+          "Zoning": "Zoning Residential",
+          "Cooling": "Cooling Central AC",
+          "Heating": "Heating Radiant Floor",
+          "Lot Acres": "Acres 0.34",
+          "Year Built": "Year Built 2024"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+        "ownership": "own"
+      },
+      {
+        "title": "56 Coldbrook Crossing, Wilmington, Vermont VT 05363",
+        "price": "$2,700,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5046444/56-Coldbrook-Crossing-Wilmington-VT-05363",
+        "photos": 1,
+        "descriptionLength": 1420,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Shingle",
+          "Sewer": "Sewer Septic",
+          "Zoning": "Zoning Residential",
+          "Cooling": "Cooling Central AC",
+          "Heating": "Heating Propane, Forced Air, Radiant Floor",
+          "Lot Acres": "Acres 1.12",
+          "Year Built": "Year Built 2018",
+          "Subdivision": "Subdivision Coldbrook Crossing"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+        "ownership": "own"
+      },
+      {
+        "title": "80 Maple Street, Acton, Maine ME 04001 -7622",
+        "price": "$550,000",
+        "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089212/80-Maple-Street-Acton-ME-04001",
+        "photos": 56,
+        "descriptionLength": 1998,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Roof Asphalt Shingle",
+          "Sewer": "Sewer On-Site Septic Exists, Private",
+          "Zoning": "Zoning Rural, Residential",
+          "Cooling": "Cooling None",
+          "Heating": "Heating Pellet Stove, Baseboard, Direct Vent, Wood Stove",
+          "Lot Acres": "Acres 5.08",
+          "Year Built": "Year Built 2012"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Elias Thomas - Exit Key Real Estate",
+        "ownership": "own"
+      }
+    ]
+  }
+]

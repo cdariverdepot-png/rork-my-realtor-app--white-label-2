@@ -1,0 +1,1491 @@
+{
+  "id": "chattanooga-property-shop",
+  "url": "https://chattanoogapropertyshop.com/",
+  "category": "idx",
+  "timeline": [
+    {
+      "at": 54,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 855,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1055,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1455,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 6 of 24\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 1655,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 listings so far · 1 page checked\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 11 of 24\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 2255,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 12 of 24\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 2456,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 12 of 24\nRead 2 linked pages\nSaving 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2857,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 12 of 24\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 3658,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 14 of 24\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 3858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 15 of 24\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 4258,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 17 of 24\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 4460,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 23 of 24\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 5262,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nReading listing details · 24 of 24\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 6063,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nRead full details for all 24 listings\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 8469,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nRead full details for all 24 listings\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours\nFound Chattanooga, TN"
+    },
+    {
+      "at": 9270,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 507,
+      "totalMs": 2954,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 12,
+          "total": 24,
+          "succeeded": 12,
+          "at": 112
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 13,
+          "total": 24,
+          "succeeded": 13,
+          "at": 283
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 14,
+          "total": 24,
+          "succeeded": 14,
+          "at": 301
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 15,
+          "total": 24,
+          "succeeded": 15,
+          "at": 377
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 16,
+          "total": 24,
+          "succeeded": 16,
+          "at": 791
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 17,
+          "total": 24,
+          "succeeded": 17,
+          "at": 863
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 18,
+          "total": 24,
+          "succeeded": 18,
+          "at": 944
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 19,
+          "total": 24,
+          "succeeded": 19,
+          "at": 958
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 20,
+          "total": 24,
+          "succeeded": 20,
+          "at": 1033
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 21,
+          "total": 24,
+          "succeeded": 21,
+          "at": 1051
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 22,
+          "total": 24,
+          "succeeded": 22,
+          "at": 1101
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 23,
+          "total": 24,
+          "succeeded": 23,
+          "at": 1114
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 24,
+          "total": 24,
+          "succeeded": 24,
+          "at": 1852
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 24,
+          "total": 24,
+          "succeeded": 24,
+          "at": 2551
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "attempted": 12,
+          "remaining": 0,
+          "items": [
+            {
+              "id": "listing-nxzon",
+              "tag": "",
+              "beds": 3,
+              "sqft": "2,815",
+              "baths": 2,
+              "facts": {
+                "Year Built": "1994"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_1.jpg",
+              "price": "$699,000",
+              "title": "415 Highway 151",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1534410/LaFayette/415-Highway-151/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Welcome to the beautiful home on 18+ acres which is surrounded by natural settings, privacy and the serene setting of the Chattahoochee National Forest which adjoins the property on the south side and rear. The property represents a perfect blend of country but only approximately 15 minutes to interstate travel. This home was custom built by the owner with lovely cathedral ceiling in the foyer and living room with gas log fireplace. You will enjoy a roomy eat in kitchen with Jenn-Air electric range, dishwasher and refrigerator and you can also enjoy the formal dining room. The laundry room is off the kitchen which exits into the garage.There is an office/study that could be converted into an additional bedroom. The primary bedroom is located on the mail level with full bathroom and walk in closet. Upstairs you will find 2 large bedrooms with walk in closets and additional attic storage connected with a stunning catwalk overlooking the living/great room and a full bathroom. The attic over the garage could be converted to additional living space. Exterior features a wrap porch with a large rear screened and open porch to enjoy the private wooded back acreage. Detached carport and storage shed. The full utility basement features a wood burning heater. SELLER IS ALSO PROVIDING A 1 YEAR HOME WARRANTY VALUE UP TO $700.00 The owner welcomes you to view the property and wishes the new owner to make years of memories as she did with her family.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Kim Littlejohn, Teems & Teems Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-kppceo",
+              "tag": "",
+              "beds": 4,
+              "sqft": "2,973",
+              "baths": 3,
+              "facts": {
+                "Year Built": "2003"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_1.jpg",
+              "price": "$565,000",
+              "title": "674 Autumn Wood Drive",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544129/Summerville/674-Autumn-Wood-Drive/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Luxury, space and exceptional amenities define this STUNNING 4-bedroom, 3.5-bath home in The Ridges, beautifully situated on 2.21 acres. Built in 2003, this two-story home with finished basement offers approximately 3,000 finished sq. ft., plus an additional floored, unfinished room above the garage providing exceptional storage or future expansion. Another stand out feature includes 2 laundry areas....one on the main level and one in the basement. The main level showcases solid hardwood and tile floors, an elegant open living and dining area with crown molding, and an electric smart-app fireplace with specialty lighting. A private office and spacious kitchen with gleaming-granite counters, pantry, built-in desk/buffet, island and breakfast bar area, add both style and function. Upstairs, 3 spacious bedrooms feature walk-in closets, including a luxurious primary suite with dual vanities, soaking tub, large tiled shower and generous walk-in closet. The finished basement offers a second living area, fourth bedroom with walk-in closet, full bath, gym/workout room, spacious laundry and utility/storage area with roll-up door. Outdoor living is truly impressive, with a large entertaining deck overlooking the fenced 18' x 36' in-ground pool and pool house featuring a half bath, storage and covered entertaining/grilling area. Surrounded by beautiful hardwoods, the wooded backyard provides a private, peaceful setting for relaxing and entertaining. A remarkable approx. 25x42 metal garage, built in 2022, offers concrete floors, power, 12' roll-up doors and 30-amp RV hookup, plus water and spigot. And Smart-home amenities include some app-controlled lighting, irrigation and backyard misting system, along with a custom dog kennel. Updates include a 2020 roof, upstairs HVAC around 2020 and main-level HVAC in 2016. This property is a rare opportunity combining refined living, privacy, entertaining and unmatched storage. Do not delay and call today for a private viewing",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Joanna Jackson, RE/MAX Real Estate Center",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-69wf9q",
+              "tag": "",
+              "beds": 3,
+              "sqft": "2,736",
+              "baths": 2,
+              "facts": {
+                "Year Built": "2022"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_1.jpg",
+              "price": "$649,000",
+              "title": "523 Bryant Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544132/Cohutta/523-Bryant-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Come home to the kind of country living that's getting harder to find--5 private acres, scenic views, peaceful surroundings, and a home filled with warmth and rustic charm. The inviting rocking-chair front porch is made for slow mornings and quiet evenings, while inside, warm tongue-and-groove cathedral ceilings and a large brick fireplace give the open-concept kitchen and living area the character and comfort of a true country home. Built on a slab for easy, step-free entry, all bedrooms are conveniently located on the main level. The spacious primary suite offers a beautifully tiled shower, large walk-in closet with washer and dryer hookups right where you need them. Upstairs, a versatile flex room provides extra space for a home office, game room, guest area, or whatever fits your lifestyle. Spray foam insulation in the exterior walls and ceiling adds year-round energy efficiency and comfort. Out back, the relaxing covered porch is the perfect place for grilling with friends, gathering with family, or simply sitting back and enjoying the peaceful views. With 5 acres to call your own, there's plenty of room to spread out, enjoy the outdoors, and leave the hustle and bustle behind. If you've been looking for privacy, scenic country views, rustic character, and a place that truly feels like home, this one checks all the boxes.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Dana Poe, Coldwell Banker Kinard Realty - Ga",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1hvdcu5",
+              "tag": "",
+              "beds": 4,
+              "sqft": "2,812",
+              "baths": 3,
+              "facts": {
+                "Year Built": "2023"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_1.jpg",
+              "price": "$650,000",
+              "title": "2323 River Bluffs Drive",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1534239/Jasper/2323-River-Bluffs-Drive/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "OPEN HOUSE 7/18 2-4 EST! Welcome to 2323 River Bluffs Dr., a stunning blend of luxury, functionality, and income potential in the prestigious Jasper Highlands. Behind the gates of this sought-after mountaintop community, this four-bedroom, 3.5-bath retreat offers an open-concept layout, soaring 10-foot ceilings, and a seamless mix of hardwood and ceramic tile flooring. The main level is designed for both everyday comfort and elevated entertaining, featuring a spacious great room, chef's kitchen with a walk-in pantry, and a separate dining room. A dedicated home office near the entry provides the perfect workspace, while three main-floor bedrooms include a lavish primary suite with a soaking tub, an oversized two-person shower with dual shower heads, and a massive walk-in closet. Upstairs, a private-entry guest suite awaits--complete with a bedroom, full bath, sitting area, and fireplace. Ideal for extended family, guests, or potential rental income, this space offers both warmth and independence. Outdoor living is effortless with dual access to the expansive covered back porch, perfect for relaxing or entertaining, along with a welcoming covered front porch. A three-car garage provides ample storage for vehicles and gear. Adding to the tranquility and privacy, the land beside the home is protected and cannot be built on, ensuring unobstructed views and a lasting sense of serenity. Set within the amenity-rich Jasper Highlands, this home grants access to community pools, scenic walking trails, tennis and pickleball courts, shuffleboard, a fitness center, and two on-site restaurants. Whether you're seeking a private escape or a property with earning potential, this exceptional home delivers.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Asher Black, Keller Williams Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-ymbyjh",
+              "tag": "",
+              "beds": 4,
+              "sqft": "3,273",
+              "baths": 4,
+              "facts": {
+                "Year Built": "1988"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_1.jpg",
+              "price": "$574,900",
+              "title": "9013 Brow Lake Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544161/Soddy-Daisy/9013-Brow-Lake-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Rare opportunity to own in Montlake Golf & Country Club Estates below neighborhood values. Situated on over an acre overlooking the 10th fairway, this 3,200-square-foot residence offers exceptional bones, an outstanding location, county only taxes and the chance to personalize a home in one of the area's premier golf course communities. With neighboring homes selling for much more, buyers have a unique opportunity to build equity while creating a home tailored to their style. Designed with a flexible floor plan, the home features a spacious primary suite on the main level. Upstairs, you'll find a second oversized primary suite, two additional generously sized bedrooms, and another full bath, providing a total of four bedrooms and four full bathrooms--ideal for multi-generational living, growing families, or hosting guests. Outdoor enthusiasts will also appreciate the close proximity to Stone Fort (Little Rock City), one of the Southeast's premier destinations for hiking, rock climbing, and exploring the natural beauty of the Cumberland Plateau. Schedule your showing for your next big opportunity today. Being sold As-Is.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Mark Morris, Keller Williams Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1epw566",
+              "tag": "",
+              "beds": 4,
+              "sqft": "2,638",
+              "baths": 3,
+              "facts": {
+                "Year Built": "1977"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_1.jpg",
+              "price": "$699,000",
+              "title": "177 N Crest Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544163/Chattanooga/177-N-Crest-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Welcome to this breathtaking view on Missionary Ridge! Sweeping city and mountain views create an incredible backdrop for this fully renovated home, a rare opportunity to enjoy scenery from your back porch that feels straight out of a magazine. The open floor plan on the main level maximizes the views, with real hardwood flooring throughout the kitchen and main living areas. Custom kitchen cabinets, quartz countertops, and handmade backsplash tile bring warmth and character to the heart of the home. The spacious primary suite feels grand with its vaulted ceiling, private balcony, and beautifully renovated bathroom. An additional upstairs bedroom next to the primary suite offers an equally impressive view, while two bedrooms in the basement provide additional space and flexibility. All bathrooms have been fully renovated, with brand-new light fixtures throughout the entire home and updated plumbing fixtures. Outside, two levels of oversized decks have been completely rebuilt with Trex decking, creating an exceptional outdoor living experience for entertaining, dining, or simply relaxing above the city. A new roof, new gutters, and two new HVAC units complete the extensive improvements. Come experience these remarkable views and make this dream home yours today!",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Angela M Fowler, Angela Fowler Real Estate, LLC",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1c51x4z",
+              "tag": "",
+              "beds": 2,
+              "sqft": "1,650",
+              "baths": 2,
+              "facts": {
+                "Year Built": "1996"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_1.jpg",
+              "price": "$650,000",
+              "title": "530 Dover Chapel Terrace",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544152/Ellijay/530-Dover-Chapel-Terrace/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Welcome to 530 Dover Chapel Terrace, a stunning cabin retreat nestled in the picturesque North Georgia mountains. This fully furnished, turnkey property offers an idyllic getaway or a lucrative investment opportunity. This inviting 4-bedroom, 2.5-bath cabin boasts approximately 1,650 square feet of thoughtfully designed living space, complemented by a generous 600-square-foot game room that is perfect for entertaining family and guests. Situated on nearly an acre of lush landscape, the property features serene water views and a private creek, providing a tranquil setting for relaxation and outdoor enjoyment. Unwind in the soothing hot tub, gather around the cozy fire pit, or enjoy the stunning natural surroundings from one of two expansive decks. Inside, a warm fireplace adds to the cabin's charm, creating a cozy ambiance for those cool mountain evenings. Currently operating as a successful Airbnb under a Superhost, this property presents an exceptional opportunity for buyers seeking a vacation home, mountain retreat, or established short-term rental. Offered fully furnished, this cabin allows the next owner to step right in and start experiencing the beauty and tranquility of North Georgia's outdoors. Whether you're searching for your dream mountain escape or a lucrative short-term rental investment, this delightful creekside cabin in Ellijay is ready for its next chapter. Don't miss your chance to own a slice of paradise! All information is deemed reliable but not guaranteed. Buyer to verify all pertinent information.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Pete Galyon, United Real Estate Experts",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1ig92ua",
+              "tag": "",
+              "beds": 3,
+              "sqft": "3,305",
+              "baths": 5,
+              "facts": {
+                "Year Built": "2004"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_1.jpg",
+              "price": "$558,000",
+              "title": "15 Thorncrest Drive",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544147/Ringgold/15-Thorncrest-Drive/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "Welcome home to this beautifully appointed property, ideally located just minutes from I-75 and downtown Ringgold, offering both convenience and an exceptional lifestyle. Featuring 3 spacious ensuite bedrooms and 5 bathrooms, this home provides plenty of comfort, privacy, and room to accommodate family and guests. Step inside to an inviting open floor plan enhanced by beautiful crown molding, specialty ceilings, and plantation shutters throughout. The great room and select bedrooms have been freshly painted, creating a bright, refreshed feel throughout the living spaces, and new carpet in bonus room! The primary suite offers a true retreat with a luxurious Jacuzzi bath, while an additional bedroom also features its own Jacuzzi bath. A large bonus room with an adjoining full bathroom provides incredible flexibility for a media room, home office, guest suite, playroom, or additional living space. Entertain or unwind on the screened-in porch, accessed through elegant Pella French doors. Both the front and back porches feature new epoxy flooring, adding a fresh, polished finish while providing durability and easy maintenance. Outside, a new black iron fence offers added convenience and peace of mind for children and pets while enhancing the home's curb appeal. With its combination of luxurious finishes, spacious living areas, multiple ensuite bedrooms, versatile bonus space, and an unbeatable location near I-75 and downtown Ringgold, this home is one you won't want to miss. Schedule your private showing today!",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Becky McNew, Keller Williams Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-1396aq9",
+              "tag": "",
+              "beds": 4,
+              "sqft": "3,964",
+              "baths": 3,
+              "facts": {
+                "Year Built": "2025"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_1.jpg",
+              "price": "$849,900",
+              "title": "653 Briar Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544151/Soddy-Daisy/653-Briar-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "MOUNTAIN PRIVACY JUST 30 MINUTES FROM DOWNTOWN CHATTANOOGA! Nestled on 4.5 wooded acres atop Mowbray Mountain, this 3,964-square-foot farmhouse-style home offers privacy and comfort. The semi-wraparound porch features a tongue-and-groove ceiling and seating overlooking the woods; positioned toward the creek, you can hear rushing water after a good rain. Inside, the living room features a large picture window overlooking the wooded backyard and opens to the gourmet kitchen. An oversized quartz island provides workspace, seating, and cabinetry. Features include deep drawers, floating shelves, custom hood vent, apron-front/farmhouse sink, soft-close cabinetry, spice drawer, pull-out utensil cabinet, stainless steel appliances, and large walk-in pantry. A nearby sitting/breakfast nook provides casual dining space, while an arched opening leads to the formal dining room. The main-level primary suite includes a nook for reading, sitting, office, nursery, or potential closet space. The primary bath features an oversized tiled walk-in shower and double-bowl furniture-style vanity. A second spacious bedroom has direct access to a full bath, which also opens to the mudroom near the garage entrance. Upstairs includes two bedrooms, full bath, dedicated office, separate flex area, climate-controlled storage, and an enormous bonus/family room for entertaining, recreation, hobbies, or additional living space. The oversized three-car garage has soaring ceilings, insulated/drywalled walls, and room for vehicles, equipment, hobbies, or projects. A separate butcher/canning room has a floor drain and sink plumbing, plus oversized loft storage above. Outside, a cleared trail winds through the acreage to a rear bluff, where minimal clearing could further open the view. Approximately 30 minutes from downtown Chattanooga and 20 minutes from Dunlap. Schedule your private tour today. All information deemed reliable but not guaranteed. Buyer to verify all information.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Jessica Hagerman, United Real Estate Experts",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-158bf2y",
+              "tag": "",
+              "beds": 2,
+              "sqft": "888",
+              "baths": 1,
+              "facts": {
+                "Year Built": "1994"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_1.jpg",
+              "price": "$1,338,750",
+              "title": "8411 Sanders Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544146/Ooltewah/8411-Sanders-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "This is a rare opportunity to purchase a large parcel of property consisting of 7.65 acres in Ooltewah! This prime property is ideal for an investor, developer, a buyer looking build their dream home, or perhaps a future multigenerational property. The property is partially cleared and has over 846' of road frontage, along with a 2 Bedroom ranch home built in 1994. Zoned RN-1-6 and in the EPB Service area. The Septic tank was pumped and risers and lids added in March 2026. This Ooltewah location is minutes to great area amenities including exceptional dining options, shopping, hiking trails, a dog park, farmers market, nearby schools, and more! Interstate 75 will get you to downtown Chattanooga, Cleveland, or into Georgia for those who commute. Drive by's are welcome but residents are not to be disturbed. No trespassing or walking the property. Access to the home can be provided with a binding Purchase and Sale Agreement. The Seller of this property is a licensed real estate agent out of state. Information provided is deemed reliable but is not guaranteed. Buyers are advised to independently perform all due diligence. Imagine what you could do and call today!",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Teresa Scheiwe, Keller Williams Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-8er75d",
+              "tag": "",
+              "beds": 0,
+              "sqft": "",
+              "baths": 0,
+              "facts": {},
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_1.jpg",
+              "price": "$2,500,000",
+              "title": "0 Split Rail Way",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1531728/Guild/0-Split-Rail-Way/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "16± Acre Bluff Estate Opportunity | River Gorge Ranch | Guild, TN. Wake up above the clouds. Discover one of the largest and most exclusive homesites available in the prestigious gated community of River Gorge Ranch. Spanning approximately 16 acres and approved for horses, this exceptional property offers 1,700 feet of road frontage on Split Rail Way, delivering a rare combination of privacy, accessibility, and flexibility for a custom estate or equestrian retreat. Perched on a premier bluff, the property showcases breathtaking 200-degree panoramic views stretching across Tennessee, Georgia, and Alabama, along with sweeping magnificent vistas of the Tennessee River Gorge. From vibrant sunrises to unforgettable sunsets, the elevated setting provides year-round natural beauty in every direction. The groundwork has already been done. Shovel-ready building site and house pad already in place. Topsoil carefully stockpiled for post-construction use. A rare combination of usable flat build area + dramatic bluff + water/gorge views. Planned future amenities including a clubhouse, fitness center, and additional recreational spaces enhance the resort-style lifestyle. For golf enthusiasts, the property is minutes from Sweetens Cove Golf Course, a premier course surrounded by rolling terrain and natural beauty. Approximately thirty minutes to Chattanooga, one hour to Huntsville; two hours to Nashville and within 2.5 hours of Birmingham. Bring your vision and your horses and see what life could look like on one of the largest and most scenic homesites available in River Gorge Ranch. Schedule your private tour today. 16 Acres with 3-State Views | Minutes to Chattanooga, Easy Access to Nashville | Build-Ready Bluff Lot This property is approved for horses, offering the space, privacy, and setting ideal for creating your own equestrian retreat. Perched on a premier bluff, the property showcases breathtaking 200-degree panoramic views stretching across Tennessee, Georgia, and Alabama, along with magnificent sweeping vistas of the Tennessee River Gorge. Spanning approximately 16 acres, this exceptional property offers 1,700 feet of road frontage on Split Rail Way. From vibrant sunrises to unforgettable sunsets, the elevated setting provides year-round natural beauty in every direction. The groundwork has already been done. The building site is shovel-ready with house pad in place. Topsoil has been carefully stockpiled for post-construction use. Discover this rare opportunity to create a luxury estate in one of the Southeast's most scenic and sought-after settings in prestigious gated River Gorge Ranch community. Within golf cart proximity, enjoy the convenience of on-site dining at Riverdance Restaurant--a refined gathering place set against the backdrop of the surrounding mountains. Planned future amenities--also designed with golf cart accessibility in mind--include a clubhouse, fitness center, and thoughtfully designed gathering and recreation spaces, where everything you need is just minutes from your doorstep. One hour to Huntsville; two hours to Nashville and within 2.5 hours of Birmingham.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Amy Collett, Keller Williams Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-sg1a24",
+              "tag": "",
+              "beds": 4,
+              "sqft": "4,148",
+              "baths": 3.5,
+              "facts": {
+                "Year Built": "2008"
+              },
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_1.jpg",
+              "price": "$725,000",
+              "title": "1446 Houston Valley Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "ownership": "featured",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1543439/Ringgold/1446-Houston-Valley-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439825751,
+              "nextSyncAt": 1791447025751,
+              "description": "CUSTOM FARMHOUSE on 7.78 +/-ACRES. Built in 2008, this thoughtfully designed 4 bedroom, 3.5 bath home offers 4,148 +/- square feet of generous living space, refined finishes, and a beautiful North Georgia country setting. Inside, the kitchen serves as the heart of the home, with a breakfast room on one side and a formal dining room on the other, creating an easy flow for both everyday meals and entertaining. Just beyond, the spacious living room with abundant built-ins provides a comfortable central gathering space, while a large two-level SCREENED PORCH extends the living area and adds even more flexibility for relaxing, entertaining, hobbies, or everyday use. The primary suite is conveniently located on the main level along with a dedicated HOME OFFICE. Upstairs, 3 additional bedrooms, 2 full baths, a large den, and a recreation room with kitchenette provide plenty of space for guests, hobbies, recreation, or additional work-from-home needs. Outside, a large cleared and level front yard is complemented by mature landscaping and open acreage. Enjoy time outdoors from the charming wraparound deck, relax on the rear screened porch, gather around the fire pit, or take advantage of the acreage for gardening, recreation, and everyday enjoyment. A 3-car attached garage and propane generator add valuable function and convenience. 1446 Houston Valley Rd offers a rare blend of privacy and proximity. Enjoy an exceptional combination of space and scenery 30 minutes from Downtown Chattanooga with convenient access to Dalton, County Taxes Only, just 10 Minutes to I-75. Schedule your private showing today! (Buyer to verify square footage. Some images may be virtually staged. Buyer is responsible for doing their due diligence to verify that all information is correct, accurate, and for obtaining any and all restrictions for the property deemed important to Buyer.)",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Todd Henon, Keller Williams Realty",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791439825751,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791439825751,
+              "lastSyncAttemptAt": 1791439825751,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-rta5pv",
+              "tag": "",
+              "beds": 5,
+              "sqft": "3,000",
+              "baths": 3,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261007184228734917000000/photo_1.jpg",
+              "price": "$539,000",
+              "title": "2025 Haven Crest Drive",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261007184228734917000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007184228734917000000/photo_2.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544182/Chattanooga/2025-Haven-Crest-Drive/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "RIDGE VIEWS • MULTI-GENERATIONAL LIVING • COMPLETELY REMODELED • OWNER FINANCING AVAILABLE Rare opportunity in 37421! FIRST SHOWINGS ARE 10/13/2026 DUE TO CLEAN UP BUT COME DRIVEBY!! This home has been completely transformed from top to bottom with nearly 3,000 sq ft of flexible living space and a beautiful ridge setting offering seasonal mountain and Chattanooga-area views that only get better as the leaves fall! Perfect for multi-generational living, featuring TWO living areas, TWO kitchens and walk-out access from BOTH levels, plus two driveways, a carport and newly created garage. The previous tenant utilized additional rooms as Bedrooms 4-6, providing tremendous flexibility for family, guests, offices or separate living arrangements. NEW ROOF • NEW WINDOWS • NEW FLOORS • NEW PAINT • UPDATED BATHROOMS • UPDATED KITCHENS • NEW GARAGE DOOR -- this home has been extensively remodeled throughout. A portion of the former carport was enclosed and remodeled into finished living space. Buyer to verify square footage, room dimensions and intended room usage. FINANCING INCENTIVE: Per Seller, Seller is offering up to 2% toward buyer discount points/rate buydown at the original 10/7/2026 listing price when financing through Seller's preferred lender, HomeRate Mortgage, East Brainerd Road. Actual rates, terms, eligibility and costs vary. Visit 423ApplyNow.com for details. NMLS #2239. Owner financing also available to qualified buyers with an acceptable down payment. Two levels. Two kitchens. Two living spaces. Two driveways. One incredible opportunity -- with a view you simply can't remodel into another house.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "1966"
+              },
+              "listingOffice": "Ben Phillips, Zach Taylor - Chattanooga",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-7fzrs4",
+              "tag": "",
+              "beds": 3,
+              "sqft": "1,632",
+              "baths": 2,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_1.jpg",
+              "price": "$640,000",
+              "title": "408 Tremont Street",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260909145000148258000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544175/Chattanooga/408-Tremont-Street/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "**OPEN HOUSE SUN 10/11 2PM-4PM** Adorable Updated Bungalow with a Large Yard in the Heart of North Chattanooga! Ideally located on desirable Tremont Street, this charming 3-bedroom, 2-bath home offers a rare combination of character, updates, and a spacious yard in one of Chattanooga's most sought-after neighborhoods. Just steps from Frazier Avenue and all that NorthShore and Downtown Chattanooga have to offer, the location is hard to beat. Inside, you'll find a thoughtfully renovated home with quality updates throughout. The kitchen was completely renovated, along with the primary bathroom and spacious primary walk-in closet. The inviting primary suite also offers convenient access to the screened-in back porch, creating a wonderful private retreat. The 2018 renovation included the kitchen, primary bath, walk-in closet, siding, HVAC system, and a mini-split in the primary suite. Additional improvements include a screened-in porch, roof, exterior paint, and built-in shelving. The crawl space was also encapsulated several years ago. One of the standout features of this property is the large, spacious yard--a rare find in North Chattanooga, where many surrounding lots have been subdivided. There is plenty of room to garden, entertain, play, or simply enjoy your own outdoor space.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "1920"
+              },
+              "listingOffice": "Louellen Smith, Keller Williams Realty",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-16njxzp",
+              "tag": "",
+              "beds": 5,
+              "sqft": "4,976",
+              "baths": 5.5,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_1.jpg",
+              "price": "$999,900",
+              "title": "201 Lake Hills Place",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260924171410921873000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544185/Trenton/201-Lake-Hills-Place/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "LUXURY MOUNTAIN VIEW ESTATE ON 2.2 ACRES | GUEST HOUSE • IN-LAW SUITE • OUTDOOR KITCHEN AREA • HOT TUB • RV HOOKUP Welcome to 201 Lake Hills Place, where luxury, space, and versatility come together across 2.2 beautiful elevated acres framed by sweeping mountain views. Offering approximately 4,976 square feet in the main residence with 5 bedrooms and 5.5 baths, this exceptional estate delivers an impressive combination of refined living, flexible spaces, and resort-style amenities. Inside, generous living areas are designed for both everyday comfort and effortless entertaining. A formal office provides a dedicated work-from-home space, while an additional bonus room offers even more flexibility. Spacious bedrooms, well-appointed living areas, and a private in-law suite create options for extended family, guests, or multigenerational living without sacrificing privacy. An additional 800-square-foot guest house offers full living accommodations in its own private setting, making it beautifully suited for in-law quarters, long-term guests, a private office or studio, or potentially a short-term rental opportunity. The outdoor spaces are equally impressive. Take in the mountain views while gathering around the beautiful Riverstone fire pit, entertain family and friends around the outdoor kitchen, or unwind in the hot tub at the end of the day. The expansive setting creates the feel of a private retreat while offering plenty of room to enjoy the property. A full RV hookup provides added convenience for recreational vehicles or visiting guests, while the included golf cart makes enjoying the grounds even easier. Whether you're searching for a luxury primary residence, a multigenerational estate, a private retreat with room for extended guests, or a property with potential to create multiple lifestyle and income opportunities, 201 Lake Hills Place delivers something truly unique. 201 Lake Hills Place isn't simply a home--it's an estate designed around possibilities.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "2010"
+              },
+              "listingOffice": "Johnny Petty, Zach Taylor - Chattanooga",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-1nn178o",
+              "tag": "",
+              "beds": 29,
+              "sqft": "3,416",
+              "baths": 0,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_1.jpg",
+              "price": "$2,575,000",
+              "title": "2620 Hickory Valley Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261007143945110243000000/photo_7.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544187/Chattanooga/2620-Hickory-Valley-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "The listing is a portfolio sale of 2618, 2620, 2622, 2624, 2628 & 2630 Hickory Valley road Chattanooga TN 37421. 6 duplexes (12 units) Sales Price $2,575,000 for entire package. Each duplex is individually parceled. All on sewer. A detailed marketing package is attached. A current rent roll, two years of income & expense report available with a signed confidentiality agreement.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Chad Wamack, NAI Charter Real Estate",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-hk6vym",
+              "tag": "",
+              "beds": 6,
+              "sqft": "4,288",
+              "baths": 4,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_1.jpg",
+              "price": "$995,000",
+              "title": "6201 Breezy Hollow Lane",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260330143007389338000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1532725/Harrison/6201-Breezy-Hollow-Lane/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Custom-built with River Views on Prime Lot on nearly an acre in Lake Breeze, this exceptional home captures breathtaking Tennessee River views and unforgettable Sunsets, offering fully accessible lower-level living designed for multigenerational flexibility, Unique Full Basement Wheelchair Accessible Living Quarters! The main level unfolds with warmth and natural light, where expansive windows are positioned to showcase the river from nearly every vantage point, filling the home with light and framing stunning views throughout. Rich hardwood floors carry through a spacious living room anchored by a stacked stone fireplace and custom built-ins, creating an inviting space for both quiet mornings and evenings spent taking in the sunset. The Kitchen is Beautifully appointed with granite countertops, generous cabinetry, and a breakfast nook that opens to an elevated back deck. This space connects seamlessly to the screened porch off the primary suite and offers stairs to the lower patio, creating a natural flow between each level of outdoor living. The primary suite is privately positioned with a spa-like bath, custom walk-in closet, and direct porch access, while two additional bedrooms share a Jack-and-Jill bath on the opposite side of the home. The lower level is a true extension of the home, thoughtfully designed for multigenerational living with a full kitchen, open living area with fireplace, two bedrooms, two baths, oversized laundry, and private two-car garage. With its own entrance and direct access to the patio and pergola, it offers flexibility without compromise and continues to capture the same incredible views. Outdoor living is a centerpiece--from the deck and screened porch to the patio below, each space offering a front-row seat to the river and sunsets. A bonus room upstairs adds versatility, while features like a four-car garage, gutter guards, 4-zone irrigation, and meticulous upkeep reflect pride of ownership. Truly one of a kind! Schedule today!",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "2016"
+              },
+              "listingOffice": "Sherry Lawrence, Zach Taylor - Chattanooga",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-1wf7gsb",
+              "tag": "",
+              "beds": 3,
+              "sqft": "2,218",
+              "baths": 1,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_1.jpg",
+              "price": "$525,000",
+              "title": "407 Colville Street",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260902163329779237000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544194/Chattanooga/407-Colville-Street/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Rare three-unit opportunity in the heart of North Chattanooga, directly across from the neighborhood park and community center with tennis, pickleball, baseball fields, and a playground. Stroll down the hill to the Walnut Street Bridge and the shops and restaurants of Frazier Avenue, all within the sought-after Normal Park school zone. Each unit has its own private entrance. Unit A is a spacious 3 bed / 1 bath with a welcoming covered front porch. Unit B is a second-floor 1 bed / 1 bath with a private front entry and an in-unit stackable washer/dryer. Unit C is a second-floor studio efficiency with a private rear entry and its own deck. Street parking is plentiful, and a private surface lot sits at the rear of the property. The heavy lifting has been done. Since 2024, the owner has replaced the sewer line from house to street, upgraded the electrical panel to modern breakers, and repaired the siding. Unit A has new appliances, including a range/oven, refrigerator, and built-in microwave, plus a smart thermostat. Unit B received a new range/oven, refrigerator, and stackable washer/dryer, along with a programmable thermostat. Unit C features a renovated kitchenette, a new mini-split HVAC system, and a rebuilt exterior staircase. Whether you're an investor seeking a turnkey, well-maintained income property or an owner-occupant looking to live in one unit and let the others help cover the mortgage, 407 Colville delivers location, flexibility, and peace of mind. Schedule your showing today. Offered as-is.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "David Barrueta, David Barrueta Associates",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-1yak1dd",
+              "tag": "",
+              "beds": 0,
+              "sqft": "",
+              "baths": 0,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_1.jpg",
+              "price": "$1,100,000",
+              "title": "65 Acres Harris Drive",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20260919030333506028000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544098/Fort-Payne/65-Acres-Harris-Drive/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Rare opportunity to own 65± acres of C4 commercial land in Fort Payne! Two parcels (60± & 5± acres) with frontage on Harris Dr.and a portion extending to I-59. Utilities available at the road, with potential Hwy. 11 access (buyer to verify). Mostly wooded with scenicmountain views and relatively level topography. Approx. 17± acres along Big Wills Creek are estimated to be in the floodplain. Outstandingdevelopment potential! Exceptional opportunity for developers, investors, or businesses seeking interstate visibility.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Jaylynn Worley, BHHS Southern Routes Realty",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-gqjil7",
+              "tag": "",
+              "beds": 0,
+              "sqft": "",
+              "baths": 0,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_1.jpg",
+              "price": "$949,000",
+              "title": "0 Flagpole Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261001133228236182000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544070/Ellijay/0-Flagpole-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Positioned in the storied foothills of the Blue Ridge Mountains just minutes north of historic downtown Ellijay, this 79.8± acre contiguous holding represents an increasingly scarce land asset in the North Georgia highlands. Held under uninterrupted single-family stewardship for well over four decades, the property remains in an undisturbed, primitive recreational state--anchored by an unharvested timber hardwood forest and high knolls commanding expansive, multi-layered mountain views. While functioning as an uncompromised family retreat or recreational reserve, the tract possesses an exceptional commercial and investment dimension. Unincorporated Gilmer County has matured into one of the premier mountain vacation and eco-tourism corridors in the Southeast, fueled by year-round demand from Atlanta, Chattanooga, and beyond. Located directly along the Flagpole Road short-term rental (STR) corridor, the property's dramatic topography yields multiple natural ridge benches and secluded home sites. This layout allows for low-density luxury chalets, a high-end cabin compound, or a private boutique hospitality enclave where every build site enjoys total visual seclusion and protected view sheds. Whether viewed through the lens of a long-term conservation and timber asset, a generational family compound, or a carefully staged vacation rental development, this 80-acre holding presents an irreplaceable canvas in Georgia's apple and wine country. Location & Regional Synergy The Heart of Apple & Wine Country: Minutes from the historic brick-paved square of Ellijay--renowned for its boutique dining, antique shops, thriving craft breweries, and world-class heritage apple orchards and vineyards. Blue Ridge & Mountain Towns: Located a short, scenic drive south of Blue Ridge, Georgia, offering Lake Blue Ridge access, fine dining, the Blue Ridge Scenic Railway, and upscale mountain hospitality. The Regional Playground: Positioned within 20 to 30 minutes of Carters Lake--the deepest lake in Georgia spanning 3,200 surface acres with zero private shoreline development, renowned for trophy striped bass fishing and deep-water boating. Bordered by the Coosawattee and Cartecay River watersheds, the area is a celebrated southeastern hub for native cold-water trout angling, kayaking, and whitewater paddling. Immediate Metro Transit: Situated under 75 miles north of Atlanta via the continuous 4-lane GA-515/Highway 515 corridor, and less than 1.5 hours southeast of Chattanooga, placing the property within an easy, friction-free 2-hour drive for over 6 million regional residents. Property & Investment Highlights Undisturbed Mature Canopy: 40+ years of uninterrupted growth has established an exceptional canopy of white oak, red oak, hickory, and mountain hardwoods, creating an authentic Appalachian woodland aesthetic. Topography & Views: Elevated ridges and defined knolls offer dramatic elevation change, opening up broad seasonal and year-round panoramic views of the Blue Ridge mountain ridges. Proven STR Development Potential: Direct frontage along the established Flagpole Road short-term rental corridor. This scenic mountain stretch has emerged as a premier corridor for investors. The natural bench-and-ridge topography allows an investor to construct multiple high-yield rental cabins with natural topography buffers providing complete guest privacy. Unincorporated County Jurisdiction: Located in unincorporated Gilmer County under current A1 Agricultural zoning, providing a streamlined pathway for residential, agricultural, conservation, and county-compliant Chapter 45 STR host licensing. Wildlife & Sport: A thriving sanctuary for native whitetail deer, wild turkey, and black bear, benefiting from large surrounding timber holdings and minimal historic hunting pressure. BROKER COMMENT: \"With 40 years of untouched timber and commanding ridge views just minutes from downtown Ellijay, land offering this level of privacy and development freedom is hard to replicate.\" The Facts/Overview 79.8± contiguous acres in the foothills of the Blue Ridge Mountains, just north of Ellijay, Georgia, in Gilmer County Held in single-family ownership for more than 40 years Undeveloped recreational property with mature hardwood timber Mature canopy includes white oak, red oak, hickory, and mountain hardwoods Elevated ridges and knolls provide multiple potential homesites and mountain views Seasonal and year-round views of surrounding Blue Ridge Mountain ridges Located along Flagpole Road, an established short-term rental corridor Natural ridge and bench topography offers potential for multiple secluded homesites or cabins Zoned A1 Agricultural Potential uses include a private family compound, recreational retreat, conservation property, or residential/hospitality development, subject to applicable approvals Minutes from downtown Ellijay, with access to restaurants, breweries, shops, orchards, and vineyards Short drive to Blue Ridge and Lake Blue Ridge Approximately 20-30 minutes from Carters Lake, a 3,200-acre reservoir known for boating and striped bass fishing Located near the Coosawattee and Cartecay River watersheds, with access to trout fishing, kayaking, and paddling Less than 75 miles north of Atlanta via GA-515/Highway 515 Less than 1.5 hours southeast of Chattanooga Area supports year-round recreational and vacation demand from Atlanta, Chattanooga, and surrounding markets Wildlife includes whitetail deer, wild turkey, and black bear",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "William Lawson, The Wings Group",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-m1qwkh",
+              "tag": "",
+              "beds": 3,
+              "sqft": "2,100",
+              "baths": 3,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_1.jpg",
+              "price": "$775,000",
+              "title": "181 County Road 5",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005140204887416000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544077/Calhoun/181-County-Road-5/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Perched atop 15 breathtaking acres with panoramic views that stretch for miles, this extraordinary hilltop retreat offers the perfect blend of luxury, privacy, and East Tennessee beauty sitting above a natural underground stream. Welcome to 181 County Hwy 5-where peaceful county living meets exceptional craftsmanship. This stunning 3 bedroom, 3 full bath custom home, which was originally built in 1900 was completely redone from the studs out 10 years ago, offers approximately 2,100 square feet of thoughtfully designed living space filled with warmth and character. Rich hardwood floors flow throughout, while the inviting floor plan creates the perfect setting for both everyday living and entertaining. At the heart of the home, the living room welcomes you with a beautiful fireplace, creating a cozy gathering space framed by picturesque views. The primary suite is a true retreat featuring its own private fireplace, offering the perfect place to unwind at the end of the day. Outside, the homes striking curb appeal shines with its impressive timber-framed entry, expansive covered porches and beautiful landscaping. Surrounded by rolling countryside and unmatched scenery, every moment here feels like a getaway. Whether enjoying morning coffee while watching the sunrises or enjoying a peaceful evening watching breathtaking sunsets, or cooking in your outdoor kitchen, this property offers a lifestyle that is increasingly hard to find. Private, Peaceful, Breathtaking. 181 Highway 5 is more than a home-it is a retreat.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "1900"
+              },
+              "listingOffice": "Frances W Vantrease, RE/MAX Properties",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-1cnry9l",
+              "tag": "",
+              "beds": 4,
+              "sqft": "3,264",
+              "baths": 3,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_1.jpg",
+              "price": "$624,900",
+              "title": "8074 Fox Glove Drive",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005144426405124000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544087/Ooltewah/8074-Fox-Glove-Drive/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "The best homes aren't defined by their size--they're defined by how well they live. 8074 Fox Glove Drive is one of those homes. Offering 3,264 square feet, four bedrooms, three full baths, a powder room, a highly sought-after main-level owner's suite, and an oversized bonus room that offers the flexibility to serve as a home office, media room, playroom, guest suite, or even a fifth bedroom, this home is designed to adapt to the way you live. The main floor was designed for the way people actually live. The spacious layout is open enough to comfortably host holiday gatherings, family celebrations, and evenings with friends, yet it still feels warm, connected, and comfortable for everyday life. The large kitchen naturally becomes the heart of the home, while the cozy gas fireplace and formal dining room with its coffered ceiling create inviting spaces to gather. The highly desirable main-level owner's suite provides the convenience of single-level living with a spacious bedroom, sitting area, large walk-in closet, and private bath--creating a comfortable retreat at the end of the day. Upstairs, you'll find three generously sized bedrooms, including one with its own private ensuite bath, while the oversized bonus room provides even more space to fit your lifestyle. The screened porch and fully fenced backyard extend your living space outdoors, providing the perfect place to relax, entertain, or let children and pets enjoy the yard. A two-car garage and additional paved parking offer extra room for guests, a third vehicle, or recreational equipment. Located in the established Meadow Stream community, this home offers convenient access to excellent schools, shopping, dining, and everything Ooltewah has to offer. It's a home you'll enjoy just as much on an ordinary Tuesday evening as you will on Thanksgiving Day.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "2014"
+              },
+              "listingOffice": "Jay L Hudson, Keller Williams Realty",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-1neeaez",
+              "tag": "",
+              "beds": 3,
+              "sqft": "2,438",
+              "baths": 2,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_1.jpg",
+              "price": "$849,000",
+              "title": "149 N Crest Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_6.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_7.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_8.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_9.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005171425898634000000/photo_10.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544096/Chattanooga/149-N-Crest-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Perched atop Missionary Ridge, this beautifully updated home pairs timeless character with today's most sought-after improvements. Over the years, the owners have invested extensively in the property, including new roof, replacement of nearly every window, fresh interior and exterior paint, refinished hardwood floors, a premium TimberTech deck, a new second driveway, and a freshly tiled front porch. Thoughtful custom touches, including custom window treatments and built-in closet systems, further enhance the home's style and functionality. With major improvements already completed, buyers can enjoy the charm of this historic home with the confidence that many big-ticket items have already been made. Enjoy front-row views of Chattanooga's skyline, spectacular sunsets, and seasonal fireworks from the new Lookouts' Erlanger Park- all from the comfort of home.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "1900"
+              },
+              "listingOffice": "Jake Kellerhals, Keller Williams Realty",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            },
+            {
+              "id": "listing-1ej5y9c",
+              "tag": "",
+              "beds": 0,
+              "sqft": "",
+              "baths": 0,
+              "image": "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_1.jpg",
+              "price": "$700,000",
+              "title": "8206 Ooltewah Georgetown Road",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_1.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_2.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_3.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_4.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_5.jpg",
+                "https://listing-images.homejunction.com/gcarafsl/20261005182308122237000000/photo_6.jpg"
+              ],
+              "sourceId": "source-m58pno",
+              "elizaTake": "",
+              "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544123/Ooltewah/8206-Ooltewah-Georgetown-Road/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791439830189,
+              "nextSyncAt": 1791447030189,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791439830189,
+              "lastSyncAttemptAt": 1791439830189,
+              "sourceMissingCount": 0,
+              "description": "Exceptional 14.5-acre opportunity nestled at the base of scenic White Oak Mountain! This versatile property offers a mix of cleared land and mature woods, perfect for a custom estate or new residential project. Features established access to main road for right-of-way/easement potential or possibility for stub-out at rear of parcel. Ideally situated just minutes from downtown Ooltewah, I-75, and HWY 58--offering an easy commute to both Chattanooga and Cleveland. Property for sale consists of approximately 14.5 acres to be subdivided from portions of two adjoining parcels: 104 083 and 104 083.01. Final acreage and legal description subject to survey prior to closing.",
+              "detailsComplete": true,
+              "facts": {},
+              "listingOffice": "Emily A Wolf, Keller Williams Realty",
+              "detailAttemptAt": 1791439830189,
+              "ownership": "featured"
+            }
+          ],
+          "timings": {
+            "details": 2439,
+            "total": 2552
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "chattanooga-property-shop-00-url.png",
+    "chattanooga-property-shop-01-review.png",
+    "chattanooga-property-shop-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3116,
+  "reviewMs": 9270,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 24 active listings\nReading Chattanooga Property Shop\nMatching your website’s design and imagery\nRead full details for all 24 listings\nRead 2 linked pages\nSaved 24 listings\nIdentified your profile photo and logo\nSorted 56 website images by role\nWriting your profile and app copy\n12 listings from other offices will be shown as featured, not as yours\nFound Chattanooga, TN",
+  "reviewText": "Back\nAPP BUILDER\nchattanoogapropertyshop.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCHATTANOOGA, TN\nDelivering results with a personal touch\nFind your dream home in Chattanooga and North Georgia with our award-winning, women-owned real estate team.\nView listings\nABOUT\nOur Team\nAll Offices All Offices Filter by... Filter by last name All a b c d e f g h i j k l m n o p q r s t u v w x y z Order by Default First Name (A-Z) First Name (Z-A) Last Name (A-Z) Last Name (Z-A) Search by name\nTHE AREA\nBirchwood\nLearn More About Birchwood MED. selling price Median Days On Market Active Listings Recent Sales\nFROM THE SITE\nPassionate Professionals, Local Roots\nWe are Chattanooga Property Shop - an award-winning team serving Chattanooga and North Georgia with nearly five decades of combined experience. Led by Lisa Brown and Diane Patty, we specialize in residential, luxury, commercial, and investment real estate. Our reputation for integrity, market insight, and strong community connections allows us to make every transaction seamless and strategic. Whether you’re buying, selling, or investing, we bring energy, expertise, and a personal touch to help you succeed.\nExperience Matters\n$699,000\n415 Highway 151\n3 beds · 2 baths · 2,815\n$565,000\n674 Autumn Wood Drive\n4 beds · 3 baths · 2,973\n$649,000\n523 Bryant Road\n3 beds · 2 baths · 2,736\n$650,000\n2323 River Bluffs Drive\n4 beds · 3 baths · 2,812\n$574,900\n9013 Brow Lake Road\n4 beds · 4 baths · 3,273\n$699,000\n177 N Crest Road\n4 beds · 3 baths · 2,638\n$650,000\n530 Dover Chapel Terrace\n2 beds · 2 baths · 1,650\n$558,000\n15 Thorncrest Drive\n3 beds · 5 baths · 3,305\n$849,900\n653 Briar Road\n4 beds · 3 baths · 3,964\n$1,338,750\n8411 Sanders Road\n2 beds · 1 baths · 888\nSERVICES\nBuying\nFrom understanding market intricacies to leveraging our local knowledge, we are committed to securing the best results.\nSERVICES\nSelling\nSelling your home demands expert skills and guidance, and we understand the importance of this process.\n423-927-1760\nguest+realtor+c2b05c16-b298-4f43-b7cc-d5866a8317f5@guest.myrealtor.app\nKeller Williams\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nLocal Expertise, Personal Touch—Serving Chattanooga & North Georgia\nTry another opening line\nYOUR INTRODUCTION\nChattanooga Property Shop is an award-winning real estate team led by experienced professionals with deep local roots in Chattanooga and North Georgia. We specialize in residential, commercial, luxury, and investment properties, offering expert insights, a seamless process, and a reputation built on integrity and strong community connections. Our commitment is to make every real estate transaction simple, strategic, and tailored to your needs.\nTry another introduction\n24 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nJust a few more details\nWe couldn’t find these on your website.\nYour name\n▸ Brokerage & license (optional)\n✓ Keller Williams\nStill needed: Your name\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCHATTANOOGA, TN\nDelivering results with a personal touch\nFind your dream home in Chattanooga and North Georgia with our award-winning, women-owned real estate team.\nView listings\nABOUT\nOur Team\nAll Offices All Offices Filter by... Filter by last name All a b c d e f g h i j k l m n o p q r s t u v w x y z Order by Default First Name (A-Z) First Name (Z-A) Last Name (A-Z) Last Name (Z-A) Search by name\nTHE AREA\nBirchwood\nLearn More About Birchwood MED. selling price Median Days On Market Active Listings Recent Sales\nFROM THE SITE\nPassionate Professionals, Local Roots\nWe are Chattanooga Property Shop - an award-winning team serving Chattanooga and North Georgia with nearly five decades of combined experience. Led by Lisa Brown and Diane Patty, we specialize in residential, luxury, commercial, and investment real estate. Our reputation for integrity, market insight, and strong community connections allows us to make every transaction seamless and strategic. Whether you’re buying, selling, or investing, we bring energy, expertise, and a personal touch to help you succeed.\nExperience Matters\n$699,000\n415 Highway 151\n3 beds · 2 baths · 2,815\n$565,000\n674 Autumn Wood Drive\n4 beds · 3 baths · 2,973\n$649,000\n523 Bryant Road\n3 beds · 2 baths · 2,736\n$650,000\n2323 River Bluffs Drive\n4 beds · 3 baths · 2,812\n$574,900\n9013 Brow Lake Road\n4 beds · 4 baths · 3,273\n$699,000\n177 N Crest Road\n4 beds · 3 baths · 2,638\n$650,000\n530 Dover Chapel Terrace\n2 beds · 2 baths · 1,650\n$558,000\n15 Thorncrest Drive\n3 beds · 5 baths · 3,305\n$849,900\n653 Briar Road\n4 beds · 3 baths · 3,964\n$1,338,750\n8411 Sanders Road\n2 beds · 1 baths · 888\nSERVICES\nBuying\nFrom understanding market intricacies to leveraging our local knowledge, we are committed to securing the best results.\nSERVICES\nSelling\nSelling your home demands expert skills and guidance, and we understand the importance of this process.\n423-927-1760\nguest+realtor+c2b05c16-b298-4f43-b7cc-d5866a8317f5@guest.myrealtor.app\nKeller Williams\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 415 Highway 151 $699,000 3 2 2,815 STATUS UNCONFIRMED 674 Autumn Wood Drive $565,000 4 3 2,973 STATUS UNCONFIRMED 523 Bryant",
+        "textLength": 1481,
+        "stillHome": false
+      },
+      {
+        "label": "415 Highway 151",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 415 Highway 151 $699,000 3 beds · 2 baths 2,815 Welcome to the beautiful home on 18+ acres which is surrounded by natural settings, privacy and the serene setting of th",
+        "textLength": 1726,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "674 Autumn Wood Drive",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 674 Autumn Wood Drive $565,000 4 beds · 3 baths 2,973 Luxury, space and exceptional amenities define this STUNNING 4-bedroom, 3.5-bath home in The Ridges, beautifully s",
+        "textLength": 2261,
+        "stillHome": false
+      },
+      {
+        "label": "523 Bryant Road",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 523 Bryant Road $649,000 3 beds · 2 baths 2,736 Come home to the kind of country living that's getting harder to find--5 private acres, scenic views, peaceful surroundi",
+        "textLength": 1615,
+        "stillHome": false
+      },
+      {
+        "label": "2323 River Bluffs Drive",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 2323 River Bluffs Drive $650,000 4 beds · 3 baths 2,812 OPEN HOUSE 7/18 2-4 EST! Welcome to 2323 River Bluffs Dr., a stunning blend of luxury, functionality, and income",
+        "textLength": 1992,
+        "stillHome": false
+      },
+      {
+        "label": "9013 Brow Lake Road",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 9013 Brow Lake Road $574,900 4 beds · 4 baths 3,273 Rare opportunity to own in Montlake Golf & Country Club Estates below neighborhood values. Situated on over an acre ",
+        "textLength": 1408,
+        "stillHome": false
+      },
+      {
+        "label": "177 N Crest Road",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 177 N Crest Road $699,000 4 beds · 3 baths 2,638 Welcome to this breathtaking view on Missionary Ridge! Sweeping city and mountain views create an incredible backdrop f",
+        "textLength": 1548,
+        "stillHome": false
+      },
+      {
+        "label": "530 Dover Chapel Terrace",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 530 Dover Chapel Terrace $650,000 2 beds · 2 baths 1,650 Welcome to 530 Dover Chapel Terrace, a stunning cabin retreat nestled in the picturesque North Georgia mountain",
+        "textLength": 1821,
+        "stillHome": false
+      },
+      {
+        "label": "15 Thorncrest Drive",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 15 Thorncrest Drive $558,000 3 beds · 5 baths 3,305 Welcome home to this beautifully appointed property, ideally located just minutes from I-75 and downtown Ringgold, o",
+        "textLength": 1802,
+        "stillHome": false
+      },
+      {
+        "label": "653 Briar Road",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 653 Briar Road $849,900 4 beds · 3 baths 3,964 MOUNTAIN PRIVACY JUST 30 MINUTES FROM DOWNTOWN CHATTANOOGA! Nestled on 4.5 wooded acres atop Mowbray Mountain, this 3,964",
+        "textLength": 2241,
+        "stillHome": false
+      },
+      {
+        "label": "8411 Sanders Road",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 8411 Sanders Road $1,338,750 2 beds · 1 bath 888 This is a rare opportunity to purchase a large parcel of property consisting of 7.65 acres in Ooltewah! This prime prop",
+        "textLength": 1445,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app CHATTANOOGA, TN Delivering results with a personal touch Find your dream home in Chattanooga and North Georgia with our award-winning, women-owned real estate team. View listings ABOUT Our Team All O",
+        "textLength": 2047,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED 415 Highway 151 $699,000 3 2 2,815 STATUS UNCONFIRMED 674 Autumn Wood Drive $565,000 4 3 2,973 STATUS UNCONFIRMED 523 Bryant",
+        "textLength": 1481,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "jobs",
+      "attempted": 12
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "415 Highway 151",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260508144346866129000000/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "674 Autumn Wood Drive",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20261002165133869324000000/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 1503,
+        "height": 1000,
+        "type": "jpg",
+        "bytes": 310493
+      }
+    },
+    {
+      "title": "523 Bryant Road",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20261006205105349079000000/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "2323 River Bluffs Drive",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260506153338742806000000/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 2248,
+        "height": 1265,
+        "type": "jpg",
+        "bytes": 448771
+      }
+    },
+    {
+      "title": "9013 Brow Lake Road",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260722152918520366000000/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "177 N Crest Road",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20261006140851282680000000/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 3000,
+        "height": 2000,
+        "type": "jpg",
+        "bytes": 905367
+      }
+    },
+    {
+      "title": "530 Dover Chapel Terrace",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260924182304765325000000/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "15 Thorncrest Drive",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260914011450659872000000/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 1280,
+        "height": 735,
+        "type": "jpg",
+        "bytes": 109974
+      }
+    },
+    {
+      "title": "653 Briar Road",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20261006210947200276000000/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "8411 Sanders Road",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20261006150910260305000000/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 3000,
+        "height": 2250,
+        "type": "jpg",
+        "bytes": 1037081
+      }
+    },
+    {
+      "title": "0 Split Rail Way",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260331193152637630000000/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "1446 Houston Valley Road",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/gcarafsl/20260914195811185431000000/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 2880,
+        "height": 1800,
+        "type": "jpg",
+        "bytes": 605111
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://chattanoogapropertyshop.com/",
+      "status": 403,
+      "finalUrl": "https://chattanoogapropertyshop.com/",
+      "title": "Just a moment...",
+      "textLength": 74,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Ray ID: a472fc845cf534ab • Contact support@agentfire.com for any questions",
+      "challenge": true,
+      "screenshot": "chattanooga-property-shop-source-0.png"
+    }
+  ],
+  "wallMs": 50811,
+  "window": {
+    "startedAt": "2026-10-08T06:10:21.865Z",
+    "endedAt": "2026-10-08T06:11:12.676Z"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "_comment": "AI spending limits for automated testing campaigns (estimated USD from reported tokens at list price). Raising a limit requires the 'authorization' block: who approved it, when, the new limits and why. Without it the defaults below apply. Production imports are not governed by this file.",
+  "levels": {
+    "A": { "usdLimit": 0, "note": "Offline replay. No model request is possible (AI_MODE=offline, Level A guard)." },
+    "B": { "usdLimit": 0, "note": "Targeted live listing extraction. Runs the discovery engine directly with AI fallbacks disabled; never builds an app." },
+    "C": { "usdLimit": 0.5, "maxSites": 3, "note": "Targeted real-AI checks of AI-dependent behaviour only." },
+    "D": { "usdLimit": 2.0, "maxSites": 25, "note": "Full end-to-end builds. Milestones and release gates only; needs a written justification." }
+  },
+  "dailyUsdLimit": 3.0,
+  "alertFraction": 0.8,
+  "defaultEstimateUsdPerBuild": 0.12,
+  "authorization": null
+}

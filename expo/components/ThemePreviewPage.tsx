@@ -11,6 +11,7 @@ import ThemeCollection from './ThemeCollection';
 import { Image } from 'expo-image';
 import PreviewSandbox, { isSandboxPage } from './PreviewSandbox';
 import ListingPhotoGallery from './ListingPhotoGallery';
+import { specLine } from "@/lib/listingSpecs";
 
 /** Local, read-only navigation inside a theme sample; never enters an authenticated account route. */
 export default function ThemePreviewPage({ route, brand, listings, onNavigate, savedIds = [], onFavorite, width }: { route: string; brand: Brand; listings: ManagedListing[]; onNavigate: (path: string) => void; savedIds?: string[]; onFavorite?: (id: string) => void; width?: number }) {
@@ -31,7 +32,7 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
     <ListingPhotoGallery images={listing.images} cover={listing.image} title={listing.title} updatedAt={listing.updatedAt} />
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 32 }}>{listing.title}</Text>
     <Text style={{ color: d.accent, fontSize: 24 }}>{listing.price}</Text>
-    <Text style={{ color: d.muted }}>{[listing.neighborhood, `${listing.beds} beds · ${listing.baths} baths`, listing.sqft].filter(Boolean).join('\n')}</Text>
+    <Text style={{ color: d.muted }}>{[listing.neighborhood, specLine(listing, 'long', false), listing.sqft].filter(Boolean).join('\n')}</Text>
     {!!listing.description && <Text style={{ color: d.ink, lineHeight: 24 }}>{listing.description}</Text>}
     {!!listing.listingNumber && <Text style={{ color: d.muted }}>MLS number: {listing.listingNumber}</Text>}
     {!!listing.propertyType && <Text style={{ color: d.muted }}>{listing.propertyType}</Text>}

@@ -1,0 +1,51 @@
+[
+  {
+    "failure": "duplicate-property",
+    "symptom": "DUPLICATE_PROPERTY",
+    "stage": "save-boundary normalizer (one record per property)",
+    "record": "docs/compatibility-knowledge/duplicate-property.md",
+    "architectures": [
+      "ihomefinder",
+      "property-cards"
+    ],
+    "integratedAt": "2026-10-08T19:24:25.342Z",
+    "commit": "0514b67923034469b0547374f08e06a6c8f492d0",
+    "gate": "13 -> 0"
+  },
+  {
+    "failure": "title-not-property",
+    "symptom": "TITLE_NOT_PROPERTY",
+    "stage": "property identity (detail enrichment / save-boundary normalizer)",
+    "record": "docs/compatibility-knowledge/title-not-property.md",
+    "architectures": [
+      "property-cards"
+    ],
+    "integratedAt": "2026-10-08T17:23:55.216Z",
+    "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+    "gate": "13 -> 0"
+  },
+  {
+    "failure": "not-a-property",
+    "symptom": "NOT_A_PROPERTY",
+    "stage": "collection scope (what counts as a property record)",
+    "record": "docs/compatibility-knowledge/not-a-property.md",
+    "architectures": [
+      "agentfire-dsidx"
+    ],
+    "integratedAt": "2026-10-08T19:38:18.922Z",
+    "commit": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+    "gate": "1 -> 0"
+  },
+  {
+    "failure": "mirrored-listing",
+    "symptom": "MIRRORED_LISTING",
+    "stage": "save-boundary normalizer (one record per listing)",
+    "record": "docs/compatibility-knowledge/mirrored-listing.md",
+    "architectures": [
+      "property-cards"
+    ],
+    "integratedAt": "2026-10-08T19:33:38.653Z",
+    "commit": "f7f39d5f4cc50badb9e4b85fe9a4041e5f30b977",
+    "gate": "49 -> 0"
+  }
+]

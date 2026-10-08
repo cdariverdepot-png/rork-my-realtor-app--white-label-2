@@ -1,0 +1,1200 @@
+{
+  "version": 1,
+  "failures": {
+    "market-only--missing-source-information": {
+      "id": "market-only--missing-source-information",
+      "code": "MARKET_ONLY",
+      "defectKind": "missing_source_information",
+      "severity": 0,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "not_code",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "d5329ba394858001",
+      "sites": [
+        {
+          "id": "bridge-realty",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "excluded": 0
+            }
+          ],
+          "detail": "Only other brokerages' listings were found; nothing is imported by design."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 1,
+      "architectures": [
+        "unrecognized"
+      ],
+      "attempts": []
+    },
+    "blocked-source--blocked-source": {
+      "id": "blocked-source--blocked-source",
+      "code": "BLOCKED_SOURCE",
+      "defectKind": "blocked_source",
+      "severity": 0,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "not_code",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "88df7a337168ae31",
+      "sites": [
+        {
+          "id": "century21-barbara-patterson",
+          "set": "regression",
+          "category": "franchise",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "redfin-gavin-shettler",
+          "set": "regression",
+          "category": "third-party-profile",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+              "error": "The page returned 405."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "remax-alexis-kemp-sagert",
+          "set": "regression",
+          "category": "franchise",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        },
+        {
+          "id": "finch-and-gable",
+          "set": "unseen",
+          "category": "iFoundAgent (WordPress)",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://finchandgable.com/",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ],
+      "siteCount": 4,
+      "listingsAffected": 4,
+      "architectures": [
+        "unrecognized"
+      ],
+      "attempts": []
+    },
+    "no-listings--needs-review": {
+      "id": "no-listings--needs-review",
+      "code": "NO_LISTINGS",
+      "defectKind": "needs_review",
+      "severity": 1,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "7cd585b7fe3604dd",
+      "sites": [
+        {
+          "id": "coldwell-banker-alena-goncharov",
+          "set": "regression",
+          "category": "franchise",
+          "architecture": "candidate:static_html",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.coldwellbankerhomes.com/sc/summerville/agent/alena-goncharov/aid_302773/",
+                "https://www.coldwellbankerhomes.com/sc/summerville/agent/alena-goncharov/aid_302773/listings/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "compass-jeff-stahlhut",
+          "set": "regression",
+          "category": "third-party-profile",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.compass.com/agents/jeff-stahlhut/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "john-holden-homes",
+          "set": "regression",
+          "category": "independent-agent",
+          "architecture": "candidate:wordpress",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://johnholdenhomes.com/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "raleigh-realty",
+          "set": "regression",
+          "category": "edge",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only",
+                "known-pattern"
+              ],
+              "visited": [
+                "https://raleighrealty.com/",
+                "https://raleighrealty.com/sitemap-listings.html",
+                "https://raleighrealty.com/raleigh",
+                "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+                "https://raleighrealty.com/raleigh/homes-with-first-floor-master?page=2"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "rockys-mom-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.rockysmom.com/",
+                "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919472?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com",
+                "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919474?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com",
+                "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919473?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com",
+                "https://rockysmom.com/search-properties/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "scott-a-jacobs-realtor",
+          "set": "regression",
+          "category": "custom",
+          "architecture": "candidate:wix",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.scottajacobsrealtor.com/",
+                "https://www.scottajacobsrealtor.com/featured-listings",
+                "https://www.scottajacobsrealtor.com/featured-listing",
+                "https://www.scottajacobsrealtor.com/search-listings"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "zillow-leland-reed",
+          "set": "regression",
+          "category": "third-party-profile",
+          "architecture": "candidate:next",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.zillow.com/profile/Leland-Reed"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "craft-bauer",
+          "set": "unseen",
+          "category": "Ylopo",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [],
+              "visited": [
+                "https://craftbauer.com/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        },
+        {
+          "id": "remington-crispeno-team",
+          "set": "unseen",
+          "category": "Wix",
+          "architecture": "candidate:idx_broker",
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.my-new-home.com/",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=41973&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=5067&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=13943&widgetReferer=true",
+                "https://search.northwestrealtors.com/idx/results/listings?idxID=b045&pt=all&lp=150000&hp=5000000&bd=1&tb=1&ccz=city&city%5B%5D=42790&widgetReferer=true"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ],
+      "siteCount": 9,
+      "listingsAffected": 9,
+      "architectures": [
+        "candidate:idx_broker",
+        "candidate:next",
+        "candidate:static_html",
+        "candidate:wix",
+        "candidate:wordpress",
+        "property-cards",
+        "unrecognized"
+      ],
+      "attempts": []
+    },
+    "detail-incomplete": {
+      "id": "detail-incomplete",
+      "code": "DETAIL_INCOMPLETE",
+      "defectKind": "code_defect",
+      "severity": 2,
+      "stage": "property detail reader",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detailGalleryImages, detailDescription)"
+      ],
+      "status": "open",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "aea556c8b113eb29",
+      "sites": [
+        {
+          "id": "houses-of-kansas-city",
+          "set": "regression",
+          "category": "independent-agent",
+          "architecture": "property-cards+public-json",
+          "count": 8,
+          "examples": [
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658350714748411355-17120-W-197th-Place",
+              "title": "17120 W 197th Place, Spring Hill, KS 66083",
+              "description": 1282,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658623479113663554-10952-S-Barth-Road",
+              "title": "10952 S Barth Road, Olathe, KS 66061",
+              "description": 645,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665891552317534343-620-W-60TH-Terrace",
+              "title": "620 W 60TH Terrace, Kansas City, MO 64113",
+              "description": 589,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665829906563548297-5418-W-131st-Terrace",
+              "title": "5418 W 131st Terrace, Overland Park, KS 66209",
+              "description": 1620,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658666774988572167-14150-W-147th-Street",
+              "title": "14150 W 147th Street, Olathe, KS 66062",
+              "description": 2007,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "mount-snow-palmiter",
+          "set": "regression",
+          "category": "independent-agent",
+          "architecture": "property-cards",
+          "count": 2,
+          "examples": [
+            {
+              "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092/20-Carinthia-Road-Dover-VT-05356",
+              "title": "20 Carinthia Road, Dover, Vermont VT 05356",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 10,
+              "pageDescription": false
+            },
+            {
+              "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5046444/56-Coldbrook-Crossing-Wilmington-VT-05363",
+              "title": "56 Coldbrook Crossing, Wilmington, Vermont VT 05363",
+              "description": 1420,
+              "photos": 1,
+              "pagePhotos": 10,
+              "pageDescription": false
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "count": 3,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085772/FL/Vero-Beach/1270-42nd-Avenue",
+              "title": "1270 42nd Avenue Vero Beach, FL 32960",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/Beaches/B26085764/FL/West-Palm-Beach/730-47TH-Street",
+              "title": "730 47TH Street West Palm Beach, FL",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 6,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ],
+      "siteCount": 3,
+      "listingsAffected": 13,
+      "architectures": [
+        "property-cards",
+        "property-cards+public-json"
+      ],
+      "attempts": []
+    },
+    "duplicate-property": {
+      "id": "duplicate-property",
+      "code": "DUPLICATE_PROPERTY",
+      "defectKind": "code_defect",
+      "severity": 2,
+      "stage": "save-boundary normalizer (one record per property)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords)"
+      ],
+      "status": "integrated",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:23:09.406Z",
+      "evidenceHash": "92b59e2a4981a304",
+      "sites": [
+        {
+          "id": "katerina-sayles",
+          "set": "regression",
+          "category": "idx",
+          "architecture": "property-cards",
+          "count": 2,
+          "examples": [
+            {
+              "title": "14035 Densmore Avenue N Seattle, WA 98133",
+              "sourceUrls": [
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/"
+              ]
+            },
+            {
+              "title": "320 NE 156th Street Shoreline, WA 98155",
+              "sourceUrls": [
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+        },
+        {
+          "id": "redman-realty-group",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "ihomefinder",
+          "count": 10,
+          "examples": [
+            {
+              "title": "Lot 9 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/"
+              ]
+            },
+            {
+              "title": "Lot 2 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/"
+              ]
+            },
+            {
+              "title": "Lot 1 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/"
+              ]
+            },
+            {
+              "title": "Lot 10 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/"
+              ]
+            },
+            {
+              "title": "Lot 8 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+        },
+        {
+          "id": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "title": "212 Utopia Ct, Keller, TX 76248",
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21333972/",
+                "https://northforworthhomes.realgeeks.com/property/21333972/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+        }
+      ],
+      "siteCount": 3,
+      "listingsAffected": 13,
+      "architectures": [
+        "ihomefinder",
+        "property-cards"
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-08T19:24:25.342Z",
+          "outcome": "integrated",
+          "branch": "improve/duplicate-property-session1",
+          "commit": "0514b67923034469b0547374f08e06a6c8f492d0",
+          "evidenceHash": "92b59e2a4981a304",
+          "gate": {
+            "accepted": true,
+            "head": "0514b67923034469b0547374f08e06a6c8f492d0",
+            "base": "af95f470981c54f517b32c7b2bdab4f24a0c8f40",
+            "target": "13 -> 0",
+            "problems": []
+          }
+        }
+      ],
+      "knowledge": "docs/compatibility-knowledge/duplicate-property.md"
+    },
+    "title-not-property": {
+      "id": "title-not-property",
+      "code": "TITLE_NOT_PROPERTY",
+      "defectKind": "code_defect",
+      "severity": 3,
+      "stage": "property identity (detail enrichment / save-boundary normalizer)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
+      ],
+      "status": "integrated",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:40:34.848Z",
+      "evidenceHash": "53d199883278363a",
+      "sites": [
+        {
+          "id": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "detailPageNames": "1001 NW 193rd Ave, Pembroke Pines, FL",
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+        }
+      ],
+      "siteCount": 0,
+      "listingsAffected": 1,
+      "architectures": [
+        "property-cards"
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-08T16:49:55.369Z",
+          "outcome": "rejected",
+          "branch": "improve/title-not-property-session1",
+          "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+          "evidenceHash": "f04715a7aa1c8ebe",
+          "gate": {
+            "accepted": false,
+            "head": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+            "base": "9ed67348936ca8c5e2edd09f0884c9e12b7ff6f1",
+            "target": "13 -> 0",
+            "problems": []
+          },
+          "note": "Rejected by a gate harness defect, not by the candidate: Node 24 prints 'ℹ pass N' and the gate parsed only TAP ('# pass N'), so the suite read as '0 passed, NaN failed'. Fixed in 2c30878; the same candidate was then gated again and accepted."
+        },
+        {
+          "at": "2026-10-08T17:23:55.216Z",
+          "outcome": "integrated",
+          "branch": "improve/title-not-property-session1",
+          "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+          "evidenceHash": "f04715a7aa1c8ebe",
+          "gate": {
+            "accepted": true,
+            "head": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+            "base": "3d529f19e3ba0613696d2e06d652d4b55e86b0ce",
+            "target": "13 -> 0",
+            "problems": []
+          }
+        }
+      ],
+      "knowledge": "docs/compatibility-knowledge/title-not-property.md",
+      "resolvedAt": "2026-10-08T19:43:47.846Z"
+    },
+    "title-not-property--temporary-outage": {
+      "id": "title-not-property--temporary-outage",
+      "code": "TITLE_NOT_PROPERTY",
+      "defectKind": "temporary_outage",
+      "severity": 1,
+      "stage": "property identity (detail enrichment / save-boundary normalizer)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
+      ],
+      "status": "not_code",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "ad1098bc29198b26",
+      "sites": [
+        {
+          "id": "realm-partners-idaho",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "property-cards",
+          "count": 2,
+          "examples": [
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261536/",
+              "title": "$20,000,000",
+              "detailPageNames": null,
+              "detailPage": "error: The operation was aborted due to timeout"
+            },
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261425/",
+              "title": "$3,797,000",
+              "detailPageNames": null,
+              "detailPage": "error: The operation was aborted due to timeout"
+            }
+          ],
+          "detail": "The detail page could not be read in this recording, so the property name is unknown."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 2,
+      "architectures": [
+        "property-cards"
+      ],
+      "attempts": []
+    },
+    "title-not-property--needs-review": {
+      "id": "title-not-property--needs-review",
+      "code": "TITLE_NOT_PROPERTY",
+      "defectKind": "needs_review",
+      "severity": 1,
+      "stage": "property identity (detail enrichment / save-boundary normalizer)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
+      ],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "18fff4034a42f88c",
+      "sites": [
+        {
+          "id": "redman-realty-group",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "ihomefinder",
+          "count": 8,
+          "examples": [
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-REED-RD-THREE-LAKES-WI-54562/219950/309/",
+              "title": "ON REED RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-SUGAR-CAMP-WI-54521/219861/309/",
+              "title": "ON HWY 17",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-EAGLE-RIVER-WI-54521/219860/309/",
+              "title": "ON HWY 17",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CONNORS-RD-THREE-LAKES-WI-54562/219840/309/",
+              "title": "ON CONNORS RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-MOONSHINE-VALLEY-RD-PRESQUE-ISLE-WI-54557/219489/309/",
+              "title": "Lot ON MOONSHINE VALLEY RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            }
+          ],
+          "detail": "Neither the card nor a recorded detail page names the property."
+        },
+        {
+          "id": "skilled-real-estate-miami",
+          "set": "unseen",
+          "category": "Showcase IDX (WordPress)",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://miamidadebrowardliving.com/properties/listing/SEF/A12103137/FL/Ocala/",
+              "title": "Open House Sat, Oct 17, 11 AM 1 / 11 $249,900 Single Family Residence For Sale Active 3 BEDS 2 TOTAL BATHS Ocala, FL 34473 Marion Oaks Subdivision",
+              "detailPageNames": null,
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "Neither the card nor a recorded detail page names the property."
+        }
+      ],
+      "siteCount": 2,
+      "listingsAffected": 9,
+      "architectures": [
+        "ihomefinder",
+        "property-cards"
+      ],
+      "attempts": []
+    },
+    "capture-incomplete--harness-failure": {
+      "id": "capture-incomplete--harness-failure",
+      "code": "CAPTURE_INCOMPLETE",
+      "defectKind": "harness_failure",
+      "severity": 1,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "not_code",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "89f4e5443044d67d",
+      "sites": [
+        {
+          "id": "rockys-mom-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "property-cards",
+          "count": 4,
+          "examples": [
+            {
+              "url": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919472?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com"
+            },
+            {
+              "url": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919474?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com"
+            },
+            {
+              "url": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919473?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com"
+            },
+            {
+              "url": "https://rockysmom.com/search-properties/"
+            }
+          ],
+          "detail": "The engine requested pages that were not recorded; recapture this site (Level B) before judging it."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 4,
+      "architectures": [
+        "property-cards"
+      ],
+      "attempts": []
+    },
+    "detail-incomplete--needs-review": {
+      "id": "detail-incomplete--needs-review",
+      "code": "DETAIL_INCOMPLETE",
+      "defectKind": "needs_review",
+      "severity": 2,
+      "stage": "property detail reader",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detailGalleryImages, detailDescription)"
+      ],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T16:31:29.309Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "93cc68c78153b2ba",
+      "sites": [
+        {
+          "id": "woods-n-water-real-estate",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+              "title": "8112 M-77 Germfask, MI 49836",
+              "description": 200,
+              "photos": 1,
+              "pagePhotos": 29,
+              "pageDescription": false
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        },
+        {
+          "id": "georgina-jacobson",
+          "set": "unseen",
+          "category": "Agent Image + iHomefinder",
+          "architecture": "property-cards",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://georginajacobson.com/homes-for-sale-details/413-29TH-NEWPORT-BEACH-CA-92663/OC26130304/306/",
+              "title": "413 29th Newport Beach, CA 92663",
+              "description": 0,
+              "photos": 0,
+              "pagePhotos": 0,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ],
+      "siteCount": 2,
+      "listingsAffected": 2,
+      "architectures": [
+        "property-cards"
+      ],
+      "attempts": []
+    },
+    "requires-rendering--needs-review": {
+      "id": "requires-rendering--needs-review",
+      "code": "REQUIRES_RENDERING",
+      "defectKind": "needs_review",
+      "severity": 1,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T19:22:34.206Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "2f61ac6a29cfa941",
+      "sites": [
+        {
+          "id": "chattanooga-property-shop",
+          "set": "regression",
+          "category": "idx",
+          "architecture": "candidate:static_html",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://chattanoogapropertyshop.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "cindy-carlson-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "candidate:flexmls",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "reagent-denver",
+          "set": "regression",
+          "category": "edge",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.reagentdenver.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "howard-hanna-daniel-torri",
+          "set": "unseen",
+          "category": "Howard Hanna brokerage profile",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "idaho-perfect-home",
+          "set": "unseen",
+          "category": "kvCORE / BoldTrail",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.idahoperfecthome.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "lauer-realty-group",
+          "set": "unseen",
+          "category": "Lofty (Chime)",
+          "architecture": "candidate:lofty_chime",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://lauerrealtygroup.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "magic-valley-homes",
+          "set": "unseen",
+          "category": "AgentFire (Home Junction data)",
+          "architecture": "candidate:static_html",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://magicvalley.homes/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "tom-toole",
+          "set": "unseen",
+          "category": "Sierra Interactive",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.tomtoole.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        }
+      ],
+      "siteCount": 8,
+      "listingsAffected": 8,
+      "architectures": [
+        "candidate:flexmls",
+        "candidate:lofty_chime",
+        "candidate:static_html",
+        "unrecognized"
+      ],
+      "attempts": []
+    },
+    "not-a-property": {
+      "id": "not-a-property",
+      "code": "NOT_A_PROPERTY",
+      "defectKind": "code_defect",
+      "severity": 4,
+      "stage": "collection scope (what counts as a property record)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (collection readers, scope)",
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords: not_a_property)"
+      ],
+      "status": "integrated",
+      "firstSeen": "2026-10-08T19:22:34.206Z",
+      "lastSeen": "2026-10-08T19:37:11.208Z",
+      "evidenceHash": "62d2693c3d059b56",
+      "sites": [
+        {
+          "id": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam"
+            }
+          ],
+          "detail": "A social-media post or profile was imported as a property listing."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 1,
+      "architectures": [
+        "agentfire-dsidx"
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-08T19:38:18.922Z",
+          "outcome": "integrated",
+          "branch": "improve/not-a-property-session1",
+          "commit": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+          "evidenceHash": "62d2693c3d059b56",
+          "gate": {
+            "accepted": true,
+            "head": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+            "base": "5803976279f14aefef077f1c074f03b93b8de18f",
+            "target": "1 -> 0",
+            "problems": []
+          }
+        }
+      ],
+      "knowledge": "docs/compatibility-knowledge/not-a-property.md"
+    },
+    "mirrored-listing": {
+      "id": "mirrored-listing",
+      "code": "MIRRORED_LISTING",
+      "defectKind": "code_defect",
+      "severity": 3,
+      "stage": "save-boundary normalizer (one record per listing)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyKey, normalizeListingRecords)"
+      ],
+      "status": "integrated",
+      "firstSeen": "2026-10-08T19:27:11.442Z",
+      "lastSeen": "2026-10-08T19:32:40.856Z",
+      "evidenceHash": "56fdb8736b1f81e2",
+      "sites": [
+        {
+          "id": "chatman-realty-group",
+          "set": "unseen",
+          "category": "Real Geeks",
+          "architecture": "property-cards",
+          "count": 49,
+          "examples": [
+            {
+              "titles": [
+                "9652 Calaveras Rd, Fort Worth, TX 76177",
+                "9652 Calaveras Rd, Fort Worth, TX 76177"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21400828/",
+                "https://northforworthhomes.realgeeks.com/property/21400828/"
+              ]
+            },
+            {
+              "titles": [
+                "3801 Heather Meadows Dr, Fort Worth, TX 76244",
+                "3801 Heather Meadows Dr, Fort Worth, TX 76244"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21404560/",
+                "https://northforworthhomes.realgeeks.com/property/21404560/"
+              ]
+            },
+            {
+              "titles": [
+                "5752 Glynda Dr, North Richland Hills, TX 76180",
+                "5752 Glynda Dr, North Richland Hills, TX 76180"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21402334/",
+                "https://northforworthhomes.realgeeks.com/property/21402334/"
+              ]
+            },
+            {
+              "titles": [
+                "5768 Glynda Dr, North Richland Hills, TX 76180",
+                "5768 Glynda Dr, North Richland Hills, TX 76180"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21402340/",
+                "https://northforworthhomes.realgeeks.com/property/21402340/"
+              ]
+            },
+            {
+              "titles": [
+                "2110 Verona Dr, Haslet, TX 76052",
+                "2110 Verona Dr, Haslet, TX 76052"
+              ],
+              "sourceUrls": [
+                "https://www.chatmanrealtygroup.com/property/21398837/",
+                "https://northforworthhomes.realgeeks.com/property/21398837/"
+              ]
+            }
+          ],
+          "detail": "The same listing (same listing-id path and price) is imported once per host the site publishes it on."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 49,
+      "architectures": [
+        "property-cards"
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-08T19:33:38.653Z",
+          "outcome": "integrated",
+          "branch": "improve/mirrored-listing-session1",
+          "commit": "f7f39d5f4cc50badb9e4b85fe9a4041e5f30b977",
+          "evidenceHash": "56fdb8736b1f81e2",
+          "gate": {
+            "accepted": true,
+            "head": "f7f39d5f4cc50badb9e4b85fe9a4041e5f30b977",
+            "base": "3d7453df527e6f60705ccd20baf3e07c5ca71f5a",
+            "target": "49 -> 0",
+            "problems": []
+          }
+        }
+      ],
+      "knowledge": "docs/compatibility-knowledge/mirrored-listing.md"
+    },
+    "all-filtered--needs-review": {
+      "id": "all-filtered--needs-review",
+      "code": "ALL_FILTERED",
+      "defectKind": "needs_review",
+      "severity": 2,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T19:40:34.848Z",
+      "lastSeen": "2026-10-08T19:43:47.846Z",
+      "evidenceHash": "ec5d4622eba0793d",
+      "sites": [
+        {
+          "id": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "count": 1,
+          "examples": [
+            {
+              "discovered": 1,
+              "reasons": {
+                "normalizer": 1
+              },
+              "sample": [
+                {
+                  "title": "cameronteam",
+                  "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/"
+                }
+              ]
+            }
+          ],
+          "detail": "Listings were discovered but none survived the save-boundary status and normalizer rules."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 1,
+      "architectures": [
+        "agentfire-dsidx"
+      ],
+      "attempts": []
+    }
+  },
+  "lastEvaluation": "2026-10-08T19:43:35.572Z"
+}

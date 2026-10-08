@@ -1,0 +1,45 @@
+{
+  "evaluatedAt": "2026-10-08T19:38:42.192Z",
+  "engine": "working tree",
+  "sites": [
+    {
+      "id": "the-cameron-team",
+      "set": "verify",
+      "category": "AgentFire + /idx/ plugin",
+      "holdout": true,
+      "architecture": "agentfire-dsidx",
+      "capturedAt": "2026-10-08T19:38:41.898Z",
+      "cpuMs": 138,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "the-cameron-team",
+          "set": "verify",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "code": "ALL_FILTERED",
+          "defectKind": "needs_review",
+          "severity": 2,
+          "count": 1,
+          "examples": [
+            {
+              "discovered": 1,
+              "reasons": {
+                "normalizer": 1
+              },
+              "sample": [
+                {
+                  "title": "cameronteam",
+                  "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/"
+                }
+              ]
+            }
+          ],
+          "detail": "Listings were discovered but none survived the save-boundary status and normalizer rules."
+        }
+      ]
+    }
+  ]
+}
