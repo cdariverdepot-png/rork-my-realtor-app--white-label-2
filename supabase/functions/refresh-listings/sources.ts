@@ -105,7 +105,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       } catch { /* disappearance or blocked pages cannot establish sold status */ }
     }
   }
-  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new SourceReadError("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS export; your existing listings are preserved.", "unreadable");
+  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new SourceReadError("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS public sharing link, or add properties yourself from your dashboard; your existing listings are preserved.", "unreadable");
   const excludedOtherOffice = discovery.meta.scope?.excludedOtherOffice ?? 0;
   if (!discovery.listings.length && !explicitEmpty && excludedOtherOffice) throw new SourceReadError(`That page shows homes listed by many different brokerages (a market search), not only yours. We import only listings attributed to you or your office, and none of the ${excludedOtherOffice} we checked were. Nothing was imported. Paste the page that shows your own listings.`, "market_only");
   if (!discovery.listings.length && !explicitEmpty) {

@@ -5721,13 +5721,17 @@ const reply = (body: unknown, status = 200) => Response.json(body, {
  * Why a website source could not be read, in words a realtor can act on. Raw network errors
  * ("signal timed out", "error sending request") say nothing about what to do next.
  */
+/** The supported ways to bring listings in when a site refuses automated readers (no workaround is attempted). */
+const BLOCKED_ALTERNATIVES = "Instead, paste a public page that lists your properties (your brokerage's “My listings” page, an IDX property list, or an MLS public sharing link), or upload a listing file (PDF, CSV, Word, text, or screenshots). You can also add properties yourself from your dashboard.";
+
 function readableSourceFailure(uri: string, error: string | undefined): string {
   let host = uri;
   try { host = new URL(uri).hostname.replace(/^www\./, ""); } catch { /* keep the raw value */ }
   const reason = error ?? "";
   if (/timed? ?out|aborted/i.test(reason)) return `${host} did not respond in time.`;
-  if (/error page instead of the website/.test(reason)) return `${host} sent an error page instead of the website. The site may block automated readers; another page of the site may work.`;
-  if (/returned 40[13]/.test(reason)) return `${host} refused our request (${reason.match(/\d{3}/)?.[0]}). The site may block automated readers.`;
+  if (/error page instead of the website/.test(reason)) return `${host} sent an error page instead of the website. The site may block automated readers; another page of the site may work. ${BLOCKED_ALTERNATIVES}`;
+  if (/returned 40[13]/.test(reason)) return `${host} refused our request (${reason.match(/\d{3}/)?.[0]}). This site blocks automated readers, so its listings can't be imported from this link. ${BLOCKED_ALTERNATIVES}`;
+  if (/human verification|captcha|robot/i.test(reason)) return `${host} asks every visitor to pass a human check, so its listings can't be imported automatically. ${BLOCKED_ALTERNATIVES}`;
   if (/returned 404/.test(reason)) return `${host} says that page does not exist (404). Check the address.`;
   if (/returned 5\d\d/.test(reason)) return `${host} had a server error (${reason.match(/\d{3}/)?.[0]}). It may be temporary.`;
   if (/resolve|dns|lookup|error sending request|connect/i.test(reason)) return `${host} could not be reached. Check the address.`;
