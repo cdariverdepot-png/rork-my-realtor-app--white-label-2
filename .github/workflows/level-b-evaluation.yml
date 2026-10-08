@@ -47,9 +47,17 @@ jobs:
           node scripts/improve/evaluate.cjs --out ../diagnostics/improvement/evaluation-latest.json
           node scripts/improve/failures.cjs diagnose ../diagnostics/improvement/evaluation-latest.json
           node scripts/improve/scorecard.cjs --evaluation ../diagnostics/improvement/evaluation-latest.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: level-b-${{ github.run_id }}
+          path: |
+            diagnostics/evaluation/captures
+            diagnostics/improvement/evaluation-latest.json
+            diagnostics/improvement/scorecard.json
       - name: Commit recordings and results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add diagnostics && git commit -m "Level B evaluation ${GITHUB_RUN_ID} [skip ci]" || exit 0
-          for i in 1 2 3; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && break; sleep 5; done
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }

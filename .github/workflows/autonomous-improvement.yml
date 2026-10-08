@@ -100,7 +100,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add diagnostics/improvement && git commit -m "Improvement loop: evaluation and registry ${GITHUB_RUN_ID} [skip ci]" || exit 0
-          for i in 1 2 3; do git pull --rebase origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && break; sleep 5; done
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }
 
   repair:
     needs: select
@@ -211,7 +211,7 @@ jobs:
             git add diagnostics/improvement docs/compatibility-knowledge
             git commit -m "Remember $FAILURE: candidate rejected by the gate; branch $CANDIDATE kept for reproduction [skip ci]"
           fi
-          for i in 1 2 3; do git pull --rebase=merges origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && break; sleep 5; done
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase=merges origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }
 
   verify:
     needs: [select, gate]
@@ -242,4 +242,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add diagnostics/improvement && git commit -m "Live verification of ${{ needs.select.outputs.failure }} (Level B) [skip ci]" || exit 0
-          for i in 1 2 3; do git pull --rebase origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && break; sleep 5; done
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin "$BASE_BRANCH" && git push origin "HEAD:$BASE_BRANCH" && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ] || { echo "::error::could not push results"; exit 1; }
