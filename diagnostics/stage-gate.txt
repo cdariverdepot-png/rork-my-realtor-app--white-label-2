@@ -1,4 +1,5 @@
-Stage gate requested Thu Oct  8 20:58:43 UTC 2026: live recheck after the detail-job title fix found by run 37840376601.
-justification: release gate recheck of the detail-job title fix before merging into main
+Stage gate requested Thu Oct  8 21:22:44 UTC 2026: end-to-end check of the DEPLOYED development preview (main 5c70bca) against the staging importer.
+justification: verify the deployed preview of main reaches the review screen with the staging importer before handing it over
 staging-ai: shared-key
-sites: realm-partners-idaho, katerina-sayles, the-battle-group
+app-url: https://cdariverdepot-my-realtor--dkx12pzmez.expo.app
+sites: realm-partners-idaho, katerina-sayles
