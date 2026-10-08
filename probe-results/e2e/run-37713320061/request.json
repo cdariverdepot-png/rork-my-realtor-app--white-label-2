@@ -1,0 +1,23 @@
+[
+  {
+    "name": "cindy-existing",
+    "url": "https://cindycarlsonrealty.com/",
+    "publish": true,
+    "email": "import-probe-cindy-existing-37713320061@example.com",
+    "hash": "$2a$10$xFsgIuFDfr0gB6oUKppz/.4COp2jtSTD85RTR4qVDUgIGaw1hdgiG"
+  },
+  {
+    "name": "gethomenow",
+    "url": "https://www.gethomenow.com/",
+    "publish": true,
+    "email": "import-probe-gethomenow-37713320061@example.com",
+    "hash": "$2a$10$jQcSy7sfkAAbCmKAMMfI6eB7rKyC.Gn9Wr2VelC/37R2yQ.Rn6IKa"
+  },
+  {
+    "name": "northidahofreedom",
+    "url": "https://northidahofreedom.com/",
+    "publish": true,
+    "email": "import-probe-northidahofreedom-37713320061@example.com",
+    "hash": "$2a$10$fjIf43R9twTHRzaE0gZAy.LKVEUmh0ZLgkyrW2cWrAyVtjAAjdlJi"
+  }
+]
