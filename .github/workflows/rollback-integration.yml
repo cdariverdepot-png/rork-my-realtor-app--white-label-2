@@ -1,0 +1,45 @@
+name: Roll back an integrated repair
+# Reverts one integration merge on repair/compatibility-engine (git revert -m 1), reopens its failure in
+# the registry and records why. Production is not involved.
+on:
+  workflow_dispatch:
+    inputs:
+      merge:
+        description: SHA of the "Integrate <failure>" merge commit to revert
+        required: true
+      reason:
+        description: Why it is being rolled back
+        required: true
+permissions:
+  contents: write
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/compatibility-engine
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Revert the merge and reopen its failure
+        env:
+          MERGE: ${{ github.event.inputs.merge }}
+          REASON: ${{ github.event.inputs.reason }}
+        run: |
+          echo "$MERGE" | grep -Eq '^[0-9a-f]{7,40}$' || { echo "::error::not a commit sha"; exit 1; }
+          subject="$(git log -1 --format=%s "$MERGE")"
+          failure="$(echo "$subject" | sed -n 's/^Integrate \([a-z0-9-]*\):.*/\1/p')"
+          [ -n "$failure" ] || { echo "::error::$MERGE is not an integration merge"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git revert -m 1 --no-edit "$MERGE"
+          node -e '
+            const fs=require("fs"),p="diagnostics/improvement/failures.json",r=JSON.parse(fs.readFileSync(p,"utf8"));
+            const f=r.failures[process.argv[1]]; if(!f) process.exit(0);
+            f.status="open"; (f.attempts??=[]).push({at:new Date().toISOString(),outcome:"rolled_back",commit:process.argv[2],reason:process.argv[3]});
+            fs.writeFileSync(p,JSON.stringify(r,null,2)+"\n");' "$failure" "$MERGE" "$REASON"
+          git add diagnostics/improvement && git commit -m "Reopen $failure after rollback: $REASON [skip ci]" || true
+          git push origin HEAD:repair/compatibility-engine

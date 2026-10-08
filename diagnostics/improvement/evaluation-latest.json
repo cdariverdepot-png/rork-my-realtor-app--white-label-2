@@ -1,0 +1,2880 @@
+{
+  "evaluatedAt": "2026-10-08T16:35:36.488Z",
+  "engine": "working tree",
+  "sites": [
+    {
+      "id": "bridge-realty",
+      "set": "regression",
+      "category": "brokerage",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T04:28:24.722Z",
+      "cpuMs": 262,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "bridge-realty",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "unrecognized",
+          "code": "MARKET_ONLY",
+          "defectKind": "missing_source_information",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "excluded": 0
+            }
+          ],
+          "detail": "Only other brokerages' listings were found; nothing is imported by design."
+        }
+      ]
+    },
+    {
+      "id": "century21-barbara-patterson",
+      "set": "regression",
+      "category": "franchise",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T04:29:31.687Z",
+      "cpuMs": 1,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "century21-barbara-patterson",
+          "set": "regression",
+          "category": "franchise",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "chattanooga-property-shop",
+      "set": "regression",
+      "category": "idx",
+      "holdout": false,
+      "architecture": "candidate:static_html",
+      "capturedAt": "2026-10-08T04:29:09.958Z",
+      "cpuMs": 5,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "chattanooga-property-shop",
+          "set": "regression",
+          "category": "idx",
+          "architecture": "candidate:static_html",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://chattanoogapropertyshop.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "cindy-carlson-realty",
+      "set": "regression",
+      "category": "flexmls",
+      "holdout": false,
+      "architecture": "candidate:flexmls",
+      "capturedAt": "2026-10-08T04:24:58.470Z",
+      "cpuMs": 19,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "cindy-carlson-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "candidate:flexmls",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "coldwell-banker-alena-goncharov",
+      "set": "regression",
+      "category": "franchise",
+      "holdout": false,
+      "architecture": "candidate:static_html",
+      "capturedAt": "2026-10-08T04:29:31.496Z",
+      "cpuMs": 13,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "coldwell-banker-alena-goncharov",
+          "set": "regression",
+          "category": "franchise",
+          "architecture": "candidate:static_html",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.coldwellbankerhomes.com/sc/summerville/agent/alena-goncharov/aid_302773/",
+                "https://www.coldwellbankerhomes.com/sc/summerville/agent/alena-goncharov/aid_302773/listings/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "compass-jeff-stahlhut",
+      "set": "regression",
+      "category": "third-party-profile",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T04:29:35.755Z",
+      "cpuMs": 37,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "compass-jeff-stahlhut",
+          "set": "regression",
+          "category": "third-party-profile",
+          "architecture": "unrecognized",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.compass.com/agents/jeff-stahlhut/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "elevate-realty-granbury",
+      "set": "regression",
+      "category": "idx",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:29:09.828Z",
+      "cpuMs": 707,
+      "imported": 20,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403980/Granbury/4304-Acoma-Court",
+          "title": "4304 Acoma Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Tammy Dill of The Trusted Property Advisors",
+          "description": 1205,
+          "photos": 4,
+          "price": "$510,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21404665/Granbury/4647-Lyndi-Lane",
+          "title": "4647 Lyndi Lane Granbury, TX 76049",
+          "ownership": "featured",
+          "listingOffice": "Heidi Mayer of 6th Ave Homes",
+          "description": 984,
+          "photos": 4,
+          "price": "$170,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21403928/Granbury/9508-Nutcracker-Court",
+          "title": "9508 Nutcracker Court Granbury, TX 76049",
+          "ownership": "featured",
+          "listingOffice": "Lana Robinson of Prairie Wind Real Estate",
+          "description": 1217,
+          "photos": 4,
+          "price": "$468,500"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398139/Granbury/3904-Country-Meadows-Road",
+          "title": "3904 Country Meadows Road Granbury, TX",
+          "ownership": "own",
+          "listingOffice": "Natalie Self of Elevate Realty Group",
+          "description": 689,
+          "photos": 4,
+          "price": "$249,999"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21398791/Granbury/157-Ponce-De-Leon-Road",
+          "title": "157 Ponce De Leon Road Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Marsha Ashlock of Visions Realty & Investments",
+          "description": 1518,
+          "photos": 4,
+          "price": "$418,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21402501/Granbury/3205-Windcrest-Drive",
+          "title": "3205 Windcrest Drive Granbury, TX",
+          "ownership": "own",
+          "listingOffice": "Brian Blevins of Elevate Realty Group",
+          "description": 235,
+          "photos": 4,
+          "price": "$324,900"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21402449/Granbury/113-W-Arnold-Street",
+          "title": "113 W Arnold Street Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Pam Knieper of Knieper Realty, Inc",
+          "description": 1375,
+          "photos": 4,
+          "price": "$245,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401040/Granbury/700-Aqua-Vista-Drive",
+          "title": "700 Aqua Vista Drive Granbury, TX",
+          "ownership": "featured",
+          "listingOffice": "Jonathan Minerick of HomeCoin.com",
+          "description": 822,
+          "photos": 4,
+          "price": "$419,950"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21380359/Granbury/2105-Wood-Duck-Lane",
+          "title": "2105 Wood Duck Lane Granbury, TX",
+          "ownership": "featured",
+          "listingOffice": "Michelle Grothouse of TRU Land & Homes",
+          "description": 1987,
+          "photos": 4,
+          "price": "$575,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21397972/Granbury/6343-Weatherby-Road",
+          "title": "6343 Weatherby Road Granbury, TX 76049",
+          "ownership": "featured",
+          "listingOffice": "Rebecca Van Buren of Keller Williams Brazos West",
+          "description": 1995,
+          "photos": 4,
+          "price": "$800,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401713/Granbury/5703-N-Sunchase-Drive",
+          "title": "5703 N Sunchase Drive Granbury, TX 76049",
+          "ownership": "featured",
+          "listingOffice": "Kelly Snodgrass of HomeSmart",
+          "description": 960,
+          "photos": 4,
+          "price": "$150,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21393472/Granbury/4101-Newport-Bay-Court",
+          "title": "4101 Newport Bay Court Granbury, TX",
+          "ownership": "featured",
+          "listingOffice": "Lisa Randolph of Cattell Real Estate Group",
+          "description": 1420,
+          "photos": 4,
+          "price": "$620,000"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401268/Granbury/408-Cactus-Court",
+          "title": "408 Cactus Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1107,
+          "photos": 4,
+          "price": "$250,990"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401246/Granbury/400-Cactus-Court",
+          "title": "400 Cactus Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1131,
+          "photos": 4,
+          "price": "$252,990"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401250/Granbury/419-Cactus-Court",
+          "title": "419 Cactus Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1003,
+          "photos": 4,
+          "price": "$208,990"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401449/Granbury/237-Coronado-Court",
+          "title": "237 Coronado Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1177,
+          "photos": 4,
+          "price": "$424,766"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401447/Granbury/441-Carnero-Drive",
+          "title": "441 Carnero Drive Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1227,
+          "photos": 4,
+          "price": "$402,864"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401235/Granbury/411-Cactus-Court",
+          "title": "411 Cactus Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1003,
+          "photos": 4,
+          "price": "$210,990"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401232/Granbury/404-Cactus-Court",
+          "title": "404 Cactus Court Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1003,
+          "photos": 4,
+          "price": "$206,990"
+        },
+        {
+          "sourceUrl": "https://granburyrelocationexperts.com/properties-listing/listing/NTREIS/21401231/Granbury/8001-Mesquite-Trail",
+          "title": "8001 Mesquite Trail Granbury, TX 76048",
+          "ownership": "featured",
+          "listingOffice": "Ben Caballero of HomesUSA.com",
+          "description": 1003,
+          "photos": 4,
+          "price": "$208,990"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "freestone-properties",
+      "set": "regression",
+      "category": "brokerage",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:27:22.303Z",
+      "cpuMs": 60,
+      "imported": 3,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.freestoneproperties.com/listings/200-courtland-place-asheville/",
+          "title": "200 Courtland Place Asheville",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 136,
+          "photos": 16,
+          "price": "$865,000"
+        },
+        {
+          "sourceUrl": "https://www.freestoneproperties.com/listings/30-laurel-branch-drive-black-mountain-nc/",
+          "title": "30 Laurel Branch Drive Black Mountain NC",
+          "ownership": "own",
+          "listingOffice": "a private water system, a community volunteer fire station, and the security of",
+          "description": 139,
+          "photos": 55,
+          "price": "$995,000"
+        },
+        {
+          "sourceUrl": "https://www.freestoneproperties.com/listings/518-sweet-birch-park-lane-black-mountain/",
+          "title": "518 Sweet Birch Park Lane Black Mountain",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 135,
+          "photos": 63,
+          "price": "$575,000"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "houses-of-kansas-city",
+      "set": "regression",
+      "category": "independent-agent",
+      "holdout": false,
+      "architecture": "property-cards+public-json",
+      "capturedAt": "2026-10-08T04:27:20.976Z",
+      "cpuMs": 205,
+      "imported": 12,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658350714748411355-17120-W-197th-Place",
+          "title": "17120 W 197th Place, Spring Hill, KS 66083",
+          "ownership": "featured",
+          "listingOffice": "BHG Kansas City Homes",
+          "description": 1282,
+          "photos": 1,
+          "price": "$569,900"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658126195968364152-6781-Rene-Street",
+          "title": "6781 Rene Street, Shawnee, KS 66216",
+          "ownership": "featured",
+          "listingOffice": "Weichert, Realtors Welch & Co",
+          "description": 264,
+          "photos": 1,
+          "price": "$395,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658623479113663554-10952-S-Barth-Road",
+          "title": "10952 S Barth Road, Olathe, KS 66061",
+          "ownership": "featured",
+          "listingOffice": "KW Diamond Partners",
+          "description": 645,
+          "photos": 1,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658269337014777830-5532-Knox-Avenue",
+          "title": "5532 Knox Avenue, Merriam, KS 66203",
+          "ownership": "featured",
+          "listingOffice": "Compass Realty Group",
+          "description": 2001,
+          "photos": 1,
+          "price": "$435,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/665891552317534343-620-W-60TH-Terrace",
+          "title": "620 W 60TH Terrace, Kansas City, MO 64113",
+          "ownership": "featured",
+          "listingOffice": "ReeceNichols - Country Club Plaza",
+          "description": 589,
+          "photos": 1,
+          "price": "$530,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/665829906563548297-5418-W-131st-Terrace",
+          "title": "5418 W 131st Terrace, Overland Park, KS 66209",
+          "ownership": "featured",
+          "listingOffice": "BHG Kansas City Homes",
+          "description": 1620,
+          "photos": 1,
+          "price": "$725,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658666774988572167-14150-W-147th-Street",
+          "title": "14150 W 147th Street, Olathe, KS 66062",
+          "ownership": "featured",
+          "listingOffice": "Keller Williams Realty Partners Inc",
+          "description": 2007,
+          "photos": 1,
+          "price": "$599,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/665867360374538741-8710-Lamar-Avenue",
+          "title": "8710 Lamar Avenue, Overland Park, KS 66207",
+          "ownership": "featured",
+          "listingOffice": "ReeceNichols -The Village",
+          "description": 1723,
+          "photos": 1,
+          "price": "$775,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/665843759403768201-8621-Floyd-Street",
+          "title": "8621 Floyd Street, Overland Park, KS 66212",
+          "ownership": "featured",
+          "listingOffice": "Compass Realty Group",
+          "description": 128,
+          "photos": 1,
+          "price": "$375,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658615700301261927-11923-W-131ST-Terrace",
+          "title": "11923 W 131ST Terrace, Overland Park, KS 66213",
+          "ownership": "featured",
+          "listingOffice": "Compass Realty Group",
+          "description": 148,
+          "photos": 1,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658104279663603241-8412-W-129-Terrace",
+          "title": "8412 W 129 Terrace, Overland Park, KS 66213",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 1,
+          "price": "$660,000"
+        },
+        {
+          "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658353948779566010-14121-Meadow-Lane",
+          "title": "14121 Meadow Lane, Leawood, KS 66224",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 1,
+          "price": "$1,599,999"
+        }
+      ],
+      "findings": [
+        {
+          "site": "houses-of-kansas-city",
+          "set": "regression",
+          "category": "independent-agent",
+          "architecture": "property-cards+public-json",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 8,
+          "examples": [
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658350714748411355-17120-W-197th-Place",
+              "title": "17120 W 197th Place, Spring Hill, KS 66083",
+              "description": 1282,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658623479113663554-10952-S-Barth-Road",
+              "title": "10952 S Barth Road, Olathe, KS 66061",
+              "description": 645,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665891552317534343-620-W-60TH-Terrace",
+              "title": "620 W 60TH Terrace, Kansas City, MO 64113",
+              "description": 589,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665829906563548297-5418-W-131st-Terrace",
+              "title": "5418 W 131st Terrace, Overland Park, KS 66209",
+              "description": 1620,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            },
+            {
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658666774988572167-14150-W-147th-Street",
+              "title": "14150 W 147th Street, Olathe, KS 66062",
+              "description": 2007,
+              "photos": 1,
+              "pagePhotos": 5,
+              "pageDescription": true
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "irene-on-whidbey",
+      "set": "regression",
+      "category": "independent-agent",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:27:17.303Z",
+      "cpuMs": 522,
+      "imported": 1,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://search.ireneonwhidbey.com/idx/details/listing/b045/2554926/550-Wanamaker-Coupeville-WA-98239",
+          "title": "550 Wanamaker Coupeville WA 98239",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1485,
+          "photos": 40,
+          "price": "$1,650,000"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "john-holden-homes",
+      "set": "regression",
+      "category": "independent-agent",
+      "holdout": false,
+      "architecture": "candidate:wordpress",
+      "capturedAt": "2026-10-08T04:27:21.799Z",
+      "cpuMs": 7,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "john-holden-homes",
+          "set": "regression",
+          "category": "independent-agent",
+          "architecture": "candidate:wordpress",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://johnholdenhomes.com/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "katerina-sayles",
+      "set": "regression",
+      "category": "idx",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:28:54.552Z",
+      "cpuMs": 176,
+      "imported": 12,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+          "title": "14035 Densmore Avenue N Seattle, WA 98133",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1273,
+          "photos": 26,
+          "price": "$679,900"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/",
+          "title": "14035 Densmore Avenue N Seattle, WA 98133",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1273,
+          "photos": 26,
+          "price": "$679,900"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/7916-RENTON-AVENUE-S-SEATTLE-WA-98118/2586856/26/",
+          "title": "7916 Renton Avenue S Seattle, WA 98118",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1496,
+          "photos": 27,
+          "price": "$685,000"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/18002-B-10TH-AVENUE-NE-SHORELINE-WA-98155/2552373/26/",
+          "title": "18002 B 10th Avenue NE Shoreline, WA 98155",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1298,
+          "photos": 28,
+          "price": "$694,950"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/583-BATTERY-STREET-508N-SEATTLE-WA-98121/2574763/26/",
+          "title": "583 Battery Street #508N Seattle, WA 98121",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1374,
+          "photos": 32,
+          "price": "$699,000"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/1017-MINOR-AVENUE-1401-SEATTLE-WA-98104/2541335/26/",
+          "title": "1017 Minor Avenue #1401 Seattle, WA 98104",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1079,
+          "photos": 17,
+          "price": "$699,000"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/4411-21ST-AVENUE-SW-SEATTLE-WA-98106/2528630/26/",
+          "title": "4411 21st Avenue SW Seattle, WA 98106",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1455,
+          "photos": 24,
+          "price": "$699,900"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/4411-21ST-AVENUE-SW-SEATTLE-WA-98106/2523876/26/",
+          "title": "4411 21st Avenue SW Seattle, WA 98106",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1455,
+          "photos": 24,
+          "price": "$699,900"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-A-28TH-AVENUE-S-SEATTLE-WA-98144/2504265/26/",
+          "title": "906 A 28th Avenue S Seattle, WA 98144",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1026,
+          "photos": 31,
+          "price": "$699,950"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
+          "title": "320 NE 156th Street Shoreline, WA 98155",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 948,
+          "photos": 30,
+          "price": "$725,000"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/",
+          "title": "320 NE 156th Street Shoreline, WA 98155",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 948,
+          "photos": 30,
+          "price": "$725,000"
+        },
+        {
+          "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-B-28TH-AVENUE-S-SEATTLE-WA-98144/2548957/26/",
+          "title": "906 B 28th Avenue S Seattle, WA 98144",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1313,
+          "photos": 27,
+          "price": "$739,950"
+        }
+      ],
+      "findings": [
+        {
+          "site": "katerina-sayles",
+          "set": "regression",
+          "category": "idx",
+          "architecture": "property-cards",
+          "code": "DUPLICATE_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 2,
+          "examples": [
+            {
+              "title": "14035 Densmore Avenue N Seattle, WA 98133",
+              "sourceUrls": [
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2488935/26/"
+              ]
+            },
+            {
+              "title": "320 NE 156th Street Shoreline, WA 98155",
+              "sourceUrls": [
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
+                "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2577985/26/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+        }
+      ]
+    },
+    {
+      "id": "mount-snow-palmiter",
+      "set": "regression",
+      "category": "independent-agent",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:27:11.021Z",
+      "cpuMs": 988,
+      "imported": 7,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089881/392-Lake-Raponda-Road-Wilmington-VT-05363",
+          "title": "392 Lake Raponda Road, Wilmington, Vermont VT 05363",
+          "ownership": "own",
+          "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+          "description": 1976,
+          "photos": 39,
+          "price": "$2,195,000"
+        },
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5095153/121-Fannie-Hill-Road-Wilmington-VT-05363",
+          "title": "121 Fannie Hill Road, Wilmington, Vermont VT 05363",
+          "ownership": "own",
+          "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+          "description": 1523,
+          "photos": 33,
+          "price": "$2,100,000"
+        },
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5066208/650-Francis-Road-Barnard-VT-05031",
+          "title": "650 Francis Road, Barnard, Vermont VT 05031",
+          "ownership": "featured",
+          "listingOffice": "Christopher Lang - Bravynia",
+          "description": 1497,
+          "photos": 60,
+          "price": "$25,000,000"
+        },
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5107096/21-Sundance-Village-Loop-Dover-VT-05356",
+          "title": "21 Sundance Village Loop, Dover, Vermont VT 05356",
+          "ownership": "featured",
+          "listingOffice": "Meghan Buckley - Skihome Realty",
+          "description": 1568,
+          "photos": 51,
+          "price": "$3,400,000"
+        },
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092/20-Carinthia-Road-Dover-VT-05356",
+          "title": "20 Carinthia Road, Dover, Vermont VT 05356",
+          "ownership": "own",
+          "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+          "description": 0,
+          "photos": 1,
+          "price": "$3,035,000"
+        },
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5046444/56-Coldbrook-Crossing-Wilmington-VT-05363",
+          "title": "56 Coldbrook Crossing, Wilmington, Vermont VT 05363",
+          "ownership": "own",
+          "listingOffice": "Adam Palmiter - Berkley & Veller Greenwood/Dover",
+          "description": 1420,
+          "photos": 1,
+          "price": "$2,700,000"
+        },
+        {
+          "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5089212/80-Maple-Street-Acton-ME-04001",
+          "title": "80 Maple Street, Acton, Maine ME 04001 -7622",
+          "ownership": "featured",
+          "listingOffice": "Elias Thomas - Exit Key Real Estate",
+          "description": 1998,
+          "photos": 56,
+          "price": "$550,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "mount-snow-palmiter",
+          "set": "regression",
+          "category": "independent-agent",
+          "architecture": "property-cards",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 2,
+          "examples": [
+            {
+              "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/4984092/20-Carinthia-Road-Dover-VT-05356",
+              "title": "20 Carinthia Road, Dover, Vermont VT 05356",
+              "description": 0,
+              "photos": 1,
+              "pagePhotos": 10,
+              "pageDescription": false
+            },
+            {
+              "sourceUrl": "https://realestatevt.mountsnowpalmiter.com/idx/details/listing/b027/5046444/56-Coldbrook-Crossing-Wilmington-VT-05363",
+              "title": "56 Coldbrook Crossing, Wilmington, Vermont VT 05363",
+              "description": 1420,
+              "photos": 1,
+              "pagePhotos": 10,
+              "pageDescription": false
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "raleigh-realty",
+      "set": "regression",
+      "category": "edge",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:30:25.319Z",
+      "cpuMs": 706,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "raleigh-realty",
+          "set": "regression",
+          "category": "edge",
+          "architecture": "property-cards",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only",
+                "known-pattern"
+              ],
+              "visited": [
+                "https://raleighrealty.com/",
+                "https://raleighrealty.com/sitemap-listings.html",
+                "https://raleighrealty.com/raleigh",
+                "https://raleighrealty.com/raleigh/homes-with-first-floor-master",
+                "https://raleighrealty.com/raleigh/homes-with-first-floor-master?page=2"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "reagent-denver",
+      "set": "regression",
+      "category": "edge",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T04:30:04.019Z",
+      "cpuMs": 1,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "reagent-denver",
+          "set": "regression",
+          "category": "edge",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.reagentdenver.com/"
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "realm-partners-idaho",
+      "set": "regression",
+      "category": "brokerage",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:28:38.249Z",
+      "cpuMs": 48,
+      "imported": 15,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261536/",
+          "title": "$20,000,000",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$20,000,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261373/",
+          "title": "$8,500,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1284,
+          "photos": 5,
+          "price": "$8,500,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20262172/",
+          "title": "$6,970,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2025,
+          "photos": 5,
+          "price": "$6,970,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261646/",
+          "title": "$6,490,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1463,
+          "photos": 5,
+          "price": "$6,490,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261912/",
+          "title": "$4,990,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1319,
+          "photos": 5,
+          "price": "$4,990,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261623/",
+          "title": "$4,950,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 3066,
+          "photos": 5,
+          "price": "$4,950,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261626/",
+          "title": "$4,800,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1033,
+          "photos": 5,
+          "price": "$4,800,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261740/",
+          "title": "$4,500,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1381,
+          "photos": 5,
+          "price": "$4,500,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261661/",
+          "title": "$4,490,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1846,
+          "photos": 5,
+          "price": "$4,490,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261961/",
+          "title": "$4,150,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2446,
+          "photos": 5,
+          "price": "$4,150,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20262164/",
+          "title": "$3,970,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2019,
+          "photos": 5,
+          "price": "$3,970,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261425/",
+          "title": "$3,797,000",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$3,797,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261649/",
+          "title": "$3,200,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1439,
+          "photos": 5,
+          "price": "$3,200,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261624/",
+          "title": "$3,200,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 2406,
+          "photos": 5,
+          "price": "$3,200,000"
+        },
+        {
+          "sourceUrl": "https://www.realmidaho.com/property/20261081/",
+          "title": "$2,500,000",
+          "ownership": "own",
+          "listingOffice": "REALM PARTNERS, LLC",
+          "description": 1425,
+          "photos": 5,
+          "price": "$2,500,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "realm-partners-idaho",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "property-cards",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 3,
+          "count": 13,
+          "examples": [
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261373/",
+              "title": "$8,500,000",
+              "detailPageNames": "Cottage Island, Hope, ID",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20262172/",
+              "title": "$6,970,000",
+              "detailPageNames": "717 Olson Dr., Dover, ID",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261646/",
+              "title": "$6,490,000",
+              "detailPageNames": "802 Sandpoint Ave #8201 \\u0026 8202, Sandpoint, ID",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261912/",
+              "title": "$4,990,000",
+              "detailPageNames": "802 Sandpoint Ave #8404, Sandpoint, ID",
+              "detailPage": "recorded"
+            },
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261623/",
+              "title": "$4,950,000",
+              "detailPageNames": "172 Elk Hills Rd, Sandpoint, ID",
+              "detailPage": "recorded"
+            }
+          ],
+          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
+        },
+        {
+          "site": "realm-partners-idaho",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "property-cards",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "temporary_outage",
+          "severity": 1,
+          "count": 2,
+          "examples": [
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261536/",
+              "title": "$20,000,000",
+              "detailPageNames": null,
+              "detailPage": "error: The operation was aborted due to timeout"
+            },
+            {
+              "sourceUrl": "https://www.realmidaho.com/property/20261425/",
+              "title": "$3,797,000",
+              "detailPageNames": null,
+              "detailPage": "error: The operation was aborted due to timeout"
+            }
+          ],
+          "detail": "The detail page could not be read in this recording, so the property name is unknown."
+        }
+      ]
+    },
+    {
+      "id": "redfin-gavin-shettler",
+      "set": "regression",
+      "category": "third-party-profile",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T04:29:35.972Z",
+      "cpuMs": 0,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "redfin-gavin-shettler",
+          "set": "regression",
+          "category": "third-party-profile",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+              "error": "The page returned 405."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "redman-realty-group",
+      "set": "regression",
+      "category": "brokerage",
+      "holdout": false,
+      "architecture": "ihomefinder",
+      "capturedAt": "2026-10-08T04:27:27.234Z",
+      "cpuMs": 89,
+      "imported": 100,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7220-ROCKOW-RD-MERCER-WI-54547/219953/309/",
+          "title": "7220 ROCKOW RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1890,
+          "photos": 46,
+          "price": "$899,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-REED-RD-THREE-LAKES-WI-54562/219950/309/",
+          "title": "ON REED RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 775,
+          "photos": 28,
+          "price": "$525,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/9864-MUD-LAKE-DR-PRESQUE-ISLE-WI-54557/219941/309/",
+          "title": "9864 MUD LAKE DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 901,
+          "photos": 21,
+          "price": "$348,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/320-AC-RIVER-RD-IRON-RIVER-MI-49935/219922/309/",
+          "title": "320 AC RIVER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 818,
+          "photos": 2,
+          "price": "$250,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-NO-4-RD-MONTREAL-WI-54550/219912/309/",
+          "title": "Lot on NO 4 RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 237,
+          "photos": 9,
+          "price": "$14,750"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3197-STAWICKI-LN-EAGLE-RIVER-WI-54521/219900/309/",
+          "title": "3197 STAWICKI LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1142,
+          "photos": 33,
+          "price": "$829,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5256-HWY-51-MANITOWISH-WATERS-WI-54545/219897/309/",
+          "title": "5256 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1848,
+          "photos": 52,
+          "price": "$897,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5256-HWY-51-51-MANITOWISH-WATERS-WI-54545/219896/309/",
+          "title": "5256 HWY 51 #51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1848,
+          "photos": 55,
+          "price": "$897,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/727-ELM-ST-WOODRUFF-WI-54568/219881/309/",
+          "title": "727 ELM ST",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1751,
+          "photos": 24,
+          "price": "$350,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2421-GOLDFINCH-LN-LAC-DU-FLAMBEAU-WI-54538/219872/309/",
+          "title": "2421 GOLDFINCH LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1953,
+          "photos": 50,
+          "price": "$549,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/13563-STATELINE-LAKE-RD-MARENISCO-MI-49947/219863/309/",
+          "title": "13563 STATELINE LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1154,
+          "photos": 23,
+          "price": "$274,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-SUGAR-CAMP-WI-54521/219861/309/",
+          "title": "ON HWY 17",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 424,
+          "photos": 19,
+          "price": "$425,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-EAGLE-RIVER-WI-54521/219860/309/",
+          "title": "ON HWY 17",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 449,
+          "photos": 19,
+          "price": "$425,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11121-ALTERRA-WAY-WOODRUFF-WI-54568/219858/309/",
+          "title": "11121 ALTERRA WAY",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1021,
+          "photos": 31,
+          "price": "$1,299,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11113-ALTERRA-WAY-ARBOR-VITAE-WI-54568/219857/309/",
+          "title": "11113 ALTERRA WAY",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1024,
+          "photos": 44,
+          "price": "$1,299,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3160-NINE-MILE-RD-EAGLE-RIVER-WI-54521/219855/309/",
+          "title": "3160 NINE MILE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1560,
+          "photos": 39,
+          "price": "$465,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/W5342-ROAD-LAKE-RD-TOMAHAWK-WI-54487/219850/309/",
+          "title": "W5342 ROAD LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 643,
+          "photos": 39,
+          "price": "$799,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1580-BRANDENBURG-RD-ST-GERMAIN-WI-54558/219844/309/",
+          "title": "1580 BRANDENBURG RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1525,
+          "photos": 78,
+          "price": "$1,099,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CONNORS-RD-THREE-LAKES-WI-54562/219840/309/",
+          "title": "ON CONNORS RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 545,
+          "photos": 13,
+          "price": "$150,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5-AC-ON-TOWER-RD-PHILLIPS-WI-54555/219795/309/",
+          "title": "5 AC ON TOWER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 759,
+          "photos": 6,
+          "price": "$39,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2380-MUD-CREEK-RD-RHINELANDER-WI-54501/219794/309/",
+          "title": "2380 MUD CREEK RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 584,
+          "photos": 16,
+          "price": "$149,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2431-NORWAY-POINT-RD-PELICAN-LAKE-WI-54463/219787/309/",
+          "title": "2431 NORWAY POINT RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 670,
+          "photos": 19,
+          "price": "$500,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7563-HWY-51-MINOCQUA-WI-54548/219783/309/",
+          "title": "7563 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 795,
+          "photos": 16,
+          "price": "$494,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
+          "title": "Lot 9 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
+          "title": "Lot 2 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
+          "title": "Lot 1 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
+          "title": "Lot 10 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$47,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
+          "title": "Lot 8 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219758/309/",
+          "title": "Lot 7 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219757/309/",
+          "title": "Lot 6 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-39-PEGGY-LN-MINOCQUA-WI-54548/219755/309/",
+          "title": "Lot 39 PEGGY LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 597,
+          "photos": 10,
+          "price": "$67,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219754/309/",
+          "title": "Lot 5 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219753/309/",
+          "title": "Lot 13 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$40,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219752/309/",
+          "title": "Lot 12 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 736,
+          "photos": 7,
+          "price": "$125,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/9091-SHISHEBOGAMA-DR-MINOCQUA-WI-54548/219746/309/",
+          "title": "9091 SHISHEBOGAMA DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1067,
+          "photos": 24,
+          "price": "$409,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/8100-HWY-45-THREE-LAKES-WI-54562/219732/309/",
+          "title": "8100 HWY 45",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1145,
+          "photos": 18,
+          "price": "$450,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11079-WOODLAND-DR-WOODRUFF-WI-54568/219724/309/",
+          "title": "11079 WOODLAND DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 670,
+          "photos": 8,
+          "price": "$199,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6714-C-W-SMITH-RD-THREE-LAKES-WI-54562/219708/309/",
+          "title": "6714 C W SMITH RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1195,
+          "photos": 60,
+          "price": "$2,290,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/8582-BAKELY-CIR-E-MINOCQUA-WI-54548/219701/309/",
+          "title": "8582 BAKELY CIR E",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1276,
+          "photos": 44,
+          "price": "$1,150,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/977-BUNDO-RD-THREE-LAKES-WI-54562/219700/309/",
+          "title": "977 BUNDO RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1612,
+          "photos": 43,
+          "price": "$695,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-CATOR-DR-MINOCQUA-WI-54548/219684/309/",
+          "title": "Lot 5 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10380-LAKE-RD-N-IRONWOOD-MI-49938/219696/309/",
+          "title": "10380 LAKE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1319,
+          "photos": 38,
+          "price": "$234,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-13-CATOR-DR-MINOCQUA-WI-54548/219691/309/",
+          "title": "Lot 13 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$40,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-12-CATOR-DR-MINOCQUA-WI-54548/219690/309/",
+          "title": "Lot 12 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 736,
+          "photos": 7,
+          "price": "$125,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/",
+          "title": "Lot 10 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$47,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/",
+          "title": "Lot 9 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/",
+          "title": "Lot 8 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-7-CATOR-DR-MINOCQUA-WI-54548/219686/309/",
+          "title": "Lot 7 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-6-CATOR-DR-MINOCQUA-WI-54548/219685/309/",
+          "title": "Lot 6 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$45,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/",
+          "title": "Lot 2 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 4,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/",
+          "title": "Lot 1 CATOR DR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 676,
+          "photos": 5,
+          "price": "$49,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-5-SUTTON-RD-MINOCQUA-WI-54548/219674/309/",
+          "title": "Lot #5 SUTTON RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1420,
+          "photos": 15,
+          "price": "$79,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1604-BILLS-LAKE-RD-LAC-DU-FLAMBEAU-WI-54538/219657/309/",
+          "title": "1604 BILLS LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1316,
+          "photos": 55,
+          "price": "$239,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1574-MARY-LN-ARBOR-VITAE-WI-54568/219653/309/",
+          "title": "1574 MARY LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 637,
+          "photos": 27,
+          "price": "$489,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10971-SNYDER-RD-WOODRUFF-WI-54568/219651/309/",
+          "title": "10971 SNYDER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1904,
+          "photos": 51,
+          "price": "$799,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6922-CONNORS-RD-THREE-LAKES-WI-54562/219646/309/",
+          "title": "6922 CONNORS RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1124,
+          "photos": 35,
+          "price": "$835,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7376-PINE-GROVE-CIR-MINOCQUA-WI-54548/219634/309/",
+          "title": "7376 PINE GROVE CIR",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1270,
+          "photos": 29,
+          "price": "$699,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-TOWNLINE-RD-N-WOODRUFF-WI-54568/219595/309/",
+          "title": "Lot 1 TOWNLINE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 572,
+          "photos": 9,
+          "price": "$79,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-3-TOWNLINE-RD-N-WOODRUFF-WI-54568/219594/309/",
+          "title": "Lot 3 TOWNLINE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 411,
+          "photos": 16,
+          "price": "$59,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/9247-TOWNLINE-RD-N-WOODRUFF-WI-54568/219593/309/",
+          "title": "9247 TOWNLINE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 642,
+          "photos": 13,
+          "price": "$299,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/4984-WILLOW-DAM-RD-HAZELHURST-WI-54531/219591/309/",
+          "title": "4984 WILLOW DAM RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1989,
+          "photos": 38,
+          "price": "$429,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1187-LOON-LN-LAC-DU-FLAMBEAU-WI-54538/219577/309/",
+          "title": "1187 LOON LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1006,
+          "photos": 57,
+          "price": "$850,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/13909-BAY-RD-W-WINCHESTER-WI-54557/219566/309/",
+          "title": "13909 BAY RD W",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1112,
+          "photos": 45,
+          "price": "$847,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6119-CTH-Y-HAZELHURST-WI-54531/219564/309/",
+          "title": "6119 CTH Y",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1003,
+          "photos": 49,
+          "price": "$1,495,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/217-DIVISION-ST-W-EAGLE-RIVER-WI-54521/219559/309/",
+          "title": "217 DIVISION ST W",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 912,
+          "photos": 17,
+          "price": "$250,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5673-POINT-O-PINES-RD-MANITOWISH-WATERS-WI-54545/219550/309/",
+          "title": "5673 POINT O PINES RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1991,
+          "photos": 50,
+          "price": "$4,950,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/4772-JIMMY-LN-HARSHAW-WI-54529/219545/309/",
+          "title": "4772 JIMMY LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 955,
+          "photos": 21,
+          "price": "$269,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/441-LAKE-ST-RHINELANDER-WI-54501/219534/309/",
+          "title": "441 LAKE ST",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 458,
+          "photos": 19,
+          "price": "$100,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-MOONSHINE-VALLEY-RD-PRESQUE-ISLE-WI-54557/219489/309/",
+          "title": "Lot ON MOONSHINE VALLEY RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1333,
+          "photos": 17,
+          "price": "$30,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/810-RANDALL-AVE-RHINELANDER-WI-54501/219481/309/",
+          "title": "810 RANDALL AVE",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 950,
+          "photos": 26,
+          "price": "$199,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7563-HWY-51-MINOCQUA-WI-54548/219476/309/",
+          "title": "7563 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 795,
+          "photos": 15,
+          "price": "$494,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3825-HARSHAW-RD-HARSHAW-WI-54529/219475/309/",
+          "title": "3825 HARSHAW RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1481,
+          "photos": 33,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/8573-HOWER-RD-MINOCQUA-WI-54548/219474/309/",
+          "title": "8573 HOWER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 808,
+          "photos": 22,
+          "price": "$48,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/N11777-DEER-LAKE-RD-TOMAHAWK-WI-54487/219465/309/",
+          "title": "N11777 DEER LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1036,
+          "photos": 42,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7651-TROUT-RD-LAKE-TOMAHAWK-WI-54539/219458/309/",
+          "title": "7651 TROUT RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1868,
+          "photos": 74,
+          "price": "$669,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3160-NINE-MILE-RD-EAGLE-RIVER-WI-54521/219441/309/",
+          "title": "3160 NINE MILE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1756,
+          "photos": 39,
+          "price": "$465,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/2594-SOUTH-SHORE-RD-PHELPS-WI-54554/219426/309/",
+          "title": "2594 SOUTH SHORE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1999,
+          "photos": 48,
+          "price": "$1,700,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7389-DEERWOOD-RD-MINOCQUA-WI-54548/219414/309/",
+          "title": "7389 DEERWOOD RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 826,
+          "photos": 33,
+          "price": "$339,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1280-BOETTCHER-RD-LOT-5-PARK-FALLS-WI-54552/219397/309/",
+          "title": "1280 BOETTCHER RD #Lot 5",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 545,
+          "photos": 12,
+          "price": "$65,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/110-2ND-ST-S-EAGLE-RIVER-WI-54521/219380/309/",
+          "title": "110 2ND ST S",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1010,
+          "photos": 46,
+          "price": "$325,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CHIPPEWA-FIRE-LN-PARK-FALLS-WI-54536/219374/309/",
+          "title": "ON CHIPPEWA FIRE LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1221,
+          "photos": 43,
+          "price": "$669,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-16-GREEN-APPLE-CT-WOODRUFF-WI-54568/219344/309/",
+          "title": "Lot 16 GREEN APPLE CT",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 883,
+          "photos": 10,
+          "price": "$64,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-PINE-SQUARE-RD-N-CASSIAN-WI-54501/219326/309/",
+          "title": "ON PINE SQUARE RD N",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 727,
+          "photos": 9,
+          "price": "$79,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/11215-FOX-FIRE-RD-WOODRUFF-WI-54568/219325/309/",
+          "title": "11215 FOX FIRE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1692,
+          "photos": 40,
+          "price": "$362,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1002-HWY-32-THREE-LAKES-WI-54562/219316/309/",
+          "title": "1002 HWY 32",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1994,
+          "photos": 37,
+          "price": "$555,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/3369-MURMURING-PINES-TRL-RHINELANDER-WI-54501/219310/309/",
+          "title": "3369 MURMURING PINES TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1891,
+          "photos": 45,
+          "price": "$362,500"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/OFF-HWY-47-RHINELANDER-WI-54501/219306/309/",
+          "title": "Off HWY 47",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 459,
+          "photos": 5,
+          "price": "$64,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/5678-HWY-51-MANITOWISH-WATERS-WI-54545/219302/309/",
+          "title": "5678 HWY 51",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1008,
+          "photos": 41,
+          "price": "$350,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1630-PINE-TREE-LN-SAINT-GERMAIN-WI-54558/219301/309/",
+          "title": "1630 PINE TREE LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 566,
+          "photos": 42,
+          "price": "$324,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1835-TIPPECANOE-RD-E-LAC-DU-FLAMBEAU-WI-54538/219297/309/",
+          "title": "1835 TIPPECANOE RD E",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1618,
+          "photos": 36,
+          "price": "$399,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/4418-TOWERING-PINE-TRL-CONOVER-WI-54519/219289/309/",
+          "title": "4418 TOWERING PINE TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1190,
+          "photos": 26,
+          "price": "$419,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/13-AC-ON-HWY-17-PHELPS-WI-54554/219281/309/",
+          "title": "13 AC ON HWY 17",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 872,
+          "photos": 8,
+          "price": "$75,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/6322-PAINT-POND-RIVER-RD-FLORENCE-WI-54121/219267/309/",
+          "title": "6322 PAINT POND RIVER RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1465,
+          "photos": 38,
+          "price": "$495,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/12720-EAGLE-CLAW-TRL-LAC-DU-FLAMBEAU-WI-54538/219255/309/",
+          "title": "12720 EAGLE CLAW TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1910,
+          "photos": 43,
+          "price": "$975,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10997-PATRICE-PINES-LN-MINOCQUA-WI-54548/219245/309/",
+          "title": "10997 PATRICE PINES LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1316,
+          "photos": 40,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/10993-PATRICE-PINES-LN-MINOCQUA-WI-54548/219244/309/",
+          "title": "10993 PATRICE PINES LN",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 674,
+          "photos": 11,
+          "price": "$84,900"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/1456-CRANBERRY-LAKE-RD-E-EAGLE-RIVER-WI-54521/219238/309/",
+          "title": "1456 CRANBERRY LAKE RD E",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1374,
+          "photos": 46,
+          "price": "$650,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7960-BO-DI-LAC-DR-S-MINOCQUA-WI-54548/219225/309/",
+          "title": "7960 BO DI LAC DR S",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 1992,
+          "photos": 30,
+          "price": "$649,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/7330-W-BIRCH-LAKE-RD-WINCHESTER-WI-54557/219224/309/",
+          "title": "7330 W BIRCH LAKE RD",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 798,
+          "photos": 39,
+          "price": "$617,000"
+        },
+        {
+          "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-SECLUDED-ACRES-TRL-LAC-DU-FLAMBEAU-WI-54538/219206/309/",
+          "title": "Lot 2 SECLUDED ACRES TRL",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 893,
+          "photos": 10,
+          "price": "$85,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "redman-realty-group",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "ihomefinder",
+          "code": "TITLE_NOT_PROPERTY",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 8,
+          "examples": [
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-REED-RD-THREE-LAKES-WI-54562/219950/309/",
+              "title": "ON REED RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-SUGAR-CAMP-WI-54521/219861/309/",
+              "title": "ON HWY 17",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-HWY-17-EAGLE-RIVER-WI-54521/219860/309/",
+              "title": "ON HWY 17",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/ON-CONNORS-RD-THREE-LAKES-WI-54562/219840/309/",
+              "title": "ON CONNORS RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            },
+            {
+              "sourceUrl": "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-ON-MOONSHINE-VALLEY-RD-PRESQUE-ISLE-WI-54557/219489/309/",
+              "title": "Lot ON MOONSHINE VALLEY RD",
+              "detailPageNames": null,
+              "detailPage": "not requested"
+            }
+          ],
+          "detail": "Neither the card nor a recorded detail page names the property."
+        },
+        {
+          "site": "redman-realty-group",
+          "set": "regression",
+          "category": "brokerage",
+          "architecture": "ihomefinder",
+          "code": "DUPLICATE_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 2,
+          "count": 10,
+          "examples": [
+            {
+              "title": "Lot 9 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219781/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-9-CATOR-DR-MINOCQUA-WI-54548/219688/309/"
+              ]
+            },
+            {
+              "title": "Lot 2 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219779/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-2-CATOR-DR-MINOCQUA-WI-54548/219683/309/"
+              ]
+            },
+            {
+              "title": "Lot 1 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219778/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-1-CATOR-DR-MINOCQUA-WI-54548/219682/309/"
+              ]
+            },
+            {
+              "title": "Lot 10 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219775/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-10-CATOR-DR-MINOCQUA-WI-54548/219689/309/"
+              ]
+            },
+            {
+              "title": "Lot 8 CATOR DR",
+              "sourceUrls": [
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219774/309/",
+                "https://www.redmanrealtygroup.com/homes-for-sale-details/LOT-8-CATOR-DR-MINOCQUA-WI-54548/219687/309/"
+              ]
+            }
+          ],
+          "detail": "The same property (same address and the same description or lead photo) is imported more than once under different URLs."
+        }
+      ]
+    },
+    {
+      "id": "remax-alexis-kemp-sagert",
+      "set": "regression",
+      "category": "franchise",
+      "holdout": false,
+      "architecture": "unrecognized",
+      "capturedAt": "2026-10-08T04:29:10.081Z",
+      "cpuMs": 0,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "remax-alexis-kemp-sagert",
+          "set": "regression",
+          "category": "franchise",
+          "architecture": "unrecognized",
+          "code": "BLOCKED_SOURCE",
+          "defectKind": "blocked_source",
+          "severity": 0,
+          "count": 1,
+          "examples": [
+            {
+              "url": "https://www.remax.com/real-estate-agents/alexis-kemp-sagert-cedar-rapids-ia/102190071",
+              "error": "The page returned 403."
+            }
+          ],
+          "detail": "The site gated or refused the reader."
+        }
+      ]
+    },
+    {
+      "id": "rockys-mom-realty",
+      "set": "regression",
+      "category": "flexmls",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:26:49.820Z",
+      "cpuMs": 46,
+      "imported": 0,
+      "missing": 4,
+      "listings": [],
+      "findings": [
+        {
+          "site": "rockys-mom-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "property-cards",
+          "code": "CAPTURE_INCOMPLETE",
+          "defectKind": "harness_failure",
+          "severity": 1,
+          "count": 4,
+          "examples": [
+            {
+              "url": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919472?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com"
+            },
+            {
+              "url": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919474?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com"
+            },
+            {
+              "url": "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919473?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com"
+            },
+            {
+              "url": "https://rockysmom.com/search-properties/"
+            }
+          ],
+          "detail": "The engine requested pages that were not recorded; recapture this site (Level B) before judging it."
+        },
+        {
+          "site": "rockys-mom-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "property-cards",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.rockysmom.com/",
+                "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919472?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com",
+                "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919474?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com",
+                "https://rockysmom.com/idx/57-Hemlock-Ridge-LN-Catawba-VA-24070-mls_919473?pg=1&Limit=3&OrderBy=-ModificationTimestamp&m=20051230194116769413000000&search_referral_url=https%3A%2F%2Frockysmom.com",
+                "https://rockysmom.com/search-properties/"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "ryan-realty",
+      "set": "regression",
+      "category": "custom",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:29:55.391Z",
+      "cpuMs": 470,
+      "imported": 36,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/discovery-west-phase-6-7/3333-leavitt-220227817",
+          "title": "3333 Leavitt Lane Bend 97703",
+          "ownership": "featured",
+          "listingOffice": "Harcourts The Garner Group Real Estate",
+          "description": 63,
+          "photos": 5,
+          "price": "$1,695,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/caldera-springs/56350-mirror-rock-220216436",
+          "title": "56350 Mirror Rock Loop Bend 97707",
+          "ownership": "featured",
+          "listingOffice": "Cascade Hasson SIR",
+          "description": 65,
+          "photos": 5,
+          "price": "$2,895,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2215-high-lakes-220228229",
+          "title": "2215 High Lakes Loop Bend 97703",
+          "ownership": "featured",
+          "listingOffice": "Ryan Bak, Knightsbridge International ·",
+          "description": 66,
+          "photos": 5,
+          "price": "$1,585,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/woodside-ranch/20423-heritage-220222195",
+          "title": "20423 Heritage Avenue Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Cowgirl Properties",
+          "description": 62,
+          "photos": 5,
+          "price": "$899,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/60844-epic-220226289",
+          "title": "60844 Epic Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 60,
+          "photos": 5,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20896-caldera-220222571",
+          "title": "20896 Caldera Drive Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 63,
+          "photos": 5,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20895-caldera-220221989",
+          "title": "20895 Caldera Drive Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 63,
+          "photos": 5,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20892-caldera-220214438",
+          "title": "20892 Caldera Drive Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 63,
+          "photos": 5,
+          "price": "$684,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/60943-apollo-220207851",
+          "title": "60943 Apollo Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 62,
+          "photos": 5,
+          "price": "$734,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/60935-apollo-220216758",
+          "title": "60935 Apollo Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 62,
+          "photos": 5,
+          "price": "$619,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/60850-barstow-220213099",
+          "title": "60850 Barstow Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 63,
+          "photos": 5,
+          "price": "$599,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/la-pine/cagle/52460-pine-220225463",
+          "title": "52460 Pine Drive La Pine 97739",
+          "ownership": "featured",
+          "listingOffice": "Alpine Real Estate",
+          "description": 55,
+          "photos": 5,
+          "price": "$319,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/culver/9290-3115-220222445",
+          "title": "9290 3115 Road Culver 97734",
+          "ownership": "featured",
+          "listingOffice": "Mal & Seitz Bend",
+          "description": 58,
+          "photos": 5,
+          "price": "$320,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/shevlin-bluffs/62720-ridge-rock-220228438",
+          "title": "62720 Ridge Rock Court Bend 97703",
+          "ownership": "featured",
+          "listingOffice": "Bend Premier Real Estate LLC",
+          "description": 68,
+          "photos": 5,
+          "price": "$1,475,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2765-high-lakes-220227670",
+          "title": "2765 High Lakes Loop Bend 97703",
+          "ownership": "featured",
+          "listingOffice": "Harcourts The Garner Group Real Estate",
+          "description": 62,
+          "photos": 5,
+          "price": "$915,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/antler-ridge/3301-antler-ridge-220226153",
+          "title": "3301 Antler Ridge Lane Redmond 97756",
+          "ownership": "featured",
+          "listingOffice": "Windermere Realty Trust",
+          "description": 66,
+          "photos": 5,
+          "price": "$435,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/elkhorn-ridge/19870-powers-220224645",
+          "title": "19870 Powers Road Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Windermere Realty Trust",
+          "description": 58,
+          "photos": 5,
+          "price": "$899,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/sun-meadow/61235-splendor-220222160",
+          "title": "61235 Splendor Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Premiere Property Group, LLC",
+          "description": 55,
+          "photos": 5,
+          "price": "$845,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/deschutes-riverwoods/59976-hopi-220228584",
+          "title": "59976 Hopi Road Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Knipe Realty ERA Powered",
+          "description": 56,
+          "photos": 5,
+          "price": "$785,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/romaine-village/60948-flint-220227577",
+          "title": "60948 Flint Lane Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Knipe Realty ERA Powered",
+          "description": 57,
+          "photos": 5,
+          "price": "$265,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/boyd-acres-view-est/20711-nicolette-220229168",
+          "title": "20711 Nicolette Drive Bend 97701",
+          "ownership": "featured",
+          "listingOffice": "Knightsbridge International",
+          "description": 62,
+          "photos": 5,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/elkhorn-ridge/19976-heron-220227772",
+          "title": "19976 Heron Loop Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "eXp Realty, LLC",
+          "description": 57,
+          "photos": 5,
+          "price": "$875,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/river-canyon-estates/60984-snowberry-220228355",
+          "title": "60984 Snowberry Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Real Broker",
+          "description": 62,
+          "photos": 5,
+          "price": "$899,999"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20738-scout-220221788",
+          "title": "20738 Scout Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 61,
+          "photos": 5,
+          "price": "$444,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/rivers-edge-village/3119-hidden-ridge-220229593",
+          "title": "3119 Hidden Ridge Drive Bend 97703",
+          "ownership": "featured",
+          "listingOffice": "Harcourts The Garner Group Real Estate",
+          "description": 69,
+          "photos": 5,
+          "price": "$1,049,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/1055-leonel-220229717",
+          "title": "1055 Leonel Lane Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Redfin",
+          "description": 60,
+          "photos": 5,
+          "price": "$535,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/calaveras/20534-empire-220226617",
+          "title": "20534 Empire Avenue Bend 97701",
+          "ownership": "featured",
+          "listingOffice": "Mariposa Real Estate Corp",
+          "description": 60,
+          "photos": 5,
+          "price": "$459,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/prineville/ironhorse/1575-perspective-220229362",
+          "title": "1575 Perspective Drive Prineville 97754",
+          "ownership": "featured",
+          "listingOffice": "Cascade Hasson SIR",
+          "description": 66,
+          "photos": 5,
+          "price": "$474,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/glacier-ridge/3348-hoona-220229721",
+          "title": "3348 Hoona Drive Bend 97701",
+          "ownership": "featured",
+          "listingOffice": "Central Oregon Real Estate Pro",
+          "description": 60,
+          "photos": 5,
+          "price": "$435,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20901-denver-220229720",
+          "title": "20901 Denver Drive Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "Pahlisch Real Estate, Inc",
+          "description": 62,
+          "photos": 5,
+          "price": "$649,900"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/prineville/golden-horseshoe/11260-lister-220229718",
+          "title": "11260 Lister Avenue Prineville 97754",
+          "ownership": "featured",
+          "listingOffice": "Homestead Realty LLC",
+          "description": 63,
+          "photos": 5,
+          "price": "$370,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/terrebonne/crr-7/7948-shad-220229716",
+          "title": "7948 Shad Road Terrebonne 97760",
+          "ownership": "featured",
+          "listingOffice": "Preferred Residential",
+          "description": 58,
+          "photos": 5,
+          "price": "$440,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/the-cliffs/1834-nickernut-220229715",
+          "title": "1834 Nickernut Place Redmond 97756",
+          "ownership": "featured",
+          "listingOffice": "Cascade Hasson SIR",
+          "description": 64,
+          "photos": 5,
+          "price": "$445,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/19210-pinehurst-220229343",
+          "title": "19210 Pinehurst Road Bend 97703",
+          "ownership": "featured",
+          "listingOffice": "John L Scott Bend",
+          "description": 61,
+          "photos": 5,
+          "price": "$899,000"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stevens-ranch/21556-etna-220229714",
+          "title": "21556 Etna Place Bend 97702",
+          "ownership": "featured",
+          "listingOffice": "D.R. Horton, Inc.-Portland",
+          "description": 60,
+          "photos": 5,
+          "price": "$664,995"
+        },
+        {
+          "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/eagle-crest/704-golden-pheasant-220229659",
+          "title": "704 Golden Pheasant Drive Redmond 97756",
+          "ownership": "featured",
+          "listingOffice": "Cascade Hasson SIR",
+          "description": 66,
+          "photos": 5,
+          "price": "$875,000"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "scott-a-jacobs-realtor",
+      "set": "regression",
+      "category": "custom",
+      "holdout": false,
+      "architecture": "candidate:wix",
+      "capturedAt": "2026-10-08T04:29:58.580Z",
+      "cpuMs": 143,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "scott-a-jacobs-realtor",
+          "set": "regression",
+          "category": "custom",
+          "architecture": "candidate:wix",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.scottajacobsrealtor.com/",
+                "https://www.scottajacobsrealtor.com/featured-listings",
+                "https://www.scottajacobsrealtor.com/featured-listing",
+                "https://www.scottajacobsrealtor.com/search-listings"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    },
+    {
+      "id": "the-battle-group",
+      "set": "regression",
+      "category": "custom",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:30:03.893Z",
+      "cpuMs": 78,
+      "imported": 6,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/2165-CABOTS-POINT-LN-RESTON-VA-20191/VAFX2341822/530/",
+          "title": "2165 CABOTS POINT LN RESTON",
+          "ownership": "own",
+          "listingOffice": "Real Broker, LLC - Arlington",
+          "description": 2692,
+          "photos": 40,
+          "price": "$849,900"
+        },
+        {
+          "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1530-KEY-BLVD-520-ARLINGTON-VA-22209/VAAR2079436/530/",
+          "title": "1530 KEY BLVD #520 ARLINGTON",
+          "ownership": "own",
+          "listingOffice": "Real Broker, LLC - Arlington",
+          "description": 1480,
+          "photos": 26,
+          "price": "$759,900"
+        },
+        {
+          "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/1111-19TH-ST-N-2110-ARLINGTON-VA-22209/VAAR2069906/530/",
+          "title": "1111 19TH ST N #2110 ARLINGTON",
+          "ownership": "own",
+          "listingOffice": "Real Broker, LLC - Arlington",
+          "description": 1279,
+          "photos": 31,
+          "price": "$699,900"
+        },
+        {
+          "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1805-ARLINGTON-VA-22203/VAAR2079614/530/",
+          "title": "900 N STAFFORD ST #1805 ARLINGTON",
+          "ownership": "own",
+          "listingOffice": "Real Broker, LLC - Arlington",
+          "description": 2135,
+          "photos": 33,
+          "price": "$625,000"
+        },
+        {
+          "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/900-N-STAFFORD-ST-1719-ARLINGTON-VA-22203/VAAR2079526/530/",
+          "title": "900 N STAFFORD ST #1719 ARLINGTON",
+          "ownership": "own",
+          "listingOffice": "Real Broker, LLC - Arlington",
+          "description": 1786,
+          "photos": 36,
+          "price": "$575,000"
+        },
+        {
+          "sourceUrl": "https://www.thebattlegroup.com/homes-for-sale-details/888-N-QUINCY-ST-1105-ARLINGTON-VA-22203/VAAR2079448/530/",
+          "title": "888 N QUINCY ST #1105 ARLINGTON",
+          "ownership": "own",
+          "listingOffice": "Real Broker, LLC - Arlington",
+          "description": 1762,
+          "photos": 40,
+          "price": "$482,500"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "woods-n-water-real-estate",
+      "set": "regression",
+      "category": "flexmls",
+      "holdout": false,
+      "architecture": "property-cards",
+      "capturedAt": "2026-10-08T04:25:01.164Z",
+      "cpuMs": 30,
+      "imported": 2,
+      "missing": 0,
+      "listings": [
+        {
+          "sourceUrl": "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+          "title": "8112 M-77 Germfask, MI 49836",
+          "ownership": "own",
+          "listingOffice": "Woods N Water Real Estate",
+          "description": 200,
+          "photos": 1,
+          "price": "$64,900"
+        },
+        {
+          "sourceUrl": "https://woodsnwaterrealestate.com/idx/W18572-H-42-Curtis-MI-49820-mls_26-887?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=y&pg=1&SavedSearch=20210102172055451402000000",
+          "title": "W18572 H-42 Curtis, MI 49820",
+          "ownership": null,
+          "listingOffice": null,
+          "description": 0,
+          "photos": 0,
+          "price": "$179,000"
+        }
+      ],
+      "findings": [
+        {
+          "site": "woods-n-water-real-estate",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "property-cards",
+          "code": "DETAIL_INCOMPLETE",
+          "defectKind": "needs_review",
+          "severity": 2,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+              "title": "8112 M-77 Germfask, MI 49836",
+              "description": 200,
+              "photos": 1,
+              "pagePhotos": 29,
+              "pageDescription": false
+            }
+          ],
+          "detail": "The recorded detail page publishes a description or photos that the imported record lacks."
+        }
+      ]
+    },
+    {
+      "id": "zillow-leland-reed",
+      "set": "regression",
+      "category": "third-party-profile",
+      "holdout": false,
+      "architecture": "candidate:next",
+      "capturedAt": "2026-10-08T04:29:45.911Z",
+      "cpuMs": 30,
+      "imported": 0,
+      "missing": 0,
+      "listings": [],
+      "findings": [
+        {
+          "site": "zillow-leland-reed",
+          "set": "regression",
+          "category": "third-party-profile",
+          "architecture": "candidate:next",
+          "code": "NO_LISTINGS",
+          "defectKind": "needs_review",
+          "severity": 1,
+          "count": 1,
+          "examples": [
+            {
+              "resolutions": [
+                "navigation-only"
+              ],
+              "visited": [
+                "https://www.zillow.com/profile/Leland-Reed"
+              ]
+            }
+          ],
+          "detail": "Nothing was imported and no obstacle explains it."
+        }
+      ]
+    }
+  ]
+}
