@@ -8,7 +8,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const dir = path.resolve(process.argv[2]);
 const rows = [];
-for (const file of fs.readdirSync(dir).filter(f => f.endsWith('.json') && !f.endsWith('.saved.json')).sort()) {
+for (const file of fs.readdirSync(dir).filter(f => f.endsWith('.json') && !f.endsWith('.saved.json') && f !== 'scorecard.json').sort()) {
   const run = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
   const savedFile = path.join(dir, file.replace('.json', '.saved.json'));
   const saved = fs.existsSync(savedFile) ? JSON.parse(fs.readFileSync(savedFile, 'utf8')) : [];
