@@ -37,7 +37,9 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
   // progress.ts has no imports; it is embedded as-is, exactly as the deployment bundle does.
   const progressModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/progress.ts'), 'utf8').replace(/^export /gm, '');
-  const edgeWithoutFiles = progressModule + '\n' + edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '');
+  // listingRecords.ts imports only types; it is embedded the same way.
+  const recordsModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingRecords.ts'), 'utf8').replace(/^import type .*;\r?\n/gm, '').replace(/^export /gm, '');
+  const edgeWithoutFiles = progressModule + '\n' + recordsModule + '\n' + edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '').replace(/^import .*listingRecords\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml, options) {

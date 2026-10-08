@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
+import { normalizeListingRecords } from "./listingRecords.ts";
 import { createImportProgress, discoveryReporter, respondWithProgress, type ImportEvent, type ImportProgress } from "./progress.ts";
 import { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, type WebsiteDesign, type WebsiteSection } from "./websiteDesign.ts";
 
@@ -783,7 +784,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
       console.error("[build] listing discovery failed", error instanceof Error ? error.message : String(error));
       return reply({ error: "Could not read those listing pages. Try another public link." }, 502);
     }
-    discovery.listings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
+    discovery.listings = normalizeListingRecords(discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown")).listings;
     discovery.meta.found = discovery.listings.length;
     if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discovery.listings.length;
     const draft = {
@@ -928,7 +929,8 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
         maxDepth: 5, maxPages: 160, maxListings: 100, maxDetailPages: 100, enrichAll: true, selectLinks: selectInventoryLinks, renderPage,
         onProgress: discoveryReporter(progress),
       });
-      discoveredListings = discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown");
+      // One normalizer before anything is saved: readable titles, decoded text, one record per property.
+      discoveredListings = normalizeListingRecords(discovery.listings.filter(item => item.status !== "sold" && item.status !== "off_market" && item.sourceStatus !== "unknown")).listings;
       discovery.meta.found = discoveredListings.length;
       if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discoveredListings.length;
       listingDiscovery = discovery.meta;

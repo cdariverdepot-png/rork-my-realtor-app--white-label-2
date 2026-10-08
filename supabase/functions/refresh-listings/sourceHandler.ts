@@ -2,6 +2,7 @@ import { readSource, reconcileInventory, verifyMissing, type ListingSource, type
 import { applyObservation, type SyncListing } from "./sync.ts";
 import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
+import { normalizeListingRecords } from "../analyze-realtor-build/listingRecords.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
 type Row = { value: Record<string, unknown>; rev: number };
@@ -58,6 +59,10 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   try {
     inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))),
       progress ? discoveryReporter(progress) : undefined, INVENTORY_JOB_DETAILS);
+    // One normalizer before anything is saved: readable titles, decoded text, one record per property.
+    const records = normalizeListingRecords(inventory.listings);
+    if (records.dropped.length) console.log("[listing-sync] normalized", records.dropped.map(row => row.reason));
+    inventory = { ...inventory, listings: records.listings, source: { ...inventory.source, listingCount: records.listings.length } };
     const enrichment = inventory.meta.enrichment;
     // Deferred details stay "in progress": the detail jobs that follow finish this line.
     if (progress?.isOpen("details") && !enrichment?.deferred?.length) progress.finish("details", "done", { count: (enrichment?.enriched ?? 0) + (enrichment?.failed ?? 0), total: enrichment?.scheduled, succeeded: enrichment?.enriched ?? 0 });
@@ -108,7 +113,8 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
       item.sourceId === inventory.source.id && typeof item.sourceUrl === "string" && detailsRead.has(item.sourceUrl) ? { ...item, detailAttemptAt: now } : item) };
   });
   progress?.finish("save", "done", { count: inventory.listings.length });
-  const detailsPending = inventory.meta.enrichment?.deferred?.length ?? 0;
+  const stillListed = new Set(inventory.listings.map(item => item.sourceUrl));
+  const detailsPending = (inventory.meta.enrichment?.deferred ?? []).filter(url => stillListed.has(url)).length;
   const excludedOtherOffice = inventory.meta.scope?.excludedOtherOffice ?? 0;
   const featured = inventory.listings.filter(item => item.ownership === "featured").length;
   if (excludedOtherOffice || featured) progress?.emit({ kind: "scope", excluded: excludedOtherOffice, featured });
@@ -158,7 +164,8 @@ async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHt
     while (next < batch.length) {
       const item = batch[next++];
       try {
-        const enriched = await enrichPublicProperty(asDiscovered(item), cachedFetch);
+        const read = await enrichPublicProperty(asDiscovered(item), cachedFetch);
+        const enriched = normalizeListingRecords([read]).listings[0] ?? read;
         results.set(item.id, enriched);
         if (enriched.detailsComplete) succeeded++;
       } catch { results.set(item.id, null); }
