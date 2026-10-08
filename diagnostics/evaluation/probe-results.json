@@ -1,0 +1,230 @@
+{
+  "at": "2026-10-08T23:39:35.628Z",
+  "runner": "GitHub Actions 1000000560",
+  "sites": [
+    {
+      "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+      "plain": {
+        "status": 200,
+        "ms": 81,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+        "bytes": 3036,
+        "title": "Client Challenge",
+        "prices": 0,
+        "detailLinks": 0
+      },
+      "plainFragment": {
+        "status": 200,
+        "ms": 1185,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+        "bytes": 88294,
+        "title": "",
+        "prices": 8,
+        "detailLinks": 0
+      },
+      "service": {
+        "status": 200,
+        "ms": 31244,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+        "bytes": 16728,
+        "title": "Client Challenge",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+            "bytes": 3036,
+            "title": "Client Challenge",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 31163,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+        "bytes": 16608,
+        "title": "Client Challenge",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+            "bytes": 3036,
+            "title": "Client Challenge",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "local": {
+        "timeline": [
+          {
+            "at": 106,
+            "event": "domcontentloaded",
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+          },
+          {
+            "at": 1110,
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+            "bytes": 16544,
+            "title": "Client Challenge",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ],
+        "responses": [
+          {
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+            "status": 200,
+            "type": "text/html; charset=utf-8"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/styles.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/errors.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true",
+            "status": 200,
+            "type": "text/javascript"
+          },
+          {
+            "url": "https://my.flexmls.com/fastly/logo",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://my.flexmls.com/fastly/logo",
+            "status": 200,
+            "type": "image/png"
+          }
+        ],
+        "cookies": []
+      }
+    },
+    {
+      "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+      "plain": {
+        "status": 200,
+        "ms": 60,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+        "bytes": 3036,
+        "title": "Client Challenge",
+        "prices": 0,
+        "detailLinks": 0
+      },
+      "plainFragment": {
+        "status": 200,
+        "ms": 452,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+        "bytes": 88294,
+        "title": "",
+        "prices": 8,
+        "detailLinks": 0
+      },
+      "service": {
+        "status": 200,
+        "ms": 31183,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+        "bytes": 16700,
+        "title": "Client Challenge",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+            "bytes": 3036,
+            "title": "Client Challenge",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 31162,
+        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+        "bytes": 16348,
+        "title": "Client Challenge",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": [
+          {
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+            "bytes": 3036,
+            "title": "Client Challenge",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ]
+      },
+      "local": {
+        "timeline": [
+          {
+            "at": 90,
+            "event": "domcontentloaded",
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24"
+          },
+          {
+            "at": 1094,
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+            "bytes": 16868,
+            "title": "Client Challenge",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ],
+        "responses": [
+          {
+            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+            "status": 200,
+            "type": "text/html; charset=utf-8"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/styles.css",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2",
+            "status": 200,
+            "type": "application/font-woff2"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/errors.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true",
+            "status": 200,
+            "type": "text/javascript"
+          },
+          {
+            "url": "https://my.flexmls.com/fastly/logo",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://my.flexmls.com/fastly/logo",
+            "status": 200,
+            "type": "image/png"
+          }
+        ],
+        "cookies": []
+      }
+    }
+  ]
+}
