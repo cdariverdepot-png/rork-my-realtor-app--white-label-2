@@ -31,18 +31,24 @@ async function waitForAccount({ email, password }, minutes) {
   while (Date.now() < deadline) {
     const response = await fetch(`${SUPABASE}/auth/v1/token?grant_type=password`, { method: 'POST',
       headers: { apikey: PUBLIC_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-    if (response.ok) return true;
+    if (response.ok) {
+      // The orientation carousel is stored per realtor; read the id the app itself would use.
+      const { access_token } = await response.json();
+      const rpc = await fetch(`${SUPABASE}/rest/v1/rpc/ensure_realtor_auth_record`, { method: 'POST',
+        headers: { apikey: PUBLIC_KEY, Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_name: '' }) });
+      return rpc.ok ? await rpc.json() : 'unknown';
+    }
     await new Promise(resolve => setTimeout(resolve, 10_000));
   }
-  return false;
+  return null;
 }
 
-async function run(item, credentials) {
+async function run(item, credentials, realtorId) {
   const { chromium } = require('playwright');
   const browser = await chromium.launch();
   const context = await browser.newContext({ viewport: { width: 430, height: 932 } });
   // The realtor walkthrough is covered elsewhere; this check starts at the builder.
-  await context.addInitScript(() => { try { localStorage.setItem('vance.onboarding.v3', JSON.stringify({ realtorTourSeen: true })); } catch {} });
+  await context.addInitScript(id => { try { localStorage.setItem(`myrealtor.onboarding.v4:admin:${id}:`, JSON.stringify({ tourSeen: true, realtorTourSeen: true, clientTourSeen: true })); } catch {} }, realtorId);
   const page = await context.newPage();
   const result = { site: item.name, url: item.url, email: credentials.email, timeline: [], network: [], console: [], screenshots: [] };
   const t0 = Date.now();
@@ -112,7 +118,7 @@ async function run(item, credentials) {
   const report = { app: APP, ranAt: new Date().toISOString(), results: [] };
   for (const item of cases) {
     const ready = await waitForAccount(secrets[item.name], Number(process.env.WAIT_MINUTES ?? 25));
-    report.results.push(ready ? await run(item, secrets[item.name]) : { site: item.name, outcome: 'account-not-provisioned' });
+    report.results.push(ready ? await run(item, secrets[item.name], ready) : { site: item.name, outcome: 'account-not-provisioned' });
     fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
   }
 })();
