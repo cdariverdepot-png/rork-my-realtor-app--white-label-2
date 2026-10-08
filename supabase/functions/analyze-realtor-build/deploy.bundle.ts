@@ -4034,6 +4034,31 @@ function sameProperty(a: DiscoveredListing, b: DiscoveredListing): boolean {
   return (remarks(a).length >= 40 && remarks(a) === remarks(b)) || (!!a.images[0] && a.images[0] === b.images[0]);
 }
 
+/**
+ * One listing published on two hosts of the same site (the agent's domain and the platform's subdomain
+ * for it, e.g. "/property/21382178/" on both): the same path carrying a listing id and the same price.
+ * (Autonomous repair: mirrored-listing.)
+ */
+function mirroredListing(a: DiscoveredListing, b: DiscoveredListing): boolean {
+  try {
+    const x = new URL(a.sourceUrl), y = new URL(b.sourceUrl);
+    if (x.hostname === y.hostname) return false;
+    const path = (u: URL) => u.pathname.replace(/\/+$/, "");
+    if (path(x) !== path(y) || !path(x).split("/").some(part => /^\d{5,}$/.test(part))) return false;
+    return !!plainKey(a.price) && plainKey(a.price) === plainKey(b.price);
+  } catch { return false; }
+}
+
+/** The copies of one mirrored listing become one record: the copy that names its property and has remarks
+ * keeps its URL, identity and attribution; the larger photo set and the longer remarks of either copy are kept. */
+function mergeMirrors(a: DiscoveredListing, b: DiscoveredListing): { keep: DiscoveredListing; other: DiscoveredListing } {
+  const score = (item: DiscoveredListing) => (needsTitle(item.title) ? 0 : 2) + (item.description ? 1 : 0);
+  const [keep, other] = score(b) > score(a) || (score(b) === score(a) && b.images.length > a.images.length) ? [b, a] : [a, b];
+  const images = other.images.length > keep.images.length ? other.images : keep.images;
+  return { other, keep: { ...keep, title: needsTitle(keep.title) && !needsTitle(other.title) ? other.title : keep.title,
+    description: other.description.length > keep.description.length ? other.description : keep.description, images, image: images[0] ?? keep.image } };
+}
+
 /** Of two records of one property: the attributed one, then the richer one, then the newer listing id. */
 function preferredRecord(a: DiscoveredListing, b: DiscoveredListing): DiscoveredListing {
   if (!!a.ownership !== !!b.ownership) return a.ownership ? a : b;
@@ -4074,6 +4099,13 @@ function normalizeListingRecords(items: DiscoveredListing[]): NormalizedRecords 
   }
   const listings: DiscoveredListing[] = [];
   for (const record of byKey.values()) {
+    const mirror = listings.findIndex(kept => mirroredListing(kept, record));
+    if (mirror >= 0) {
+      const { keep, other } = mergeMirrors(listings[mirror], record);
+      listings[mirror] = keep;
+      dropped.push({ sourceUrl: other.sourceUrl, title: other.title, reason: "mirrored_listing" });
+      continue;
+    }
     const index = listings.findIndex(kept => sameProperty(kept, record));
     if (index < 0) { listings.push(record); continue; }
     const keep = preferredRecord(listings[index], record);
