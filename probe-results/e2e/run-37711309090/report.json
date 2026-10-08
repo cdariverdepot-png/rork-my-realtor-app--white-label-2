@@ -1,0 +1,333 @@
+{
+  "app": "https://cdariverdepot-my-realtor.expo.app",
+  "ranAt": "2026-10-08T01:08:00.068Z",
+  "results": [
+    {
+      "site": "cindy-existing",
+      "url": "https://cindycarlsonrealty.com/",
+      "email": "import-probe-cindy-existing-37711309090@example.com",
+      "timeline": [],
+      "network": [],
+      "console": [
+        {
+          "at": 1391,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 1484,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 1528,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:clientProfiles.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:clientFeed.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:docs.v2 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:notifs.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:brand.design-draft.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:appointments.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:brand.previous-published.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:clients.v1 "
+        },
+        {
+          "at": 4626,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:client-self:chat.v1 "
+        },
+        {
+          "at": 4627,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:listings.v2 "
+        },
+        {
+          "at": 4627,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:tx.v1 "
+        },
+        {
+          "at": 4627,
+          "type": "log",
+          "text": "[kv] get error 584ff3b7-c0a6-4014-9dac-4e74cce91753:brand.v2 "
+        },
+        {
+          "at": 4765,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 4792,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 4805,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        }
+      ],
+      "screenshots": [
+        "cindy-existing-00-signin.png",
+        "cindy-existing-01-url.png",
+        "cindy-existing-02-error.png"
+      ],
+      "signedInAt": 4559,
+      "submittedAt": 7923,
+      "outcome": "error",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByLabel('Import my listings')\n    - locator resolved to <button tabindex=\"0\" role=\"button\" type=\"button\" class=\"css-g5y9jx\" aria-label=\"Import my listings\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    56 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n     - r",
+      "finalText": "MY REALTOR / STUDIO\nBring in\nyour listings\nPaste the page where your listings live. We’ll figure out the rest.\nListings page URL\nUse your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.\nImport my listings\n9 listings already saved · View listings\nYour Brand,\nYour App\nAdd your website, documents, and photos. We'll build a branded starting point that fits your style.\nPrivate\nClient Codes\nShare a unique 6-character code with your clients. They enter it once and unlock an app tailored exclusively to you.\nBeautiful\nListings\nShowcase properties with rich imagery, market insights, saved favorites, and a curated editorial feel.\nStay\nConnected\nBuilt-in messaging, document sharing, appointment booking, and push notifications keep everyone in sync.\nYour App,\nReady to Use\nWe'll ask about anything we can't confirm. Finish setup to see your dashboard, then edit or switch layouts whenever you like."
+    },
+    {
+      "site": "gethomenow",
+      "url": "https://www.gethomenow.com/",
+      "email": "import-probe-gethomenow-37711309090@example.com",
+      "timeline": [],
+      "network": [],
+      "console": [
+        {
+          "at": 723,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 818,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 861,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:clients.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:docs.v2 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:client-self:chat.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:brand.previous-published.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:clientProfiles.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:brand.v2 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:appointments.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:notifs.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:clientFeed.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:listings.v2 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:tx.v1 "
+        },
+        {
+          "at": 3031,
+          "type": "log",
+          "text": "[kv] get error e33f12b5-f506-4381-b963-0ed5543837f4:brand.design-draft.v1 "
+        },
+        {
+          "at": 3174,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 3201,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 3215,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        }
+      ],
+      "screenshots": [
+        "gethomenow-00-signin.png",
+        "gethomenow-01-url.png",
+        "gethomenow-02-error.png"
+      ],
+      "signedInAt": 2980,
+      "submittedAt": 5977,
+      "outcome": "error",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByLabel('Import my listings')\n    - locator resolved to <button tabindex=\"0\" role=\"button\" type=\"button\" class=\"css-g5y9jx\" aria-label=\"Import my listings\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Page 3\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 r-z2wwpe r-ocptab r-3da1kt r-1jg9483\">…</button> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    14 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-",
+      "finalText": "MY REALTOR / STUDIO\nBring in\nyour listings\nPaste the page where your listings live. We’ll figure out the rest.\nListings page URL\nUse your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.\nImport my listings\nYour Brand,\nYour App\nAdd your website, documents, and photos. We'll build a branded starting point that fits your style.\nPrivate\nClient Codes\nShare a unique 6-character code with your clients. They enter it once and unlock an app tailored exclusively to you.\nBeautiful\nListings\nShowcase properties with rich imagery, market insights, saved favorites, and a curated editorial feel.\nStay\nConnected\nBuilt-in messaging, document sharing, appointment booking, and push notifications keep everyone in sync.\nYour App,\nReady to Use\nWe'll ask about anything we can't confirm. Finish setup to see your dashboard, then edit or switch layouts whenever you like."
+    },
+    {
+      "site": "northidahofreedom",
+      "url": "https://northidahofreedom.com/",
+      "email": "import-probe-northidahofreedom-37711309090@example.com",
+      "timeline": [],
+      "network": [],
+      "console": [
+        {
+          "at": 563,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 656,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 699,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:clients.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:docs.v2 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:client-self:chat.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:brand.previous-published.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:appointments.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:brand.v2 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:clientProfiles.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:notifs.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:clientFeed.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:listings.v2 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:tx.v1 "
+        },
+        {
+          "at": 3153,
+          "type": "log",
+          "text": "[kv] get error b81837b0-7473-48b8-bed4-6656caf86a95:brand.design-draft.v1 "
+        },
+        {
+          "at": 3297,
+          "type": "warning",
+          "text": "[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect."
+        },
+        {
+          "at": 3328,
+          "type": "warning",
+          "text": "[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality."
+        },
+        {
+          "at": 3342,
+          "type": "warning",
+          "text": "Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md"
+        }
+      ],
+      "screenshots": [
+        "northidahofreedom-00-signin.png",
+        "northidahofreedom-01-url.png",
+        "northidahofreedom-02-error.png"
+      ],
+      "signedInAt": 3094,
+      "submittedAt": 6254,
+      "outcome": "error",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByLabel('Import my listings')\n    - locator resolved to <button tabindex=\"0\" role=\"button\" type=\"button\" class=\"css-g5y9jx\" aria-label=\"Import my listings\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Page 3\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 r-z2wwpe r-ocptab r-3da1kt r-1jg9483\">…</button> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    14 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-",
+      "finalText": "MY REALTOR / STUDIO\nBring in\nyour listings\nPaste the page where your listings live. We’ll figure out the rest.\nListings page URL\nUse your website, a public IDX or MLS page, Zillow, Realtor.com, or an individual property page.\nImport my listings\nYour Brand,\nYour App\nAdd your website, documents, and photos. We'll build a branded starting point that fits your style.\nPrivate\nClient Codes\nShare a unique 6-character code with your clients. They enter it once and unlock an app tailored exclusively to you.\nBeautiful\nListings\nShowcase properties with rich imagery, market insights, saved favorites, and a curated editorial feel.\nStay\nConnected\nBuilt-in messaging, document sharing, appointment booking, and push notifications keep everyone in sync.\nYour App,\nReady to Use\nWe'll ask about anything we can't confirm. Finish setup to see your dashboard, then edit or switch layouts whenever you like."
+    }
+  ]
+}
