@@ -84,7 +84,8 @@ jobs:
         run: |
           mkdir -p diagnostics
           printf '{"url":"%s","commit":"%s","entry":"%s","verifiedAt":"%s","importer":"staging"}\n' "$PREVIEW_URL" "$GITHUB_SHA" "$ENTRY" "$(date -u +%FT%TZ)" > diagnostics/preview-deployed.json
+          npx --yes qrcode@1.5.4 -w 480 -o diagnostics/preview-qr.png "$PREVIEW_URL"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add diagnostics/preview-deployed.json && git commit -m "Preview deployed and verified for ${GITHUB_SHA} [skip ci]" || exit 0
+          git add diagnostics/preview-deployed.json diagnostics/preview-qr.png && git commit -m "Preview deployed and verified for ${GITHUB_SHA} [skip ci]" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ]
