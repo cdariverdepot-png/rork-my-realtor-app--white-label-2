@@ -113,7 +113,8 @@ function suite() {
   const out = run.stdout + run.stderr;
   const pass = Number(out.match(/^# pass (\d+)/m)?.[1] ?? 0), fail = Number(out.match(/^# fail (\d+)/m)?.[1] ?? NaN);
   const failing = [...out.matchAll(/^not ok \d+ - (.*)$/gm)].map(m => m[1]).slice(0, 20);
-  return { ok: run.status === 0 && fail === 0, pass, fail, failing, guard: /Level A guard/.test(out) ? 'network or AI request attempted' : 'clean' };
+  const blocked = /Level A guard: \d+ unexpected network request/.test(out);
+  return { ok: run.status === 0 && fail === 0 && !blocked, pass, fail, failing, guard: blocked ? 'network or AI request attempted' : 'clean' };
 }
 
 /** Base engine sources extracted from git into a temporary directory. */
