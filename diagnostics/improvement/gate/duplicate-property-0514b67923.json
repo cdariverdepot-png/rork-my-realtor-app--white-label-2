@@ -1,0 +1,106 @@
+{
+  "failure": "duplicate-property",
+  "base": "origin/repair/compatibility-engine",
+  "head": "0514b67923034469b0547374f08e06a6c8f492d0",
+  "baseSha": "af95f470981c54f517b32c7b2bdab4f24a0c8f40",
+  "at": "2026-10-08T19:23:29.535Z",
+  "checks": {
+    "policy": {
+      "ok": true,
+      "problems": [],
+      "notes": [
+        "4 files changed; 3 tests added."
+      ],
+      "files": [
+        {
+          "status": "A",
+          "file": "docs/compatibility-knowledge/duplicate-property.md"
+        },
+        {
+          "status": "A",
+          "file": "expo/tests/duplicateProperty.test.cjs"
+        },
+        {
+          "status": "M",
+          "file": "supabase/functions/analyze-realtor-build/deploy.bundle.ts"
+        },
+        {
+          "status": "M",
+          "file": "supabase/functions/analyze-realtor-build/listingRecords.ts"
+        }
+      ],
+      "declaredChanges": []
+    },
+    "static": {
+      "ok": true,
+      "problems": []
+    },
+    "suite": {
+      "ok": true,
+      "pass": 588,
+      "fail": 0,
+      "failing": [],
+      "guard": "clean"
+    },
+    "corpus": {
+      "ok": true,
+      "problems": [],
+      "improvements": [
+        "DUPLICATE_PROPERTY: 13 -> 0 code-defect records across the corpus."
+      ],
+      "notes": [
+        "Corpus CPU 6881 ms -> 6440 ms."
+      ],
+      "targetBefore": 13,
+      "targetAfter": 0
+    },
+    "declarations": {
+      "ok": true,
+      "problems": [],
+      "notes": [
+        "0 declared baseline changes verified."
+      ]
+    }
+  },
+  "holdout": [
+    "bridge-realty",
+    "century21-barbara-patterson",
+    "chattanooga-property-shop",
+    "cindy-carlson-realty",
+    "coldwell-banker-alena-goncharov",
+    "compass-jeff-stahlhut",
+    "elevate-realty-granbury",
+    "freestone-properties",
+    "houses-of-kansas-city",
+    "irene-on-whidbey",
+    "john-holden-homes",
+    "mount-snow-palmiter",
+    "raleigh-realty",
+    "reagent-denver",
+    "realm-partners-idaho",
+    "redfin-gavin-shettler",
+    "remax-alexis-kemp-sagert",
+    "rockys-mom-realty",
+    "ryan-realty",
+    "scott-a-jacobs-realtor",
+    "the-battle-group",
+    "woods-n-water-real-estate",
+    "zillow-leland-reed",
+    "bernard-real-estate-group",
+    "canaday-group",
+    "craft-bauer",
+    "eddie-and-laura",
+    "finch-and-gable",
+    "find-estes-park-homes",
+    "georgina-jacobson",
+    "howard-hanna-daniel-torri",
+    "idaho-perfect-home",
+    "lauer-realty-group",
+    "magic-valley-homes",
+    "remington-crispeno-team",
+    "skilled-real-estate-miami",
+    "the-cameron-team",
+    "tom-toole"
+  ],
+  "accepted": true
+}

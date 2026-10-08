@@ -505,7 +505,7 @@
       "ownerCode": [
         "supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords)"
       ],
-      "status": "open",
+      "status": "integrated",
       "firstSeen": "2026-10-08T16:31:29.309Z",
       "lastSeen": "2026-10-08T19:23:09.406Z",
       "evidenceHash": "92b59e2a4981a304",
@@ -603,7 +603,23 @@
         "ihomefinder",
         "property-cards"
       ],
-      "attempts": []
+      "attempts": [
+        {
+          "at": "2026-10-08T19:24:25.342Z",
+          "outcome": "integrated",
+          "branch": "improve/duplicate-property-session1",
+          "commit": "0514b67923034469b0547374f08e06a6c8f492d0",
+          "evidenceHash": "92b59e2a4981a304",
+          "gate": {
+            "accepted": true,
+            "head": "0514b67923034469b0547374f08e06a6c8f492d0",
+            "base": "af95f470981c54f517b32c7b2bdab4f24a0c8f40",
+            "target": "13 -> 0",
+            "problems": []
+          }
+        }
+      ],
+      "knowledge": "docs/compatibility-knowledge/duplicate-property.md"
     },
     "title-not-property": {
       "id": "title-not-property",

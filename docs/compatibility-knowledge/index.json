@@ -1,5 +1,18 @@
 [
   {
+    "failure": "duplicate-property",
+    "symptom": "DUPLICATE_PROPERTY",
+    "stage": "save-boundary normalizer (one record per property)",
+    "record": "docs/compatibility-knowledge/duplicate-property.md",
+    "architectures": [
+      "ihomefinder",
+      "property-cards"
+    ],
+    "integratedAt": "2026-10-08T19:24:25.342Z",
+    "commit": "0514b67923034469b0547374f08e06a6c8f492d0",
+    "gate": "13 -> 0"
+  },
+  {
     "failure": "title-not-property",
     "symptom": "TITLE_NOT_PROPERTY",
     "stage": "property identity (detail enrichment / save-boundary normalizer)",
