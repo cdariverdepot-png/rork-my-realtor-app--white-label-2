@@ -444,3 +444,25 @@ test('pages that could not be opened are unreadable, never evidence of an empty 
   assert.equal(result.result.code, 'unreadable');
   assert.match(result.result.error, /some of its pages could not be opened/);
 });
+
+// title-not-property, production job-split path (found by the final release gate, Oct 8 2026): listings
+// whose details are read by a later detail job must get their detail page's property name too, exactly as
+// the first job's listings do. Synthetic contract.
+test('title-not-property: detail jobs name price-titled listings from their own detail pages', async () => {
+  const scope = '11111111-1111-1111-1111-111111111111';
+  const numbers = Array.from({ length: 16 }, (_, i) => 200 + i);
+  const card = n => ({ ...home(n), name: '$350,000' });
+  const detailPage = n => `<html><head>${html({ ...card(n), address: { '@type': 'PostalAddress', streetAddress: `${n} Pine St`, addressLocality: 'Hope', addressRegion: 'ID', postalCode: '83836' } })}</head>` +
+    `<body><h1>${n} Pine St, Hope, ID 83836</h1><div class="property-description">${'A lake cabin with a dock and mountain views. '.repeat(4)}</div></body></html>`;
+  const pages = { [source.url]: html(numbers.map(card)) };
+  for (const n of numbers) pages[home(n).url] = detailPage(n);
+  const rows = {};
+  const first = await endpoint({ body: { mode: 'connect', url: source.url }, pages, rows });
+  assert.equal(first.status, 200);
+  const since = first.result.detailsSince;
+  assert.ok(first.result.detailsPending > 0, 'some details are left for a detail job');
+  await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since }, pages, rows });
+  const titles = rows[scope + ':listings.v2'].value.items.map(item => item.title);
+  assert.equal(titles.filter(title => /^\$/.test(title)).length, 0, titles.join(' | '));
+  assert.ok(titles.includes('215 Pine St, Hope, ID 83836'));
+});

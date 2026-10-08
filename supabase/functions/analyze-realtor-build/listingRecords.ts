@@ -86,6 +86,8 @@ export function propertyTitle(raw: string): string | undefined {
   return undefined;
 }
 
+/** A title that is a price, card text, a label or an entity soup rather than the property's name. */
+export const titleNeedsRepair = (title: string) => needsTitle(title);
 const needsTitle = (title: string) => !title || /^\$?\s?[\d,.]+\s?[KkMm]?$/.test(title.trim()) || /\$\s?\d/.test(title) || HAS_UI_LABEL.test(title) ||
   /\b\d+\s*(?:beds?|bd|baths?|ba)\b/i.test(title) || /\bmls\s*#?\s*\d/i.test(title) || /&(?:#\d+|#x[0-9a-f]+|[a-z]+);/i.test(title) || title.length > 90;
 

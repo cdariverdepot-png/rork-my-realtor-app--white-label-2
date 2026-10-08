@@ -1,4 +1,4 @@
-Stage gate requested Thu Oct  8 20:33:45 UTC 2026 for the final integration of repair/compatibility-engine into main.
-justification: release gate before merging Phase 1-9 into main; OpenAI credit replenished; verifies the four Phase 9 repairs end to end
+Stage gate requested Thu Oct  8 20:58:43 UTC 2026: live recheck after the detail-job title fix found by run 37840376601.
+justification: release gate recheck of the detail-job title fix before merging into main
 staging-ai: shared-key
-sites: realm-partners-idaho, katerina-sayles, redman-realty-group, chatman-realty-group, cindy-carlson-realty, woods-n-water-real-estate, the-battle-group, elevate-realty-granbury, mount-snow-palmiter, canaday-group, the-cameron-team, remax-alexis-kemp-sagert
+sites: realm-partners-idaho, katerina-sayles, the-battle-group

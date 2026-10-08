@@ -2,7 +2,7 @@ import { readSource, reconcileInventory, verifyMissing, SourceReadError, type Li
 import { applyObservation, type SyncListing } from "./sync.ts";
 import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
-import { normalizeListingRecords } from "../analyze-realtor-build/listingRecords.ts";
+import { normalizeListingRecords, titleNeedsRepair } from "../analyze-realtor-build/listingRecords.ts";
 import { importAiGateway, pageAi } from "./normalizePage.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
@@ -188,7 +188,11 @@ async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHt
       const property = results.get(item.id);
       const observed = property && property.sourceUrl === item.sourceUrl
         ? applyObservation(item, { sourceUrl: item.sourceUrl!, checkedAt: now, property, status: property.status }) : item;
-      return { ...observed, detailAttemptAt: now };
+      // The detail page's own property name replaces a price or card-text title, as in the first job
+      // (title-not-property); a title that already names the property is never replaced.
+      const named = property && property.sourceUrl === item.sourceUrl && titleNeedsRepair(item.title) && property.title && !titleNeedsRepair(property.title)
+        ? { title: property.title, updatedAt: now } : {};
+      return { ...observed, ...named, detailAttemptAt: now };
     });
     // Attribution read from detail pages labels this source's listings own or featured.
     const labelled = labelInventoryOwnership(merged.filter(item => item.sourceId === body.sourceId), identity);
