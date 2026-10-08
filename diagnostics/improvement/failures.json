@@ -10,7 +10,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "d5329ba394858001",
       "sites": [
         {
@@ -43,8 +43,8 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
-      "evidenceHash": "71cf6b21c74d51fe",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
+      "evidenceHash": "88df7a337168ae31",
       "sites": [
         {
           "id": "century21-barbara-patterson",
@@ -56,48 +56,6 @@
             {
               "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
               "error": "The page returned 403."
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "chattanooga-property-shop",
-          "set": "regression",
-          "category": "idx",
-          "architecture": "candidate:static_html",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://chattanoogapropertyshop.com/"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "cindy-carlson-realty",
-          "set": "regression",
-          "category": "flexmls",
-          "architecture": "candidate:flexmls",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "reagent-denver",
-          "set": "regression",
-          "category": "edge",
-          "architecture": "unrecognized",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://www.reagentdenver.com/"
             }
           ],
           "detail": "The site gated or refused the reader."
@@ -143,84 +101,11 @@
             }
           ],
           "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "howard-hanna-daniel-torri",
-          "set": "unseen",
-          "category": "Howard Hanna brokerage profile",
-          "architecture": "unrecognized",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "idaho-perfect-home",
-          "set": "unseen",
-          "category": "kvCORE / BoldTrail",
-          "architecture": "unrecognized",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://www.idahoperfecthome.com/"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "lauer-realty-group",
-          "set": "unseen",
-          "category": "Lofty (Chime)",
-          "architecture": "candidate:lofty_chime",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://lauerrealtygroup.com/"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "magic-valley-homes",
-          "set": "unseen",
-          "category": "AgentFire (Home Junction data)",
-          "architecture": "candidate:static_html",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://magicvalley.homes/"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
-        },
-        {
-          "id": "tom-toole",
-          "set": "unseen",
-          "category": "Sierra Interactive",
-          "architecture": "unrecognized",
-          "count": 1,
-          "examples": [
-            {
-              "obstacle": "requires_rendering",
-              "url": "https://www.tomtoole.com/"
-            }
-          ],
-          "detail": "The site gated or refused the reader."
         }
       ],
-      "siteCount": 12,
-      "listingsAffected": 12,
+      "siteCount": 4,
+      "listingsAffected": 4,
       "architectures": [
-        "candidate:flexmls",
-        "candidate:lofty_chime",
-        "candidate:static_html",
         "unrecognized"
       ],
       "attempts": []
@@ -234,7 +119,7 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "7cd585b7fe3604dd",
       "sites": [
         {
@@ -439,7 +324,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "48be237528437f38",
       "sites": [
         {
@@ -622,7 +507,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "92b59e2a4981a304",
       "sites": [
         {
@@ -732,7 +617,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "0d7df76bc512fe9d",
       "sites": [
         {
@@ -842,7 +727,7 @@
       ],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "ad1098bc29198b26",
       "sites": [
         {
@@ -887,7 +772,7 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "88935e90db8f6ebb",
       "sites": [
         {
@@ -964,7 +849,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "89f4e5443044d67d",
       "sites": [
         {
@@ -1008,7 +893,7 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T19:20:50.826Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
       "evidenceHash": "50c61de848c2b20d",
       "sites": [
         {
@@ -1073,7 +958,179 @@
         "property-cards"
       ],
       "attempts": []
+    },
+    "requires-rendering--needs-review": {
+      "id": "requires-rendering--needs-review",
+      "code": "REQUIRES_RENDERING",
+      "defectKind": "needs_review",
+      "severity": 1,
+      "stage": "unclassified",
+      "ownerCode": [],
+      "status": "needs_review",
+      "firstSeen": "2026-10-08T19:22:34.206Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
+      "evidenceHash": "2f61ac6a29cfa941",
+      "sites": [
+        {
+          "id": "chattanooga-property-shop",
+          "set": "regression",
+          "category": "idx",
+          "architecture": "candidate:static_html",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://chattanoogapropertyshop.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "cindy-carlson-realty",
+          "set": "regression",
+          "category": "flexmls",
+          "architecture": "candidate:flexmls",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "reagent-denver",
+          "set": "regression",
+          "category": "edge",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.reagentdenver.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "howard-hanna-daniel-torri",
+          "set": "unseen",
+          "category": "Howard Hanna brokerage profile",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "idaho-perfect-home",
+          "set": "unseen",
+          "category": "kvCORE / BoldTrail",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.idahoperfecthome.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "lauer-realty-group",
+          "set": "unseen",
+          "category": "Lofty (Chime)",
+          "architecture": "candidate:lofty_chime",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://lauerrealtygroup.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "magic-valley-homes",
+          "set": "unseen",
+          "category": "AgentFire (Home Junction data)",
+          "architecture": "candidate:static_html",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://magicvalley.homes/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        },
+        {
+          "id": "tom-toole",
+          "set": "unseen",
+          "category": "Sierra Interactive",
+          "architecture": "unrecognized",
+          "count": 1,
+          "examples": [
+            {
+              "obstacle": "requires_rendering",
+              "url": "https://www.tomtoole.com/"
+            }
+          ],
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
+        }
+      ],
+      "siteCount": 8,
+      "listingsAffected": 8,
+      "architectures": [
+        "candidate:flexmls",
+        "candidate:lofty_chime",
+        "candidate:static_html",
+        "unrecognized"
+      ],
+      "attempts": []
+    },
+    "not-a-property": {
+      "id": "not-a-property",
+      "code": "NOT_A_PROPERTY",
+      "defectKind": "code_defect",
+      "severity": 4,
+      "stage": "collection scope (what counts as a property record)",
+      "ownerCode": [
+        "supabase/functions/analyze-realtor-build/listingDiscovery.ts (collection readers, scope)",
+        "supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords: not_a_property)"
+      ],
+      "status": "open",
+      "firstSeen": "2026-10-08T19:22:34.206Z",
+      "lastSeen": "2026-10-08T19:22:34.206Z",
+      "evidenceHash": "62d2693c3d059b56",
+      "sites": [
+        {
+          "id": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam"
+            }
+          ],
+          "detail": "A social-media post or profile was imported as a property listing."
+        }
+      ],
+      "siteCount": 1,
+      "listingsAffected": 1,
+      "architectures": [
+        "agentfire-dsidx"
+      ],
+      "attempts": []
     }
   },
-  "lastEvaluation": "2026-10-08T19:20:50.767Z"
+  "lastEvaluation": "2026-10-08T19:22:34.140Z"
 }

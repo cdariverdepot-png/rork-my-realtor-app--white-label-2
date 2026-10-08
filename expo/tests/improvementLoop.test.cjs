@@ -181,3 +181,10 @@ test('improvement loop: a duplicate repair may remove records only within a dupl
   const lostOther = evaluation([site('a', [], [rec('d2', '1 Elm St, Boise, ID'), rec('e1', '2 Oak St, Boise, ID')])]);
   assert.ok(compare(before, lostOther, failureFor('DUPLICATE_PROPERTY')).problems.some(p => /disappeared: f1/.test(p)));
 });
+
+test('improvement loop: a social post imported as a listing is a code defect; a site drawn in the browser is not', () => {
+  const social = findingsFor(entry, { pages: [] }, replay([listing('https://www.instagram.com/p/abc/', 'cameronteam')])).find(f => f.code === 'NOT_A_PROPERTY');
+  assert.equal(social.defectKind, 'code_defect');
+  const drawn = findingsFor(entry, { pages: [] }, { result: { listings: [], meta: { obstacles: [{ code: 'requires_rendering', url: 'https://a.example/' }] } }, listings: [], missing: [] });
+  assert.deepEqual(drawn.map(f => [f.code, f.defectKind]), [['REQUIRES_RENDERING', 'needs_review']]);
+});

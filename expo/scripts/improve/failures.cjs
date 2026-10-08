@@ -22,6 +22,7 @@ const STAGES = {
   DUPLICATE_PROPERTY: { stage: 'save-boundary normalizer (one record per property)', code: ['supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords)'] },
   DETAIL_INCOMPLETE: { stage: 'property detail reader', code: ['supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detailGalleryImages, detailDescription)'] },
   NEEDS_STRATEGY: { stage: 'extraction strategy registry', code: ['supabase/functions/analyze-realtor-build/listingDiscovery.ts (LISTING_EXTRACTION_STRATEGIES)'] },
+  NOT_A_PROPERTY: { stage: 'collection scope (what counts as a property record)', code: ['supabase/functions/analyze-realtor-build/listingDiscovery.ts (collection readers, scope)', 'supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords: not_a_property)'] },
   ENGINE_ERROR: { stage: 'discovery engine', code: ['supabase/functions/analyze-realtor-build/listingDiscovery.ts (discoverListings)'] },
 };
 const SEVERITY_LABEL = ['informational', 'minor', 'moderate', 'serious', 'severe', 'critical'];

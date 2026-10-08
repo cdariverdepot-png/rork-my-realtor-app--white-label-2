@@ -95,6 +95,11 @@ function findingsFor(entry, capture, replay) {
   const obstacles = result.meta?.obstacles ?? [];
   if (result.error) add('ENGINE_ERROR', 'code_defect', 5, [{ error: result.error }], 'Discovery threw instead of returning a result.');
 
+  // A social post, video or profile is never a property record, whatever page linked to it.
+  const SOCIAL = /(?:^|\.)(?:instagram\.com|facebook\.com|fb\.com|youtube\.com|youtu\.be|tiktok\.com|pinterest\.com|twitter\.com|x\.com|linkedin\.com|threads\.net|vimeo\.com)$/i;
+  const social = listings.filter(item => { try { return SOCIAL.test(new URL(item.sourceUrl).hostname); } catch { return false; } });
+  if (social.length) add('NOT_A_PROPERTY', 'code_defect', 4, social.map(i => ({ sourceUrl: i.sourceUrl, title: i.title })), 'A social-media post or profile was imported as a property listing.');
+
   // Titles: every imported record must be named by its property, never its price or card text.
   const unnamed = listings.filter(item => !namesProperty(item.title));
   const fixable = [], unpublished = [];
@@ -151,7 +156,11 @@ function findingsFor(entry, capture, replay) {
     const refused = seedFailures.filter(f => /returned 40[1359]|returned 451/.test(f.error));
     const outage = seedFailures.filter(f => /timeout|aborted|returned 5\d\d|returned 429/.test(f.error));
     const raw = result.listings ?? [];
-    if (obstacles.length || refused.length) add('BLOCKED_SOURCE', 'blocked_source', 0, [...obstacles.map(o => ({ obstacle: o.code ?? o, url: o.url })), ...refused], 'The site gated or refused the reader.');
+    const rendering = obstacles.filter(o => /requires_rendering|render_failed/.test(o.code ?? o));
+    const gates = obstacles.filter(o => !rendering.includes(o));
+    if (gates.length || refused.length) add('BLOCKED_SOURCE', 'blocked_source', 0, [...gates.map(o => ({ obstacle: o.code ?? o, url: o.url })), ...refused], 'The site gated or refused the reader.');
+    else if (rendering.length) add('REQUIRES_RENDERING', 'needs_review', 1, rendering.map(o => ({ obstacle: o.code ?? o, url: o.url })),
+      'The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it.');
     else if (outage.length) add('SOURCE_UNAVAILABLE', 'temporary_outage', 0, outage, 'The site did not answer in this recording.');
     else if (raw.length) {
       const reasons = {};

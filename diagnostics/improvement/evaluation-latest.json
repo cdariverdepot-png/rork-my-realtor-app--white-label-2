@@ -1,5 +1,5 @@
 {
-  "evaluatedAt": "2026-10-08T19:20:50.767Z",
+  "evaluatedAt": "2026-10-08T19:22:34.140Z",
   "engine": "working tree",
   "sites": [
     {
@@ -9,7 +9,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:28:24.722Z",
-      "cpuMs": 211,
+      "cpuMs": 256,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -39,7 +39,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:31.687Z",
-      "cpuMs": 0,
+      "cpuMs": 1,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -70,7 +70,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:09.958Z",
-      "cpuMs": 4,
+      "cpuMs": 5,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -80,9 +80,9 @@
           "set": "regression",
           "category": "idx",
           "architecture": "candidate:static_html",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -90,7 +90,7 @@
               "url": "https://chattanoogapropertyshop.com/"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -101,7 +101,7 @@
       "holdout": false,
       "architecture": "candidate:flexmls",
       "capturedAt": "2026-10-08T04:24:58.470Z",
-      "cpuMs": 14,
+      "cpuMs": 18,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -111,9 +111,9 @@
           "set": "regression",
           "category": "flexmls",
           "architecture": "candidate:flexmls",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -121,7 +121,7 @@
               "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:31.496Z",
-      "cpuMs": 13,
+      "cpuMs": 14,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -203,7 +203,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:09.828Z",
-      "cpuMs": 595,
+      "cpuMs": 727,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -397,7 +397,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:22.303Z",
-      "cpuMs": 48,
+      "cpuMs": 60,
       "imported": 3,
       "missing": 0,
       "listings": [
@@ -438,7 +438,7 @@
       "holdout": false,
       "architecture": "property-cards+public-json",
       "capturedAt": "2026-10-08T04:27:20.976Z",
-      "cpuMs": 142,
+      "cpuMs": 196,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -614,7 +614,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:17.303Z",
-      "cpuMs": 452,
+      "cpuMs": 554,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -637,7 +637,7 @@
       "holdout": false,
       "architecture": "candidate:wordpress",
       "capturedAt": "2026-10-08T04:27:21.799Z",
-      "cpuMs": 9,
+      "cpuMs": 7,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -672,7 +672,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:54.552Z",
-      "cpuMs": 158,
+      "cpuMs": 182,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -832,7 +832,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:11.021Z",
-      "cpuMs": 824,
+      "cpuMs": 1007,
       "imported": 7,
       "missing": 0,
       "listings": [
@@ -939,7 +939,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:25.319Z",
-      "cpuMs": 602,
+      "cpuMs": 718,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -989,9 +989,9 @@
           "set": "regression",
           "category": "edge",
           "architecture": "unrecognized",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -999,7 +999,7 @@
               "url": "https://www.reagentdenver.com/"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -1216,7 +1216,7 @@
       "holdout": false,
       "architecture": "ihomefinder",
       "capturedAt": "2026-10-08T04:27:27.234Z",
-      "cpuMs": 51,
+      "cpuMs": 85,
       "imported": 100,
       "missing": 0,
       "listings": [
@@ -2295,7 +2295,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:26:49.820Z",
-      "cpuMs": 41,
+      "cpuMs": 47,
       "imported": 0,
       "missing": 4,
       "listings": [],
@@ -2359,7 +2359,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:55.391Z",
-      "cpuMs": 407,
+      "cpuMs": 478,
       "imported": 36,
       "missing": 0,
       "listings": [
@@ -2697,7 +2697,7 @@
       "holdout": false,
       "architecture": "candidate:wix",
       "capturedAt": "2026-10-08T04:29:58.580Z",
-      "cpuMs": 125,
+      "cpuMs": 144,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2735,7 +2735,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:03.893Z",
-      "cpuMs": 70,
+      "cpuMs": 113,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -2803,7 +2803,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:25:01.164Z",
-      "cpuMs": 21,
+      "cpuMs": 31,
       "imported": 2,
       "missing": 0,
       "listings": [
@@ -2857,7 +2857,7 @@
       "holdout": false,
       "architecture": "candidate:next",
       "capturedAt": "2026-10-08T04:29:45.911Z",
-      "cpuMs": 30,
+      "cpuMs": 33,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2892,7 +2892,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:44.547Z",
-      "cpuMs": 283,
+      "cpuMs": 292,
       "imported": 10,
       "missing": 0,
       "listings": [
@@ -2996,7 +2996,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:38.708Z",
-      "cpuMs": 165,
+      "cpuMs": 176,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -3064,7 +3064,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:19:37.044Z",
-      "cpuMs": 452,
+      "cpuMs": 548,
       "imported": 100,
       "missing": 0,
       "listings": [
@@ -4134,7 +4134,7 @@
       "holdout": true,
       "architecture": "attribute-cards",
       "capturedAt": "2026-10-08T19:20:13.553Z",
-      "cpuMs": 51,
+      "cpuMs": 59,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -4188,7 +4188,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:35.591Z",
-      "cpuMs": 1552,
+      "cpuMs": 1733,
       "imported": 55,
       "missing": 0,
       "listings": [
@@ -4697,7 +4697,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:20.911Z",
-      "cpuMs": 180,
+      "cpuMs": 209,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -4851,9 +4851,9 @@
           "set": "unseen",
           "category": "Howard Hanna brokerage profile",
           "architecture": "unrecognized",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -4861,7 +4861,7 @@
               "url": "https://www.howardhanna.com/Agent/Detail/Daniel-Torri/36053"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -4872,7 +4872,7 @@
       "holdout": true,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T19:19:39.188Z",
-      "cpuMs": 0,
+      "cpuMs": 1,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4882,9 +4882,9 @@
           "set": "unseen",
           "category": "kvCORE / BoldTrail",
           "architecture": "unrecognized",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -4892,7 +4892,7 @@
               "url": "https://www.idahoperfecthome.com/"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -4903,7 +4903,7 @@
       "holdout": true,
       "architecture": "candidate:lofty_chime",
       "capturedAt": "2026-10-08T19:19:39.733Z",
-      "cpuMs": 64,
+      "cpuMs": 67,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4913,9 +4913,9 @@
           "set": "unseen",
           "category": "Lofty (Chime)",
           "architecture": "candidate:lofty_chime",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -4923,7 +4923,7 @@
               "url": "https://lauerrealtygroup.com/"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -4934,7 +4934,7 @@
       "holdout": true,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T19:19:40.096Z",
-      "cpuMs": 4,
+      "cpuMs": 2,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -4944,9 +4944,9 @@
           "set": "unseen",
           "category": "AgentFire (Home Junction data)",
           "architecture": "candidate:static_html",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -4954,7 +4954,7 @@
               "url": "https://magicvalley.homes/"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     },
@@ -4965,7 +4965,7 @@
       "holdout": true,
       "architecture": "candidate:idx_broker",
       "capturedAt": "2026-10-08T19:20:38.476Z",
-      "cpuMs": 75,
+      "cpuMs": 80,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -5004,7 +5004,7 @@
       "holdout": true,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T19:20:13.012Z",
-      "cpuMs": 353,
+      "cpuMs": 434,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -5255,7 +5255,7 @@
       "holdout": true,
       "architecture": "agentfire-dsidx",
       "capturedAt": "2026-10-08T19:19:43.140Z",
-      "cpuMs": 69,
+      "cpuMs": 107,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -5270,6 +5270,23 @@
         }
       ],
       "findings": [
+        {
+          "site": "the-cameron-team",
+          "set": "unseen",
+          "category": "AgentFire + /idx/ plugin",
+          "architecture": "agentfire-dsidx",
+          "code": "NOT_A_PROPERTY",
+          "defectKind": "code_defect",
+          "severity": 4,
+          "count": 1,
+          "examples": [
+            {
+              "sourceUrl": "https://www.instagram.com/p/DeAMNvJjKI7/",
+              "title": "cameronteam"
+            }
+          ],
+          "detail": "A social-media post or profile was imported as a property listing."
+        },
         {
           "site": "the-cameron-team",
           "set": "unseen",
@@ -5329,9 +5346,9 @@
           "set": "unseen",
           "category": "Sierra Interactive",
           "architecture": "unrecognized",
-          "code": "BLOCKED_SOURCE",
-          "defectKind": "blocked_source",
-          "severity": 0,
+          "code": "REQUIRES_RENDERING",
+          "defectKind": "needs_review",
+          "severity": 1,
           "count": 1,
           "examples": [
             {
@@ -5339,7 +5356,7 @@
               "url": "https://www.tomtoole.com/"
             }
           ],
-          "detail": "The site gated or refused the reader."
+          "detail": "The inventory is drawn in the browser. Offline replay and the Level B reader have no renderer; only a rendered (staging) check can judge it."
         }
       ]
     }
