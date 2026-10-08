@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { LISTING_FUNCTION } from "@/lib/importerFunctions";
 import type { ManagedListing } from "@/contexts/ListingsContext";
 import { invokeWithProgress } from "@/lib/importStream";
 import type { ImportEvent } from "@/lib/importProgress";
@@ -21,13 +22,13 @@ export async function invokeListingSync(body: { mode?: "connect" | "details"; ur
   const { data: session, error: sessionError } = await supabase.auth.getSession();
   if (sessionError || !session.session) throw new Error("Your session has expired. Sign in again to import listings.");
   if (onEvent) {
-    const streamed = await invokeWithProgress("refresh-listings", body, onEvent);
+    const streamed = await invokeWithProgress(LISTING_FUNCTION, body, onEvent);
     if (streamed.status >= 400 || streamed.body?.error) {
       throw new ListingImportError(streamed.body?.error ?? "We couldn’t check your listings right now. Please try again.", streamed.status);
     }
     return streamed.body as ListingSyncResult;
   }
-  const { data, error } = await supabase.functions.invoke("refresh-listings", { body });
+  const { data, error } = await supabase.functions.invoke(LISTING_FUNCTION, { body });
   if (data?.error) throw new ListingImportError(data.error, error?.context?.status);
   if (error) {
     let detail: { error?: string } | undefined;

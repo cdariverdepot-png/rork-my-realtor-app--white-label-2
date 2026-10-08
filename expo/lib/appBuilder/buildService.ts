@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BUILD_FUNCTION } from "@/lib/importerFunctions";
 import { File } from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { Platform } from "react-native";
@@ -196,11 +197,11 @@ async function generateLocal(realtorId: string, target?: "heroMessage" | "welcom
   };
   let data: any;
   if (!target && options?.onEvent) {
-    const streamed = await invokeWithProgress("analyze-realtor-build", body, options.onEvent);
+    const streamed = await invokeWithProgress(BUILD_FUNCTION, body, options.onEvent);
     data = streamed.body;
     if (streamed.status >= 400 || data?.error) throw new Error(data?.error ?? `Your website could not be analyzed. Please retry. (status ${streamed.status})`);
   } else {
-    const response = await supabase.functions.invoke("analyze-realtor-build", { body });
+    const response = await supabase.functions.invoke(BUILD_FUNCTION, { body });
     data = response.data;
     if (response.error || data?.error) throw await functionError(response.error, data, "Your website could not be analyzed. Please retry.");
   }
@@ -356,7 +357,7 @@ export async function uploadBuildFile(
 export async function importListingFilesBuild(sourceIds: string[]): Promise<SavedBuild> {
   const route = await resolveBuilderRoute();
   if (route.kind === "local") throw new Error("Sign in to your realtor account to upload listing files.");
-  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
+  const { data, error } = await supabase!.functions.invoke(BUILD_FUNCTION, {
     body: { mode: "import-listing-files", sourceIds },
   });
   if (error || data?.error) throw await functionError(error, data, "The listing files could not be read. Please retry.");
@@ -402,12 +403,12 @@ export async function analyzeBuild(options?: { connectedListingSources?: string[
 
   const body = options?.connectedListingSources?.length ? { connectedListingSources: options.connectedListingSources } : {};
   if (options?.onEvent) {
-    const streamed = await invokeWithProgress("analyze-realtor-build", body, options.onEvent);
+    const streamed = await invokeWithProgress(BUILD_FUNCTION, body, options.onEvent);
     if (streamed.status >= 400 || streamed.body?.error) {
       throw new Error(streamed.body?.error ?? (streamed.status === 401 ? "Please sign in again to build your app." : `Analysis could not finish. (status ${streamed.status})`));
     }
   } else {
-    const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", { body });
+    const { data, error } = await supabase!.functions.invoke(BUILD_FUNCTION, { body });
     if (error || data?.error) throw await functionError(error, data, "Analysis could not finish.");
   }
   const saved = await loadBuild();
@@ -421,7 +422,7 @@ export async function refreshWebsiteDesign(sourceUrl?: string): Promise<WebsiteD
   const sources = sourceUrl ? [{ id: 'website-design', kind: 'url', label: 'Website', uri: sourceUrl, status: 'queued' }] : saved?.sources ?? [];
   if (!sources.some(s => s.kind === 'url')) throw new Error('Add your website URL in Studio first.');
   if (!supabase || !(await ensureSupabaseSession())) throw new Error('Connect to refresh your website design.');
-  const { data, error } = await supabase.functions.invoke('analyze-realtor-build', {
+  const { data, error } = await supabase.functions.invoke(BUILD_FUNCTION, {
     body: { mode: 'refresh-design', ...(route.kind === 'local' ? { guest: true, sources } : { sources }) },
   });
   if (error || data?.error) throw await functionError(error, data, 'Could not refresh the website design.');
@@ -435,7 +436,7 @@ export async function regenerateBuildCopy(
   const route = await resolveBuilderRoute();
   if (route.kind === "local") return regenerateLocal(route.realtorId, target);
 
-  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
+  const { data, error } = await supabase!.functions.invoke(BUILD_FUNCTION, {
     body: { mode: "regenerate", target },
   });
   if (error || data?.error) throw await functionError(error, data, "Could not create another version.");
@@ -477,7 +478,7 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     if (!supabase || !(await ensureSupabaseSession())) {
       throw new Error("Could not connect to the app builder. Please retry.");
     }
-    const { data, error } = await supabase.functions.invoke("analyze-realtor-build", {
+    const { data, error } = await supabase.functions.invoke(BUILD_FUNCTION, {
       body: {
         guest: true,
         mode: "discover-listings",
@@ -501,7 +502,7 @@ export async function discoverListingsBuild(listingsUrl?: string): Promise<Saved
     return next;
   }
 
-  const { data, error } = await supabase!.functions.invoke("analyze-realtor-build", {
+  const { data, error } = await supabase!.functions.invoke(BUILD_FUNCTION, {
     body: { mode: "discover-listings", ...(listingsUrl ? { listingsUrl } : {}) },
   });
   if (error || data?.error) {

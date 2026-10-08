@@ -345,6 +345,7 @@ test('completed guest drafts can refresh the same URL and retain saved content o
     if (id==='expo-crypto') return {randomUUID:()=> 'id'};
     if (id==='react-native') return {Platform:{OS:'web'}};
     if (id==='@/lib/importStream') return {invokeWithProgress:async()=>{throw new Error('streaming is not used by this flow');}};
+    if (id==='@/lib/importerFunctions') return {BUILD_FUNCTION:'analyze-realtor-build',LISTING_FUNCTION:'refresh-listings'};
     if (id==='@/lib/supabase') return {ensureSupabaseSession:async()=>true,supabase:{functions:{invoke:async()=>{calls++;return fail ? {data:{error:'Website unavailable'}} : {data:{draft:{heroMessage:'Fresh copy'},evidence:[],sources:original.sources}};}}}};
     throw new Error(id);
   },mod,mod.exports);

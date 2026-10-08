@@ -124,6 +124,7 @@ const listingService = responses => {
   const calls = [];
   const service = loadModule('lib/listingSourceService.ts', {
     './supabase': { supabase: { auth: { getSession: async () => ({ data: { session: { access_token: 't' } }, error: null }) } } },
+    '@/lib/importerFunctions': { LISTING_FUNCTION: 'refresh-listings' },
     '@/lib/importStream': { invokeWithProgress: async (_, body) => {
       calls.push(body);
       const next = responses.shift();
@@ -169,4 +170,16 @@ test('a detail job that makes no progress ends the loop instead of repeating', a
   ]);
   await service.connectListingSource('https://agent.example/listings', 'r1', () => {});
   assert.equal(calls.length, 2);
+});
+
+test('production builds call the production importer; only a well-formed suffix selects staging copies', () => {
+  const names = suffix => {
+    const saved = process.env.EXPO_PUBLIC_FUNCTION_SUFFIX;
+    if (suffix === undefined) delete process.env.EXPO_PUBLIC_FUNCTION_SUFFIX; else process.env.EXPO_PUBLIC_FUNCTION_SUFFIX = suffix;
+    try { return loadModule('lib/importerFunctions.ts', {}); }
+    finally { if (saved === undefined) delete process.env.EXPO_PUBLIC_FUNCTION_SUFFIX; else process.env.EXPO_PUBLIC_FUNCTION_SUFFIX = saved; }
+  };
+  assert.deepEqual({ ...names(undefined) }, { BUILD_FUNCTION: 'analyze-realtor-build', LISTING_FUNCTION: 'refresh-listings' });
+  assert.deepEqual({ ...names('-staging') }, { BUILD_FUNCTION: 'analyze-realtor-build-staging', LISTING_FUNCTION: 'refresh-listings-staging' });
+  assert.equal(names('/../billing').BUILD_FUNCTION, 'analyze-realtor-build');
 });
