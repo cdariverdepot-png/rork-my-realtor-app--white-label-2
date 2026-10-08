@@ -1,0 +1,99 @@
+[
+  {
+    "realtorId": "e836d552-b4ab-4e0c-9921-45e0e96d06f4",
+    "createdAt": "2026-10-08 06:26:37.976871+00",
+    "sources": [
+      {
+        "id": "source-1asba0h",
+        "url": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "redfin",
+            "gavin",
+            "shettler"
+          ],
+          "phrases": [
+            "redfin",
+            "gavinshettler",
+            "realestateagent"
+          ]
+        },
+        "nextSyncAt": 1791448002176,
+        "connectedAt": 1791440802176,
+        "listingCount": 5,
+        "submittedUrl": "https://www.redfin.com/real-estate-agents/gavin-shettler",
+        "inventoryUrls": [
+          "https://www.redfin.com/real-estate-agents/gavin-shettler"
+        ],
+        "lastCheckedAt": 1791440802176
+      }
+    ],
+    "listings": [
+      {
+        "title": "900 NE 81st Ave #402, Portland, OR 97213",
+        "price": "$285,000",
+        "sourceUrl": "https://www.redfin.com/OR/Portland/900-NE-81st-Ave-97213/unit-402/home/25791331",
+        "photos": 0,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "4966 Evie Jean St, Salem, OR 97305",
+        "price": "$390,000",
+        "sourceUrl": "https://www.redfin.com/OR/Salem/4966-Evie-Jean-St-NE-97305/home/26412741",
+        "photos": 0,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1833 SE Exeter Dr, Portland, OR 97202",
+        "price": "$1,600,000",
+        "sourceUrl": "https://www.redfin.com/OR/Portland/1833-SE-Exeter-Dr-97202/home/25759570",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 4,
+        "baths": 4,
+        "sqft": "4,788"
+      },
+      {
+        "title": "12035 SE Wintercress Ct, Happy Valley, OR 97086",
+        "price": "$1,400,000",
+        "sourceUrl": "https://www.redfin.com/OR/Happy-Valley/12035-SE-Wintercress-Ct-97086/home/25888076",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 5,
+        "baths": 4,
+        "sqft": "3,826"
+      },
+      {
+        "title": "4421 SW Melville Ave, Portland, OR 97239",
+        "price": "$1,076,000",
+        "sourceUrl": "https://www.redfin.com/OR/Portland/4421-SW-Melville-Ave-97239/home/26300616",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 5,
+        "baths": 3,
+        "sqft": "3,281"
+      }
+    ]
+  }
+]

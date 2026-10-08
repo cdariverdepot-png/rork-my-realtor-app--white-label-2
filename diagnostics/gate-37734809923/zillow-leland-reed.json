@@ -1,0 +1,173 @@
+{
+  "id": "zillow-leland-reed",
+  "url": "https://www.zillow.com/profile/Leland-Reed",
+  "category": "third-party-profile",
+  "timeline": [
+    {
+      "at": 52,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 857,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1260,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1865,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Zillow\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2268,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 1 of 6"
+    },
+    {
+      "at": 2471,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 3 of 6"
+    },
+    {
+      "at": 2672,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 4 of 6"
+    },
+    {
+      "at": 2873,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Zillow\nMatching your website’s design and imagery\nReading linked pages · 5 of 6"
+    },
+    {
+      "at": 3278,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Zillow\nMatching your website’s design and imagery\nRead 6 linked pages\nIdentified your logo\nSorted 22 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 8723,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 533,
+      "totalMs": 2586,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 108
+        },
+        {
+          "kind": "listings",
+          "host": "zillow.com",
+          "pages": 1,
+          "found": 0,
+          "at": 1006
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "failed",
+          "at": 1980
+        }
+      ],
+      "result": {
+        "status": 422,
+        "body": {
+          "ok": false,
+          "error": "We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.",
+          "timings": {
+            "listings": 1872,
+            "total": 1980
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "zillow-leland-reed-00-url.png",
+    "zillow-leland-reed-01-review.png",
+    "zillow-leland-reed-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 4355,
+  "reviewMs": 8723,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading Zillow\nMatching your website’s design and imagery\nRead 6 linked pages\nIdentified your logo\nSorted 22 website images by role\nWriting your profile and app copy",
+  "reviewText": "Back\nAPP BUILDER\nwww.zillow.com/profile/Leland-Reed\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nWHITEFISH, MT\nLeland Reed\nVisit Leland Reed's profile on Zillow to find ratings and reviews. Find great Whitefish, MT real estate professionals on Zillow like Leland Reed of Revel Real Estate \nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\n8 Tips for Finding a Bargain-Priced Home\nHow much home can you afford? At Zillow Home Loans, we can pre-qualify you in as little as 5 minutes, with no impact to your credit score. Zillow Home Loans, NMLS # 10287. Equal Housing Lender Get pre-qualified A great agent makes all the difference A local agent has the inside scoop on your market and can guide you through the buying process from start to finish.\nSERVICES\nBuy a home\nFind your new place with millions of constantly updated listings, robust filters and an immersive photo experience.\nABOUT\nUnlock agenda & speakers just dropped\nOur speaker lineup, agenda, and workshops are here. Learn from the industry's biggest names and leave with strategies you can put to work immediately. Register today\nFROM THE SITE\nZillow has been working to transform the real estate experience since 2006.\nAdvocating for consumers is core to who we are and why we exist. We were the first to put an estimated value over every roof in America, bringing home values out of the dark with the Zestimate®. We offer innovative products and support public policies to make homeownership more accessible.\nFROM THE SITE\nGet to know Leland Reed\nReal Estate Agent Leland Reed loves people, and it’s clear to see why. One of the top-performing Agents in the state (and a household name in the Missoula, Montana market for being a “Go-Getter”), with over $40M sold last year, Leland is a passionate storyteller, empathetic listener and tenacious dealmaker, all with one goal in mind: making people happy. Leland has experienced fast and continued success since entering the world of Real Estate. She brings a wealth ...\nFROM THE SITE\nBought and sold a home in 2023.\nLeland is the best Relator in Missoula! She is warm, welcoming, and works to understand your needs…then she makes sure you get what you are looking for. She had our back ... Leland is the best Relator in Missoula! She is warm, welcoming, and works to understand your needs…then she makes sure you get wha... Show more 5.0 Report a problem 5/31/2023 • jonesfamily4321\n(406) 207-2727\nLeland@revel.realestate\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nEmpowering Your Montana Move—With Heart, Tenacity, and Trusted Results\nTry another opening line\nYOUR INTRODUCTION\nLeland Reed has quickly become one of Montana’s most trusted realtors, known for a passion for people, market insight, and unwavering hustle. An empathetic listener and natural storyteller, Leland approaches every transaction with the heart of a guide and the determination of a dealmaker. With a broad network, deep knowledge of Whitefish, Missoula, and regional markets, and over $40M sold in the last year, clients can expect care at every step—from staging and strategy to the final keys in your hand. If you want to feel seen, heard, and confident in Montana real estate, Leland is ready to help you reach your goals.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nWe couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nWHITEFISH, MT\nLeland Reed\nVisit Leland Reed's profile on Zillow to find ratings and reviews. Find great Whitefish, MT real estate professionals on Zillow like Leland Reed of Revel Real Estate \nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nSERVICES\n8 Tips for Finding a Bargain-Priced Home\nHow much home can you afford? At Zillow Home Loans, we can pre-qualify you in as little as 5 minutes, with no impact to your credit score. Zillow Home Loans, NMLS # 10287. Equal Housing Lender Get pre-qualified A great agent makes all the difference A local agent has the inside scoop on your market and can guide you through the buying process from start to finish.\nSERVICES\nBuy a home\nFind your new place with millions of constantly updated listings, robust filters and an immersive photo experience.\nABOUT\nUnlock agenda & speakers just dropped\nOur speaker lineup, agenda, and workshops are here. Learn from the industry's biggest names and leave with strategies you can put to work immediately. Register today\nFROM THE SITE\nZillow has been working to transform the real estate experience since 2006.\nAdvocating for consumers is core to who we are and why we exist. We were the first to put an estimated value over every roof in America, bringing home values out of the dark with the Zestimate®. We offer innovative products and support public policies to make homeownership more accessible.\nFROM THE SITE\nGet to know Leland Reed\nReal Estate Agent Leland Reed loves people, and it’s clear to see why. One of the top-performing Agents in the state (and a household name in the Missoula, Montana market for being a “Go-Getter”), with over $40M sold last year, Leland is a passionate storyteller, empathetic listener and tenacious dealmaker, all with one goal in mind: making people happy. Leland has experienced fast and continued success since entering the world of Real Estate. She brings a wealth ...\nFROM THE SITE\nBought and sold a home in 2023.\nLeland is the best Relator in Missoula! She is warm, welcoming, and works to understand your needs…then she makes sure you get what you are looking for. She had our back ... Leland is the best Relator in Missoula! She is warm, welcoming, and works to understand your needs…then she makes sure you get wha... Show more 5.0 Report a problem 5/31/2023 • jonesfamily4321\n(406) 207-2727\nLeland@revel.realestate\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app WHITEFISH, MT Leland Reed Visit Leland Reed's profile on Zillow to find ratings and reviews. Find great Whitefish, MT real estate professionals on Zillow like Leland Reed of Revel Real Estate View l",
+        "textLength": 2484,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "error": "We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in."
+    }
+  ],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.zillow.com/profile/Leland-Reed",
+      "status": 403,
+      "finalUrl": "https://www.zillow.com/profile/Leland-Reed",
+      "title": "Access to this page has been denied",
+      "textLength": 106,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Press & Hold to confirm you are\na human (and not a bot).\nReference ID 62ee517d-c2e1-11f1-a68d-88275a27fa68",
+      "challenge": false,
+      "screenshot": "zillow-leland-reed-source-0.png"
+    }
+  ],
+  "wallMs": 32563,
+  "window": {
+    "startedAt": "2026-10-08T06:27:23.390Z",
+    "endedAt": "2026-10-08T06:27:55.953Z"
+  }
+}
