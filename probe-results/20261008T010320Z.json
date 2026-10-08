@@ -1,0 +1,1919 @@
+{
+  "ranAt": "2026-10-08T01:02:19.100Z",
+  "before": "af4fe13",
+  "note": "Real network; Supabase stubbed; AI step stubbed with a fixed neutral profile; no listing renderer configured.",
+  "sites": [
+    {
+      "url": "https://cindycarlsonrealty.com/",
+      "before": {
+        "elapsedMs": 2987,
+        "firstEventMs": null,
+        "status": 200,
+        "listings": 0,
+        "discovery": {
+          "outcome": "unreadable",
+          "interfaces": [
+            "structured-property-data",
+            "flexmls",
+            "managed-challenge"
+          ],
+          "obstacles": [
+            {
+              "code": "requires_rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+              "detail": "No browser renderer is configured"
+            }
+          ],
+          "issues": [
+            {
+              "code": "requires-rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+              "interface": "managed-challenge"
+            }
+          ],
+          "stages": [
+            "architecture_detected"
+          ],
+          "enrichment": {
+            "status": "enrichment_not_requested",
+            "scheduled": 0,
+            "attempted": 0,
+            "enriched": 0,
+            "failed": 0
+          },
+          "visited": 3
+        },
+        "design": {
+          "portrait": true,
+          "logo": false,
+          "sections": 4
+        },
+        "requests": 14,
+        "failedRequests": [],
+        "events": []
+      },
+      "after": {
+        "elapsedMs": 1103,
+        "firstEventMs": 4,
+        "status": 200,
+        "listings": 0,
+        "timings": {
+          "pages": 429,
+          "design": 980,
+          "site": 1014,
+          "listings": 84,
+          "profile": 1,
+          "save": 0,
+          "total": 1099
+        },
+        "discovery": {
+          "outcome": "unreadable",
+          "interfaces": [
+            "structured-property-data",
+            "flexmls",
+            "managed-challenge"
+          ],
+          "obstacles": [
+            {
+              "code": "requires_rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+              "detail": "No browser renderer is configured"
+            }
+          ],
+          "issues": [
+            {
+              "code": "requires-rendering",
+              "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+              "interface": "managed-challenge"
+            }
+          ],
+          "stages": [
+            "architecture_detected"
+          ],
+          "enrichment": {
+            "status": "enrichment_not_requested",
+            "scheduled": 0,
+            "attempted": 0,
+            "enriched": 0,
+            "failed": 0
+          },
+          "visited": 3
+        },
+        "design": {
+          "portrait": true,
+          "logo": false,
+          "sections": 4
+        },
+        "requests": 11,
+        "failedRequests": [],
+        "events": [
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "start",
+            "at": 0
+          },
+          {
+            "kind": "site",
+            "name": "Cindy Carlson Realty",
+            "host": "cindycarlsonrealty.com",
+            "at": 30
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "start",
+            "at": 30
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 0,
+            "total": 2,
+            "at": 580
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 1,
+            "total": 2,
+            "at": 622
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 2,
+            "total": 2,
+            "at": 632
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "done",
+            "count": 2,
+            "total": 2,
+            "at": 1009
+          },
+          {
+            "kind": "design",
+            "portrait": true,
+            "logo": false,
+            "images": 5,
+            "sections": 4,
+            "at": 1010
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "done",
+            "at": 1010
+          },
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "done",
+            "count": 1,
+            "at": 1014
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "start",
+            "at": 1014
+          },
+          {
+            "kind": "listings",
+            "host": "cindycarlsonrealty.com",
+            "pages": 1,
+            "found": 0,
+            "at": 1015
+          },
+          {
+            "kind": "listings",
+            "host": "cindycarlsonrealty.com",
+            "pages": 2,
+            "found": 0,
+            "at": 1028
+          },
+          {
+            "kind": "listings",
+            "host": "my.flexmls.com",
+            "pages": 3,
+            "found": 0,
+            "at": 1077
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "done",
+            "count": 0,
+            "at": 1098
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "start",
+            "at": 1098
+          },
+          {
+            "kind": "profile",
+            "name": "Replay Realtor",
+            "at": 1099
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "done",
+            "at": 1099
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "start",
+            "at": 1099
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "done",
+            "at": 1099
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.gethomenow.com/",
+      "before": {
+        "elapsedMs": 18323,
+        "firstEventMs": null,
+        "status": 200,
+        "listings": 94,
+        "discovery": {
+          "outcome": "found",
+          "interfaces": [
+            "brivity",
+            "structured-property-data",
+            "public-json"
+          ],
+          "obstacles": [],
+          "issues": [],
+          "stages": [
+            "architecture_detected",
+            "detail_enrichment_scheduled",
+            "inventory_discovered",
+            "detail_enrichment_completed"
+          ],
+          "enrichment": {
+            "status": "enrichment_complete",
+            "scheduled": 94,
+            "attempted": 94,
+            "enriched": 94,
+            "failed": 0
+          },
+          "visited": 96
+        },
+        "design": {
+          "portrait": true,
+          "logo": true,
+          "sections": 7
+        },
+        "requests": 202,
+        "failedRequests": [
+          {
+            "url": "https://cdn1.brivityidx.com/assets/css/library-dd.css",
+            "status": 403
+          }
+        ],
+        "events": []
+      },
+      "after": {
+        "elapsedMs": 7361,
+        "firstEventMs": 3,
+        "status": 200,
+        "listings": 94,
+        "timings": {
+          "pages": 225,
+          "design": 2029,
+          "site": 2212,
+          "details": 4844,
+          "listings": 5134,
+          "profile": 1,
+          "save": 0,
+          "total": 7347
+        },
+        "discovery": {
+          "outcome": "found",
+          "interfaces": [
+            "brivity",
+            "structured-property-data",
+            "public-json"
+          ],
+          "obstacles": [],
+          "issues": [],
+          "stages": [
+            "architecture_detected",
+            "detail_enrichment_scheduled",
+            "inventory_discovered",
+            "detail_enrichment_completed"
+          ],
+          "enrichment": {
+            "status": "enrichment_complete",
+            "scheduled": 94,
+            "attempted": 94,
+            "enriched": 94,
+            "failed": 0
+          },
+          "visited": 96
+        },
+        "design": {
+          "portrait": true,
+          "logo": true,
+          "sections": 7
+        },
+        "requests": 201,
+        "failedRequests": [
+          {
+            "url": "https://cdn1.brivityidx.com/assets/css/library-dd.css",
+            "status": 403
+          }
+        ],
+        "events": [
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "start",
+            "at": 0
+          },
+          {
+            "kind": "site",
+            "name": "The Jason Walker Team",
+            "host": "gethomenow.com",
+            "at": 179
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "start",
+            "at": 179
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 0,
+            "total": 3,
+            "at": 1983
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 1,
+            "total": 3,
+            "at": 2087
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 2,
+            "total": 3,
+            "at": 2132
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 3,
+            "total": 3,
+            "at": 2139
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "done",
+            "count": 3,
+            "total": 3,
+            "at": 2208
+          },
+          {
+            "kind": "design",
+            "portrait": true,
+            "logo": true,
+            "images": 4,
+            "sections": 7,
+            "at": 2208
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "done",
+            "at": 2208
+          },
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "done",
+            "count": 1,
+            "at": 2212
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "start",
+            "at": 2212
+          },
+          {
+            "kind": "listings",
+            "host": "gethomenow.com",
+            "pages": 1,
+            "found": 0,
+            "at": 2214
+          },
+          {
+            "kind": "listings",
+            "host": "gethomenow.com",
+            "pages": 2,
+            "found": 0,
+            "at": 2246
+          },
+          {
+            "kind": "listings",
+            "host": "gethomenow.com",
+            "pages": 2,
+            "found": 94,
+            "at": 2501
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 0,
+            "total": 94,
+            "at": 2501
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 1,
+            "total": 94,
+            "at": 2855
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 2,
+            "total": 94,
+            "at": 2861
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 3,
+            "total": 94,
+            "at": 2864
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 4,
+            "total": 94,
+            "at": 2987
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 5,
+            "total": 94,
+            "at": 3010
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 6,
+            "total": 94,
+            "at": 3018
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 7,
+            "total": 94,
+            "at": 3139
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 8,
+            "total": 94,
+            "at": 3150
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 9,
+            "total": 94,
+            "at": 3205
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 10,
+            "total": 94,
+            "at": 3306
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 11,
+            "total": 94,
+            "at": 3320
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 12,
+            "total": 94,
+            "at": 3358
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 13,
+            "total": 94,
+            "at": 3426
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 14,
+            "total": 94,
+            "at": 3457
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 15,
+            "total": 94,
+            "at": 3489
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 16,
+            "total": 94,
+            "at": 3600
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 17,
+            "total": 94,
+            "at": 3606
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 18,
+            "total": 94,
+            "at": 3652
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 19,
+            "total": 94,
+            "at": 3712
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 20,
+            "total": 94,
+            "at": 3744
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 21,
+            "total": 94,
+            "at": 3790
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 22,
+            "total": 94,
+            "at": 3881
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 23,
+            "total": 94,
+            "at": 3889
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 24,
+            "total": 94,
+            "at": 3945
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 25,
+            "total": 94,
+            "at": 3990
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 26,
+            "total": 94,
+            "at": 4031
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 27,
+            "total": 94,
+            "at": 4073
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 28,
+            "total": 94,
+            "at": 4182
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 29,
+            "total": 94,
+            "at": 4184
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 30,
+            "total": 94,
+            "at": 4233
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 31,
+            "total": 94,
+            "at": 4284
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 32,
+            "total": 94,
+            "at": 4319
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 33,
+            "total": 94,
+            "at": 4376
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 34,
+            "total": 94,
+            "at": 4470
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 35,
+            "total": 94,
+            "at": 4472
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 36,
+            "total": 94,
+            "at": 4524
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 37,
+            "total": 94,
+            "at": 4563
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 38,
+            "total": 94,
+            "at": 4611
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 39,
+            "total": 94,
+            "at": 4647
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 40,
+            "total": 94,
+            "at": 4760
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 41,
+            "total": 94,
+            "at": 4764
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 42,
+            "total": 94,
+            "at": 4812
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 43,
+            "total": 94,
+            "at": 4846
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 44,
+            "total": 94,
+            "at": 4889
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 45,
+            "total": 94,
+            "at": 4929
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 46,
+            "total": 94,
+            "at": 5053
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 47,
+            "total": 94,
+            "at": 5063
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 48,
+            "total": 94,
+            "at": 5101
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 49,
+            "total": 94,
+            "at": 5124
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 50,
+            "total": 94,
+            "at": 5172
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 51,
+            "total": 94,
+            "at": 5215
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 52,
+            "total": 94,
+            "at": 5333
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 53,
+            "total": 94,
+            "at": 5339
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 54,
+            "total": 94,
+            "at": 5403
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 55,
+            "total": 94,
+            "at": 5420
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 56,
+            "total": 94,
+            "at": 5444
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 57,
+            "total": 94,
+            "at": 5492
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 58,
+            "total": 94,
+            "at": 5623
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 59,
+            "total": 94,
+            "at": 5638
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 60,
+            "total": 94,
+            "at": 5699
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 61,
+            "total": 94,
+            "at": 5703
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 62,
+            "total": 94,
+            "at": 5736
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 63,
+            "total": 94,
+            "at": 5774
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 64,
+            "total": 94,
+            "at": 5912
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 65,
+            "total": 94,
+            "at": 5917
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 66,
+            "total": 94,
+            "at": 5987
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 67,
+            "total": 94,
+            "at": 5991
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 68,
+            "total": 94,
+            "at": 6025
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 69,
+            "total": 94,
+            "at": 6056
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 70,
+            "total": 94,
+            "at": 6196
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 71,
+            "total": 94,
+            "at": 6216
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 72,
+            "total": 94,
+            "at": 6270
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 73,
+            "total": 94,
+            "at": 6272
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 74,
+            "total": 94,
+            "at": 6311
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 75,
+            "total": 94,
+            "at": 6368
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 76,
+            "total": 94,
+            "at": 6488
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 77,
+            "total": 94,
+            "at": 6494
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 78,
+            "total": 94,
+            "at": 6557
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 79,
+            "total": 94,
+            "at": 6568
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 80,
+            "total": 94,
+            "at": 6590
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 81,
+            "total": 94,
+            "at": 6642
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 82,
+            "total": 94,
+            "at": 6768
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 83,
+            "total": 94,
+            "at": 6781
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 84,
+            "total": 94,
+            "at": 6832
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 85,
+            "total": 94,
+            "at": 6835
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 86,
+            "total": 94,
+            "at": 6868
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 87,
+            "total": 94,
+            "at": 6925
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 88,
+            "total": 94,
+            "at": 7065
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 89,
+            "total": 94,
+            "at": 7069
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 90,
+            "total": 94,
+            "at": 7120
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 91,
+            "total": 94,
+            "at": 7121
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 92,
+            "total": 94,
+            "at": 7148
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 93,
+            "total": 94,
+            "at": 7204
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "done",
+            "count": 94,
+            "total": 94,
+            "at": 7345
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "done",
+            "count": 94,
+            "at": 7346
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "start",
+            "at": 7346
+          },
+          {
+            "kind": "profile",
+            "name": "Replay Realtor",
+            "at": 7347
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "done",
+            "at": 7347
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "start",
+            "at": 7347
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "done",
+            "at": 7347
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.mckenzie-realty.com/",
+      "before": {
+        "elapsedMs": 12035,
+        "firstEventMs": null,
+        "status": 200,
+        "listings": 0,
+        "discovery": {
+          "outcome": "unreadable",
+          "interfaces": [
+            "ihomefinder",
+            "structured-property-data"
+          ],
+          "obstacles": [
+            {
+              "code": "requires_rendering",
+              "url": "https://www.mckenzie-realty.com/email-alerts/",
+              "detail": "No browser renderer is configured"
+            },
+            {
+              "code": "requires_rendering",
+              "url": "https://www.mckenzie-realty.com/homes-for-sale-search/",
+              "detail": "No browser renderer is configured"
+            }
+          ],
+          "issues": [
+            {
+              "code": "requires-rendering",
+              "url": "https://www.mckenzie-realty.com/email-alerts/",
+              "interface": "ihomefinder"
+            },
+            {
+              "code": "requires-rendering",
+              "url": "https://www.mckenzie-realty.com/homes-for-sale-search/",
+              "interface": "ihomefinder"
+            }
+          ],
+          "stages": [
+            "architecture_detected"
+          ],
+          "enrichment": {
+            "status": "enrichment_not_requested",
+            "scheduled": 0,
+            "attempted": 0,
+            "enriched": 0,
+            "failed": 0
+          },
+          "visited": 5
+        },
+        "design": {
+          "portrait": true,
+          "logo": true,
+          "sections": 9
+        },
+        "requests": 18,
+        "failedRequests": [],
+        "events": []
+      },
+      "after": {
+        "elapsedMs": 4302,
+        "firstEventMs": 0,
+        "status": 200,
+        "listings": 0,
+        "timings": {
+          "pages": 202,
+          "design": 1466,
+          "site": 1475,
+          "listings": 2826,
+          "profile": 0,
+          "save": 0,
+          "total": 4301
+        },
+        "discovery": {
+          "outcome": "unreadable",
+          "interfaces": [
+            "ihomefinder",
+            "structured-property-data"
+          ],
+          "obstacles": [
+            {
+              "code": "requires_rendering",
+              "url": "https://www.mckenzie-realty.com/email-alerts/",
+              "detail": "No browser renderer is configured"
+            },
+            {
+              "code": "requires_rendering",
+              "url": "https://www.mckenzie-realty.com/homes-for-sale-search/",
+              "detail": "No browser renderer is configured"
+            }
+          ],
+          "issues": [
+            {
+              "code": "requires-rendering",
+              "url": "https://www.mckenzie-realty.com/email-alerts/",
+              "interface": "ihomefinder"
+            },
+            {
+              "code": "requires-rendering",
+              "url": "https://www.mckenzie-realty.com/homes-for-sale-search/",
+              "interface": "ihomefinder"
+            }
+          ],
+          "stages": [
+            "architecture_detected"
+          ],
+          "enrichment": {
+            "status": "enrichment_not_requested",
+            "scheduled": 0,
+            "attempted": 0,
+            "enriched": 0,
+            "failed": 0
+          },
+          "visited": 5
+        },
+        "design": {
+          "portrait": true,
+          "logo": true,
+          "sections": 9
+        },
+        "requests": 16,
+        "failedRequests": [],
+        "events": [
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "start",
+            "at": 0
+          },
+          {
+            "kind": "site",
+            "name": "McKenzie Realty",
+            "host": "mckenzie-realty.com",
+            "at": 8
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "start",
+            "at": 8
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 0,
+            "total": 4,
+            "at": 1271
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 1,
+            "total": 4,
+            "at": 1271
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 2,
+            "total": 4,
+            "at": 1277
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 3,
+            "total": 4,
+            "at": 1278
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 4,
+            "total": 4,
+            "at": 1282
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "done",
+            "count": 4,
+            "total": 4,
+            "at": 1473
+          },
+          {
+            "kind": "design",
+            "portrait": true,
+            "logo": true,
+            "images": 9,
+            "sections": 9,
+            "at": 1473
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "done",
+            "at": 1474
+          },
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "done",
+            "count": 1,
+            "at": 1475
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "start",
+            "at": 1475
+          },
+          {
+            "kind": "listings",
+            "host": "mckenzie-realty.com",
+            "pages": 1,
+            "found": 0,
+            "at": 1475
+          },
+          {
+            "kind": "listings",
+            "host": "idxhome.com",
+            "pages": 2,
+            "found": 0,
+            "at": 1491
+          },
+          {
+            "kind": "listings",
+            "host": "mckenzie-realty.com",
+            "pages": 3,
+            "found": 0,
+            "at": 1565
+          },
+          {
+            "kind": "listings",
+            "host": "mckenzie-realty.com",
+            "pages": 4,
+            "found": 0,
+            "at": 1583
+          },
+          {
+            "kind": "listings",
+            "host": "mckenzie-realty.com",
+            "pages": 5,
+            "found": 0,
+            "at": 3041
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "done",
+            "count": 0,
+            "at": 4301
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "start",
+            "at": 4301
+          },
+          {
+            "kind": "profile",
+            "name": "Replay Realtor",
+            "at": 4301
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "done",
+            "at": 4301
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "start",
+            "at": 4301
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "done",
+            "at": 4301
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://northidahofreedom.com/",
+      "before": {
+        "elapsedMs": 10815,
+        "firstEventMs": null,
+        "status": 200,
+        "listings": 6,
+        "discovery": {
+          "outcome": "partial",
+          "interfaces": [
+            "idx-broker",
+            "structured-property-data"
+          ],
+          "obstacles": [],
+          "issues": [
+            {
+              "code": "limited-showcase",
+              "url": "https://homes.northidahofreedom.com/idx/customshowcasejs.php?widgetid=23132",
+              "interface": "idx-broker"
+            }
+          ],
+          "stages": [
+            "architecture_detected",
+            "detail_enrichment_scheduled",
+            "inventory_discovered",
+            "detail_enrichment_partial"
+          ],
+          "enrichment": {
+            "status": "enrichment_unavailable",
+            "scheduled": 6,
+            "attempted": 6,
+            "enriched": 0,
+            "failed": 6
+          },
+          "visited": 14
+        },
+        "design": {
+          "portrait": false,
+          "logo": true,
+          "sections": 8
+        },
+        "requests": 30,
+        "failedRequests": [
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-9784",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-9064",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-9675",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-8982",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-8064",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-8066",
+            "status": 400
+          }
+        ],
+        "events": []
+      },
+      "after": {
+        "elapsedMs": 1594,
+        "firstEventMs": 0,
+        "status": 200,
+        "listings": 6,
+        "timings": {
+          "pages": 501,
+          "design": 937,
+          "site": 972,
+          "details": 398,
+          "listings": 620,
+          "profile": 1,
+          "save": 0,
+          "total": 1593
+        },
+        "discovery": {
+          "outcome": "partial",
+          "interfaces": [
+            "idx-broker",
+            "structured-property-data"
+          ],
+          "obstacles": [],
+          "issues": [
+            {
+              "code": "limited-showcase",
+              "url": "https://homes.northidahofreedom.com/idx/customshowcasejs.php?widgetid=23132",
+              "interface": "idx-broker"
+            }
+          ],
+          "stages": [
+            "architecture_detected",
+            "detail_enrichment_scheduled",
+            "inventory_discovered",
+            "detail_enrichment_partial"
+          ],
+          "enrichment": {
+            "status": "enrichment_unavailable",
+            "scheduled": 6,
+            "attempted": 6,
+            "enriched": 0,
+            "failed": 6
+          },
+          "visited": 14
+        },
+        "design": {
+          "portrait": false,
+          "logo": true,
+          "sections": 8
+        },
+        "requests": 28,
+        "failedRequests": [
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-9784",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-9064",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-8982",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-9675",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-8066",
+            "status": 400
+          },
+          {
+            "url": "https://homes.northidahofreedom.com/idx/photogallery/b254/26-8064",
+            "status": 400
+          }
+        ],
+        "events": [
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "start",
+            "at": 0
+          },
+          {
+            "kind": "site",
+            "name": "Janna McRoy Homes",
+            "host": "northidahofreedom.com",
+            "at": 28
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "start",
+            "at": 28
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 0,
+            "total": 7,
+            "at": 463
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 1,
+            "total": 7,
+            "at": 468
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 2,
+            "total": 7,
+            "at": 486
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 3,
+            "total": 7,
+            "at": 490
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 4,
+            "total": 7,
+            "at": 491
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 5,
+            "total": 7,
+            "at": 497
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 6,
+            "total": 7,
+            "at": 503
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "start",
+            "count": 7,
+            "total": 7,
+            "at": 505
+          },
+          {
+            "kind": "stage",
+            "stage": "pages",
+            "state": "done",
+            "count": 5,
+            "total": 7,
+            "at": 964
+          },
+          {
+            "kind": "design",
+            "portrait": false,
+            "logo": true,
+            "images": 11,
+            "sections": 8,
+            "at": 965
+          },
+          {
+            "kind": "stage",
+            "stage": "design",
+            "state": "done",
+            "at": 965
+          },
+          {
+            "kind": "stage",
+            "stage": "site",
+            "state": "done",
+            "count": 1,
+            "at": 972
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "start",
+            "at": 972
+          },
+          {
+            "kind": "listings",
+            "host": "northidahofreedom.com",
+            "pages": 1,
+            "found": 0,
+            "at": 972
+          },
+          {
+            "kind": "listings",
+            "host": "homes.northidahofreedom.com",
+            "pages": 2,
+            "found": 0,
+            "at": 994
+          },
+          {
+            "kind": "listings",
+            "host": "homes.northidahofreedom.com",
+            "pages": 2,
+            "found": 6,
+            "at": 1194
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 0,
+            "total": 6,
+            "at": 1194
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 1,
+            "total": 6,
+            "at": 1420
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 2,
+            "total": 6,
+            "at": 1470
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 3,
+            "total": 6,
+            "at": 1494
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 4,
+            "total": 6,
+            "at": 1501
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "start",
+            "count": 5,
+            "total": 6,
+            "at": 1591
+          },
+          {
+            "kind": "stage",
+            "stage": "details",
+            "state": "done",
+            "count": 6,
+            "total": 6,
+            "at": 1592
+          },
+          {
+            "kind": "stage",
+            "stage": "listings",
+            "state": "done",
+            "count": 6,
+            "at": 1592
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "start",
+            "at": 1592
+          },
+          {
+            "kind": "profile",
+            "name": "Replay Realtor",
+            "at": 1592
+          },
+          {
+            "kind": "stage",
+            "stage": "profile",
+            "state": "done",
+            "at": 1593
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "start",
+            "at": 1593
+          },
+          {
+            "kind": "stage",
+            "stage": "save",
+            "state": "done",
+            "at": 1593
+          }
+        ]
+      }
+    }
+  ]
+}
