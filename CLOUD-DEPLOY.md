@@ -14,7 +14,7 @@ Open GitHub Actions → **Build and deploy Expo web** → **Run workflow** on `m
 
 The workflow installs the locked dependencies, runs the app tests, exports all static pages, and deploys to production. Everything runs on GitHub's servers. The saved Actions secret `EXPO_TOKEN` authenticates with Expo; never commit its value.
 
-Pushes to `main` that touch `expo/**` or this workflow also deploy to production (same as a manual run with Deploy enabled). You can still use **Run workflow** for an on-demand deploy or to skip deploy by turning the input off. The **Check Expo hosting** workflow can also be run manually to verify the root, welcome, and callback URLs. Checks retry for propagation delays observed on the first deployment.
+Pushes to `main` no longer deploy production (Oct 8 2026): production is published only by **Run workflow** with Deploy enabled. The same applies to the Edge Functions (**Deploy Supabase Edge Functions**) and the listing renderer. The testing preview of `main` is published by **Deploy development preview** (`deploy-preview.yml`) to `https://cdariverdepot-my-realtor--preview.expo.app` against the staging importer. The **Check Expo hosting** workflow can also be run manually to verify the root, welcome, and callback URLs. Checks retry for propagation delays observed on the first deployment.
 
 ## Supabase authentication
 

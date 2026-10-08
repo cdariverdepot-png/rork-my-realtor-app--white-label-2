@@ -1,0 +1,2229 @@
+{
+  "id": "magic-valley-homes",
+  "url": "https://magicvalley.homes/",
+  "category": "AgentFire (Home Junction data)",
+  "timeline": [
+    {
+      "at": 64,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 668,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 870,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading Iker Serna\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1071,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 listings so far · 1 page checked\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 2 of 15"
+    },
+    {
+      "at": 1274,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 listings so far · 1 page checked\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 6 of 15\nReading linked pages · 2 of 6"
+    },
+    {
+      "at": 1475,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 listings so far · 1 page checked\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 9 of 15\nReading linked pages · 2 of 6"
+    },
+    {
+      "at": 2078,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 listings so far · 1 page checked\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 9 of 15\nReading linked pages · 4 of 6"
+    },
+    {
+      "at": 2279,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 listings so far · 1 page checked\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 10 of 15\nReading linked pages · 4 of 6"
+    },
+    {
+      "at": 2480,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 12 of 15\nReading linked pages · 5 of 6"
+    },
+    {
+      "at": 2681,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 12 of 15\nReading linked pages · 5 of 6\nSaving 15 listings"
+    },
+    {
+      "at": 2882,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 12 of 15\nRead 6 linked pages\nSaved 15 listings\nIdentified your profile photo and logo\nSorted 28 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4291,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 13 of 15\nRead 6 linked pages\nSaved 15 listings\nIdentified your profile photo and logo\nSorted 28 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4492,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nReading listing details · 15 of 15\nRead 6 linked pages\nSaved 15 listings\nIdentified your profile photo and logo\nSorted 28 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4708,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nRead full details for all 15 listings\nRead 6 linked pages\nSaved 15 listings\nIdentified your profile photo and logo\nSorted 28 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 8931,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nRead full details for all 15 listings\nRead 6 linked pages\nSaved 15 listings\nIdentified your profile photo and logo\nSorted 28 website images by role\nWriting your profile and app copy\nFound Iker Serna · Burley, ID"
+    },
+    {
+      "at": 9357,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 379,
+      "totalMs": 1962,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 12,
+          "total": 15,
+          "succeeded": 12,
+          "at": 54
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 13,
+          "total": 15,
+          "succeeded": 13,
+          "at": 1199
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 14,
+          "total": 15,
+          "succeeded": 14,
+          "at": 1328
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 15,
+          "total": 15,
+          "succeeded": 15,
+          "at": 1419
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 15,
+          "total": 15,
+          "succeeded": 15,
+          "at": 1636
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "attempted": 3,
+          "remaining": 0,
+          "items": [
+            {
+              "id": "listing-13cpekd",
+              "tag": "",
+              "beds": 4,
+              "sqft": "1,856",
+              "baths": 2,
+              "facts": {
+                "Year Built": "1915"
+              },
+              "image": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg",
+              "price": "$415,000",
+              "title": "3444 N 4500 E",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98999860/Murtaugh/3444-N-4500-E/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Country charm meets modern comfort! Idaho acreage property! If you've been dreaming of a place where there's room to breathe, mature trees and the pace of life slows down just enough to enjoy it; this beautifully updated farmhouse in Murtaugh is the one you've been waiting for. Situated on 1.31 acres, this inviting two-story home offers 1,856 square feet with 4 bedrooms, 2 bathrooms and the perfect blend of timeless character and thoughtful updates. Inside, you'll love the refreshed kitchen with lots of storage, walk in pantry, double ovens, propane oven/range, fridge, dishwasher & microwave. Comfortable living spaces designed for everyday life. Newer mini-split systems provide efficient year-round comfort. Upstairs bathroom has a walk in tile shower. Step outside and imagine mornings on the covered front porch, evenings relaxing under the gazebo and weekends enjoying the shade of mature trees that create your own private retreat. The detached garage/shop offers endless possibilities for hobbies, projects, extra storage, or parking, while the additional storage shed keeps all your outdoor equipment organized. With plenty of room for gardening, animals, toys, RVs or simply enjoying the space, this property offers the freedom that's becoming harder to find. Close to Twin Falls or Burley activities. Setup a showing of this property today.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-epvnjm",
+              "tag": "",
+              "beds": 2,
+              "sqft": "1,144",
+              "baths": 2,
+              "facts": {
+                "Year Built": "1994"
+              },
+              "image": "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_1.jpg",
+              "price": "$225,000",
+              "title": "192 W Caswell",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98998915/Twin-Falls/192-W-Caswell/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Affordable, centrally located, and ready for its next chapter! This 2-bedroom, 2-bath manufactured home offers 1,144 sq ft of comfortable living space on a permanent foundation in a convenient central Twin Falls location. An attached 1-car garage provides additional parking and storage. Several of the big-ticket improvements have already been completed, including a new roof and HVAC system in 2024, plus central air for year-round comfort. Inside, the home is ready for a new owner to bring their own style and updates, creating a great opportunity to build equity and make the space their own. Conveniently located near shopping, schools, dining, and everyday amenities, this property offers an affordable path to homeownership without sacrificing location. Whether you’re looking for a primary residence, downsizing, or searching for an investment opportunity, 192 W Caswell Ave is full of potential. Priced to sell—don’t miss your opportunity to make this Twin Falls home your own!",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-hqsebz",
+              "tag": "",
+              "beds": 3,
+              "sqft": "1,607",
+              "baths": 2,
+              "facts": {
+                "Year Built": "2026"
+              },
+              "image": "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_1.jpg",
+              "price": "$425,000",
+              "title": "930 Tunnel Street",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98998783/Twin-Falls/930-Tunnel-Street/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "This beautiful 3-bedroom, 2-bath home offers 1,607 sq ft of thoughtfully-designed living space on a .17-acre lot. The open-concept layout features a desirable split-bedroom floor plan and upgraded LVP flooring throughout the main living areas, complemented by cozy carpet in the bedrooms. The kitchen has stunning custom black walnut cabinets, granite countertops, tasteful tile backsplashes, undercabinet lighting, full Samsung appliance package, including a french door refridgerator, and an overall upscale finish. Fireplace is an electric insert offering aesthetics and warmth. A completely finished 2-car garage with enclosed furnace room and insulated garage doors. Exterior is Stucco with stone accents, vinyl siding on sides and back, full raingutters, and complete landscaping. Fully fenced yard with sprinklers, curbing, sodded lawn in front & seeded lawn in the back. It has a covered back patio, perfect for relaxing evenings. Additional perks include insulated interior walls and LED can-lighting throughout.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-11y148g",
+              "tag": "",
+              "beds": 4,
+              "sqft": "1,657",
+              "baths": 2,
+              "facts": {
+                "Year Built": "2026"
+              },
+              "image": "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_1.jpg",
+              "price": "$425,000",
+              "title": "946 Tunnel Street",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98998784/Twin-Falls/946-Tunnel-Street/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "This beautiful 4-bedroom, 2-bath home offers 1,657 sq ft of thoughtfully-designed living space on a .17-acre lot. The open-concept layout features a desirable split-bedroom floor plan and upgraded LVP flooring throughout the main living areas, complemented by cozy carpet in the bedrooms. The kitchen has stunning custom black walnut cabinets, granite countertops, tasteful tile backsplashes, undercabinet lighting, full Samsung appliance package, including a french door refridgerator. Fireplace is an electric insert offering aesthetics and warmth. A completely finished 2-car garage with enclosed furnace room and insulated garage doors.Exterior offers Stucco with stone accents, vinyl siding on sides and back, full raingutters, and completed landscaping. Fully fenced with sprinklers, curbing, sodded lawn in front & seeded lawn in the back. It has a covered back patio, perfect for relaxing evenings. Additional perks include insulated interior walls and LED can-lighting throughout.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-uvemak",
+              "tag": "",
+              "beds": 4,
+              "sqft": "2,816",
+              "baths": 2.5,
+              "facts": {
+                "Year Built": "2020"
+              },
+              "image": "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_1.jpg",
+              "price": "$739,900",
+              "title": "2214 Settlers Ridge Trail",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98998565/Twin-Falls/2214-Settlers-Ridge-Trail/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Modern perfection, inside & out! Designer's Dream Home. Custom built in 2020 on a large and beautifully landscaped, 0.357 acre corner lot. Located in a prime NW Twin Falls location just steps away from the Snake River Canyon Rim trail system & just minutes from shopping, parks and medical facilities. It is luxurious and has all the bells and whistles you are looking for. Impeccable condition, looks brand new. Everything in this home is a showstopper. Large and open greatroom with tall windows and impressive electric fireplace. Kitchen has quartz counters, Bosch appliances and tons of storage cabinets. Huge walk in pantry space. Separate tub and walk in tile shower in the master suite with a good sized walk in closet. 4 Beds 2.5 Baths + Front Sitting Room / Piano Room. Single level home with 2816 sq ft of living space. 3 car garage on the side of the home. Enjoy the outdoor living space, with established backyard landscaping and a large covered patio. The home, the yard, the location are all WOW! Pin this home with a designer's touch and setup a private tour of this luxury Twin Falls home for sale today! #twinfalls #twinfallsidaho #twinfallshomeforsale #twinfallsidahohomeforsale",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-83ebe7",
+              "tag": "",
+              "beds": 0,
+              "sqft": "",
+              "baths": 0,
+              "facts": {},
+              "image": "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_1.jpg",
+              "price": "$130,000",
+              "title": "1280 E 4340 N",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_5.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98997802/Buhl/1280-E-4340-N/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Yes this parcel comes with ground water rights - Irrigate up to 4 acres through the existing well from April-October. Easement access runs through neighboring property, shut all cattle gates and be respectful of their land. GPS coordinates are 42.627592, -114.796668. LOOK AT THE PHOTOS FOR DIRECTIONS TO THE CORRECT ACCESS ROAD. Don't get yourself in trouble. Don't knock on neighboring homes. Address is county approx, not accurate. From Hwy 30, turn North down Carter Pack Rd (1325 E). At Bartlett corner where Carter Pack continues as 4325 N, you'll get off the pavement and continue on 1325 E on a dirt road that goes uphill. Access road is on the right side, look for the machetes on the fence post. Go through the first cattle gate. There's another gate and a ditch before you're on the property. There is an existing well (needs new pump) and septic tank. Ask ME or your agent for specifics. This is probably as good a deal as you'll ever find on land with water rights! Buyer to verify all info.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-myc6uh",
+              "tag": "",
+              "beds": 4,
+              "sqft": "3,223",
+              "baths": 4,
+              "facts": {
+                "Year Built": "1963"
+              },
+              "image": "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_1.jpg",
+              "price": "$415,000",
+              "title": "1228 Evergreen Dr",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98995647/Twin-Falls/1228-Evergreen-Dr/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Some homes are simply lived in, this one is where memories are made. From summer afternoons spent lounging by the in-ground pool to evenings gathered around one of three fireplaces, this remarkable 3,223-square-foot mid-century home was designed for bringing people together. Situated on a beautifully landscaped .257-acre lot, the inviting front yard even features a charming tree swing that perfectly captures the warmth and character found throughout the property. Inside, you’ll discover 4 bedrooms, 4 bathrooms and an abundance of flexible living spaces that make entertaining effortless. Whether you’re hosting holiday celebrations, game nights, movie marathons, or quiet evenings with family, there’s room for everyone to spread out and feel at home. Expansive windows fill the home with natural light, highlighting the timeless mid-century architecture and welcoming atmosphere. Three fireplaces, including two wood-burning fireplaces and one gas fireplace, create cozy gathering spaces throughout every season. The spacious kitchen offers generous workspace and flows seamlessly into the home’s multiple living and dining areas, making it ideal for entertaining on any scale. 3 of the bathrooms offer step in showers. Located near schools, shopping and everyday conveniences, this is more than just a beautiful home, it’s the one everyone will want to gather at. Setup a private showing today.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-pc3ay3",
+              "tag": "",
+              "beds": 3,
+              "sqft": "1,810",
+              "baths": 2.5,
+              "facts": {
+                "Year Built": "1981"
+              },
+              "image": "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_1.jpg",
+              "price": "$347,000",
+              "title": "2345 Longbow Dr",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98995555/Twin-Falls/2345-Longbow-Dr/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Welcome home to this beautifully maintained property. Perfectly situated on a spacious corner lot with mature landscaping, outstanding curb appeal and convenient RV parking! Nestled on a generous .239-acre lot, this inviting 1,810-square-foot home offers the ideal blend of comfort, space, and functionality. Inside, you’ll find 3 bedrooms, 2.5 bathrooms and multiple living areas designed to fit every lifestyle. Cozy up by the fireplace in the welcoming family room, entertain guests in the formal living room, or host memorable dinners in the elegant formal dining room. The kitchen is ready for everyday living with updated appliances, granite countertops, abundant cabinet space, and plenty of room to prepare your favorite meals. Major updates include a new roof installed in 2023, providing added peace of mind for years to come. Step outside to enjoy the beautifully established landscaping, ample yard space for outdoor activities and the convenience of RV parking for your toys, trailer, or extra vehicles. Located within the Pillar Falls Elementary School attendance area and close to parks, this move-in-ready home offers the perfect combination of location and livability. Don’t miss your opportunity to own this exceptional property. Schedule your private showing today before it’s gone!",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-p41v10",
+              "tag": "",
+              "beds": 2,
+              "sqft": "680",
+              "baths": 1,
+              "facts": {
+                "Year Built": "1914"
+              },
+              "image": "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_1.jpg",
+              "price": "$189,000",
+              "title": "201 Locust Street South",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98995168/Twin-Falls/201-Locust-Street-South/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Great property with a 2 bedroom home. Use home as is or as a rental. Home is a cute starter home with a Stove and a refrigerator, Separate laundry room, small yard and large gravel area. Home has a unfinished basement. Several potential uses. Zoned Industrial 2 which permits the lot to be used for many potential uses. Manufacturing, Office or retail. Parking on lot with plenty of solid metal fencing. 1 car detached garage with small work shop. Room for R.V. and boat parking.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-vxygnf",
+              "tag": "",
+              "beds": 4,
+              "sqft": "1,644",
+              "baths": 2,
+              "facts": {
+                "Year Built": "2022"
+              },
+              "image": "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_1.jpg",
+              "price": "$412,000",
+              "title": "919 Gem Ave",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98993443/Kimberly/919-Gem-Ave/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Newer home with 1644 sq ft of open concept living. Split floor plan with 4 beds, 2 baths, & 2 car garage. Beautiful Granite countertop. LVP throughout with carpet in bedrooms and closets. LG Stainless Steel appliances including French door refrigerator, electric smooth top stove with convection & air-fry oven, dishwasher, microwave, disposal, & water softener. Blinds & curtains already installed. Move in ready. Fully landscaped, with automatic sprinkler system, fenced back yard & RV parking. Move in ready.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-f56ou1",
+              "tag": "",
+              "beds": 0,
+              "sqft": "2,194",
+              "baths": 0,
+              "facts": {},
+              "image": "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_1.jpg",
+              "price": "$36,201",
+              "title": "1290 N College Rd",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98990483/Twin-Falls/1290-N-College-Rd/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Premium high-traffic location available September 2026 for a commercial/medical office tenant. Prominent commercial signage location available on both the building and separate sign on N. College Rd. This 2,194 sq ft office suite includes 9 private offices, a central reception and work station area, two ADA compliant bathrooms, and a breakroom with a kitchenette. Office is located in a 3 unit building (long term adjacent tenants include a Beauty Salon and a Real Estate Brokerage.)",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-8esgov",
+              "tag": "",
+              "beds": 4,
+              "sqft": "1,923",
+              "baths": 2,
+              "facts": {
+                "Year Built": "2007"
+              },
+              "image": "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_1.jpg",
+              "price": "$587,000",
+              "title": "4531 N 1250 E",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "ownership": "own",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98990243/Buhl/4531-N-1250-E/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498032284,
+              "nextSyncAt": 1791505232284,
+              "description": "Some views never get old. Perched on more than 6 acres overlooking the breathtaking Snake River Canyon, this extraordinary property offers the kind of panoramic scenery most people only experience on vacation. If you've been searching for privacy, space, and unforgettable Idaho sunsets, you've just found it. This beautifully designed single-level home offers 1,923 square feet with 4 bedrooms, a dedicated office, 2 bathrooms and a layout that was built to showcase the incredible surroundings. The vaulted great room features rich bamboo flooring, a cozy fireplace and an impressive wall of windows that frames the canyon like a living work of art. The spacious kitchen comes fully equipped with all major appliances, including a refrigerator and double ovens, making it perfect for entertaining family and friends. Escape to the private primary suite featuring direct access to the covered patio, dual vanities, a relaxing soaker tub, walk-in shower, and the same spectacular views that make this property so special. A 3-car garage provides plenty of room for vehicles, toys, and outdoor gear. Whether you're enjoying your morning coffee as the sun rises over the canyon or ending the day beneath Idaho's colorful skies, this isn't simply a home, it's a front-row seat to one of the most breathtaking landscapes in the Northwest. Schedule your private showing today and experience it for yourself.",
+              "neighborhood": "",
+              "syncFailures": 0,
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "sourceArchived": false,
+              "detailAttemptAt": 1791498032284,
+              "detailsComplete": true,
+              "lastRefreshedAt": 1791498032284,
+              "lastSyncAttemptAt": 1791498032284,
+              "sourceMissingCount": 0
+            },
+            {
+              "id": "listing-g4s559",
+              "tag": "",
+              "beds": 3,
+              "sqft": "2,028",
+              "baths": 3,
+              "image": "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_1.jpg",
+              "price": "$619,000",
+              "title": "548 Canyon Falls Dr",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98990126/Twin-Falls/548-Canyon-Falls-Dr/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498036167,
+              "nextSyncAt": 1791505236167,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791498036167,
+              "lastSyncAttemptAt": 1791498036167,
+              "sourceMissingCount": 0,
+              "description": "2 master suites and the 3rd bedroom has an attached bathroom! This brand new built home is a 3 bed, 3 bath 2028 sq ft single level home in the gated community of the Residences at Breckenridge. Beautiful kitchen with quart countertops, lots of storage, refrigerator, oven with gas cooktop, dishwasher & microwave. Vaulted ceilings in the greatroom with a gas fireplace. Lots of natural light. In master bathrooms you will find dual vanities and walk in showers. One of the mater bathrooms also has a standalone soaker tub. Covered back patio for enjoying the Idaho summers. Front yard is landscaped with sod and sprinklers and backyard is seeded with sprinklers. Close to the snake river canyon and walking paths. Seller financing available for the right buyer. Setup a showing of this super brand new construction built by Powlus Construction Inc, today!",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "2026"
+              },
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "detailAttemptAt": 1791498036167,
+              "ownership": "own"
+            },
+            {
+              "id": "listing-yvvvqs",
+              "tag": "",
+              "beds": 4,
+              "sqft": "1,657",
+              "baths": 2,
+              "image": "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_1.jpg",
+              "price": "$420,000",
+              "title": "3125 Orion Ave",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98986471/Twin-Falls/3125-Orion-Ave/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498036167,
+              "nextSyncAt": 1791505236167,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791498036167,
+              "lastSyncAttemptAt": 1791498036167,
+              "sourceMissingCount": 0,
+              "description": "Improved Price. This beautiful 4-bedroom, 2-bath home offers 1,657 sq ft of thoughtfully-designed living space on a .17-acre lot. The open-concept layout features a desirable split-bedroom floor plan and upgraded LVP flooring throughout the main living areas, complemented by cozy carpet in the bedrooms. The kitchen has stunning custom black walnut cabinets, granite countertops, tasteful tile backsplashes, undercabinet lighting, full Samsung appliance package, including a french door refridgerator, and an overall upscale finish that’s hard to match. This home delivers on curb appeal with Accend Siding and Shakes in the front, vinyl siding on sides and back, full raingutters, and highlighted in stone. A completely finished 2-car garage with enclosed furnace room and insulated garage doors. Fully fenced and ready for outdoor fun with sprinklers, curbing, sodded lawn in front & seeded lawn in the back. It has a covered back patio, perfect for relaxing evenings. Additional perks include insulated interior walls and LED can-lighting throughout.",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "2026"
+              },
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "detailAttemptAt": 1791498036167,
+              "ownership": "own"
+            },
+            {
+              "id": "listing-1meixq0",
+              "tag": "",
+              "beds": 4,
+              "sqft": "1,307",
+              "baths": 1,
+              "image": "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_1.jpg",
+              "price": "$253,000",
+              "title": "1501 21st Street",
+              "hidden": false,
+              "images": [
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_1.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_2.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_3.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_4.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_5.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_6.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_7.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_8.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_9.jpg",
+                "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_10.jpg"
+              ],
+              "sourceId": "source-1oi2m45",
+              "elizaTake": "",
+              "sourceUrl": "https://magicvalley.homes/listing/imls/98984376/Heyburn/1501-21st-Street/",
+              "syncState": "status-unconfirmed",
+              "updatedAt": 1791498036167,
+              "nextSyncAt": 1791505236167,
+              "neighborhood": "",
+              "syncFailures": 0,
+              "sourceArchived": false,
+              "lastRefreshedAt": 1791498036167,
+              "lastSyncAttemptAt": 1791498036167,
+              "sourceMissingCount": 0,
+              "description": "This newly renovated 4-bedroom home in Heyburn, Idaho offers 1,307 square feet of comfortable living space and is completely move-in ready. Fresh updates throughout give the home a clean, modern look and feel. With four bedrooms, there is plenty of space for a growing family, guests, or a home office. Located in a quiet community with nearby amenities, this home is a great opportunity at a great value. Schedule your showing today!",
+              "detailsComplete": true,
+              "facts": {
+                "Year Built": "1957"
+              },
+              "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+              "detailAttemptAt": 1791498036167,
+              "ownership": "own"
+            }
+          ],
+          "timings": {
+            "details": 1582,
+            "total": 1636
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 433,
+      "totalMs": 8788,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Iker Serna",
+          "host": "magicvalley.homes",
+          "at": 171
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 171
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 6,
+          "at": 450
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 6,
+          "at": 455
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 6,
+          "at": 618
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 6,
+          "at": 1299
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 6,
+          "at": 1316
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 6,
+          "at": 1776
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 6,
+          "total": 6,
+          "at": 1928
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 6,
+          "total": 6,
+          "at": 2023
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": true,
+          "images": 28,
+          "sections": 8,
+          "at": 2025
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 2025
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 2040
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 2040
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 2040
+        },
+        {
+          "kind": "profile",
+          "name": "Iker Serna",
+          "city": "Burley, ID",
+          "at": 8191
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 8191
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 1573,
+            "design": 1854,
+            "site": 2040,
+            "profile": 6151,
+            "total": 8191
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 7274,
+            "outputTokens": 1031,
+            "estimatedUsd": 0.022796,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.022796
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 7274,
+                "cachedInputTokens": 0,
+                "outputTokens": 1031,
+                "estimatedUsd": 0.022796,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "Iker Serna",
+              "confidence": 1,
+              "locator": "PAGE DETAILS title, meta, profile and about page repeated"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "Real Estate Agent",
+              "confidence": 0.95,
+              "locator": "about page, Home page: 'dedicated and experienced real estate agent'"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "Burley, ID",
+              "confidence": 1,
+              "locator": "contact details and address on contact/about pages"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "208-312-8950",
+              "confidence": 1,
+              "locator": "phone links, details footer, contact and about pages"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "iker@magicvalley.homes",
+              "confidence": 1,
+              "locator": "contact page structured data and mailto link"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "Magic Valley Homes",
+              "confidence": 1,
+              "locator": "site header, title, repeated references"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "Super Realty of Idaho",
+              "confidence": 0.8,
+              "locator": "'Super Realty of Idaho' in top menu and page navigation"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "value": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg",
+              "confidence": 0.7,
+              "locator": "images (portrait, 800x1000)"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Your Southern Idaho Real Estate Expert",
+            "welcomeNote": "Welcome! I'm Iker Serna, a proud Southern Idaho real estate agent committed to providing you with experienced guidance and a personalized approach to buying or selling your home.",
+            "tagline": "Experience. Integrity. Trusted Local Service.",
+            "aboutParagraph": "With over a decade of dedicated experience in the Southern Idaho real estate market, I take great pride in offering a deeply personalized service for both buyers and sellers. My approach pairs local market insight with a genuine passion for helping you achieve your real estate goals—whether you're buying your first home, moving up, or planning a seamless sale. I’m known for my professionalism, integrity, and attention to detail, striving to make every step of your transaction smooth and rewarding.",
+            "conciergeLine": "Not sure if it’s the right time or the right move? Let’s talk about your unique needs, and I’ll help you navigate your options with honesty and expert",
+            "contactLine": "Ready to make your move in Southern Idaho? Call or email me today—I'm here to guide you, every step of the way.",
+            "tone": "Warm, welcoming, and focused on personal connection and knowledgeable local service.",
+            "layoutId": "warm-concierge",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "b753e376-cad8-4e57-b7b5-39672b9e8002"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://magicvalley.homes/",
+              "analyzedAt": 1791498032814,
+              "logoUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png",
+              "heroImageUrl": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600",
+              "portraitImageUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg",
+              "introImage": {
+                "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white-1.svg",
+                "fit": "contain",
+                "role": "article"
+              },
+              "heroTitle": "It's YOUR Move",
+              "heroSubtitle": "Discover Southern Idaho real estate with expert Iker Serna. Over a decade of experience, millions closed, and personalized service for buyers and sellers. Explore local communities today.",
+              "sections": [
+                {
+                  "kind": "about",
+                  "title": "Real Estate Expert",
+                  "body": "Iker Serna is a dedicated and experienced real estate agent specializing in the Southern Idaho region. With a deep understanding of the local market and a passion for helping clients achieve their real estate goals, Iker has become a trusted advisor for both buyers and sellers. With over a decade of experience in sales, Iker has built a reputation for his exceptional professionalism, integrity, and personalized service.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Mini-Cassia",
+                  "body": "Learn More About Mini-Cassia MED. selling price Median Days On Market Active Listings Recent Sales",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "testimonials",
+                  "title": "The next step?",
+                  "body": "Not sure if now's the right time to buy or sell? Need a reliable contractor? I would love to get to know more about you and your needs! Feel free to use any of the options here to get in contact with me! Let's Talk About Your Goals Share My QR &times; Success! We strive to provide the content you need in the format you require.",
+                  "intent": "testimonials",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Around The Area",
+                  "body": "Browse through the top rated businesses that Twin Falls has to offer! Dine Drink Shop Perk Sweat Groom Wag",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Buying Experience",
+                  "body": "I am here to provide you with personalized service and help you achieve your home-buying goals. I take the time to get to know you and your needs so that I can find the perfect home for you. I am dedicated to going above and beyond to ensure that your home-buying experience is smooth and stress-free. Buyer Insights I possess extensive knowledge of real estate markets, providing you with insights into various neighborhoods and market trends to make an informed decision about your new home.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Thanks for requesting a free home valuation!",
+                  "body": "Please allow up to 48hrs for us to research and deliver your personal comprehensive analysis. If you have any questions in the meantime, feel free to give us a call or drop us a note. Estimate New Address",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Success Stories",
+                  "body": "\"Iker is amazing! I cannot say enough good things about him. He helped us buy and sell a home. Even in this tough market Iker was able to sell our house in less than 45 days. He is very knowledgeable and was extremely helpful with any questions we … had. He went the extra mile to make sure everything went as smoothly as possible for us throughout the entire process. We would definitely use him again in the future.\" ashley02185 Reviews on Zillow \"Iker was an absolute professional.",
+                  "imageUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/profile.png",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Handpicked Listings",
+                  "body": "View all $415,000 3444 N 4500 E Murtaugh, ID 4 Beds 2 Baths 1,856 Sqft $225,000 192 W Caswell Twin Falls, ID 2 Beds 2 Baths 1,144 Sqft $425,000 930 Tunnel Street Twin Falls, ID 3 Beds 2 Baths 1,607 Sqft $425,000 946 Tunnel Street Twin Falls, ID 4 Beds 2 Baths 1,657 Sqft $739,900 2214 Settlers Ridge Trail Twin Falls, ID 4 Beds 3 Baths 2,816 Sqft $130,000 1280 E 4340 N Buhl, ID 4."
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png",
+                  "variants": [
+                    {
+                      "url": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png"
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png",
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "portrait": {
+                  "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg",
+                  "variants": [
+                    {
+                      "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg"
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg",
+                  "width": 800,
+                  "height": 1000,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 350,
+                  "upscaleRatio": 0.7,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "hero": {
+                  "sourceUrl": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600",
+                  "variants": [
+                    {
+                      "url": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600"
+                    }
+                  ],
+                  "role": "hero",
+                  "selectedUrl": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600",
+                  "destination": "hero",
+                  "fit": "cover",
+                  "renderedWidth": 390,
+                  "renderedHeight": 220,
+                  "upscaleRatio": 1,
+                  "crop": "modest",
+                  "rank": 3
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white-1.svg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white-1.svg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white-1.svg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/55231-christmas-wreath-on-front-door-of-house-2023-11-27-04-56-35-utc-1.jpg",
+                    "width": 800,
+                    "height": 1000,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 350,
+                    "upscaleRatio": 0.7,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/bedroom-with-a-sofa-2023-11-27-05-31-42-utc-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/bedroom-with-a-sofa-2023-11-27-05-31-42-utc-1.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/bedroom-with-a-sofa-2023-11-27-05-31-42-utc-1.jpg",
+                    "width": 800,
+                    "height": 1000,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 350,
+                    "upscaleRatio": 0.7,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/bright-kitchen-in-the-scandinavian-style-with-dish-2024-12-04-10-32-49-utc-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/bright-kitchen-in-the-scandinavian-style-with-dish-2024-12-04-10-32-49-utc-1.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/bright-kitchen-in-the-scandinavian-style-with-dish-2024-12-04-10-32-49-utc-1.jpg",
+                    "width": 800,
+                    "height": 1000,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 350,
+                    "upscaleRatio": 0.7,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/20200804-da-bridge.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/20200804-da-bridge.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/20200804-da-bridge.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/20250314-homes-in-burley.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/20250314-homes-in-burley.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/20250314-homes-in-burley.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/Rupert-2048x2048.fit.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/Rupert-2048x2048.fit.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/Rupert-2048x2048.fit.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/heyburn.png",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/heyburn.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/03/heyburn.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/my-family-are-all-shareholders-in-my-happiness-sh-2023-11-27-04-50-37-utc-1.jpg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/my-family-are-all-shareholders-in-my-happiness-sh-2023-11-27-04-50-37-utc-1.jpg"
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/my-family-are-all-shareholders-in-my-happiness-sh-2023-11-27-04-50-37-utc-1.jpg",
+                    "width": 800,
+                    "height": 929,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 325,
+                    "upscaleRatio": 0.7,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png",
+                    "variants": [
+                      {
+                        "url": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/source/zillow-small.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/profile.png",
+                    "variants": [
+                      {
+                        "url": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/profile.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://magicvalley.homes/wp-content/plugins/agentfire-testimonials-v2/images/profile.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white.svg",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white.svg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/mvh-white.svg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/images-1.max.png",
+                    "variants": [
+                      {
+                        "url": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/images-1.max.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.thesparksite.com/uploads/sites/5778/2025/01/images-1.max.png",
+                    "width": 247,
+                    "height": 80,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 167,
+                    "renderedHeight": 54,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/2f776a6e54bd82be1ec6478f73660e70/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/41ab65e21fcf69f02e0de70b9e817e39/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_1.jpg?width=600",
+                    "variants": [
+                      {
+                        "url": "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_1.jpg?width=600"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://listing-images.homejunction.com/imls/92d0a96ee09ae45637669b3270eedf55/photo_1.jpg?width=600",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#fff2aa",
+                "background": "#ffffff",
+                "ink": "#15191d",
+                "panel": "#fffdf9",
+                "muted": "#15191d",
+                "fontFamily": "Inter",
+                "headingFontFamily": "Inter",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 0,
+                "headingSize": 52,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#fff2aa",
+                "background": "#ffffff",
+                "ink": "#15191d",
+                "panel": "#fffdf9",
+                "muted": "#15191d",
+                "fontFamily": "Inter",
+                "headingFontFamily": "Inter",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://static.thesparksite.com/wp-content/mu-plugins/agentfire-shared-library/css/bundle/bundle.min.css?ver=1.3.13",
+                  "https://static.thesparksite.com/wp-content/mu-plugins/agentfire-shared-library/bower_components/animate.css/animate.css",
+                  "https://magicvalley.homes/scss/plugin/gdpr/client.css?ver=1.0.1&rev=13.675",
+                  "https://magicvalley.homes/scss/plugin/guide-covers/client.css?ver=1.3.3&rev=13.675",
+                  "https://magicvalley.homes/scss/plugin/home-valuation/client.css?ver=3.3.59&rev=13.675",
+                  "https://magicvalley.homes/scss/plugin/lead-form/client.css?ver=1.3.77&rev=13.675"
+                ],
+                "colors": [
+                  "#0b0b0b",
+                  "#cccccc",
+                  "#ffffff",
+                  "#333333",
+                  "#3f3f3f",
+                  "#000000",
+                  "#444444",
+                  "#bdbdbd",
+                  "#f3f3f3",
+                  "#eeeeee",
+                  "#666666",
+                  "#e0e0e0",
+                  "#f7f7f7",
+                  "#f1f1f1",
+                  "#bbbbbb",
+                  "#ededed",
+                  "#dedede",
+                  "#fff2aa",
+                  "#c19163",
+                  "#f4f4f4",
+                  "#b4b3b3",
+                  "#d7d7d7",
+                  "#999999",
+                  "#aaaaaa",
+                  "#4c4c4c",
+                  "#0f85d1",
+                  "#0c6aa7",
+                  "#b50a1b",
+                  "#0074e4",
+                  "#74c005"
+                ],
+                "fonts": [
+                  "Arial",
+                  "FontAwesome",
+                  "Museo-Slab",
+                  "fontawesome",
+                  "sans-serif",
+                  "Inter",
+                  "Roboto"
+                ],
+                "routing": [
+                  {
+                    "source": "Privacy Policy \",\"oauth2_initial_urls\":{\"facebook\":\"https:\\/\\/www.facebook.com\\/",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "menu",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Work with Me",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "For Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "For Sellers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "About Me",
+                    "intent": "profile",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Community Guides",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Neighborhood Quiz",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Dashboard",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Success Stories",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "VIP Home Search",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sellers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "What’s My Home Worth?",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Mortgage Calculator",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "131 Dennis Cir, Burley, 83318 ID",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Explore the area",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "scroll to discover",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "View all",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Explore Twin Falls",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Explore Mini-Cassia",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Explore Rupert",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Explore Heyburn",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Why Iker?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Why working with the right agent matter!",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Matters!",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Check out my Instafeed!",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Real Estate Expert",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Buying",
+                    "intent": "services",
+                    "canonical": "card:services",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Selling",
+                    "intent": "services",
+                    "canonical": "card:services",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Success Stories",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "The next step?",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://magicvalley.homes/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://magicvalley.homes/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "b753e376-cad8-4e57-b7b5-39672b9e8002",
+              "kind": "url",
+              "label": "magicvalley.homes",
+              "uri": "https://magicvalley.homes/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "magic-valley-homes-00-url.png",
+    "magic-valley-homes-01-review.png",
+    "magic-valley-homes-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3757,
+  "reviewMs": 9357,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 15 active listings\nReading Iker Serna\nMatching your website’s design and imagery\nRead full details for all 15 listings\nRead 6 linked pages\nSaved 15 listings\nIdentified your profile photo and logo\nSorted 28 website images by role\nWriting your profile and app copy\nFound Iker Serna · Burley, ID",
+  "reviewText": "Back\nAPP BUILDER\nmagicvalley.homes\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nBURLEY, ID\nIt's YOUR Move\nDiscover Southern Idaho real estate with expert Iker Serna. Over a decade of experience, millions closed, and personalized service for buyers and sellers. Explore local communities today.\nView listings\nABOUT\nReal Estate Expert\nIker Serna is a dedicated and experienced real estate agent specializing in the Southern Idaho region. With a deep understanding of the local market and a passion for helping clients achieve their real estate goals, Iker has become a trusted advisor for both buyers and sellers. With over a decade of experience in sales, Iker has built a reputation for his exceptional professionalism, integrity, and personalized service.\nTHE AREA\nMini-Cassia\nLearn More About Mini-Cassia MED. selling price Median Days On Market Active Listings Recent Sales\nCLIENTS\nThe next step?\nNot sure if now's the right time to buy or sell? Need a reliable contractor? I would love to get to know more about you and your needs! Feel free to use any of the options here to get in contact with me! Let's Talk About Your Goals Share My QR &times; Success! We strive to provide the content you need in the format you require.\nTHE AREA\nAround The Area\nBrowse through the top rated businesses that Twin Falls has to offer! Dine Drink Shop Perk Sweat Groom Wag\nSERVICES\nBuying Experience\nI am here to provide you with personalized service and help you achieve your home-buying goals. I take the time to get to know you and your needs so that I can find the perfect home for you. I am dedicated to going above and beyond to ensure that your home-buying experience is smooth and stress-free. Buyer Insights I possess extensive knowledge of real estate markets, providing you with insights into various neighborhoods and market trends to make an informed decision about your new home.\nSERVICES\nThanks for requesting a free home valuation!\nPlease allow up to 48hrs for us to research and deliver your personal comprehensive analysis. If you have any questions in the meantime, feel free to give us a call or drop us a note. Estimate New Address\nHandpicked Listings\n$415,000\n3444 N 4500 E\n4 beds · 2 baths · 1,856\n$225,000\n192 W Caswell\n2 beds · 2 baths · 1,144\n$425,000\n930 Tunnel Street\n3 beds · 2 baths · 1,607\n$425,000\n946 Tunnel Street\n4 beds · 2 baths · 1,657\n$739,900\n2214 Settlers Ridge Trail\n4 beds · 2.5 baths · 2,816\n$130,000\n1280 E 4340 N\n$415,000\n1228 Evergreen Dr\n4 beds · 4 baths · 3,223\n$347,000\n2345 Longbow Dr\n3 beds · 2.5 baths · 1,810\n$189,000\n201 Locust Street South\n2 beds · 1 baths · 680\n$412,000\n919 Gem Ave\n4 beds · 2 baths · 1,644\n208-312-8950\niker@magicvalley.homes\nSuper Realty of Idaho\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour Southern Idaho Real Estate Expert\nTry another opening line\nYOUR INTRODUCTION\nWith over a decade of dedicated experience in the Southern Idaho real estate market, I take great pride in offering a deeply personalized service for both buyers and sellers. My approach pairs local market insight with a genuine passion for helping you achieve your real estate goals—whether you're buying your first home, moving up, or planning a seamless sale. I’m known for my professionalism, integrity, and attention to detail, striving to make every step of your transaction smooth and rewarding.\nTry another introduction\n15 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Super Realty of Idaho\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nBURLEY, ID\nIt's YOUR Move\nDiscover Southern Idaho real estate with expert Iker Serna. Over a decade of experience, millions closed, and personalized service for buyers and sellers. Explore local communities today.\nView listings\nABOUT\nReal Estate Expert\nIker Serna is a dedicated and experienced real estate agent specializing in the Southern Idaho region. With a deep understanding of the local market and a passion for helping clients achieve their real estate goals, Iker has become a trusted advisor for both buyers and sellers. With over a decade of experience in sales, Iker has built a reputation for his exceptional professionalism, integrity, and personalized service.\nTHE AREA\nMini-Cassia\nLearn More About Mini-Cassia MED. selling price Median Days On Market Active Listings Recent Sales\nCLIENTS\nThe next step?\nNot sure if now's the right time to buy or sell? Need a reliable contractor? I would love to get to know more about you and your needs! Feel free to use any of the options here to get in contact with me! Let's Talk About Your Goals Share My QR &times; Success! We strive to provide the content you need in the format you require.\nTHE AREA\nAround The Area\nBrowse through the top rated businesses that Twin Falls has to offer! Dine Drink Shop Perk Sweat Groom Wag\nSERVICES\nBuying Experience\nI am here to provide you with personalized service and help you achieve your home-buying goals. I take the time to get to know you and your needs so that I can find the perfect home for you. I am dedicated to going above and beyond to ensure that your home-buying experience is smooth and stress-free. Buyer Insights I possess extensive knowledge of real estate markets, providing you with insights into various neighborhoods and market trends to make an informed decision about your new home.\nSERVICES\nThanks for requesting a free home valuation!\nPlease allow up to 48hrs for us to research and deliver your personal comprehensive analysis. If you have any questions in the meantime, feel free to give us a call or drop us a note. Estimate New Address\nHandpicked Listings\n$415,000\n3444 N 4500 E\n4 beds · 2 baths · 1,856\n$225,000\n192 W Caswell\n2 beds · 2 baths · 1,144\n$425,000\n930 Tunnel Street\n3 beds · 2 baths · 1,607\n$425,000\n946 Tunnel Street\n4 beds · 2 baths · 1,657\n$739,900\n2214 Settlers Ridge Trail\n4 beds · 2.5 baths · 2,816\n$130,000\n1280 E 4340 N\n$415,000\n1228 Evergreen Dr\n4 beds · 4 baths · 3,223\n$347,000\n2345 Longbow Dr\n3 beds · 2.5 baths · 1,810\n$189,000\n201 Locust Street South\n2 beds · 1 baths · 680\n$412,000\n919 Gem Ave\n4 beds · 2 baths · 1,644\n208-312-8950\niker@magicvalley.homes\nSuper Realty of Idaho\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all LISTING 3444 N 4500 E $415,000 4 2 1,856 LISTING 192 W Caswell $225,000 2 2 1,144 LISTING 930 Tunnel Street $425,000 3 2 1,607 LISTING 946 Tunn",
+        "textLength": 759,
+        "stillHome": false
+      },
+      {
+        "label": "3444 N 4500 E",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 3444 N 4500 E $415,000 4 beds · 2 baths 1,856 Country charm meets modern comfort! Idaho acreage property! If you've been dreaming of a place where there's room to breat",
+        "textLength": 1622,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "192 W Caswell",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 192 W Caswell $225,000 2 beds · 2 baths 1,144 Affordable, centrally located, and ready for its next chapter! This 2-bedroom, 2-bath manufactured home offers 1,144 sq ft",
+        "textLength": 1252,
+        "stillHome": false
+      },
+      {
+        "label": "930 Tunnel Street",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 930 Tunnel Street $425,000 3 beds · 2 baths 1,607 This beautiful 3-bedroom, 2-bath home offers 1,607 sq ft of thoughtfully-designed living space on a .17-acre lot. The ",
+        "textLength": 1290,
+        "stillHome": false
+      },
+      {
+        "label": "946 Tunnel Street",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 946 Tunnel Street $425,000 4 beds · 2 baths 1,657 This beautiful 4-bedroom, 2-bath home offers 1,657 sq ft of thoughtfully-designed living space on a .17-acre lot. The ",
+        "textLength": 1258,
+        "stillHome": false
+      },
+      {
+        "label": "2214 Settlers Ridge Trail",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 2214 Settlers Ridge Trail $739,900 4 beds · 2.5 baths 2,816 Modern perfection, inside & out! Designer's Dream Home. Custom built in 2020 on a large and beautifully land",
+        "textLength": 1475,
+        "stillHome": false
+      },
+      {
+        "label": "1280 E 4340 N",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 1280 E 4340 N $130,000 Yes this parcel comes with ground water rights - Irrigate up to 4 acres through the existing well from April-October. Easement access runs through",
+        "textLength": 1228,
+        "stillHome": false
+      },
+      {
+        "label": "1228 Evergreen Dr",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 1228 Evergreen Dr $415,000 4 beds · 4 baths 3,223 Some homes are simply lived in, this one is where memories are made. From summer afternoons spent lounging by the in-g",
+        "textLength": 1671,
+        "stillHome": false
+      },
+      {
+        "label": "2345 Longbow Dr",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 2345 Longbow Dr $347,000 3 beds · 2.5 baths 1,810 Welcome home to this beautifully maintained property. Perfectly situated on a spacious corner lot with mature landscap",
+        "textLength": 1570,
+        "stillHome": false
+      },
+      {
+        "label": "201 Locust Street South",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 201 Locust Street South $189,000 2 beds · 1 bath 680 Great property with a 2 bedroom home. Use home as is or as a rental. Home is a cute starter home with a Stove and a",
+        "textLength": 751,
+        "stillHome": false
+      },
+      {
+        "label": "919 Gem Ave",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 10 photos 919 Gem Ave $412,000 4 beds · 2 baths 1,644 Newer home with 1644 sq ft of open concept living. Split floor plan with 4 beds, 2 baths, & 2 car garage. Beautiful Granite ",
+        "textLength": 774,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app BURLEY, ID It's YOUR Move Discover Southern Idaho real estate with expert Iker Serna. Over a decade of experience, millions closed, and personalized service for buyers and sellers. Explore local comm",
+        "textLength": 2684,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all LISTING 3444 N 4500 E $415,000 4 2 1,856 LISTING 192 W Caswell $225,000 2 2 1,144 LISTING 930 Tunnel Street $425,000 3 2 1,607 LISTING 946 Tunn",
+        "textLength": 759,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "jobs",
+      "attempted": 3
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "3444 N 4500 E",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/e7476fbb81b6cdd5cf0d6916aa0795c8/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "192 W Caswell",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/af4f4de66ffb0fdd7e2210902d6a3f51/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 2048,
+        "height": 1366,
+        "type": "jpg",
+        "bytes": 279628
+      }
+    },
+    {
+      "title": "930 Tunnel Street",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/451bc19a7e38bd4a1916af2f3df204f6/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "946 Tunnel Street",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/1a587805c6d9331dded55d3f84d01af8/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 3072,
+        "height": 2304,
+        "type": "jpg",
+        "bytes": 753089
+      }
+    },
+    {
+      "title": "2214 Settlers Ridge Trail",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/620097352fc97507c8d8c279466b3955/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "1280 E 4340 N",
+      "photos": 5,
+      "first": "https://listing-images.homejunction.com/imls/2531f4b7a463fa9cdbaf8bb017fd5057/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 3072,
+        "height": 2304,
+        "type": "jpg",
+        "bytes": 865690
+      }
+    },
+    {
+      "title": "1228 Evergreen Dr",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/b23874f2a53e0f88a0d9725196ed35b1/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "2345 Longbow Dr",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/3b85a5e010865c83ead466b1319c9739/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 2048,
+        "height": 1365,
+        "type": "jpg",
+        "bytes": 669194
+      }
+    },
+    {
+      "title": "201 Locust Street South",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/10c3734f50a0e96f7356d631aa890df7/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "919 Gem Ave",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/4c1550b032dfa2ea39a7dc6823948337/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 3072,
+        "height": 2304,
+        "type": "jpg",
+        "bytes": 706768
+      }
+    },
+    {
+      "title": "1290 N College Rd",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/c30c13c40367ee9e31e40444634c4d39/photo_1.jpg",
+      "size": {
+        "error": "unsupported file type: undefined"
+      }
+    },
+    {
+      "title": "4531 N 1250 E",
+      "photos": 10,
+      "first": "https://listing-images.homejunction.com/imls/7d431c47b26b963ad29cf522acc88367/photo_1.jpg",
+      "size": {
+        "status": 200,
+        "width": 2048,
+        "height": 1365,
+        "type": "jpg",
+        "bytes": 518636
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://magicvalley.homes/",
+      "status": 403,
+      "finalUrl": "https://magicvalley.homes/",
+      "title": "Just a moment...",
+      "textLength": 74,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Ray ID: a4788995fdf450a1 • Contact support@agentfire.com for any questions",
+      "challenge": true,
+      "screenshot": "magic-valley-homes-source-0.png"
+    }
+  ],
+  "wallMs": 51745,
+  "window": {
+    "startedAt": "2026-10-08T22:20:27.928Z",
+    "endedAt": "2026-10-08T22:21:19.673Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.022796,
+    "inputTokens": 7274,
+    "outputTokens": 1031
+  }
+}

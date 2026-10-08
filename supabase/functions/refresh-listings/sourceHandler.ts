@@ -2,7 +2,7 @@ import { readSource, reconcileInventory, verifyMissing, SourceReadError, type Li
 import { applyObservation, type SyncListing } from "./sync.ts";
 import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
-import { normalizeListingRecords, titleNeedsRepair } from "../analyze-realtor-build/listingRecords.ts";
+import { normalizeListingRecords, titleNeedsRepair, collapseDuplicates } from "../analyze-realtor-build/listingRecords.ts";
 import { importAiGateway, pageAi } from "./normalizePage.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
@@ -142,7 +142,32 @@ const asDiscovered = (item: SyncListing): DiscoveredListing => ({
   listingNumber: typeof item.listingNumber === "string" ? item.listingNumber : undefined,
   propertyType: typeof item.propertyType === "string" ? item.propertyType : undefined,
   facts: item.facts && typeof item.facts === "object" ? item.facts as Record<string, string> : undefined,
+  ...(item.ownership === "own" || item.ownership === "featured" ? { ownership: item.ownership } : {}),
 });
+
+/**
+ * Detail jobs read remarks and photos after the inventory job saved the listings, so a property published
+ * under two listing ids may only become recognizable then (duplicate-property, live job-split path). The
+ * same rules as the save-boundary normalizer collapse this source's saved listings; a listing a realtor
+ * hid, tagged or annotated is never removed. Returns the merges (duplicate URL -> kept URL) to remember.
+ */
+export function reconcileSavedDuplicates(items: SyncListing[], sourceId: string): { items: SyncListing[]; merged: Record<string, string> } {
+  const scope = items.filter(item => item.sourceId === sourceId && !item.sourceArchived && typeof item.sourceUrl === "string");
+  const byId = new Map(scope.map(item => [item.id, item]));
+  const userContent = (item: SyncListing) => !!item.hidden || !!(typeof item.elizaTake === "string" && item.elizaTake.trim()) || !!(typeof item.tag === "string" && item.tag.trim());
+  const views = scope.map(item => ({ ...asDiscovered(item), savedId: item.id }));
+  const { kept, merged } = collapseDuplicates(views, view => !userContent(byId.get(view.savedId)!));
+  if (!merged.length) return { items, merged: {} };
+  const removed = new Set(merged.map(m => m.from.savedId));
+  const updates = new Map(kept.map(view => [view.savedId, view]));
+  const next = items.filter(item => !removed.has(item.id)).map(item => {
+    const view = updates.get(item.id);
+    if (!view) return item;
+    const changed = view.title !== item.title || view.description !== (item.description ?? "") || view.images.length !== (item.images?.length ?? 0);
+    return changed ? { ...item, title: view.title, description: view.description, images: view.images, image: view.images[0] ?? item.image } : item;
+  });
+  return { items: next, merged: Object.fromEntries(merged.map(m => [m.from.sourceUrl, m.into.sourceUrl])) };
+}
 
 /** One bounded batch of property detail pages for the import that started at `since`. */
 async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHtml: FetchHtml, read: Read, save: Save,
@@ -182,6 +207,7 @@ async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHt
   const now = Date.now();
   const sources = ((await read(sourceKey))?.value.sources ?? []) as ListingSource[];
   const identity = (Array.isArray(sources) ? sources : []).find(source => source.id === body.sourceId)?.identity;
+  let mergedNow: Record<string, string> = {};
   const saved = await save(listingKey, value => {
     const merged = ((Array.isArray(value.items) ? value.items : []) as SyncListing[]).map(item => {
       if (!results.has(item.id) || item.sourceId !== body.sourceId) return item;
@@ -197,8 +223,19 @@ async function runDetailJob(body: { sourceId?: string; since?: number }, fetchHt
     // Attribution read from detail pages labels this source's listings own or featured.
     const labelled = labelInventoryOwnership(merged.filter(item => item.sourceId === body.sourceId), identity);
     const byId = new Map(labelled.map(item => [item.id, item]));
-    return { ...value, items: merged.map(item => byId.get(item.id) ?? item) };
+    const reconciled = reconcileSavedDuplicates(merged.map(item => byId.get(item.id) ?? item), body.sourceId!);
+    mergedNow = reconciled.merged;
+    return { ...value, items: reconciled.items };
   });
+  if (Object.keys(mergedNow).length) {
+    console.log("[listing-sync] merged duplicates", Object.keys(mergedNow).length);
+    await save(sourceKey, value => ({ ...value, sources: (Array.isArray(value.sources) ? value.sources : []).map(source => {
+      const s = source as ListingSource;
+      if (s.id !== body.sourceId) return s;
+      const all = { ...s.mergedDuplicates, ...mergedNow };
+      return { ...s, mergedDuplicates: Object.fromEntries(Object.entries(all).slice(-300)) };
+    }) }));
+  }
   const remaining = pending.length - batch.length;
   const savedItems = (Array.isArray(saved.items) ? saved.items : []) as SyncListing[];
   if (remaining > 0) {

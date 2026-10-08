@@ -1274,3 +1274,48 @@ test('a persistent challenge origin is rendered once and a captcha is not render
 });
 
 
+
+test('a renderer refused by the site never replaces the readable plain page', async () => {
+  const origin = 'https://refused-render.example';
+  const home = '<html><head><title>Lake Homes Team</title></head><body><nav><a href="/featured-listings/">Featured Listings</a></nav>'
+    + '<div id="root"></div><script src="/app.js"></script></body></html>';
+  const card = (n, street, price) => `<div class="listing"><a href="/listing/${n}"><img src="https://photos.example/${n}.jpg">${street}, Lakeview, WI ${price} 3 beds 2 baths</a></div>`;
+  const featured = '<html><body>' + card(1, '12 Pine Rd', '$350,000') + card(2, '40 Oak Ln', '$410,000') + card(3, '7 Birch Ct', '$275,000') + '</body></html>';
+  const pages = { [origin + '/']: home, [origin + '/featured-listings/']: featured };
+  const fetchHtml = async url => ({ html: pages[url] ?? '<html></html>', finalUrl: new URL(url) });
+  const blockedPage = '<html><head><title>Request Blocked</title></head><body><h1>Request Blocked</h1><p>Your request was blocked.</p></body></html>';
+  let renders = 0;
+  const result = await discoverListings([origin + '/'], fetchHtml, {
+    maxPages: 4, maxDetailPages: 0, renderPage: async url => { renders++; return { html: blockedPage, finalUrl: new URL(url) }; },
+  });
+  const plain = await discoverListings([origin + '/'], fetchHtml, { maxPages: 4, maxDetailPages: 0 });
+  assert.ok(plain.listings.length >= 3);
+  assert.deepEqual(result.listings.map(row => row.sourceUrl).sort(), plain.listings.map(row => row.sourceUrl).sort());
+  assert.equal(renders, 1);
+  assert.ok(result.meta.stages.includes('browser_render_refused'));
+  assert.ok(result.meta.obstacles.some(row => row.code === 'render_failed'));
+  assert.equal(engine.isBlockedRender(blockedPage), true);
+  assert.equal(engine.isBlockedRender(home), false);
+  assert.equal(engine.isBlockedRender(featured), false);
+});
+
+test('a card whose photo and price sit above its address link is bound by its URL-keyed container', () => {
+  const base = new URL('https://cards-above.example/featured-listings/');
+  const card = (id, street, price, beds) => `<div id="lw${id}" class="tile" data-url="/property-search/detail/9/${id}/${street.toLowerCase().replace(/\W+/g, '-')}/">`
+    + `<div class="photo"><button data-price="${price.replace(/\D/g, '')}" aria-label="Save"></button><a role="link" class="js-detail">`
+    + `<img src="/loading.gif" data-src="https://photos.example/${id}.jpg" alt="${street}"></a>`
+    + '<div class="controls"><button>Prev</button><button>Next</button></div>'.repeat(4) + '</div>'
+    + `<div class="price">${price}</div><div class="hood">${'<span class="hood-label">Neighborhood:</span>'.repeat(5)}<span>Old Town</span></div>`
+    + `<div class="title"><a href="/property-search/detail/9/${id}/${street.toLowerCase().replace(/\W+/g, '-')}/" title="${street}">`
+    + `<div>${street}</div><div>Springfield, PA 19000</div></a></div>`
+    + `<div class="info"><span>${beds}</span> Beds <span>2</span> Baths</div></div>`;
+  const html = '<main>' + card('A1', '12 Pine Rd', '$350,000', 3) + card('B2', '40 Oak Ln', '$410,000', 4) + card('C3', '7 Birch Ct', '$275,000', 2) + '</main>';
+  const rows = engine.listingsFromCards(html, base);
+  assert.deepEqual(rows.map(row => [row.title.replace(/\s+/g, ' '), row.price, row.beds, row.image]), [
+    ['12 Pine Rd Springfield, PA 19000', '$350,000', 3, 'https://photos.example/A1.jpg'],
+    ['40 Oak Ln Springfield, PA 19000', '$410,000', 4, 'https://photos.example/B2.jpg'],
+    ['7 Birch Ct Springfield, PA 19000', '$275,000', 2, 'https://photos.example/C3.jpg'],
+  ]);
+  // A lone container is not a repeated card pattern; nothing is borrowed from outside the anchor.
+  assert.equal(engine.listingsFromCards('<main>' + card('A1', '12 Pine Rd', '$350,000', 3) + '</main>', base).length, 0);
+});

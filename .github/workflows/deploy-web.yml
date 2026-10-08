@@ -1,12 +1,8 @@
 name: Build and deploy Expo web
 
+# Manual only (Oct 8 2026 decision): pushes to main, including Rork syncs, never redeploy the production
+# web site. Use "Run workflow" (Deploy enabled) to publish; deploy-preview.yml serves the testing preview.
 on:
-  push:
-    branches: [main, codex/intelligent-listing-import, codex/website-to-app, codex/import-onboarding-fix]
-    paths:
-      - 'expo/**'
-      - 'supabase/functions/analyze-realtor-build/**'
-      - '.github/workflows/deploy-web.yml'
   workflow_dispatch:
     inputs:
       deploy:
@@ -42,7 +38,7 @@ jobs:
     env:
       CI: '1'
       EXPO_NO_TELEMETRY: '1'
-      DEPLOY: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/codex/intelligent-listing-import')) || (github.event_name == 'workflow_dispatch' && inputs.deploy) }}
+      DEPLOY: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
       EXPO_PROJECT_ID: ${{ inputs.project_id || vars.EXPO_PROJECT_ID }}
       HOSTING_SUBDOMAIN: ${{ inputs.subdomain || vars.EXPO_HOSTING_SUBDOMAIN || 'cdariverdepot-my-realtor' }}
     steps:

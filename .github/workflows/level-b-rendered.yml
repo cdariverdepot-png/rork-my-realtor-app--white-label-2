@@ -1,0 +1,59 @@
+name: Level B rendered capture (live sites through the existing renderer, no AI)
+# Records sites through the same Fly.io renderer service the Edge Functions use (LISTING_RENDER_URL), so
+# browser-drawn inventories can be judged offline. Uses the existing Fly app and token; creates nothing.
+# Sites come from diagnostics/evaluation/rendered.txt lines "capture: <new-id> <url>". Recordings are new,
+# immutable files under diagnostics/evaluation/captures. No AI calls are possible here.
+on:
+  push:
+    branches: [repair/compatibility-engine]
+    paths: [diagnostics/evaluation/rendered.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: level-b-rendered
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      AI_MODE: offline
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/compatibility-engine
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Renderer endpoint and token from the existing Fly app
+        run: |
+          test -n "$FLY_API_TOKEN" || { echo "::error::FLY_API_TOKEN is not set"; exit 1; }
+          curl -fsSL https://fly.io/install.sh | sh
+          export PATH="$HOME/.fly/bin:$PATH"
+          raw=$(fly ssh console --app cdariver-listing-renderer -C "printenv LISTING_RENDER_TOKEN" </dev/null 2>/dev/null || true)
+          TOKEN=$(printf '%s\n' "$raw" | tr -d '\r' | grep -E '^[0-9a-f]{48}$' | tail -n 1 || true)
+          test -n "$TOKEN" || { echo "::error::could not read the renderer token"; exit 1; }
+          echo "::add-mask::$TOKEN"
+          echo "LISTING_RENDER_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+          echo "LISTING_RENDER_URL=https://cdariver-listing-renderer.fly.dev" >> "$GITHUB_ENV"
+          mkdir -p diagnostics/evaluation
+          printf '{"checkedAt":"%s","health":"%s"}\n' "$(date -u +%FT%TZ)" "$(curl -fsS --max-time 20 https://cdariver-listing-renderer.fly.dev/health | head -c 200 | tr -d '"\n' || echo unreachable)" > diagnostics/evaluation/renderer-status.json
+          cat diagnostics/evaluation/renderer-status.json
+      - name: Capture the requested sites with rendering
+        working-directory: expo
+        run: |
+          args=$(grep -E '^capture:' ../diagnostics/evaluation/rendered.txt | while read -r _ id url; do
+            [ -e "../diagnostics/evaluation/captures/$id.json.gz" ] || printf -- '--id %s %s ' "$id" "$url"; done)
+          test -n "$args" || { echo "nothing new to capture"; exit 0; }
+          node scripts/capture-discovery.cjs --out "$RUNNER_TEMP/captures" $args | tee "$RUNNER_TEMP/capture.log"
+          mkdir -p ../diagnostics/evaluation/captures
+          for f in "$RUNNER_TEMP"/captures/*.json; do gzip -9 -c "$f" > "../diagnostics/evaluation/captures/$(basename "$f").gz"; done
+          cp "$RUNNER_TEMP/capture.log" ../diagnostics/evaluation/rendered-capture.log
+      - name: Commit recordings
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/evaluation && git commit -m "Level B rendered captures ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ]

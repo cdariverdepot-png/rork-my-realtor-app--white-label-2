@@ -1,5 +1,4 @@
-Stage gate requested Thu Oct  8 21:22:44 UTC 2026: end-to-end check of the DEPLOYED development preview (main 5c70bca) against the staging importer.
-justification: verify the deployed preview of main reaches the review screen with the staging importer before handing it over
+Stage gate requested Thu Oct  8 22:09:37 UTC 2026: final integration check of eed64f6 on staging (duplicates kept merged across detail jobs, Real Geeks refused renders, Sierra cards, detail galleries/remarks, blocked-site messages).
+justification: validate the final integration fixes end to end on the staging importer before merging into main and deploying the preview
 staging-ai: shared-key
-app-url: https://cdariverdepot-my-realtor--dkx12pzmez.expo.app
-sites: realm-partners-idaho, katerina-sayles
+sites: redman-realty-group, chatman-realty-group, tom-toole, houses-of-kansas-city, skilled-real-estate-miami, magic-valley-homes, remax-alexis-kemp-sagert, realm-partners-idaho, katerina-sayles

@@ -1,12 +1,9 @@
 name: Deploy Supabase functions
 # Runs the importer regression suite before deploying every Edge Function.
 
+# Manual only (Oct 8 2026 decision): pushes to main, including Rork syncs, never deploy the production
+# Edge Functions. Run this workflow by hand when a validated importer is approved for App Store users.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'supabase/functions/**'
-      - '.github/workflows/deploy-functions.yml'
   workflow_dispatch:
 
 permissions:

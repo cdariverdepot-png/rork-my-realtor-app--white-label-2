@@ -466,3 +466,71 @@ test('title-not-property: detail jobs name price-titled listings from their own 
   assert.equal(titles.filter(title => /^\$/.test(title)).length, 0, titles.join(' | '));
   assert.ok(titles.includes('215 Pine St, Hope, ID 83836'));
 });
+
+// duplicate-property, production job-split path (found by the final release gate, Oct 8 2026): a property
+// published under two listing ids is recognizable only once the detail jobs read the shared remarks. The
+// detail job merges it, remembers the merge on the source, and later syncs keep it merged. Synthetic contract.
+const duplicateFixture = ({ sameRemarks = true } = {}) => {
+  // 28 other listings with the pair in the middle, so neither copy is among the inventory job's first 12 details.
+  const fillers = Array.from({ length: 28 }, (_, i) => 300 + i);
+  const pair = [{ ...home(401), name: '7563 Hwy 51, Minocqua, WI', price: 494900, image: 'https://photos.example/a.jpg' },
+    { ...home(402), name: '7563 Hwy 51, Minocqua, WI', price: 494900, image: 'https://photos.example/b.jpg' }];
+  const cards = [...fillers.slice(0, 14).map(n => home(n)), ...pair, ...fillers.slice(14).map(n => home(n))];
+  const remarks = n => sameRemarks || n === 401 ? 'Former log model home, now a 3 bed 3 bath with a full basement and a large shop on the highway.' : 'A different listing at this address: commercial frontage with its own remarks and photos.';
+  const pages = { [source.url]: html(cards) };
+  for (const card of cards) {
+    const n = Number(card.url.split('/').pop());
+    pages[card.url] = `<html><head>${html(card)}</head><body><h1>${card.name}</h1><div class="property-description">${remarks(n)}</div></body></html>`;
+  }
+  return pages;
+};
+const runImport = async (pages, rows) => {
+  const first = await endpoint({ body: { mode: 'connect', url: source.url }, pages, rows });
+  if (first.result.detailsPending) await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since: first.result.detailsSince }, pages, rows });
+  return first;
+};
+const savedItems = rows => rows['11111111-1111-1111-1111-111111111111:listings.v2'].value.items;
+const savedSource = rows => rows['11111111-1111-1111-1111-111111111111:listing-sources.v1'].value.sources[0];
+
+test('duplicate-property: detail jobs merge a property revealed by its shared remarks, and later syncs keep it merged', async () => {
+  const pages = duplicateFixture(), rows = {};
+  await runImport(pages, rows);
+  const hwy = () => savedItems(rows).filter(item => /7563 Hwy 51/.test(item.title) && !item.sourceArchived);
+  assert.equal(hwy().length, 1, 'one record for the property');
+  assert.equal(savedItems(rows).length, 29, 'the 28 other listings are untouched');
+  const merges = Object.entries(savedSource(rows).mergedDuplicates ?? {});
+  assert.equal(merges.length, 1);
+  // A later sync of the same source must not bring the merged copy back.
+  await endpoint({ body: { mode: 'connect', url: source.url }, pages, rows });
+  assert.equal(hwy().length, 1, 'still one record after the next sync');
+});
+
+test('duplicate-property: same address and price with different remarks and photos stays two listings', async () => {
+  const pages = duplicateFixture({ sameRemarks: false }), rows = {};
+  await runImport(pages, rows);
+  assert.equal(savedItems(rows).filter(item => /7563 Hwy 51/.test(item.title)).length, 2);
+  assert.deepEqual(savedSource(rows).mergedDuplicates ?? {}, {});
+});
+
+test('duplicate-property: a saved listing the realtor hid, tagged or annotated is never removed by a merge', () => {
+  const { reconcileSavedDuplicates } = pure.load('refresh-listings/sourceHandler.ts');
+  const base = { sourceId: 's', price: '$494,900', description: 'Former log model home, now a 3 bed 3 bath with a full basement.', images: ['https://p.example/1.jpg'], title: '7563 Hwy 51, Minocqua, WI' };
+  // 'a' (the older id) is the copy a merge would drop; the realtor annotated it.
+  const items = [{ ...base, id: 'a', sourceUrl: 'https://agent.example/property/219476', elizaTake: 'My favourite' }, { ...base, id: 'b', sourceUrl: 'https://agent.example/property/219783' }];
+  assert.equal(reconcileSavedDuplicates(items, 's').items.length, 2, 'the annotated copy is protected');
+  const plain = [{ ...base, id: 'a', sourceUrl: 'https://agent.example/property/219476' }, { ...base, id: 'b', sourceUrl: 'https://agent.example/property/219783' }];
+  const result = reconcileSavedDuplicates(plain, 's');
+  assert.equal(result.items.length, 1);
+  assert.deepEqual(Object.keys(result.merged).length, 1);
+});
+
+test('duplicate-property: a merged copy returns when the kept record is no longer published', () => {
+  const now = 10 * 3_600_000;
+  const kept = { title: '7563 Hwy 51', sourceUrl: 'https://agent.example/property/219783', description: '', price: '$1', beds: 0, baths: 0, sqft: '', neighborhood: '', image: '', images: [] };
+  const other = { ...kept, sourceUrl: 'https://agent.example/property/219476' };
+  const src = { ...source, mergedDuplicates: { [other.sourceUrl]: kept.sourceUrl } };
+  const both = sources.reconcileInventory([], { source: src, listings: [kept, other], complete: true, meta: {} }, now);
+  assert.deepEqual(both.map(i => i.sourceUrl), [kept.sourceUrl], 'skipped while the kept record is published');
+  const alone = sources.reconcileInventory([], { source: src, listings: [other], complete: true, meta: {} }, now);
+  assert.deepEqual(alone.map(i => i.sourceUrl), [other.sourceUrl], 'comes back when it is the only copy');
+});

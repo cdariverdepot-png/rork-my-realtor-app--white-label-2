@@ -670,6 +670,7 @@ function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredList
   const found: DiscoveredListing[] = [];
   const seen = new Set<string>();
   const hrefs = [...html.matchAll(/<a\b([^>]*)href\s*=\s*["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi)];
+  const containers = propertyCardContainers(html, base);
   for (const match of hrefs) {
     const href = canonicalListingUrl(absolutize(decodeEntities(match[2]).trim(), base) ?? "");
     if (!href || seen.has(href)) continue;
@@ -691,7 +692,10 @@ function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredList
     // A priced anchor is the complete card. Never borrow fields or a photo from its neighbors.
     const before = html.slice(Math.max(0, idx - 200), idx).split(/<\/a>/i).pop() ?? "";
     const after = html.slice(idx + match[0].length, idx + match[0].length + 400).split(/<a\b/i)[0];
-    const window = ownPrice ? match[4] : before + match[0] + after;
+    let window = ownPrice ? match[4] : before + match[0] + after;
+    // A card container that names this same property URL bounds the card when its price sits outside the
+    // anchor's immediate neighborhood (photo and price above the address link).
+    if (!ownPrice && !/\$\s?\d/.test(stripTags(window)) && containers.has(href)) window = containers.get(href)!;
     const text = decodeEntities(stripTags(window));
     const priceMatch = text.match(/\$\s?\d{1,3}(?:,\d{3})+(?:\.\d+)?|\$\s?\d+(?:\.\d+)?\s?[MK]/i);
     if (!priceMatch || !pathOk) continue;
@@ -732,6 +736,30 @@ function listingsFromCards(html: string, base: URL, limit = 100): DiscoveredList
     if (found.length >= limit) break;
   }
   return found;
+}
+
+/**
+ * Repeated card containers that carry their property's URL as an attribute (data-url, data-href, data-link,
+ * data-detail-url). Each card runs to the next container, so facts cannot leak between properties. Only a
+ * repeated pattern counts (3+), and only property detail paths.
+ */
+function propertyCardContainers(html: string, base: URL): Map<string, string> {
+  const starts: { index: number; url: string }[] = [];
+  for (const m of html.matchAll(/<(?:div|li|article|section)\b(?:[^>"']|"[^"]*"|'[^']*')*\bdata-(?:url|href|link|detail-url)\s*=\s*["']([^"']+)["'](?:[^>"']|"[^"]*"|'[^']*')*>/gi)) {
+    const abs = absolutize(decodeEntities(m[1]).trim(), base);
+    if (!abs) continue;
+    let url: URL;
+    try { url = new URL(abs); } catch { continue; }
+    if (!sameSite(url, base) || !DETAIL_PATH.test(url.pathname)) continue;
+    starts.push({ index: m.index ?? 0, url: canonicalListingUrl(url.toString()) });
+  }
+  const out = new Map<string, string>();
+  if (starts.length < 3) return out;
+  starts.forEach((start, i) => {
+    if (out.has(start.url)) return;
+    out.set(start.url, html.slice(start.index, Math.min(starts[i + 1]?.index ?? html.length, start.index + 12000)));
+  });
+  return out;
 }
 
 /** Repeated tiles that publish a price, an address, and a property URL as attributes.
@@ -1213,6 +1241,18 @@ async function publishedScriptGateCookie(html: string): Promise<string | null> {
 }
 
 /** A robot or challenge document, not an empty listing collection. Footer widgets are not this page. */
+/**
+ * A rendered document that is the renderer being refused (a WAF "Request Blocked"/"Access Denied"/403 page or
+ * a challenge) rather than the page. It must never replace a readable plain response: the renderer runs from
+ * other network addresses than the importer, and some sites block one but not the other.
+ */
+function isBlockedRender(html: string): boolean {
+  if (isRobotChallenge(html)) return true;
+  const title = stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "").trim();
+  if (/^(?:request blocked|access denied|forbidden|403(?: forbidden)?|blocked|error 403|you have been blocked|sorry, you have been blocked)$/i.test(title)) return true;
+  return html.length < 4000 && !/<a\b[^>]*href=/i.test(html) && /\b(?:blocked|denied|forbidden)\b/i.test(stripTags(html));
+}
+
 function isRobotChallenge(html: string): boolean {
   const title = stripTags(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "").trim();
   if (/^robot validate$/i.test(title)) return true;
@@ -2546,7 +2586,8 @@ function roleContainers(html: string, role: RegExp, exclude: RegExp): string[] {
   for (const match of html.matchAll(/<(?:div|section|ul|ol|figure|article|aside|span|p)\b[^>]*>/gi)) {
     if (chrome.some(range => match.index! >= range.start && match.index! < range.end)) continue;
     const tag = match[0];
-    const label = `${detailAttr(tag, "class")} ${detailAttr(tag, "id")}`;
+    // Component libraries name the role in a test or slot hook (data-testid="carousel-container") instead of a class.
+    const label = `${detailAttr(tag, "class")} ${detailAttr(tag, "id")} ${detailAttr(tag, "data-testid")} ${detailAttr(tag, "data-slot")}`;
     if (!role.test(` ${label} `) || exclude.test(label)) continue;
     const start = match.index!;
     if (found.some(item => start >= item.start && start < item.end)) continue;
@@ -2635,7 +2676,8 @@ function propertyNameKeys(item: Pick<DiscoveredListing, "title" | "sourceUrl">):
   try {
     for (const segment of new URL(item.sourceUrl).pathname.split("/").reverse()) {
       const words = decodeURIComponent(segment).split(/[-_+]+/).filter(Boolean);
-      if (words.length >= 3 && /^\d{1,6}[a-z]?$/i.test(words[0]) && /^[a-z]/i.test(words[1])) { keys.push(key(words.slice(0, 3).join(""))); break; }
+      // The street name may be a numbered one ("1270-42nd-Avenue", "730-47TH-Street").
+      if (words.length >= 3 && /^\d{1,6}[a-z]?$/i.test(words[0]) && (/^[a-z]/i.test(words[1]) || /^\d{1,4}(?:st|nd|rd|th)$/i.test(words[1]))) { keys.push(key(words.slice(0, 3).join(""))); break; }
     }
   } catch { /* no URL key */ }
   return [...new Set(keys.filter(value => value.length >= 7 && /\d/.test(value) && /[a-z]/.test(value)))];
@@ -2739,7 +2781,10 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
     .filter(sentence => !/please (?:fill out|contact|call|click)|contact us|click here|request (?:more )?info|schedule a (?:showing|tour)|fill out the form/i.test(sentence)).join(" ").trim();
   const remarksText = remarks ? cleanRemarks(remarks) : "";
   // A meta description is used only for its factual sentences; calls to action are not remarks.
-  const description = cleanRemarks(detail?.description || (remarksText.length >= 80 ? remarksText : "") || detailDescription(html) || remarksText || meta("og:description") || meta("description"));
+  const pageRemarks = (remarksText.length >= 80 ? remarksText : "") || detailDescription(html);
+  // A structured summary ("Property for lease at <address>…") does not stand in for the page's own remarks.
+  const structuredRemarks = detail?.description && (detail.description.length >= 200 || pageRemarks.length <= detail.description.length) ? detail.description : "";
+  const description = cleanRemarks(structuredRemarks || pageRemarks || detail?.description || remarksText || meta("og:description") || meta("description"));
   const cover = absolutize(meta("og:image"), base);
   // Explicit gallery images only; exclude related-home cards and site chrome.
   const gallery:string[]=[];
@@ -2748,7 +2793,8 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
     const url=absolutize(attr(tag,"data-full")||attr(tag,"data-src")||attr(tag,"src"),base);
     if(url&&!looksLikeChrome(url))gallery.push(url);
   }
-  if (!(detail?.images.length) && !gallery.length) gallery.push(...detailGalleryImages(html, base));
+  // A structured record with a single cover photo does not stand in for the page's gallery either.
+  if ((detail?.images.length ?? 0) <= 1 && !gallery.length) gallery.push(...detailGalleryImages(html, base));
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
   const office = item.listingOffice ?? detailAttribution(html);
@@ -3093,7 +3139,7 @@ async function discoverListings(
         try {
           const gate = cookieFor(finalUrl.toString());
           const rendered = await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
-          if (sameSite(rendered.finalUrl, finalUrl) && !isPublishedScriptGate(rendered.html) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
+          if (sameSite(rendered.finalUrl, finalUrl) && !isPublishedScriptGate(rendered.html) && !isBlockedRender(rendered.html) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
             html = rendered.html;
             finalUrl = rendered.finalUrl;
             stages.push("browser_render_escalated");
@@ -3222,7 +3268,11 @@ async function discoverListings(
           if (!pendingRenderNetwork && options?.renderPage) {
             const gate = cookieFor(finalUrl.toString());
             const rendered=await options.renderPage(finalUrl.toString(), gate ? { cookie: gate } : undefined);
-            if (sameSite(rendered.finalUrl,finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
+            if (isBlockedRender(rendered.html)) {
+              // Keep the readable plain document; navigation from it continues.
+              obstacles.push({ code: "render_failed", url: finalUrl.toString(), detail: "The renderer was refused by the site" });
+              stages.push("browser_render_refused");
+            } else if (sameSite(rendered.finalUrl,finalUrl) && !LOGIN_PATH.test(rendered.finalUrl.pathname)) {
               html=rendered.html; finalUrl=rendered.finalUrl;
               renderedNetwork = rendered.network ?? [];
               observation = describeListingArchitecture(html, finalUrl, "rendered-dom");
@@ -4111,23 +4161,40 @@ function normalizeListingRecords(items: DiscoveredListing[]): NormalizedRecords 
       description: keep.description.length >= other.description.length ? keep.description : other.description });
     dropped.push({ sourceUrl: other.sourceUrl, title: other.title, reason: "duplicate_url_variant" });
   }
-  const listings: DiscoveredListing[] = [];
-  for (const record of byKey.values()) {
-    const mirror = listings.findIndex(kept => mirroredListing(kept, record));
+  const collapsed = collapseDuplicates([...byKey.values()]);
+  for (const merge of collapsed.merged) dropped.push({ sourceUrl: merge.from.sourceUrl, title: merge.from.title, reason: merge.reason });
+  return { listings: collapsed.kept, dropped };
+}
+
+/**
+ * One record per property and per listing (mirrored-listing, duplicate-property). Used at the save boundary
+ * and again by the refresh detail jobs, whose later details (remarks, photos) can reveal duplicates the first
+ * job could not see. Records keep their own extra fields (saved ids, notes); `canDrop` lets a caller protect
+ * records that must never be removed (for example ones a realtor edited or hid).
+ */
+function collapseDuplicates<T extends DiscoveredListing>(items: T[], canDrop: (item: T) => boolean = () => true):
+  { kept: T[]; merged: { from: T; into: T; reason: "mirrored_listing" | "duplicate_property" }[] } {
+  const kept: T[] = [];
+  const merged: { from: T; into: T; reason: "mirrored_listing" | "duplicate_property" }[] = [];
+  for (const record of items) {
+    const mirror = kept.findIndex(other => mirroredListing(other, record));
     if (mirror >= 0) {
-      const { keep, other } = mergeMirrors(listings[mirror], record);
-      listings[mirror] = keep;
-      dropped.push({ sourceUrl: other.sourceUrl, title: other.title, reason: "mirrored_listing" });
-      continue;
+      const { keep, other } = mergeMirrors(kept[mirror], record);
+      if (canDrop(other as T)) {
+        kept[mirror] = keep as T;
+        merged.push({ from: other as T, into: kept[mirror], reason: "mirrored_listing" });
+        continue;
+      }
     }
-    const index = listings.findIndex(kept => sameProperty(kept, record));
-    if (index < 0) { listings.push(record); continue; }
-    const keep = preferredRecord(listings[index], record);
-    const other = keep === record ? listings[index] : record;
-    listings[index] = keep;
-    dropped.push({ sourceUrl: other.sourceUrl, title: other.title, reason: "duplicate_property" });
+    const index = mirror >= 0 ? -1 : kept.findIndex(other => sameProperty(other, record));
+    if (index < 0) { kept.push(record); continue; }
+    const keep = preferredRecord(kept[index], record) as T;
+    const other = keep === record ? kept[index] : record;
+    if (!canDrop(other)) { kept.push(record); continue; }
+    kept[index] = keep;
+    merged.push({ from: other, into: keep, reason: "duplicate_property" });
   }
-  return { listings, dropped };
+  return { kept, merged };
 }
 return { normalizeListingRecords, fullSizeImageUrl };
 })();
@@ -5654,13 +5721,17 @@ const reply = (body: unknown, status = 200) => Response.json(body, {
  * Why a website source could not be read, in words a realtor can act on. Raw network errors
  * ("signal timed out", "error sending request") say nothing about what to do next.
  */
+/** The supported ways to bring listings in when a site refuses automated readers (no workaround is attempted). */
+const BLOCKED_ALTERNATIVES = "Instead, paste a public page that lists your properties (your brokerage's “My listings” page, an IDX property list, or an MLS public sharing link), or upload a listing file (PDF, CSV, Word, text, or screenshots). You can also add properties yourself from your dashboard.";
+
 function readableSourceFailure(uri: string, error: string | undefined): string {
   let host = uri;
   try { host = new URL(uri).hostname.replace(/^www\./, ""); } catch { /* keep the raw value */ }
   const reason = error ?? "";
   if (/timed? ?out|aborted/i.test(reason)) return `${host} did not respond in time.`;
-  if (/error page instead of the website/.test(reason)) return `${host} sent an error page instead of the website. The site may block automated readers; another page of the site may work.`;
-  if (/returned 40[13]/.test(reason)) return `${host} refused our request (${reason.match(/\d{3}/)?.[0]}). The site may block automated readers.`;
+  if (/error page instead of the website/.test(reason)) return `${host} sent an error page instead of the website. The site may block automated readers; another page of the site may work. ${BLOCKED_ALTERNATIVES}`;
+  if (/returned 40[13]/.test(reason)) return `${host} refused our request (${reason.match(/\d{3}/)?.[0]}). This site blocks automated readers, so its listings can't be imported from this link. ${BLOCKED_ALTERNATIVES}`;
+  if (/human verification|captcha|robot/i.test(reason)) return `${host} asks every visitor to pass a human check, so its listings can't be imported automatically. ${BLOCKED_ALTERNATIVES}`;
   if (/returned 404/.test(reason)) return `${host} says that page does not exist (404). Check the address.`;
   if (/returned 5\d\d/.test(reason)) return `${host} had a server error (${reason.match(/\d{3}/)?.[0]}). It may be temporary.`;
   if (/resolve|dns|lookup|error sending request|connect/i.test(reason)) return `${host} could not be reached. Check the address.`;
