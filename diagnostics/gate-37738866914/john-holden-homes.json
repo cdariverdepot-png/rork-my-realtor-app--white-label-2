@@ -1,0 +1,81 @@
+{
+  "id": "john-holden-homes",
+  "url": "https://johnholdenhomes.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 48,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1051,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 2059,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nLooking for your listings\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2460,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nLooking for listings · 1 page checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 3064,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nLooking for listings · 1 page checked\nMatching your website’s design and imagery\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 3264,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nLooking for listings · 1 page checked\nMatching your website’s design and imagery\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 3666,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nNo active listings were found on this page\nMatching your website’s design and imagery\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 11303,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading John Holden Homes\nNo active listings were found on this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 12509,
+      "screen": "Building your app\nBUILD STOPPED\nReading John Holden Homes\nNo active listings were found on this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "john-holden-homes-00-url.png",
+    "john-holden-homes-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 4570,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nReading John Holden Homes\nNo active listings were found on this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\njohnholdenhomes.com\nBuilding your app\nBUILD STOPPED\nReading John Holden Homes\nNo active listings were found on this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://johnholdenhomes.com/",
+      "status": 200,
+      "finalUrl": "https://johnholdenhomes.com/",
+      "title": "Chattanooga Real Estate Broker / Realtor - John Holden Homes",
+      "textLength": 2834,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Skip to content\nHome\nBuying\nSelling\nContact John\n(423) 314-8761\n\n(423) 541-0100\n\nFind Your Dream Home in Chattanooga\n\nHelping you buy and sell homes in the Chattanooga, Tennessee area\n\nJohn Holden\nAffiliate Broker\n423-314-8761\n423-541-0100\nGet A Callback\n\nBy submitting my data I agree to be contacted\n\n2 Timothy 4:7: “I have fought the good fight, I have finished the race, I have kept the faith.”\nCONTACT\n\n5959 Shallowford Rd #225,\nChattanooga, TN 37421 .\n\nPhone: (423) 314-8761 or (423) 541-0100 \n\n© 2025 • Website designed & built by Colourscope\n\nEXCELLENT\nBased on 7 reviews\nMike Canto\nJohn was amazing from the start to closing. Very attentive of our needs, friendly and very professional. John made the process smooth and constantly checked in to ensure if we needed anything or had any questions. I would highly recommend working with John. Thanks again for helping make our home buying experience exceptional!\najrose98\nJohn was amazing from the first initial phone calls to the closing. He was definitely \"Johnny on the spot!\" My husband was out of the country for most of the process. However, John made sure to stay in contact with both of us every step of the way.\nJeremiah B McCain\nJohn ",
+      "challenge": false,
+      "screenshot": "john-holden-homes-source-0.png"
+    }
+  ],
+  "wallMs": 432149,
+  "window": {
+    "startedAt": "2026-10-08T07:08:05.205Z",
+    "endedAt": "2026-10-08T07:15:17.354Z"
+  }
+}

@@ -1,0 +1,1069 @@
+{
+  "id": "houses-of-kansas-city",
+  "url": "https://www.housesofkansascity.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 67,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1073,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1679,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2081,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading listing details · 0 of 12\nReading linked pages · 1 of 9"
+    },
+    {
+      "at": 2281,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading listing details · 1 of 12\nReading linked pages · 1 of 9"
+    },
+    {
+      "at": 2483,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading listing details · 4 of 12\nReading linked pages · 1 of 9"
+    },
+    {
+      "at": 2685,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading listing details · 7 of 12\nReading linked pages · 5 of 9"
+    },
+    {
+      "at": 2886,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading listing details · 9 of 12\nReading linked pages · 5 of 9"
+    },
+    {
+      "at": 3087,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nReading linked pages · 7 of 9"
+    },
+    {
+      "at": 3491,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nReading linked pages · 8 of 9\nSaving 12 listings"
+    },
+    {
+      "at": 3692,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nReading linked pages · 8 of 9\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 4296,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 9 linked pages\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 5303,
+      "screen": "Building your app\nBUILD STOPPED\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 9 linked pages\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours\nIdentified your profile photo\nSorted 60 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n12 listings were imported and saved. They are kept.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 534,
+      "totalMs": 3471,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 41
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 1,
+          "found": 0,
+          "at": 655
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 0,
+          "at": 708
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 12,
+          "at": 1040
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1040
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1383
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1421
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1446
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1456
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1722
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1734
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 7,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1746
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 8,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1842
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 9,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1991
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 10,
+          "total": 12,
+          "succeeded": 0,
+          "at": 2034
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 11,
+          "total": 12,
+          "succeeded": 0,
+          "at": 2049
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 12,
+          "total": 12,
+          "succeeded": 0,
+          "at": 2085
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 12,
+          "at": 2091
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 12,
+          "at": 2458
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 12,
+          "at": 2652
+        },
+        {
+          "kind": "scope",
+          "excluded": 0,
+          "featured": 10,
+          "at": 2652
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-1636u8n",
+            "url": "https://www.housesofkansascity.com/",
+            "submittedUrl": "https://www.housesofkansascity.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://housesofkansascity.com/",
+              "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D"
+            ],
+            "connectedAt": 1791442851168,
+            "lastCheckedAt": 1791442851168,
+            "nextSyncAt": 1791450051168,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 12,
+            "identity": {
+              "phrases": [
+                "housesofkansascity",
+                "anthonywest",
+                "toprealestateexpertinkansascity"
+              ],
+              "words": [
+                "housesofkansascity",
+                "anthony",
+                "expert",
+                "kansas"
+              ]
+            }
+          },
+          "imported": 12,
+          "scope": {
+            "excludedOtherOffice": 0,
+            "featured": 10
+          },
+          "warning": "12 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 12,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-tr2ixx",
+              "title": "12604 Baltimore Court, Kansas City, MO 64145",
+              "neighborhood": "",
+              "price": "$420,000",
+              "beds": 3,
+              "baths": 3,
+              "sqft": "2,586",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645685/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645685/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658840717209549923-12604-Baltimore-Court",
+              "description": "$420,000 · 3 bd / 3 ba, 2,586 sq ft home for sale at 12604 Baltimore Court, Kansas City, MO 64145. MLS# 2645685. Contact Anthony West for details.",
+              "facts": {
+                "Coordinates": "38.899213, -94.595298"
+              },
+              "listingOffice": "EXP Realty LLC",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-shahsx",
+              "title": "8129 Dearborn Drive, Prairie Village, KS 66208",
+              "neighborhood": "",
+              "price": "$789,000",
+              "beds": 4,
+              "baths": 2.5,
+              "sqft": "2,851",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642290/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642290/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658287307492489007-8129-Dearborn-Drive",
+              "description": "Completely refreshed Prairie Village home on an incredible nearly half-acre cul-de-sac lot! This beautifully updated 4-bedroom, 2.5-bath home offers the perfect combination of modern updates, functional living space and an amazing setting in the Shawnee Mission School District. Located on a quiet cul-de-sac, the home features a long, flat driveway, 2-car garage and a spacious walkout basement with a gas fireplace. Inside, the home has been thoughtfully transformed with refinished existing hardwood floors and new hardwood flooring, new carpet in the basement, fresh interior paint and all-new lighting and fixtures. The kitchen has been opened up by removing a wall, creating a more spacious, connected feel, and features all-new cabinetry. Both bathrooms have been beautifully updated with new tile, vanities, lighting and finishes. Additional improvements include a new electrical panel, Pella windows and a new mini-split system serving the 4th bedroom. Outside, the transformation continues with all-new exterior paint and landscaping, a brand-new concrete driveway and sidewalk leading to the front door, and a new stamped-concrete patio overlooking the expansive backyard. The brickwork on the front of the home has also been professionally restored. With generous living space, a large private lot this Prairie Village home is truly move-in ready. A rare opportunity to enjoy the space and setting of a nearly half-acre lot while being conveniently located in the heart of Prairie Village! Read more",
+              "facts": {
+                "Coordinates": "38.980378, -94.653969"
+              },
+              "listingOffice": "Compass Realty Group",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-1t3tzdp",
+              "title": "15672 S Blackfoot Street, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$439,900",
+              "beds": 5,
+              "baths": 3,
+              "sqft": "1,893",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658372556536226330-15672-S-Blackfoot-Street",
+              "description": "Welcome to this beautifully updated split-entry in the desirable Woodland Creek community! This move-in-ready home offers living space with vaulted ceilings, a spacious living room with fireplace, formal dining area, and an eat-in kitchen featuring granite countertops and updated finishes. The main level includes three bedrooms and two full baths, while the finished lower level offers two additional bedrooms and a full bath, perfect for guests, a home office, or additional living space. Recent updates include new carpet, updated tile in the kitchen and bathrooms, granite countertops, new sinks and faucets, a new kitchen stove, and an electric tankless water heater. Outside, relax on the deck or enjoy the spacious fenced backyard. Additional features include an attached 2-car garage with EV charger, Google Fiber, and a large, fenced backyard with deck. Enjoy Woodland Creek amenities including a community pool, lodge, playgrounds, and dog park. Conveniently located near parks, shopping, dining, schools, and major highways. Schedule your showing today! Woodland Creek amenities include a community pool, lodge, playgrounds, and dog park. Read more",
+              "facts": {
+                "Coordinates": "38.84377, -94.765256"
+              },
+              "listingOffice": "Platinum Realty LLC",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-1veklje",
+              "title": "26413 W 111th Terrace, Olathe, KS 66061",
+              "neighborhood": "",
+              "price": "$635,000",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "4,302",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642831/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642831/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658763046608314820-26413-W-111th-Terrace",
+              "description": "Welcome to the highly sought-after Cedar Creek! This stunning two-story home offers soaring 10-foot ceilings throughout the main level, an inviting open-concept layout, and an abundance of natural light, overlooking the private treed backyard. As you walk in, the two-story entryway features a gorgeous curved staircase, and right off of it is the large office space or flex room. The spacious living room includes built-ins, a tiled fireplace, and flows seamlessly into the breakfast area, creating a comfortable space for everyday living. The beautiful kitchen features ample storage, stainless steel appliances, granite countertops, and a tile backsplash. The main level also includes a dining room with hardwood floors and floor-to-ceiling windows and a convenient laundry room with tile floors and built-in storage. Upstairs, the primary bedroom provides a relaxing retreat with a private sitting room and its own fireplace, a vaulted ceiling, and a tiled bathroom with two large vanities and his-and-hers closets. Three additional bedrooms and two full bathrooms offer plenty of space for family, guests, or a home office, completing the second level. The finished basement expands the living space with a wet bar that includes a stove, microwave, and dishwasher, plenty of room for recreation or entertaining, and an additional full bathroom. Outside, enjoy the charming front porch and lovely back patio. On an oversized lot, this home is one you don't want to miss! Additional upgrades/updates include: a brand-new HVAC system, a sprinkler system, and front door keyless entry. Read more",
+              "facts": {
+                "Coordinates": "38.924632, -94.890091"
+              },
+              "listingOffice": "RE/MAX State Line",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-8vaxsn",
+              "title": "300 W 34 Street, Kansas City, MO 64111",
+              "neighborhood": "",
+              "price": "$749,950",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "2,616",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644871/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644871/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658933519598295310-300-W-34-Street",
+              "description": "Classic brick architecture defined by stately columns and a fenced yard welcomes you to this completely remodeled two-story home. Spanning 2,616 square feet of living space, this residence is designed with a true open floor plan that offers incredible flexibility. Experience the seamless flow with elegant crown molding and recessed lighting throughout. The stylish living room fireplace anchors the main level, creating an inviting setting for gatherings. At the heart of the home, the open kitchen is equipped with a kitchen island, built-in features, and sleek cabinetry. Prepare meals with ease using the cooktop, built-in range, electric oven, microwave, dishwasher, and refrigerator. This fully updated layout includes four bedrooms and three and a half bathrooms. Two bedrooms feature private en suite baths, while the remaining bedrooms share a hallway bath. Inside laundry on the main floor. The second floor features a primary suite with its own en suite bath and a large balcony overlooking city views. Down the second-floor hallway, a second private balcony that overlooks the backyard. Modern tile floors and sleek vanities define the bathrooms, which include a glass-enclosed walk-in shower with stone details. Outdoor living is highlighted by a covered front porch, a private driveway secured by a locked gate leads to an oversized paved parking area with ample space for multiple cars and room to add a future garage. This property is situated in an unbeatable central location on 34th Street. Easy access to the KC Streetcar, popular restaurants, entertainment, hospitals, colleges, and everything Kansas City has to offer. Read more",
+              "facts": {
+                "Coordinates": "39.065938, -94.589093"
+              },
+              "listingOffice": "ReeceNichols - Country Club Plaza",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-1mxb5vj",
+              "title": "4715 Black Swan Drive, Shawnee, KS 66216",
+              "neighborhood": "",
+              "price": "$930,000",
+              "beds": 5,
+              "baths": 4,
+              "sqft": "4,050",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2639190/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2639190/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658839768241889792-4715-Black-Swan-Drive",
+              "description": "You'll feel like you're not in in Kansas anymore! This exceptional Lake property is nestled in the coveted Black Swan Estates. Located just 15 minutes from the energy and modern conveniences of Kansas City. You're not just discovering a home; you're discovering the lifestyle you've been waiting for. Step inside and you'll be swept away with the artfully designed spaces. Enjoy a first floor large bedroom with En-suite, walk in closet and option to add washer and dryer. Across the hall you'll find with a second generous size family room with office nook and another full bathroom adjoining. Wander to the second floor where you will find the heart of the home. The large open kitchen with walk in pantry, full size side by side refrigerator & freezer will make all your entertaining dreams a breeze. With all of the outdoor living spaces with expansive decks, perfect for meandering and taking all your meals alfresco, your guests will never want to leave. The deck becomes screened with the touch of a button. The vaulted ceilings, chic electric fireplace coupled with the expansive idyllic views will have you blown away. The second floor offers two more bedrooms and a full bath with the option for compact stackable washer and dryer. Stroll on up to the third floor for the piece de la resistance, with the luxurious third-floor primary suite providing a private retreat, complete with its own private deck. Imagine waking up on a crisp fall morning, taking your coffee on the deck with all the leaves changing color! The amenities continue in the spa inspired En-suite with a freestanding soaking tub, and custom walk-in closet. A laundry closet with full size washer and dryer. Residents of Black Swan Estates enjoy community amenities, activities, and access to a stocked lake featuring smallmouth bass, largemouth bass, channel catfish, flathead catfish, and walleye. Community events, including an impressive Fourth of July celebration, add to the neighborhood’s appeal. Read more",
+              "facts": {
+                "Coordinates": "39.043826, -94.73129"
+              },
+              "listingOffice": "Platinum Realty LLC",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-g0pgyi",
+              "title": "5320 W 160 Street, Overland Park, KS 66085",
+              "neighborhood": "",
+              "price": "$610,000",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "3,328",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642002/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642002/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665894481133003907-5320-W-160-Street",
+              "description": "Welcome home to this well-maintained, move-in-ready property with comfortable living spaces, thoughtful updates, and a great layout for everyday living. The main level features updated carpeting, a welcoming kitchen, and a refreshed half bath. One of the best features of the home is the beautiful outdoor entertaining area, complete with a spacious patio, built-in gas fire pit, gas hookup for a grill, and a good-sized yard with plenty of room to enjoy. Upstairs, the primary suite includes an updated bathroom and remote-controlled blinds, with the laundry room conveniently located near the bedrooms. The finished basement adds even more usable space and includes a full bathroom, making it a great option for guests, a rec room, home office, or additional living area. Additional features include a roof that is only five years old, dual-zone air conditioning, and a gas heater in the garage. This home offers a nice mix of comfort, functionality, and outdoor space and is ready for its next owner. Read more",
+              "facts": {
+                "Coordinates": "38.838804, -94.647026"
+              },
+              "listingOffice": "ReeceNichols - Leawood",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-a5eqex",
+              "title": "5300 Sunset Drive Unit: 1, Kansas City, MO 64112",
+              "neighborhood": "",
+              "price": "$2,165,000",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "5,591",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644592/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644592/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658457326492078742-5300-Sunset-Drive-Unit-1",
+              "description": "Tucked inside a rare, private gated community just minutes from the Country Club Plaza, this stunning 5,500-square-foot English Tudor offers timeless character, exceptional privacy, and beautifully updated spaces designed for both everyday living and entertaining. Warm and inviting from the moment you step inside, the home features multiple sitting and gathering areas, giving everyone room to spread out while still feeling connected. At the heart of the home is a beautifully updated kitchen with crisp white marble countertops, blending classic elegance with modern functionality. The dramatic great room is a standout, with its soaring vaulted ceiling and impressive stone fireplace creating a space that feels both grand and incredibly comfortable. Spacious bedrooms provide peaceful retreats throughout the home, while the beautifully finished lower level adds another layer of living and entertaining space, complete with a stylish bar. Outside, the setting is equally special. Lush, mature landscaping surrounds the property, creating a private oasis around the pool, while a beautiful side yard offers additional space to relax, entertain, or simply enjoy the scenery. With its gracious proportions, inviting atmosphere, resort-like outdoor spaces, and coveted location near the Plaza, this is a home that offers the best of Kansas City living—private and peaceful, yet remarkably close to everything. Read more",
+              "facts": {
+                "Coordinates": "39.031274, -94.603586"
+              },
+              "listingOffice": "ReeceNichols - Leawood",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-39ystc",
+              "title": "16218 W 143rd Terrace, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$410,000",
+              "beds": 4,
+              "baths": 2.5,
+              "sqft": "2,393",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2636565/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2636565/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658567755397620966-16218-W-143rd-Terrace",
+              "description": "Welcome Home – You’ve Been Waiting For This One! From the moment you arrive, this impressive 4-bedroom, 3-bath home feels welcoming, beautifully cared for and ready to enjoy. Offering nearly 2,400 finished square feet, it blends thoughtful updates, comfortable living and tremendous curb appeal with a versatile floor plan designed for everyday life and entertaining. Step inside to gleaming hardwood floors throughout the main level, where the kitchen, dining and living spaces flow naturally together. It boasts new carpeting on the upper level, some fresh interior paint, a remodeled primary bathroom, newer roof with gutters and leaf guards (2025), tankless HWH (2025) and many more awesome features too! The beautifully appointed kitchen highlights granite countertops, breakfast bar, abundant painted cabinetry, pantry with pull-out drawers and some stainless steel appliances. It has a roomy dining room and an inviting 11x20 living room. The captivating family room showcases abundant natural light, built-ins, fireplace, surround sound and walkout access to a spectacular 15'x18' stamped-concrete patio with retractable awning … the perfect setting for relaxing, entertaining or enjoying the fenced backyard. Upstairs, the primary suite provides a peaceful retreat with carpeting, ceiling fan, two closets and an elegant en-suite bath that includes a solid surface vanity, shower, tile floor. Three additional bedrooms and another full bath for the ultimate convenience and comfort. The finished basement includes a recreational room or home office while the unfinished area provides lots of abundant storage. Meticulously maintained and move-in-ready, this wonderful home spotlights several other features including maintenance free vinyl siding, thermal windows, water softener, sump pump with battery backup, no HOA. Beautiful landscaping and fantastic location near parks (Heritage and Black Bob Park), shopping, dining, entertainment. The Perfect Place To Call Home!! Read more",
+              "facts": {
+                "Coordinates": "38.868822, -94.774808"
+              },
+              "listingOffice": "KW Diamond Partners",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-z5lvdd",
+              "title": "5545 Canterbury Road, Fairway, KS 66205",
+              "neighborhood": "",
+              "price": "$725,000",
+              "beds": 3,
+              "baths": 2.5,
+              "sqft": "2,350",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644575/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644575/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658977970699989944-5545-Canterbury-Road",
+              "description": "Storybook Cape Cod in the heart of the Golden Triangle! Full of timeless charm and thoughtfully updated throughout, this beautifully maintained home offers the perfect blend of character, comfort and modern functionality. From the moment you arrive, you’ll appreciate the attention to detail and extensive improvements that make this home truly move-in ready. The main level features inviting living spaces, a beautifully remodeled kitchen, updated powder room and a dedicated office with custom built-ins. The primary suite offers a stunning marble bath with double vanities, separate tub and shower. The finished lower level adds valuable living space with a full bath and has been thoughtfully remodeled, while a new French drain provides added peace of mind. Outside, enjoy an **expansive backyard** with updated landscaping, new sod, irrigation and a functional self-draining planter. Additional improvements include a whole-house generator, updated HVAC humidifier, new water heater, garage floor, sewer lining from the home to the city main, and a fully functioning wood-burning fireplace. With extensive improvements made throughout the years, there’s truly nothing left to do but move in and enjoy this exceptional Golden Triangle gem! Read more",
+              "facts": {
+                "Coordinates": "39.028041, -94.621973"
+              },
+              "listingOffice": "Compass Realty Group",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-1o422my",
+              "title": "9367 W 170 Terrace, Overland Park, KS 66085",
+              "neighborhood": "",
+              "price": "$1,215,000",
+              "beds": 5,
+              "baths": 5,
+              "sqft": "4,020",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645872/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645872/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658321966121770128-9367-W-170-Terrace",
+              "facts": {
+                "Coordinates": "38.81840509, -94.69188849"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            },
+            {
+              "id": "listing-mrug5k",
+              "title": "12201 Caenen Drive, Overland Park, KS 66213",
+              "neighborhood": "",
+              "price": "$475,000",
+              "beds": 3,
+              "baths": 2,
+              "sqft": "1,978",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645395/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645395/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658509801885393267-12201-Caenen-Drive",
+              "facts": {
+                "Coordinates": "38.905064, -94.727302"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791442849122,
+              "lastRefreshedAt": 1791442849122,
+              "lastSyncAttemptAt": 1791442849122,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791450049122,
+              "updatedAt": 1791442849122,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791442849122
+            }
+          ],
+          "timings": {
+            "details": 1045,
+            "listings": 2050,
+            "save": 195,
+            "total": 2652
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 575,
+      "totalMs": 5048,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Anthony West",
+          "host": "housesofkansascity.com",
+          "at": 627
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 627
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 9,
+          "at": 1001
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 9,
+          "at": 1016
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 9,
+          "at": 1596
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 9,
+          "at": 1613
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 9,
+          "at": 1634
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 9,
+          "at": 1748
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 6,
+          "total": 9,
+          "at": 2031
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 7,
+          "total": 9,
+          "at": 2036
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 8,
+          "total": 9,
+          "at": 2437
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 9,
+          "total": 9,
+          "at": 3146
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 8,
+          "total": 9,
+          "at": 3303
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": false,
+          "images": 60,
+          "sections": 9,
+          "at": 3308
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 3308
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 3332
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 3332
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 3332
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "failed",
+          "at": 4186
+        }
+      ],
+      "result": {
+        "status": 502,
+        "body": {
+          "code": "ai_rejected",
+          "error": "Analysis failed (AI quota or rate limit). Your sources are still saved; please retry."
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "houses-of-kansas-city-00-url.png",
+    "houses-of-kansas-city-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 4121,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 9 linked pages\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours\nIdentified your profile photo\nSorted 60 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n12 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.housesofkansascity.com\nBuilding your app\nBUILD STOPPED\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nFull details weren’t available for these 12 listings\nRead 9 linked pages\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours\nIdentified your profile photo\nSorted 60 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n12 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 12
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "12604 Baltimore Court, Kansas City, MO 64145",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645685/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 645,
+        "type": "jpg",
+        "bytes": 108462
+      }
+    },
+    {
+      "title": "8129 Dearborn Drive, Prairie Village, KS 66208",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642290/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 680,
+        "type": "jpg",
+        "bytes": 206784
+      }
+    },
+    {
+      "title": "15672 S Blackfoot Street, Olathe, KS 66062",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 144402
+      }
+    },
+    {
+      "title": "26413 W 111th Terrace, Olathe, KS 66061",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642831/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 681,
+        "type": "jpg",
+        "bytes": 173520
+      }
+    },
+    {
+      "title": "300 W 34 Street, Kansas City, MO 64111",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644871/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 165350
+      }
+    },
+    {
+      "title": "4715 Black Swan Drive, Shawnee, KS 66216",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2639190/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 575,
+        "type": "jpg",
+        "bytes": 203454
+      }
+    },
+    {
+      "title": "5320 W 160 Street, Overland Park, KS 66085",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642002/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 681,
+        "type": "jpg",
+        "bytes": 130191
+      }
+    },
+    {
+      "title": "5300 Sunset Drive Unit: 1, Kansas City, MO 64112",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644592/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 681,
+        "type": "jpg",
+        "bytes": 241065
+      }
+    },
+    {
+      "title": "16218 W 143rd Terrace, Olathe, KS 66062",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2636565/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 129295
+      }
+    },
+    {
+      "title": "5545 Canterbury Road, Fairway, KS 66205",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644575/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 680,
+        "type": "jpg",
+        "bytes": 184162
+      }
+    },
+    {
+      "title": "9367 W 170 Terrace, Overland Park, KS 66085",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645872/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 768,
+        "type": "jpg",
+        "bytes": 145944
+      }
+    },
+    {
+      "title": "12201 Caenen Drive, Overland Park, KS 66213",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645395/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 735,
+        "type": "jpg",
+        "bytes": 162281
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 30188,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-0.png"
+    },
+    {
+      "url": "https://housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 29916,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-1.png"
+    }
+  ],
+  "wallMs": 441154,
+  "window": {
+    "startedAt": "2026-10-08T07:00:44.051Z",
+    "endedAt": "2026-10-08T07:08:05.205Z"
+  }
+}

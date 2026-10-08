@@ -1,0 +1,77 @@
+{
+  "id": "scott-a-jacobs-realtor",
+  "url": "https://www.scottajacobsrealtor.com/",
+  "category": "custom",
+  "timeline": [
+    {
+      "at": 63,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 868,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1305,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nReading linked pages · 0 of 1"
+    },
+    {
+      "at": 2108,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2309,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2710,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 3112,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 4 pages checked\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nYour profile could not be written"
+    },
+    {
+      "at": 3916,
+      "screen": "Building your app\nBUILD STOPPED\nNo active listings were found on this page\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "scott-a-jacobs-realtor-00-url.png",
+    "scott-a-jacobs-realtor-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 4106,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nNo active listings were found on this page\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.scottajacobsrealtor.com\nBuilding your app\nBUILD STOPPED\nNo active listings were found on this page\nReading ScottAJacobsRealtor\nMatching your website’s design and imagery\nRead 1 linked page\nIdentified your profile photo and logo\nSorted 20 website images by role\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: We read that page but couldn’t find any active listings on it. If your listings are on another page, paste that page; otherwise you can add listings later.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.scottajacobsrealtor.com/",
+      "status": 200,
+      "finalUrl": "https://www.scottajacobsrealtor.com/",
+      "title": "Scott A Jacobs Realtor | Real Estate Services",
+      "textLength": 2062,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 2,
+      "sample": "Skip to Main Content\n\nHOME\n\nABOUT\n\nREVIEWS\n\nFEATURED\n\nLISTINGS\n\nCONTACT\n\nHOME DESIGN & LIVING\n\n616.481.2122\n\nFind\n\nYour Dream Home\n\nFollow\n\nYour Path\n\nCOMPREHENSIVE SERVICES\n\nCorporate business background with negotiation experience you can trust.\n\nInvestment Property\n\nProviding you with the due diligence, potential income, and required financial data on investment properties and packages to make sound investment and selling decisions.\n\nDream Home\n\nWhat's most important to you when buying or selling your home? Catering specifically to your needs and serving as your negotiator, we'll make your dream happen.\n\nReal Estate Guidance\n\nWith access to local market statistics, expert brokerage team, and corporate career experience, you'll receive well-rounded guidance to help you with solid next steps.\n\nSearch For Properties\nAbout Me\n\nI'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.\n\nLearn More\nA Homeowner's Guide To the S",
+      "challenge": false,
+      "screenshot": "scott-a-jacobs-realtor-source-0.png"
+    }
+  ],
+  "wallMs": 430185,
+  "window": {
+    "startedAt": "2026-10-08T08:56:25.365Z",
+    "endedAt": "2026-10-08T09:03:35.550Z"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "id": "century21-barbara-patterson",
+  "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+  "category": "franchise",
+  "timeline": [
+    {
+      "at": 69,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1075,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading your website"
+    },
+    {
+      "at": 3089,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nWriting your profile and app copy"
+    },
+    {
+      "at": 4697,
+      "screen": "Building your app\nBUILD STOPPED\nYour listings could not be read from this page\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 559,
+      "totalMs": 4436,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "ERROR: The request could not be satisfied",
+          "host": "century21.com",
+          "at": 2154
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 2154
+        },
+        {
+          "kind": "design",
+          "portrait": false,
+          "logo": false,
+          "images": 0,
+          "sections": 1,
+          "at": 2167
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 2167
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 2167
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 2167
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 2167
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "failed",
+          "at": 3578
+        }
+      ],
+      "result": {
+        "status": 502,
+        "body": {
+          "code": "ai_rejected",
+          "error": "Analysis failed (AI quota or rate limit). Your sources are still saved; please retry."
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "century21-barbara-patterson-00-url.png",
+    "century21-barbara-patterson-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3974,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nYour listings could not be read from this page\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.century21.com/real-estate/barbara-patterson/O10000058\nBuilding your app\nBUILD STOPPED\nYour listings could not be read from this page\nReading ERROR: The request could not be satisfied\nMatching your website’s design and imagery\nYour profile could not be written\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+      "status": 403,
+      "finalUrl": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+      "title": "ERROR: The request could not be satisfied",
+      "textLength": 513,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "403 ERROR\nThe request could not be satisfied.\nRequest blocked. We can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again later, or contact the app or website owner.\nIf you provide content to customers through CloudFront, you can find steps to troubleshoot and help prevent this error by reviewing the CloudFront documentation.\n\nGenerated by cloudfront (CloudFront)\nRequest ID: RR38GT4ar9_o7v0QbaddGGgylMfuh5aWUP5UV4dm5qJuec_kYZ4aZQ==\n",
+      "challenge": false,
+      "screenshot": "century21-barbara-patterson-source-0.png"
+    }
+  ],
+  "wallMs": 429388,
+  "window": {
+    "startedAt": "2026-10-08T08:20:36.185Z",
+    "endedAt": "2026-10-08T08:27:45.573Z"
+  }
+}

@@ -1,0 +1,567 @@
+{
+  "id": "freestone-properties",
+  "url": "https://www.freestoneproperties.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 61,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1067,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1269,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nMatching your website’s design and imagery\nReading listing details · 0 of 3"
+    },
+    {
+      "at": 1471,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nMatching your website’s design and imagery\nReading listing details · 2 of 3"
+    },
+    {
+      "at": 1672,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nMatching your website’s design and imagery\nReading listing details · 2 of 3\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 1874,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nMatching your website’s design and imagery\nReading listing details · 2 of 3\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 2076,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 listings so far · 1 page checked\nReading Freestone Properties\nMatching your website’s design and imagery\nReading listing details · 2 of 3\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2479,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nMatching your website’s design and imagery\nRead full details for all 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2680,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nMatching your website’s design and imagery\nRead full details for all 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaving 3 listings"
+    },
+    {
+      "at": 2881,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 3 active listings\nReading Freestone Properties\nMatching your website’s design and imagery\nRead full details for all 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nYour profile could not be written\nSaved 3 listings"
+    },
+    {
+      "at": 3082,
+      "screen": "Building your app\nBUILD STOPPED\nFound 3 active listings\nReading Freestone Properties\nMatching your website’s design and imagery\nRead full details for all 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nYour profile could not be written\nSaved 3 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n3 listings were imported and saved. They are kept.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 566,
+      "totalMs": 2628,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 53
+        },
+        {
+          "kind": "listings",
+          "host": "freestoneproperties.com",
+          "pages": 1,
+          "found": 0,
+          "at": 297
+        },
+        {
+          "kind": "listings",
+          "host": "freestoneproperties.com",
+          "pages": 1,
+          "found": 3,
+          "at": 319
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 3,
+          "succeeded": 0,
+          "at": 319
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 3,
+          "succeeded": 1,
+          "at": 429
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 3,
+          "succeeded": 2,
+          "at": 468
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 3,
+          "total": 3,
+          "succeeded": 3,
+          "at": 1422
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 3,
+          "at": 1429
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 3,
+          "at": 1643
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 3,
+          "at": 1822
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-nkdipb",
+            "url": "https://www.freestoneproperties.com/",
+            "submittedUrl": "https://www.freestoneproperties.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://www.freestoneproperties.com/"
+            ],
+            "connectedAt": 1791443723851,
+            "lastCheckedAt": 1791443723851,
+            "nextSyncAt": 1791450923851,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 3,
+            "identity": {
+              "phrases": [
+                "freestoneproperties",
+                "ashevillerealestate",
+                "blackmountainncrealestate",
+                "freestone"
+              ],
+              "words": [
+                "freestoneproperties",
+                "freestone",
+                "asheville",
+                "black",
+                "mountain"
+              ]
+            }
+          },
+          "imported": 3,
+          "checked": 3,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-an4r8u",
+              "title": "518 Sweet Birch Park Lane Black Mountain",
+              "neighborhood": "",
+              "price": "$575,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/1-custom-518-sweet-birch-park-ln.jpeg?t=1778890113",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/2-custom-518-sweet-birch-park-ln.jpeg?t=1778890114",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/3-custom-518-sweet-birch-park-ln.jpg?t=1778890113",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/4-custom-518-sweet-birch-park-ln.jpg?t=1778890114",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/5-custom-518-sweet-birch-park-ln.jpg?t=1778890114",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/6-custom-518-sweet-birch-park-ln.jpg?t=1778890113",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/7-custom-518-sweet-birch-park-ln.jpg?t=1778890114",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/8-custom-518-sweet-birch-park-ln.jpg?t=1778890114",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/9-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/10-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/11-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/12-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/13-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/14-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/15-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/16-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/17-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/18-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/19-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/20-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/21-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/22-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/23-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/24-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/25-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/26-custom-518-sweet-birch-park-ln.jpg?t=1778890116",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/27-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/28-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/29-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/30-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/31-custom-518-sweet-birch-park-ln.jpg?t=1778890115",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/32-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/33-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/34-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/35-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/36-custom-518-sweet-birch-park-ln.jpg?t=1778890117",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/37-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/38-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/39-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/40-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/41-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/42-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/43-custom-518-sweet-birch-park-ln.jpg?t=1778890118",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/44-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/45-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/46-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/47-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/48-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/49-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/50-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/51-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/52-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/53-custom-518-sweet-birch-park-ln.jpg?t=1778890119",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/54-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/55-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/56-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/57-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/58-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/59-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/60-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/61-custom-518-sweet-birch-park-ln.jpg?t=1778890120",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/62-custom-518-sweet-birch-park-ln.jpg?t=1778890121",
+                "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/63-custom-518-sweet-birch-park-ln.jpg?t=1778890120"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/1-custom-518-sweet-birch-park-ln.jpeg?t=1778890113",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/518-sweet-birch-park-lane-black-mountain/",
+              "description": "Desirable Sweet Birch Commons townhome for sale with an open concept, high-end finishes throughout, and an extremely functional layout.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791443722481,
+              "lastSyncAttemptAt": 1791443722481,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791450922481,
+              "updatedAt": 1791443722481,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791443722481
+            },
+            {
+              "id": "listing-10kubj2",
+              "title": "554 Sweet Birch Park Lane Black Mountain",
+              "neighborhood": "",
+              "price": "$615,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-01-1920x1440.jpg?t=1789106875",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-02-1920x1440.jpg?t=1789058569",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-03-1920x1440.jpg?t=1789058569",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-04-1920x1440.jpg?t=1789058578",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-05-1920x1440.jpg?t=1789058585",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-06-1920x1440.jpg?t=1789058591",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-07-1920x2560.jpg?t=1789058597",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-08-1920x1440.jpg?t=1789058603",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-09-1920x1440.jpg?t=1789058609",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-10-1920x1440.jpg?t=1789058616",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-11-1920x1440.jpg?t=1789058622",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-12_-1920x1440.jpg?t=1789058628",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-12-1920x1440.jpg?t=1789058634",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-13-1920x1440.jpg?t=1789058640",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-14-1920x1440.jpg?t=1789058646",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-15-1920x1440.jpg?t=1789058652",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-16-1920x1440.jpg?t=1789058658",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-17-1920x1440.jpg?t=1789058664",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-18-1920x1440.jpg?t=1789058670",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-19-1920x1440.jpg?t=1789058676",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-20-1920x1440.jpg?t=1789058682",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-21-1920x1440.jpg?t=1789058688",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-22-1920x1440.jpg?t=1789058694",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-23-1920x1441.jpg?t=1789058700",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-24-1920x1440.jpg?t=1789058706",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-25-1920x1440.jpg?t=1789058712",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-26-1920x1440.jpg?t=1789058718",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-27-1920x1440.jpg?t=1789058724",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-28-1920x1440.jpg?t=1789058730",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-29-1920x1440.jpg?t=1789058737",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-30-1920x1440.jpg?t=1789263296",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-31-1920x1440.jpg?t=1789263296",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-32-1920x1440.jpg?t=1789263307",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-33-1920x1440.jpg?t=1789263312",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-34-1920x1440.jpg?t=1789263313",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-35-1920x1440.jpg?t=1789263314",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-36-1920x1440.jpg?t=1789263316",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-37-1920x1440.jpg?t=1789539872",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-38-1920x1440.jpg?t=1789539873",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-39-1920x1440.jpg?t=1789937206",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-40-1920x1440.jpg?t=1789937182",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-41-1920x1440.jpg?t=1790083247",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-42-1920x1440.jpg?t=1790014080",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-43-1920x1440.jpg?t=1789263326",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-44-1920x1440.jpg?t=1789263324",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-45-1920x1440.jpg?t=1789263320",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-46-1920x1440.jpg?t=1789263320",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-47-1920x1440.jpg?t=1789263320",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-48-1920x1440.jpg?t=1789263345",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-49-1920x1440.jpg?t=1789263363",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-50-1920x1440.jpg?t=1789263383",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-51-1920x1440.jpg?t=1789939645",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-52-1920x1440.jpg?t=1789263387",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-53-1920x1440.jpg?t=1789263387",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-54-1920x1440.jpg?t=1789263387",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-55-1920x1440.jpg?t=1789263391",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-56-1920x2560.jpg?t=1789263393",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-57-1920x1440.jpg?t=1789263396",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-58-1920x1440.jpg?t=1789263396",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-59-1920x1440.jpg?t=1789263396",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-60-1920x2560.jpg?t=1789263399",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-61-1920x1440.jpg?t=1789263402",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-62-1920x1440.jpg?t=1789263402",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-63-1920x1440.jpg?t=1789263402",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-64-1920x1440.jpg?t=1789263421",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-65-1920x1440.jpg?t=1789263421",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-66-1920x1440.jpg?t=1789263421",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-67-1920x1440.jpg?t=1789916461",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-68-1920x1440.jpg?t=1789902057",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-69-1920x1440.jpg?t=1790012289",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-70-1920x1440.jpg?t=1789950001",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-71-1920x1440.jpg?t=1790010461",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-72-1920x1440.jpg?t=1789937189",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-73-1920x1440.jpg?t=1790011724",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-74-1920x1440.jpg?t=1790009401",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-75-1920x1440.jpg?t=1789886169",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-76-1920x1440.jpg?t=1789539830",
+                "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-77-1920x1440.jpg?t=1789539830"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-01-1920x1440.jpg?t=1789106875",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/554-sweet-birch-park-lane-black-mountain/",
+              "description": "Experience the perfect blend of privacy, convenience, and charm in this beautifully situated end-unit home! Interior Features: Bright, open floor plan Main-level primary ensuite with a soaring cathedral ceiling Spacious kitchen island Versatile loft/flex space for a home office or media room Massive 1,000-square-foot encapsulated crawlspace with 8-foot+ ceilings offering storage space Exterior Features: One […]",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791443722481,
+              "lastSyncAttemptAt": 1791443722481,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791450922481,
+              "updatedAt": 1791443722481,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791443722481
+            },
+            {
+              "id": "listing-bpibtn",
+              "title": "277 Debbies Branch Drive Old Fort",
+              "neighborhood": "",
+              "price": "$324,500",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-01-1920x1080.jpg?t=1787694075",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-02-1920x1080.jpg?t=1787694136",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-03-1920x1080.jpg?t=1787694137",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-04-1920x1080.jpg?t=1787694136",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-05-1920x1080.jpg?t=1787694144",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-06-1920x1080.jpg?t=1787718242",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-07-1920x1080.jpg?t=1787718236",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-08-1920x1080.jpg?t=1787718226",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-09-1920x1080.jpg?t=1787718226",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-10-1920x1080.jpg?t=1787718243",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-11-1920x1080.jpg?t=1787718226",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-12-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-13-1920x1080.jpg?t=1787718226",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-14-1920x1080.jpg?t=1787718241",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-17-1920x1080.jpg?t=1787718235",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-18-1920x1080.jpg?t=1787718236",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-19-1920x1080.jpg?t=1787718236",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-20-1920x1080.jpg?t=1787718242",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-21-1920x1080.jpg?t=1787718232",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-22-1920x1080.jpg?t=1787718232",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-23-1920x1080.jpg?t=1787718227",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-24-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-25-1920x1080.jpg?t=1787718242",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-26-1920x1080.jpg?t=1787718226",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-27-1920x1080.jpg?t=1787718232",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-28-1920x1080.jpg?t=1787718238",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-29-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-30-1920x1080.jpg?t=1787718241",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-31-1920x1080.jpg?t=1787718227",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-32-1920x1080.jpg?t=1787718233",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-33-1920x1080.jpg?t=1787718235",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-34-1920x1080.jpg?t=1787718232",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-35-1920x1080.jpg?t=1787718238",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-36-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-37-1920x1080.jpg?t=1787718226",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-16-1920x1080.jpg?t=1787718241",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-38-1920x1080.jpg?t=1787788562",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-39-1920x1080.jpg?t=1787718235",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-40-1920x1080.jpg?t=1787718242",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-41-1920x1080.jpg?t=1787788562",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-42-1920x1080.jpg?t=1787718243",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-43-1920x1080.jpg?t=1787718238",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-44-1920x1080.jpg?t=1787788563",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-45-1920x1080.jpg?t=1787788562",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-46-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-47-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-48-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-49-1920x1080.jpg?t=1787718230",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-50-1920x1080.jpg?t=1787788562",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-51-1920x1080.jpg?t=1787718239",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-52-1920x1080.jpg?t=1787788563",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-53-1920x1080.jpg?t=1787718239",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-54-1920x1080.jpg?t=1787718243",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-55-1920x1080.jpg?t=1787718232",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-56-1920x1080.jpg?t=1787718238",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-57-1920x1080.jpg?t=1787718239",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-58-1920x1080.jpg?t=1787788563",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-59-1920x1080.jpg?t=1787718229",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-60-1920x1080.jpg?t=1787718238",
+                "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-61-1920x1080.jpg?t=1787718232"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-01-1920x1080.jpg?t=1787694075",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/277-debbies-branch-drive-old-fort/",
+              "description": "Charming, well-maintained single-level home for sale in Old Fort, NC! Ideal setting to enjoy everything the mountains have to offer!",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791443722481,
+              "lastSyncAttemptAt": 1791443722481,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791450922481,
+              "updatedAt": 1791443722481,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791443722481
+            }
+          ],
+          "timings": {
+            "details": 1103,
+            "listings": 1377,
+            "save": 179,
+            "total": 1823
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "freestone-properties-00-url.png",
+    "freestone-properties-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 4189,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nFound 3 active listings\nReading Freestone Properties\nMatching your website’s design and imagery\nRead full details for all 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nYour profile could not be written\nSaved 3 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n3 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.freestoneproperties.com\nBuilding your app\nBUILD STOPPED\nFound 3 active listings\nReading Freestone Properties\nMatching your website’s design and imagery\nRead full details for all 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nYour profile could not be written\nSaved 3 listings\nThe build stopped\nAnalysis failed (AI quota or rate limit). Your sources are still saved; please retry.\n3 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 3
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "518 Sweet Birch Park Lane Black Mountain",
+      "photos": 63,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/518-sweet-birch/1-custom-518-sweet-birch-park-ln.jpeg?t=1778890113",
+      "size": {
+        "status": 200,
+        "width": 1200,
+        "height": 900,
+        "type": "jpg",
+        "bytes": 133400
+      }
+    },
+    {
+      "title": "554 Sweet Birch Park Lane Black Mountain",
+      "photos": 78,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/554-Sweet-Birch-Black-Mtn-NC-01-1920x1440.jpg?t=1789106875",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 1080,
+        "type": "jpg",
+        "bytes": 246471
+      }
+    },
+    {
+      "title": "277 Debbies Branch Drive Old Fort",
+      "photos": 60,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/277-debbies-branch/277-Debbies-Branch-Dr-Old-Fort-NC-01-1920x1080.jpg?t=1787694075",
+      "size": {
+        "status": 200,
+        "width": 1920,
+        "height": 1080,
+        "type": "jpg",
+        "bytes": 449490
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9045,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-0.png"
+    },
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9045,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-1.png"
+    }
+  ],
+  "wallMs": 436434,
+  "window": {
+    "startedAt": "2026-10-08T07:15:17.354Z",
+    "endedAt": "2026-10-08T07:22:33.788Z"
+  }
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "realtorId": "50cad5f4-f78d-4d53-9e77-0a06899ebb9a",
+    "createdAt": "2026-10-08 06:45:42.412696+00",
+    "sources": [
+      {
+        "id": "source-1iaaykx",
+        "url": "https://www.rockysmom.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "rockysmom",
+            "rocky"
+          ],
+          "phrases": [
+            "rockysmom",
+            "rockysmomrealty",
+            "homesforsale"
+          ]
+        },
+        "nextSyncAt": 1791449148291,
+        "connectedAt": 1791441948291,
+        "listingCount": 1,
+        "submittedUrl": "https://www.rockysmom.com/",
+        "inventoryUrls": [
+          "https://rockysmom.com/"
+        ],
+        "lastCheckedAt": 1791441948291
+      }
+    ],
+    "listings": [
+      {
+        "title": "3531 Peters Creek RD NW",
+        "price": "$140,000",
+        "sourceUrl": "https://rockysmom.com/idx/3531-Peters-Creek-RD-NW-107-Roanoke-VA-24019-mls_929929?Limit=3&m=20051230194116769413000000&OrderBy=-ModificationTimestamp&pg=1&search_referral_url=https%3A%2F%2Frockysmom.com",
+        "photos": 15,
+        "descriptionLength": 622,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "ROCKY'S MOM REALTY LLC",
+        "ownership": "own"
+      }
+    ]
+  }
+]
