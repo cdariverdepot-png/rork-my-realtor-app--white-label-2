@@ -25,6 +25,18 @@
     "gate": "13 -> 0"
   },
   {
+    "failure": "not-a-property",
+    "symptom": "NOT_A_PROPERTY",
+    "stage": "collection scope (what counts as a property record)",
+    "record": "docs/compatibility-knowledge/not-a-property.md",
+    "architectures": [
+      "agentfire-dsidx"
+    ],
+    "integratedAt": "2026-10-08T19:38:18.922Z",
+    "commit": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+    "gate": "1 -> 0"
+  },
+  {
     "failure": "mirrored-listing",
     "symptom": "MIRRORED_LISTING",
     "stage": "save-boundary normalizer (one record per listing)",

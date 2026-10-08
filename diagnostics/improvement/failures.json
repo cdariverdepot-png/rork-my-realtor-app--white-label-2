@@ -1030,7 +1030,7 @@
         "supabase/functions/analyze-realtor-build/listingDiscovery.ts (collection readers, scope)",
         "supabase/functions/analyze-realtor-build/listingRecords.ts (normalizeListingRecords: not_a_property)"
       ],
-      "status": "open",
+      "status": "integrated",
       "firstSeen": "2026-10-08T19:22:34.206Z",
       "lastSeen": "2026-10-08T19:37:11.208Z",
       "evidenceHash": "62d2693c3d059b56",
@@ -1055,7 +1055,23 @@
       "architectures": [
         "agentfire-dsidx"
       ],
-      "attempts": []
+      "attempts": [
+        {
+          "at": "2026-10-08T19:38:18.922Z",
+          "outcome": "integrated",
+          "branch": "improve/not-a-property-session1",
+          "commit": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+          "evidenceHash": "62d2693c3d059b56",
+          "gate": {
+            "accepted": true,
+            "head": "42d648a2c3b1f88e158ec3595e7e381d697a5e9c",
+            "base": "5803976279f14aefef077f1c074f03b93b8de18f",
+            "target": "1 -> 0",
+            "problems": []
+          }
+        }
+      ],
+      "knowledge": "docs/compatibility-knowledge/not-a-property.md"
     },
     "mirrored-listing": {
       "id": "mirrored-listing",
