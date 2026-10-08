@@ -1,0 +1,173 @@
+[
+  {
+    "realtorId": "f13da69c-8e49-43b3-ac72-70d80b7ad157",
+    "createdAt": "2026-10-08 22:29:28.508076+00",
+    "sources": [
+      {
+        "id": "source-12427zc",
+        "url": "https://www.katerinasaylesrealtor.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "katerinasaylesrealtor",
+            "katerina",
+            "sayles",
+            "windermere",
+            "capitol",
+            "explore",
+            "seattle",
+            "today"
+          ],
+          "phrases": [
+            "katerinasaylesrealtor",
+            "katerinasayles",
+            "windermererealestatecapitolhill",
+            "exploreseattlerealestatetoday"
+          ]
+        },
+        "nextSyncAt": 1791505791628,
+        "connectedAt": 1791498591628,
+        "listingCount": 10,
+        "submittedUrl": "https://www.katerinasaylesrealtor.com/",
+        "inventoryUrls": [
+          "https://www.katerinasaylesrealtor.com/"
+        ],
+        "lastCheckedAt": 1791498591628
+      }
+    ],
+    "listings": [
+      {
+        "title": "14035 Densmore Avenue N Seattle, WA 98133",
+        "price": "$679,900",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/14035-DENSMORE-AVENUE-N-SEATTLE-WA-98133/2513298/26/",
+        "photos": 26,
+        "descriptionLength": 1273,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "7916 Renton Avenue S Seattle, WA 98118",
+        "price": "$685,000",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/7916-RENTON-AVENUE-S-SEATTLE-WA-98118/2586856/26/",
+        "photos": 27,
+        "descriptionLength": 1496,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "18002 B 10th Avenue NE Shoreline, WA 98155",
+        "price": "$694,950",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/18002-B-10TH-AVENUE-NE-SHORELINE-WA-98155/2552373/26/",
+        "photos": 28,
+        "descriptionLength": 1298,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "583 Battery Street #508N Seattle, WA 98121",
+        "price": "$699,000",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/583-BATTERY-STREET-508N-SEATTLE-WA-98121/2574763/26/",
+        "photos": 32,
+        "descriptionLength": 1374,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "1017 Minor Avenue #1401 Seattle, WA 98104",
+        "price": "$699,000",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/1017-MINOR-AVENUE-1401-SEATTLE-WA-98104/2541335/26/",
+        "photos": 17,
+        "descriptionLength": 1079,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "4411 21st Avenue SW Seattle, WA 98106",
+        "price": "$699,900",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/4411-21ST-AVENUE-SW-SEATTLE-WA-98106/2528630/26/",
+        "photos": 24,
+        "descriptionLength": 1455,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "4411 21st Avenue SW Seattle, WA 98106",
+        "price": "$699,900",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/4411-21ST-AVENUE-SW-SEATTLE-WA-98106/2523876/26/",
+        "photos": 24,
+        "descriptionLength": 1455,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "906 A 28th Avenue S Seattle, WA 98144",
+        "price": "$699,950",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-A-28TH-AVENUE-S-SEATTLE-WA-98144/2504265/26/",
+        "photos": 31,
+        "descriptionLength": 1026,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "320 NE 156th Street Shoreline, WA 98155",
+        "price": "$725,000",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/320-NE-156TH-STREET-SHORELINE-WA-98155/2580829/26/",
+        "photos": 30,
+        "descriptionLength": 948,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "906 B 28th Avenue S Seattle, WA 98144",
+        "price": "$739,950",
+        "sourceUrl": "https://www.katerinasaylesrealtor.com/homes-for-sale-details/906-B-28TH-AVENUE-S-SEATTLE-WA-98144/2548957/26/",
+        "photos": 27,
+        "descriptionLength": 1313,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      }
+    ]
+  }
+]

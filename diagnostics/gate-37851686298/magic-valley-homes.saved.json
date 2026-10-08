@@ -1,0 +1,293 @@
+[
+  {
+    "realtorId": "5b34c342-7708-40bd-b472-ff2a6939c981",
+    "createdAt": "2026-10-08 22:20:29.773952+00",
+    "sources": [
+      {
+        "id": "source-1oi2m45",
+        "url": "https://magicvalley.homes/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "magicvalley",
+            "serna",
+            "southern",
+            "idaho",
+            "expert",
+            "magic",
+            "valley"
+          ],
+          "phrases": [
+            "magicvalley",
+            "ikerserna",
+            "southernidahorealestateexpertikerserna",
+            "magicvalleyhomes"
+          ]
+        },
+        "nextSyncAt": 1791505234053,
+        "connectedAt": 1791498034053,
+        "listingCount": 15,
+        "submittedUrl": "https://magicvalley.homes/",
+        "inventoryUrls": [
+          "https://magicvalley.homes/"
+        ],
+        "lastCheckedAt": 1791498034053
+      }
+    ],
+    "listings": [
+      {
+        "title": "3444 N 4500 E",
+        "price": "$415,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98999860/Murtaugh/3444-N-4500-E/",
+        "photos": 10,
+        "descriptionLength": 1357,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1915"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,856",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "192 W Caswell",
+        "price": "$225,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98998915/Twin-Falls/192-W-Caswell/",
+        "photos": 10,
+        "descriptionLength": 987,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1994"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": "1,144",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "930 Tunnel Street",
+        "price": "$425,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98998783/Twin-Falls/930-Tunnel-Street/",
+        "photos": 10,
+        "descriptionLength": 1021,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,607",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "946 Tunnel Street",
+        "price": "$425,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98998784/Twin-Falls/946-Tunnel-Street/",
+        "photos": 10,
+        "descriptionLength": 989,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,657",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "2214 Settlers Ridge Trail",
+        "price": "$739,900",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98998565/Twin-Falls/2214-Settlers-Ridge-Trail/",
+        "photos": 10,
+        "descriptionLength": 1196,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2020"
+        },
+        "beds": 4,
+        "baths": 2.5,
+        "sqft": "2,816",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "1280 E 4340 N",
+        "price": "$130,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98997802/Buhl/1280-E-4340-N/",
+        "photos": 5,
+        "descriptionLength": 1004,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "1228 Evergreen Dr",
+        "price": "$415,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98995647/Twin-Falls/1228-Evergreen-Dr/",
+        "photos": 10,
+        "descriptionLength": 1402,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1963"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": "3,223",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "2345 Longbow Dr",
+        "price": "$347,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98995555/Twin-Falls/2345-Longbow-Dr/",
+        "photos": 10,
+        "descriptionLength": 1301,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1981"
+        },
+        "beds": 3,
+        "baths": 2.5,
+        "sqft": "1,810",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "201 Locust Street South",
+        "price": "$189,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98995168/Twin-Falls/201-Locust-Street-South/",
+        "photos": 10,
+        "descriptionLength": 479,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1914"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": "680",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "919 Gem Ave",
+        "price": "$412,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98993443/Kimberly/919-Gem-Ave/",
+        "photos": 10,
+        "descriptionLength": 511,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2022"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,644",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "1290 N College Rd",
+        "price": "$36,201",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98990483/Twin-Falls/1290-N-College-Rd/",
+        "photos": 10,
+        "descriptionLength": 485,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": "2,194",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "4531 N 1250 E",
+        "price": "$587,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98990243/Buhl/4531-N-1250-E/",
+        "photos": 10,
+        "descriptionLength": 1402,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2007"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,923",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "548 Canyon Falls Dr",
+        "price": "$619,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98990126/Twin-Falls/548-Canyon-Falls-Dr/",
+        "photos": 10,
+        "descriptionLength": 855,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,028",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "3125 Orion Ave",
+        "price": "$420,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98986471/Twin-Falls/3125-Orion-Ave/",
+        "photos": 10,
+        "descriptionLength": 1054,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,657",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      },
+      {
+        "title": "1501 21st Street",
+        "price": "$253,000",
+        "sourceUrl": "https://magicvalley.homes/listing/imls/98984376/Heyburn/1501-21st-Street/",
+        "photos": 10,
+        "descriptionLength": 434,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1957"
+        },
+        "beds": 4,
+        "baths": 1,
+        "sqft": "1,307",
+        "listingOffice": "Super Realty of Idaho Super Realty of Idaho",
+        "ownership": "own"
+      }
+    ]
+  }
+]

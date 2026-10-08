@@ -1,0 +1,1086 @@
+{
+  "id": "houses-of-kansas-city",
+  "url": "https://www.housesofkansascity.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 61,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 867,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1470,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+    },
+    {
+      "at": 1671,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1872,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 0 of 9"
+    },
+    {
+      "at": 2073,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 1 of 9\nReading listing details · 0 of 12"
+    },
+    {
+      "at": 2274,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 2 of 9\nReading listing details · 0 of 12"
+    },
+    {
+      "at": 2478,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 2 of 9\nReading listing details · 4 of 12"
+    },
+    {
+      "at": 2679,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 4 of 9\nReading listing details · 7 of 12"
+    },
+    {
+      "at": 2881,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 5 of 9\nReading listing details · 7 of 12"
+    },
+    {
+      "at": 3083,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 7 of 9\nReading listing details · 10 of 12"
+    },
+    {
+      "at": 3284,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 7 of 9\nReading listing details · 11 of 12"
+    },
+    {
+      "at": 3485,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 8 of 9\nReading listing details · 11 of 12"
+    },
+    {
+      "at": 3887,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4089,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaving 12 listings"
+    },
+    {
+      "at": 4491,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaved 12 listings"
+    },
+    {
+      "at": 12542,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaved 12 listings\nFound Anthony West · Mission Woods, KS"
+    },
+    {
+      "at": 12744,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 529,
+      "totalMs": 4267,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 117
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 1,
+          "found": 0,
+          "at": 751
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 0,
+          "at": 806
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 12,
+          "at": 1327
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 12,
+          "succeeded": 0,
+          "at": 1327
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 12,
+          "succeeded": 1,
+          "at": 1727
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 12,
+          "succeeded": 2,
+          "at": 1778
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 12,
+          "succeeded": 3,
+          "at": 1798
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 12,
+          "succeeded": 4,
+          "at": 1829
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 12,
+          "succeeded": 5,
+          "at": 1919
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 12,
+          "succeeded": 5,
+          "at": 1932
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 7,
+          "total": 12,
+          "succeeded": 5,
+          "at": 1942
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 8,
+          "total": 12,
+          "succeeded": 6,
+          "at": 2314
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 9,
+          "total": 12,
+          "succeeded": 7,
+          "at": 2328
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 10,
+          "total": 12,
+          "succeeded": 8,
+          "at": 2410
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 11,
+          "total": 12,
+          "succeeded": 9,
+          "at": 2574
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 12,
+          "total": 12,
+          "succeeded": 10,
+          "at": 3078
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 12,
+          "at": 3086
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 12,
+          "at": 3379
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 12,
+          "at": 3674
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-1636u8n",
+            "url": "https://www.housesofkansascity.com/",
+            "submittedUrl": "https://www.housesofkansascity.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://housesofkansascity.com/",
+              "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D"
+            ],
+            "connectedAt": 1791497905965,
+            "lastCheckedAt": 1791497905965,
+            "nextSyncAt": 1791505105965,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 12,
+            "identity": {
+              "phrases": [
+                "housesofkansascity",
+                "anthonywest",
+                "toprealestateexpertinkansascity"
+              ],
+              "words": [
+                "housesofkansascity",
+                "anthony",
+                "expert",
+                "kansas"
+              ]
+            }
+          },
+          "imported": 12,
+          "warning": "2 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 12,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1ftckbd",
+              "title": "11721 W 181ST Street, Overland Park, KS 66013",
+              "neighborhood": "",
+              "price": "$2,025,989",
+              "beds": 4,
+              "baths": 5.5,
+              "sqft": "5,426",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658491477007215241-11721-W-181ST-Street",
+              "description": "The stunning HAMILTON 1.5-story by Bickimer Homes is back in MODEL ROW due to high demand and ready to tour on lot #13 in Woodmyre in Overland Park, 181st/ Quivira. A must-see new model home with updated warm wood, black solid surface countertops, and an impressive daylight basement with a speakeasy twist that everyone is talking about. This spacious 1.5-story is a favorite with a main-floor primary bedroom and a sunroom/office or 5th bedroom option, high ceilings in the great room, a curved open staircase, and a bonus upstairs loft! WOW! Beautiful new English Contemporary exterior is fresh and timeless with stucco, light-colored stone, black window frames, and metal roof accents with an oversized iron entry door. WOODMYRE is one of the last new home communities in Johnson County. With only 85 homes when complete, WOODMYRE will provide an intimate, connected lifestyle in a thoughtfully designed and naturally inspired neighborhood you’ll be proud to call home! Located at 181st/Quivira, Woodmyre is close to Bluhawk shopping, OP Arboretum, Heritage Park, and has super easy access to HWY 69. BLUE VALLEY SCHOOLS Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.79943723, -94.72192005"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-1pad0sy",
+              "title": "15268 W 161st Court, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$790,000",
+              "beds": 5,
+              "baths": 4.5,
+              "sqft": "2,899",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658344935808088357-15268-W-161st-Court",
+              "description": "The St. John by C3 Homes coming soon! This 1.5 Story home features main floor primary bedroom and additional main floor bedroom or office. Three bedrooms upstairs, all of which have their own private bathroom. Laundry on main level and upstairs. No more hauling laundry up and down the stairs! Unfinished basement with plumbing stub and daylight grade lot. This home is under construction! Renderings are for conceptual purposes only and specifications and features may vary. All in the coveted Heritage Ranch, A Lambie-Rieke Community, with Amenities Galore such as state-of-the-art pool, clubhouse, trails, pickleball, putting green, play area, half-court basketball, ponds and so much more coming soon! This community provides a wonderful lifestyle and right next to the 1,238 Acre Heritage Park with Dog Park, Sports Parks, Golf, Lake, Trails and so much more! Contact Onsite Agents for Estimated Completion of homes on site, and design selections. Our Welcome Center Office is located at LOT 64, open 7 days a week. Sq Ft & Taxes are estimated. Home is under construction. 60+/- Days to Completion. LOT 20. Welcome Home to Heritage Ranch - one of the last NEW Home Communities in Johnson County! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.8345832, -94.76265553"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-fj9w4l",
+              "title": "11704 W 181st Street, Overland Park, KS 66013",
+              "neighborhood": "",
+              "price": "$1,049,722",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "3,530",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658662917909040249-11704-W-181st-Street",
+              "description": "The Roosevelt 1.5 Story with Regency exterior elevation by Bickimer Homes on lot #8 in Woodmyre, an upscale new home community in OP with Blue Valley Schools, ready for a Fall 2027 move-in. This sought-after plan features a stunning circular staircase as you enter, arched room transitions, an upstairs loft space, a grand two-story great room and a secret back pantry with access from the garage to the back yard. The most talked about model home is now back and building in Woodmyre. There is still time to pick your design selections and add a basement finish. *Photos of previous model home as this home is under construction* Woodmyre is a brand new upscale new home community in Overland Park with BLUE VALLEY SCHOOLS. Situated on a hilltop at 181st and Quivira this boutique style community will have a resort-style pool, year round outdoor covered pavilion, pickleball court, play area, basketball half court, and outdoor sports field. With only 85 homes when complete, WOODMYRE will provide an intimate, connected lifestyle thoughtfully designed by 4 local builders and naturally inspired by the wooded hilltop. A neighborhood you’ll be proud to call home! Located at 181st/Quivira, Woodmyre is close to Bluhawk shopping, OP Arboretum, Heritage Park with easy access to HWY 69. BLUE VALLEY SCHOOLS Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.79847902, -94.7218039"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-g5kqhy",
+              "title": "3440 W 133rd Terrace, Leawood, KS 66209",
+              "neighborhood": "",
+              "price": "$1,498,000",
+              "beds": 4,
+              "baths": 3,
+              "sqft": "3,022",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/a914bcc1-1608-4df0-b6c8-7e55dcefdef8.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/0e17b2b7-5dfc-47dd-a01d-778a43f90dc4.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/10f6580e-fdfd-4ee7-998f-90e84dc967df.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/5aff6b73-1d4b-4732-8fa7-3c10b4c0b21b.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/082fda3c-2574-430c-93de-f1eb3df2b948.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/a914bcc1-1608-4df0-b6c8-7e55dcefdef8.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658594293304130786-3440-W-133rd-Terrace",
+              "description": "Willis Custom Homes presents the Bradford Cottage for East Village Leawood! Located on Lot 8, this Reverse 1.5 Story home offers thoughtful design throughout for everyday living. The main level features a spacious kitchen and dining that make entertaining easy, from the large kitchen island and walk-in pantry to the built-in hutch in the dining area. A large covered lanai with fireplace is the perfect place to relax! The main level primary suite is a spa-like space, and the spacious flex room is perfect for an additional bedroom or office on the main as well. Two bedrooms, bar, rec, and bath complete the lower level. Construction is scheduled to be complete on 9/4/26! East Village Leawood is one of Leawood's newest maintenance-provided communities conveniently located off the 135th St corridor. Uncover everything East Village Leawood has to offer in this amazing mixed-use community designed by Oddo Development Company, Inc. Residential meets vibrant living experience unlike any other community in South Johnson County! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.885807, -94.62486"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-12dqmmt",
+              "title": "17341 W 169th Terrace, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$781,766",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "2,780",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665828386411154810-17341-W-169th-Terrace",
+              "description": "***The Makenna by Gabriel Homes***Lot 137***MODEL NOW FOR SALE*** Beautiful Boulder Creek! You won't want to miss this new and stunning modern Makenna model home by Gabriel Homes that is outfitted with so many custom features and designer decor! This 4 bedroom & 3.5 bath home features an open concept kitchen/breakfast room/great room with 10 ft ceilings plus a main floor office just off the entry with French doors and built-in bookshelves. HUGE master bedroom with a sitting room for your quiet get-away. An amazing master bathroom with 3 shower heads, free-standing tub, a huge walk-in closet plus a second walk-in closet behind a SECRET DOOR. 2nd floor laundry room adjacent to the master bedroom. Covered stamped concrete patio plus more open-air patio with a firepit. This home is a must see!!! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.82191526, -94.78621775"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-ma5c6k",
+              "title": "7927 Round Prairie Street, Shawnee, KS 66220",
+              "neighborhood": "",
+              "price": "$994,500",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "3,367",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/8f2f83eb-09bb-4fe9-b073-38e34bccf3e2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/fb41a8d6-f39b-409b-9d7a-cf013f0e7cd2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/be222d63-e65a-4d92-89bc-38e9a868ec33.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/8e326bd7-b938-4b12-a7da-1251a86be3d1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/a439036d-d2ba-49ba-adec-34dc396c4896.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/8f2f83eb-09bb-4fe9-b073-38e34bccf3e2.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658815102358963521-7927-Round-Prairie-Street",
+              "description": "MODEL HOME – NOT FOR SALE. Welcome to the Cypress by J.S. Robinson Fine Homes on Lot 79 in Bristol Highlands. J.S. Robinson shows off their craft in this stunning new 1.5 Story model, the Gold Pick of the Parade! This home has all the right spaces in all the right places—starting with a main-level primary suite that feels like a retreat with its soaking tub, separate shower, and double vanity. The laundry room connects directly to the oversized walk-in closet (complete with built-ins), keeping life organized is easier than ever. The heart of the home is a 2-story great room drenched in natural light with a cozy gas fireplace, while a flex room with glass-paned double sliding pocket doors gives you space for an office, playroom, or creative nook right off the breakfast area. The kitchen is as stylish as it is functional, featuring cabinets to the ceiling, a quartz-topped oversized island, and a generous walk-in pantry. A large mudroom ties the flow together, leading out to the 3-car garage. Upstairs, zoned heating and cooling keep everyone comfortable. The spacious loft with a walk-in closet is already roughed in for a future bathroom, while three bedrooms offer private and shared spaces—one ensuite with its own bath, and two sharing a Jack-and-Jill with separate vanities. Future amenities include a clubhouse, resort-style pool, play area, sport courts, and more! Located in a premier Shawnee location close to parks, trails, shopping, dining and top-rated De Soto schools, all 5 minutes from Shawnee Mission Park (largest park in JoCo), Lake Lenexa, 7 premier golf courses, Lenexa City Center and Marketplace with the new Restaurant Row plus the numerous festivals in Shawnee and Lenexa throughout the year! Open Daily! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.98389802, -94.84096908"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-1fx6hx7",
+              "title": "11717 W 181st Street, Overland Park, KS 66013",
+              "neighborhood": "",
+              "price": "$1,434,900",
+              "beds": 4,
+              "baths": 5,
+              "sqft": "4,519",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658134617063568613-11717-W-181st-Street",
+              "description": "The brand NEW MAPLEWOOD IV REVERSE by JFE HOMES is now finished and ready to tour in WOODMYRE on lot #14. This stunning MODEL HOME is an expanded version of the popular Maplewood with all the extra features like a back hall, prep-style kitchen pantry, large dining room, tall ceilings, arched entries, covered deck, and a bonus spectacular finished basement featuring a golf simulator. WOW! WOODMYRE is one of the last new home communities in Johnson County. With only 85 homes when complete, WOODMYRE will provide an intimate, connected lifestyle in a thoughtfully designed and naturally inspired neighborhood you’ll be proud to call home! Located at 181st/Quivira, Woodmyre is close to Bluhawk shopping, OP Arboretum, Heritage Park, and has super easy access to HWY 69. BLUE VALLEY SCHOOLS * MODEL HOME NOT FOR SALE* Due to a road closure, please travel South on Pflumm to 183rd, just past Riverstone, to visit us. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.79944161, -94.72160942"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-1mviflk",
+              "title": "3256 W 133rd Terrace, Leawood, KS 66209",
+              "neighborhood": "",
+              "price": "$2,250,000",
+              "beds": 4,
+              "baths": 4,
+              "sqft": "4,293",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658494093556023103-3256-W-133rd-Terrace",
+              "description": "Model Now for Sale! Discover the perfect balance of contemporary design and comfortable living in this stunning Willis Custom Homes Reverse 1.5-story home. From the moment you step through the smart glass double front doors, you’re greeted by soaring ceilings, floor-to-ceiling windows, and an abundance of natural light that flows seamlessly through the open main level. The floating staircase and offset fireplace serve as striking architectural centerpieces, while thoughtfully designed ambient lighting enhances the home’s warm and modern aesthetic. The gourmet kitchen is a chef’s dream — featuring solid surface countertops, custom cabinetry, and high-end appliances, all crafted for both functionality and entertaining. With 4 bedrooms and 4 bathrooms, this home offers flexible living spaces ideal for families or guests. The walkout, walk-up lower level expands your living area outdoors, opening to a beautifully landscaped backyard where a tranquil water feature and fire pit create the perfect setting for gatherings or quiet evenings. Located on Lot 15 at East Village Leawood, The Caspian is sleek, sophisticated, and thoughtfully designed. This property defines modern luxury living. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.88593466, -94.62393419"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-14ffcjb",
+              "title": "16979 S Cheshire Street, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$629,950",
+              "beds": 3,
+              "baths": 2.5,
+              "sqft": "1,857",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/2c6fa7ae-a58d-4bce-8a0a-727b45365857.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/39a1c53a-9cb6-465b-b16e-7d8622f37286.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/d54cf439-ea75-4d1f-a023-a16904eae249.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/0156373a-17ae-45f8-ba35-d682f60073aa.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/7f5bc92c-b110-474a-945e-bb44b5300c40.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/2c6fa7ae-a58d-4bce-8a0a-727b45365857.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658878706821171462-16979-S-Cheshire-Street",
+              "description": "Stonebridge Villas, Rodrock Development's newest maintenance provided community, presents The Payton Villa RANCH by New Mark Homes. MOVE IN READY!! This 3 bedroom 2.5 bath RANCH home sits on an East backing daylight basement lot! Features a composite, covered deck, enlarged kitchen island, upgraded hardwood flooring, built in cabinets on fireplace wall, tile and light fixture upgrades throughout! HOA covers lawn care, snow removal, clubhouse access, pool, pickleball courts and walking trails. Easy access to major routes for regional commuting. Heritage Park 1.5 mi. Lake Olathe Park 2.0 mi. Hy-Vee 3 mi. Price Chopper 1.5 mi. **Some pictures are of a previous model home. Finishes and Upgrades may vary. Contact agent for details.**",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.82103567, -94.77593124"
+              },
+              "listingOffice": "Rodrock & Associates Realtors",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-1o56ptf",
+              "title": "12407 W 183rd Terrace, Overland Park, KS 66013",
+              "neighborhood": "",
+              "price": "$989,800",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "3,367",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/cd113bd8-514b-467c-adbf-e80c657669cc.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/d8a9718d-71a7-465c-b640-cdf038c24e67.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/0ee8f8e0-0305-4830-b9da-d6e4a820f68f.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/853e9814-4858-4a00-8a6b-62330f1fc973.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/50bd2244-9414-435d-b1d8-b5c330570b50.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/cd113bd8-514b-467c-adbf-e80c657669cc.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658716980239498059-12407-W-183rd-Terrace",
+              "description": "MODEL HOME- NOT FOR SALE AT THIS TIME. Situated on Lot 52, J.S. Robinson’s Cypress 1.5 floor plan offers a refined 1½-story layout centered around an impressive two-story great room, which is visible from the upper level. The open concept seamlessly integrates the great room, kitchen, dining area, flex room, and outdoor living space. The primary suite serves as a main-level retreat with a luxurious, spa-inspired bath. The upper level features three bedrooms: one with a private en-suite bathroom and two sharing a Jack and Jill bath, each equipped with walk-in closets. Additional living space is provided by a loft that includes a walk-in game closet. Entertaining is enhanced by the covered back patio. This efficient design balances functionality with comfortable and elegant living. Riverstone Valley is close to schools, highways, shops and restaurants! Note: Beginning in the fall of 2026, students in Riverstone Valley will attend the new Blue Valley Middle School: Wolf Springs Middle located at 17501 Grant Street. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.79542937, -94.72927738"
+              },
+              "listingOffice": "Weichert, Realtors Welch & Co",
+              "ownership": "own",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-u8c5md",
+              "title": "18021 Cody Street, Overland Park, KS 66013",
+              "neighborhood": "",
+              "price": "$1,367,993",
+              "beds": 5,
+              "baths": 5.5,
+              "sqft": "3,866",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2596411/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2596411/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658248181509834536-18021-Cody-Street",
+              "facts": {
+                "Coordinates": "38.79986105, -94.72030169"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            },
+            {
+              "id": "listing-174rfcv",
+              "title": "11712 W 181st Street, Overland Park, KS 66013",
+              "neighborhood": "",
+              "price": "$1,050,937",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "3,506",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2584310/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2584310/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658833756177509724-11712-W-181st-Street",
+              "facts": {
+                "Coordinates": "38.79975189, -94.72121654"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791497903003,
+              "lastRefreshedAt": 1791497903003,
+              "lastSyncAttemptAt": 1791497903003,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791505103003,
+              "updatedAt": 1791497903003,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791497903003
+            }
+          ],
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 0,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedUsd": 0,
+            "byStage": {},
+            "records": []
+          },
+          "timings": {
+            "details": 1751,
+            "listings": 2969,
+            "save": 295,
+            "total": 3675
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "houses-of-kansas-city-00-url.png",
+    "houses-of-kansas-city-01-review.png",
+    "houses-of-kansas-city-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 39,
+    "text": []
+  },
+  "submittedAt": 3306,
+  "reviewMs": 12744,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaved 12 listings\nFound Anthony West · Mission Woods, KS",
+  "reviewText": "Back\nAPP BUILDER\nwww.housesofkansascity.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nHouses of Kansas City\nMISSION WOODS, KS\nWELCOME\nAnthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas City metro. $34M+ sold · 98% list-to-sale ratio · 500K+ social reach. Licensed in KS, MO & CA.\nView listings\nABOUT\nAnthony West\nPrimary phone 913.522.0329 Website http://HousesofKansasCity.com License Number #00233835 | 2013012910 Email [email protected] Address 2001 Shawnee Mission Pkwy Ste 210 Mission, KS 66205-3601\nTHE AREA\nAreas of Expertise\nWestwood A charming suburban community known for its friendly atmosphere, beautiful homes, and convenient location. Situated just minutes from downtown Kansas City and near the…\nCLIENTS\nWork With Anthony\nWith Anthony, your Real Estate journey is not just a transaction; it's an adventure. Experience the Houses of Kansas City difference, where passion meets proficiency, and every deal is sealed with a touch of fun. Contact him today so he can guide you through the buying and selling process. Work with Anthony Home Search\nFROM THE SITE\nWhat \"luxury\" means in Kansas City\nLuxury real estate here isn't just a price point. It's homes with real architectural character, properties with history, land with development potential, and buyers and sellers who want an agent who understands what makes a property actually stand out, not just what it's listed for. That's the market I work in every day: Mission Hills, Leawood, Prairie Village, Fairway, Overland Park, Brookside, and the wider Kansas City metro on both sides of the state line.\nFROM THE SITE\nWhat Makes the Shakespeare Chateau Singular\nMost historic homes have been compromised. Original windows replaced. Period details painted over or removed entirely. The Shakespeare Chateau is the exception that makes you realize how rare genuine architectural integrity actually is. 47 original stained-glass windows. Every single one installed in 1885 and still present.\nFROM THE SITE\nFrequently Asked Questions\nWhat is Sage Sotheby's International Realty and how is it different from other brokerages? Sage Sotheby's International Realty is the Kansas City and Oklahoma City regional affiliate of Sotheby's International Realty, a global luxury real estate brand with over 1,000 offices in 80+ countries.\nFeatured Properties\n$2,025,989\n11721 W 181ST Street, Overland Park, KS 66013\n4 beds · 5.5 baths · 5,426\n$790,000\n15268 W 161st Court, Olathe, KS 66062\n5 beds · 4.5 baths · 2,899\n$1,049,722\n11704 W 181st Street, Overland Park, KS 66013\n4 beds · 4.5 baths · 3,530\n$1,498,000\n3440 W 133rd Terrace, Leawood, KS 66209\n4 beds · 3 baths · 3,022\n$781,766\n17341 W 169th Terrace, Olathe, KS 66062\n4 beds · 3.5 baths · 2,780\n$994,500\n7927 Round Prairie Street, Shawnee, KS 66220\n4 beds · 3.5 baths · 3,367\n$1,434,900\n11717 W 181st Street, Overland Park, KS 66013\n4 beds · 5 baths · 4,519\n$2,250,000\n3256 W 133rd Terrace, Leawood, KS 66209\n4 beds · 4 baths · 4,293\n$629,950\n16979 S Cheshire Street, Olathe, KS 66062\n3 beds · 2.5 baths · 1,857\n$989,800\n12407 W 183rd Terrace, Overland Park, KS 66013\n4 beds · 3.5 baths · 3,367\n913.522.0329\n[email protected]\nSage Sotheby's International Realty\n#00233835 | 2013012910\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour trusted real estate guide for Kansas City and beyond.\nTry another opening line\nYOUR INTRODUCTION\nAnthony West brings more than a decade of Kansas City real estate experience to every client partnership. As the leader of Houses of Kansas City at Sage Sotheby’s International Realty, Anthony specializes in residential resale, land sales, new construction, and custom home building. Licensed in Kansas, Missouri, and California, he pairs neighborhood expertise with innovative digital marketing to maximize results. With a record of $34M+ in career sales and a reach spanning hundreds of thousands, Anthony’s reputation is built on strategy, creativity, and genuine commitment. Whether buying or selling, his mission is to make the process seamless—and a little fun—each step of the way.\nTry another introduction\n12 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Sage Sotheby's International Realty · #00233835 | 2013012910 · KS, MO, CA\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nHouses of Kansas City\nMISSION WOODS, KS\nWELCOME\nAnthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas City metro. $34M+ sold · 98% list-to-sale ratio · 500K+ social reach. Licensed in KS, MO & CA.\nView listings\nABOUT\nAnthony West\nPrimary phone 913.522.0329 Website http://HousesofKansasCity.com License Number #00233835 | 2013012910 Email [email protected] Address 2001 Shawnee Mission Pkwy Ste 210 Mission, KS 66205-3601\nTHE AREA\nAreas of Expertise\nWestwood A charming suburban community known for its friendly atmosphere, beautiful homes, and convenient location. Situated just minutes from downtown Kansas City and near the…\nCLIENTS\nWork With Anthony\nWith Anthony, your Real Estate journey is not just a transaction; it's an adventure. Experience the Houses of Kansas City difference, where passion meets proficiency, and every deal is sealed with a touch of fun. Contact him today so he can guide you through the buying and selling process. Work with Anthony Home Search\nFROM THE SITE\nWhat \"luxury\" means in Kansas City\nLuxury real estate here isn't just a price point. It's homes with real architectural character, properties with history, land with development potential, and buyers and sellers who want an agent who understands what makes a property actually stand out, not just what it's listed for. That's the market I work in every day: Mission Hills, Leawood, Prairie Village, Fairway, Overland Park, Brookside, and the wider Kansas City metro on both sides of the state line.\nFROM THE SITE\nWhat Makes the Shakespeare Chateau Singular\nMost historic homes have been compromised. Original windows replaced. Period details painted over or removed entirely. The Shakespeare Chateau is the exception that makes you realize how rare genuine architectural integrity actually is. 47 original stained-glass windows. Every single one installed in 1885 and still present.\nFROM THE SITE\nFrequently Asked Questions\nWhat is Sage Sotheby's International Realty and how is it different from other brokerages? Sage Sotheby's International Realty is the Kansas City and Oklahoma City regional affiliate of Sotheby's International Realty, a global luxury real estate brand with over 1,000 offices in 80+ countries.\nFeatured Properties\n$2,025,989\n11721 W 181ST Street, Overland Park, KS 66013\n4 beds · 5.5 baths · 5,426\n$790,000\n15268 W 161st Court, Olathe, KS 66062\n5 beds · 4.5 baths · 2,899\n$1,049,722\n11704 W 181st Street, Overland Park, KS 66013\n4 beds · 4.5 baths · 3,530\n$1,498,000\n3440 W 133rd Terrace, Leawood, KS 66209\n4 beds · 3 baths · 3,022\n$781,766\n17341 W 169th Terrace, Olathe, KS 66062\n4 beds · 3.5 baths · 2,780\n$994,500\n7927 Round Prairie Street, Shawnee, KS 66220\n4 beds · 3.5 baths · 3,367\n$1,434,900\n11717 W 181st Street, Overland Park, KS 66013\n4 beds · 5 baths · 4,519\n$2,250,000\n3256 W 133rd Terrace, Leawood, KS 66209\n4 beds · 4 baths · 4,293\n$629,950\n16979 S Chesh",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all ACTIVE 11721 W 181ST Street, Overland Park, KS 66013 $2,025,989 ACTIVE 15268 W 161st Court, Olathe, KS 66062 $790,000 ACTIVE 11704 W 181st Stre",
+        "textLength": 834,
+        "stillHome": false
+      },
+      {
+        "label": "11721 W 181ST Street, Overland Park, KS 66013",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 11721 W 181ST Street, Overland Park, KS 66013 $2,025,989 4 beds · 5.5 baths 5,426 The stunning HAMILTON 1.5-story by Bickimer Homes is back in MODEL ROW due to high dema",
+        "textLength": 1456,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "15268 W 161st Court, Olathe, KS 66062",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 15268 W 161st Court, Olathe, KS 66062 $790,000 5 beds · 4.5 baths 2,899 The St. John by C3 Homes coming soon! This 1.5 Story home features main floor primary bedroom and",
+        "textLength": 1521,
+        "stillHome": false
+      },
+      {
+        "label": "11704 W 181st Street, Overland Park, KS 66013",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 11704 W 181st Street, Overland Park, KS 66013 $1,049,722 4 beds · 4.5 baths 3,530 The Roosevelt 1.5 Story with Regency exterior elevation by Bickimer Homes on lot #8 in ",
+        "textLength": 1637,
+        "stillHome": false
+      },
+      {
+        "label": "3440 W 133rd Terrace, Leawood, KS 66209",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 3440 W 133rd Terrace, Leawood, KS 66209 $1,498,000 4 beds · 3 baths 3,022 Willis Custom Homes presents the Bradford Cottage for East Village Leawood! Located on Lot 8, t",
+        "textLength": 1352,
+        "stillHome": false
+      },
+      {
+        "label": "17341 W 169th Terrace, Olathe, KS 66062",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 17341 W 169th Terrace, Olathe, KS 66062 $781,766 4 beds · 3.5 baths 2,780 ***The Makenna by Gabriel Homes***Lot 137***MODEL NOW FOR SALE*** Beautiful Boulder Creek! You ",
+        "textLength": 1126,
+        "stillHome": false
+      },
+      {
+        "label": "7927 Round Prairie Street, Shawnee, KS 66220",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 7927 Round Prairie Street, Shawnee, KS 66220 $994,500 4 beds · 3.5 baths 3,367 MODEL HOME – NOT FOR SALE. Welcome to the Cypress by J.S. Robinson Fine Homes on Lot 79 in",
+        "textLength": 2070,
+        "stillHome": false
+      },
+      {
+        "label": "11717 W 181st Street, Overland Park, KS 66013",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 11717 W 181st Street, Overland Park, KS 66013 $1,434,900 4 beds · 5 baths 4,519 The brand NEW MAPLEWOOD IV REVERSE by JFE HOMES is now finished and ready to tour in WOOD",
+        "textLength": 1246,
+        "stillHome": false
+      },
+      {
+        "label": "3256 W 133rd Terrace, Leawood, KS 66209",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 3256 W 133rd Terrace, Leawood, KS 66209 $2,250,000 4 beds · 4 baths 4,293 Model Now for Sale! Discover the perfect balance of contemporary design and comfortable living ",
+        "textLength": 1522,
+        "stillHome": false
+      },
+      {
+        "label": "16979 S Cheshire Street, Olathe, KS 66062",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 16979 S Cheshire Street, Olathe, KS 66062 $629,950 3 beds · 2.5 baths 1,857 Stonebridge Villas, Rodrock Development's newest maintenance provided community, presents The",
+        "textLength": 1054,
+        "stillHome": false
+      },
+      {
+        "label": "12407 W 183rd Terrace, Overland Park, KS 66013",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 12407 W 183rd Terrace, Overland Park, KS 66013 $989,800 4 beds · 3.5 baths 3,367 MODEL HOME- NOT FOR SALE AT THIS TIME. Situated on Lot 52, J.S. Robinson’s Cypress 1.5 f",
+        "textLength": 1358,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app Houses of Kansas City MISSION WOODS, KS WELCOME Anthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas ",
+        "textLength": 3261,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all ACTIVE 11721 W 181ST Street, Overland Park, KS 66013 $2,025,989 ACTIVE 15268 W 161st Court, Olathe, KS 66062 $790,000 ACTIVE 11704 W 181st Stre",
+        "textLength": 834,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 12
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "11721 W 181ST Street, Overland Park, KS 66013",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2631186/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 129100
+      }
+    },
+    {
+      "title": "15268 W 161st Court, Olathe, KS 66062",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582224/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 109565
+      }
+    },
+    {
+      "title": "11704 W 181st Street, Overland Park, KS 66013",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638654/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 768,
+        "type": "jpg",
+        "bytes": 197867
+      }
+    },
+    {
+      "title": "3440 W 133rd Terrace, Leawood, KS 66209",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633524/a914bcc1-1608-4df0-b6c8-7e55dcefdef8.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 526,
+        "type": "jpg",
+        "bytes": 80286
+      }
+    },
+    {
+      "title": "17341 W 169th Terrace, Olathe, KS 66062",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2511522/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 731,
+        "type": "jpg",
+        "bytes": 112193
+      }
+    },
+    {
+      "title": "7927 Round Prairie Street, Shawnee, KS 66220",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2576695/8f2f83eb-09bb-4fe9-b073-38e34bccf3e2.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 767,
+        "type": "jpg",
+        "bytes": 149568
+      }
+    },
+    {
+      "title": "11717 W 181st Street, Overland Park, KS 66013",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616562/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 142367
+      }
+    },
+    {
+      "title": "3256 W 133rd Terrace, Leawood, KS 66209",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2586524/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 768,
+        "height": 512,
+        "type": "jpg",
+        "bytes": 50075
+      }
+    },
+    {
+      "title": "16979 S Cheshire Street, Olathe, KS 66062",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2583648/2c6fa7ae-a58d-4bce-8a0a-727b45365857.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 768,
+        "type": "jpg",
+        "bytes": 142126
+      }
+    },
+    {
+      "title": "12407 W 183rd Terrace, Overland Park, KS 66013",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2544470/cd113bd8-514b-467c-adbf-e80c657669cc.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 767,
+        "type": "jpg",
+        "bytes": 110653
+      }
+    },
+    {
+      "title": "18021 Cody Street, Overland Park, KS 66013",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2596411/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 764,
+        "type": "jpg",
+        "bytes": 117161
+      }
+    },
+    {
+      "title": "11712 W 181st Street, Overland Park, KS 66013",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2584310/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 768,
+        "type": "jpg",
+        "bytes": 96266
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 30230,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-0.png"
+    },
+    {
+      "url": "https://housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 29958,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-1.png"
+    }
+  ],
+  "wallMs": 61681,
+  "window": {
+    "startedAt": "2026-10-08T22:18:18.906Z",
+    "endedAt": "2026-10-08T22:19:20.587Z"
+  },
+  "aiUsage": {
+    "calls": 0,
+    "blocked": 0,
+    "estimatedUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}
