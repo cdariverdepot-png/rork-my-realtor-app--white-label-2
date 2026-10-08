@@ -1,229 +1,782 @@
 {
-  "at": "2026-10-08T23:39:35.628Z",
-  "runner": "GitHub Actions 1000000560",
+  "at": "2026-10-08T23:44:55.811Z",
+  "runner": "GitHub Actions 1000000561",
   "sites": [
     {
-      "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+      "url": "https://cindycarlsonrealty.com/property-search/",
       "plain": {
         "status": 200,
-        "ms": 81,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-        "bytes": 3036,
-        "title": "Client Challenge",
+        "ms": 642,
+        "finalUrl": "https://cindycarlsonrealty.com/property-search/",
+        "bytes": 59727,
+        "title": "Property Search",
         "prices": 0,
-        "detailLinks": 0
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [
+          "https://cdn.trustedsite.com/js/1.js",
+          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
+          "https://stats.wp.com/e-202641.js",
+          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
+        ],
+        "links": [
+          "https://cindycarlsonrealty.com/feed/",
+          "https://cindycarlsonrealty.com/comments/feed/",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F&#038;format=xml",
+          "https://cindycarlsonrealty.com/property-search/",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-json/",
+          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/23",
+          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
+          "https://cindycarlsonrealty.com/xmlrpc.php",
+          "https://cindycarlsonrealty.com/",
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://cindycarlsonrealty.com/about-the-area/",
+          "https://cindycarlsonrealty.com/about-us/",
+          "https://cindycarlsonrealty.com/contact-us/",
+          "https://my.flexmls.com/CiindyCarlson/search/idx_links/20170223165601030945000000/listings?_filter=CountyOrParish+Eq+%27Shoshone%27+And+MlsStatus+Eq+%27Active%27%2C%27Active+with+Bump+Clause%27%2C%27Pending%27+And+%28PurchaseContractDate+Bt+2024-04-08%2C2035-04-08+Or+StandardStatus+Ne+%27Pending%27%29+And+PropertyType+Eq+%27A%27",
+          "https://cindycarlsonrealty.com/wp-login.php"
+        ]
       },
       "plainFragment": {
         "status": 200,
-        "ms": 1185,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-        "bytes": 88294,
-        "title": "",
-        "prices": 8,
-        "detailLinks": 0
+        "ms": 73,
+        "finalUrl": "https://cindycarlsonrealty.com/property-search/",
+        "bytes": 59727,
+        "title": "Property Search",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [
+          "https://cdn.trustedsite.com/js/1.js",
+          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
+          "https://stats.wp.com/e-202641.js",
+          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
+        ],
+        "links": [
+          "https://cindycarlsonrealty.com/feed/",
+          "https://cindycarlsonrealty.com/comments/feed/",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fproperty-search%2F&#038;format=xml",
+          "https://cindycarlsonrealty.com/property-search/",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-json/",
+          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/23",
+          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
+          "https://cindycarlsonrealty.com/xmlrpc.php",
+          "https://cindycarlsonrealty.com/",
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://cindycarlsonrealty.com/about-the-area/",
+          "https://cindycarlsonrealty.com/about-us/",
+          "https://cindycarlsonrealty.com/contact-us/",
+          "https://my.flexmls.com/CiindyCarlson/search/idx_links/20170223165601030945000000/listings?_filter=CountyOrParish+Eq+%27Shoshone%27+And+MlsStatus+Eq+%27Active%27%2C%27Active+with+Bump+Clause%27%2C%27Pending%27+And+%28PurchaseContractDate+Bt+2024-04-08%2C2035-04-08+Or+StandardStatus+Ne+%27Pending%27%29+And+PropertyType+Eq+%27A%27",
+          "https://cindycarlsonrealty.com/wp-login.php"
+        ]
       },
       "service": {
-        "status": 200,
-        "ms": 31244,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-        "bytes": 16728,
-        "title": "Client Challenge",
-        "prices": 0,
-        "detailLinks": 0,
-        "network": [
-          {
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-            "bytes": 3036,
-            "title": "Client Challenge",
-            "prices": 0,
-            "detailLinks": 0
-          }
-        ]
+        "error": "The operation was aborted due to timeout",
+        "ms": 90002
       },
       "serviceAgain": {
-        "status": 200,
-        "ms": 31163,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-        "bytes": 16608,
-        "title": "Client Challenge",
-        "prices": 0,
-        "detailLinks": 0,
-        "network": [
-          {
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-            "bytes": 3036,
-            "title": "Client Challenge",
-            "prices": 0,
-            "detailLinks": 0
-          }
-        ]
+        "error": "The operation was aborted due to timeout",
+        "ms": 90001
       },
       "local": {
         "timeline": [
           {
-            "at": 106,
+            "at": 374,
             "event": "domcontentloaded",
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings"
+            "url": "https://cindycarlsonrealty.com/property-search/"
           },
           {
-            "at": 1110,
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
-            "bytes": 16544,
-            "title": "Client Challenge",
+            "at": 1383,
+            "url": "https://cindycarlsonrealty.com/property-search/",
+            "bytes": 67107,
+            "title": "Property Search",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 6416,
+            "url": "https://cindycarlsonrealty.com/property-search/",
+            "bytes": 67097,
+            "title": "Property Search",
             "prices": 0,
             "detailLinks": 0
           }
         ],
         "responses": [
           {
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+            "url": "https://cindycarlsonrealty.com/property-search/",
             "status": 200,
-            "type": "text/html; charset=utf-8"
+            "type": "text/html; charset=UTF-8"
           },
           {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/styles.css",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/errors.js",
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/hoverIntent.min.js?ver=1.10.2",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true",
+            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css?family=Oswald:400&ver=2.2.1",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/style.css?ver=2.2.1",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css?family=Quintessential:400&subset=latin,latin-ext&ver=2",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js",
+            "status": 301,
+            "type": ""
+          },
+          {
+            "url": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/realtycandy-idx-broker-simple-social-icons-idxaddon/css/style.css?ver=1.0.12",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.min.js?ver=1.7.10",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://img1.wsimg.com/signals/js/clients/tti/tti.min.js",
             "status": 200,
             "type": "text/javascript"
           },
           {
-            "url": "https://my.flexmls.com/fastly/logo",
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.args.min.js?ver=3.6.2",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/skip-links.min.js?ver=3.6.2",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/js/responsive-menus.min.js?ver=2.2.1",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://stats.wp.com/e-202641.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiZQ.woff2",
+            "status": 200,
+            "type": "font/woff2"
+          },
+          {
+            "url": "https://img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js",
+            "status": 200,
+            "type": "text/javascript"
+          },
+          {
+            "url": "blob:https://cindycarlsonrealty.com/7a477e25-5293-45fb-a282-a839f4bd42aa",
+            "status": 200,
+            "type": "text/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/cropped-satincombinedlogoccr-1-2.png",
             "status": 200,
             "type": "image/png"
           },
           {
-            "url": "https://my.flexmls.com/fastly/logo",
+            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
             "status": 200,
-            "type": "image/png"
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://pixel.wp.com/g.gif?v=ext&blog=127862438&post=23&tz=0&srv=cindycarlsonrealty.com&j=1%3A16.3&host=cindycarlsonrealty.com&ref=&fcp=332&rand=0.0651949442045",
+            "status": 200,
+            "type": "image/gif"
+          },
+          {
+            "url": "https://connect.facebook.net/en_US/sdk.js",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://cdn.trustedsite.com/js/1.js",
+            "status": 200,
+            "type": "text/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://connect.facebook.net/en_US/bundle/sdk.js/",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsmain",
+            "status": 200,
+            "type": "application/json"
+          },
+          {
+            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsinline",
+            "status": 200,
+            "type": "application/json"
+          },
+          {
+            "url": "https://connect.facebook.net/app_config/json/249643311490/",
+            "status": 200,
+            "type": "application/json; charset=utf-8"
+          },
+          {
+            "url": "https://connect.facebook.net/app_config/json/249643311490/",
+            "status": 200,
+            "type": "application/json; charset=utf-8"
+          },
+          {
+            "url": "https://cdn.ywxi.net/meter/cindycarlsonrealty.com/205.svg?ts=1791453262656&l=en",
+            "status": 200,
+            "type": "image/svg+xml"
+          },
+          {
+            "url": "https://cdn.ywxi.net/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503277712",
+            "status": 302,
+            "type": "text/html; charset=utf-8"
+          },
+          {
+            "url": "https://www.trustedsite.com/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503277712&hash=1791503277808",
+            "status": 200,
+            "type": "text/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://csp.secureserver.net/eventbus/web?clientid=b18ef4f046435b64a469b32c3c1c20a3",
+            "status": 202,
+            "type": "application/json"
+          },
+          {
+            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
+            "status": 202,
+            "type": "application/json"
+          },
+          {
+            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
+            "status": 202,
+            "type": "application/json"
           }
         ],
-        "cookies": []
+        "cookies": [
+          {
+            "name": "__cf_bm",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "_tccl_visitor",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "_tccl_visit",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "_scc_session",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "trustedsite_visit",
+            "domain": "cindycarlsonrealty.com"
+          },
+          {
+            "name": "trustedsite_tm_float_seen",
+            "domain": "cindycarlsonrealty.com"
+          },
+          {
+            "name": "AWSALBCORS",
+            "domain": "www.trustedsite.com"
+          }
+        ]
       }
     },
     {
-      "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+      "url": "https://cindycarlsonrealty.com/about-us/",
       "plain": {
         "status": 200,
-        "ms": 60,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-        "bytes": 3036,
-        "title": "Client Challenge",
+        "ms": 193,
+        "finalUrl": "https://cindycarlsonrealty.com/about-us/",
+        "bytes": 81296,
+        "title": "About Us",
         "prices": 0,
-        "detailLinks": 0
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [
+          "https://cdn.trustedsite.com/js/1.js",
+          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
+          "https://stats.wp.com/e-202641.js",
+          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/carousel/jetpack-carousel.min.js?ver=16.3",
+          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
+        ],
+        "links": [
+          "https://cindycarlsonrealty.com/feed/",
+          "https://cindycarlsonrealty.com/comments/feed/",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F&#038;format=xml",
+          "https://cindycarlsonrealty.com/about-us/",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-json/",
+          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/26",
+          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
+          "https://cindycarlsonrealty.com/xmlrpc.php",
+          "https://cindycarlsonrealty.com/",
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://cindycarlsonrealty.com/property-search/",
+          "https://cindycarlsonrealty.com/about-the-area/",
+          "https://cindycarlsonrealty.com/contact-us/",
+          "https://www.facebook.com/674159426036823",
+          "https://www.linkedin.com/in/cindy-carlson-2317824b/",
+          "https://cindycarlsonrealty.com/wp-login.php"
+        ]
       },
       "plainFragment": {
         "status": 200,
-        "ms": 452,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-        "bytes": 88294,
-        "title": "",
-        "prices": 8,
-        "detailLinks": 0
+        "ms": 36,
+        "finalUrl": "https://cindycarlsonrealty.com/about-us/",
+        "bytes": 81296,
+        "title": "About Us",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [
+          "https://cdn.trustedsite.com/js/1.js",
+          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
+          "https://stats.wp.com/e-202641.js",
+          "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/carousel/jetpack-carousel.min.js?ver=16.3",
+          "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js"
+        ],
+        "links": [
+          "https://cindycarlsonrealty.com/feed/",
+          "https://cindycarlsonrealty.com/comments/feed/",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F",
+          "https://cindycarlsonrealty.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcindycarlsonrealty.com%2Fabout-us%2F&#038;format=xml",
+          "https://cindycarlsonrealty.com/about-us/",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+          "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
+          "https://cindycarlsonrealty.com/wp-json/",
+          "https://cindycarlsonrealty.com/wp-json/wp/v2/pages/26",
+          "https://cindycarlsonrealty.com/xmlrpc.php?rsd",
+          "https://cindycarlsonrealty.com/xmlrpc.php",
+          "https://cindycarlsonrealty.com/",
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://cindycarlsonrealty.com/property-search/",
+          "https://cindycarlsonrealty.com/about-the-area/",
+          "https://cindycarlsonrealty.com/contact-us/",
+          "https://www.facebook.com/674159426036823",
+          "https://www.linkedin.com/in/cindy-carlson-2317824b/",
+          "https://cindycarlsonrealty.com/wp-login.php"
+        ]
       },
       "service": {
-        "status": 200,
-        "ms": 31183,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-        "bytes": 16700,
-        "title": "Client Challenge",
-        "prices": 0,
-        "detailLinks": 0,
-        "network": [
-          {
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-            "bytes": 3036,
-            "title": "Client Challenge",
-            "prices": 0,
-            "detailLinks": 0
-          }
-        ]
+        "error": "The operation was aborted due to timeout",
+        "ms": 90001
       },
       "serviceAgain": {
-        "status": 200,
-        "ms": 31162,
-        "finalUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-        "bytes": 16348,
-        "title": "Client Challenge",
-        "prices": 0,
-        "detailLinks": 0,
-        "network": [
-          {
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-            "bytes": 3036,
-            "title": "Client Challenge",
-            "prices": 0,
-            "detailLinks": 0
-          }
-        ]
+        "error": "The operation was aborted due to timeout",
+        "ms": 90000
       },
       "local": {
         "timeline": [
           {
-            "at": 90,
+            "at": 416,
             "event": "domcontentloaded",
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24"
+            "url": "https://cindycarlsonrealty.com/about-us/"
           },
           {
-            "at": 1094,
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
-            "bytes": 16868,
-            "title": "Client Challenge",
+            "at": 1426,
+            "url": "https://cindycarlsonrealty.com/about-us/",
+            "bytes": 89821,
+            "title": "About Us",
+            "prices": 0,
+            "detailLinks": 0
+          },
+          {
+            "at": 6465,
+            "url": "https://cindycarlsonrealty.com/about-us/",
+            "bytes": 89811,
+            "title": "About Us",
             "prices": 0,
             "detailLinks": 0
           }
         ],
         "responses": [
           {
-            "url": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+            "url": "https://cindycarlsonrealty.com/about-us/",
             "status": 200,
-            "type": "text/html; charset=utf-8"
+            "type": "text/html; charset=UTF-8"
           },
           {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/styles.css",
+            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
             "status": 200,
             "type": "text/css"
           },
           {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2",
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/realtycandy-idx-broker-simple-social-icons-idxaddon/css/style.css?ver=1.0.12",
             "status": 200,
-            "type": "application/font-woff2"
+            "type": "text/css"
           },
           {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/errors.js",
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
             "status": 200,
             "type": "application/javascript"
           },
           {
-            "url": "https://my.flexmls.com/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true",
+            "url": "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/style.css?ver=2.2.1",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/hoverIntent.min.js?ver=1.10.2",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=7.1.3",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/blocks/swiper.css?ver=16.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css?family=Oswald:400&ver=2.2.1",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://fonts.googleapis.com/css?family=Quintessential:400&subset=latin,latin-ext&ver=2",
+            "status": 200,
+            "type": "text/css; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/modules/carousel/jetpack-carousel.css?ver=16.3",
+            "status": 200,
+            "type": "text/css"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.min.js?ver=1.7.10",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/js/responsive-menus.min.js?ver=2.2.1",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/menu/superfish.args.min.js?ver=3.6.2",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/facebook-embed.min.js?ver=16.3",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
+            "status": 200,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/cropped-satincombinedlogoccr-1-2.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/genesis/lib/js/skip-links.min.js?ver=3.6.2",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://stats.wp.com/e-202641.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiZQ.woff2",
+            "status": 200,
+            "type": "font/woff2"
+          },
+          {
+            "url": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0",
+            "status": 200,
+            "type": "font/woff2"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/build/carousel/jetpack-carousel.min.js?ver=16.3",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/images/lines.png",
+            "status": 200,
+            "type": "image/png"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-content/plugins/jetpack/_inc/blocks/swiper.js",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://img1.wsimg.com/traffic-assets/js/tccl-tti.min.js",
+            "status": 301,
+            "type": ""
+          },
+          {
+            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2019/09/Heather-3.jpg?resize=279%2C300&ssl=1",
+            "status": 200,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js",
             "status": 200,
             "type": "text/javascript"
           },
           {
-            "url": "https://my.flexmls.com/fastly/logo",
+            "url": "https://img1.wsimg.com/signals/js/clients/tti/tti.min.js",
             "status": 200,
-            "type": "image/png"
+            "type": "text/javascript"
           },
           {
-            "url": "https://my.flexmls.com/fastly/logo",
+            "url": "blob:https://cindycarlsonrealty.com/7188f2f4-bb21-4cef-a6a3-bca79b51454d",
             "status": 200,
-            "type": "image/png"
+            "type": "text/javascript"
+          },
+          {
+            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2020/05/25-scaled.jpg?resize=200%2C300&ssl=1",
+            "status": 200,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://pixel.wp.com/g.gif?v=ext&blog=127862438&post=26&tz=0&srv=cindycarlsonrealty.com&j=1%3A16.3&host=cindycarlsonrealty.com&ref=&fcp=300&rand=0.3870069444618",
+            "status": 200,
+            "type": "image/gif"
+          },
+          {
+            "url": "https://connect.facebook.net/en_US/sdk.js",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://cdn.trustedsite.com/js/1.js",
+            "status": 200,
+            "type": "text/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://cindycarlsonrealty.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3",
+            "status": 200,
+            "type": "application/javascript"
+          },
+          {
+            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2019/09/SterlingR-2019-Sm.gif?resize=40%2C32&ssl=1",
+            "status": 200,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://connect.facebook.net/en_US/bundle/sdk.js/",
+            "status": 200,
+            "type": "application/x-javascript; charset=utf-8"
+          },
+          {
+            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/IMG_6669_3617.jpg?resize=200%2C300&ssl=1",
+            "status": 200,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://connect.facebook.net/app_config/json/249643311490/",
+            "status": 200,
+            "type": "application/json; charset=utf-8"
+          },
+          {
+            "url": "https://connect.facebook.net/app_config/json/249643311490/",
+            "status": 200,
+            "type": "application/json; charset=utf-8"
+          },
+          {
+            "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2026/02/kristen-jarvey.jpg?resize=262%2C300&ssl=1",
+            "status": 200,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsinline",
+            "status": 200,
+            "type": "application/json"
+          },
+          {
+            "url": "https://s3-us-west-2.amazonaws.com/mfesecure-public/host/cindycarlsonrealty.com/client.json?source=jsmain",
+            "status": 200,
+            "type": "application/json"
+          },
+          {
+            "url": "https://www.facebook.com/v2.3/plugins/page.php?app_id=249643311490&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb",
+            "status": 302,
+            "type": "text/html; charset=\"utf-8\""
+          },
+          {
+            "url": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fplugins%2Fpage.php%3Fapp_id%3D249643311490%26channel%3Dhttps%253A%252F%252Fstaticxx.facebo",
+            "status": 400,
+            "type": "text/html; charset=\"utf-8\""
+          },
+          {
+            "url": "https://cdn.ywxi.net/meter/cindycarlsonrealty.com/205.svg?ts=1791453262656&l=en",
+            "status": 200,
+            "type": "image/svg+xml"
+          },
+          {
+            "url": "https://cdn.ywxi.net/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503503750",
+            "status": 302,
+            "type": "text/html; charset=utf-8"
+          },
+          {
+            "url": "https://www.trustedsite.com/rpc/tmjs/cindycarlsonrealty.com/visit?rand=1791503503750&hash=1791503503947",
+            "status": 200,
+            "type": "text/javascript; charset=utf-8"
+          },
+          {
+            "url": "https://www.facebook.com/v2.3/plugins/page.php?app_id=249643311490&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb",
+            "status": 302,
+            "type": "text/html; charset=\"utf-8\""
+          },
+          {
+            "url": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fplugins%2Fpage.php%3Fapp_id%3D249643311490%26channel%3Dhttps%253A%252F%252Fstaticxx.facebo",
+            "status": 400,
+            "type": "text/html; charset=\"utf-8\""
+          },
+          {
+            "url": "https://csp.secureserver.net/eventbus/web?clientid=b18ef4f046435b64a469b32c3c1c20a3",
+            "status": 202,
+            "type": "application/json"
+          },
+          {
+            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
+            "status": 202,
+            "type": "application/json"
+          },
+          {
+            "url": "https://csp.secureserver.net/eventbus/web?clientid=8da2217409854bee82e12dc4ca0b39fb",
+            "status": 202,
+            "type": "application/json"
           }
         ],
-        "cookies": []
+        "cookies": [
+          {
+            "name": "__cf_bm",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "_tccl_visitor",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "_tccl_visit",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "_scc_session",
+            "domain": ".cindycarlsonrealty.com"
+          },
+          {
+            "name": "trustedsite_visit",
+            "domain": "cindycarlsonrealty.com"
+          },
+          {
+            "name": "trustedsite_tm_float_seen",
+            "domain": "cindycarlsonrealty.com"
+          },
+          {
+            "name": "AWSALBCORS",
+            "domain": "www.trustedsite.com"
+          }
+        ]
       }
     }
   ]
