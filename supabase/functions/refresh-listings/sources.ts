@@ -6,6 +6,8 @@ export type ListingSource = {
   id: string; url: string; submittedUrl: string; kind: string; inventoryUrls: string[];
   /** What the site published about itself; detail jobs use it to label ownership. */
   identity?: { phrases: string[]; words: string[] };
+  /** Listings merged into another record of the same property (duplicate URL -> kept URL), so later syncs keep them merged. */
+  mergedDuplicates?: Record<string, string>;
   connectedAt: number; lastCheckedAt?: number; lastCompleteSyncAt?: number; nextSyncAt: number;
   state: "connected" | "unavailable"; error?: string; failures?: number; listingCount: number;
 };
@@ -129,7 +131,12 @@ export function reconcileInventory(current: SyncListing[], inventory: SourceInve
   const next = [...current];
   const seen = new Set<string>();
   const sharedUrls = new Set(inventory.listings.filter((home, i, all) => all.some((other, j) => j !== i && other.sourceUrl === home.sourceUrl)).map(home => home.sourceUrl));
+  // A listing previously merged into another record of the same property stays merged while that record is
+  // still published by this source; if the kept record disappears, the other copy comes back as itself.
+  const published = new Set(inventory.listings.map(home => home.sourceUrl));
+  const mergedInto = inventory.source.mergedDuplicates ?? {};
   for (const incoming of inventory.listings) {
+    if (mergedInto[incoming.sourceUrl] && published.has(mergedInto[incoming.sourceUrl])) continue;
     const index = next.findIndex(item => item.sourceUrl === incoming.sourceUrl && ((!sharedUrls.has(incoming.sourceUrl) && next.filter(p => p.sourceUrl === incoming.sourceUrl).length === 1) || item.title === incoming.title) ||
       item.sourceId === inventory.source.id && !!incoming.listingNumber && item.listingNumber === incoming.listingNumber);
     const prior: SyncListing = index >= 0 ? next[index] : { id: `listing-${hash(incoming.sourceUrl + "|" + incoming.title)}`, title: incoming.title,
