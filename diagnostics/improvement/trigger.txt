@@ -1,3 +1,3 @@
-Autonomous improvement trigger (Thu Oct  8 19:32:11 UTC 2026)
-failure: mirrored-listing
-candidate: improve/mirrored-listing-session1
+Autonomous improvement trigger (Thu Oct  8 19:36:51 UTC 2026)
+failure: not-a-property
+candidate: improve/not-a-property-session1
