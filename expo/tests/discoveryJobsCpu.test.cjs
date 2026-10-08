@@ -17,6 +17,37 @@ const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => f.endsWith('.
 // inventory job, ~1.4 s, spent crawling a regional MLS feed of other offices' listings (repair stage 4: scope).
 const INVENTORY_JOB_DETAILS = 12, DETAIL_JOB_SIZE = 25, JOB_CPU_CEILING_MS = 1500;
 
+// Declared, evidence-backed baseline changes (tests/fixtures/baseline-changes, see its README): exact
+// before -> after values for named records, verified as improvements by the acceptance gate. Everything
+// not declared must still match the recording.
+const DECLARABLE_FIELDS = new Set(['title']);
+const declared = (() => {
+  const folder = path.resolve(__dirname, 'fixtures/baseline-changes');
+  if (!fs.existsSync(folder)) return [];
+  return fs.readdirSync(folder).filter(f => f.endsWith('.json')).flatMap(f => JSON.parse(fs.readFileSync(path.join(folder, f), 'utf8')).changes.map(c => ({ ...c, file: f })));
+})();
+function withDeclaredChanges(id, expected) {
+  const changes = declared.filter(c => c.capture === id);
+  if (!changes.length) return expected;
+  const next = JSON.parse(JSON.stringify(expected));
+  for (const change of changes) {
+    assert.ok(DECLARABLE_FIELDS.has(change.field), `${change.file}: ${change.field} cannot be declared`);
+    const record = next.listings.find(item => item.sourceUrl === change.sourceUrl);
+    assert.ok(record, `${change.file}: no recorded listing ${change.sourceUrl}`);
+    assert.equal(record[change.field], change.before, `${change.file}: recorded ${change.field} differs from the declared before-value`);
+    record[change.field] = change.after;
+  }
+  return next;
+}
+
+test('declared baseline changes name only declarable fields and existing captures', () => {
+  for (const change of declared) {
+    assert.ok(DECLARABLE_FIELDS.has(change.field), `${change.file}: ${change.field}`);
+    assert.ok(files.includes(`${change.capture}.json.gz`), `${change.file}: unknown capture ${change.capture}`);
+    assert.notEqual(change.before, change.after, `${change.file}: a declared change must change something`);
+  }
+});
+
 test('detail job sizes match the refresh-listings function', () => {
   const handler = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/refresh-listings/sourceHandler.ts'), 'utf8');
   assert.match(handler, new RegExp(`INVENTORY_JOB_DETAILS = ${INVENTORY_JOB_DETAILS};`));
@@ -57,7 +88,7 @@ for (const file of files) {
     const fixture = load(path.join(dir, file));
     // Imported inventory is unchanged; fewer failed requests is allowed, new failures are not.
     const full = await replayDiscovery(engine, fixture);
-    const now = snapshot(full.result), was = fixture.expected;
+    const now = snapshot(full.result), was = withDeclaredChanges(id, fixture.expected);
     const reviewed = REVIEWED_SCOPE_CHANGES[id];
     if (reviewed) {
       assert.equal(now.listings.length, reviewed.listings, reviewed.why);

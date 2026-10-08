@@ -42,6 +42,7 @@ function changePolicy(base, failureId) {
   });
   if (!rows.length) problems.push('The candidate changes nothing.');
   let addedTests = 0, mentionsFailure = false, knowledge = false;
+  const declaredChanges = [];
   for (const { status, file } of rows) {
     if (!ALLOWED.some(rule => rule.test(file))) problems.push(`${file}: outside the paths an autonomous repair may change.`);
     if (status !== 'A' && IMMUTABLE_EXISTING.some(rule => rule.test(file))) problems.push(`${file}: existing fixtures and recorded captures are immutable (${status}).`);
@@ -65,11 +66,39 @@ function changePolicy(base, failureId) {
       if (missing.length) problems.push(`${file}: missing sections ${missing.join(', ')}.`);
     }
   }
+  // Declared baseline changes are new files only, each a verified improvement (checked against the corpus below).
+  for (const { status, file } of rows) {
+    if (!/^expo\/tests\/fixtures\/baseline-changes\/[a-z0-9-]+\.json$/.test(file) || status !== 'A') continue;
+    try {
+      const declaration = JSON.parse(fs.readFileSync(path.join(repoRoot, file), 'utf8'));
+      if (declaration.failure !== failureId) problems.push(`${file}: declares changes for ${declaration.failure}, not ${failureId}.`);
+      if (!declaration.rationale || !declaration.evidence) problems.push(`${file}: needs a rationale and an evidence record.`);
+      for (const change of declaration.changes ?? []) {
+        if (change.field !== 'title') { problems.push(`${file}: field ${change.field} cannot be declared autonomously.`); continue; }
+        declaredChanges.push({ ...change, file });
+      }
+    } catch (error) { problems.push(`${file}: unreadable declaration (${error.message}).`); }
+  }
   if (!addedTests) problems.push('No new regression test was added.');
   if (!mentionsFailure) problems.push(`No new test names the failure "${failureId}".`);
   if (!knowledge) problems.push(`docs/compatibility-knowledge/${failureId}.md is missing.`);
   notes.push(`${rows.length} files changed; ${addedTests} tests added.`);
-  return { ok: !problems.length, problems, notes, files: rows };
+  return { ok: !problems.length, problems, notes, files: rows, declaredChanges };
+}
+
+/** Every declared baseline change must be what the candidate now produces, and an improvement by rule. */
+function checkDeclarations(declaredChanges, before, after) {
+  const problems = [];
+  const find = (report, capture, url) => report.sites.find(s => s.id === capture)?.listings.find(l => l.sourceUrl === url);
+  const k = value => String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  for (const change of declaredChanges) {
+    const was = find(before, change.capture, change.sourceUrl), now = find(after, change.capture, change.sourceUrl);
+    if (!was || !now) { problems.push(`${change.file}: ${change.capture} ${change.sourceUrl} is not in the evaluated corpus.`); continue; }
+    if (k(now.title) !== k(change.after)) problems.push(`${change.file}: the candidate produces "${now.title}", not the declared "${change.after}".`);
+    if (k(was.title) !== k(change.before)) problems.push(`${change.file}: the base produced "${was.title}", not the declared "${change.before}".`);
+    if (!namesProperty(change.after) || namesProperty(change.before)) problems.push(`${change.file}: "${change.before}" -> "${change.after}" is not a title improvement by rule.`);
+  }
+  return { ok: !problems.length, problems, notes: [`${declaredChanges.length} declared baseline changes verified.`] };
 }
 
 function staticChecks() {
@@ -155,6 +184,7 @@ async function gate({ failureId, base, skipSuite = false, registry }) {
   const before = await evaluate({ functionsRoot: baseDir });
   const after = await evaluate();
   verdict.checks.corpus = compare(before, after, failure);
+  verdict.checks.declarations = checkDeclarations(verdict.checks.policy.declaredChanges ?? [], before, after);
   verdict.holdout = after.sites.filter(s => !failure.sites.some(f => f.id === s.id)).map(s => s.id);
   verdict.accepted = Object.values(verdict.checks).every(check => check.ok);
   return { verdict, before, after };
@@ -176,7 +206,7 @@ function report(verdict) {
   return lines.join('\n') + '\n';
 }
 
-module.exports = { gate, changePolicy, compare, report, ALLOWED };
+module.exports = { gate, changePolicy, compare, checkDeclarations, report, ALLOWED };
 
 if (require.main === module) (async () => {
   const args = process.argv.slice(2);

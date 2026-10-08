@@ -160,3 +160,13 @@ test('improvement loop: the change policy rejects edits to tests, fixtures, the 
   }
   fs.rmSync(repo, { recursive: true, force: true });
 });
+
+test('improvement loop: a declared baseline change must be produced exactly and be an improvement by rule', () => {
+  const { checkDeclarations } = require('../scripts/improve/gate.cjs');
+  const before = evaluation([site('a', [], [rec('u1', '$500,000'), rec('u2', '1 Elm St, Boise, ID')])]);
+  const after = evaluation([site('a', [], [rec('u1', '412 Pine St, Sandpoint, ID'), rec('u2', '1 Elm St, Boise, ID')])]);
+  const good = { file: 'x.json', capture: 'a', sourceUrl: 'u1', field: 'title', before: '$500,000', after: '412 Pine St, Sandpoint, ID' };
+  assert.equal(checkDeclarations([good], before, after).ok, true);
+  assert.equal(checkDeclarations([{ ...good, after: '999 Invented Rd, Boise, ID' }], before, after).ok, false, 'must be what the engine now produces');
+  assert.equal(checkDeclarations([{ ...good, sourceUrl: 'u2', before: '1 Elm St, Boise, ID', after: '$1' }], before, after).ok, false, 'a regression cannot be declared');
+});
