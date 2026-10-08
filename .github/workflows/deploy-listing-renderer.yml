@@ -1,12 +1,8 @@
 name: Deploy listing renderer
 
+# Manual only (Oct 8 2026 decision): this workflow also redeploys the production importer functions.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'services/listing-renderer/**'
-      - '.github/workflows/deploy-listing-renderer.yml'
 
 permissions:
   contents: read
