@@ -2647,6 +2647,51 @@ function pageNamesProperty(text: string, item: Pick<DiscoveredListing, "title" |
 }
 
 /** Enrich an already evidenced property without replacing its address with an agency title. */
+/**
+ * A card can name its property only by its price or badges ("$8,500,000", "Featured 4 Beds"). The
+ * property's own detail page usually names it: one structured PostalAddress for the listing, and/or one
+ * main heading. When the card's title names nothing, that name becomes the title. Guards: the page must
+ * be this listing's own document (not a redirect elsewhere), a structured address must be the only one on
+ * the page (related-home cards carry others), and a heading is used only when it reads as a located place
+ * ("802 Sandpoint Ave #8404, Sandpoint, ID 83864"; "Cottage Island, Hope, ID 83836"). Nothing is invented,
+ * and a title that already names something is never replaced. (Autonomous repair: title-not-property.)
+ */
+function detailPageTitle(item: Pick<DiscoveredListing, "title" | "sourceUrl">, html: string, base: URL): string | undefined {
+  const residue = decodeEntities(item.title ?? "")
+    .replace(/\$\s?\d[\d,.]*(?:\s?(?:[KkMm]|million)\b)?/g, " ")
+    .replace(/\b\d+(?:\.\d+)?\s*(?:beds?|bd|br|baths?|ba|sq\.?\s*ft|sqft|acres?)\b/gi, " ")
+    .replace(/\b(?:new|active|pending|sold|featured|just listed|for sale|listing|property|home|view|details?|price|reduced|mls|add to favou?rites)\b/gi, " ")
+    .replace(/[^a-z]/gi, "");
+  if (residue.length >= 3) return undefined;
+  const sameDocument = (() => {
+    try {
+      const a = new URL(item.sourceUrl), b = base;
+      const host = (h: string) => h.replace(/^www\./, "");
+      return host(a.hostname) === host(b.hostname) && a.pathname.replace(/\/+$/, "") === b.pathname.replace(/\/+$/, "");
+    } catch { return false; }
+  })();
+  if (!sameDocument) return undefined;
+  const clean = (value: string) => decodeEntities(decodeEntities(value.replace(/\\u0026/g, "&"))).replace(/\s+/g, " ").replace(/\s+,/g, ",").trim();
+  const located = (text: string) => text.length >= 6 && text.length <= 140 && /[a-z]{2,}/i.test(text) &&
+    (/^[NSEW]?\d{1,6}[A-Z]?\s+[A-Za-z0-9]/.test(text) || /,\s*[A-Za-z .'-]+,?\s+[A-Z]{2}\b/.test(text) || /\b\d{5}(?:-\d{4})?\b/.test(text));
+  const streets = new Map<string, string>();
+  for (const block of html.matchAll(/<script\b[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    for (const match of block[1].matchAll(/"streetAddress"\s*:\s*"((?:[^"\\]|\\.){2,120})"/g)) {
+      const street = clean(match[1]);
+      const rest = block[1].slice(match.index ?? 0, (match.index ?? 0) + 600);
+      const field = (name: string) => clean(rest.match(new RegExp(`"${name}"\\s*:\\s*"((?:[^"\\\\]|\\\\.){1,60})"`))?.[1] ?? "");
+      if (street) streets.set(street.toLowerCase(), [street, field("addressLocality"), [field("addressRegion"), field("postalCode")].filter(Boolean).join(" ")].filter(Boolean).join(", "));
+    }
+  }
+  const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map(m => clean(stripTags(m[1])));
+  const heading = headings.length === 1 ? headings[0] : "";
+  const structured = streets.size === 1 ? [...streets.values()][0] : "";
+  const street = streets.size === 1 ? [...streets.keys()][0] : "";
+  if (heading && located(heading) && (!street || heading.toLowerCase().includes(street))) return heading.slice(0, 160);
+  if (structured && /[a-z]{2,}/i.test(street)) return structured.slice(0, 160);
+  return undefined;
+}
+
 function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL): DiscoveredListing {
   if (isRobotChallenge(html)) throw new Error("Detail page requires human verification");
   if (isPublishedScriptGate(html)) throw new Error("Detail page script gate did not unlock");
@@ -2703,7 +2748,8 @@ function enrichListingFromPage(item: DiscoveredListing, html: string, base: URL)
   const fullGallery=(detail?.images.length??0)>0||gallery.length>0;
   const images = distinctPropertyImages([...(detail?.images ?? []),...gallery, ...(!fullGallery&&cover&&!looksLikeChrome(cover)?[cover]:[]), ...(!fullGallery?item.images:[])]);
   const office = item.listingOffice ?? detailAttribution(html);
-  return { ...item, ...(office ? { listingOffice: office } : {}), facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
+  const named = detailPageTitle(item, html, base);
+  return { ...item, ...(named ? { title: named } : {}), ...(office ? { listingOffice: office } : {}), facts:{...item.facts,...structured?.facts,...structuredFactsForAddress(html,item),...detail?.facts,...providerPropertyFacts(html,base)}, detailsComplete: fullGallery && !!description, status: detail?.status ?? statusForProperty(html, item, base) ?? item.status, description: description.slice(0, 16000) || item.description,
     beds: detail?.beds || item.beds, baths: detail?.baths || item.baths, sqft: detail?.sqft || item.sqft,
     listingNumber:detail?.listingNumber||item.listingNumber,propertyType:detail?.propertyType||item.propertyType,neighborhood: detail?.neighborhood || item.neighborhood, image: images[0] || item.image, images };
 }
