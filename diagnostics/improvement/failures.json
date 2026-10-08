@@ -505,7 +505,7 @@
         "supabase/functions/analyze-realtor-build/listingDiscovery.ts (enrichPublicProperty, detail reader)",
         "supabase/functions/analyze-realtor-build/listingRecords.ts (propertyTitle, normalizeListingRecords)"
       ],
-      "status": "rejected",
+      "status": "integrated",
       "firstSeen": "2026-10-08T16:31:29.309Z",
       "lastSeen": "2026-10-08T17:22:44.054Z",
       "evidenceHash": "f04715a7aa1c8ebe",
@@ -570,8 +570,23 @@
             "target": "13 -> 0",
             "problems": []
           }
+        },
+        {
+          "at": "2026-10-08T17:23:55.216Z",
+          "outcome": "integrated",
+          "branch": "improve/title-not-property-session1",
+          "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+          "evidenceHash": "f04715a7aa1c8ebe",
+          "gate": {
+            "accepted": true,
+            "head": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+            "base": "3d529f19e3ba0613696d2e06d652d4b55e86b0ce",
+            "target": "13 -> 0",
+            "problems": []
+          }
         }
-      ]
+      ],
+      "knowledge": "docs/compatibility-knowledge/title-not-property.md"
     },
     "title-not-property--temporary-outage": {
       "id": "title-not-property--temporary-outage",

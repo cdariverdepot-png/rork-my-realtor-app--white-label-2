@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "failure": "title-not-property",
+    "symptom": "TITLE_NOT_PROPERTY",
+    "stage": "property identity (detail enrichment / save-boundary normalizer)",
+    "record": "docs/compatibility-knowledge/title-not-property.md",
+    "architectures": [
+      "property-cards"
+    ],
+    "integratedAt": "2026-10-08T17:23:55.216Z",
+    "commit": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
+    "gate": "13 -> 0"
+  }
+]

@@ -2,8 +2,8 @@
   "failure": "title-not-property",
   "base": "origin/repair/compatibility-engine",
   "head": "b782f5abcdb3ee27b687c58a7d596ef7b970cf79",
-  "baseSha": "9ed67348936ca8c5e2edd09f0884c9e12b7ff6f1",
-  "at": "2026-10-08T16:49:08.040Z",
+  "baseSha": "3d529f19e3ba0613696d2e06d652d4b55e86b0ce",
+  "at": "2026-10-08T17:23:06.099Z",
   "checks": {
     "policy": {
       "ok": true,
@@ -145,9 +145,9 @@
       "problems": []
     },
     "suite": {
-      "ok": false,
-      "pass": 0,
-      "fail": null,
+      "ok": true,
+      "pass": 583,
+      "fail": 0,
       "failing": [],
       "guard": "clean"
     },
@@ -171,7 +171,7 @@
         "realm-partners-idaho: \"$2,500,000\" -> \"239 Pierce Ln, Sagle, ID 83860\""
       ],
       "notes": [
-        "Corpus CPU 3788 ms -> 3712 ms."
+        "Corpus CPU 3792 ms -> 3667 ms."
       ],
       "targetBefore": 13,
       "targetAfter": 0
@@ -210,5 +210,5 @@
     "woods-n-water-real-estate",
     "zillow-leland-reed"
   ],
-  "accepted": false
+  "accepted": true
 }

@@ -1,17 +1,17 @@
-# Acceptance gate: title-not-property — REJECTED
+# Acceptance gate: title-not-property — ACCEPTED
 
-Candidate b782f5abcd against base 9ed6734893 (2026-10-08T16:49:08.040Z).
+Candidate b782f5abcd against base 3d529f19e3 (2026-10-08T17:23:06.099Z).
 
 ## policy: pass
 - 5 files changed; 4 tests added.
 
 ## static: pass
 
-## suite: FAIL
-- 0 passed, NaN failed; network guard: clean
+## suite: pass
+- 583 passed, 0 failed; network guard: clean
 
 ## corpus: pass
-- Corpus CPU 3788 ms -> 3712 ms.
+- Corpus CPU 3792 ms -> 3667 ms.
 - ✓ TITLE_NOT_PROPERTY: 13 -> 0 code-defect records across the corpus.
 - ✓ realm-partners-idaho: "$8,500,000" -> "Cottage Island, Hope, ID 83836"
 - ✓ realm-partners-idaho: "$6,970,000" -> "717 Olson Dr., Dover, ID 83825"
