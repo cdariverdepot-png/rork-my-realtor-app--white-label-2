@@ -139,6 +139,32 @@ function propertyKey(sourceUrl: string): string {
   } catch { return sourceUrl; }
 }
 
+const plainKey = (value: string | undefined) => (value ?? "").toLowerCase().replace(/&amp;/g, "&").replace(/[^a-z0-9]/g, "");
+const listingIdOf = (item: DiscoveredListing) => Number(item.listingNumber?.replace(/\D/g, "") || item.sourceUrl.match(/\/(\d{5,})(?:\/|$|[?#])/)?.[1] || 0);
+
+/**
+ * One property published under two listing ids (a relisting, or the same home entered in two MLS classes):
+ * the same named property (title and area), the same price, and the same remarks or lead photo. Distinct
+ * units carry their unit in the title; one parcel listed as a house and as land carries a different price
+ * or remarks; titles that name nothing (a price, card text) are never merged. (Autonomous repair:
+ * duplicate-property.)
+ */
+function sameProperty(a: DiscoveredListing, b: DiscoveredListing): boolean {
+  if (needsTitle(a.title) || !/[a-z]{2,}/i.test(a.title)) return false;
+  if (plainKey(a.title) !== plainKey(b.title) || plainKey(a.neighborhood) !== plainKey(b.neighborhood)) return false;
+  if (!plainKey(a.price) || plainKey(a.price) !== plainKey(b.price)) return false;
+  const remarks = (item: DiscoveredListing) => item.description.replace(/\s+/g, " ").trim();
+  return (remarks(a).length >= 40 && remarks(a) === remarks(b)) || (!!a.images[0] && a.images[0] === b.images[0]);
+}
+
+/** Of two records of one property: the attributed one, then the richer one, then the newer listing id. */
+function preferredRecord(a: DiscoveredListing, b: DiscoveredListing): DiscoveredListing {
+  if (!!a.ownership !== !!b.ownership) return a.ownership ? a : b;
+  if (a.images.length !== b.images.length) return a.images.length > b.images.length ? a : b;
+  if (a.description.length !== b.description.length) return a.description.length > b.description.length ? a : b;
+  return listingIdOf(b) > listingIdOf(a) ? b : a;
+}
+
 export function normalizeListingRecords(items: DiscoveredListing[]): NormalizedRecords {
   const dropped: NormalizedRecords["dropped"] = [];
   const byKey = new Map<string, DiscoveredListing>();
@@ -169,5 +195,14 @@ export function normalizeListingRecords(items: DiscoveredListing[]): NormalizedR
       description: keep.description.length >= other.description.length ? keep.description : other.description });
     dropped.push({ sourceUrl: other.sourceUrl, title: other.title, reason: "duplicate_url_variant" });
   }
-  return { listings: [...byKey.values()], dropped };
+  const listings: DiscoveredListing[] = [];
+  for (const record of byKey.values()) {
+    const index = listings.findIndex(kept => sameProperty(kept, record));
+    if (index < 0) { listings.push(record); continue; }
+    const keep = preferredRecord(listings[index], record);
+    const other = keep === record ? listings[index] : record;
+    listings[index] = keep;
+    dropped.push({ sourceUrl: other.sourceUrl, title: other.title, reason: "duplicate_property" });
+  }
+  return { listings, dropped };
 }
