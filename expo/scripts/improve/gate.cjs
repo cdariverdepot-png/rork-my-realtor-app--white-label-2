@@ -143,9 +143,15 @@ function compare(before, after, failure) {
     if (!prior) { notes.push(`${site.id}: new in corpus (no baseline).`); continue; }
     cpuBefore += prior.cpuMs; cpuAfter += site.cpuMs;
     const a = findingCounts(prior), b = findingCounts(site);
+    // When every record a site had was one the target identified as wrong (a non-property, a scope escape),
+    // removing them leaves nothing imported; the finding that explains an empty import is then expected.
+    const onlyWrongRecords = ['NOT_A_PROPERTY', 'OFFSITE_UNLINKED'].includes(target) && prior.listings.length > 0 && !site.listings.length &&
+      prior.listings.every(l => prior.findings.some(f => f.code === target && (f.all ?? f.examples.map(e => e.sourceUrl)).includes(l.sourceUrl)));
+    const EMPTY_EXPLANATIONS = new Set(['ALL_FILTERED', 'NO_LISTINGS', 'REQUIRES_RENDERING', 'MARKET_ONLY', 'BLOCKED_SOURCE']);
     for (const [k, n] of Object.entries(b)) {
       const [code] = k.split('|');
       if (code === target) continue;
+      if (onlyWrongRecords && EMPTY_EXPLANATIONS.has(code)) { notes.push(`${site.id}: now imports nothing; ${k} explains it (expected).`); continue; }
       if (n > (a[k] ?? 0)) problems.push(`${site.id}: new or increased finding ${k} (${a[k] ?? 0} -> ${n}).`);
     }
     // The target symptom may move between evidence classes only by getting smaller overall at this site.

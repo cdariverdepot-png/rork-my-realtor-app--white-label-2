@@ -213,3 +213,12 @@ test('improvement loop: one listing id published on two hosts of a site is a mir
   const mirrored = findings.find(f => f.code === 'MIRRORED_LISTING');
   assert.deepEqual(mirrored.groups, [['https://www.agent.example/property/21382178/', 'https://agent.platform.example/property/21382178/']]);
 });
+
+test('improvement loop: removing a site\'s only wrong record may leave an explained empty import, nothing more', () => {
+  const bad = { ...finding('NOT_A_PROPERTY', 'code_defect', 1), examples: [{ sourceUrl: 'ig' }], all: ['ig'] };
+  const before = evaluation([site('a', [bad], [rec('ig', 'cameronteam')])]);
+  const empty = evaluation([site('a', [finding('ALL_FILTERED', 'needs_review', 1)], [])]);
+  assert.equal(compare(before, empty, failureFor('NOT_A_PROPERTY')).ok, true);
+  const worse = evaluation([site('a', [finding('ALL_FILTERED', 'needs_review', 1), finding('DETAIL_INCOMPLETE', 'code_defect', 1)], [])]);
+  assert.equal(compare(before, worse, failureFor('NOT_A_PROPERTY')).ok, false);
+});
