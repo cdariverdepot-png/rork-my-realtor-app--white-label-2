@@ -13,3 +13,5 @@
 {"at":"2026-10-08T21:02:52.019Z","kind":"site","campaign":"gate-37843454766","level":"D","site":"realm-partners-idaho","calls":1,"blocked":0,"estimatedUsd":0.0111,"inputTokens":3385,"outputTokens":539}
 {"at":"2026-10-08T21:04:18.607Z","kind":"site","campaign":"gate-37843454766","level":"D","site":"katerina-sayles","calls":1,"blocked":0,"estimatedUsd":0.0174,"inputTokens":4394,"outputTokens":1071}
 {"at":"2026-10-08T21:05:15.137Z","kind":"site","campaign":"gate-37843454766","level":"D","site":"the-battle-group","calls":1,"blocked":0,"estimatedUsd":0.0122,"inputTokens":3070,"outputTokens":759}
+{"at":"2026-10-08T21:25:40.170Z","kind":"site","campaign":"gate-37846354461","level":"D","site":"realm-partners-idaho","calls":1,"blocked":0,"estimatedUsd":0.0116,"inputTokens":3381,"outputTokens":599}
+{"at":"2026-10-08T21:26:48.828Z","kind":"site","campaign":"gate-37846354461","level":"D","site":"katerina-sayles","calls":1,"blocked":0,"estimatedUsd":0.0163,"inputTokens":4396,"outputTokens":942}

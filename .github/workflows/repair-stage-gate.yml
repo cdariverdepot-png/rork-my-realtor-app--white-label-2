@@ -69,7 +69,13 @@ jobs:
           grep -q '= "staging";' supabase/functions/refresh-listings-staging/deployment.ts
           supabase functions deploy analyze-realtor-build-staging --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
           supabase functions deploy refresh-listings-staging --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
+      - name: "Gate B - target app (an app-url line in stage-gate.txt tests an already deployed preview instead of a local build)"
+        run: |
+          url="$(grep -i '^app-url:' diagnostics/stage-gate.txt | head -1 | cut -d: -f2- | tr -d ' ')"
+          if [ -n "$url" ]; then echo "$url" | grep -Eq '^https://[a-z0-9-]+\.expo\.app$' || { echo "::error::app-url must be an expo.app preview"; exit 1; }; fi
+          echo "DEPLOYED_APP_URL=$url" >> "$GITHUB_ENV"
       - name: Gate B - build the branch web app against the staging functions
+        if: env.DEPLOYED_APP_URL == ''
         working-directory: expo
         env:
           EXPO_PUBLIC_FUNCTION_SUFFIX: '-staging'
@@ -87,9 +93,13 @@ jobs:
           (cd expo && CAMPAIGN_JUSTIFICATION="$JUSTIFICATION" node scripts/ai-budget.cjs plan --level D --sites "$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.env.RUNNER_TEMP + "/gate-sites.json","utf8")).length)')" --justification "$JUSTIFICATION")
       - name: Gate B - 25 sites through the branch app (sequential, isolated sessions)
         run: |
-          (cd expo && pnpm exec expo serve --port 8081 > "$RUNNER_TEMP/serve.log" 2>&1 &)
-          for i in $(seq 1 60); do curl -sf http://localhost:8081/ >/dev/null && break; sleep 2; done
-          APP_URL=http://localhost:8081 SITES="$(cat "$RUNNER_TEMP/gate-sites.json")" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
+          app="$DEPLOYED_APP_URL"
+          if [ -z "$app" ]; then
+            (cd expo && pnpm exec expo serve --port 8081 > "$RUNNER_TEMP/serve.log" 2>&1 &)
+            for i in $(seq 1 60); do curl -sf http://localhost:8081/ >/dev/null && break; sleep 2; done
+            app=http://localhost:8081
+          fi
+          APP_URL="$app" SITES="$(cat "$RUNNER_TEMP/gate-sites.json")" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
       - name: Saved listings per site (read-only)
         if: always()
         run: node expo/scripts/diagnostic-saved-listings.cjs diag-out || true
