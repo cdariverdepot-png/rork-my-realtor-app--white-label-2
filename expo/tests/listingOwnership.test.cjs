@@ -119,3 +119,21 @@ test('featured listings are labelled in the client app and the listings manager'
   assert.match(client, /Listing courtesy of \{item\.listingOffice\}/);
   assert.match(fs.readFileSync(path.join(__dirname, '../app/admin/listings.tsx'), 'utf8'), /Featured · listed by/);
 });
+
+test('a city search on another company\'s site is not the agent\'s inventory; a claimed link to it is', async () => {
+  const { discoverListings } = await get();
+  const cards = [1, 2, 3].map(n => `<div class="result"><a href="https://brokerage.example/property_listing/${n}/12${n}-Elm-St-Ada-MI"><img src="https://photos.example/${n}.jpg"><h3>12${n} Elm St, Ada, MI</h3><span>$${300 + n},000</span></a></div>`).join('');
+  const search = 'https://brokerage.example/fine/real/estate/newsearch/cityname/Ada+-+MI';
+  const unclaimed = await discoverListings(['https://agent.example/'], pagesFetch({
+    'https://agent.example/': site('Jane Agent', '<a href="/search-listings">Search Listings</a>'),
+    'https://agent.example/search-listings': site('Jane Agent', `<a href="${search}">Ada Homes for Sale</a>`),
+    [search]: cards,
+  }), { maxDetailPages: 0 });
+  assert.equal(unclaimed.listings.length, 0, 'a city search reached by a generic label is the market');
+  assert.equal(unclaimed.meta.scope.excludedOtherOffice, 3);
+  const claimed = await discoverListings(['https://agent.example/'], pagesFetch({
+    'https://agent.example/': site('Jane Agent', `<a href="${search}">View our listings</a>`),
+    [search]: cards,
+  }), { maxDetailPages: 0 });
+  assert.equal(claimed.listings.length, 3, 'the agent\'s own site claims that collection');
+});

@@ -24,7 +24,8 @@ const iso = value => { const d = new Date(value); if (Number.isNaN(+d)) throw Er
     const saved = rows.map(row => ({ realtorId: row.id, createdAt: row.created_at, sources: row.sources?.sources ?? [],
       listings: (row.listings?.items ?? []).map(item => ({ title: item.title, price: item.price, status: item.status, sourceUrl: item.sourceUrl,
         photos: item.images?.length ?? 0, descriptionLength: item.description?.length ?? 0, detailsComplete: !!item.detailsComplete,
-        detailAttempted: !!item.detailAttemptAt, facts: item.facts, beds: item.beds, baths: item.baths, sqft: item.sqft })) }));
+        detailAttempted: !!item.detailAttemptAt, facts: item.facts, beds: item.beds, baths: item.baths, sqft: item.sqft,
+        listingOffice: item.listingOffice, ownership: item.ownership })) }));
     fs.writeFileSync(path.join(dir, file.replace('.json', '.saved.json')), JSON.stringify(saved, null, 2));
     console.log(file, saved.map(s => s.listings.length));
   }

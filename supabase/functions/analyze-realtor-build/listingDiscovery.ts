@@ -2734,7 +2734,8 @@ export async function discoverListings(
   let hops = 0;
   let maxDepthReached = 0;
 
-  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean };
+  /** claimed: a link on the path to this page claimed the agent's own inventory, or the request is agent-scoped. */
+  type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean; claimed?: boolean };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
   // Ownership and scope: navigation stays inside the seed's scope; market feeds keep only own listings.
   const seedScopes = [...new Set(seedUris.filter(Boolean))].flatMap(url => { try { return [seedScope(new URL(url))]; } catch { return []; } });
@@ -2823,7 +2824,8 @@ export async function discoverListings(
       const framed = soleFrameDocument(html, finalUrl);
       if (framed && framed !== finalUrl.toString() && !visitedSet.has(framed) && !queue.some(item => item.url === framed)) {
         stages.push("frame_document");
-        queue.unshift({ url: framed, depth: next.depth, priority: 250, parent: finalUrl.toString() });
+        // A page that is only a frame around another document presents that document as its own.
+        queue.unshift({ url: framed, depth: next.depth, priority: 250, parent: finalUrl.toString(), claimed: true });
         continue;
       }
     }
@@ -2952,8 +2954,21 @@ export async function discoverListings(
     if (listingTemplate) listingUrlTemplates.set(finalUrl.origin, listingTemplate);
     if (/\/graphql$/i.test(finalUrl.pathname)) html = applyPublishedListingUrls(html, listingUrlTemplates.get(finalUrl.origin) ?? null);
     if (next.depth === 0 && !identity) identity = siteIdentity(html, finalUrl);
+    const claimedNow = !!next.claimed || agentScopedRequest(next.url) || agentScopedRequest(finalUrl.toString());
     let found = excluded ? [] : extractListingsFromPage(html, finalUrl, observation.attempts);
-    let marketPage = false;
+    // A collection on another company's website is the agent's inventory only when the path claimed it
+    // ("Our properties", "My listings"), the request is agent/office-filtered, or it is a listing transport.
+    // Public fragments and provider APIs are transport by construction; only navigated pages are judged.
+    const offSite = !next.fragment && seedScopes.length > 0 && !seedScopes.some(scope => registrableDomain(finalUrl.hostname) === scope.domain) && !MLS_INVENTORY_HOST.test(finalUrl.hostname);
+    let unscopedOffSite = false;
+    if (found.length && offSite && !claimedNow) {
+      unscopedOffSite = true;
+      excludedOtherOffice += found.length;
+      marketPages.push(finalUrl.toString());
+      stages.push("unscoped_offsite_collection");
+      found = [];
+    }
+    let marketPage = unscopedOffSite;
     if (found.length) {
       const published = Number(html.match(/data-(?:search-results-search-count|listings-count|results-count)\s*=\s*["']?(\d+)/i)?.[1] ?? 0);
       const extent = pagerExtent(visibleDocument(html), finalUrl, found.map(item => item.sourceUrl));
@@ -3034,7 +3049,7 @@ export async function discoverListings(
               stages.push("api_discovered");
               observation.resolution = "known-pattern";
             } else if (!historicalInventoryUrl(entry.url) && /\/(?:api|graphql)|listing|search/i.test(entryUrl.pathname) && !visitedSet.has(entry.url) && !queue.some(q => q.url === entry.url)) {
-              queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString() });
+              queue.push({ url: entry.url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString(), claimed: claimedNow });
               stages.push("api_discovered");
             }
           }
@@ -3094,16 +3109,16 @@ export async function discoverListings(
       continue;
     }
     if (!broad) {
-      for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString()}); }
+      for(const request of kestrelInventoryRequests(html)){ if(!visitedSet.has(request.url)&&!queue.some(q=>q.url===request.url)) queue.push({...request,depth:next.depth,priority:220,fragment:true,parent:finalUrl.toString(),claimed:claimedNow}); }
       for (const url of collectInventoryFragments(html, finalUrl)) {
         if (historicalInventoryUrl(url) || visitedSet.has(url) || queue.some(q => q.url === url)) continue;
-        queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString() });
+        queue.push({ url, depth: next.depth, priority: 200, fragment: true, parent: finalUrl.toString(), claimed: claimedNow });
       }
       for (const url of publishedQueries) {
         if (!visitedSet.has(url) && !queue.some(q => q.url === url)) {
           sawContinuation = true;
           continuationMechanism = continuationMechanism || "offset-query";
-          queue.push({ url, depth: next.depth, priority: 205, fragment: true, parent: finalUrl.toString(), continuation: true });
+          queue.push({ url, depth: next.depth, priority: 205, fragment: true, parent: finalUrl.toString(), continuation: true, claimed: claimedNow });
         }
       }
       if (found.length) {
@@ -3124,7 +3139,7 @@ export async function discoverListings(
           if (!boundary.open && boundary.providerTerminal) providerTerminalPages++;
           for (const url of marketPage ? [] : boundary.continuations) {
             if (url === finalUrl.toString()) { openContinuation = true; continue; }
-            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true });
+            if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, claimed: claimedNow });
           }
         }
         // Flexmls uses public paged fragments without a Next anchor.
@@ -3135,7 +3150,7 @@ export async function discoverListings(
           if (!visitedSet.has(nextUrl) && !queue.some(q => q.url === nextUrl)) {
             sawContinuation = true;
             continuationMechanism = continuationMechanism || "numbered-pagination";
-            queue.push({ url: nextUrl, depth: next.depth, priority: 180, fragment: true, continuation: true });
+            queue.push({ url: nextUrl, depth: next.depth, priority: 180, fragment: true, continuation: true, claimed: claimedNow });
           }
         } else if (next.fragment && finalUrl.searchParams.get("list_view") === "photo" && found.length > 0 && found.length < 24) {
           providerTerminalPages++;
@@ -3148,7 +3163,7 @@ export async function discoverListings(
           if (nextUrl && !visitedSet.has(nextUrl) && !queue.some(q => q.url === nextUrl)) {
             sawContinuation = true;
             continuationMechanism = continuationMechanism || "offset-query";
-            queue.push({ url: nextUrl, depth: next.depth, priority: 190, fragment: true, continuation: true });
+            queue.push({ url: nextUrl, depth: next.depth, priority: 190, fragment: true, continuation: true, claimed: claimedNow });
           }
         } catch { /* not a collection payload */ }
       }
@@ -3163,7 +3178,7 @@ export async function discoverListings(
       if (queue.some((q) => q.url === cta.url)) continue;
       const broad = /property\s+search|search\s+(?:all\s+)?(?:homes|properties)|all\s+(?:homes|properties|listings)/i.test(cta.label) &&
         !/\bmy\b|\bour\b|featured|exclusive|office_listing_categories|agent_listing_categories/i.test(cta.label + cta.url);
-      queue.push({ url: cta.url, depth: next.depth + 1, priority: cta.score, broad, parent: finalUrl.toString() });
+      queue.push({ url: cta.url, depth: next.depth + 1, priority: cta.score, broad, parent: finalUrl.toString(), claimed: claimedNow || OWN_INVENTORY_LABEL.test(cta.label) || cta.label === "embedded listings" || agentScopedRequest(cta.url) });
     }
 
     if (!listings.length && !queue.length && options?.selectLinks && aiRoutes < 2 && Date.now() < deadline) {
@@ -3174,7 +3189,7 @@ export async function discoverListings(
           const selected = await options.selectLinks(finalUrl.toString(), candidates);
           // Never fetch a URL invented by the model, or follow its page-supplied instructions.
           for (const url of [...new Set(selected)].slice(0, 4)) {
-            if (candidates.some(c => c.url === url) && inScope(url, candidates.find(c => c.url === url)?.label)) queue.push({ url, depth: next.depth + 1, priority: 100 });
+            if (candidates.some(c => c.url === url) && inScope(url, candidates.find(c => c.url === url)?.label)) queue.push({ url, depth: next.depth + 1, priority: 100, claimed: claimedNow || OWN_INVENTORY_LABEL.test(candidates.find(c => c.url === url)?.label ?? "") });
           }
         } catch { /* navigation remains useful when AI is unavailable */ }
       }
@@ -3185,7 +3200,7 @@ export async function discoverListings(
       for (const item of found.slice(0, 4)) {
         if (visitedSet.has(item.sourceUrl)) continue;
         if (item.images.length && item.price) continue;
-        queue.push({ url: item.sourceUrl, depth: next.depth + 1, priority: 20 });
+        queue.push({ url: item.sourceUrl, depth: next.depth + 1, priority: 20, claimed: claimedNow });
       }
     }
   }
