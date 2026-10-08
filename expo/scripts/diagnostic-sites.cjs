@@ -185,16 +185,26 @@ async function run(browser, site) {
 }
 
 (async () => {
+  // Level D campaign budget: planned before the first site, metered after each one (see ai-budget.cjs).
+  const budget = require('./ai-budget.cjs');
+  const campaign = process.env.CAMPAIGN_ID ?? `local-${Date.now()}`;
+  const plan = budget.planCampaign({ level: 'D', sites: sites.length, justification: process.env.CAMPAIGN_JUSTIFICATION });
+  fs.writeFileSync(path.join(out, 'budget-plan.json'), JSON.stringify(plan, null, 2));
+  if (!plan.allowed) { console.error(`[ai-budget] campaign refused: ${plan.reason}`); process.exit(3); }
+  const meter = budget.createCampaignMeter({ campaign, level: 'D' });
   const { chromium } = require('playwright');
   const browser = await chromium.launch();
   for (const site of sites) {
+    if (!meter.beforeSite()) { fs.writeFileSync(path.join(out, `${site.id}.json`), JSON.stringify({ id: site.id, url: site.url, notRun: meter.stopped }, null, 2)); continue; }
     const started = Date.now();
     const startedAt = new Date().toISOString();
     const result = await run(browser, site).catch(e => ({ id: site.id, url: site.url, error: String(e.stack ?? e) }));
     result.wallMs = Date.now() - started;
     result.window = { startedAt, endedAt: new Date().toISOString() };
+    result.aiUsage = meter.recordSite(site.id, (result.calls ?? []).map(call => call.result?.body?.aiUsage));
     fs.writeFileSync(path.join(out, `${site.id}.json`), JSON.stringify(result, null, 2));
-    console.log(site.id, result.reviewMs ?? result.error?.slice(0, 80));
+    console.log(site.id, result.reviewMs ?? result.error?.slice(0, 80), `ai $${result.aiUsage.estimatedUsd}`);
   }
   await browser.close();
+  fs.writeFileSync(path.join(out, 'budget-spent.json'), JSON.stringify({ campaign, spentUsd: meter.spent, limitUsd: meter.limit, stopped: meter.stopped }, null, 2));
 })();

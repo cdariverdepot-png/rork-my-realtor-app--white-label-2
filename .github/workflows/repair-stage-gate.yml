@@ -47,6 +47,10 @@ jobs:
           set -e
           cp -r supabase/functions/analyze-realtor-build supabase/functions/analyze-realtor-build-staging
           cp -r supabase/functions/refresh-listings supabase/functions/refresh-listings-staging
+          # Staging copies run under the staging AI policy (own key, hard per-request limits).
+          sed -i 's/= "production";/= "staging";/' supabase/functions/analyze-realtor-build-staging/deployment.ts supabase/functions/refresh-listings-staging/deployment.ts
+          grep -q '= "staging";' supabase/functions/analyze-realtor-build-staging/deployment.ts
+          grep -q '= "staging";' supabase/functions/refresh-listings-staging/deployment.ts
           supabase functions deploy analyze-realtor-build-staging --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
           supabase functions deploy refresh-listings-staging --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
       - name: Gate B - build the branch web app against the staging functions
@@ -58,6 +62,13 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/diag" --no-audit --no-fund playwright@1.55.0 image-size@2.0.2
           "$RUNNER_TEMP/diag/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Gate B - AI budget plan (refuses the campaign without a justification and budget room)
+        run: |
+          mkdir -p "$OUT_DIR"
+          JUSTIFICATION="$(grep -i '^justification:' diagnostics/stage-gate.txt | head -1 | cut -d: -f2-)"
+          echo "CAMPAIGN_JUSTIFICATION=$JUSTIFICATION" >> "$GITHUB_ENV"
+          echo "CAMPAIGN_ID=gate-${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
+          (cd expo && CAMPAIGN_JUSTIFICATION="$JUSTIFICATION" node scripts/ai-budget.cjs plan --level D --sites "$(node -e 'console.log(JSON.parse(require("fs").readFileSync("../diagnostics/sites-25.json","utf8")).length)')" --justification "$JUSTIFICATION")
       - name: Gate B - 25 sites through the branch app (sequential, isolated sessions)
         run: |
           (cd expo && pnpm exec expo serve --port 8081 > "$RUNNER_TEMP/serve.log" 2>&1 &)
@@ -74,4 +85,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add diagnostics && git commit -m "Stage gate results ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          # diagnostics/ai-ledger.jsonl travels with the results, so daily totals accumulate across runs.
           for i in 1 2 3; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && break; sleep 5; done

@@ -3,6 +3,7 @@ import { applyObservation, type SyncListing } from "./sync.ts";
 import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
 import { normalizeListingRecords } from "../analyze-realtor-build/listingRecords.ts";
+import { importAiGateway, pageAi } from "./normalizePage.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
 type Row = { value: Record<string, unknown>; rev: number };
@@ -55,10 +56,13 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   if (!connecting && !target) return body.sourceId ? { body: { ok: true, checked: 0 } } : null;
   if (connecting && sources.length >= 5 && !target) return { body: { ok: false, error: "You already have five connected sources. Use one of your connected pages." }, status: 400 };
   let inventory: SourceInventory;
+  // One metered AI gateway for this import: navigation and page fallbacks share its budget and usage record.
+  const ai = importAiGateway();
+  const fallbacks = pageAi(ai);
   progress?.start("listings");
   try {
-    inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, undefined, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))),
-      progress ? discoveryReporter(progress) : undefined, INVENTORY_JOB_DETAILS);
+    inventory = await readSource(connecting ? body.url! : target!.url, fetchHtml, target, fallbacks.selectInventoryLinks, createListingRenderer(listingRenderBackendFromEnv(name => Deno.env.get(name))),
+      progress ? discoveryReporter(progress) : undefined, INVENTORY_JOB_DETAILS, fallbacks.normalizePublicPage);
     // One normalizer before anything is saved: readable titles, decoded text, one record per property.
     const records = normalizeListingRecords(inventory.listings);
     if (records.dropped.length) console.log("[listing-sync] normalized", records.dropped.map(row => row.reason));
@@ -80,7 +84,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
       return { ...s, state: "unavailable", error: message, failures, lastCheckedAt: now,
         nextSyncAt: now + Math.min(24, 0.5 * 2 ** Math.min(failures - 1, 6)) * 3_600_000 };
     }) }));
-    return { body: { ok: false, error: message, code }, status: 422 };
+    return { body: { ok: false, error: message, code, aiUsage: ai.summary() }, status: 422 };
   }
   // Save the source first so an interrupted collection write remains recoverable by the next sync.
   await save(sourceKey, value => {
@@ -125,7 +129,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     ...(detailsPending ? { detailsPending, detailsSince: now } : {}),
     ...(excludedOtherOffice || featured ? { scope: { excludedOtherOffice, featured } } : {}),
     ...(incomplete?{warning:`${incomplete} listing${incomplete===1?" has":"s have"} incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.`}:{}),
-    checked: inventory.listings.length, complete: inventory.complete, items: saved.items } };
+    checked: inventory.listings.length, complete: inventory.complete, items: saved.items, aiUsage: ai.summary() } };
 }
 
 type Read = (key: string) => Promise<Row | null>;

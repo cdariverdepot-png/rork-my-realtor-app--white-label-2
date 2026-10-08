@@ -39,7 +39,9 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   const progressModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/progress.ts'), 'utf8').replace(/^export /gm, '');
   // listingRecords.ts imports only types; it is embedded the same way.
   const recordsModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingRecords.ts'), 'utf8').replace(/^import type .*;\r?\n/gm, '').replace(/^export /gm, '');
-  const edgeWithoutFiles = progressModule + '\n' + recordsModule + '\n' + edge.replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '').replace(/^import .*listingRecords\.ts";\r?\n/m, '');
+  // aiGateway.ts and deployment.ts import nothing; they are embedded the same way.
+  const aiModules = ['aiGateway.ts', 'deployment.ts'].map(file => fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build', file), 'utf8').replace(/^export /gm, '')).join('\n');
+  const edgeWithoutFiles = progressModule + '\n' + recordsModule + '\n' + aiModules + '\n' + edge.replace(/^import .*aiGateway\.ts";\r?\n/m, '').replace(/^import .*deployment\.ts";\r?\n/m, '').replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '').replace(/^import .*listingRecords\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml, options) {
