@@ -1,0 +1,44 @@
+// Website-reader replay corpus: every public response the profile/design reader requested from the
+// 25 sites of the Oct 7 2026 diagnostic (live captures, provenance "public-response-capture").
+// *.expected.json.gz holds what the reader produced BEFORE the CPU work (AI input + website design),
+// captured from the then-current main; refactors must reproduce it exactly. The CPU ceiling guards the
+// Edge Function allowance: production killed 11 of these builds with "CPU Time exceeded" (Elevate
+// alone used 28.9 s of CPU); after compiling selectors once, indexing elements and skipping the style
+// cascade for linked pages, the worst site uses well under a second.
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const zlib = require('node:zlib');
+const { loadCapture, replayCapture } = require('../scripts/replay-build-capture.cjs');
+const { currentBundle } = require('../scripts/build-pipeline-harness.cjs');
+
+const dir = path.join(__dirname, 'fixtures/build-pipeline');
+const ids = fs.readdirSync(dir).filter(f => f.endsWith('.capture.json.gz')).map(f => f.replace('.capture.json.gz', '')).sort();
+const CPU_CEILING_MS = 1500;
+const quiet = async work => {
+  const log = console.log, error = console.error, warn = console.warn;
+  console.log = (...a) => { if (!/^\[(build|listing-sync)\]/.test(String(a[0]))) log(...a); };
+  console.error = () => {}; console.warn = () => {};
+  try { return await work(); } finally { console.log = log; console.error = error; console.warn = warn; }
+};
+
+test('the website-reader corpus covers the 25 diagnostic sites', () => {
+  assert.equal(ids.length, 25);
+  for (const id of ids) assert.equal(loadCapture(path.join(dir, `${id}.capture.json.gz`)).provenance, 'public-response-capture');
+});
+
+const bundle = currentBundle();
+for (const id of ids) {
+  test(`${id}: reader output is unchanged and stays within the CPU allowance`, () => quiet(async () => {
+    const capture = loadCapture(path.join(dir, `${id}.capture.json.gz`));
+    const expected = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(dir, `${id}.expected.json.gz`))).toString('utf8'));
+    await replayCapture(bundle, capture); // warm-up: JIT and module evaluation are not the import's work
+    const run = await replayCapture(bundle, capture);
+    const json = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+    assert.equal(run.status, expected.status);
+    assert.deepEqual(json(run.aiRequest), expected.ai, 'the profile model must receive exactly the same source text');
+    assert.deepEqual(json(run.design), expected.design, 'the website design must be unchanged');
+    assert.ok(run.cpuMs < CPU_CEILING_MS, `${id} used ${run.cpuMs} ms CPU (ceiling ${CPU_CEILING_MS} ms)`);
+  }));
+}

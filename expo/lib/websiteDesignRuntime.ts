@@ -448,14 +448,20 @@ export function presentWebsiteSurface(background: string, accent: string, ink?: 
 }
 
 /** A bounded CSS approximation, retaining its evidence and explicit rendering limitations. */
-export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheets: { url: string; css: string }[] = []): WebsiteDesign {
+/**
+ * sectionsOnly: the caller needs only the page's heading and sections (a linked page, or a first look
+ * that decides whether a browser is needed). The style cascade and image analysis, by far the most
+ * expensive work, are not computed for it; heroTitle and sections are exactly what the full pass returns.
+ */
+export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheets: { url: string; css: string }[] = [], options?: { sectionsOnly?: boolean }): WebsiteDesign {
+  const sectionsOnly = options?.sectionsOnly === true;
   if (blockedWebsiteDocument(html)) {
     const neutral: WebsiteAppearance = { accent: '#34566a', background: '#ffffff', ink: '#1c1c1c', panel: '#fffdf9', muted: '#1c1c1c', fontFamily: 'Inter', headingFontFamily: 'Inter', layout: 'text-first', spacing: 24, radius: 0, headingSize: 38, motion: 'none' };
     return { version: 1, sourceUrl, analyzedAt: Date.now(), heroTitle: '', heroSubtitle: '', sections: [],
       original: neutral, optimized: { ...neutral, radius: 12, headingSize: 36, layout: 'portrait-split', motion: 'rise' },
       evidence: { stylesheets: [], colors: [], fonts: [], routing: [], warnings: ['Access to this page was blocked. No site content was imported from the block page.'] } };
   }
-  const css = (stylesheets.map(s => s.css.replace(/url\((['"]?)([^)'"\s]+)\1\)/g, (all, quote, url) => {
+  const css = sectionsOnly ? '' : (stylesheets.map(s => s.css.replace(/url\((['"]?)([^)'"\s]+)\1\)/g, (all, quote, url) => {
     const absolute = websiteAsset(url, s.url); return absolute ? `url("${absolute}")` : all;
   })).join('\n') + '\n' + [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(m => m[1]).join('\n')).replace(/\/\*[\s\S]*?\*\//g, '');
   // Match selectors against actual markup, so unused Bootstrap/IDX/plugin styles
@@ -463,29 +469,88 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
   type Node = { tag: string; markup: string; classes: string[]; id: string; parent?: Node };
   const nodes: Node[] = [], stack: Node[] = [];
   const cleanMarkup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
-  for (const match of cleanMarkup.matchAll(/<(\/)?([a-z][\w-]*)\b[^>]*>/gi)) {
+  for (const match of sectionsOnly ? [] : cleanMarkup.matchAll(/<(\/)?([a-z][\w-]*)\b[^>]*>/gi)) {
     const tag = match[2].toLowerCase();
     if (match[1]) { const index = stack.map(n => n.tag).lastIndexOf(tag); if (index >= 0) stack.splice(index); continue; }
     const node: Node = { tag, markup: match[0], classes: attr(match[0], 'class').split(/\s+/), id: attr(match[0], 'id'), parent: stack.at(-1) };
     if (nodes.length < 6000) nodes.push(node);
     if (!/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/.test(tag) && !/\/>$/.test(match[0])) stack.push(node);
   }
-  const simple = (node: Node, selector: string) => {
-    if (/:hover|:focus|:disabled|:before|:after|:not\(|:has\(|\[|@/.test(selector)) return false;
-    const bare = selector.replace(/:[\w-]+(?:\([^)]*\))?/g, '');
-    const tag = bare.match(/^[\w-]+/)?.[0];
-    if (tag && node.tag !== tag.toLowerCase()) return false;
-    return [...bare.matchAll(/([.#])([\w-]+)/g)].every(m => m[1] === '#' ? node.id === m[2] : node.classes.includes(m[2]));
+  // Each selector is parsed once, not once per node and rule visit: large stylesheets times thousands
+  // of nodes made re-parsing the dominant cost of a whole import. Matching semantics are unchanged.
+  type Compound = { unsupported: boolean; tag?: string; ids: string[]; classes: string[] };
+  const compoundCache = new Map<string, Compound>();
+  const compound = (part: string): Compound => {
+    let parsed = compoundCache.get(part);
+    if (!parsed) {
+      const unsupported = /:hover|:focus|:disabled|:before|:after|:not\(|:has\(|\[|@/.test(part);
+      const bare = unsupported ? '' : part.replace(/:[\w-]+(?:\([^)]*\))?/g, '');
+      const tag = bare.match(/^[\w-]+/)?.[0]?.toLowerCase();
+      const ids: string[] = [], classes: string[] = [];
+      for (const m of bare.matchAll(/([.#])([\w-]+)/g)) (m[1] === '#' ? ids : classes).push(m[2]);
+      parsed = { unsupported, tag, ids, classes };
+      compoundCache.set(part, parsed);
+    }
+    return parsed;
   };
+  const simple = (node: Node, part: string | Compound) => {
+    const c = typeof part === 'string' ? compound(part) : part;
+    if (c.unsupported) return false;
+    if (c.tag && node.tag !== c.tag) return false;
+    for (const id of c.ids) if (node.id !== id) return false;
+    for (const name of c.classes) if (!node.classes.includes(name)) return false;
+    return true;
+  };
+  // A selector compiles to its compounds, right to left; '>' stays a child combinator.
+  const compiledSelectors = new Map<string, (Compound | '>')[]>();
+  const compiled = (selector: string) => {
+    let parts = compiledSelectors.get(selector);
+    if (!parts) {
+      parts = selector.trim().split(/\s+/).map(part => part === '>' ? '>' as const : compound(part)).reverse();
+      compiledSelectors.set(selector, parts);
+    }
+    return parts;
+  };
+  const star = compound('*');
   const matches = (node: Node, selector: string) => {
-    const parts = selector.trim().split(/\s+/); let current: Node | undefined = node;
-    if (!simple(node, parts.pop() ?? '*')) return false;
-    while (parts.length) {
-      const part = parts.pop()!;
-      if (part === '>') { current = current?.parent; if (!current || !simple(current, parts.pop() ?? '*')) return false; }
-      else { current = current?.parent; while (current && !simple(current, part)) current = current.parent; if (!current) return false; }
+    const parts = compiled(selector);
+    let i = 0;
+    const next = () => (i < parts.length ? parts[i++] : undefined);
+    let current: Node | undefined = node;
+    const last = next();
+    if (!simple(node, last === undefined || last === '>' ? (last === '>' ? compound('>') : star) : last)) return false;
+    while (i < parts.length) {
+      const part = next()!;
+      if (part === '>') {
+        current = current?.parent;
+        const target = next();
+        if (!current || !simple(current, target === undefined ? star : target === '>' ? compound('>') : target)) return false;
+      } else { current = current?.parent; while (current && !simple(current, part)) current = current.parent; if (!current) return false; }
     }
     return true;
+  };
+  // Candidate elements for a selector come from its rightmost compound (id, class or tag index).
+  const byId = new Map<string, Node[]>(), byClass = new Map<string, Node[]>(), byTag = new Map<string, Node[]>();
+  const index = (map: Map<string, Node[]>, key: string, node: Node) => { if (!key) return; const list = map.get(key); if (list) list.push(node); else map.set(key, [node]); };
+  for (const node of nodes) {
+    index(byId, node.id, node);
+    index(byTag, node.tag, node);
+    for (const name of new Set(node.classes)) index(byClass, name, node);
+  }
+  // Whether any element on the page uses a selector does not change between properties.
+  const usedSelectors = new Map<string, boolean>();
+  const selectorUsed = (selector: string) => {
+    let used = usedSelectors.get(selector);
+    if (used === undefined) {
+      const right = compiled(selector)[0];
+      const candidates = right === undefined || right === '>' || right.unsupported ? nodes
+        : right.ids.length ? byId.get(right.ids[0]) ?? []
+        : right.classes.length ? byClass.get(right.classes[0]) ?? []
+        : right.tag ? byTag.get(right.tag) ?? [] : nodes;
+      used = candidates.some(n => matches(n, selector));
+      usedSelectors.set(selector, used);
+    }
+    return used;
   };
   const variables = new Map<string, string>();
   for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;}]+)/g)) variables.set(m[1], m[2].trim());
@@ -494,7 +559,13 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
     return v.trim();
   };
   const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].flatMap(m => m[1].split(',').map(selector => ({ selector: selector.trim(), body: m[2] }))).filter(r => !/::|@font-face|keyframes/.test(r.selector));
-  const valueFrom = (body: string, property: string) => resolve(body.match(new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*([^;]+)`, 'i'))?.[1]?.replace(/!important/g, '') ?? '');
+  const propertyPatterns = new Map<string, RegExp>();
+  const propertyPattern = (property: string) => {
+    let pattern = propertyPatterns.get(property);
+    if (!pattern) { pattern = new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*([^;]+)`, 'i'); propertyPatterns.set(property, pattern); }
+    return pattern;
+  };
+  const valueFrom = (body: string, property: string) => resolve(body.match(propertyPattern(property))?.[1]?.replace(/!important/g, '') ?? '');
   const computed = (node: Node, property: string, allow?: (value: string) => boolean) => {
     let value: string | undefined, score = -1;
     for (const rule of rules) {
@@ -509,8 +580,8 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
   const pick = (property: string, relevance: RegExp, allow?: (v: string) => boolean): string | undefined => {
     let best: string | undefined, score = -1;
     for (const rule of rules) {
-      if (!relevance.test(rule.selector) || /@font-face|keyframes|hover|focus|disabled|\.idx|\.ihf|\.dsidx/i.test(rule.selector) || !nodes.some(n => matches(n, rule.selector))) continue;
-      const value = resolve(rule.body.match(new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*([^;]+)`, 'i'))?.[1]?.replace(/!important/g, '') ?? '');
+      if (!relevance.test(rule.selector) || /@font-face|keyframes|hover|focus|disabled|\.idx|\.ihf|\.dsidx/i.test(rule.selector) || !selectorUsed(rule.selector)) continue;
+      const value = resolve(rule.body.match(propertyPattern(property))?.[1]?.replace(/!important/g, '') ?? '');
       if (!value || (allow && !allow(value))) continue;
       const weight = (/hero|banner|masthead|site-header|primary|brand|h1|\.elementor-heading-title/i.test(rule.selector) ? 3 : 1) + (/^body$|^:root$/.test(rule.selector) ? 4 : 0);
       if (weight >= score) { best = value; score = weight; }
@@ -544,7 +615,7 @@ export function extractWebsiteDesign(html: string, sourceUrl: string, stylesheet
   const metaDescription = (html.match(/<meta\b[^>]*>/gi) ?? []).find(t => attr(t, 'name').toLowerCase() === 'description');
   const described = metaDescription ? attr(metaDescription, 'content').slice(0, 500) : '';
   const heroSubtitle = platformBoilerplate(described) ? '' : described;
-  const media = assignPageImages(describePageImages(clean, css, raw => websiteAsset(raw, sourceUrl)));
+  const media: PageImagery = sectionsOnly ? { all: [] } : assignPageImages(describePageImages(clean, css, raw => websiteAsset(raw, sourceUrl)));
   const logo = media.logo;
   const heroImageUrl = media.hero?.selectedUrl;
   const portraitImageUrl = media.portrait?.selectedUrl;

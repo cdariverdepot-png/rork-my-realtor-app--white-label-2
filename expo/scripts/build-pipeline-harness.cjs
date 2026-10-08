@@ -9,6 +9,7 @@ const { requestKey } = require('./listing-compatibility.cjs');
 
 const functionsRoot = path.resolve(__dirname, '../../supabase/functions');
 const compile = source => ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+const compiledBundles = new Map();
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /** A fetch that serves recorded pages (and 404s anything unrecorded) after `latencyMs`. */
@@ -65,7 +66,8 @@ function loadBuildFunction(bundleSource, { fetch, sources, guest = false }) {
           update: value => ({ eq: async () => { saved.push(value); return { error: null }; } }) },
   };
   const env = name => name.startsWith('LISTING_RENDER') ? undefined : 'fixture';
-  const code = compile(bundleSource.replace(/^import .*createClient.*;\r?\n/, ''));
+  let code = compiledBundles.get(bundleSource);
+  if (!code) { code = compile(bundleSource.replace(/^import .*createClient.*;\r?\n/, '')); compiledBundles.set(bundleSource, code); }
   new Function('Deno', 'createClient', 'fetch', code)({
     env: { get: env }, resolveDns: async (_, type) => type === 'A' ? ['8.8.8.8'] : [], serve: fn => { handler = fn; },
   }, () => admin, fetch);

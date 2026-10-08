@@ -346,7 +346,8 @@ async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: 
   progress?: ImportProgress): Promise<WebsiteDesign> {
   let currentHtml = html;
   let currentUrl = url;
-  const preliminary = extractWebsiteDesign(currentHtml, currentUrl);
+  // The first look only decides whether a browser is needed: heading and sections, no style cascade.
+  const preliminary = extractWebsiteDesign(currentHtml, currentUrl, [], { sectionsOnly: true });
   const reason = websiteNeedsBrowser(currentHtml, preliminary);
   if (renderPage && (reason === "client-shell-without-prose" || reason === "access-interstitial")) {
     try {
@@ -388,7 +389,8 @@ async function analyzeWebsiteAppearance(html: string, url: string, renderPage?: 
         } catch { /* keep the blocked link out of the app */ }
       }
       if (isRobotChallenge(page.html) || websiteNeedsBrowser(page.html, { heroTitle: "", sections: [] }) === "access-interstitial") continue;
-      const inner = extractWebsiteDesign(page.html, page.finalUrl.toString());
+      // Only a linked page's sections are used, so its style cascade and imagery are not computed.
+      const inner = extractWebsiteDesign(page.html, page.finalUrl.toString(), [], { sectionsOnly: true });
       const ranked = inner.sections
         .map(section => ({ ...section, ...classifyWebsiteSection(section.title, section.body) }))
         .filter(section => section.destination === 'unique' && section.body.trim().length >= 80)
