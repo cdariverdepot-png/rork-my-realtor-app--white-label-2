@@ -1,0 +1,90 @@
+name: Deploy development preview (web, staging importer)
+# An isolated web preview of the latest main for testing on a phone. It is NOT the production site:
+#   - deployed as the EAS Hosting alias "preview" (https://<subdomain>--preview.expo.app), never --prod;
+#   - built with EXPO_PUBLIC_FUNCTION_SUFFIX=-staging, so it calls the staging importer functions that the
+#     stage gate deploys from the same code; production functions and App Store users are untouched;
+#   - stamped with build.json (commit SHA, time) and checked after deploy: the live preview must serve this
+#     build's own entry bundle and this commit's SHA, or the job fails.
+on:
+  push:
+    branches: [main]
+    paths: [diagnostics/preview.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: preview-deploy
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: expo
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      HOSTING_SUBDOMAIN: ${{ vars.EXPO_HOSTING_SUBDOMAIN || 'cdariverdepot-my-realtor' }}
+      EXPO_PUBLIC_FUNCTION_SUFFIX: '-staging'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: expo/pnpm-lock.yaml
+      - name: Check deployment credentials
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: test -n "$EXPO_TOKEN" || { echo "::error::Add EXPO_TOKEN in repository Actions secrets."; exit 1; }
+      - name: Preview URL
+        run: |
+          url="https://${HOSTING_SUBDOMAIN}--preview.expo.app"
+          echo "PREVIEW_URL=$url" >> "$GITHUB_ENV"
+          echo "EXPO_PUBLIC_APP_URL=$url" >> "$GITHUB_ENV"
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Regression suite and type check (the preview never ships failing code)
+        run: |
+          pnpm test
+          pnpm exec tsc --noEmit
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Link Expo project
+        run: eas init --account jtaylor537 --force --non-interactive
+      - name: Export the web app against the staging importer
+        run: |
+          pnpm exec expo export --platform web --clear
+          entry="$(grep -o '/_expo/static/js/web/entry-[^"]*\.js' dist/index.html | head -1)"
+          test -n "$entry" || { echo "::error::no entry bundle in dist/index.html"; exit 1; }
+          printf '{"commit":"%s","builtAt":"%s","importer":"staging","entry":"%s"}\n' "$GITHUB_SHA" "$(date -u +%FT%TZ)" "$entry" > dist/build.json
+          echo "ENTRY=$entry" >> "$GITHUB_ENV"
+      - name: Deploy the preview alias (never production)
+        run: eas deploy --alias preview --non-interactive
+      - name: Verify the live preview serves this build
+        run: |
+          for i in $(seq 1 20); do
+            live="$(curl -fsSL --max-time 20 "$PREVIEW_URL/build.json" || true)"
+            echo "$live" | grep -q "$GITHUB_SHA" && curl -fsSL --max-time 20 "$PREVIEW_URL/" | grep -q "$ENTRY" && break
+            sleep 15
+          done
+          echo "$live" | grep -q "$GITHUB_SHA" || { echo "::error::preview does not serve commit $GITHUB_SHA"; exit 1; }
+          for route in / /welcome /auth/callback; do curl -fsS --max-time 20 -o /dev/null "$PREVIEW_URL$route"; done
+          printf 'Preview: %s\nCommit: %s\nImporter: staging functions\n' "$PREVIEW_URL" "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Record the preview
+        working-directory: .
+        run: |
+          mkdir -p diagnostics
+          printf '{"url":"%s","commit":"%s","entry":"%s","verifiedAt":"%s","importer":"staging"}\n' "$PREVIEW_URL" "$GITHUB_SHA" "$ENTRY" "$(date -u +%FT%TZ)" > diagnostics/preview-deployed.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/preview-deployed.json && git commit -m "Preview deployed and verified for ${GITHUB_SHA} [skip ci]" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ]

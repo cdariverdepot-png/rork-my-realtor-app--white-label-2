@@ -4304,6 +4304,11 @@ function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?
         ? "This test deployment has no separate AI key, so AI steps are switched off."
         : "The AI service is not configured.");
       if (sent() >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
+      // Optional fallbacks never use the last capped call: the profile writer, which a build cannot finish
+      // without, always keeps one within the same limit.
+      if (stage !== "profile" && Number.isFinite(policy.maxCalls) && sent() >= policy.maxCalls - 1) {
+        throw blocked(stage, "ai_budget", "The remaining AI call of this request is reserved for writing the profile.");
+      }
       if (spent() >= policy.maxUsd) throw blocked(stage, "ai_budget", `This request reached its AI spending limit ($${policy.maxUsd}).`);
       // The model leads the body, as every request wrote it before the gateway existed.
       const payload = JSON.stringify({ model: model(stage), ...body });

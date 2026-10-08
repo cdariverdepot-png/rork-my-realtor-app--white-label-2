@@ -58,11 +58,14 @@ test('staging never uses the production key by default; its own key or an explic
 test('staging requests stop at their call and spending limits; production is metered but not capped here', async () => {
   const { createAiGateway } = await load();
   const net = scripted(completed());
-  const capped = createAiGateway({ env: envFrom({ OPENAI_API_KEY_STAGING: 'dev', AI_STAGING_MAX_CALLS: '2' }), channel: 'staging', fetch: net.fetch, log: silent });
+  const capped = createAiGateway({ env: envFrom({ OPENAI_API_KEY_STAGING: 'dev', AI_STAGING_MAX_CALLS: '3' }), channel: 'staging', fetch: net.fetch, log: silent });
   await capped.request('navigation', { input: 1 });
   await capped.request('navigation', { input: 2 });
+  // Navigation cannot take the last call: it is kept for the profile writer.
   await assert.rejects(capped.request('navigation', { input: 3 }), { code: 'ai_budget' });
-  assert.equal(net.calls.length, 2);
+  await capped.request('profile', { input: 4 });
+  await assert.rejects(capped.request('profile', { input: 5 }), { code: 'ai_budget' });
+  assert.equal(net.calls.length, 3);
 
   const pricey = scripted(completed({ input_tokens: 100_000, output_tokens: 10_000 })); // $0.28 at gpt-4.1 list price
   const dollars = createAiGateway({ env: envFrom({ OPENAI_API_KEY_STAGING: 'dev', AI_STAGING_MAX_USD: '0.25' }), channel: 'staging', fetch: pricey.fetch, log: silent });

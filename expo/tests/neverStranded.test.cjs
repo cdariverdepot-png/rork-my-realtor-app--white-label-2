@@ -184,6 +184,24 @@ test('production builds call the production importer; only a well-formed suffix 
   assert.equal(names('/../billing').BUILD_FUNCTION, 'analyze-realtor-build');
 });
 
+test('development previews use the staging importer unless told otherwise; release builds never do', () => {
+  const names = (suffix, dev) => {
+    const saved = process.env.EXPO_PUBLIC_FUNCTION_SUFFIX, savedDev = globalThis.__DEV__;
+    if (suffix === undefined) delete process.env.EXPO_PUBLIC_FUNCTION_SUFFIX; else process.env.EXPO_PUBLIC_FUNCTION_SUFFIX = suffix;
+    if (dev === undefined) delete globalThis.__DEV__; else globalThis.__DEV__ = dev;
+    try { return { ...loadModule('lib/importerFunctions.ts', {}) }; }
+    finally {
+      if (saved === undefined) delete process.env.EXPO_PUBLIC_FUNCTION_SUFFIX; else process.env.EXPO_PUBLIC_FUNCTION_SUFFIX = saved;
+      if (savedDev === undefined) delete globalThis.__DEV__; else globalThis.__DEV__ = savedDev;
+    }
+  };
+  assert.equal(names(undefined, true).BUILD_FUNCTION, 'analyze-realtor-build-staging', 'a Rork/Expo dev preview tests the staging importer');
+  assert.equal(names(undefined, true).LISTING_FUNCTION, 'refresh-listings-staging');
+  assert.equal(names(undefined, false).BUILD_FUNCTION, 'analyze-realtor-build', 'an App Store (release) build uses production');
+  assert.equal(names('none', true).BUILD_FUNCTION, 'analyze-realtor-build', '"none" forces production in a preview');
+  assert.equal(names('-staging', false).BUILD_FUNCTION, 'analyze-realtor-build-staging', 'an explicit suffix still wins (staging web preview)');
+});
+
 // Repair stage 3 (synthetic contracts): blocked pages, loader shells and transient failures.
 const buildWith = async fetch => {
   const { handler } = loadBuildFunction(bundle, { fetch, sources: [{ id: 'website', kind: 'url', label: 'Website', uri: 'https://agent.example/', status: 'queued' }] });

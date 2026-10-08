@@ -42,6 +42,22 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: latest
+      - name: "Gate B - choose the sites (a sites line in stage-gate.txt selects ids; default all 25)"
+        run: |
+          node -e '
+            const fs = require("fs");
+            const all = [...JSON.parse(fs.readFileSync("diagnostics/sites-25.json", "utf8")),
+              ...(fs.existsSync("diagnostics/evaluation/sites.json") ? JSON.parse(fs.readFileSync("diagnostics/evaluation/sites.json", "utf8")) : [])];
+            const line = fs.readFileSync("diagnostics/stage-gate.txt", "utf8").split("\n").find(l => /^sites:/i.test(l));
+            const ids = line ? line.slice(6).split(",").map(s => s.trim()).filter(Boolean) : JSON.parse(fs.readFileSync("diagnostics/sites-25.json", "utf8")).map(s => s.id);
+            const sites = ids.map(id => all.find(s => s.id === id) ?? (() => { throw new Error("unknown site " + id); })());
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/gate-sites.json", JSON.stringify(sites));
+            console.log(sites.map(s => s.id).join(", "));'
+      - name: "Gate B - staging AI key policy (a staging-ai shared-key line lets staging use the existing OpenAI key, within its per-request limits)"
+        run: |
+          if grep -qi '^staging-ai: *shared-key' diagnostics/stage-gate.txt; then
+            supabase secrets set AI_STAGING_ALLOW_SHARED_KEY=1 --project-ref "$SUPABASE_PROJECT_REF"
+          fi
       - name: Gate B - deploy staging copies of the importer functions
         run: |
           set -e
@@ -68,12 +84,12 @@ jobs:
           JUSTIFICATION="$(grep -i '^justification:' diagnostics/stage-gate.txt | head -1 | cut -d: -f2-)"
           echo "CAMPAIGN_JUSTIFICATION=$JUSTIFICATION" >> "$GITHUB_ENV"
           echo "CAMPAIGN_ID=gate-${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
-          (cd expo && CAMPAIGN_JUSTIFICATION="$JUSTIFICATION" node scripts/ai-budget.cjs plan --level D --sites "$(node -e 'console.log(JSON.parse(require("fs").readFileSync("../diagnostics/sites-25.json","utf8")).length)')" --justification "$JUSTIFICATION")
+          (cd expo && CAMPAIGN_JUSTIFICATION="$JUSTIFICATION" node scripts/ai-budget.cjs plan --level D --sites "$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.env.RUNNER_TEMP + "/gate-sites.json","utf8")).length)')" --justification "$JUSTIFICATION")
       - name: Gate B - 25 sites through the branch app (sequential, isolated sessions)
         run: |
           (cd expo && pnpm exec expo serve --port 8081 > "$RUNNER_TEMP/serve.log" 2>&1 &)
           for i in $(seq 1 60); do curl -sf http://localhost:8081/ >/dev/null && break; sleep 2; done
-          APP_URL=http://localhost:8081 SITES="$(cat diagnostics/sites-25.json)" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
+          APP_URL=http://localhost:8081 SITES="$(cat "$RUNNER_TEMP/gate-sites.json")" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
       - name: Saved listings per site (read-only)
         if: always()
         run: node expo/scripts/diagnostic-saved-listings.cjs diag-out || true

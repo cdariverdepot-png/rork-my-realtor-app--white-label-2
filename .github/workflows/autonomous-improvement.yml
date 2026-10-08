@@ -5,8 +5,10 @@ name: Autonomous compatibility improvement
 #
 #   select  Level A (offline, free): evaluate the recorded corpus, update the failure registry, pick the
 #           highest-priority code defect that has new evidence. Reports whether a coding agent is configured.
-#   repair  The coding agent (Claude Code) works on an isolated improve/* branch from a written brief.
-#           Read/edit files and run the offline suite only: no web access, no pushes, no secrets but its own key.
+#   repair  The coding agent (OpenAI Codex, openai/codex-action, using the existing OpenAI account) works on an
+#           isolated improve/* branch from a written brief, in Codex's workspace-write sandbox (no network) with
+#           sudo dropped. It cannot push; the workflow commits. DISABLED unless the repository variable
+#           AUTONOMOUS_REPAIR is set to "enabled" (explicit authorization) and the secret OPENAI_API_KEY exists.
 #   gate    The protected acceptance gate from the BASE branch judges the candidate (the agent cannot edit it).
 #           Accepted: merged into repair/compatibility-engine with --no-ff (one revertable merge commit).
 #           Rejected: the candidate branch and the gate report are kept for reproduction.
@@ -23,10 +25,6 @@ on:
       candidate:
         description: Gate an existing improve/* branch instead of running the agent
         required: false
-      max_turns:
-        description: Coding-agent turn limit
-        required: false
-        default: '60'
   push:
     branches: [repair/compatibility-engine]
     paths: [diagnostics/improvement/trigger.txt]
@@ -83,16 +81,18 @@ jobs:
           echo "candidate=$candidate" >> "$GITHUB_OUTPUT"
           echo "verify_only=$([ -n "$verify_only" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
           echo "Selected failure: ${failure:-none}; candidate: ${candidate:-agent}"
-      - name: Is a coding agent configured?
+      - name: Is unattended repair authorized and configured?
         id: agent
         env:
-          HAS_API_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
-          HAS_OAUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+          HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+          AUTHORIZED: ${{ vars.AUTONOMOUS_REPAIR == 'enabled' }}
         run: |
-          if [ "$HAS_API_KEY" = "true" ] || [ "$HAS_OAUTH" = "true" ]; then available=true; else available=false; fi
+          if [ "$HAS_OPENAI_KEY" = "true" ] && [ "$AUTHORIZED" = "true" ]; then available=true; else available=false; fi
           echo "available=$available" >> "$GITHUB_OUTPUT"
-          printf '{"checkedAt":"%s","run":"%s","codingAgent":%s,"missing":%s}\n' "$(date -u +%FT%TZ)" "$GITHUB_RUN_ID" "$available" \
-            "$([ "$available" = true ] && echo null || echo '"Repository secret ANTHROPIC_API_KEY (or CLAUDE_CODE_OAUTH_TOKEN) is not set; unattended repair cannot run. Gate, integration and verification still run for candidate branches."')" \
+          reason=null
+          if [ "$AUTHORIZED" != "true" ]; then reason='"Unattended repair is disabled: set the repository variable AUTONOMOUS_REPAIR=enabled to authorize it. Gate, integration and verification still run for candidate branches."'
+          elif [ "$HAS_OPENAI_KEY" != "true" ]; then reason='"Repository secret OPENAI_API_KEY is not set; the Codex repair step cannot run."'; fi
+          printf '{"checkedAt":"%s","run":"%s","codingAgent":"openai-codex","enabled":%s,"missing":%s}\n' "$(date -u +%FT%TZ)" "$GITHUB_RUN_ID" "$available" "$reason" \
             > diagnostics/improvement/agent-status.json
           cat diagnostics/improvement/agent-status.json
       - name: Save registry
@@ -123,28 +123,28 @@ jobs:
         id: brief
         working-directory: expo
         run: |
-          node scripts/improve/failures.cjs brief "${{ needs.select.outputs.failure }}" --out "$RUNNER_TEMP/brief.md"
-          { echo 'prompt<<BRIEF_EOF'; cat "$RUNNER_TEMP/brief.md"; echo 'BRIEF_EOF'; } >> "$GITHUB_OUTPUT"
+          # The brief sits in the workspace for the agent and is removed before the candidate is committed.
+          node scripts/improve/failures.cjs brief "${{ needs.select.outputs.failure }}" --out ../.codex-brief.md
+          printf '\nTest command (offline, guarded): cd expo && NODE_PATH=%s npm test\n' "$RUNNER_TEMP/import-tests/node_modules" >> ../.codex-brief.md
           git switch -c "improve/${{ needs.select.outputs.failure }}-${GITHUB_RUN_ID}"
-      - name: Coding agent repairs the failure class
-        uses: anthropics/claude-code-action@v1
+      - name: Coding agent (OpenAI Codex) repairs the failure class
+        uses: openai/codex-action@v1
         env:
           NODE_PATH: ${{ runner.temp }}/import-tests/node_modules
           LEVEL_A_GUARD: 'on'
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          prompt: ${{ steps.brief.outputs.prompt }}
-          claude_args: >-
-            --max-turns ${{ github.event.inputs.max_turns || '60' }}
-            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(node:*),Bash(npm test:*),Bash(git diff:*),Bash(git status:*)"
-            --disallowedTools "WebFetch,WebSearch,Bash(git push:*),Bash(curl:*),Bash(wget:*)"
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .codex-brief.md
+          sandbox: workspace-write
+          safety-strategy: drop-sudo
+          output-file: ${{ runner.temp }}/codex-final.md
       - name: Commit the candidate (the workflow commits; the agent cannot push)
         id: push
         run: |
           branch="improve/${{ needs.select.outputs.failure }}-${GITHUB_RUN_ID}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .codex-brief.md
           git add -A
           git commit -m "Autonomous repair candidate: ${{ needs.select.outputs.failure }} (run ${GITHUB_RUN_ID})" || { echo "::warning::agent produced no change"; exit 1; }
           git push origin "HEAD:refs/heads/$branch"
