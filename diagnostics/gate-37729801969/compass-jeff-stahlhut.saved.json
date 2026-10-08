@@ -1,0 +1,157 @@
+[
+  {
+    "realtorId": "80dd4ccd-7797-418e-ae7e-c9173de0e9cc",
+    "createdAt": "2026-10-08 05:28:21.238012+00",
+    "sources": [
+      {
+        "id": "source-821j2o",
+        "url": "https://www.compass.com/agents/jeff-stahlhut/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791444521231,
+        "connectedAt": 1791437321231,
+        "listingCount": 10,
+        "submittedUrl": "https://www.compass.com/agents/jeff-stahlhut/",
+        "inventoryUrls": [
+          "https://www.compass.com/homes-for-sale/",
+          "https://www.compass.com/homes-for-sale/manhattan-ny/",
+          "https://www.compass.com/homes-for-sale/manhattan-ny/p-2/"
+        ],
+        "lastCheckedAt": 1791437321231
+      }
+    ],
+    "listings": [
+      {
+        "title": "169 Mercer Street, Unit PH",
+        "price": "$3,995,000",
+        "sourceUrl": "https://www.compass.com/homedetails/169-Mercer-St-Unit-PH-Manhattan-NY-10012/19C8GO_pid/",
+        "photos": 23,
+        "descriptionLength": 2275,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 0,
+        "sqft": "2,300"
+      },
+      {
+        "title": "Open House - 11:00 AM - 12:00 PM",
+        "price": "$1,995,000",
+        "sourceUrl": "https://www.compass.com/homedetails/303-Mercer-St-Unit-B204-Manhattan-NY-10003/208C4T_pid/",
+        "photos": 20,
+        "descriptionLength": 2610,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "719 Greenwich Street, Unit PH",
+        "price": "$10,500,000",
+        "sourceUrl": "https://www.compass.com/homedetails/719-Greenwich-St-Unit-PH-Manhattan-NY-10014/2I57E1_pid/",
+        "photos": 18,
+        "descriptionLength": 2601,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 4,
+        "baths": 0,
+        "sqft": "3,060"
+      },
+      {
+        "title": "111 Barrow Street, Unit 6C",
+        "price": "$2,200,000",
+        "sourceUrl": "https://www.compass.com/homedetails/111-Barrow-St-Unit-6C-Manhattan-NY-10014/20S785_pid/",
+        "photos": 17,
+        "descriptionLength": 1615,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 2,
+        "sqft": "1,650"
+      },
+      {
+        "title": "118 Suffolk Street, Unit 1B",
+        "price": "$675,000",
+        "sourceUrl": "https://www.compass.com/homedetails/118-Suffolk-St-Unit-1B-Manhattan-NY-10002/204UJK_pid/",
+        "photos": 18,
+        "descriptionLength": 1784,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 1,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "Open House - 11:30 AM - 1:00 PM",
+        "price": "$1,700,000",
+        "sourceUrl": "https://www.compass.com/homedetails/314-W-77th-St-Unit-4A-Manhattan-NY-10024/2001RD_pid/",
+        "photos": 16,
+        "descriptionLength": 1251,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 2,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "Open House - 11:00 AM - 12:00 PM",
+        "price": "$1,990,000",
+        "sourceUrl": "https://www.compass.com/homedetails/46-Carmine-St-Unit-4-Manhattan-NY-10014/1OXCK8_pid/",
+        "photos": 22,
+        "descriptionLength": 2205,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 1,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1 Bond Street, Unit 3D",
+        "price": "$2,500,000",
+        "sourceUrl": "https://www.compass.com/homedetails/1-Bond-St-Unit-3D-Manhattan-NY-10012/208VDQ_pid/",
+        "photos": 17,
+        "descriptionLength": 1281,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 1,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "12 West 72nd Street, Unit 5L",
+        "price": "$440,000",
+        "sourceUrl": "https://www.compass.com/homedetails/12-W-72nd-St-Unit-5L-Manhattan-NY-10023/20W764_pid/",
+        "photos": 11,
+        "descriptionLength": 961,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "505 West End Avenue, Unit 12C",
+        "price": "$1,800,000",
+        "sourceUrl": "https://www.compass.com/homedetails/505-West-End-Ave-Unit-12C-Manhattan-NY-10024/20MKIL_pid/",
+        "photos": 19,
+        "descriptionLength": 1824,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

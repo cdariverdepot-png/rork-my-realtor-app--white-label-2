@@ -1,0 +1,1355 @@
+{
+  "id": "bridge-realty",
+  "url": "https://www.thebridgerealty.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 53,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 2064,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for listings · 2 pages checked"
+    },
+    {
+      "at": 2264,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2666,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nReading linked pages · 0 of 5"
+    },
+    {
+      "at": 3269,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nReading linked pages · 2 of 5"
+    },
+    {
+      "at": 3470,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 8092,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 10907,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 12919,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 4 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 13522,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 5 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 14729,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 6 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 15936,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 7 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 17746,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 8 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 18149,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 9 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 19759,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 10 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 20363,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 11 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 20967,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 12 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 21771,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 13 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN"
+    },
+    {
+      "at": 22376,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 500,
+      "totalMs": 7986,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Bridge Realty",
+          "host": "thebridgerealty.com",
+          "at": 1296
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 1296
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 5,
+          "at": 1797
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 5,
+          "at": 2334
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 5,
+          "at": 2526
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 5,
+          "at": 2537
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 5,
+          "at": 2566
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 5,
+          "at": 2567
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 3,
+          "total": 5,
+          "at": 2646
+        },
+        {
+          "kind": "design",
+          "portrait": false,
+          "logo": true,
+          "images": 25,
+          "sections": 8,
+          "at": 2647
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 2647
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 2656
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 2657
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 2657
+        },
+        {
+          "kind": "profile",
+          "city": "Bloomington, MN",
+          "at": 7300
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 7300
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 849,
+            "design": 1351,
+            "site": 2656,
+            "profile": 4643,
+            "total": 7300
+          },
+          "evidence": [
+            {
+              "field": "realtor.brandName",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "Bridge Realty",
+              "confidence": 1,
+              "locator": "meta og:site_name, page body, structured data"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "Bloomington, MN",
+              "confidence": 1,
+              "locator": "office address in footer and structured data; coverage for Twin Cities"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "Bridge Realty",
+              "confidence": 1,
+              "locator": "License #: 20586794, footer and contact; listed as brokerage everywhere"
+            },
+            {
+              "field": "credentials.license.number",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "20586794",
+              "confidence": 1,
+              "locator": "footer, About page, Contact page"
+            },
+            {
+              "field": "credentials.license.state",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "MN",
+              "confidence": 1,
+              "locator": "office address and license, About and Contact pages"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "952-368-0021",
+              "confidence": 1,
+              "locator": "Contact, About, and homepage; office phone"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "value": "Frontdesk@thebridgerealty.com",
+              "confidence": 1,
+              "locator": "Contact, About, and homepage; general email"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Serving Minneapolis & the Twin Cities with integrity and expertise.",
+            "welcomeNote": "Welcome to Bridge Realty, where our experience and dedication empower your next real estate move in the Twin Cities.",
+            "tagline": "Connecting buyers and sellers across Minneapolis, St. Paul, and the surrounding communities.",
+            "aboutParagraph": "Bridge Realty is the largest family-owned brokerage in the Twin Cities, serving Minneapolis, St. Paul, and surrounding areas since 2006. With a commitment to honesty, open communication, and client-first service, we specialize in residential and commercial properties including single-family homes, condos, multi-family investments, and new construction. Our client-focused team combines local market knowledge and tailored strategies to guide you through every step of your real estate journey.",
+            "conciergeLine": "Curious about the Twin Cities market or ready to start your search? Reach out for expert guidance and a seamless real estate experience.",
+            "contactLine": "Contact Bridge Realty at 952-368-0021 or Frontdesk@thebridgerealty.com to get started.",
+            "tone": "Warm, professional, and client-focused, emphasizing local expertise and a family-owned approach.",
+            "layoutId": "warm-concierge",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "68e475eb-426e-4989-966e-7c488323fe0f"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://www.thebridgerealty.com/",
+              "analyzedAt": 1791436096011,
+              "logoUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+              "heroImageUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png",
+              "heroTitle": "Find Your Dream Home in Minneapolis & Twin Cities with Bridge Realty",
+              "heroSubtitle": "Discover Minneapolis & Twin Cities homes with Bridge Realty, the largest family-owned brokerage providing expert guidance.",
+              "sections": [
+                {
+                  "kind": "about",
+                  "title": "Meet Our Team",
+                  "body": "Our team at Bridge Realty is made up of experienced, licensed brokers dedicated to helping clients succeed in real estate. We combine local market expertise with a commitment to professional growth, ensuring every client receives top-tier support in the Twin Cities.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Negotiation & Offer",
+                  "body": "Our brokers provide expert advice on pricing and negotiations, helping you make strong, competitive offers. Bridge Realty ensures you secure your Twin Cities home with confidence and clarity.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Why Choose Bridge Realty",
+                  "body": "Bridge Realty, the largest family-owned brokerage in the Twin Cities, offers unmatched experience and local market knowledge. We prioritize your goals, guiding you through every step of the selling process with transparency and professionalism.",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Explore Real Estate in Minneapolis, St. Paul, Maple Grove, Mankato & Bloomington",
+                  "body": "Paul 1070 Properties listed for sale $364,532 Average listing home price Mankato 429 Properties listed for sale $404,125 Average listing home price Maple Grove 340 Properties listed for sale $619,453 Average listing home price Bloomington 256 Properties listed for sale $409,164 Average listing home price View All"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "How Can We Help?",
+                  "body": "Ready to buy, sell, or invest in the Twin Cities? Our team at Bridge Realty is here to guide you every step of the way. Contact us today to get personalized support and expert advice for all your real estate needs. Let's Connect"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Bloomington, MN Market Data",
+                  "body": "New On Market 565 1.8% increase in new listings Properties Sold 313 -11.3% decrease in sales Properties for Sale 1422 2.6% increase in inventory Avg Asking Price $490 K -0.5% decrease in asking price Statistics above are calculated on activity within the period from Sep, 04 2026 to Oct, 04 2026 Increase/Decrease activity is compared to the month of September. Subscribe to Market Insights View All"
+                },
+                {
+                  "kind": "about",
+                  "intent": "profile",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Our Team",
+                  "body": "Angela Seitzer angelaseitzer@thebridgerealty.com Minnesota Cell: 952-393-7403 Faith Kellum faithk@thebridgerealty.com Minnesota Cell: 612-383-9888 Ahmet Akyol ahmet.akyol@thebridgerealty.com Minnesota Cell: 6129875628 Office: 6129875628 Kim Eisen kim@thebridgerealty.com Minnesota Cell: 6514574663 Ahmed Muhumud amuhumud@thebridgerealty.com Minnesota Cell: 6125989491 Ali Ngasa alingasa@thebridgerealty.com Minnesota Cell: 6122324583 Olga Zamsarskaja olga@thebridgerealty.com Suhail Khatri skhatri@thebridgerealty."
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Twin Cities Real Estate Insights Expert Tips from Bridge Realty",
+                  "body": "Navigating the Minneapolis and Twin Cities real estate market can be complex. Bridge Realty, a ...",
+                  "imageUrl": "https://assets.pinterest.com/images/PinExt.png",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+                  "variants": [
+                    {
+                      "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+                      "width": 700
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+                  "width": 700,
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 64,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "hero": {
+                  "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png",
+                  "variants": [
+                    {
+                      "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png"
+                    }
+                  ],
+                  "role": "hero",
+                  "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png",
+                  "destination": "hero",
+                  "fit": "cover",
+                  "renderedWidth": 390,
+                  "renderedHeight": 220,
+                  "upscaleRatio": 1,
+                  "crop": "modest",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+                        "width": 700
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_header_logo/53766/5430ebfafa19eca433e19b3ee66d315a.png?width=700&optimize=medium&auto=webp",
+                    "width": 700,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60418/406c3912d69d34d86720a80485553c1a.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60418/406c3912d69d34d86720a80485553c1a.jpg?width=767&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-x50"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-y50",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60418/406c3912d69d34d86720a80485553c1a.jpg?width=362&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60418/406c3912d69d34d86720a80485553c1a.jpg?width=460&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60418/406c3912d69d34d86720a80485553c1a.jpg?width=766&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60418/406c3912d69d34d86720a80485553c1a.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebridgerealty.com/offset-y50",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60419/966d2a1f3883c0eabb0bdc1285754068.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60419/966d2a1f3883c0eabb0bdc1285754068.jpg?width=767&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-x50"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-y50",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60419/966d2a1f3883c0eabb0bdc1285754068.jpg?width=362&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60419/966d2a1f3883c0eabb0bdc1285754068.jpg?width=460&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60419/966d2a1f3883c0eabb0bdc1285754068.jpg?width=766&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60419/966d2a1f3883c0eabb0bdc1285754068.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebridgerealty.com/offset-y50",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60421/da60122c91db1de55479dcae4568fe11.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60421/da60122c91db1de55479dcae4568fe11.jpg?width=767&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-x50"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-y50",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60421/da60122c91db1de55479dcae4568fe11.jpg?width=362&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60421/da60122c91db1de55479dcae4568fe11.jpg?width=460&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60421/da60122c91db1de55479dcae4568fe11.jpg?width=766&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60421/da60122c91db1de55479dcae4568fe11.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebridgerealty.com/offset-y50",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60420/67353196b25ed514ea50a63b17824209.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60420/67353196b25ed514ea50a63b17824209.jpg?width=767&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-x50"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-y50",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60420/67353196b25ed514ea50a63b17824209.jpg?width=362&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60420/67353196b25ed514ea50a63b17824209.jpg?width=460&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60420/67353196b25ed514ea50a63b17824209.jpg?width=766&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60420/67353196b25ed514ea50a63b17824209.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebridgerealty.com/offset-y50",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60216/e73f0aa0a6200311e10f2f9ddf913edd.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60216/e73f0aa0a6200311e10f2f9ddf913edd.jpg?width=767&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-x50"
+                      },
+                      {
+                        "url": "https://www.thebridgerealty.com/offset-y50",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60216/e73f0aa0a6200311e10f2f9ddf913edd.jpg?width=362&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60216/e73f0aa0a6200311e10f2f9ddf913edd.jpg?width=460&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60216/e73f0aa0a6200311e10f2f9ddf913edd.jpg?width=766&optimize=medium&auto=webp&crop=16:9"
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/area_profile/gallery_image/60216/e73f0aa0a6200311e10f2f9ddf913edd.jpg?width=767&optimize=medium&auto=webp&crop=16:9,offset-x50,offset-y50"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.thebridgerealty.com/offset-y50",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134935/f2bb5f491b90b1cd9a6c1f99a8d14836.jpg?width=767&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134935/f2bb5f491b90b1cd9a6c1f99a8d14836.jpg?width=767&optimize=medium&auto=webp",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134935/f2bb5f491b90b1cd9a6c1f99a8d14836.jpg?width=400&optimize=medium&auto=webp",
+                        "width": 400
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134935/f2bb5f491b90b1cd9a6c1f99a8d14836.jpg?width=500&optimize=medium&auto=webp",
+                        "width": 500
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134935/f2bb5f491b90b1cd9a6c1f99a8d14836.jpg?width=767&optimize=medium&auto=webp",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets3.fastly.propertybase.com/assets/pic_agent_placeholder-c703037d2ddbff68eb24e5383c031df284ba6aa6613ef0448a4eb954708cd519.png",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets3.fastly.propertybase.com/assets/pic_agent_placeholder-c703037d2ddbff68eb24e5383c031df284ba6aa6613ef0448a4eb954708cd519.png"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets3.fastly.propertybase.com/assets/pic_agent_placeholder-c703037d2ddbff68eb24e5383c031df284ba6aa6613ef0448a4eb954708cd519.png",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134905/e1b7087c9a9e5e46f93021dfa8574ae4.jpg?width=767&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134905/e1b7087c9a9e5e46f93021dfa8574ae4.jpg?width=767&optimize=medium&auto=webp",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134905/e1b7087c9a9e5e46f93021dfa8574ae4.jpg?width=400&optimize=medium&auto=webp",
+                        "width": 400
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134905/e1b7087c9a9e5e46f93021dfa8574ae4.jpg?width=500&optimize=medium&auto=webp",
+                        "width": 500
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134905/e1b7087c9a9e5e46f93021dfa8574ae4.jpg?width=767&optimize=medium&auto=webp",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/135595/23f1562a82ab00af2de578c968263b86.png?width=767&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/135595/23f1562a82ab00af2de578c968263b86.png?width=767&optimize=medium&auto=webp",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/135595/23f1562a82ab00af2de578c968263b86.png?width=400&optimize=medium&auto=webp",
+                        "width": 400
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/135595/23f1562a82ab00af2de578c968263b86.png?width=500&optimize=medium&auto=webp",
+                        "width": 500
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/135595/23f1562a82ab00af2de578c968263b86.png?width=767&optimize=medium&auto=webp",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134929/e9f4d773b0d8b2c71ae6416932015ed0.jpg?width=767&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134929/e9f4d773b0d8b2c71ae6416932015ed0.jpg?width=767&optimize=medium&auto=webp",
+                        "width": 767
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134929/e9f4d773b0d8b2c71ae6416932015ed0.jpg?width=400&optimize=medium&auto=webp",
+                        "width": 400
+                      },
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134929/e9f4d773b0d8b2c71ae6416932015ed0.jpg?width=500&optimize=medium&auto=webp",
+                        "width": 500
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/134929/e9f4d773b0d8b2c71ae6416932015ed0.jpg?width=767&optimize=medium&auto=webp",
+                    "width": 767,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/post/featured_image/68486/e21632d1ea40f02210fc2eca40c98142.jpg?width=1100&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/post/featured_image/68486/e21632d1ea40f02210fc2eca40c98142.jpg?width=1100&optimize=medium&auto=webp",
+                        "width": 1100
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/post/featured_image/68486/e21632d1ea40f02210fc2eca40c98142.jpg?width=1100&optimize=medium&auto=webp",
+                    "width": 1100,
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo1/53766/ed3dd180785295ff78ca8cbb6e6c0545.png?width=300&optimize=low&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo1/53766/ed3dd180785295ff78ca8cbb6e6c0545.png?width=300&optimize=low&auto=webp",
+                        "width": 300
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo1/53766/ed3dd180785295ff78ca8cbb6e6c0545.png?width=300&optimize=low&auto=webp",
+                    "width": 300,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo2/53766/96cc9cd21ba0645154d20e608ff57a35.png?width=300&optimize=low&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo2/53766/96cc9cd21ba0645154d20e608ff57a35.png?width=300&optimize=low&auto=webp",
+                        "width": 300
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo2/53766/96cc9cd21ba0645154d20e608ff57a35.png?width=300&optimize=low&auto=webp",
+                    "width": 300,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo3/53766/1dcd51fd3ec3d0277ef40b53d6521305.png?width=300&optimize=low&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo3/53766/1dcd51fd3ec3d0277ef40b53d6521305.png?width=300&optimize=low&auto=webp",
+                        "width": 300
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo3/53766/1dcd51fd3ec3d0277ef40b53d6521305.png?width=300&optimize=low&auto=webp",
+                    "width": 300,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo4/53766/8ecb277ed05244749e89f79a7aba0758.png?width=300&optimize=low&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo4/53766/8ecb277ed05244749e89f79a7aba0758.png?width=300&optimize=low&auto=webp",
+                        "width": 300
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/affiliate_logo4/53766/8ecb277ed05244749e89f79a7aba0758.png?width=300&optimize=low&auto=webp",
+                    "width": 300,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_footer_logo/53766/3d8bbdaec7043c061b35d7bf412abb0c.png?width=700&optimize=medium&auto=webp",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_footer_logo/53766/3d8bbdaec7043c061b35d7bf412abb0c.png?width=700&optimize=medium&auto=webp",
+                        "width": 700
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_footer_logo/53766/3d8bbdaec7043c061b35d7bf412abb0c.png?width=700&optimize=medium&auto=webp",
+                    "width": 700,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://assets.pinterest.com/images/PinExt.png",
+                    "variants": [
+                      {
+                        "url": "https://assets.pinterest.com/images/PinExt.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://assets.pinterest.com/images/PinExt.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets1.fastly.propertybase.com/assets/flags/america-630e493ada66cb800d573c39c22e883c9e4c26ea0fb89aeb673bf8a5c27f94a8.svg",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets1.fastly.propertybase.com/assets/flags/america-630e493ada66cb800d573c39c22e883c9e4c26ea0fb89aeb673bf8a5c27f94a8.svg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets1.fastly.propertybase.com/assets/flags/america-630e493ada66cb800d573c39c22e883c9e4c26ea0fb89aeb673bf8a5c27f94a8.svg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets1.fastly.propertybase.com/assets/flags/china-bec62ef4bb32521aa6f1d673a130cd9edd7241e54edd177087f86ca4583c99f5.svg",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets1.fastly.propertybase.com/assets/flags/china-bec62ef4bb32521aa6f1d673a130cd9edd7241e54edd177087f86ca4583c99f5.svg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets1.fastly.propertybase.com/assets/flags/china-bec62ef4bb32521aa6f1d673a130cd9edd7241e54edd177087f86ca4583c99f5.svg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets3.fastly.propertybase.com/assets/flags/spain-97747c40c2dad3b79c99ecc007c990287926384594319a78d8cea2b5e934041c.svg",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets3.fastly.propertybase.com/assets/flags/spain-97747c40c2dad3b79c99ecc007c990287926384594319a78d8cea2b5e934041c.svg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets3.fastly.propertybase.com/assets/flags/spain-97747c40c2dad3b79c99ecc007c990287926384594319a78d8cea2b5e934041c.svg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets1.fastly.propertybase.com/assets/flags/russia-c7fc73312928b0780dfcfab4683f9ad1130fda5e961071e5c35592a130eb92f5.svg",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets1.fastly.propertybase.com/assets/flags/russia-c7fc73312928b0780dfcfab4683f9ad1130fda5e961071e5c35592a130eb92f5.svg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets1.fastly.propertybase.com/assets/flags/russia-c7fc73312928b0780dfcfab4683f9ad1130fda5e961071e5c35592a130eb92f5.svg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets3.fastly.propertybase.com/assets/flags/saudi-cb06eefda35e8efdd47a648a08001f8e7759588365c52999bcbc7e9af61f1b7c.svg",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets3.fastly.propertybase.com/assets/flags/saudi-cb06eefda35e8efdd47a648a08001f8e7759588365c52999bcbc7e9af61f1b7c.svg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets3.fastly.propertybase.com/assets/flags/saudi-cb06eefda35e8efdd47a648a08001f8e7759588365c52999bcbc7e9af61f1b7c.svg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://prd-assets1.fastly.propertybase.com/assets/spinner-6936d4b7da6c3bec105e39b5c6ea209fcf90f196af4fe4e34996e547a848e126.gif",
+                    "variants": [
+                      {
+                        "url": "https://prd-assets1.fastly.propertybase.com/assets/spinner-6936d4b7da6c3bec105e39b5c6ea209fcf90f196af4fe4e34996e547a848e126.gif"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://prd-assets1.fastly.propertybase.com/assets/spinner-6936d4b7da6c3bec105e39b5c6ea209fcf90f196af4fe4e34996e547a848e126.gif",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png",
+                    "variants": [
+                      {
+                        "url": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://production-uploads.fastly.propertybase.com/assets/uploads/setting/company_print_email_logo/53766/50206b6de4769517b1e08ac8bc43e985.png",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#f9a622",
+                "background": "#ffffff",
+                "ink": "#222223",
+                "panel": "#fffdf9",
+                "muted": "#222223",
+                "fontFamily": "Figtree",
+                "headingFontFamily": "Figtree",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 4,
+                "headingSize": 28,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#f9a622",
+                "background": "#ffffff",
+                "ink": "#222223",
+                "panel": "#fffdf9",
+                "muted": "#222223",
+                "fontFamily": "Figtree",
+                "headingFontFamily": "Figtree",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://fonts.googleapis.com/css?family=Figtree:300,400,400i,500,600,700&display=swap",
+                  "https://prd-assets1.fastly.propertybase.com/company_frontend_54808_116bc22d1a447876551827a8d3387de7_1790814697.css?as=style&rel=preload",
+                  "https://prd-assets1.fastly.propertybase.com/company_frontend_54808_116bc22d1a447876551827a8d3387de7_1790814697.css"
+                ],
+                "colors": [
+                  "#007bff",
+                  "#6610f2",
+                  "#6f42c1",
+                  "#e83e8c",
+                  "#dc3545",
+                  "#fd7e14",
+                  "#ffc107",
+                  "#28a745",
+                  "#20c997",
+                  "#17a2b8",
+                  "#ffffff",
+                  "#6c757d",
+                  "#343a40",
+                  "#f9a622",
+                  "#050505",
+                  "#7b7c7f",
+                  "#f8f9fa",
+                  "#adb5bd",
+                  "#dee2e6",
+                  "#222223",
+                  "#fcf8e3",
+                  "#212529",
+                  "#e9ecef",
+                  "#fde6c1",
+                  "#fcdca8",
+                  "#f2f2f2",
+                  "#b9b9b9",
+                  "#acacac",
+                  "#dadadb",
+                  "#cdcdce"
+                ],
+                "fonts": [
+                  "Figtree",
+                  "sans-serif",
+                  "monospace",
+                  "SFMono-Regular",
+                  "slick",
+                  "swiper-icons",
+                  "Glyphicons Halflings"
+                ],
+                "routing": [
+                  {
+                    "source": "About Us",
+                    "intent": "profile",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Blog",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buyers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Mortgage Calculator",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sellers",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Valuation",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Market Data Reports",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Agents",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Agent Portal",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Join Bridge Realty",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Search",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Upcoming Open Houses",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Log In / Sign Up",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sign Up",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Login",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Advanced Search",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Valuation",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Single-Family Homes",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "New Construction",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Condos & Townhomes",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Active Adult & 55+ Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Multi-Family Homes",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "View All",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Bridge Realty Insights – Twin Cities Real Estate Blog",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Privacy Choices",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "About Bridge Realty",
+                    "intent": "profile",
+                    "canonical": "card:profile",
+                    "render": "card"
+                  },
+                  {
+                    "source": "How Can We Help?",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Bloomington, MN Market Data",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Twin Cities Real Estate Insights Expert Tips from Bridge Realty",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.thebridgerealty.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.thebridgerealty.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "68e475eb-426e-4989-966e-7c488323fe0f",
+              "kind": "url",
+              "label": "www.thebridgerealty.com",
+              "uri": "https://www.thebridgerealty.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "bridge-realty-00-url.png",
+    "bridge-realty-01-review.png",
+    "bridge-realty-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3522,
+  "reviewMs": 22376,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Bridge Realty\nLooking for listings · 13 pages checked\nMatching your website’s design and imagery\nRead 5 linked pages\nIdentified your logo\nSorted 25 website images by role\nWriting your profile and app copy\nFound Bloomington, MN",
+  "reviewText": "Back\nAPP BUILDER\nwww.thebridgerealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nBLOOMINGTON, MN\nFind Your Dream Home in Minneapolis & Twin Cities with Bridge Realty\nDiscover Minneapolis & Twin Cities homes with Bridge Realty, the largest family-owned brokerage providing expert guidance.\nView listings\nABOUT\nMeet Our Team\nOur team at Bridge Realty is made up of experienced, licensed brokers dedicated to helping clients succeed in real estate. We combine local market expertise with a commitment to professional growth, ensuring every client receives top-tier support in the Twin Cities.\nSERVICES\nNegotiation & Offer\nOur brokers provide expert advice on pricing and negotiations, helping you make strong, competitive offers. Bridge Realty ensures you secure your Twin Cities home with confidence and clarity.\nSERVICES\nWhy Choose Bridge Realty\nBridge Realty, the largest family-owned brokerage in the Twin Cities, offers unmatched experience and local market knowledge. We prioritize your goals, guiding you through every step of the selling process with transparency and professionalism.\nExplore Real Estate in Minneapolis, St. Paul, Maple Grove, Mankato & Bloomington\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nFROM THE SITE\nHow Can We Help?\nReady to buy, sell, or invest in the Twin Cities? Our team at Bridge Realty is here to guide you every step of the way. Contact us today to get personalized support and expert advice for all your real estate needs. Let's Connect\nFROM THE SITE\nBloomington, MN Market Data\nNew On Market 565 1.8% increase in new listings Properties Sold 313 -11.3% decrease in sales Properties for Sale 1422 2.6% increase in inventory Avg Asking Price $490 K -0.5% decrease in asking price Statistics above are calculated on activity within the period from Sep, 04 2026 to Oct, 04 2026 Increase/Decrease activity is compared to the month of September. Subscribe to Market Insights View All\n952-368-0021\nFrontdesk@thebridgerealty.com\nBridge Realty\n20586794\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nServing Minneapolis & the Twin Cities with integrity and expertise.\nTry another opening line\nYOUR INTRODUCTION\nBridge Realty is the largest family-owned brokerage in the Twin Cities, serving Minneapolis, St. Paul, and surrounding areas since 2006. With a commitment to honesty, open communication, and client-first service, we specialize in residential and commercial properties including single-family homes, condos, multi-family investments, and new construction. Our client-focused team combines local market knowledge and tailored strategies to guide you through every step of your real estate journey.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nWe couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nJust a few more details\nWe couldn’t find these on your website.\nYour name\n▸ Brokerage & license (optional)\n✓ Bridge Realty · 20586794 · MN\nStill needed: Your name\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nBLOOMINGTON, MN\nFind Your Dream Home in Minneapolis & Twin Cities with Bridge Realty\nDiscover Minneapolis & Twin Cities homes with Bridge Realty, the largest family-owned brokerage providing expert guidance.\nView listings\nABOUT\nMeet Our Team\nOur team at Bridge Realty is made up of experienced, licensed brokers dedicated to helping clients succeed in real estate. We combine local market expertise with a commitment to professional growth, ensuring every client receives top-tier support in the Twin Cities.\nSERVICES\nNegotiation & Offer\nOur brokers provide expert advice on pricing and negotiations, helping you make strong, competitive offers. Bridge Realty ensures you secure your Twin Cities home with confidence and clarity.\nSERVICES\nWhy Choose Bridge Realty\nBridge Realty, the largest family-owned brokerage in the Twin Cities, offers unmatched experience and local market knowledge. We prioritize your goals, guiding you through every step of the selling process with transparency and professionalism.\nExplore Real Estate in Minneapolis, St. Paul, Maple Grove, Mankato & Bloomington\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nFROM THE SITE\nHow Can We Help?\nReady to buy, sell, or invest in the Twin Cities? Our team at Bridge Realty is here to guide you every step of the way. Contact us today to get personalized support and expert advice for all your real estate needs. Let's Connect\nFROM THE SITE\nBloomington, MN Market Data\nNew On Market 565 1.8% increase in new listings Properties Sold 313 -11.3% decrease in sales Properties for Sale 1422 2.6% increase in inventory Avg Asking Price $490 K -0.5% decrease in asking price Statistics above are calculated on activity within the period from Sep, 04 2026 to Oct, 04 2026 Increase/Decrease activity is compared to the month of September. Subscribe to Market Insights View All\n952-368-0021\nFrontdesk@thebridgerealty.com\nBridge Realty\n20586794\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app BLOOMINGTON, MN Find Your Dream Home in Minneapolis & Twin Cities with Bridge Realty Discover Minneapolis & Twin Cities homes with Bridge Realty, the largest family-owned brokerage providing expert g",
+        "textLength": 2005,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.thebridgerealty.com/",
+      "status": 200,
+      "finalUrl": "https://www.thebridgerealty.com/",
+      "title": "Bridge Realty – Twin Cities Real Estate",
+      "textLength": 4957,
+      "priceCount": 13,
+      "uniquePrices": 5,
+      "propertyLinkCount": 3,
+      "sample": "About Us\nBuyers\nSellers\nContact\nAgents\nSearch\nLog In / Sign Up\nFind Your Dream Home in Minneapolis & Twin Cities with Bridge Realty\nBuy\nSell\nSearch\nAdvanced Search\nAbout Bridge Realty\n\nBrokerage founded in 2006, Bridge Realty is the largest family-owned real estate company in the Twin Cities. We specialize in residential and commercial properties, including single-family homes, condos, multi-family investments, and new construction. Client satisfaction is our top priority, and we work with buyers and sellers across all price ranges. As Minnesota’s first 100% commission brokerage, we’re backed by a strong culture of honesty, excellence, integrity, and open communication. By connecting sellers and buyers and supporting the professional growth of our brokers, we help our community thrive.\n\nAbout Us\nSingle-Family Homes\nNew Construction\nCondos & Townhomes\nActive Adult & 55+ Communities\nMulti-Family Homes\nRental & Investment Properties\nExplore Real Estate in Minneapolis, St. Paul, Maple Grove, Mankato & Bloomington\nPrevious\nMankato\n429 Properties listed for sale\n$404,125 Average listing home price\nMaple Grove\n340 Properties listed for sale\n$619,453 Average listing home price\nBloomington\n",
+      "challenge": false,
+      "screenshot": "bridge-realty-source-0.png"
+    }
+  ],
+  "wallMs": 46451,
+  "window": {
+    "startedAt": "2026-10-08T05:08:09.947Z",
+    "endedAt": "2026-10-08T05:08:56.398Z"
+  }
+}

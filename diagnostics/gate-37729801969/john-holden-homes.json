@@ -1,0 +1,165 @@
+{
+  "id": "john-holden-homes",
+  "url": "https://johnholdenhomes.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 55,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 860,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1868,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading John Holden Homes\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2069,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading John Holden Homes\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2675,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 1 page checked\nReading John Holden Homes\nMatching your website’s design and imagery\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 2877,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading John Holden Homes\nMatching your website’s design and imagery\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 14759,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading John Holden Homes\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 20978,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 553,
+      "totalMs": 2743,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 125
+        },
+        {
+          "kind": "listings",
+          "host": "johnholdenhomes.com",
+          "pages": 1,
+          "found": 0,
+          "at": 1374
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "failed",
+          "at": 2162
+        }
+      ],
+      "result": {
+        "status": 422,
+        "body": {
+          "ok": false,
+          "error": "We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.",
+          "timings": {
+            "listings": 2037,
+            "total": 2162
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "john-holden-homes-00-url.png",
+    "john-holden-homes-01-review.png",
+    "john-holden-homes-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3580,
+  "reviewMs": 20978,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nYour listings could not be read from this page\nReading John Holden Homes\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo and logo\nSorted 8 website images by role\nWriting your profile and app copy",
+  "reviewText": "Back\nAPP BUILDER\njohnholdenhomes.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCHATTANOOGA, TN\nFind Your Dream Home in Chattanooga\nChattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n423-314-8761\nguest+realtor+abbd6747-fdb0-4254-920b-acf99ff28057@guest.myrealtor.app\nRealty One Group Experts\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nHelping you achieve your real estate goals in Chattanooga.\nTry another opening line\nYOUR INTRODUCTION\nWith over 30 years of living in the Chattanooga area and a background that spans the Marine Corps, finance, and hospitality management, I bring unique insight and commitment to my clients. Partnering with Realty One Group Experts, I use cutting-edge tools and genuine local knowledge to streamline your real estate experience. My approach is straightforward and focused: clear communication, expert negotiation, and a steady presence from consultation to closing.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nWe couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nPlease confirm\nWe found these — fix anything that’s wrong.\nPhone\nAlso found: 423-541-0100\n▸ Brokerage & license (optional)\n✓ Realty One Group Experts\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCHATTANOOGA, TN\nFind Your Dream Home in Chattanooga\nChattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards.\nView listings\nHomes I picked\nfor you.\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n423-314-8761\nguest+realtor+abbd6747-fdb0-4254-920b-acf99ff28057@guest.myrealtor.app\nRealty One Group Experts\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app CHATTANOOGA, TN Find Your Dream Home in Chattanooga Chattanooga-based John Holden Homes are a realtor / broker dedicated to helping you achieve your real estate goals at the highest standards. View l",
+        "textLength": 487,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "error": "We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown. The page must open without signing in."
+    }
+  ],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://johnholdenhomes.com/",
+      "status": 200,
+      "finalUrl": "https://johnholdenhomes.com/",
+      "title": "Chattanooga Real Estate Broker / Realtor - John Holden Homes",
+      "textLength": 2834,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Skip to content\nHome\nBuying\nSelling\nContact John\n(423) 314-8761\n\n(423) 541-0100\n\nFind Your Dream Home in Chattanooga\n\nHelping you buy and sell homes in the Chattanooga, Tennessee area\n\nJohn Holden\nAffiliate Broker\n423-314-8761\n423-541-0100\nGet A Callback\n\nBy submitting my data I agree to be contacted\n\n2 Timothy 4:7: “I have fought the good fight, I have finished the race, I have kept the faith.”\nCONTACT\n\n5959 Shallowford Rd #225,\nChattanooga, TN 37421 .\n\nPhone: (423) 314-8761 or (423) 541-0100 \n\n© 2025 • Website designed & built by Colourscope\n\nEXCELLENT\nBased on 7 reviews\nMike Canto\nJohn was amazing from the start to closing. Very attentive of our needs, friendly and very professional. John made the process smooth and constantly checked in to ensure if we needed anything or had any questions. I would highly recommend working with John. Thanks again for helping make our home buying experience exceptional!\najrose98\nJohn was amazing from the first initial phone calls to the closing. He was definitely \"Johnny on the spot!\" My husband was out of the country for most of the process. However, John made sure to stay in contact with both of us every step of the way.\nJeremiah B McCain\nJohn ",
+      "challenge": false,
+      "screenshot": "john-holden-homes-source-0.png"
+    }
+  ],
+  "wallMs": 45368,
+  "window": {
+    "startedAt": "2026-10-08T05:05:12.101Z",
+    "endedAt": "2026-10-08T05:05:57.469Z"
+  }
+}

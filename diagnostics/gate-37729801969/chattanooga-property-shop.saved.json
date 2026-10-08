@@ -1,0 +1,373 @@
+[
+  {
+    "realtorId": "679f14a8-afc2-490c-8320-989eeb53b654",
+    "createdAt": "2026-10-08 05:11:32.171646+00",
+    "sources": [
+      {
+        "id": "source-m58pno",
+        "url": "https://chattanoogapropertyshop.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791443497247,
+        "connectedAt": 1791436297247,
+        "listingCount": 24,
+        "submittedUrl": "https://chattanoogapropertyshop.com/",
+        "inventoryUrls": [
+          "https://chattanoogapropertyshop.com/"
+        ],
+        "lastCheckedAt": 1791436297247
+      }
+    ],
+    "listings": [
+      {
+        "title": "415 Highway 151",
+        "price": "$699,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1534410/LaFayette/415-Highway-151/",
+        "photos": 10,
+        "descriptionLength": 1459,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1994"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "2,815"
+      },
+      {
+        "title": "674 Autumn Wood Drive",
+        "price": "$565,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544129/Summerville/674-Autumn-Wood-Drive/",
+        "photos": 10,
+        "descriptionLength": 1988,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2003"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,973"
+      },
+      {
+        "title": "523 Bryant Road",
+        "price": "$649,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544132/Cohutta/523-Bryant-Road/",
+        "photos": 10,
+        "descriptionLength": 1348,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2022"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "2,736"
+      },
+      {
+        "title": "2323 River Bluffs Drive",
+        "price": "$650,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1534239/Jasper/2323-River-Bluffs-Drive/",
+        "photos": 10,
+        "descriptionLength": 1717,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2023"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,812"
+      },
+      {
+        "title": "9013 Brow Lake Road",
+        "price": "$574,900",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544161/Soddy-Daisy/9013-Brow-Lake-Road/",
+        "photos": 10,
+        "descriptionLength": 1137,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1988"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": "3,273"
+      },
+      {
+        "title": "177 N Crest Road",
+        "price": "$699,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544163/Chattanooga/177-N-Crest-Road/",
+        "photos": 10,
+        "descriptionLength": 1280,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1977"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,638"
+      },
+      {
+        "title": "530 Dover Chapel Terrace",
+        "price": "$650,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544152/Ellijay/530-Dover-Chapel-Terrace/",
+        "photos": 10,
+        "descriptionLength": 1545,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1996"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": "1,650"
+      },
+      {
+        "title": "15 Thorncrest Drive",
+        "price": "$558,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544147/Ringgold/15-Thorncrest-Drive/",
+        "photos": 10,
+        "descriptionLength": 1531,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2004"
+        },
+        "beds": 3,
+        "baths": 5,
+        "sqft": "3,305"
+      },
+      {
+        "title": "653 Briar Road",
+        "price": "$849,900",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544151/Soddy-Daisy/653-Briar-Road/",
+        "photos": 10,
+        "descriptionLength": 1975,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2025"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "3,964"
+      },
+      {
+        "title": "8411 Sanders Road",
+        "price": "$1,338,750",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544146/Ooltewah/8411-Sanders-Road/",
+        "photos": 10,
+        "descriptionLength": 1177,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1994"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": "888"
+      },
+      {
+        "title": "0 Split Rail Way",
+        "price": "$2,500,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1531728/Guild/0-Split-Rail-Way/",
+        "photos": 10,
+        "descriptionLength": 3135,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1446 Houston Valley Road",
+        "price": "$725,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1543439/Ringgold/1446-Houston-Valley-Road/",
+        "photos": 10,
+        "descriptionLength": 1882,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2008"
+        },
+        "beds": 4,
+        "baths": 3.5,
+        "sqft": "4,148"
+      },
+      {
+        "title": "2025 Haven Crest Drive",
+        "price": "$539,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544182/Chattanooga/2025-Haven-Crest-Drive/",
+        "photos": 2,
+        "descriptionLength": 1628,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1966"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": "3,000"
+      },
+      {
+        "title": "408 Tremont Street",
+        "price": "$640,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544175/Chattanooga/408-Tremont-Street/",
+        "photos": 10,
+        "descriptionLength": 1298,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1920"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,632"
+      },
+      {
+        "title": "201 Lake Hills Place",
+        "price": "$999,900",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544185/Trenton/201-Lake-Hills-Place/",
+        "photos": 10,
+        "descriptionLength": 1993,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2010"
+        },
+        "beds": 5,
+        "baths": 5.5,
+        "sqft": "4,976"
+      },
+      {
+        "title": "2620 Hickory Valley Road",
+        "price": "$2,575,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544187/Chattanooga/2620-Hickory-Valley-Road/",
+        "photos": 7,
+        "descriptionLength": 380,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 29,
+        "baths": 0,
+        "sqft": "3,416"
+      },
+      {
+        "title": "6201 Breezy Hollow Lane",
+        "price": "$995,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1532725/Harrison/6201-Breezy-Hollow-Lane/",
+        "photos": 10,
+        "descriptionLength": 1996,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2016"
+        },
+        "beds": 6,
+        "baths": 4,
+        "sqft": "4,288"
+      },
+      {
+        "title": "407 Colville Street",
+        "price": "$525,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544194/Chattanooga/407-Colville-Street/",
+        "photos": 10,
+        "descriptionLength": 1525,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 3,
+        "baths": 1,
+        "sqft": "2,218"
+      },
+      {
+        "title": "65 Acres Harris Drive",
+        "price": "$1,100,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544098/Fort-Payne/65-Acres-Harris-Drive/",
+        "photos": 10,
+        "descriptionLength": 523,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "0 Flagpole Road",
+        "price": "$949,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544070/Ellijay/0-Flagpole-Road/",
+        "photos": 10,
+        "descriptionLength": 5491,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "181 County Road 5",
+        "price": "$775,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544077/Calhoun/181-County-Road-5/",
+        "photos": 10,
+        "descriptionLength": 1534,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1900"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,100"
+      },
+      {
+        "title": "8074 Fox Glove Drive",
+        "price": "$624,900",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544087/Ooltewah/8074-Fox-Glove-Drive/",
+        "photos": 10,
+        "descriptionLength": 1839,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "2014"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "3,264"
+      },
+      {
+        "title": "149 N Crest Road",
+        "price": "$849,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544096/Chattanooga/149-N-Crest-Road/",
+        "photos": 10,
+        "descriptionLength": 868,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1900"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "2,438"
+      },
+      {
+        "title": "8206 Ooltewah Georgetown Road",
+        "price": "$700,000",
+        "sourceUrl": "https://chattanoogapropertyshop.com/listing/gcarafsl/1544123/Ooltewah/8206-Ooltewah-Georgetown-Road/",
+        "photos": 6,
+        "descriptionLength": 674,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

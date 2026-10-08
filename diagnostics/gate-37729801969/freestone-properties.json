@@ -1,0 +1,1140 @@
+{
+  "id": "freestone-properties",
+  "url": "https://www.freestoneproperties.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 55,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 658,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nReading your website"
+    },
+    {
+      "at": 858,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1060,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 3"
+    },
+    {
+      "at": 1261,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 3\nReading linked pages · 1 of 2"
+    },
+    {
+      "at": 1662,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 0 of 3\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2265,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 listings so far · 1 page checked\nMatching your website’s design and imagery\nReading listing details · 1 of 3\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2466,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2668,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaving 3 listings"
+    },
+    {
+      "at": 2869,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaved 3 listings"
+    },
+    {
+      "at": 5885,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 434,
+      "totalMs": 5639,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Freestone Properties",
+          "host": "freestoneproperties.com",
+          "at": 198
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 198
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 2,
+          "at": 516
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 2,
+          "at": 610
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 2,
+          "at": 807
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 2,
+          "total": 2,
+          "at": 914
+        },
+        {
+          "kind": "design",
+          "portrait": false,
+          "logo": true,
+          "images": 21,
+          "sections": 7,
+          "at": 915
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 915
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 924
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 925
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 925
+        },
+        {
+          "kind": "profile",
+          "city": "Black Mountain, NC",
+          "at": 5045
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 5045
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 398,
+            "design": 717,
+            "site": 924,
+            "profile": 4120,
+            "total": 5045
+          },
+          "evidence": [
+            {
+              "field": "realtor.brandName",
+              "sourceId": "54ec7a1b-7f29-4059-a368-facf1d7fb04a",
+              "value": "Freestone Properties",
+              "confidence": 1,
+              "locator": "Meta og:site_name, site structured data, about page"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "54ec7a1b-7f29-4059-a368-facf1d7fb04a",
+              "value": "Freestone Properties",
+              "confidence": 1,
+              "locator": "Meta og:site_name, about page, contact page, whole site branding"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "54ec7a1b-7f29-4059-a368-facf1d7fb04a",
+              "value": "(828) 419-0444",
+              "confidence": 1,
+              "locator": "Sitewide header/footer, contact page, about page"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "54ec7a1b-7f29-4059-a368-facf1d7fb04a",
+              "value": "realestate@freestoneproperties.com",
+              "confidence": 1,
+              "locator": "Sitewide, contact page, about page"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "54ec7a1b-7f29-4059-a368-facf1d7fb04a",
+              "value": "Black Mountain, NC",
+              "confidence": 1,
+              "locator": "Footer address, contact page, about page"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Your Asheville and Black Mountain Real Estate Partners",
+            "welcomeNote": "Welcome to Freestone Properties—offering a modern, local approach to real estate in Asheville, Black Mountain and the scenic communities of Western North Carolina.",
+            "tagline": "Local Roots. Boutique Service. Modern Results.",
+            "aboutParagraph": "Founded by Scott and Lisa Russell, Freestone Properties is a truly local, boutique real estate firm serving the Asheville and Black Mountain area. Our firm blends years of market expertise and personalized service with the innovative technology and robust resources of the largest real estate company in the Carolinas, through our partnership with Allen Tate/Beverly-Hanks. At Freestone, we believe real estate is more than transactions—it's about connections, local knowledge, and helping our clients navigate the constantly changing landscape of buying and selling homes. We take pride in offering customized strategies, continuous innovation, and a genuinely people-focused experience.",
+            "conciergeLine": "Have a question or ready to start your real estate journey? Reach out by phone or email for prompt, friendly assistance.",
+            "contactLine": "Call us at (828) 419-0444 or email realestate@freestoneproperties.com—we're here to help.",
+            "tone": "warm, local, knowledgeable, approachable",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "54ec7a1b-7f29-4059-a368-facf1d7fb04a"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://www.freestoneproperties.com/",
+              "analyzedAt": 1791435962777,
+              "logoUrl": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+              "heroImageUrl": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg",
+              "heroTitle": "Asheville & Black Mountain Real Estate",
+              "heroSubtitle": "Browse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents.",
+              "sections": [
+                {
+                  "kind": "content",
+                  "title": "Waynesville - Primary Community, NC",
+                  "body": "View all Waynesville homes for sale Waynesville, NC is a town located southwest of Asheville. It’s the county seat of Haywood County and the biggest town west of Asheville before the North Carolina-Tennessee border. In addition to a warm and walkable downtown, the larger Waynesville area also contains quiet neighborhoods and rural communities. It is considered part of the Asheville metropolitan area, being only 45 minutes from the Asheville city center.",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Arden",
+                  "body": "Learn More Arden is one of the larger suburbs of Asheville, spreading across most of the southern portion of Buncombe County. Homes in Arden range from modest ranch-style homes and bungalows to multi-million ... Details",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Choose Local, Experienced Agents to Buy or Sell Your Asheville Home",
+                  "body": "Name This field is for validation purposes and should be left unchanged. Name (Required) Email (Required) Phone Message (Required) Referrer URL Submit Search Asheville Area Homes More Save Search",
+                  "imageUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_03.png",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Freestone Properties",
+                  "body": "is a small, innovative real estate firm with a hometown touch. We are dedicated to providing our clients with exceptional service, intimate market knowledge, and customized strategies to make buying or selling a home an enjoyable experience. Freestone Properties | Allen Tate/Beverly-Hanks Partnership: Our partnership combines our strengths to enhance your buying and selling experience—all while remaining your trusted, family-owned real estate firm."
+                },
+                {
+                  "kind": "testimonials",
+                  "intent": "testimonials",
+                  "destination": "unique",
+                  "title": "What Clients Are Saying Testimonials",
+                  "body": "\" We have bought and sold seven homes so far with these being located all over the United States, including Hawaii. During the buying and selling process, we were privileged to work with many, outstanding real estate professionals. We have to say, Scott... continued \" - Jim and Linda W., Black Mountain, NC \" I can honestly say the property we sold would not have happened with that particular buyer without a patient agent representing our interest."
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Moving to Asheville, NC",
+                  "body": "Asheville, North Carolina is one of those places that has a lasting effect on a person. Just at the mention of it, a person who...",
+                  "imageUrl": "https://www.freestoneproperties.com/wp-content/uploads/Asheville-Good-Place-Retire-300x157.jpg",
+                  "imageFit": "contain",
+                  "imageRole": "article",
+                  "imageWidth": 300,
+                  "imageHeight": 157
+                },
+                {
+                  "kind": "content",
+                  "intent": "content",
+                  "destination": "unique",
+                  "title": "Is Asheville NC a Good Place to Retire?",
+                  "body": "In recent years, Asheville, North Carolina has become a very popular area for retirees. The reasons are countless, but some of...",
+                  "imageUrl": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header-300x200.png",
+                  "imageFit": "contain",
+                  "imageRole": "article",
+                  "imageWidth": 300,
+                  "imageHeight": 200
+                }
+              ],
+              "imagery": {
+                "logo": {
+                  "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+                  "variants": [
+                    {
+                      "url": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+                      "width": 600
+                    },
+                    {
+                      "url": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo-300x54.png",
+                      "width": 300
+                    }
+                  ],
+                  "role": "logo",
+                  "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+                  "width": 600,
+                  "height": 108,
+                  "destination": "logo",
+                  "fit": "contain",
+                  "renderedWidth": 190,
+                  "renderedHeight": 34,
+                  "upscaleRatio": 0.63,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "hero": {
+                  "sourceUrl": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg",
+                  "variants": [
+                    {
+                      "url": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg"
+                    }
+                  ],
+                  "role": "hero",
+                  "selectedUrl": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg",
+                  "destination": "hero",
+                  "fit": "cover",
+                  "renderedWidth": 390,
+                  "renderedHeight": 220,
+                  "upscaleRatio": 1,
+                  "crop": "modest",
+                  "rank": 3
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+                        "width": 600
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo-300x54.png",
+                        "width": 300
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/freestone-properties-howard-hanna-logo.png",
+                    "width": 600,
+                    "height": 108,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 34,
+                    "upscaleRatio": 0.63,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/logo-element.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/logo-element.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/logo-element.png",
+                    "width": 200,
+                    "height": 197,
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 65,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 0.65,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/mls-search/signin/guest_temp_lead_123456789",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/mls-search/signin/guest_temp_lead_123456789"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://www.freestoneproperties.com/mls-search/signin/guest_temp_lead_123456789",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_03.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_03.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_03.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_02.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_02.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_02.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_01.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_01.png"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/cta_home_01.png",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/gallery/285-mount-allen/cache/10-custom-285-mt-allen-heights-rd.jpg-nggid0513049-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1787340901",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/gallery/285-mount-allen/cache/10-custom-285-mt-allen-heights-rd.jpg-nggid0513049-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1787340901"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/gallery/285-mount-allen/cache/10-custom-285-mt-allen-heights-rd.jpg-nggid0513049-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1787340901",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/gallery/215-varden/cache/11-custom-215-varden-pl.jpg-nggid0512674-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1783677948",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/gallery/215-varden/cache/11-custom-215-varden-pl.jpg-nggid0512674-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1783677948"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/gallery/215-varden/cache/11-custom-215-varden-pl.jpg-nggid0512674-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1783677948",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/cache/554-Sweet-Birch-Black-Mtn-NC-01-1920x1440.jpg-nggid0513185-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1789106875",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/cache/554-Sweet-Birch-Black-Mtn-NC-01-1920x1440.jpg-nggid0513185-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1789106875"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/gallery/554-sweet-birch-park/cache/554-Sweet-Birch-Black-Mtn-NC-01-1920x1440.jpg-nggid0513185-ngg0dyn-650x508x60-00f0w010c011r110f110r010t010.jpg?t=1789106875",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/12/image3-300x202.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/12/image3-300x202.png",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/12/image3-768x518.png",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/12/image3-1024x691.png",
+                        "width": 1024
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/12/image3-e1544585510493.png",
+                        "width": 1000
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/12/image3-300x202.png",
+                    "width": 300,
+                    "height": 202,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 136,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/Asheville-Good-Place-Retire-300x157.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Asheville-Good-Place-Retire-300x157.jpg",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Asheville-Good-Place-Retire-768x402.jpg",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Asheville-Good-Place-Retire-1024x536.jpg",
+                        "width": 1024
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/Asheville-Good-Place-Retire-300x157.jpg",
+                    "width": 300,
+                    "height": 157,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 106,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header-300x200.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header-300x200.png",
+                        "width": 300
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header-1024x683.png",
+                        "width": 1024
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header-768x512.png",
+                        "width": 768
+                      },
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header.png",
+                        "width": 1200
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/Build-vs-buy-header-300x200.png",
+                    "width": 300,
+                    "height": 200,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 203,
+                    "renderedHeight": 135,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/hm_map.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/hm_map.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/hm_map.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/freeston-properties-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/freeston-properties-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/freeston-properties-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/howard-hanna-real-estate-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/howard-hanna-real-estate-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/howard-hanna-real-estate-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/logo-leading.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/logo-leading.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/logo-leading.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/luxury-portfolio-international-logo.png",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/luxury-portfolio-international-logo.png"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/luxury-portfolio-international-logo.png",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/re-logos-footer.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/re-logos-footer.jpg"
+                      }
+                    ],
+                    "role": "logo",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/2018/10/re-logos-footer.jpg",
+                    "destination": "logo",
+                    "fit": "contain",
+                    "renderedWidth": 190,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://moderate6-v4.cleantalk.org/pixel/79ba8c52fb26159aa11b0e1ec6753de9.gif",
+                    "variants": [
+                      {
+                        "url": "https://moderate6-v4.cleantalk.org/pixel/79ba8c52fb26159aa11b0e1ec6753de9.gif"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://moderate6-v4.cleantalk.org/pixel/79ba8c52fb26159aa11b0e1ec6753de9.gif",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/themes/phoenix/images/banner-large.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  },
+                  {
+                    "sourceUrl": "https://www.freestoneproperties.com/wp-content/uploads/banner-home-cottage2.jpg",
+                    "variants": [
+                      {
+                        "url": "https://www.freestoneproperties.com/wp-content/uploads/banner-home-cottage2.jpg"
+                      }
+                    ],
+                    "role": "hero",
+                    "selectedUrl": "https://www.freestoneproperties.com/wp-content/uploads/banner-home-cottage2.jpg",
+                    "destination": "hero",
+                    "fit": "cover",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "modest",
+                    "rank": 3
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#41495b",
+                "background": "#ffffff",
+                "ink": "#12161d",
+                "panel": "#fffdf9",
+                "muted": "#12161d",
+                "fontFamily": "Lato",
+                "headingFontFamily": "Lato",
+                "layout": "image-first",
+                "spacing": 48,
+                "radius": 3,
+                "headingSize": 28,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#41495b",
+                "background": "#ffffff",
+                "ink": "#12161d",
+                "panel": "#fffdf9",
+                "muted": "#12161d",
+                "fontFamily": "Lato",
+                "headingFontFamily": "Lato",
+                "layout": "image-overlay",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://www.freestoneproperties.com/wp-content/themes/phoenix/lib/idxc_addons/css/styles_addons.css?ver=1.0.37",
+                  "https://www.freestoneproperties.com/wp-content/themes/phoenix/style.css?ver=1.0.37",
+                  "https://www.freestoneproperties.com/wp-content/themes/phoenix/lib/css/animate_custom.css?ver=1.0.37",
+                  "https://www.freestoneproperties.com/wp-content/themes/phoenix/lib/idxc_addons/css/style.css?ver=1.0.0",
+                  "https://search.showcaseidx.com/app/css/ZjNjODIyNzktNjZhOC00NzVlL/custom.css",
+                  "https://www.freestoneproperties.com/wp-content/plugins/gravityforms/legacy/css/formsmain.min.css?ver=3.1.3"
+                ],
+                "colors": [
+                  "#111111",
+                  "#333333",
+                  "#ffffff",
+                  "#222222",
+                  "#966c02",
+                  "#000000",
+                  "#f9f9f9",
+                  "#d5bc70",
+                  "#999999",
+                  "#ffff00",
+                  "#12161d",
+                  "#e5554e",
+                  "#9b3931",
+                  "#41495b",
+                  "#dddddd",
+                  "#cccccc",
+                  "#eeeeee",
+                  "#2c313c",
+                  "#d4d3d3",
+                  "#666666",
+                  "#333d55",
+                  "#61739c",
+                  "#777777",
+                  "#f5f5f5",
+                  "#404040",
+                  "#f8f8f8",
+                  "#7c7c7c",
+                  "#7f8ba5",
+                  "#363636",
+                  "#f3f1eb"
+                ],
+                "fonts": [
+                  "Icon",
+                  "sans-serif",
+                  "monospace",
+                  "Lato",
+                  "Montserrat",
+                  "Yesteryear",
+                  "serif",
+                  "Cormorant Garamond",
+                  "arial",
+                  "FontAwesome",
+                  "Arial",
+                  "Helvetica Neue"
+                ],
+                "routing": [
+                  {
+                    "source": "(828) 419-0444",
+                    "intent": "contact",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Login | Register",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Search",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Search by Neighborhood",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Selling",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buying",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Area Info",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities, Neighborhoods, and Towns",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Counties in Western North Carolina",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Gated Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "neighborhoods",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Asheville Homes in Gated Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Black Mountain Homes in Gated Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Facebook",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Instagram",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "LinkedIn",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "YouTube",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Privacy Policy",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Selecting the Right Real Estate Expert",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sell My Home",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Real Estate Stats & Trends",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Asheville",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Black Mountain",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Located In The Blue Ridge Mountains Of Western North Carolina,",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Surrounding Areas",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Asheville Real Estate Resources",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Asheville Real Estate Popular Searches",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Subscribe & Stay Informed Real Estate Newsletter",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Choose Local, Experienced Agents to Buy or Sell Your Asheville Home",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "What Clients Are Saying Testimonials",
+                    "intent": "testimonials",
+                    "canonical": "card:testimonials",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Moving to Asheville, NC",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  },
+                  {
+                    "source": "Is Asheville NC a Good Place to Retire?",
+                    "intent": "content",
+                    "canonical": "card:content",
+                    "render": "card"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.freestoneproperties.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.freestoneproperties.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "54ec7a1b-7f29-4059-a368-facf1d7fb04a",
+              "kind": "url",
+              "label": "www.freestoneproperties.com",
+              "uri": "https://www.freestoneproperties.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "freestone-properties-00-url.png",
+    "freestone-properties-01-review.png",
+    "freestone-properties-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 4135,
+  "reviewMs": 5885,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nFound 3 active listings\nMatching your website’s design and imagery\nFull details weren’t available for these 3 listings\nRead 2 linked pages\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaved 3 listings",
+  "reviewText": "Back\nAPP BUILDER\nwww.freestoneproperties.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nBLACK MOUNTAIN, NC\nAsheville & Black Mountain Real Estate\nBrowse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents.\nView listings\nTHE AREA\nWaynesville - Primary Community, NC\nView all Waynesville homes for sale Waynesville, NC is a town located southwest of Asheville. It’s the county seat of Haywood County and the biggest town west of Asheville before the North Carolina-Tennessee border. In addition to a warm and walkable downtown, the larger Waynesville area also contains quiet neighborhoods and rural communities. It is considered part of the Asheville metropolitan area, being only 45 minutes from the Asheville city center.\nTHE AREA\nArden\nLearn More Arden is one of the larger suburbs of Asheville, spreading across most of the southern portion of Buncombe County. Homes in Arden range from modest ranch-style homes and bungalows to multi-million ... Details\nFROM THE SITE\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName This field is for validation purposes and should be left unchanged. Name (Required) Email (Required) Phone Message (Required) Referrer URL Submit Search Asheville Area Homes More Save Search\nFreestone Properties\n$615,000\n$615,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,472 Beautiful home with absolutely breathtaking mountain views in Black \n$347,500\n$347,500 Swannanoa Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,288 Located in the highly sought-after Grovemont community, this charming hom\n$615,000\n$615,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,185 Experience the perfect blend of privacy, convenience, and charm in\nCLIENTS\nWhat Clients Are Saying Testimonials\n\" We have bought and sold seven homes so far with these being located all over the United States, including Hawaii. During the buying and selling process, we were privileged to work with many, outstanding real estate professionals. We have to say, Scott... continued \" - Jim and Linda W., Black Mountain, NC \" I can honestly say the property we sold would not have happened with that particular buyer without a patient agent representing our interest.\nFROM THE SITE\nMoving to Asheville, NC\nAsheville, North Carolina is one of those places that has a lasting effect on a person. Just at the mention of it, a person who...\n(828) 419-0444\nrealestate@freestoneproperties.com\nFreestone Properties\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour Asheville and Black Mountain Real Estate Partners\nTry another opening line\nYOUR INTRODUCTION\nFounded by Scott and Lisa Russell, Freestone Properties is a truly local, boutique real estate firm serving the Asheville and Black Mountain area. Our firm blends years of market expertise and personalized service with the innovative technology and robust resources of the largest real estate company in the Carolinas, through our partnership with Allen Tate/Beverly-Hanks. At Freestone, we believe real estate is more than transactions—it's about connections, local knowledge, and helping our clients navigate the constantly changing landscape of buying and selling homes. We take pride in offering customized strategies, continuous innovation, and a genuinely people-focused experience.\nTry another introduction\n3 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nJust a few more details\nWe couldn’t find these on your website.\nYour name\n▸ Brokerage & license (optional)\n✓ Freestone Properties\nStill needed: Your name\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nBLACK MOUNTAIN, NC\nAsheville & Black Mountain Real Estate\nBrowse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents.\nView listings\nTHE AREA\nWaynesville - Primary Community, NC\nView all Waynesville homes for sale Waynesville, NC is a town located southwest of Asheville. It’s the county seat of Haywood County and the biggest town west of Asheville before the North Carolina-Tennessee border. In addition to a warm and walkable downtown, the larger Waynesville area also contains quiet neighborhoods and rural communities. It is considered part of the Asheville metropolitan area, being only 45 minutes from the Asheville city center.\nTHE AREA\nArden\nLearn More Arden is one of the larger suburbs of Asheville, spreading across most of the southern portion of Buncombe County. Homes in Arden range from modest ranch-style homes and bungalows to multi-million ... Details\nFROM THE SITE\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName This field is for validation purposes and should be left unchanged. Name (Required) Email (Required) Phone Message (Required) Referrer URL Submit Search Asheville Area Homes More Save Search\nFreestone Properties\n$615,000\n$615,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,472 Beautiful home with absolutely breathtaking mountain views in Black \n$347,500\n$347,500 Swannanoa Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,288 Located in the highly sought-after Grovemont community, this charming hom\n$615,000\n$615,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,185 Experience the perfect blend of privacy, convenience, and charm in\nCLIENTS\nWhat Clients Are Saying Testimonials\n\" We have bought and sold seven homes so far with these being located all over the United States, including Hawaii. During the buying and selling process, we were privileged to work with many, outstanding real estate professionals. We have to say, Scott... continued \" - Jim and Linda W., Black Mountain, NC \" I can honestly say the property we sold would not have happened with that particular buyer without a patient agent representing our interest.\nFROM THE SITE\nMoving to Asheville, NC\nAsheville, North Carolina is one of those places that has a lasting effect on a person. Just at the mention of it, a person who...\n(828) 419-0444\nrealestate@freestoneproperties.com\nFreestone Properties\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED $615,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,472 Beautiful home with absolutely b",
+        "textLength": 676,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app BLACK MOUNTAIN, NC Asheville & Black Mountain Real Estate Browse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents. ",
+        "textLength": 2550,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all STATUS UNCONFIRMED $615,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,472 Beautiful home with absolutely b",
+        "textLength": 676,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9046,
+      "priceCount": 3,
+      "uniquePrices": 2,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-0.png"
+    }
+  ],
+  "wallMs": 30109,
+  "window": {
+    "startedAt": "2026-10-08T05:05:57.469Z",
+    "endedAt": "2026-10-08T05:06:27.578Z"
+  }
+}

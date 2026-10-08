@@ -1,0 +1,140 @@
+{
+  "id": "century21-barbara-patterson",
+  "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+  "category": "franchise",
+  "timeline": [
+    {
+      "at": 54,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 859,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1061,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading C21 loading...\nYour listings could not be read from this page\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2269,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading C21 loading...\nYour listings could not be read from this page\nMatching your website’s design and imagery\nWriting your profile and app copy"
+    },
+    {
+      "at": 4073,
+      "screen": "Building your app\nBUILD STOPPED\nReading C21 loading...\nYour listings could not be read from this page\nMatching your website’s design and imagery\nYour profile could not be written\nThe build stopped\nNo usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 423,
+      "totalMs": 4009,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "C21 loading...",
+          "host": "century21.com",
+          "at": 386
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 386
+        },
+        {
+          "kind": "design",
+          "portrait": false,
+          "logo": false,
+          "images": 0,
+          "sections": 1,
+          "at": 1478
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 1478
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 1478
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 1478
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 1478
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "failed",
+          "at": 3402
+        }
+      ],
+      "result": {
+        "status": 422,
+        "body": {
+          "code": "profile_empty",
+          "error": "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page."
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "century21-barbara-patterson-00-url.png",
+    "century21-barbara-patterson-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 2,
+    "text": []
+  },
+  "submittedAt": 4399,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nReading C21 loading...\nYour listings could not be read from this page\nMatching your website’s design and imagery\nYour profile could not be written\nThe build stopped\nNo usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nwww.century21.com/real-estate/barbara-patterson/O10000058\nBuilding your app\nBUILD STOPPED\nReading C21 loading...\nYour listings could not be read from this page\nMatching your website’s design and imagery\nYour profile could not be written\nThe build stopped\nNo usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page.\nListings: This website doesn't allow automatic access to that page. Paste another public listings or profile URL.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+      "status": 403,
+      "finalUrl": "https://www.century21.com/real-estate/barbara-patterson/O10000058",
+      "title": "ERROR: The request could not be satisfied",
+      "textLength": 513,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "403 ERROR\nThe request could not be satisfied.\nRequest blocked. We can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again later, or contact the app or website owner.\nIf you provide content to customers through CloudFront, you can find steps to troubleshoot and help prevent this error by reviewing the CloudFront documentation.\n\nGenerated by cloudfront (CloudFront)\nRequest ID: Zxj4Tkm3LOCu9i1bfdFV30vj_mOYh0YKMkdJu_Mml6WdNBqn8xtvVw==\n",
+      "challenge": false,
+      "screenshot": "century21-barbara-patterson-source-0.png"
+    }
+  ],
+  "wallMs": 429798,
+  "window": {
+    "startedAt": "2026-10-08T05:21:09.261Z",
+    "endedAt": "2026-10-08T05:28:19.059Z"
+  }
+}

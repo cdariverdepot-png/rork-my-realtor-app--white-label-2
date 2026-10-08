@@ -1,0 +1,613 @@
+[
+  {
+    "realtorId": "fda64dbe-30bc-4a26-ad5b-3f511677ef31",
+    "createdAt": "2026-10-08 05:31:36.314232+00",
+    "sources": [
+      {
+        "id": "source-1jrxsis",
+        "url": "https://ryan-realty.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791444704277,
+        "connectedAt": 1791437504277,
+        "listingCount": 37,
+        "submittedUrl": "https://ryan-realty.com/",
+        "inventoryUrls": [
+          "https://ryan-realty.com/"
+        ],
+        "lastCheckedAt": 1791437504277
+      }
+    ],
+    "listings": [
+      {
+        "title": "$1,695,000 3 bd 3 ba 2,304 sqft $736 /sqft 3333 Leavitt Lane Bend 97703 See this listing",
+        "price": "$1,695,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/discovery-west-phase-6-7/3333-leavitt-220227817",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "9147.6",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,304"
+      },
+      {
+        "title": "$2,895,000 5 bd · 7 ba · 4,826 sqft · $600/sqft 56350 Mirror Rock Loop Bend 97707",
+        "price": "$2,895,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/caldera-springs/56350-mirror-rock-220216436",
+        "photos": 5,
+        "descriptionLength": 65,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "19602",
+          "Year Built": "2025"
+        },
+        "beds": 5,
+        "baths": 7,
+        "sqft": "4,826"
+      },
+      {
+        "title": "$1,585,000 4 bd · 3 ba · 2,549 sqft · $622/sqft 2215 High Lakes Loop Bend 97703",
+        "price": "$1,585,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2215-high-lakes-220228229",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "9147.6",
+          "Year Built": "2006"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,549"
+      },
+      {
+        "title": "$875,000 4 bd · 4 ba · 2,912 sqft · $300/sqft 19976 Heron Loop Bend 97702",
+        "price": "$875,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/elkhorn-ridge/19976-heron-220227772",
+        "photos": 5,
+        "descriptionLength": 57,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6534",
+          "Year Built": "2002"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": "2,912"
+      },
+      {
+        "title": "$899,999 4 bd · 3 ba · 3,000 sqft · $300/sqft 60984 Snowberry Place Bend 97702",
+        "price": "$899,999",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/river-canyon-estates/60984-snowberry-220228355",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6534",
+          "Year Built": "2005"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "3,000"
+      },
+      {
+        "title": "$899,900 3 bd · 3 ba · 2,110 sqft · $426/sqft 20423 Heritage Avenue Bend 97702",
+        "price": "$899,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/woodside-ranch/20423-heritage-220222195",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "87120",
+          "Year Built": "1978"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,110"
+      },
+      {
+        "title": "Townhouse $444,900 3 bd · 3 ba · 1,450 sqft · $307/sqft 20738 Scout Place Bend 97702",
+        "price": "$444,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20738-scout-220221788",
+        "photos": 5,
+        "descriptionLength": 61,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "2178",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,450"
+      },
+      {
+        "title": "$599,900 3 bd · 3 ba · 2,088 sqft · $287/sqft 60844 Epic Place Bend 97702",
+        "price": "$599,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/60844-epic-220226289",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3049.2",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,088"
+      },
+      {
+        "title": "$649,900 3 bd · 3 ba · 2,010 sqft · $323/sqft 20896 Caldera Drive Bend 97702",
+        "price": "$649,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20896-caldera-220222571",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3920.4",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,010"
+      },
+      {
+        "title": "$649,900 3 bd · 3 ba · 2,010 sqft · $323/sqft 20895 Caldera Drive Bend 97702",
+        "price": "$649,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20895-caldera-220221989",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3920.4",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,010"
+      },
+      {
+        "title": "$684,900 3 bd · 3 ba · 2,141 sqft · $320/sqft 20892 Caldera Drive Bend 97702",
+        "price": "$684,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20892-caldera-220214438",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "5227.2",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,141"
+      },
+      {
+        "title": "$734,900 4 bd · 3 ba · 2,590 sqft · $284/sqft 60943 Apollo Place Bend 97702",
+        "price": "$734,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/60943-apollo-220207851",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3920.4",
+          "Year Built": "2026"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,590"
+      },
+      {
+        "title": "Price cut −3.2% Was $1,575,000 $1,525,000 3 bd 3 ba 2,849 sqft $535 /sqft 2966 Meldrum Court Bend 97703 See this listing",
+        "price": "$1,575,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/awbrey-butte/2966-meldrum-220227377",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "29185.2",
+          "Year Built": "2018"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,849"
+      },
+      {
+        "title": "Townhouse $1,297,000 3 bd · 4 ba · 2,943 sqft · $441/sqft 2563 Crossing Drive Bend 97703",
+        "price": "$1,297,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2563-crossing-220221404",
+        "photos": 5,
+        "descriptionLength": 65,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3920.4",
+          "Year Built": "2008"
+        },
+        "beds": 3,
+        "baths": 4,
+        "sqft": "2,943"
+      },
+      {
+        "title": "$1,695,000 4 bd · 4 ba · 2,714 sqft · $625/sqft 56964 Dancing Rock Loop Bend 97707",
+        "price": "$1,695,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/caldera-springs/56964-dancing-rock-220223844",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "10018.8",
+          "Year Built": "2022"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": "2,714"
+      },
+      {
+        "title": "Manufactured on land $299,900 3 bd · 2 ba · 1,782 sqft · $168/sqft 9290 3115 Road Culver 97734",
+        "price": "$299,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/culver/9290-3115-220222445",
+        "photos": 5,
+        "descriptionLength": 58,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "218235.6",
+          "Year Built": "2017"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,782"
+      },
+      {
+        "title": "$1,475,000 4 bd · 5 ba · 2,480 sqft · $595/sqft 62720 Ridge Rock Court Bend 97703",
+        "price": "$1,475,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/shevlin-bluffs/62720-ridge-rock-220228438",
+        "photos": 5,
+        "descriptionLength": 68,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "11325.6",
+          "Year Built": "2021"
+        },
+        "beds": 4,
+        "baths": 5,
+        "sqft": "2,480"
+      },
+      {
+        "title": "$915,000 2 bd · 2 ba · 992 sqft · $922/sqft 2765 High Lakes Loop Bend 97703",
+        "price": "$915,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-crossing/2765-high-lakes-220227670",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3049.2",
+          "Year Built": "2018"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": "992"
+      },
+      {
+        "title": "$435,000 3 bd · 2 ba · 1,201 sqft · $362/sqft 3301 Antler Ridge Lane Redmond 97756",
+        "price": "$435,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/antler-ridge/3301-antler-ridge-220226153",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "8712",
+          "Year Built": "2012"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,201"
+      },
+      {
+        "title": "$899,900 4 bd · 3 ba · 2,890 sqft · $311/sqft 19870 Powers Road Bend 97702",
+        "price": "$899,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/elkhorn-ridge/19870-powers-220224645",
+        "photos": 5,
+        "descriptionLength": 58,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6969.6",
+          "Year Built": "2001"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,890"
+      },
+      {
+        "title": "$845,000 4 bd · 3 ba · 2,870 sqft · $294/sqft 61235 Splendor Bend 97702",
+        "price": "$845,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/sun-meadow/61235-splendor-220222160",
+        "photos": 5,
+        "descriptionLength": 55,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "5227.2",
+          "Year Built": "2005"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,870"
+      },
+      {
+        "title": "$785,000 7 bd · 3 ba · 2,634 sqft · $298/sqft 59976 Hopi Road Bend 97702",
+        "price": "$785,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/deschutes-riverwoods/59976-hopi-220228584",
+        "photos": 5,
+        "descriptionLength": 56,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "39639.6",
+          "Year Built": "1986"
+        },
+        "beds": 7,
+        "baths": 3,
+        "sqft": "2,634"
+      },
+      {
+        "title": "Manufactured on land $265,000 4 bd · 2 ba · 1,344 sqft · $197/sqft 60948 Flint Lane Bend 97702",
+        "price": "$265,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/romaine-village/60948-flint-220227577",
+        "photos": 5,
+        "descriptionLength": 57,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "13503.6",
+          "Year Built": "1973"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": "1,344"
+      },
+      {
+        "title": "$625,000 3 bd · 2 ba · 1,810 sqft · $345/sqft 20711 Nicolette Drive Bend 97701",
+        "price": "$625,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/boyd-acres-view-est/20711-nicolette-220229168",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6534",
+          "Year Built": "2000"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,810"
+      },
+      {
+        "title": "Townhouse $435,000 3 bd 2 ba 1,102 sqft $395 /sqft 4020 Pumice Avenue Redmond 97756 See this listing",
+        "price": "$435,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/feather-ridge-phase-1/4020-pumice-220229723",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "3484.8",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,102"
+      },
+      {
+        "title": "$779,000 4 bd · 3 ba · 2,324 sqft · $335/sqft 60349 Sage Stone Loop Bend 97702",
+        "price": "$779,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/stonegate/60349-sage-stone-220229456",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4791.6",
+          "Year Built": "2007"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,324"
+      },
+      {
+        "title": "Duplex $999,990 2,024 sqft · $494/sqft 1204 Ithaca Avenue Bend 97703",
+        "price": "$999,990",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/northwest-townsite/1204-ithaca-220229547",
+        "photos": 5,
+        "descriptionLength": 46,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "10890",
+          "Year Built": "1972"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "2,024"
+      },
+      {
+        "title": "$1,049,900 3 bd · 2 ba · 1,989 sqft · $528/sqft 3119 Hidden Ridge Drive Bend 97703",
+        "price": "$1,049,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/rivers-edge-village/3119-hidden-ridge-220229593",
+        "photos": 5,
+        "descriptionLength": 69,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6098.4",
+          "Year Built": "2019"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,989"
+      },
+      {
+        "title": "$535,000 3 bd · 3 ba · 1,967 sqft · $272/sqft 1055 Leonel Lane Bend 97702",
+        "price": "$535,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/1055-leonel-220229717",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "2613.6",
+          "Year Built": "2015"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,967"
+      },
+      {
+        "title": "Townhouse $459,000 3 bd · 3 ba · 1,751 sqft · $262/sqft 20534 Empire Avenue Bend 97701",
+        "price": "$459,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/calaveras/20534-empire-220226617",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "1742.4",
+          "Year Built": "2022"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,751"
+      },
+      {
+        "title": "$474,000 3 bd · 2 ba · 1,318 sqft · $360/sqft 1575 Perspective Drive Prineville 97754",
+        "price": "$474,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/prineville/ironhorse/1575-perspective-220229362",
+        "photos": 5,
+        "descriptionLength": 66,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6534",
+          "Year Built": "2013"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,318"
+      },
+      {
+        "title": "$435,000 3 bd · 2 ba · 1,366 sqft · $318/sqft 3348 Hoona Drive Bend 97701",
+        "price": "$435,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/glacier-ridge/3348-hoona-220229721",
+        "photos": 5,
+        "descriptionLength": 60,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6098.4",
+          "Year Built": "2000"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,366"
+      },
+      {
+        "title": "$649,900 3 bd · 3 ba · 1,939 sqft · $335/sqft 20901 Denver Drive Bend 97702",
+        "price": "$649,900",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/bend/easton/20901-denver-220229720",
+        "photos": 5,
+        "descriptionLength": 62,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "4356",
+          "Year Built": "2026"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,939"
+      },
+      {
+        "title": "$370,000 3 bd · 3 ba · 1,224 sqft · $302/sqft 11260 Lister Avenue Prineville 97754",
+        "price": "$370,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/prineville/golden-horseshoe/11260-lister-220229718",
+        "photos": 5,
+        "descriptionLength": 63,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "9147.6",
+          "Year Built": "2002"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "1,224"
+      },
+      {
+        "title": "Manufactured on land $440,000 3 bd · 2 ba · 1,377 sqft · $320/sqft 7948 Shad Road Terrebonne 97760",
+        "price": "$440,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/terrebonne/crr-7/7948-shad-220229716",
+        "photos": 5,
+        "descriptionLength": 58,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "46609.2",
+          "Year Built": "2001"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": "1,377"
+      },
+      {
+        "title": "$445,000 2 bd · 2 ba · 1,720 sqft · $259/sqft 1834 Nickernut Place Redmond 97756",
+        "price": "$445,000",
+        "sourceUrl": "https://ryan-realty.com/homes-for-sale/redmond/the-cliffs/1834-nickernut-220229715",
+        "photos": 5,
+        "descriptionLength": 64,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Lot Size": "6969.6",
+          "Year Built": "2005"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": "1,720"
+      },
+      {
+        "title": "La Pine 170 houses for sale Median list price $495,000",
+        "price": "$495,000",
+        "sourceUrl": "https://ryan-realty.com/cities/la-pine",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

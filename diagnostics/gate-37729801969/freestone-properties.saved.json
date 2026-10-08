@@ -1,0 +1,61 @@
+[
+  {
+    "realtorId": "b1656f4b-2338-4d48-818b-c150c9bfc2ac",
+    "createdAt": "2026-10-08 05:05:59.249519+00",
+    "sources": [
+      {
+        "id": "source-nkdipb",
+        "url": "https://www.freestoneproperties.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791443163967,
+        "connectedAt": 1791435963967,
+        "listingCount": 3,
+        "submittedUrl": "https://www.freestoneproperties.com/",
+        "inventoryUrls": [
+          "https://www.freestoneproperties.com/"
+        ],
+        "lastCheckedAt": 1791435963967
+      }
+    ],
+    "listings": [
+      {
+        "title": "$615,000 Black Mountain Beds: 2 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,472 Beautiful home with absolutely breathtaking mountain views in Black ",
+        "price": "$615,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/285-mount-allen-heights-black-mountain/",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "$347,500 Swannanoa Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2 &nbsp;|&nbsp;&nbsp;SqFt: 1,288 Located in the highly sought-after Grovemont community, this charming hom",
+        "price": "$347,500",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/215-varden-place-swannanoa/",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "$615,000 Black Mountain Beds: 3 &nbsp;|&nbsp;&nbsp;Baths:: 2.5 &nbsp;|&nbsp;&nbsp;SqFt: 2,185 Experience the perfect blend of privacy, convenience, and charm in",
+        "price": "$615,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/554-sweet-birch-park-lane-black-mountain/",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

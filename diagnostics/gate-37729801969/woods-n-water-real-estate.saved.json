@@ -1,0 +1,63 @@
+[
+  {
+    "realtorId": "04ab8668-837d-4469-b2da-1ec08bca2963",
+    "createdAt": "2026-10-08 04:59:19.248144+00",
+    "sources": [
+      {
+        "id": "source-3h79ow",
+        "url": "https://www.woodsnwaterrealestate.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "nextSyncAt": 1791442764603,
+        "connectedAt": 1791435564603,
+        "listingCount": 3,
+        "submittedUrl": "https://www.woodsnwaterrealestate.com/",
+        "inventoryUrls": [
+          "https://woodsnwaterrealestate.com/"
+        ],
+        "lastCheckedAt": 1791435564603
+      }
+    ],
+    "listings": [
+      {
+        "title": "12 Listings",
+        "price": "$64,900",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/search/?My=listings&OrderBy=-ModificationTimestamp&pg=1&SavedSearch=20210102172055451402000000",
+        "photos": 0,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "$64,900 8112 M-77 Germfask, MI 49836",
+        "price": "$64,900",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/8112-M-77-Germfask-MI-49836-mls_25-766?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=n&pg=1&SavedSearch=20210102172055451402000000",
+        "photos": 1,
+        "descriptionLength": 200,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "$179,000 W18572 H-42 Curtis, MI 49820",
+        "price": "$179,000",
+        "sourceUrl": "https://woodsnwaterrealestate.com/idx/W18572-H-42-Curtis-MI-49820-mls_26-887?m=20041217205818829687000000&My=listings&n=y&OrderBy=-ModificationTimestamp&p=y&pg=1&SavedSearch=20210102172055451402000000",
+        "photos": 1,
+        "descriptionLength": 199,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]
