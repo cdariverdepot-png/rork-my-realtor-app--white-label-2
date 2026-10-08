@@ -10,7 +10,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "d5329ba394858001",
       "sites": [
         {
@@ -43,7 +43,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "43a04cbcd9360989",
       "sites": [
         {
@@ -149,7 +149,7 @@
       "ownerCode": [],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "9ffebbc59d143cba",
       "sites": [
         {
@@ -315,7 +315,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "5849995abb2cc7ae",
       "sites": [
         {
@@ -414,7 +414,7 @@
       ],
       "status": "open",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "18fe8af664e1a653",
       "sites": [
         {
@@ -570,7 +570,7 @@
             "target": "13 -> 0",
             "problems": []
           },
-          "note": "Rejected by a gate harness defect, not by the candidate: Node 24 prints '\u2139 pass N' and the gate parsed only TAP ('# pass N'), so the suite read as '0 passed, NaN failed'. Fixed in 2c30878; the same candidate was then gated again and accepted."
+          "note": "Rejected by a gate harness defect, not by the candidate: Node 24 prints 'ℹ pass N' and the gate parsed only TAP ('# pass N'), so the suite read as '0 passed, NaN failed'. Fixed in 2c30878; the same candidate was then gated again and accepted."
         },
         {
           "at": "2026-10-08T17:23:55.216Z",
@@ -601,7 +601,7 @@
       ],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "ad1098bc29198b26",
       "sites": [
         {
@@ -646,7 +646,7 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "08caf8876fc4a2e6",
       "sites": [
         {
@@ -706,7 +706,7 @@
       "ownerCode": [],
       "status": "not_code",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "89f4e5443044d67d",
       "sites": [
         {
@@ -750,7 +750,7 @@
       ],
       "status": "needs_review",
       "firstSeen": "2026-10-08T16:31:29.309Z",
-      "lastSeen": "2026-10-08T17:22:44.054Z",
+      "lastSeen": "2026-10-08T17:25:19.310Z",
       "evidenceHash": "a2d35fcb2aa5ba2d",
       "sites": [
         {
@@ -780,5 +780,5 @@
       "attempts": []
     }
   },
-  "lastEvaluation": "2026-10-08T17:22:43.981Z"
+  "lastEvaluation": "2026-10-08T17:25:19.210Z"
 }

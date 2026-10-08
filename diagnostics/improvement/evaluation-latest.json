@@ -1,5 +1,5 @@
 {
-  "evaluatedAt": "2026-10-08T17:22:43.981Z",
+  "evaluatedAt": "2026-10-08T17:25:19.210Z",
   "engine": "working tree",
   "sites": [
     {
@@ -9,7 +9,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:28:24.722Z",
-      "cpuMs": 141,
+      "cpuMs": 214,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -70,7 +70,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:09.958Z",
-      "cpuMs": 3,
+      "cpuMs": 4,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -101,7 +101,7 @@
       "holdout": false,
       "architecture": "candidate:flexmls",
       "capturedAt": "2026-10-08T04:24:58.470Z",
-      "cpuMs": 11,
+      "cpuMs": 14,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -132,7 +132,7 @@
       "holdout": false,
       "architecture": "candidate:static_html",
       "capturedAt": "2026-10-08T04:29:31.496Z",
-      "cpuMs": 10,
+      "cpuMs": 14,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -168,7 +168,7 @@
       "holdout": false,
       "architecture": "unrecognized",
       "capturedAt": "2026-10-08T04:29:35.755Z",
-      "cpuMs": 25,
+      "cpuMs": 34,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -203,7 +203,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:09.828Z",
-      "cpuMs": 406,
+      "cpuMs": 578,
       "imported": 20,
       "missing": 0,
       "listings": [
@@ -397,7 +397,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:22.303Z",
-      "cpuMs": 33,
+      "cpuMs": 47,
       "imported": 3,
       "missing": 0,
       "listings": [
@@ -438,7 +438,7 @@
       "holdout": false,
       "architecture": "property-cards+public-json",
       "capturedAt": "2026-10-08T04:27:20.976Z",
-      "cpuMs": 98,
+      "cpuMs": 137,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -614,7 +614,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:17.303Z",
-      "cpuMs": 305,
+      "cpuMs": 430,
       "imported": 1,
       "missing": 0,
       "listings": [
@@ -637,7 +637,7 @@
       "holdout": false,
       "architecture": "candidate:wordpress",
       "capturedAt": "2026-10-08T04:27:21.799Z",
-      "cpuMs": 5,
+      "cpuMs": 9,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -672,7 +672,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:54.552Z",
-      "cpuMs": 115,
+      "cpuMs": 159,
       "imported": 12,
       "missing": 0,
       "listings": [
@@ -822,7 +822,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:27:11.021Z",
-      "cpuMs": 533,
+      "cpuMs": 816,
       "imported": 7,
       "missing": 0,
       "listings": [
@@ -929,7 +929,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:25.319Z",
-      "cpuMs": 385,
+      "cpuMs": 576,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -1000,7 +1000,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:28:38.249Z",
-      "cpuMs": 32,
+      "cpuMs": 49,
       "imported": 15,
       "missing": 0,
       "listings": [
@@ -1015,7 +1015,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261373/",
-          "title": "$8,500,000",
+          "title": "Cottage Island, Hope, ID 83836",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1284,
@@ -1024,7 +1024,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20262172/",
-          "title": "$6,970,000",
+          "title": "717 Olson Dr., Dover, ID 83825",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 2025,
@@ -1033,7 +1033,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261646/",
-          "title": "$6,490,000",
+          "title": "802 Sandpoint Ave #8201 & 8202, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1463,
@@ -1042,7 +1042,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261912/",
-          "title": "$4,990,000",
+          "title": "802 Sandpoint Ave #8404, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1319,
@@ -1051,7 +1051,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261623/",
-          "title": "$4,950,000",
+          "title": "172 Elk Hills Rd, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 3066,
@@ -1060,7 +1060,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261626/",
-          "title": "$4,800,000",
+          "title": "Lot 2 Basin Express, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1033,
@@ -1069,7 +1069,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261740/",
-          "title": "$4,500,000",
+          "title": "802 Sandpoint Ave #8403, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1381,
@@ -1078,7 +1078,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261661/",
-          "title": "$4,490,000",
+          "title": "802 Sandpoint Ave #8304, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1846,
@@ -1087,7 +1087,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261961/",
-          "title": "$4,150,000",
+          "title": "5033 E Dodd Rd., Hayden, ID 83835",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 2446,
@@ -1096,7 +1096,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20262164/",
-          "title": "$3,970,000",
+          "title": "417 Ravenwood Dr, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 2019,
@@ -1114,7 +1114,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261649/",
-          "title": "$3,200,000",
+          "title": "37 Birch Haven, Sagle, ID 83860-8803",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1439,
@@ -1123,7 +1123,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261624/",
-          "title": "$3,200,000",
+          "title": "172 Elk Hills Rd, Sandpoint, ID 83864",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 2406,
@@ -1132,7 +1132,7 @@
         },
         {
           "sourceUrl": "https://www.realmidaho.com/property/20261081/",
-          "title": "$2,500,000",
+          "title": "239 Pierce Ln, Sagle, ID 83860",
           "ownership": "own",
           "listingOffice": "REALM PARTNERS, LLC",
           "description": 1425,
@@ -1141,49 +1141,6 @@
         }
       ],
       "findings": [
-        {
-          "site": "realm-partners-idaho",
-          "set": "regression",
-          "category": "brokerage",
-          "architecture": "property-cards",
-          "code": "TITLE_NOT_PROPERTY",
-          "defectKind": "code_defect",
-          "severity": 3,
-          "count": 13,
-          "examples": [
-            {
-              "sourceUrl": "https://www.realmidaho.com/property/20261373/",
-              "title": "$8,500,000",
-              "detailPageNames": "Cottage Island, Hope, ID",
-              "detailPage": "recorded"
-            },
-            {
-              "sourceUrl": "https://www.realmidaho.com/property/20262172/",
-              "title": "$6,970,000",
-              "detailPageNames": "717 Olson Dr., Dover, ID",
-              "detailPage": "recorded"
-            },
-            {
-              "sourceUrl": "https://www.realmidaho.com/property/20261646/",
-              "title": "$6,490,000",
-              "detailPageNames": "802 Sandpoint Ave #8201 \\u0026 8202, Sandpoint, ID",
-              "detailPage": "recorded"
-            },
-            {
-              "sourceUrl": "https://www.realmidaho.com/property/20261912/",
-              "title": "$4,990,000",
-              "detailPageNames": "802 Sandpoint Ave #8404, Sandpoint, ID",
-              "detailPage": "recorded"
-            },
-            {
-              "sourceUrl": "https://www.realmidaho.com/property/20261623/",
-              "title": "$4,950,000",
-              "detailPageNames": "172 Elk Hills Rd, Sandpoint, ID",
-              "detailPage": "recorded"
-            }
-          ],
-          "detail": "The property detail page names the property, but the imported title is a price, card text or label."
-        },
         {
           "site": "realm-partners-idaho",
           "set": "regression",
@@ -1249,7 +1206,7 @@
       "holdout": false,
       "architecture": "ihomefinder",
       "capturedAt": "2026-10-08T04:27:27.234Z",
-      "cpuMs": 34,
+      "cpuMs": 55,
       "imported": 100,
       "missing": 0,
       "listings": [
@@ -2286,7 +2243,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:26:49.820Z",
-      "cpuMs": 27,
+      "cpuMs": 37,
       "imported": 0,
       "missing": 4,
       "listings": [],
@@ -2350,7 +2307,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:29:55.391Z",
-      "cpuMs": 253,
+      "cpuMs": 388,
       "imported": 36,
       "missing": 0,
       "listings": [
@@ -2688,7 +2645,7 @@
       "holdout": false,
       "architecture": "candidate:wix",
       "capturedAt": "2026-10-08T04:29:58.580Z",
-      "cpuMs": 84,
+      "cpuMs": 116,
       "imported": 0,
       "missing": 0,
       "listings": [],
@@ -2726,7 +2683,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:30:03.893Z",
-      "cpuMs": 47,
+      "cpuMs": 71,
       "imported": 6,
       "missing": 0,
       "listings": [
@@ -2794,7 +2751,7 @@
       "holdout": false,
       "architecture": "property-cards",
       "capturedAt": "2026-10-08T04:25:01.164Z",
-      "cpuMs": 14,
+      "cpuMs": 21,
       "imported": 2,
       "missing": 0,
       "listings": [
@@ -2848,7 +2805,7 @@
       "holdout": false,
       "architecture": "candidate:next",
       "capturedAt": "2026-10-08T04:29:45.911Z",
-      "cpuMs": 21,
+      "cpuMs": 30,
       "imported": 0,
       "missing": 0,
       "listings": [],
