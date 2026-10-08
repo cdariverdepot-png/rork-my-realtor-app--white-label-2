@@ -118,3 +118,55 @@ test('the build screen keeps the activity and offers the reason, what was kept, 
   // Only account/ownership problems stop the profile build when listings could not be imported.
   assert.match(setup, /error instanceof ListingImportError && \(error\.status === 401 \|\| error\.status === 403\)\) throw error/);
 });
+
+/** listingSourceService with a signed-in session and scripted refresh-listings responses. */
+const listingService = responses => {
+  const calls = [];
+  const service = loadModule('lib/listingSourceService.ts', {
+    './supabase': { supabase: { auth: { getSession: async () => ({ data: { session: { access_token: 't' } }, error: null }) } } },
+    '@/lib/importStream': { invokeWithProgress: async (_, body) => {
+      calls.push(body);
+      const next = responses.shift();
+      if (next instanceof Error) throw next;
+      return { status: 200, body: next };
+    } },
+  });
+  return { service, calls };
+};
+
+test('setup keeps reading deferred details job by job until every listing was attempted', async () => {
+  const { service, calls } = listingService([
+    { ok: true, imported: 60, source: { id: 'src' }, detailsPending: 48, detailsSince: 77, items: [] },
+    { ok: true, attempted: 25, detailsPending: 23, items: [{ id: 'a' }] },
+    { ok: true, attempted: 23, remaining: 0, items: [{ id: 'b' }], warning: '3 listings have incomplete property details.' },
+  ]);
+  const result = await service.connectListingSource('https://agent.example/listings', 'r1', () => {});
+  assert.deepEqual(calls.map(c => c.mode), ['connect', 'details', 'details']);
+  assert.ok(calls.slice(1).every(c => c.sourceId === 'src' && c.since === 77), 'every job belongs to the same import');
+  assert.equal(result.imported, 60);
+  assert.equal(result.detailsPending, 0);
+  assert.deepEqual(result.items, [{ id: 'b' }]);
+  assert.match(result.warning, /3 listings have incomplete/);
+});
+
+test('an interrupted detail job keeps the import and says exactly what is still missing', async () => {
+  const { service, calls } = listingService([
+    { ok: true, imported: 60, source: { id: 'src' }, detailsPending: 48, detailsSince: 77, items: [{ id: 'cards' }] },
+    { ok: true, attempted: 25, detailsPending: 23, items: [{ id: 'first-batch' }] },
+    new Error('The import was interrupted before it finished. Anything already saved is kept.'),
+  ]);
+  const result = await service.connectListingSource('https://agent.example/listings', 'r1', () => {});
+  assert.equal(calls.length, 3);
+  assert.equal(result.imported, 60, 'the saved inventory is still reported');
+  assert.deepEqual(result.items, [{ id: 'first-batch' }], 'details read before the interruption are kept');
+  assert.match(result.warning, /Full details for 23 of them could not be read this time.*Sync your listings to try again/);
+});
+
+test('a detail job that makes no progress ends the loop instead of repeating', async () => {
+  const { service, calls } = listingService([
+    { ok: true, imported: 5, source: { id: 'src' }, detailsPending: 5, detailsSince: 9 },
+    { ok: true, attempted: 0, detailsPending: 5 },
+  ]);
+  await service.connectListingSource('https://agent.example/listings', 'r1', () => {});
+  assert.equal(calls.length, 2);
+});

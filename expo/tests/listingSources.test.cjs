@@ -360,3 +360,41 @@ test('split structured house records retain facts only for the matching property
  const result=discovery.enrichListingFromPage(item,page,new URL(item.sourceUrl));
  assert.equal(result.facts['Year Built'],'1986');
 });
+
+// Repair campaign stage 1 (synthetic contract): property details are read in bounded jobs. The
+// inventory job saves every listing and reads the first details; each detail job reads the next
+// batch for the same import. Every listing is attempted exactly once and each batch is saved.
+test('a large import saves its inventory first, then reads every listing’s details in bounded jobs', async () => {
+  const scope = '11111111-1111-1111-1111-111111111111';
+  const { INVENTORY_JOB_DETAILS, DETAIL_JOB_SIZE } = pure.load('refresh-listings/sourceHandler.ts');
+  const numbers = Array.from({ length: 30 }, (_, i) => 100 + i);
+  const pages = { [source.url]: html(numbers.map(n => home(n))) };
+  for (const n of numbers) pages[home(n).url] = html(home(n));
+  const rows = {};
+  const first = await endpoint({ body: { mode: 'connect', url: source.url }, pages, rows });
+  assert.equal(first.status, 200);
+  assert.equal(first.result.imported, 30, 'the whole inventory is saved by the first job');
+  assert.equal(first.result.detailsPending, 30 - INVENTORY_JOB_DETAILS);
+  const since = first.result.detailsSince;
+  const attempted = () => rows[scope + ':listings.v2'].value.items.filter(item => item.detailAttemptAt >= since).length;
+  assert.equal(rows[scope + ':listings.v2'].value.items.length, 30);
+  assert.equal(attempted(), INVENTORY_JOB_DETAILS);
+  assert.equal(first.result.warning, undefined, 'unread details are pending, not reported as unavailable');
+
+  const second = await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since }, pages, rows });
+  assert.equal(second.status, 200);
+  assert.equal(second.result.attempted, Math.min(DETAIL_JOB_SIZE, 30 - INVENTORY_JOB_DETAILS));
+  assert.equal(second.result.remaining, 0);
+  assert.equal(second.fetched, second.result.attempted + 1 /* robots.txt */, 'only this batch’s detail pages are read');
+  assert.equal(attempted(), 30, 'every listing was attempted exactly once across the jobs');
+
+  const third = await endpoint({ body: { mode: 'details', sourceId: first.result.source.id, since }, pages, rows });
+  assert.equal(third.result.attempted, 0, 'a finished import has nothing left to read');
+  assert.equal(third.fetched, 0);
+});
+
+test('a detail job needs the import it belongs to', async () => {
+  const result = await endpoint({ body: { mode: 'details', sourceId: 'source' } });
+  assert.equal(result.status, 400);
+  assert.equal(result.fetched, 0);
+});

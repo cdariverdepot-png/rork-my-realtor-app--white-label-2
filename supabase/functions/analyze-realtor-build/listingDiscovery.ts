@@ -28,6 +28,34 @@ export type DiscoveredListing = {
   facts?: Record<string, string>;
 };
 
+/**
+ * Per-document memo. One fetched page is examined by several readers (architecture, interface
+ * detection, public fragments, navigation, extraction, per-property status) and several of them
+ * used to re-scan the same HTML from scratch, once per caller or once per listing on the page.
+ * Each pure derivation of (html, base URL) is now computed once. Bounded to the most recent
+ * documents so a 160-page crawl never retains every page; results are returned as copies so no
+ * caller can alter what another caller sees.
+ */
+const DOCUMENT_MEMO_LIMIT = 8;
+const documentMemos = new Map<string, Map<string, unknown>>();
+function documentOnce<T>(html: string, key: string, compute: () => T): T {
+  let memo = documentMemos.get(html);
+  if (memo) { documentMemos.delete(html); documentMemos.set(html, memo); }
+  else {
+    memo = new Map();
+    documentMemos.set(html, memo);
+    if (documentMemos.size > DOCUMENT_MEMO_LIMIT) documentMemos.delete(documentMemos.keys().next().value as string);
+  }
+  if (memo.has(key)) return memo.get(key) as T;
+  const value = compute();
+  memo.set(key, value);
+  return value;
+}
+/** Strategy and adapter applicability is a property of the document; it is decided once per id. */
+function documentMatches(id: string, matches: (html: string, base: URL) => boolean, html: string, base: URL): boolean {
+  return documentOnce(html, `matches:${id}|${base.href}`, () => matches(html, base));
+}
+
 export type ListingDiscoveryMeta = {
   /** Versioned architectural evidence, including failed/empty attempts, never widget credentials. */
   compatibility?: { version: 1; pages: CompatibilityPage[] };
@@ -61,7 +89,9 @@ export type ListingDiscoveryMeta = {
     importedEligible: number;
     eligibleImportComplete: boolean;
   };
-  enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number };
+  enrichment?: { status: "enrichment_complete" | "enrichment_partial" | "enrichment_unavailable" | "enrichment_not_requested"; scheduled: number; attempted: number; enriched: number; failed: number;
+    /** Listings (source URLs) whose details were left for follow-up detail jobs (detailBudget). */
+    deferred?: string[] };
   /** Machine-readable obstacles. Never a substitute for extracted listings. */
   obstacles?: { code: string; url?: string; detail?: string }[];
   stages?: string[];
@@ -175,6 +205,10 @@ export function scoreInventoryLink(href: string, label: string, seed: URL): numb
 
 /** Collect outbound inventory CTAs from a page. */
 export function collectInventoryLinks(html: string, base: URL, limit = 8): { url: string; score: number; label: string }[] {
+  return documentOnce(html, `inventoryLinks|${base.href}`, () => rankedInventoryLinks(html, base)).slice(0, limit).map(link => ({ ...link }));
+}
+
+function rankedInventoryLinks(html: string, base: URL): { url: string; score: number; label: string }[] {
   const seen = new Set<string>();
   const out: { url: string; score: number; label: string }[] = [];
   const hrefs = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
@@ -219,10 +253,15 @@ export function collectInventoryLinks(html: string, base: URL, limit = 8): { url
     const url = raw ? absolutize(raw, base) : null;
     if (url && !seen.has(url) && !LOGIN_PATH.test(new URL(url).pathname)) out.push({ url, score: 160, label: "Page redirect" });
   }
-  return out.sort((a, b) => b.score - a.score).slice(0, limit);
+  return out.sort((a, b) => b.score - a.score);
 }
 
+/** Parsed JSON-LD blocks, parsed once per document (readers only walk them, never modify them). */
 function jsonLdBlocks(html: string): unknown[] {
+  return documentOnce(html, "jsonLd", () => parseJsonLdBlocks(html)).slice();
+}
+
+function parseJsonLdBlocks(html: string): unknown[] {
   const out: unknown[] = [];
   const re = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
   let m: RegExpExecArray | null;
@@ -628,7 +667,7 @@ function extractPropertyRecords(html: string, base: URL, attempts?: StrategyAtte
   const seen = new Set<string>();
   for (const strategy of LISTING_EXTRACTION_STRATEGIES) {
     if (strategy.phase === "fallback" && merged.length) break;
-    if (!strategy.matches(html, base)) continue;
+    if (!documentMatches(strategy.id, strategy.matches, html, base)) continue;
     let rows: DiscoveredListing[];
     try { rows = strategy.extract(html, base); }
     catch { attempts?.push({ id: strategy.id, version: strategy.version, evidence: strategy.evidence, outcome: "error", records: 0 }); continue; }
@@ -706,6 +745,34 @@ export function isProductEligible(item: Pick<DiscoveredListing, "status" | "sour
 
 const propertyIdentity = (value: unknown) => typeof value === "string" ? value.toLowerCase().replace(/[^a-z0-9]/g, "") : "";
 
+/** Document-level status evidence shared by every listing read from the same page. */
+function statusEvidenceOf(html: string) {
+  const nodes = jsonLdBlocks(html);
+  for (const m of html.matchAll(/<script\b[^>]*type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { nodes.push(JSON.parse(m[1])); } catch { /* malformed hydration */ }
+  }
+  const cards: Record<string, unknown>[] = [];
+  for (const m of html.matchAll(/<[^>]+\bdata-listing=["'][^>]+>/gi)) {
+    try { cards.push(JSON.parse(attr(m[0], "data-listing"))); } catch { /* malformed card */ }
+  }
+  const metas = html.match(/<meta\b[^>]*>/gi) ?? [];
+  const headings = [...html.matchAll(/<(?:h1|title)\b[^>]*>([\s\S]*?)<\/(?:h1|title)>/gi)].map(m => stripTags(m[1]));
+  for (const tag of metas) if (attr(tag, "property") === "og:title") headings.push(attr(tag, "content"));
+  const metaStatuses = metas.filter(tag => /^(?:listing:status|property:status|listingstatus|standardstatus)$/i.test(attr(tag, "property") || attr(tag, "name")))
+    .map(tag => attr(tag, "content"));
+  // Read only on an identified detail page, then kept: the main column (status badges of recommended
+  // properties farther down the page are not this property's) and its text.
+  let column: { badges: string[]; text: () => string } | undefined;
+  const mainColumn = () => column ??= (() => {
+    let main = html.replace(/<(?:script|style|nav|footer)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer)>/gi, "");
+    main = main.split(/<(?:h2|h3)\b|(?:related|similar|recommended|recently sold)\s+(?:homes|properties|listings)/i)[0];
+    const badges = [...main.matchAll(/<(?:span|div|p|strong)\b[^>]*(?:class|id)=["'][^"']*(?:listing-status|property-status|standard-status)[^"']*["'][^>]*>([^<]*)<\//gi)].map(m => m[1]);
+    let text: string | undefined;
+    return { badges, text: () => text ??= stripTags(main) };
+  })();
+  return { nodes, cards, headings, metaStatuses, mainColumn };
+}
+
 /** Only use status attached to the matching property; recommendations and navigation are excluded. */
 export function statusForProperty(html: string, item: Pick<DiscoveredListing, "title" | "sourceUrl">, base: URL): DiscoveredListing["status"] {
   const expected = propertyIdentity(item.title);
@@ -725,33 +792,22 @@ export function statusForProperty(html: string, item: Pick<DiscoveredListing, "t
     return [obj.StreetAddress, obj.streetAddress, obj.UnparsedAddress, obj.addressLine1, address, obj.name, obj.title]
       .some(value => propertyIdentity(value) === expected);
   };
-  const nodes = jsonLdBlocks(html);
-  for (const m of html.matchAll(/<script\b[^>]*type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
-    try { nodes.push(JSON.parse(m[1])); } catch { /* malformed hydration */ }
-  }
-  walkLd(nodes, obj => { if (!matched && matches(obj)) matched = statusFrom(obj); });
+  // The page's structured data is parsed once per document, not once per listing on the page.
+  const page = documentOnce(html, "statusEvidence", () => statusEvidenceOf(html));
+  walkLd(page.nodes, obj => { if (!matched && matches(obj)) matched = statusFrom(obj); });
   if (matched) return matched;
-  for (const m of html.matchAll(/<[^>]+\bdata-listing=["'][^>]+>/gi)) {
-    try { const obj = JSON.parse(attr(m[0], "data-listing")); if (matches(obj)) { const status = statusFrom(obj); if (status) return status; } } catch { /* malformed card */ }
+  for (const obj of page.cards) {
+    try { if (matches(obj)) { const status = statusFrom(obj); if (status) return status; } } catch { /* malformed card */ }
   }
   // Visible labels are accepted only on an identified property detail page.
-  const headings = [...html.matchAll(/<(?:h1|title)\b[^>]*>([\s\S]*?)<\/(?:h1|title)>/gi)].map(m => stripTags(m[1]));
-  for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) if (attr(tag, "property") === "og:title") headings.push(attr(tag, "content"));
-  const identified = headings.some(title => propertyIdentity(title) === expected ||
+  const identified = page.headings.some(title => propertyIdentity(title) === expected ||
     title.split(/\s[|–—]\s/).some(part => propertyIdentity(part) === expected));
   if (identified) {
-    for (const tag of html.match(/<meta\b[^>]*>/gi) ?? []) {
-      if (/^(?:listing:status|property:status|listingstatus|standardstatus)$/i.test(attr(tag, "property") || attr(tag, "name"))) {
-        const status = normalizeListingStatus(attr(tag, "content")); if (status) return status;
-      }
+    for (const value of page.metaStatuses) { const status = normalizeListingStatus(value); if (status) return status; }
+    for (const badge of page.mainColumn().badges) {
+      const status = normalizeListingStatus(stripTags(badge).replace(/^status\s*:\s*/i, "")); if (status) return status;
     }
-    let main = html.replace(/<(?:script|style|nav|footer)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer)>/gi, "");
-    // Do not consume status badges belonging to recommended properties farther down the page.
-    main = main.split(/<(?:h2|h3)\b|(?:related|similar|recommended|recently sold)\s+(?:homes|properties|listings)/i)[0];
-    for (const m of main.matchAll(/<(?:span|div|p|strong)\b[^>]*(?:class|id)=["'][^"']*(?:listing-status|property-status|standard-status)[^"']*["'][^>]*>([^<]*)<\//gi)) {
-      const status = normalizeListingStatus(stripTags(m[1]).replace(/^status\s*:\s*/i, "")); if (status) return status;
-    }
-    const label = stripTags(main).match(/\b(?:listing status|property status|standard status|MLS status)\s*:\s*(active under contract|active contingent|off[- ]market|for sale|active|pending|contingent|sold|closed|withdrawn|expired|cancelled)\b/i);
+    const label = page.mainColumn().text().match(/\b(?:listing status|property status|standard status|MLS status)\s*:\s*(active under contract|active contingent|off[- ]market|for sale|active|pending|contingent|sold|closed|withdrawn|expired|cancelled)\b/i);
     const status = normalizeListingStatus(label?.[1]); if (status) return status;
   }
   return undefined;
@@ -1071,6 +1127,10 @@ export function architectureCandidates(html: string, base?: URL): { id: string; 
  * An unscoped "all listings" source is the market, not the agent's collection.
  */
 export function chimeListingSearchRequests(html: string, base: URL): string[] {
+  return documentOnce(html, `chimeRequests|${base.href}`, () => chimeListingSearchRequestsOf(html, base)).slice();
+}
+
+function chimeListingSearchRequestsOf(html: string, base: URL): string[] {
   if (!/static\.chimeroi\.com|cdn\.chime\.me|sitePageJSON|pageJsonAndGlobalData/i.test(html)) return [];
   const sources = new Set<string>();
   for (const match of decodeScriptLiterals(html).matchAll(/listingSource["']?\s*[:=]\s*["']([^"']+)["']/g)) {
@@ -1274,6 +1334,10 @@ export function listingsFromPublicJson(text: string, base: URL): DiscoveredListi
 
 /** Public Kestrel widget requests: retain featured scope and never use a general MLS search. */
 export function kestrelInventoryRequests(html: string): { url: string; activationToken: string }[] {
+  return documentOnce(html, "kestrelRequests", () => kestrelInventoryRequestsOf(html)).map(request => ({ ...request }));
+}
+
+function kestrelInventoryRequestsOf(html: string): { url: string; activationToken: string }[] {
   if (!/kestrel\.idxhome\.com\/ihf-kestrel\.js/i.test(html)) return [];
   const raw = html.match(/ihfKestrel\.config\s*=\s*(\{[^;]+\})\s*;/)?.[1];
   let activationToken = "";
@@ -1413,7 +1477,7 @@ export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
 ];
 
 export function detectListingInterfaces(html: string, base: URL): string[] {
-  return LISTING_INTERFACE_ADAPTERS.filter(a => a.matches(html,base)).map(a => a.id);
+  return LISTING_INTERFACE_ADAPTERS.filter(a => documentMatches(a.id, a.matches, html, base)).map(a => a.id);
 }
 
 export type StrategyAttempt = {
@@ -1486,6 +1550,10 @@ export function describeListingArchitecture(html: string, base: URL, rendering: 
 
 /** Recognize unsupported dynamic providers without pretending their data was read. */
 function dynamicInterfaceHint(html: string): string | undefined {
+  return documentOnce(html, "dynamicHint", () => dynamicInterfaceHintOf(html));
+}
+
+function dynamicInterfaceHintOf(html: string): string | undefined {
   if (/static\.chimeroi\.com|cdn\.chime\.me|sitePageJSON|pageJsonAndGlobalData/i.test(html)) return "chime-site-search";
   for (const [id, pattern] of [
     ["ihomefinder", /ihomefinder|idxhome\.com|ihf-container|ihf-main-container/i],
@@ -1502,7 +1570,11 @@ function dynamicInterfaceHint(html: string): string | undefined {
 
 /** Public fragments keep the exact agent/category/filter instead of broadening the search. */
 export function collectInventoryFragments(html: string, base: URL): string[] {
-  const out = LISTING_INTERFACE_ADAPTERS.filter(adapter => adapter.matches(html,base)).flatMap(adapter => adapter.fragments?.(html,base) ?? []);
+  return documentOnce(html, `fragments|${base.href}`, () => inventoryFragmentsOf(html, base)).slice();
+}
+
+function inventoryFragmentsOf(html: string, base: URL): string[] {
+  const out = LISTING_INTERFACE_ADAPTERS.filter(adapter => documentMatches(adapter.id, adapter.matches, html, base)).flatMap(adapter => adapter.fragments?.(html,base) ?? []);
   for (const url of chimeListingSearchRequests(html, base)) out.push(url);
   for (const tag of html.match(/<[^>]+\bdata-(?:listings|results|inventory)-(?:url|src)=["'][^>]+>/gi) ?? []) {
     const raw = attr(tag, "data-listings-url") || attr(tag, "data-results-url") || attr(tag, "data-inventory-url") ||
@@ -1526,6 +1598,25 @@ export function collectInventoryFragments(html: string, base: URL): string[] {
 
 function visibleDocument(html: string): string {
   return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ");
+}
+
+const PAGER_PARAM = /^(?:page(?:_\d+)?|pageNumber|offset|limit|per_page|q_offset|cursor|after|start)$/i;
+const PAGER_LABEL = /^\s*(?:\d{1,4}|next|prev(?:ious)?|first|last|more|[»«›‹>]+|…)\s*(?:page)?\s*$/i;
+
+/**
+ * A pager link of the document being read (same address, only page position or pager-only scope
+ * changed). It is a continuation of this collection, never a step toward the agent's inventory:
+ * continuations are followed only from a page that produced listings (inspectCollectionDocument).
+ * Following them as navigation crawls every page × pager combination of collections we cannot read.
+ */
+export function isPagerOf(target: string, base: URL, label: string): boolean {
+  let next: URL;
+  try { next = new URL(target); } catch { return false; }
+  if (next.origin !== base.origin || next.pathname.replace(/\/+$/, "") !== base.pathname.replace(/\/+$/, "")) return false;
+  const keys = new Set([...next.searchParams.keys(), ...base.searchParams.keys()]);
+  const changed = [...keys].filter(key => next.searchParams.getAll(key).join("\u0000") !== base.searchParams.getAll(key).join("\u0000"));
+  if (!changed.length) return false;
+  return changed.every(key => PAGER_PARAM.test(key)) || (PAGER_LABEL.test(label) && changed.some(key => PAGER_PARAM.test(key)));
 }
 
 function sameCollectionQuery(next: URL, base: URL): boolean {
@@ -1849,6 +1940,10 @@ function nextPublishedOffsetUrl(current: URL, total: number, rows: number): stri
 }
 
 function paginationLinks(html: string, base: URL): string[] {
+  return documentOnce(html, `pagination|${base.href}`, () => paginationLinksOf(html, base)).slice();
+}
+
+function paginationLinksOf(html: string, base: URL): string[] {
   const out: string[] = [];
   try {
     const payload=JSON.parse(html), raw=payload.nextUrl ?? payload["@odata.nextLink"] ?? payload.links?.next ?? payload.pagination?.nextUrl;
@@ -2151,6 +2246,11 @@ export async function discoverListings(
     maxRenders?: number;
     /** Enrich every discovered listing. Detail requests do not consume the collection page budget. */
     enrichAll?: boolean;
+    /**
+     * With enrichAll: read details for at most this many listings in this job. The rest are reported
+     * as deferred (meta.enrichment.deferred) for follow-up detail jobs; nothing is skipped or marked read.
+     */
+    detailBudget?: number;
     /** User-authorized session cookie. Never logged, stored in meta, or written into fixtures. */
     sessionCookie?: string;
     /** Observes real progress (pages examined, listings found, renders, detail pages). Never alters discovery. */
@@ -2625,6 +2725,7 @@ export async function discoverListings(
     const ctas = found.length || chimeListingSearchRequests(html, finalUrl).length ? [] : ownInventoryLinks.length ? ownInventoryLinks : collectInventoryLinks(html, finalUrl, 6);
     for (const cta of ctas) {
       if (visitedSet.has(cta.url)) continue;
+      if (isPagerOf(cta.url, finalUrl, cta.label)) continue;
       if (queue.some((q) => q.url === cta.url)) continue;
       const broad = /property\s+search|search\s+(?:all\s+)?(?:homes|properties)|all\s+(?:homes|properties|listings)/i.test(cta.label) &&
         !/\bmy\b|\bour\b|featured|exclusive|office_listing_categories|agent_listing_categories/i.test(cta.label + cta.url);
@@ -2659,10 +2760,14 @@ export async function discoverListings(
   // Detail enrichment keeps collection provenance. enrichAll does not spend the collection page budget.
   const enrichAll = options?.enrichAll === true;
   let detailIndex=0;
-  const detailLimit = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
+  const budgeted = enrichAll && typeof options?.detailBudget === "number" && options.detailBudget >= 0;
+  const requestedDetails = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
+  const detailLimit = budgeted ? Math.min(requestedDetails, maxListings, options!.detailBudget!) : requestedDetails;
+  // Progress counts against every listing that needs details, including those deferred to later jobs.
+  const detailTotal = budgeted ? listings.slice(0, maxListings).length : detailLimit;
   let detailsHandled = 0;
-  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit, enriched: enrichmentEnriched }); };
-  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit, enriched: 0 });
+  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailTotal, enriched: enrichmentEnriched }); };
+  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailTotal, enriched: 0 });
   let enrichmentAttempted = 0, enrichmentEnriched = 0, enrichmentFailed = 0;
   let detailThrottled = false;
   const detailFetch:FetchHtml=async (uri,opts)=>{
@@ -2787,7 +2892,8 @@ export async function discoverListings(
       interfaces: [...interfaces], coverage: limitedShowcase ? "showcase" : [...inventoryUrls].some(u=>/\/listings\/(?:my|our)-active-listings/.test(new URL(u).pathname)) || expectedCount || (interfaces.has("flexmls") && [...inventoryUrls].some(u => /\/(?:office|agent)_listing_categories\//.test(u))) ? "collection" : "unknown",
       issues: [...issues, ...listings.filter(l => !l.images.length).map(l => ({code: "missing-photos" as const, url:l.sourceUrl}))],
       failed, failureDetails, inventoryUrls: [...inventoryUrls], expectedCount: expectedCount || undefined, outcome,
-      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests, continuationAvailable }, accounting, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed },
+      inventoryStatus, completenessEvidence, collectionBoundary: { mechanism: continuationMechanism || (openContinuation ? "hidden" : "none"), terminal: completenessEvidence[0], continuationRequests, continuationAvailable }, accounting, enrichment: { status: enrichmentStatus, scheduled: detailLimit, attempted: enrichmentAttempted, enriched: enrichmentEnriched, failed: enrichmentFailed,
+        ...(budgeted ? { deferred: listings.slice(detailLimit, maxListings).map(item => item.sourceUrl) } : {}) },
       obstacles, stages: [...new Set(stages)], candidates: [...candidateMap.values()].sort((a, b) => b.confidence - a.confidence || a.id.localeCompare(b.id)).slice(0, 8),
       resume: (!listings.length || verificationPending.length || continuationAvailable) ? { seeds: [...new Set(seedUris.filter(Boolean))].slice(0, 8), pending: resumePending, obstacle: resumeObstacle, stage: verificationPending.length ? "verification_required" : continuationAvailable ? "collection_continuation" : "discovery_blocked" } : undefined },
   };
