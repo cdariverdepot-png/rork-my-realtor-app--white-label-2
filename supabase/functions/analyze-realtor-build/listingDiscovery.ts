@@ -2137,7 +2137,8 @@ const THROTTLED_DETAIL_CONCURRENCY = 3;
 export type DiscoveryProgress =
   | { phase: "inventory"; url: string; pages: number; found: number }
   | { phase: "render"; url: string; state: "start" | "done" | "failed" }
-  | { phase: "details"; url: string; done: number; total: number };
+  /** done = detail pages handled; enriched = listings whose full details were actually read. */
+  | { phase: "details"; url: string; done: number; total: number; enriched: number };
 
 export async function discoverListings(
   seedUris: string[],
@@ -2660,8 +2661,8 @@ export async function discoverListings(
   let detailIndex=0;
   const detailLimit = enrichAll ? listings.length : Math.min(listings.length, options?.maxDetailPages ?? 0);
   let detailsHandled = 0;
-  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit }); };
-  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit });
+  const detailSettled = (url: string) => { detailsHandled++; report({ phase: "details", url, done: detailsHandled, total: detailLimit, enriched: enrichmentEnriched }); };
+  if (detailLimit > 0) report({ phase: "details", url: listings[0]?.sourceUrl ?? "", done: 0, total: detailLimit, enriched: 0 });
   let enrichmentAttempted = 0, enrichmentEnriched = 0, enrichmentFailed = 0;
   let detailThrottled = false;
   const detailFetch:FetchHtml=async (uri,opts)=>{

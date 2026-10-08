@@ -178,23 +178,32 @@ async function resolveBuilderRoute(): Promise<BuilderRoute> {
 }
 
 /** Guest drafts stay on the device, but URL analysis uses the real service. */
-async function generateLocal(realtorId: string, target?: "heroMessage" | "welcomeNote" | "aboutParagraph"): Promise<SavedBuild> {
+async function generateLocal(realtorId: string, target?: "heroMessage" | "welcomeNote" | "aboutParagraph",
+  options?: { connectedListingSources?: string[]; onEvent?: (event: ImportEvent) => void }): Promise<SavedBuild> {
   const saved = (await readLocalBuild(realtorId)) ?? emptyBuild();
   // A completed onboarding draft remains a valid source for Edit Content refreshes.
   const sources = saved.sources.filter(source => source.kind === "url" || source.kind === "listing");
   if (!sources.length) throw new Error("Add your website URL to generate your app copy.");
   if (!supabase || !(await ensureSupabaseSession())) throw new Error("Could not connect to the app builder. Please retry.");
-  const { data, error } = await supabase.functions.invoke("analyze-realtor-build", {
-    body: {
-      guest: true,
-      sources,
-      draft: saved.draft,
-      // Guest drafts keep evidence on-device; the edge function needs it for grounded variations.
-      evidence: saved.evidence ?? [],
-      ...(target ? { mode: "regenerate", target } : {}),
-    },
-  });
-  if (error || data?.error) throw await functionError(error, data, "Your website could not be analyzed. Please retry.");
+  const body = {
+    guest: true,
+    sources,
+    draft: saved.draft,
+    // Guest drafts keep evidence on-device; the edge function needs it for grounded variations.
+    evidence: saved.evidence ?? [],
+    ...(target ? { mode: "regenerate", target } : {}),
+    ...(!target && options?.connectedListingSources?.length ? { connectedListingSources: options.connectedListingSources } : {}),
+  };
+  let data: any;
+  if (!target && options?.onEvent) {
+    const streamed = await invokeWithProgress("analyze-realtor-build", body, options.onEvent);
+    data = streamed.body;
+    if (streamed.status >= 400 || data?.error) throw new Error(data?.error ?? `Your website could not be analyzed. Please retry. (status ${streamed.status})`);
+  } else {
+    const response = await supabase.functions.invoke("analyze-realtor-build", { body });
+    data = response.data;
+    if (response.error || data?.error) throw await functionError(response.error, data, "Your website could not be analyzed. Please retry.");
+  }
   if (!data?.draft || !(target ? data.draft[target] : data.draft.heroMessage)?.trim()) {
     throw new Error("No website-based copy came back. Your current draft is still saved.");
   }
@@ -205,7 +214,7 @@ async function generateLocal(realtorId: string, target?: "heroMessage" | "welcom
   await writeLocalBuild(realtorId, next);
   return next;
 }
-const analyzeLocal = (realtorId: string) => generateLocal(realtorId);
+const analyzeLocal = (realtorId: string, options?: { connectedListingSources?: string[]; onEvent?: (event: ImportEvent) => void }) => generateLocal(realtorId, undefined, options);
 const regenerateLocal = (realtorId: string, target: "heroMessage" | "welcomeNote" | "aboutParagraph") => generateLocal(realtorId, target);
 
 export async function loadBuild(): Promise<SavedBuild | null> {
@@ -388,7 +397,8 @@ async function functionError(error: unknown, data: unknown, fallback: string): P
  */
 export async function analyzeBuild(options?: { connectedListingSources?: string[]; onEvent?: (event: ImportEvent) => void }): Promise<SavedBuild> {
   const route = await resolveBuilderRoute();
-  if (route.kind === "local") return analyzeLocal(route.realtorId);
+  // Owner-test (access code) builds keep the draft on this device but use the same live importer.
+  if (route.kind === "local") return analyzeLocal(route.realtorId, options);
 
   const body = options?.connectedListingSources?.length ? { connectedListingSources: options.connectedListingSources } : {};
   if (options?.onEvent) {

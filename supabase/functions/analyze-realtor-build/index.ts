@@ -870,7 +870,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
       if (discovery.meta.accounting) discovery.meta.accounting.importedEligible = discoveredListings.length;
       listingDiscovery = discovery.meta;
       console.log("[build] listing discovery", listingDiscovery);
-      if (progress.isOpen("details")) progress.finish("details", "done", { count: (discovery.meta.enrichment?.enriched ?? 0) + (discovery.meta.enrichment?.failed ?? 0), total: discovery.meta.enrichment?.scheduled });
+      if (progress.isOpen("details")) progress.finish("details", "done", { count: (discovery.meta.enrichment?.enriched ?? 0) + (discovery.meta.enrichment?.failed ?? 0), total: discovery.meta.enrichment?.scheduled, succeeded: discovery.meta.enrichment?.enriched ?? 0 });
       progress.finish("listings", "done", { count: discoveredListings.length });
     } catch (error) {
       console.error("[build] listing discovery error", error instanceof Error ? error.message : String(error));

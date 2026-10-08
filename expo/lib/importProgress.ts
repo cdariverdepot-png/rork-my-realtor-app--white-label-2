@@ -8,7 +8,7 @@
  */
 export type ImportStage = "site" | "design" | "pages" | "listings" | "details" | "verify" | "profile" | "save";
 export type ImportEvent =
-  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; reason?: string; at: number }
+  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; succeeded?: number; reason?: string; at: number }
   | { kind: "site"; name: string; host: string; at: number }
   | { kind: "design"; portrait: boolean; logo: boolean; images: number; sections: number; at: number }
   | { kind: "profile"; name?: string; city?: string; at: number }
@@ -115,8 +115,12 @@ function applyStage(lines: ActivityLine[], channel: ImportChannel, event: Extrac
       const total = event.total ?? 0, count = event.count ?? 0;
       if (state === "start") return upsert(lines, { id: id("details"), state: "active", text: `Reading listing details · ${count} of ${total}` });
       if (failed) return settle(lines, id("details"), "failed");
+      // Only listings whose full details were actually read count as read.
+      const read = event.succeeded ?? 0;
       return upsert(lines, { id: id("details"), state: "done",
-        text: count === total ? `Read details for ${total === 1 ? "the listing" : `all ${total} listings`}` : `Read details for ${count} of ${plural(total, "listing")}` });
+        text: read === 0 ? `Full details weren’t available for ${total === 1 ? "this listing" : `these ${total} listings`}`
+          : read === total ? `Read full details for ${total === 1 ? "the listing" : `all ${total} listings`}`
+          : `Read full details for ${read} of ${plural(total, "listing")}` });
     }
     case "verify":
       if (state === "start") return upsert(lines, { id: id("verify"), state: "active", text: "Rechecking listings that are no longer on the page" });

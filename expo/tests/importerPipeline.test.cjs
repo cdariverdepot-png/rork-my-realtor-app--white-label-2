@@ -96,6 +96,7 @@ for (const fixture of fixtures) {
     if (body.listingDiscovery.enrichment?.scheduled) {
       assert.equal(details.at(-1).total, body.listingDiscovery.enrichment.scheduled);
       assert.equal(details.at(-1).count, body.listingDiscovery.enrichment.enriched + body.listingDiscovery.enrichment.failed);
+      assert.equal(details.at(-1).succeeded, body.listingDiscovery.enrichment.enriched, 'success is reported separately from pages handled');
     }
     const profile = events.find(e => e.kind === 'profile');
     assert.equal(profile.name, defaultProfile().evidence[0].value, 'profile events repeat validated evidence only');
@@ -181,4 +182,12 @@ test('streamed frames split across chunks are reassembled without guessing', () 
   assert.equal(first.messages.length, 1);
   const second = model.parseEventFrames(first.rest + 'ult":{"status":200,"body":{"ok":true}}}\n\n');
   assert.deepEqual(second.messages, [{ result: { status: 200, body: { ok: true } } }]);
+});
+
+test('a detail page that was handled but yielded no details is not reported as read', () => {
+  const model = loadProgressModel();
+  const done = (succeeded) => model.applyImportEvent([], 'listings', { kind: 'stage', stage: 'details', state: 'done', count: 6, total: 6, succeeded, at: 1 })[0].text;
+  assert.equal(done(0), 'Full details weren’t available for these 6 listings');
+  assert.equal(done(6), 'Read full details for all 6 listings');
+  assert.equal(done(4), 'Read full details for 4 of 6 listings');
 });

@@ -6,7 +6,8 @@
 export type ImportStage = "site" | "design" | "pages" | "listings" | "details" | "verify" | "profile" | "save";
 export type ImportEvent =
   /** A pipeline stage started, finished, failed, or was not needed. count/total are real tallies. */
-  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; reason?: string; at: number }
+  /** For "details", succeeded counts listings whose full details were actually read (count = pages handled). */
+  | { kind: "stage"; stage: ImportStage; state: "start" | "done" | "failed" | "skipped"; count?: number; total?: number; succeeded?: number; reason?: string; at: number }
   /** The page title / site name the realtor's own website published. */
   | { kind: "site"; name: string; host: string; at: number }
   /** What the design reader identified in the source markup. */
@@ -39,11 +40,11 @@ export function createImportProgress(sink?: (event: ImportEvent) => void) {
   };
   return {
     emit,
-    start(stage: ImportStage, extra?: { count?: number; total?: number }) {
+    start(stage: ImportStage, extra?: { count?: number; total?: number; succeeded?: number }) {
       if (!opened.has(stage)) opened.set(stage, Date.now());
       emit({ kind: "stage", stage, state: "start", ...extra });
     },
-    finish(stage: ImportStage, state: "done" | "failed" | "skipped" = "done", extra?: { count?: number; total?: number; reason?: string }) {
+    finish(stage: ImportStage, state: "done" | "failed" | "skipped" = "done", extra?: { count?: number; total?: number; succeeded?: number; reason?: string }) {
       close(stage);
       emit({ kind: "stage", stage, state, ...extra });
     },
@@ -67,15 +68,15 @@ export function discoveryReporter(progress: ImportProgress) {
       if (event.pages === lastPages && event.found === lastFound) return;
       lastPages = event.pages; lastFound = event.found;
       progress.emit({ kind: "listings", host, pages: event.pages, found: event.found });
-    } else if (event.done < event.total) progress.start("details", { count: event.done, total: event.total });
-    else progress.finish("details", "done", { count: event.done, total: event.total });
+    } else if (event.done < event.total) progress.start("details", { count: event.done, total: event.total, succeeded: event.enriched });
+    else progress.finish("details", "done", { count: event.done, total: event.total, succeeded: event.enriched });
   };
 }
 /** Mirrors the engine's onProgress events (kept structural so this module has no imports). */
 export type DiscoveryProgressEvent =
   | { phase: "inventory"; url: string; pages: number; found: number }
   | { phase: "render"; url: string; state: "start" | "done" | "failed" }
-  | { phase: "details"; url: string; done: number; total: number };
+  | { phase: "details"; url: string; done: number; total: number; enriched: number };
 
 /**
  * Serve a handler either as ordinary JSON or, when the client asks for an event stream, as
