@@ -188,3 +188,10 @@ test('improvement loop: a social post imported as a listing is a code defect; a 
   const drawn = findingsFor(entry, { pages: [] }, { result: { listings: [], meta: { obstacles: [{ code: 'requires_rendering', url: 'https://a.example/' }] } }, listings: [], missing: [] });
   assert.deepEqual(drawn.map(f => [f.code, f.defectKind]), [['REQUIRES_RENDERING', 'needs_review']]);
 });
+
+test('improvement loop: a not-a-property repair may remove only the records identified as non-properties', () => {
+  const bad = { ...finding('NOT_A_PROPERTY', 'code_defect', 1), examples: [{ sourceUrl: 'ig' }], all: ['ig'] };
+  const before = evaluation([site('a', [bad], [rec('ig', 'cameronteam'), rec('h1', '1 Elm St, Boise, ID')])]);
+  assert.equal(compare(before, evaluation([site('a', [], [rec('h1', '1 Elm St, Boise, ID')])]), failureFor('NOT_A_PROPERTY')).ok, true);
+  assert.equal(compare(before, evaluation([site('a', [], [rec('ig', 'cameronteam')])]), failureFor('NOT_A_PROPERTY')).ok, false, 'a real property may not be removed');
+});

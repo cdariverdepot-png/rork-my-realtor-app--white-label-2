@@ -98,7 +98,10 @@ function findingsFor(entry, capture, replay) {
   // A social post, video or profile is never a property record, whatever page linked to it.
   const SOCIAL = /(?:^|\.)(?:instagram\.com|facebook\.com|fb\.com|youtube\.com|youtu\.be|tiktok\.com|pinterest\.com|twitter\.com|x\.com|linkedin\.com|threads\.net|vimeo\.com)$/i;
   const social = listings.filter(item => { try { return SOCIAL.test(new URL(item.sourceUrl).hostname); } catch { return false; } });
-  if (social.length) add('NOT_A_PROPERTY', 'code_defect', 4, social.map(i => ({ sourceUrl: i.sourceUrl, title: i.title })), 'A social-media post or profile was imported as a property listing.');
+  if (social.length) {
+    add('NOT_A_PROPERTY', 'code_defect', 4, social.map(i => ({ sourceUrl: i.sourceUrl, title: i.title })), 'A social-media post or profile was imported as a property listing.');
+    out[out.length - 1].all = social.map(i => i.sourceUrl);
+  }
 
   // Titles: every imported record must be named by its property, never its price or card text.
   const unnamed = listings.filter(item => !namesProperty(item.title));

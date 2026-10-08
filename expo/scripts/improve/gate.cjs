@@ -156,6 +156,8 @@ function compare(before, after, failure) {
     // A duplicate-property repair may remove records only inside a base duplicate group, and each group must keep one.
     const groups = target === 'DUPLICATE_PROPERTY' ? prior.findings.filter(f => f.code === 'DUPLICATE_PROPERTY').flatMap(f => f.groups ?? f.examples.map(e => e.sourceUrls ?? [])) : [];
     const mergedAway = new Set(groups.flat());
+    // A not-a-property repair may remove exactly the records the base evaluation identified as non-properties.
+    if (target === 'NOT_A_PROPERTY') for (const f of prior.findings.filter(f => f.code === 'NOT_A_PROPERTY')) for (const url of f.all ?? f.examples.map(e => e.sourceUrl)) mergedAway.add(url);
     for (const group of groups) if (!group.some(url => now.has(url))) problems.push(`${site.id}: every record of a duplicate group disappeared (${group.join(', ')})`);
     for (const [url, old] of was) {
       const cur = now.get(url);
