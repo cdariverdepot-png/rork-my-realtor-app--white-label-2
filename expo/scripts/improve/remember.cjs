@@ -19,7 +19,7 @@ function recordAttempt(registry, { failureId, outcome, gate, branch, commit, hyp
     ...(hypothesis ? { hypothesis, newHypothesis: true } : {}),
     gate: gate ? { accepted: gate.accepted, head: gate.head, base: gate.baseSha,
       target: gate.checks?.corpus ? `${gate.checks.corpus.targetBefore} -> ${gate.checks.corpus.targetAfter}` : undefined,
-      problems: Object.values(gate.checks ?? {}).flatMap(c => c.problems ?? []).slice(0, 20) } : undefined };
+      problems: Object.entries(gate.checks ?? {}).flatMap(([name, c]) => [...(c.problems ?? []), ...(c.ok === false && !(c.problems ?? []).length ? [`${name}: failed (${c.pass ?? 0} passed, ${c.fail} failed${c.failing?.length ? `: ${c.failing.slice(0, 5).join('; ')}` : ''})`] : [])]).slice(0, 20) } : undefined };
   const status = outcome === 'integrated' ? 'integrated' : outcome === 'rejected' ? 'rejected' : failure.status;
   const knowledge = fs.existsSync(path.join(KNOWLEDGE, `${failureId}.md`)) ? `docs/compatibility-knowledge/${failureId}.md` : failure.knowledge;
   return { ...registry, failures: { ...registry.failures, [failureId]: { ...failure, status, knowledge, attempts: [...failure.attempts ?? [], attempt] } } };

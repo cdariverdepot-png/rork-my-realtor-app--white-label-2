@@ -1,0 +1,1 @@
+Level B evaluation trigger (Thu Oct  8 17:24:54 UTC 2026): capture and evaluate diagnostics/evaluation/sites.json

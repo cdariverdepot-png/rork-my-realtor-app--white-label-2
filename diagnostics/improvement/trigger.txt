@@ -1,3 +1,2 @@
-Autonomous improvement trigger (Thu Oct  8 17:22:24 UTC 2026)
-failure: title-not-property
-candidate: improve/title-not-property-session1
+Autonomous improvement trigger (Thu Oct  8 17:24:54 UTC 2026)
+verify: title-not-property

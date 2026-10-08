@@ -569,7 +569,8 @@
             "base": "9ed67348936ca8c5e2edd09f0884c9e12b7ff6f1",
             "target": "13 -> 0",
             "problems": []
-          }
+          },
+          "note": "Rejected by a gate harness defect, not by the candidate: Node 24 prints '\u2139 pass N' and the gate parsed only TAP ('# pass N'), so the suite read as '0 passed, NaN failed'. Fixed in 2c30878; the same candidate was then gated again and accepted."
         },
         {
           "at": "2026-10-08T17:23:55.216Z",
