@@ -26,7 +26,6 @@ jobs:
       CI: '1'
       EXPO_NO_TELEMETRY: '1'
       HOSTING_SUBDOMAIN: ${{ vars.EXPO_HOSTING_SUBDOMAIN || 'cdariverdepot-my-realtor' }}
-      EXPO_PUBLIC_FUNCTION_SUFFIX: '-staging'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,6 +60,9 @@ jobs:
       - name: Link Expo project
         run: eas init --account jtaylor537 --force --non-interactive
       - name: Export the web app against the staging importer
+        # Only the exported preview is pointed at staging; the tests above run as an ordinary build.
+        env:
+          EXPO_PUBLIC_FUNCTION_SUFFIX: '-staging'
         run: |
           pnpm exec expo export --platform web --clear
           entry="$(grep -o '/_expo/static/js/web/entry-[^"]*\.js' dist/index.html | head -1)"
