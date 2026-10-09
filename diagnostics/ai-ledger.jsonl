@@ -58,3 +58,4 @@
 {"at":"2026-10-09T06:27:57.316Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"paonia-then-cindy","calls":2,"blocked":0,"estimatedUsd":0.0264,"inputTokens":5348,"outputTokens":1969}
 {"at":"2026-10-09T06:29:27.179Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-paonia-cindy-paonia","calls":7,"blocked":0,"estimatedUsd":0.1338,"inputTokens":90880,"outputTokens":3074}
 {"at":"2026-10-09T06:30:50.293Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-exit-mid-import-paonia","calls":2,"blocked":0,"estimatedUsd":0.0282,"inputTokens":7510,"outputTokens":2323}
+{"at":"2026-10-09T06:36:34.779Z","kind":"site","campaign":"gate-37893995342","level":"D","site":"cindy-exit-mid-import-paonia","calls":4,"blocked":0,"estimatedUsd":0.0903,"inputTokens":51431,"outputTokens":2032}
