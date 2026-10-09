@@ -20,7 +20,7 @@ export class SourceReadError extends Error {
   constructor(message: string, readonly code: "no_listings" | "unreadable" | "market_only") { super(message); this.name = "SourceReadError"; }
 }
 /** The supported way forward in the app: another public page, or one home at a time by its public link. */
-const PASTE_ANOTHER_PAGE = "Paste another public page that shows your listings, such as your brokerage's listings page or a public agent profile. You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
+const PASTE_ANOTHER_PAGE = "Paste another public page that shows your listings, such as your brokerage's listings page or a public agent profile, or import a CSV export of your listings. You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
 
 /**
  * Why a source that needed a browser produced nothing. A provider that answers automated readers with a

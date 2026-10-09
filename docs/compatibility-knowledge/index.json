@@ -61,5 +61,17 @@
     "integratedAt": "2026-10-08T22:01:40.518Z",
     "commit": null,
     "gate": "reviewed change; corpus 52 records improved, 0 degraded"
+  },
+  {
+    "failure": "provider-browser-check",
+    "symptom": "REQUIRES_RENDERING (managed-challenge on the inventory provider)",
+    "stage": "provider transport selection",
+    "record": "docs/compatibility-knowledge/provider-browser-check.md",
+    "architectures": [
+      "flexmls"
+    ],
+    "integratedAt": "2026-10-09T01:39:52.473Z",
+    "commit": null,
+    "gate": "reviewed change; Cindy 0 -> 8 live"
   }
 ]

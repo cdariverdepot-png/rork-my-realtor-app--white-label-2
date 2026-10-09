@@ -863,7 +863,7 @@ export function statusForProperty(html: string, item: Pick<DiscoveredListing, "t
 export function extractListingsFromPage(html: string, base: URL, attempts?: StrategyAttempt[]): DiscoveredListing[] {
   return extractPropertyRecords(html, base, attempts).map(item => ({ ...item, status: item.status ?? statusForProperty(html, item, base) ??
     // Flexmls's explicitly filtered collection establishes active membership.
-    (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/(?:office|agent)_listing_categories\/Active\/listings/.test(base.pathname) ? "active" : undefined) }));
+    (/(?:^|\.)flexmls\.com$/i.test(base.hostname) && /\/(?:(?:office|agent)_)?listing_categories\/Active\/listings/.test(base.pathname) ? "active" : undefined) }));
 }
 
 /** Public server-rendered cards with per-property payloads (including Flexmls). */
@@ -1516,6 +1516,11 @@ export type ListingInterfaceAdapter = {
   matches: (html: string, url: URL) => boolean;
   extract: (html: string, url: URL) => DiscoveredListing[];
   fragments?: (html: string, url: URL) => string[];
+  /**
+   * Published transports fully determined by a collection URL. Used when the collection's own document cannot
+   * be read (a browser check, a script shell), so the provider's published inventory is still reachable.
+   */
+  transports?: (url: URL) => string[];
 };
 
 /** Reusable transport/platform adapters. No customer domains or inventory IDs belong here. */
@@ -1529,7 +1534,7 @@ export const LISTING_INTERFACE_ADAPTERS: ListingInterfaceAdapter[] = [
       return url && /\/idx\/customshowcasejs\.php$/.test(new URL(url).pathname) && /^\d+$/.test(new URL(url).searchParams.get("widgetid") ?? "") ? [url] : []; }) },
   { id: "brivity", matches: (h,u) => /brivityidx\.com|FeaturedProperties-1R/.test(h) || /\/pages\/search\.php\/?$/.test(u.pathname),
     extract: (h,u) => listingsFromBrivityResponse(h,u)?.listings ?? [], fragments: brivityInventoryFragments },
-  { id: "flexmls", matches: (h,u) => /(?:^|\.)flexmls\.com$/i.test(u.hostname), extract: listingsFromStructuredCards },
+  { id: "flexmls", matches: (h,u) => /(?:^|\.)flexmls\.com$/i.test(u.hostname), extract: listingsFromStructuredCards, transports: flexmlsCollectionTransport },
   { id: "public-json", matches: h => /^[\s]*[\[{]/.test(h), extract: listingsFromPublicJson },
   { id: "structured-property-data", matches: h => /application\/(?:ld\+json|json)/i.test(h),
     extract: (h,u) => [...listingsFromJsonLd(h,u), ...listingsFromHydration(h,u)] },
@@ -1560,7 +1565,7 @@ const PLATFORM_CONTRACTS: Record<string, [string, string]> = {
   "agentfire-dsidx": ["AgentFire cards or dsIDXpress explicit property fields", "Property-local fields preserve identity and avoid neighboring cards and price history."],
   "idx-broker": ["IDX showcase script or IDX detail route", "Parse literal widget facts without executing JavaScript; showcase is partial inventory."],
   brivity: ["Brivity featured widget or scoped search response", "Retain published agent/office filters and display permissions."],
-  flexmls: ["Public Flexmls server-rendered listing cards", "Preserve collection scope and per-card payloads through public fragments."],
+  flexmls: ["Public Flexmls server-rendered listing cards; listing-category collection URLs (office_/agent_/plain)", "Preserve collection scope and per-card payloads through public fragments; when the collection page shows a browser check, read its URL-derived photo-view transport and listing_detail fragments."],
   "public-json": ["JSON object/array containing evidenced property records", "Normalize RESO and common property fields independent of CMS or framework."],
 };
 
@@ -1663,6 +1668,10 @@ function inventoryFragmentsOf(html: string, base: URL): string[] {
  * it is used only where the provider's robots rules allow the importer (checked by the fetch layer).
  */
 export function urlDerivedTransports(base: URL): string[] {
+  return [...new Set(LISTING_INTERFACE_ADAPTERS.flatMap(adapter => adapter.transports?.(base) ?? []))];
+}
+
+function flexmlsCollectionTransport(base: URL): string[] {
   if (!/(?:^|\.)flexmls\.com$/i.test(base.hostname) || base.searchParams.has("list_view")) return [];
   // office_/agent_listing_categories are scoped by the provider; plain listing_categories are judged by the
   // cards' office attribution like any other collection (a market category is never imported wholesale).
@@ -2295,7 +2304,7 @@ function navigationCandidates(html: string, base: URL): NavigationCandidate[] {
 /** Public Flexmls Turbo LDP route: keep the exact agent/office filter and property id. */
 export function propertyDetailRequest(raw: string): {url:string;fragment:boolean} {
   const url=new URL(raw);
-  if (/(?:^|\.)flexmls\.com$/i.test(url.hostname) && /\/search\/(?:office|agent)_listing_categories\/[^/]+\/listings\/\d{20,32}$/.test(url.pathname)) {
+  if (/(?:^|\.)flexmls\.com$/i.test(url.hostname) && /\/search\/(?:(?:office|agent)_)?listing_categories\/[^/]+\/listings\/\d{20,32}$/.test(url.pathname)) {
     url.pathname=url.pathname.replace(/\/listings\/(\d{20,32})$/, "/listing_detail/$1");
     return {url:url.toString(),fragment:true};
   }
@@ -3029,7 +3038,11 @@ export async function discoverListings(
       let obstacle = classifyObstacle(html) ?? "captcha_required";
       let carriedNetwork: { url: string; html: string }[] | null = null;
       // A collection with a URL-derived published transport is read through it; a browser is not needed.
-      const transports = broad ? [] : urlDerivedTransports(finalUrl).filter(url => !visitedSet.has(url) && !queue.some(q => q.url === url));
+      // A provider-scoped category (office_/agent_) is the agent's by construction; a plain category only when
+      // the realtor submitted it or their site claimed it ("My listings", "Featured listings").
+      const providerScoped = /\/(?:office|agent)_listing_categories\//.test(finalUrl.pathname);
+      const transports = broad || !(providerScoped || next.depth === 0 || next.claimed) ? []
+        : urlDerivedTransports(finalUrl).filter(url => !visitedSet.has(url) && !queue.some(q => q.url === url));
       if (obstacle === "requires_rendering" && !transports.length && options?.renderPage && !renderedChallenges.has(finalUrl.origin) && Date.now() < deadline && rendersUsed < maxRenders) {
         rendersUsed++;
         stages.push("browser_render_escalated");

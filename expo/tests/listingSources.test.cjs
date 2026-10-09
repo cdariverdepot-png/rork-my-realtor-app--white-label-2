@@ -534,3 +534,43 @@ test('duplicate-property: a merged copy returns when the kept record is no longe
   const alone = sources.reconcileInventory([], { source: src, listings: [other], complete: true, meta: {} }, now);
   assert.deepEqual(alone.map(i => i.sourceUrl), [other.sourceUrl], 'comes back when it is the only copy');
 });
+
+test('a CSV listing export is imported through the same save boundary, and re-importing updates the same homes', async () => {
+  const realtor = '11111111-1111-1111-1111-111111111111';
+  const csv = [
+    'ListingId,StreetAddress,City,StateOrProvince,ListPrice,BedroomsTotal,BathroomsTotalInteger,LivingArea,StandardStatus,PublicRemarks,PhotoURLs',
+    '26-1644,11 & 13 Kingston Way,Kingston,ID,99500,0,0,,Active,"Over 6 acres of mountain top paradise, power and gas close.",https://photos.example/a1.jpg|https://photos.example/a2.jpg',
+    '26-2527,NKA May Court,Cataldo,ID,130000,0,0,,Pending,"A .80 lot in Cataldo zoned R-2.",https://photos.example/b1.jpg',
+    '25-9001,7 Sold Lane,Kellogg,ID,250000,3,2,1500,Closed,"Sold last spring.",',
+  ].join('\n');
+  const first = await endpoint({ body: { mode: 'import-file', csv, label: 'flexmls-export.csv' } });
+  assert.equal(first.status, 200);
+  assert.equal(first.result.imported, 2, 'closed rows are not imported');
+  assert.equal(first.fetched, 0, 'a file import never fetches the web');
+  const items = first.rows[`${realtor}:listings.v2`].value.items;
+  const kingston = items.find(item => item.title === '11 & 13 Kingston Way');
+  assert.equal(kingston.price, '$99,500');
+  assert.equal(kingston.status, 'active');
+  assert.equal(kingston.listingNumber, '26-1644');
+  assert.deepEqual(kingston.images, ['https://photos.example/a1.jpg', 'https://photos.example/a2.jpg']);
+  assert.equal(items.find(item => item.title === 'NKA May Court').status, 'pending');
+  const fileSource = first.rows[`${realtor}:listing-sources.v1`].value.sources[0];
+  assert.equal(fileSource.kind, 'listing-file');
+  assert.ok(items.every(item => item.sourceId === fileSource.id && item.detailAttemptAt));
+
+  // The realtor annotates a home, then uploads an updated export: same homes, new price, note kept.
+  const rows = structuredClone(first.rows);
+  rows[`${realtor}:listings.v2`].value.items = rows[`${realtor}:listings.v2`].value.items.map(item => item.title === '11 & 13 Kingston Way' ? { ...item, elizaTake: 'Great views.' } : item);
+  const second = await endpoint({ rows, body: { mode: 'import-file', csv: csv.replace(',99500,', ',95000,'), label: 'flexmls-export.csv' } });
+  const after = second.rows[`${realtor}:listings.v2`].value.items;
+  assert.equal(after.length, 2);
+  assert.equal(after.find(item => item.title === '11 & 13 Kingston Way').price, '$95,000');
+  assert.equal(after.find(item => item.title === '11 & 13 Kingston Way').elizaTake, 'Great views.');
+
+  // A scheduled or manual website sync never tries to re-read the file source.
+  const sync = await endpoint({ rows: second.rows, body: {} });
+  assert.equal(sync.fetched, 0);
+  // Contact lists are not listing exports.
+  const contacts = await endpoint({ body: { mode: 'import-file', csv: 'Name,Email,Phone\nJane,jane@example.com,555', label: 'contacts.csv' } });
+  assert.equal(contacts.status, 422);
+});

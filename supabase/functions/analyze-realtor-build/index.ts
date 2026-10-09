@@ -61,7 +61,7 @@ const reply = (body: unknown, status = 200) => Response.json(body, {
  * ("signal timed out", "error sending request") say nothing about what to do next.
  */
 /** The supported ways to bring listings in when a site refuses automated readers (no workaround is attempted). */
-const BLOCKED_ALTERNATIVES = "Instead, paste another public page that shows your listings (your brokerage's listings page, an IDX property list, or a public agent profile). You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
+const BLOCKED_ALTERNATIVES = "Instead, paste another public page that shows your listings (your brokerage's listings page, an IDX property list, or a public agent profile), or import a CSV export of your listings. You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
 
 function readableSourceFailure(uri: string, error: string | undefined): string {
   let host = uri;

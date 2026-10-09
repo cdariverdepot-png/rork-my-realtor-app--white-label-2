@@ -16,7 +16,7 @@ export type ListingSyncResult = { ok: boolean; items?: ManagedListing[]; source?
   /** Listings whose details are read by follow-up detail jobs of the import that started at detailsSince. */
   detailsPending?: number; detailsSince?: number; attempted?: number };
 
-export async function invokeListingSync(body: { mode?: "connect" | "details"; url?: string; listingId?: string; realtorId?: string; sourceId?: string; since?: number },
+export async function invokeListingSync(body: { mode?: "connect" | "details" | "import-file"; url?: string; listingId?: string; realtorId?: string; sourceId?: string; since?: number; csv?: string; label?: string },
   onEvent?: (event: ImportEvent) => void): Promise<ListingSyncResult> {
   // Importing must use the existing login, never create a replacement guest session.
   if (!supabase) throw new Error("Sign in to your realtor account to connect listings.");
@@ -74,4 +74,14 @@ export async function connectListingSource(raw: string, realtorId?: string, onEv
   if (url.protocol !== "https:" || url.username || url.password) throw new Error("Use the public HTTPS link to your profile or listings page.");
   const connected = await invokeListingSync({ mode: "connect", url: url.toString(), ...(realtorId ? { realtorId } : {}) }, onEvent);
   return readRemainingDetails(connected, realtorId, onEvent);
+}
+
+/**
+ * A listing export (CSV from the MLS or a spreadsheet) goes through the same importer save boundary as a
+ * website: one normalizer and the same listing store. Re-importing the same file name updates its properties.
+ */
+export async function importListingCsv(csv: string, label: string, realtorId?: string): Promise<ListingSyncResult> {
+  if (!csv.trim()) throw new ListingImportError("That file is empty.");
+  if (csv.length > 2_000_000) throw new ListingImportError("Use a CSV under 2 MB (about 1,000 listings).");
+  return invokeListingSync({ mode: "import-file", csv, label, ...(realtorId ? { realtorId } : {}) });
 }

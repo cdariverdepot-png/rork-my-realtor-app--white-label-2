@@ -82,7 +82,11 @@ export function parseListingCsv(csv: string): DiscoveredListing[] {
       description: field("PublicRemarks", "PublicDescription", "Description"),
       images, sourceUrl: field("PublicURL", "ListingURL", "PropertyURL"),
     });
-    if (item) found.push(item);
+    if (!item) continue;
+    // The export's own MLS number and status, as published; an unrecognized status is left unclaimed.
+    const listingNumber = field("ListingId", "MLSNumber", "MLS#", "MLSID", "ListingKey");
+    const status = field("StandardStatus", "MlsStatus", "ListingStatus", "Status");
+    found.push({ ...item, ...(listingNumber ? { listingNumber: listingNumber.slice(0, 60) } : {}), ...(status ? { fileStatus: status.slice(0, 60) } : {}) } as DiscoveredListing);
   }
   return found;
 }
