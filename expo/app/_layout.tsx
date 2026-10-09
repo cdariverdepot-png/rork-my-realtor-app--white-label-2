@@ -1,5 +1,4 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { historyTrace } from "@/lib/historyTrace";
 import { Stack, usePathname, useRouter } from "expo-router";
 import { navIntent } from "@/lib/navIntent";
 import ClientShell, { ClientPreviewBoundary } from '@/components/ClientShell';
@@ -98,8 +97,6 @@ export const unstable_settings = { initialRouteName: 'index' };
 const clientScreenLayout = ({ children }: { children: React.ReactNode }) => <OnboardingGuard><ClientPreviewBoundary>{children}</ClientPreviewBoundary></OnboardingGuard>;
 function RootLayoutNav() {
   const { isClient, viewAsClient, isAuthenticated } = useAuth();
-  React.useEffect(() => { historyTrace("root-nav", "mount"); return () => historyTrace("root-nav", "unmount"); }, []);
-  historyTrace("root-nav", "render", { isClient, viewAsClient, isAuthenticated });
   const modal = {
     presentation: isClient || viewAsClient ? "card" as const : "modal" as const,
     headerShown: false,

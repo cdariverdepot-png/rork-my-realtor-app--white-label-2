@@ -45,6 +45,6 @@ export default function SetupReviewActions({ draft, listings, onChoose, disabled
         </ScrollView>
       </GestureHandlerRootView>
     </Modal>
-    <ThemePreviewModal visible={preview} title="Your client app" brand={draft} listings={listings} onClose={() => setPreview(false)} />
+    <ThemePreviewModal visible={preview} title="Your client app" brand={draft} listings={listings} onClose={() => setPreview(false)} browserHistory />
   </>;
 }

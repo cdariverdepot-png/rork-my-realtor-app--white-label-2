@@ -166,10 +166,7 @@ async function studioWalk(page, r, studio) {
   const probe = async label => ({ label, ...(await page.evaluate(() => ({ length: history.length, path: location.pathname, state: JSON.stringify(history.state).slice(0, 160),
     modal: document.querySelectorAll('[aria-modal="true"]').length }))) });
   st.historyProbe = st.historyProbe ?? [];
-  st.historyTrace = st.historyTrace ?? [];
-  page.on('console', m => { if (m.text().startsWith('[hist]')) st.historyTrace.push(m.text().slice(7)); });
   const previewListings = async (button, name, closeWith = 'on-screen') => {
-    await page.evaluate(() => { window.__mraHistoryTrace = true; });
     st.historyProbe.push(await probe(`${name}: before open`));
     await page.getByRole('button', { name: button, exact: true }).first().click();
     await page.waitForTimeout(2500);
@@ -177,20 +174,6 @@ async function studioWalk(page, r, studio) {
     await modal().getByRole('button', { name: 'Listings', exact: true }).last().click();
     await page.waitForTimeout(2000);
     st.historyProbe.push(await probe(`${name}: listings`));
-    // Trace every history call and popstate from here on (console survives a document change).
-    await page.evaluate(tag => {
-      const log = (kind, arg) => console.log('[hist]', JSON.stringify({ tag, kind, arg, path: location.pathname, state: JSON.stringify(history.state)?.slice(0, 90),
-        modal: document.querySelectorAll('[aria-modal="true"]').length, stack: (new Error().stack ?? '').split('\n').slice(2, 6).map(l => l.trim().slice(0, 140)).join(' | ') }));
-      const ob = history.back.bind(history), og = history.go.bind(history), op = history.pushState.bind(history), or = history.replaceState.bind(history);
-      history.back = () => { log('back'); ob(); };
-      history.go = n => { log('go', n); og(n); };
-      history.pushState = (st, t, u) => { log('push', u); op(st, t, u); };
-      history.replaceState = (st, t, u) => { log('replace', u); or(st, t, u); };
-      window.addEventListener('popstate', () => log('popstate'), true);
-      window.addEventListener('pagehide', () => log('pagehide'));
-      for (const type of ['blur', 'focus', 'resize', 'hashchange']) window.addEventListener(type, () => log(type), true);
-      document.addEventListener('visibilitychange', () => log('visibility', document.visibilityState), true);
-    }, name);
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
     // The preview's own Back steps out of it (Listings -> Home -> closed), leaving the dashboard as it was.
@@ -205,20 +188,6 @@ async function studioWalk(page, r, studio) {
     await page.waitForTimeout(3000);
     return titles;
   };
-  // Diagnostics: how the bundled router uses the browser history (snippets around history calls).
-  try {
-    const snippets = await page.evaluate(async () => {
-      const src = [...document.scripts].map(sc => sc.src).find(u => /entry-.*\.js/.test(u));
-      const text = await (await fetch(src)).text();
-      const out = [];
-      for (const re of [/addEventListener\(["']popstate["']/g, /history\.(back|go|forward)\(/g, /["']navigate["']/g, /window\.navigation/g]) {
-        let m; let count = 0;
-        while ((m = re.exec(text)) && count < 12) { out.push(text.slice(Math.max(0, m.index - 600), m.index + 400)); count++; }
-      }
-      return out;
-    });
-    fs.writeFileSync(path.join(out, `${r.id}-router-history-snippets.txt`), snippets.join('\n\n=====\n\n'));
-  } catch (e) { st.snippetError = String(e).slice(0, 200); }
   // 1. Publish the app built from the first website.
   await page.getByRole('button', { name: 'Publish My App' }).first().click({ timeout: 15000 });
   for (let i = 0; i < 60 && /\/admin\/build/.test(page.url()); i++) await page.waitForTimeout(1000);
@@ -318,6 +287,32 @@ async function run(browser, site) {
         r.signInRetried = true;
         await page.waitForTimeout(30000);
       }
+    }
+    if (site.dashboardOnly) {
+      // The dashboard's app preview (no import): its Back steps through the preview and closes it on the dashboard.
+      await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await page.getByRole('button', { name: 'Preview draft', exact: true }).first().waitFor({ timeout: 60000 });
+      await page.waitForTimeout(3000);
+      const modal = () => page.locator('[aria-modal="true"]').last();
+      const where = async () => ({ path: await page.evaluate(() => location.pathname), modal: await page.locator('[aria-modal="true"]').count() });
+      r.dashboardPreview = { steps: [] };
+      for (const closeWith of ['on-screen', 'browser']) {
+        await page.getByRole('button', { name: 'Preview draft', exact: true }).first().click();
+        await page.waitForTimeout(2500);
+        await modal().getByRole('button', { name: 'Listings', exact: true }).last().click();
+        await page.waitForTimeout(2000);
+        const opened = await where();
+        if (closeWith === 'browser') await page.goBack(); else await modal().getByLabel('Back').first().click();
+        await page.waitForTimeout(1500);
+        const afterFirst = await where();
+        const stillInPreview = afterFirst.modal > 0;
+        if (stillInPreview) { if (closeWith === 'browser') await page.goBack(); else await modal().getByLabel('Back').first().click(); await page.waitForTimeout(1500); }
+        const closed = await where();
+        await shot(`dashboard-preview-${closeWith}`);
+        r.dashboardPreview.steps.push({ closeWith, opened, afterFirst, closed, onDashboard: closed.path === '/admin' && await page.getByRole('button', { name: 'Preview draft', exact: true }).first().isVisible().catch(() => false) });
+        if (closed.path !== '/admin') { await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 }); await page.waitForTimeout(3000); }
+      }
+      throw Object.assign(new Error('dashboard-only scenario finished'), { done: true });
     }
     await page.getByLabel('Page 5').click({ timeout: 30000 });
     await page.getByText('BUILD MY APP', { exact: true }).click({ timeout: 30000 });
@@ -464,6 +459,7 @@ async function run(browser, site) {
       }
     }
   } catch (e) {
+    if (e?.done) { await Promise.allSettled(pending); await context.close(); return r; }
     r.error = String(e.stack ?? e).slice(0, 1200);
     await shot('error');
     r.reviewText = (await page.evaluate(() => document.body.innerText).catch(() => '')).slice(0, 4000);

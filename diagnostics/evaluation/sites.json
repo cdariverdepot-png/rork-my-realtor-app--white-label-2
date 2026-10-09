@@ -486,5 +486,14 @@
     "studio": {
       "url": "https://www.paoniarealty.com/"
     }
+  },
+  {
+    "category": "Dashboard app preview Back",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 9 2026: dashboard preview Back left the dashboard",
+    "id": "dashboard-preview-back",
+    "url": "https://cindycarlsonrealty.com/",
+    "dashboardOnly": true
   }
 ]

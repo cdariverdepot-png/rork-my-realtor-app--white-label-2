@@ -16,16 +16,20 @@ import { claimPop, historyLayers } from '@/lib/builderHistory';
 import { PreviewSandboxProvider } from './PreviewSandbox';
 import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 
-/** Temporary diagnostics for the gate harness (only when the harness sets window.__mraHistoryTrace). */
-const trace = (kind: string, data: object) => { if (typeof window !== "undefined" && (window as unknown as { __mraHistoryTrace?: boolean }).__mraHistoryTrace) console.log("[hist]", JSON.stringify({ tag: "modal", kind, ...data, stack: (new Error().stack ?? "").split("\n").slice(2, 7).join(" | ") })); };
-
 /**
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
  * or by swiping right — the screen follows the finger and slides away.
  */
-export default function ThemePreviewModal({ visible, title, subtitle, note, brand, listings, portraitSource, initialRoute = "/", onClose }: {
+export default function ThemePreviewModal({ visible, title, subtitle, note, brand, listings, portraitSource, initialRoute = "/", onClose, browserHistory = false }: {
   visible: boolean; title: string; subtitle?: string; note?: string;
   brand: Brand; listings: ManagedListing[]; portraitSource?: number; initialRoute?:string; onClose: () => void;
+  /**
+   * Make the preview's pages browser history entries (web), so the browser's Back and Safari's edge swipe step
+   * through the preview instead of leaving the screen underneath. Used where the screen underneath is verified to
+   * keep its state across those history steps (the app builder's review). Elsewhere (the dashboard) a history step
+   * made the router remount the screen, which closed the preview and left the dashboard, so it is off there.
+   */
+  browserHistory?: boolean;
 }) {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -51,7 +55,11 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
    */
   const webEntries = useRef(0);
   const ignorePops = useRef(0);
-  const web = Platform.OS === "web" && typeof window !== "undefined" && !!window.history;
+  const web = browserHistory && Platform.OS === "web" && typeof window !== "undefined" && !!window.history;
+  // Set while the preview itself is being removed (its screen left or remounted): its history entries are then left
+  // in place, because walking back from a screen that is going away would leave the page.
+  const unmounting = useRef(false);
+  useEffect(() => () => { unmounting.current = true; }, []);
   const navigate = (path: string) => {
     const destination = clientDestination(path, true);
     if (destination === page) return;
@@ -60,7 +68,6 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   };
 
   const close = () => {
-    trace("close", { page, webEntries: webEntries.current });
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
     onClose();
   };
@@ -82,7 +89,6 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     // Every pop while the preview is open is the preview's: handled here and kept from the router, which would
     // otherwise reset the screen underneath to an older recorded state (lib/builderHistory).
     const onPop = (event: PopStateEvent) => {
-      trace("onPop", { webEntries: webEntries.current });
       claimPop(event);
       if (ignorePops.current > 0) { ignorePops.current--; return; }
       if (webEntries.current > 0) webEntries.current--;
@@ -90,12 +96,11 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     };
     window.addEventListener("popstate", onPop, true);
     return () => {
-      trace("cleanup", { webEntries: webEntries.current });
       window.removeEventListener("popstate", onPop, true);
       historyLayers.close();
       // Closed some other way: drop the preview's remaining history entries without leaving the page. That pop
       // is the preview's too, so it is kept from the router as well.
-      if (webEntries.current > 0) {
+      if (webEntries.current > 0 && !unmounting.current) {
         const n = webEntries.current; webEntries.current = 0;
         const swallow = (event: PopStateEvent) => { claimPop(event); window.removeEventListener("popstate", swallow, true); };
         window.addEventListener("popstate", swallow, true);

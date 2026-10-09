@@ -92,10 +92,18 @@ test('stepping back through the client app preview opened from the review never 
   // Pops that belong to the preview or the builder never reach the router: it would reset the screen underneath
   // to an older recorded state (the dashboard preview closed and left the dashboard, Oct 9 2026 gate probe).
   const modal = read('components/ThemePreviewModal.tsx'), setup = read('components/InitialRealtorSetup.tsx');
-  assert.match(modal, /const onPop = \(event: PopStateEvent\) => \{\n(?:\s+trace\([^\n]*\n)?\s+claimPop\(event\);/);
+  assert.match(modal, /const onPop = \(event: PopStateEvent\) => \{\n\s+claimPop\(event\);/);
   assert.match(modal, /window\.addEventListener\("popstate", onPop, true\);/);
   assert.match(modal, /window\.addEventListener\("popstate", swallow, true\);\n\s+window\.history\.go\(-n\);/);
   assert.match(setup, /window\.addEventListener\("popstate", onPop, true\);/);
+  // Browser-history steps are only used where the screen underneath keeps its state across them (the builder's
+  // review); on the dashboard a history step made the router remount it (preview closed, dashboard left).
+  assert.match(read('components/SetupReviewActions.tsx'), /<ThemePreviewModal [^\n]*browserHistory \/>/);
+  for (const file of ['components/DesignPublicationPanel.tsx', 'components/ThemeShowcase.tsx', 'components/ThemeCarousel.tsx']) assert.doesNotMatch(read(file), /browserHistory/, file);
+  assert.match(modal, /const web = browserHistory && Platform\.OS === "web"/);
+  // A preview removed with its screen leaves its entries: walking back from a screen that is going away leaves the page.
+  assert.match(modal, /useEffect\(\(\) => \(\) => \{ unmounting\.current = true; \}, \[\]\);/);
+  assert.match(modal, /if \(webEntries\.current > 0 && !unmounting\.current\) \{/);
   assert.match(setup, /if \(!popped\) return;\n\s+claimPop\(event\);/);
   assert.match(read('components/ThemePreviewModal.tsx'), /historyLayers\.close\(\);\n\s+\/\/ Closed some other way/);
 });

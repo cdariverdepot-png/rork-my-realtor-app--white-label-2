@@ -23,7 +23,6 @@ import { Image } from "expo-image";
 import PortraitImage from "@/components/PortraitImage";
 import { usePortraitPicker } from "@/hooks/usePortraitPicker";
 import { useRouter, useFocusEffect } from "expo-router";
-import { historyTrace } from "@/lib/historyTrace";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
@@ -178,7 +177,6 @@ function useCountUp(target: number, duration = 1200, enabled = true): number {
 /* ─── Main Dashboard ─── */
 export default function AdminDashboard() {
   const router = useRouter();
-  useEffect(() => { historyTrace("dashboard", "mount"); return () => historyTrace("dashboard", "unmount"); }, []);
   useFocusEffect(useCallback(() => {
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => true);
     return () => subscription.remove();

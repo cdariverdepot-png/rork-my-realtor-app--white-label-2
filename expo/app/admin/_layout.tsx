@@ -1,9 +1,7 @@
 import { Stack } from "expo-router";
-import React, { useEffect } from "react";
-import { historyTrace } from "@/lib/historyTrace";
+import React from "react";
 export const unstable_settings = { initialRouteName: 'index' };
 export default function AdminLayout() {
-  useEffect(() => { historyTrace("admin-layout", "mount"); return () => historyTrace("admin-layout", "unmount"); }, []);
   return (
     <Stack
         screenOptions={{
