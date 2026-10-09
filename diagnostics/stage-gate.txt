@@ -1,4 +1,4 @@
-Stage gate requested Fri Oct  9 14:20:50 UTC 2026: audit repairs on a branch build (07d859d) — Studio website switch, builder Back and resume after a failed import, wording, card details, Listings at 430/768/1280.
+Stage gate requested Fri Oct  9 14:43:01 UTC 2026: audit repairs, second run (history layers fix) on a branch build.
 justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
