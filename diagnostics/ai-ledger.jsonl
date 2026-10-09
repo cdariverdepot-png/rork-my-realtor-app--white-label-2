@@ -54,3 +54,7 @@
 {"at":"2026-10-09T05:02:39.665Z","kind":"site","campaign":"gate-37886066232","level":"D","site":"redman-realty-group","calls":1,"blocked":0,"estimatedUsd":0.0182,"inputTokens":6421,"outputTokens":668}
 {"at":"2026-10-09T05:11:29.368Z","kind":"site","campaign":"gate-37887169474","level":"D","site":"cindy-carlson-realty","calls":2,"blocked":0,"estimatedUsd":0.0239,"inputTokens":21610,"outputTokens":899}
 {"at":"2026-10-09T05:20:40.618Z","kind":"site","campaign":"gate-37887913475","level":"D","site":"cindy-carlson-realty","calls":2,"blocked":0,"estimatedUsd":0.0259,"inputTokens":21606,"outputTokens":1142}
+{"at":"2026-10-09T06:26:52.386Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-then-paonia","calls":2,"blocked":0,"estimatedUsd":0.0258,"inputTokens":5343,"outputTokens":1890}
+{"at":"2026-10-09T06:27:57.316Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"paonia-then-cindy","calls":2,"blocked":0,"estimatedUsd":0.0264,"inputTokens":5348,"outputTokens":1969}
+{"at":"2026-10-09T06:29:27.179Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-paonia-cindy-paonia","calls":7,"blocked":0,"estimatedUsd":0.1338,"inputTokens":90880,"outputTokens":3074}
+{"at":"2026-10-09T06:30:50.293Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-exit-mid-import-paonia","calls":2,"blocked":0,"estimatedUsd":0.0282,"inputTokens":7510,"outputTokens":2323}
