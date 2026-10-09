@@ -130,7 +130,8 @@ test('setup runs the listing import and profile build together and tells the bui
   const setup = fs.readFileSync(path.join(__dirname, '../components/InitialRealtorSetup.tsx'), 'utf8');
   assert.match(setup, /Promise\.allSettled\(\[listingImport, profileBuild\]\)/);
   assert.match(setup, /analyzeBuild\(\{ connectedListingSources: \[listingUrl\]/);
-  assert.match(setup, /connectListingSource\(listingUrl, auth\.realtorId, report\("listings"\)\)/);
+  // The import also carries its setup session (cross-website isolation, Oct 8 2026).
+  assert.match(setup, /connectListingSource\(listingUrl, auth\.realtorId, report\("listings"\), session\)/);
 });
 
 test('before any event, the screen claims only that the requests were sent', () => {

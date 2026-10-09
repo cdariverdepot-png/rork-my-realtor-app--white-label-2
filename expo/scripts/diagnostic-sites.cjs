@@ -92,7 +92,8 @@ async function uiWalk(page, r) {
   const width = page.viewportSize().width;
   ui.listings = { cards: boxes.length, clipped: boxes.filter(b => b.x < 0 || b.x + b.w > width + 1).length, widths: [...new Set(boxes.map(b => b.w))],
     themeLabel: /THEME PREVIEW/.test(listingText), viewAll: /\bView all\b/.test(listingText), pickedForYou: /picked for you/i.test(listingText),
-    heading: (listingText.match(/[^\n]*’s listings|Available homes/) ?? [''])[0], count: (listingText.match(/\d+ homes?\b/) ?? [''])[0] };
+    heading: (listingText.match(/[^\n]*’s listings|Available homes/) ?? [''])[0], count: (listingText.match(/\d+ homes?\b/) ?? [''])[0],
+    titles: await page.evaluate(() => [...document.querySelectorAll('[data-testid="listing-card"] [role="button"]')].map(el => el.getAttribute('aria-label')).filter(Boolean).slice(0, 40)) };
   await step('listings-top');
   // Scroll the preview to the end: every card must be reachable.
   const vp = page.viewportSize();
@@ -198,6 +199,52 @@ async function run(browser, site) {
     r.finalBuildScreen = r.timeline.filter(t => t.screen !== 'REVIEW').at(-1)?.screen ?? '';
     await shot(done ? 'review' : 'stuck');
     r.reviewText = (await page.evaluate(() => document.body.innerText)).slice(0, 6000);
+    // Website changes in one session (cross-website isolation): site.then = [{ url, how: 'change' | 'exit-mid-import' }].
+    // 'change' uses the review's Change link after the previous import finished; 'exit-mid-import' leaves the
+    // builder a few seconds into the previous import and starts again from the new website.
+    const waitReview = async host => {
+      const until = Date.now() + 420000;
+      while (Date.now() < until) {
+        const text = await page.evaluate(() => document.body.innerText).catch(() => '');
+        if (/Here’s your app|Here's your app/.test(text) && text.includes(host)) return true;
+        await page.waitForTimeout(300);
+      }
+      return false;
+    };
+    const submitUrl = async url => {
+      const field2 = page.getByPlaceholder('https://your-website.com');
+      await field2.waitFor({ timeout: 60000 });
+      await field2.fill(url);
+      const submit = page.getByLabel('Import my listings');
+      for (let i = 0; i < 60 && !(await submit.isEnabled().catch(() => false)); i++) await page.waitForTimeout(250);
+      await submit.click({ timeout: 20000 });
+    };
+    r.changes = [];
+    const plan = Array.isArray(site.then) ? site.then : site.replaceWith ? [{ url: site.replaceWith, how: 'change' }] : [];
+    let previousUrl = site.url;
+    for (const change of plan) {
+      const host = new URL(change.url).hostname.replace(/^www\./, '');
+      if (change.how === 'exit-mid-import') {
+        // Start the previous website again, then leave a few seconds in.
+        if (done) { await page.getByText('Change', { exact: true }).first().click({ timeout: 10000 }); await submitUrl(previousUrl); }
+        await page.waitForTimeout(4000);
+        await page.getByLabel('Back').first().click({ timeout: 10000 });
+        await page.waitForURL(u => !String(u).includes('/admin/build'), { timeout: 30000 }).catch(() => {});
+        await page.getByLabel('Page 5').click({ timeout: 30000 });
+        await page.getByText('BUILD MY APP', { exact: true }).click({ timeout: 30000 });
+        await page.waitForURL(u => String(u).includes('/admin/build'), { timeout: 60000 });
+        const change2 = page.getByText('Change', { exact: true });
+        if (await change2.count()) await change2.first().click().catch(() => {});
+      } else if (done) {
+        await page.getByText('Change', { exact: true }).first().click({ timeout: 10000 });
+      }
+      await submitUrl(change.url);
+      done = await waitReview(host);
+      r.changes.push({ url: change.url, how: change.how, review: done, imported: Number((await page.evaluate(() => document.body.innerText)).match(/(\d+) listings? imported/)?.[1] ?? 0) });
+      await shot(done ? `changed-${r.changes.length}` : `changed-${r.changes.length}-stuck`);
+      previousUrl = change.url;
+      if (!done) break;
+    }
     if (done && process.env.UI_WALK) await uiWalk(page, r).catch(e => { r.ui = { ...(r.ui ?? {}), error: String(e.stack ?? e).slice(0, 800) }; });
     if (done && !process.env.UI_WALK) {
       // Client preview: record each control and what it opens.

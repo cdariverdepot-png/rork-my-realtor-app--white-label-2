@@ -16,7 +16,7 @@ export type ListingSyncResult = { ok: boolean; items?: ManagedListing[]; source?
   /** Listings whose details are read by follow-up detail jobs of the import that started at detailsSince. */
   detailsPending?: number; detailsSince?: number; attempted?: number };
 
-export async function invokeListingSync(body: { mode?: "connect" | "details" | "import-file"; url?: string; listingId?: string; realtorId?: string; sourceId?: string; since?: number; csv?: string; label?: string },
+export async function invokeListingSync(body: { mode?: "connect" | "details" | "import-file" | "disconnect"; url?: string; listingId?: string; realtorId?: string; sourceId?: string; since?: number; csv?: string; label?: string; session?: string },
   onEvent?: (event: ImportEvent) => void): Promise<ListingSyncResult> {
   // Importing must use the existing login, never create a replacement guest session.
   if (!supabase) throw new Error("Sign in to your realtor account to connect listings.");
@@ -65,14 +65,14 @@ export async function readRemainingDetails(first: ListingSyncResult, realtorId?:
   return result;
 }
 
-export async function connectListingSource(raw: string, realtorId?: string, onEvent?: (event: ImportEvent) => void) {
+export async function connectListingSource(raw: string, realtorId?: string, onEvent?: (event: ImportEvent) => void, session?: string) {
   const value = raw.trim();
   if (!value) throw new Error("Paste the page where your listings live.");
   let url: URL;
   try { url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`); }
   catch { throw new Error("Paste the full public link to your profile or listings page."); }
   if (url.protocol !== "https:" || url.username || url.password) throw new Error("Use the public HTTPS link to your profile or listings page.");
-  const connected = await invokeListingSync({ mode: "connect", url: url.toString(), ...(realtorId ? { realtorId } : {}) }, onEvent);
+  const connected = await invokeListingSync({ mode: "connect", url: url.toString(), ...(realtorId ? { realtorId } : {}), ...(session ? { session } : {}) }, onEvent);
   return readRemainingDetails(connected, realtorId, onEvent);
 }
 
@@ -85,3 +85,12 @@ export async function importListingCsv(csv: string, label: string, realtorId?: s
   if (csv.length > 2_000_000) throw new ListingImportError("Use a CSV under 2 MB (about 1,000 listings).");
   return invokeListingSync({ mode: "import-file", csv, label, ...(realtorId ? { realtorId } : {}) });
 }
+
+/**
+ * The realtor replaced their website during setup: the old website stops syncing and its listings leave the app
+ * (archived on the server, so reconnecting it restores them with their notes and tags).
+ */
+export async function disconnectListingSource(url: string, realtorId?: string, session?: string): Promise<ListingSyncResult> {
+  return invokeListingSync({ mode: "disconnect", url, ...(realtorId ? { realtorId } : {}), ...(session ? { session } : {}) });
+}
+

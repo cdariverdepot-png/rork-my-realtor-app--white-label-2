@@ -1,5 +1,2 @@
-Rendered capture requested Fri Oct  9 01:53:20 UTC 2026: Flexmls transport paging (10 cards per response).
-capture: flexmls-columbiarealestate--3 https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings
-capture: flexmls-redefinedrealty--3 https://my.flexmls.com/redefinedrealty/search/listing_categories/Active/listings
-capture: flexmls-homesourceofyakima--3 https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings
-capture: cindy-carlson-realty--transport-3 https://cindycarlsonrealty.com/
+Rendered capture requested Fri Oct  9 06:06:04 UTC 2026: Paonia Realty (user test, import returned 422).
+capture: paonia-realty https://www.paoniarealty.com/

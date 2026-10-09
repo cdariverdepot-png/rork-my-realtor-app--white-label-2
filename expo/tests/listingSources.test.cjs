@@ -185,11 +185,12 @@ function fakeDatabase({ rows = {}, auth = true, conflict = false, owner = true, 
   return { db, rows, reads, writes };
 }
 
-async function endpoint({ body = {}, auth = true, headers = {}, pages = {}, rows = {}, conflict = false, owner = true, serviceActive = true } = {}) {
+async function endpoint({ body = {}, auth = true, headers = {}, pages = {}, rows = {}, conflict = false, owner = true, serviceActive = true, onFetch } = {}) {
   const database = fakeDatabase({ rows, auth, conflict, owner, serviceActive }); let fetched = 0;
   const r = runtime({ database: database.db, env: { SUPABASE_URL: 'https://project.supabase.co', SUPABASE_SERVICE_ROLE_KEY: 'private', LISTING_SYNC_TOKEN: 'scheduler-secret' },
     fetchFixture: async uri => {
       fetched++; const url = String(uri);
+      onFetch?.(url, database.rows);
       if (url.endsWith('/robots.txt')) return new Response('User-agent: *\nAllow: /', { headers: { 'Content-Type': 'text/plain' } });
       if (!(url in pages)) return new Response('Not found', { status: 404 });
       return new Response(pages[url], { headers: { 'Content-Type': 'text/html' } });
@@ -573,4 +574,100 @@ test('a CSV listing export is imported through the same save boundary, and re-im
   // Contact lists are not listing exports.
   const contacts = await endpoint({ body: { mode: 'import-file', csv: 'Name,Email,Phone\nJane,jane@example.com,555', label: 'contacts.csv' } });
   assert.equal(contacts.status, 422);
+});
+
+test('replacing the website archives the old website\'s listings and stops its sync; reconnecting restores them', async () => {
+  const realtor = '11111111-1111-1111-1111-111111111111';
+  const first = await endpoint({ body: { mode: 'connect', url: source.url }, pages: { [source.url]: html([home(), home(25)]), [home().url]: html(home()), [home(25).url]: html(home(25)) } });
+  assert.equal(first.result.imported, 2);
+  const csv = 'ListingId,StreetAddress,City,StateOrProvince,ListPrice\n9,9 Other Rd,Paonia,CO,450000';
+  const file = await endpoint({ rows: first.rows, body: { mode: 'import-file', csv, label: 'other.csv' } });
+  const rows = structuredClone(file.rows);
+  rows[`${realtor}:listings.v2`].value.items = rows[`${realtor}:listings.v2`].value.items.map(item => item.title === '12 Pine St' ? { ...item, elizaTake: 'Lovely porch.' } : item);
+  const gone = await endpoint({ rows, body: { mode: 'disconnect', url: 'https://www.agent.example/' } });
+  assert.equal(gone.status, 200);
+  assert.equal(gone.result.removed, 1);
+  assert.equal(gone.result.archived, 2);
+  assert.equal(gone.fetched, 0);
+  const sources = gone.rows[`${realtor}:listing-sources.v1`].value.sources;
+  assert.deepEqual(sources.map(s => s.kind), ['listing-file'], 'only the old website source is removed');
+  const items = gone.rows[`${realtor}:listings.v2`].value.items;
+  assert.ok(items.filter(item => item.title !== '9 Other Rd').every(item => item.sourceArchived));
+  assert.equal(items.find(item => item.title === '9 Other Rd').sourceArchived, false);
+  // Reconnecting the same website brings the same homes back, with the realtor's note.
+  const back = await endpoint({ rows: gone.rows, body: { mode: 'connect', url: source.url }, pages: { [source.url]: html([home(), home(25)]), [home().url]: html(home()), [home(25).url]: html(home(25)) } });
+  const restored = back.rows[`${realtor}:listings.v2`].value.items.filter(item => item.title !== '9 Other Rd');
+  assert.equal(restored.length, 2);
+  assert.ok(restored.every(item => !item.sourceArchived));
+  assert.equal(restored.find(item => item.title === '12 Pine St').elizaTake, 'Lovely porch.');
+  // An unknown website is a no-op.
+  const none = await endpoint({ rows: back.rows, body: { mode: 'disconnect', url: 'https://unrelated.example/' } });
+  assert.equal(none.result.removed, 0);
+});
+
+
+// Cross-website isolation in the app builder (Oct 8 2026: Cindy -> Back -> Paonia showed Cindy's homes).
+const REALTOR = '11111111-1111-1111-1111-111111111111';
+const siteA = 'https://cindy.example/', siteB = 'https://paonia.example/';
+const homeAt = (origin, n, street) => ({ '@type': 'RealEstateListing', name: `${n} ${street}`, url: `${origin}property/${n}`, price: 300000 + n,
+  image: `https://photos.example/${n}.jpg`, offers: { availability: 'https://schema.org/InStock', price: 300000 + n } });
+const sitePages = (origin, homes) => Object.fromEntries([[origin, html(homes)], ...homes.map(h => [h.url, html(h)])]);
+const cindyHomes = [homeAt(siteA, 409, 'Emerald Dr'), homeAt(siteA, 604, 'Cameron Ave')];
+const paoniaHomes = [homeAt(siteB, 12, 'Grand Ave'), homeAt(siteB, 40, 'Orchard Rd'), homeAt(siteB, 7, 'Lamborn Mesa')];
+const active = rows => rows[`${REALTOR}:listings.v2`].value.items.filter(item => !item.sourceArchived && !item.hidden).map(item => item.title).sort();
+
+test('isolation: Cindy -> Paonia in one setup shows only Paonia\'s homes; Paonia -> Cindy restores Cindy\'s', async () => {
+  const cindy = await endpoint({ body: { mode: 'connect', url: siteA, session: 'setup-aaaaaaaa' }, pages: sitePages(siteA, cindyHomes) });
+  assert.equal(cindy.status, 200);
+  assert.deepEqual(active(cindy.rows), ['409 Emerald Dr', '604 Cameron Ave']);
+  const paonia = await endpoint({ rows: cindy.rows, body: { mode: 'connect', url: siteB, session: 'setup-bbbbbbbb' }, pages: sitePages(siteB, paoniaHomes) });
+  assert.equal(paonia.status, 200);
+  assert.deepEqual(active(paonia.rows), ['12 Grand Ave', '40 Orchard Rd', '7 Lamborn Mesa']);
+  assert.deepEqual(active({ [`${REALTOR}:listings.v2`]: { value: { items: paonia.result.items } } }), ['12 Grand Ave', '40 Orchard Rd', '7 Lamborn Mesa'], 'the response the review saves is Paonia only');
+  assert.deepEqual(paonia.rows[`${REALTOR}:listing-sources.v1`].value.sources.map(s => s.url), [siteB]);
+  // Nothing was deleted: Cindy's homes are archived and come back, edits intact, when Cindy's site is chosen again.
+  const rows = structuredClone(paonia.rows);
+  rows[`${REALTOR}:listings.v2`].value.items = rows[`${REALTOR}:listings.v2`].value.items.map(item => item.title === '409 Emerald Dr' ? { ...item, elizaTake: 'Great kitchen.' } : item);
+  const back = await endpoint({ rows, body: { mode: 'connect', url: siteA, session: 'setup-cccccccc' }, pages: sitePages(siteA, cindyHomes) });
+  assert.deepEqual(active(back.rows), ['409 Emerald Dr', '604 Cameron Ave']);
+  assert.equal(back.rows[`${REALTOR}:listings.v2`].value.items.find(item => item.title === '409 Emerald Dr').elizaTake, 'Great kitchen.');
+  // Several consecutive changes leave exactly one website's homes.
+  const again = await endpoint({ rows: back.rows, body: { mode: 'connect', url: siteB, session: 'setup-dddddddd' }, pages: sitePages(siteB, paoniaHomes) });
+  assert.deepEqual(active(again.rows), ['12 Grand Ave', '40 Orchard Rd', '7 Lamborn Mesa']);
+});
+
+test('isolation: a slower import of the previous website never saves into the newer setup', async () => {
+  const cindy = await endpoint({ body: { mode: 'connect', url: siteA, session: 'setup-aaaaaaaa' }, pages: sitePages(siteA, cindyHomes) });
+  // While a second Cindy import is reading pages, the realtor switches to Paonia (a new session starts).
+  const late = await endpoint({ rows: cindy.rows, body: { mode: 'connect', url: siteA, session: 'setup-eeeeeeee' }, pages: sitePages(siteA, cindyHomes),
+    onFetch: (url, rows) => { if (url === siteA) rows[`${REALTOR}:listing-sources.v1`].value.setupSession = 'setup-ffffffff'; } });
+  assert.equal(late.status, 409);
+  assert.equal(late.result.code, 'superseded');
+  const before = JSON.stringify(cindy.rows[`${REALTOR}:listings.v2`].value.items.map(({ updatedAt, lastCheckedAt, detailAttemptAt, ...rest }) => rest));
+  const after = JSON.stringify(late.rows[`${REALTOR}:listings.v2`].value.items.map(({ updatedAt, lastCheckedAt, detailAttemptAt, ...rest }) => rest));
+  assert.equal(after, before, 'the superseded import wrote no listings');
+});
+
+test('isolation: a failed import after a successful one shows no homes from the previous website', async () => {
+  const cindy = await endpoint({ body: { mode: 'connect', url: siteA, session: 'setup-aaaaaaaa' }, pages: sitePages(siteA, cindyHomes) });
+  // The builder disconnects the replaced website first, then the new import finds nothing.
+  const gone = await endpoint({ rows: cindy.rows, body: { mode: 'disconnect', url: siteA, session: 'setup-bbbbbbbb' } });
+  assert.equal(gone.result.archived, 2);
+  const failed = await endpoint({ rows: gone.rows, body: { mode: 'connect', url: siteB, session: 'setup-bbbbbbbb' }, pages: { [siteB]: '<html><body><h1>Paonia Realty</h1><p>No listings at this time.</p></body></html>' } });
+  assert.equal(failed.status, 422);
+  assert.deepEqual(active(failed.rows), []);
+});
+
+test('isolation: another realtor account\'s listings and sources are never read or written', async () => {
+  const other = '22222222-2222-2222-2222-222222222222';
+  const rows = { [`${other}:listings.v2`]: { key: `${other}:listings.v2`, rev: 5, value: { items: [{ id: 'theirs', title: '1 Their St', sourceId: 'source-x', sourceUrl: 'https://their.example/p/1' }] } },
+    [`${other}:listing-sources.v1`]: { key: `${other}:listing-sources.v1`, rev: 5, value: { sources: [{ id: 'source-x', url: siteA, submittedUrl: siteA, kind: 'agent-website', setupSession: 'setup-zzzzzzzz' }] } } };
+  const snapshot = JSON.stringify(rows);
+  const mine = await endpoint({ rows, body: { mode: 'connect', url: siteA, session: 'setup-aaaaaaaa' }, pages: sitePages(siteA, cindyHomes) });
+  assert.equal(mine.status, 200);
+  assert.equal(JSON.stringify({ [`${other}:listings.v2`]: mine.rows[`${other}:listings.v2`], [`${other}:listing-sources.v1`]: mine.rows[`${other}:listing-sources.v1`] }), snapshot);
+  assert.ok(!mine.reads.some(read => String(read.filters.key ?? '').startsWith(other)));
+  // Asking for another account's realtor id is refused before anything is read.
+  const foreign = await endpoint({ rows, body: { mode: 'connect', url: siteA, realtorId: other } });
+  assert.equal(foreign.status, 403);
 });
