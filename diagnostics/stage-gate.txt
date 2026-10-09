@@ -1,6 +1,6 @@
-Stage gate requested Fri Oct  9 05:08:42 UTC 2026: phone-size UI walkthrough of the DEPLOYED preview of main 139d87b (Cindy Carlson).
-justification: confirm on the deployed iPhone preview that Cindy's import fills the app on the first pass and the Listings tab, Home, Saved and back navigation behave
+Stage gate requested Fri Oct  9 05:17:53 UTC 2026: phone-size UI walkthrough of the DEPLOYED preview of main 3e5d780 (Cindy Carlson).
+justification: final check on the deployed iPhone preview of the Listings tab, Saved homes, Home and back navigation with Cindy's live import
 staging-ai: shared-key
 ui-walk: yes
-app-url: https://cdariverdepot-my-realtor--9scug67ffk.expo.app
+app-url: https://cdariverdepot-my-realtor--u44zpz4804.expo.app
 sites: cindy-carlson-realty
