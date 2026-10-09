@@ -1,0 +1,563 @@
+{
+  "id": "freestone-properties",
+  "url": "https://www.freestoneproperties.com/",
+  "category": "brokerage",
+  "timeline": [
+    {
+      "at": 54,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 860,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nReading your website"
+    },
+    {
+      "at": 1062,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nReading Freestone Properties\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1264,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nLooking for your listings"
+    },
+    {
+      "at": 1465,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nLooking for your listings\nReading linked pages · 0 of 2"
+    },
+    {
+      "at": 1666,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 listings so far · 1 page checked\nReading linked pages · 1 of 2\nReading listing details · 0 of 3"
+    },
+    {
+      "at": 1867,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 listings so far · 1 page checked\nReading linked pages · 1 of 2\nReading listing details · 1 of 3"
+    },
+    {
+      "at": 2068,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 listings so far · 1 page checked\nRead 2 linked pages\nReading listing details · 1 of 3\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3277,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 listings so far · 1 page checked\nRead 2 linked pages\nReading listing details · 2 of 3\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3478,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 active listings\nRead 2 linked pages\nRead full details for all 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4081,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 active listings\nRead 2 linked pages\nRead full details for all 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaving 3 listings"
+    },
+    {
+      "at": 4685,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 active listings\nRead 2 linked pages\nRead full details for all 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaved 3 listings"
+    },
+    {
+      "at": 7704,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 active listings\nRead 2 linked pages\nRead full details for all 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaved 3 listings\nFound Black Mountain, NC"
+    },
+    {
+      "at": 7914,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 966,
+      "totalMs": 4537,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 312
+        },
+        {
+          "kind": "listings",
+          "host": "freestoneproperties.com",
+          "pages": 1,
+          "found": 0,
+          "at": 590
+        },
+        {
+          "kind": "listings",
+          "host": "freestoneproperties.com",
+          "pages": 1,
+          "found": 3,
+          "at": 613
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 3,
+          "succeeded": 0,
+          "at": 613
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 3,
+          "succeeded": 1,
+          "at": 821
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 3,
+          "succeeded": 2,
+          "at": 2306
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 3,
+          "total": 3,
+          "succeeded": 3,
+          "at": 2361
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 3,
+          "at": 2370
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 3,
+          "at": 3046
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 3,
+          "at": 3662
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-nkdipb",
+            "url": "https://www.freestoneproperties.com/",
+            "submittedUrl": "https://www.freestoneproperties.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://www.freestoneproperties.com/"
+            ],
+            "connectedAt": 1791520689520,
+            "lastCheckedAt": 1791520689520,
+            "nextSyncAt": 1791527889520,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 3,
+            "identity": {
+              "phrases": [
+                "freestoneproperties",
+                "ashevillerealestate",
+                "blackmountainncrealestate",
+                "freestone"
+              ],
+              "words": [
+                "freestoneproperties",
+                "freestone",
+                "asheville",
+                "black",
+                "mountain"
+              ]
+            }
+          },
+          "imported": 3,
+          "checked": 3,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-ohs73p",
+              "title": "200 Courtland Place Asheville",
+              "neighborhood": "",
+              "price": "$865,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/200Courtland.jpg?t=1790383722",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/Screenshot-2026-09-25-10.43.46-AM.png?t=1790349915",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_0407-1.jpg?t=1790349915",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/Screenshot-2026-09-25-10.43.42-AM.png?t=1790349918",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/Screenshot-2026-09-25-10.44.07-AM.png?t=1790349924",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/Screenshot-2026-09-25-10.43.53-AM.png?t=1790349929",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_0394-1.jpg?t=1790349933",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_5206.jpg?t=1790349936",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_5209.jpg?t=1790349943",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_5208.jpg?t=1790349953",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_5207.jpg?t=1790349956",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_2352.jpg?t=1790349960",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_2356.jpg?t=1790349967",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_2345.jpg?t=1790349973",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/IMG_2348.jpg?t=1790349977",
+                "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/Screenshot-2026-09-25-10.43.56-AM.png?t=1790349983"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/200Courtland.jpg?t=1790383722",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/200-courtland-place-asheville/",
+              "description": "Monford multi-unit property for sale, ideal for an owner-occupant looking to offset a mortgage or an investor expanding their portfolio.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791520687471,
+              "lastSyncAttemptAt": 1791520687471,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791527887471,
+              "updatedAt": 1791520687471,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791520687471
+            },
+            {
+              "id": "listing-1500pfa",
+              "title": "808 Montreat Road Black Mountain",
+              "neighborhood": "",
+              "price": "$510,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/1-custom-808-montreat-rd.jpg?t=1783119176",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/2-custom-808-montreat-rd.jpg?t=1783119183",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/3-custom-808-montreat-rd.jpg?t=1783119183",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/4-custom-808-montreat-rd.jpg?t=1783119183",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/5-custom-808-montreat-rd.jpg?t=1783361919",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/6-custom-808-montreat-rd.jpg?t=1783328724",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/7-custom-808-montreat-rd.jpg?t=1783345063",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/8-custom-808-montreat-rd.jpg?t=1783349143",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/9-custom-808-montreat-rd.jpg?t=1783312491",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/10-custom-808-montreat-rd.jpg?t=1783360711",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/11-custom-808-montreat-rd.jpg?t=1783361331",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/12-custom-808-montreat-rd.jpg?t=1783451724",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/13-custom-808-montreat-rd.jpg?t=1783335915",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/14-custom-808-montreat-rd.jpg?t=1783445612",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/15-custom-808-montreat-rd.jpg?t=1783357716",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/16-custom-808-montreat-rd.jpg?t=1783370648",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/17-custom-808-montreat-rd.jpg?t=1783384285",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/18-custom-808-montreat-rd.jpg?t=1783337551",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/19-custom-808-montreat-rd.jpg?t=1783451724",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/20-custom-808-montreat-rd.jpg?t=1783370524",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/21-custom-808-montreat-rd.jpg?t=1783451724",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/22-custom-808-montreat-rd.jpg?t=1783363019",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/23-custom-808-montreat-rd.jpg?t=1783359532",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/24-custom-808-montreat-rd.jpg?t=1783445549",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/25-custom-808-montreat-rd.jpg?t=1783345072",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/26-custom-808-montreat-rd.jpg?t=1783328719",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/27-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/28-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/29-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/30-custom-808-montreat-rd.jpg?t=1783391241",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/31-custom-808-montreat-rd.jpg?t=1783391173",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/32-custom-808-montreat-rd.jpg?t=1783391137",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/33-custom-808-montreat-rd.jpg?t=1783373824",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/34-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/35-custom-808-montreat-rd.jpg?t=1783366467",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/36-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/37-custom-808-montreat-rd.jpg?t=1783363016",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/38-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/39-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/40-custom-808-montreat-rd.jpg?t=1783345060",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/41-custom-808-montreat-rd.jpg?t=1783349159",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/42-custom-808-montreat-rd.jpg?t=1783323815",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/43-custom-808-montreat-rd.jpg?t=1783330507",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/44-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/45-custom-808-montreat-rd.jpg?t=1783444992",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/46-custom-808-montreat-rd.jpg?t=1783358196",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/47-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/48-custom-808-montreat-rd.jpg?t=1783451725",
+                "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/49-custom-808-montreat-rd.jpg?t=1783349160"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/1-custom-808-montreat-rd.jpg?t=1783119176",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/808-montreat-road-black-mountain/",
+              "description": "Picture perfect cottage right in the heart of Black Mountain on almost 1 acre! Remodeled 1923 home boasts incredible charm & large, flat lot!",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791520687471,
+              "lastSyncAttemptAt": 1791520687471,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791527887471,
+              "updatedAt": 1791520687471,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791520687471
+            },
+            {
+              "id": "listing-1l3iscu",
+              "title": "120 Maple Ridge Road Candler",
+              "neighborhood": "",
+              "price": "$389,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/1-web-or-mls-120-maple-ridge-rd.jpg?t=1778018667",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/13-web-or-mls-120-maple-ridge-rd.jpg?t=1778018667",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/14-web-or-mls-120-maple-ridge-rd.jpg?t=1778018667",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/3-web-or-mls-120-maple-ridge-rd.jpg?t=1778027228",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/4-web-or-mls-120-maple-ridge-rd.jpg?t=1778027259",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/5-web-or-mls-120-maple-ridge-rd.jpg?t=1778027232",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/6-web-or-mls-120-maple-ridge-rd.jpg?t=1778027213",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/7-web-or-mls-120-maple-ridge-rd.jpg?t=1778027256",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/2-web-or-mls-120-maple-ridge-rd.jpg?t=1778027218",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/8-web-or-mls-120-maple-ridge-rd.jpg?t=1778027222",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/9-web-or-mls-120-maple-ridge-rd.jpg?t=1778027205",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/10-web-or-mls-120-maple-ridge-rd.jpg?t=1778027249",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/11-web-or-mls-120-maple-ridge-rd.jpg?t=1778027264",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/12-web-or-mls-120-maple-ridge-rd.jpg?t=1778027228",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/15-web-or-mls-120-maple-ridge-rd.jpg?t=1778027239",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/16-web-or-mls-120-maple-ridge-rd.jpg?t=1778027208",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/17-web-or-mls-120-maple-ridge-rd.jpg?t=1778027198",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/18-web-or-mls-120-maple-ridge-rd.jpg?t=1778027242",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/19-web-or-mls-120-maple-ridge-rd.jpg?t=1778027254",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/20-web-or-mls-120-maple-ridge-rd.jpg?t=1778027266",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/21-web-or-mls-120-maple-ridge-rd.jpg?t=1778027263",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/22-web-or-mls-120-maple-ridge-rd.jpg?t=1778027208",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/23-web-or-mls-120-maple-ridge-rd.jpg?t=1778027266",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/24-web-or-mls-120-maple-ridge-rd.jpg?t=1778027259",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/25-web-or-mls-120-maple-ridge-rd.jpg?t=1778027222",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/26-web-or-mls-120-maple-ridge-rd.jpg?t=1778027228",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/27-web-or-mls-120-maple-ridge-rd.jpg?t=1778027203",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/28-web-or-mls-120-maple-ridge-rd.jpg?t=1778027212",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/29-web-or-mls-120-maple-ridge-rd.jpg?t=1778027269",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/30-web-or-mls-120-maple-ridge-rd.jpg?t=1778027225",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/31-web-or-mls-120-maple-ridge-rd.jpg?t=1778027249",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/32-web-or-mls-120-maple-ridge-rd.jpg?t=1778027218",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/33-web-or-mls-120-maple-ridge-rd.jpg?t=1778027205",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/34-web-or-mls-120-maple-ridge-rd.jpg?t=1778027223",
+                "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/35-web-or-mls-120-maple-ridge-rd.jpg?t=1778027242"
+              ],
+              "image": "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/1-web-or-mls-120-maple-ridge-rd.jpg?t=1778018667",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://www.freestoneproperties.com/listings/120-maple-ridge-road-candler/",
+              "description": "Located just off Smokey Park Hwy, this property is dual zoned - road frontage half is CS and the back half is R-3. 1.70 acres in Candler, NC.",
+              "detailsComplete": true,
+              "facts": {},
+              "lastRefreshedAt": 1791520687471,
+              "lastSyncAttemptAt": 1791520687471,
+              "syncFailures": 0,
+              "syncState": "status-unconfirmed",
+              "nextSyncAt": 1791527887471,
+              "updatedAt": 1791520687471,
+              "sourceId": "source-nkdipb",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791520687471
+            }
+          ],
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 0,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedUsd": 0,
+            "byStage": {},
+            "records": []
+          },
+          "timings": {
+            "details": 1748,
+            "listings": 2058,
+            "save": 616,
+            "total": 3662
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "freestone-properties-00-url.png",
+    "freestone-properties-01-review.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 3225,
+  "reviewMs": 7914,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Freestone Properties\nMatching your website’s design and imagery\nFound 3 active listings\nRead 2 linked pages\nRead full details for all 3 listings\nIdentified your logo\nSorted 21 website images by role\nWriting your profile and app copy\nSaved 3 listings\nFound Black Mountain, NC",
+  "reviewText": "Back\nAPP BUILDER\nwww.freestoneproperties.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nBLACK MOUNTAIN, NC\nAsheville & Black Mountain Real Estate\nBrowse real estate in Asheville, Black Mountain, and surrounding areas. Buy or sell homes with Asheville's trusted local real estate agents.\nTHE AREA\nWaynesville - Primary Community, NC\nView all Waynesville homes for sale Waynesville, NC is a town located southwest of Asheville. It’s the county seat of Haywood County and the biggest town west of Asheville before the North Carolina-Tennessee border. In addition to a warm and walkable downtown, the larger Waynesville area also contains quiet neighborhoods and rural communities. It is considered part of the Asheville metropolitan area, being only 45 minutes from the Asheville city center.\nTHE AREA\nArden\nLearn More Arden is one of the larger suburbs of Asheville, spreading across most of the southern portion of Buncombe County. Homes in Arden range from modest ranch-style homes and bungalows to multi-million ... Details\nFROM THE SITE\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nPhone This field is for validation purposes and should be left unchanged. Name (Required) Email (Required) Phone Message (Required) Referrer URL Submit Search Asheville Area Homes More Save Search\nFreestone Properties\n$865,000\n200 Courtland Place Asheville\n$510,000\n808 Montreat Road Black Mountain\n$389,000\n120 Maple Ridge Road Candler\nCLIENTS\nWhat Clients Are Saying Testimonials\n\" We have bought and sold seven homes so far with these being located all over the United States, including Hawaii. During the buying and selling process, we were privileged to work with many, outstanding real estate professionals. We have to say, Scott... continued \" - Jim and Linda W., Black Mountain, NC \" I can honestly say the property we sold would not have happened with that particular buyer without a patient agent representing our interest.\nFROM THE SITE\nMoving to Asheville, NC\nAsheville, North Carolina is one of those places that has a lasting effect on a person. Just at the mention of it, a person who...\n(828) 419-0444\nrealestate@freestoneproperties.com\nAllen Tate/Beverly-Hanks Partnership\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nA truly local real estate firm for Asheville, Black Mountain, and Western North Carolina.\nTry another opening line\nYOUR INTRODUCTION\nFounded by Scott and Lisa Russell, Freestone Properties brings together a love for our mountain communities and a dedication to client satisfaction. As a family-owned firm based in Black Mountain, we take pride in offering personalized guidance, powered by deep experience and an innovative spirit. Our partnership with Allen Tate/Beverly-Hanks blends the resources of the Carolinas’ largest real estate company with our own local knowledge—ensuring you benefit from both world-class tools and a hometown touch. We believe every client and every property deserve unique attention, and our goal is to make your move in Western North Carolina as rewarding as the place itself.\nTry another introduction\n3 listings imported from your website.\nAdd your portrait\nRecommended — your app opens on your photo.\nChoose a photo\nJust a few more details\nWe couldn’t find these on your website.\nYour name\n▸ Brokerage & license (optional)\n✓ Allen Tate/Beverly-Hanks Partnership\nStill needed: Your name\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "ui": {
+    "steps": [
+      {
+        "name": "review",
+        "file": "freestone-properties-ui-00-review.png"
+      },
+      {
+        "name": "home",
+        "file": "freestone-properties-ui-01-home.png",
+        "viewListingsButton": false,
+        "propertySection": true
+      },
+      {
+        "name": "listings-top",
+        "file": "freestone-properties-ui-02-listings-top.png"
+      },
+      {
+        "name": "listings-end",
+        "file": "freestone-properties-ui-03-listings-end.png",
+        "lastCardVisible": true
+      },
+      {
+        "name": "detail",
+        "file": "freestone-properties-ui-04-detail.png",
+        "property": true
+      },
+      {
+        "name": "after-browser-back",
+        "file": "freestone-properties-ui-05-after-browser-back.png"
+      },
+      {
+        "name": "saved",
+        "file": "freestone-properties-ui-06-saved.png",
+        "savedShown": true
+      },
+      {
+        "name": "closed",
+        "file": "freestone-properties-ui-07-closed.png"
+      }
+    ],
+    "review": {
+      "importerOffered": false,
+      "imported": 3,
+      "url": "http://localhost:8081/admin/build"
+    },
+    "listings": {
+      "cards": 3,
+      "clipped": 0,
+      "widths": [
+        358
+      ],
+      "themeLabel": false,
+      "viewAll": true,
+      "pickedForYou": false,
+      "heading": "Available homes",
+      "count": "3 homes"
+    },
+    "backFromDetail": "listings",
+    "browserBackFromDetail": "listings",
+    "afterClosing": {
+      "url": "http://localhost:8081/admin/build",
+      "review": true,
+      "importerOffered": false,
+      "imported": 3
+    }
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 3
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "200 Courtland Place Asheville",
+      "photos": 16,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/200-courtland/200Courtland.jpg?t=1790383722",
+      "size": {
+        "status": 200,
+        "width": 890,
+        "height": 668,
+        "type": "jpg",
+        "bytes": 137918
+      }
+    },
+    {
+      "title": "808 Montreat Road Black Mountain",
+      "photos": 49,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/808-montreat-road/1-custom-808-montreat-rd.jpg?t=1783119176",
+      "size": {
+        "status": 200,
+        "width": 1920,
+        "height": 1080,
+        "type": "jpg",
+        "bytes": 477222
+      }
+    },
+    {
+      "title": "120 Maple Ridge Road Candler",
+      "photos": 35,
+      "first": "https://www.freestoneproperties.com/wp-content/gallery/120-maple-ridge/1-web-or-mls-120-maple-ridge-rd.jpg?t=1778018667",
+      "size": {
+        "status": 200,
+        "width": 1440,
+        "height": 1080,
+        "type": "jpg",
+        "bytes": 233536
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9041,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-0.png"
+    },
+    {
+      "url": "https://www.freestoneproperties.com/",
+      "status": 200,
+      "finalUrl": "https://www.freestoneproperties.com/",
+      "title": "Asheville Real Estate | Black Mountain NC Real Estate - Freestone",
+      "textLength": 9041,
+      "priceCount": 3,
+      "uniquePrices": 3,
+      "propertyLinkCount": 34,
+      "sample": " (828) 419-0444 CONTACT US\nSEARCH\nProperty Search\n \nOur Featured Listings\n \nOur Land Listings\n \nSearch by County\n \nSearch by Neighborhood\n \nSearch by Property Type\n \nSearch by School District\n \nAsheville Coming Soon Listings\n \nAsheville New Listings\n \nRegister / Login for New Listing Alerts\n \nSign Up for our Real Estate Market Newsletter\n \nSELLING\nSell a Home in Asheville\n \nSelling with Freestone Properties\n \nSell My Home in Asheville\n \nOur Sold Listings\n \nAsheville Real Estate & Housing Market Update\n \nBUYING\nReasons to Move to Asheville\n \nThe Home Buying Process\n \nBuying Land in Asheville\n \nAsheville Upcoming Open Houses\n \nAsheville Real Estate & Housing Market Update\n \nAREA INFO\nAsheville Area Information\n \nCommunities, Neighborhoods, and Towns\n \nAsheville Area School Information\n \nCounties in Western North Carolina\n \nBLOG\n \nABOUT\nOur Team\n \nClient Testimonials\n \nCONTACT\nAsheville & Black Mountain Real Estate\nChoose Local, Experienced Agents to Buy or Sell Your Asheville Home\nName(Required)\nEmail(Required)\nPhone\nMessage(Required)\nSUBMIT\nSearch Asheville Area Homes\nSELECTING THE RIGHT\nREAL ESTATE EXPERT\n\nLearn How to Choose an Experienced Realtor.\n\nLEARN MORE\n\t\nSELL MY HOME\n\nLet'",
+      "challenge": false,
+      "screenshot": "freestone-properties-source-1.png"
+    }
+  ],
+  "wallMs": 39745,
+  "window": {
+    "startedAt": "2026-10-09T04:38:02.985Z",
+    "endedAt": "2026-10-09T04:38:42.730Z"
+  },
+  "aiUsage": {
+    "calls": 0,
+    "blocked": 0,
+    "estimatedUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

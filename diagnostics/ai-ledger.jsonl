@@ -44,3 +44,8 @@
 {"at":"2026-10-09T02:27:10.885Z","kind":"site","campaign":"gate-37874399194","level":"D","site":"cindy-carlson-realty","calls":1,"blocked":0,"estimatedUsd":0.0093,"inputTokens":17851,"outputTokens":6}
 {"at":"2026-10-09T02:34:20.754Z","kind":"site","campaign":"gate-37874399194","level":"D","site":"flexmls-redefinedrealty--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
 {"at":"2026-10-09T02:35:34.785Z","kind":"site","campaign":"gate-37874399194","level":"D","site":"tom-toole","calls":3,"blocked":0,"estimatedUsd":0.0561,"inputTokens":78402,"outputTokens":804}
+{"at":"2026-10-09T04:37:31.476Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"cindy-carlson-realty","calls":2,"blocked":0,"estimatedUsd":0.025,"inputTokens":21596,"outputTokens":1037}
+{"at":"2026-10-09T04:38:02.984Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"irene-on-whidbey","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T04:38:42.730Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"freestone-properties","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T04:45:53.497Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"flexmls-redefinedrealty--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T04:53:03.848Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"flexmls-columbiarealestate--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
