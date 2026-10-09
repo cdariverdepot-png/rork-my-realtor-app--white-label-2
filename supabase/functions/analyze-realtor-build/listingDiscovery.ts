@@ -2863,6 +2863,7 @@ export async function discoverListings(
   let maxDepthReached = 0;
 
   /** claimed: a link on the path to this page claimed the agent's own inventory, or the request is agent-scoped. */
+  const flexmlsPageHeads = new Set<string>();
   type QueueItem = { url: string; depth: number; priority: number; fragment?: boolean; broad?: boolean; parent?: string; activationToken?: string; cookie?: string; retries?: number; continuation?: boolean; claimed?: boolean };
   const queue: QueueItem[] = [...new Set(seedUris.filter(Boolean))].map((url, i) => ({ url, depth: 0, priority: 150 - i }));
   // Ownership and scope: navigation stays inside the seed's scope; market feeds keep only own listings.
@@ -3284,8 +3285,13 @@ export async function discoverListings(
             if (!visitedSet.has(url) && !queue.some(q => q.url === url)) queue.push({ url, depth: next.depth, priority: 180, fragment: next.fragment, continuation: true, claimed: claimedNow });
           }
         }
-        // Flexmls uses public paged fragments without a Next anchor.
-        if (next.fragment && finalUrl.searchParams.get("list_view") === "photo" && found.length === 24) {
+        // Flexmls uses public paged fragments without a Next anchor. Its page size is the provider's (10 cards per
+        // response since Oct 2026, 24 before), whatever per_page asks for: a page of 10 or more is followed by the
+        // next page; a page that repeats an earlier page's first card ends the collection.
+        const photoPage = next.fragment && finalUrl.searchParams.get("list_view") === "photo";
+        const repeatedPage = photoPage && found.length > 0 && flexmlsPageHeads.has(canonicalListingUrl(found[0].sourceUrl));
+        if (photoPage && found.length) flexmlsPageHeads.add(canonicalListingUrl(found[0].sourceUrl));
+        if (photoPage && found.length >= 10 && !repeatedPage) {
           const url = new URL(finalUrl);
           url.searchParams.set("page", String(Number(url.searchParams.get("page") ?? 1) + 1));
           const nextUrl = url.toString();
@@ -3294,7 +3300,7 @@ export async function discoverListings(
             continuationMechanism = continuationMechanism || "numbered-pagination";
             queue.push({ url: nextUrl, depth: next.depth, priority: 180, fragment: true, continuation: true, claimed: claimedNow });
           }
-        } else if (next.fragment && finalUrl.searchParams.get("list_view") === "photo" && found.length > 0 && found.length < 24) {
+        } else if (photoPage && found.length > 0) {
           providerTerminalPages++;
         }
       }
