@@ -30,7 +30,7 @@ import { connectedSourceIds } from "@/lib/appBuilder/connectedSources";
 import { listingsForSources, resumedReviewScope } from "@/lib/appBuilder/importScope";
 import { sameWebsite, startWebsiteImport } from "@/lib/appBuilder/websiteSwitch";
 import { clearPendingWebsite } from "@/lib/appBuilder/pendingWebsite";
-import { createBuilderHistory } from "@/lib/builderHistory";
+import { claimPop, createBuilderHistory } from "@/lib/builderHistory";
 import { mergeDiscoveredListings, saveDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -279,9 +279,15 @@ export default function InitialRealtorSetup() {
   }, []));
   useEffect(() => {
     if (!builderHistory.current || typeof window === "undefined") return;
-    const onPop = () => { if (builderHistory.current?.popped() && phaseRef.current === "review") setEditingSources(true); };
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    // Capture: runs before the router's listener, which must not reset its state for the builder's own entry.
+    const onPop = (event: PopStateEvent) => {
+      const popped = builderHistory.current?.popped();
+      if (!popped) return;
+      claimPop(event);
+      if (popped === "review" && phaseRef.current === "review") setEditingSources(true);
+    };
+    window.addEventListener("popstate", onPop, true);
+    return () => window.removeEventListener("popstate", onPop, true);
   }, []);
 
   /** Edge case only: non-guest without cloud auth — send to portal (never invent signup here). */

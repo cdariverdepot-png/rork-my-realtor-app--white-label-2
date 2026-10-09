@@ -166,7 +166,7 @@ async function studioWalk(page, r, studio) {
   const probe = async label => ({ label, ...(await page.evaluate(() => ({ length: history.length, path: location.pathname, state: JSON.stringify(history.state).slice(0, 160),
     modal: document.querySelectorAll('[aria-modal="true"]').length }))) });
   st.historyProbe = st.historyProbe ?? [];
-  const previewListings = async (button, name) => {
+  const previewListings = async (button, name, closeWith = 'on-screen') => {
     st.historyProbe.push(await probe(`${name}: before open`));
     await page.getByRole('button', { name: button, exact: true }).first().click();
     await page.waitForTimeout(2500);
@@ -177,7 +177,10 @@ async function studioWalk(page, r, studio) {
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
     // The preview's own Back steps out of it (Listings -> Home -> closed), leaving the dashboard as it was.
-    for (let i = 0; i < 4 && await page.locator('[aria-modal="true"]').count(); i++) { await modal().getByLabel('Back').first().click().catch(() => {}); await page.waitForTimeout(1500); st.historyProbe.push(await probe(`${name}: back ${i + 1}`)); }
+    for (let i = 0; i < 4 && await page.locator('[aria-modal="true"]').count(); i++) {
+      if (closeWith === 'browser') await page.goBack(); else await modal().getByLabel('Back').first().click().catch(() => {});
+      await page.waitForTimeout(1500); st.historyProbe.push(await probe(`${name}: ${closeWith} back ${i + 1}`));
+    }
     await step(`${name}-closed`, { closedWithBack: !(await page.locator('[aria-modal="true"]').count()), url: page.url() });
     // Back to a fresh dashboard (the previews are read-only).
     await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -229,7 +232,7 @@ async function studioWalk(page, r, studio) {
   }
   st.publishNotice = notice;
   await step('publish-changes', { notice });
-  st.publishedAfter = await previewListings('View published app', 'published-after');
+  st.publishedAfter = await previewListings('View published app', 'published-after', 'browser');
   // 6. The client Listings screen at wider widths (the builder preview itself is a phone frame).
   st.widths = [];
   for (const [width, height] of [[430, 932], [768, 1024], [1280, 900]]) {

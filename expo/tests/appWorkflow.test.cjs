@@ -43,7 +43,8 @@ function builder() {
   const screen = { step: 'collect', imports: 0 };
   const steps = createBuilderHistory(history, historyLayers);
   const go = step => { screen.step = step; steps.sync(step); };
-  history.onPop(() => { if (steps.popped() && screen.step === 'review') go('collect'); });
+  screen.claimed = [];
+  history.onPop(() => { const popped = steps.popped(); if (popped) screen.claimed.push(popped); if (popped === 'review' && screen.step === 'review') go('collect'); });
   return { history, screen, go, historyLayers };
 }
 
@@ -63,6 +64,7 @@ test('leaving the review on screen (Back or Change) drops its entry, so browser 
   go('collect'); // on-screen Back
   assert.equal(history.length, 1);
   assert.equal(screen.step, 'collect');
+  assert.deepEqual(screen.claimed, ['own'], 'the builder\'s own Back is kept from the router');
   go('review'); // the same website again returns to the review
   assert.equal(history.length, 2);
 });
@@ -85,7 +87,16 @@ test('stepping back through the client app preview opened from the review never 
   historyLayers.close(Date.now() - 5000);
   history.back();
   assert.equal(screen.step, 'collect');
+  assert.deepEqual(screen.claimed, ['review'], 'only the review\'s own pop is the builder\'s; the preview claims its pops');
   assert.match(read('components/ThemePreviewModal.tsx'), /historyLayers\.open\(\);/);
+  // Pops that belong to the preview or the builder never reach the router: it would reset the screen underneath
+  // to an older recorded state (the dashboard preview closed and left the dashboard, Oct 9 2026 gate probe).
+  const modal = read('components/ThemePreviewModal.tsx'), setup = read('components/InitialRealtorSetup.tsx');
+  assert.match(modal, /const onPop = \(event: PopStateEvent\) => \{\n\s+claimPop\(event\);/);
+  assert.match(modal, /window\.addEventListener\("popstate", onPop, true\);/);
+  assert.match(modal, /window\.addEventListener\("popstate", swallow, true\);\n\s+window\.history\.go\(-n\);/);
+  assert.match(setup, /window\.addEventListener\("popstate", onPop, true\);/);
+  assert.match(setup, /if \(!popped\) return;\n\s+claimPop\(event\);/);
   assert.match(read('components/ThemePreviewModal.tsx'), /historyLayers\.close\(\);\n\s+\/\/ Closed some other way/);
 });
 

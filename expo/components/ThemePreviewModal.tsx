@@ -12,7 +12,7 @@ import ThemeNavigation from "./ThemeNavigation";
 import ThemePreviewPage from './ThemePreviewPage';
 import { clientDestination } from '@/lib/clientNavigation';
 import { previewDestination, previousPreviewPage } from '@/lib/previewHistory';
-import { historyLayers } from '@/lib/builderHistory';
+import { claimPop, historyLayers } from '@/lib/builderHistory';
 import { PreviewSandboxProvider } from './PreviewSandbox';
 import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 
@@ -75,17 +75,26 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     webEntries.current = 1;
     // A history layer above whatever opened the preview (the app builder's review): its pops are the preview's.
     historyLayers.open();
-    const onPop = () => {
+    // Every pop while the preview is open is the preview's: handled here and kept from the router, which would
+    // otherwise reset the screen underneath to an older recorded state (lib/builderHistory).
+    const onPop = (event: PopStateEvent) => {
+      claimPop(event);
       if (ignorePops.current > 0) { ignorePops.current--; return; }
       if (webEntries.current > 0) webEntries.current--;
       stepBackRef.current();
     };
-    window.addEventListener("popstate", onPop);
+    window.addEventListener("popstate", onPop, true);
     return () => {
-      window.removeEventListener("popstate", onPop);
+      window.removeEventListener("popstate", onPop, true);
       historyLayers.close();
-      // Closed some other way: drop the preview's remaining history entries without leaving the page.
-      if (webEntries.current > 0) { const n = webEntries.current; webEntries.current = 0; window.history.go(-n); }
+      // Closed some other way: drop the preview's remaining history entries without leaving the page. That pop
+      // is the preview's too, so it is kept from the router as well.
+      if (webEntries.current > 0) {
+        const n = webEntries.current; webEntries.current = 0;
+        const swallow = (event: PopStateEvent) => { claimPop(event); window.removeEventListener("popstate", swallow, true); };
+        window.addEventListener("popstate", swallow, true);
+        window.history.go(-n);
+      }
     };
   }, [visible, web]);
   const swipeBack = useMemo(() => Gesture.Pan()
