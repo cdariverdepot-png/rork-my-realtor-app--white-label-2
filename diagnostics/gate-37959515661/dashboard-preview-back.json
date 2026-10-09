@@ -1,0 +1,46 @@
+{
+  "id": "dashboard-preview-back",
+  "url": "https://cindycarlsonrealty.com/",
+  "category": "Dashboard app preview Back",
+  "timeline": [],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "dashboard-preview-back-00-error.png"
+  ],
+  "dashboardPreview": {
+    "steps": []
+  },
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Preview draft', exact: true }).first()\n    - locator resolved to <button tabindex=\"0\" role=\"button\" type=\"button\" class=\"css-g5y9jx r-1loqt21 r-1otgn73\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div class=\"css-g5y9jx r-cpa5s6\">…</div> from <div class=\"css-g5y9jx r-4it0wc r-1p0dtai r-1d2f490 r-bztko3 r-1xcajam r-zchlnj r-ipm5af r-13qz1uu r-63otww\">…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - eleme",
+  "reviewText": "LIVE SITE\nYOUR DASHBOARD\nLIVE\nGood afternoon, Eliza Vance.\nBuild your app from your website, documents, and photos.\nSETUP NEEDED\nLet's build your app.\n0\n%\n0 of 12\nYour name\nCity or region\nSet your display name\nYOUR CLIENT APP\nYour app is a draft\nDesign changes reach clients when you publish. Your listing inventory updates independently.\nPreview draft\nEdit draft\nPublish My App\nRefresh Website Design\nMake changes whenever you need.\nREAL ESTATE\nA PERSONAL INTRODUCTION\nP\nE\nR\nS\nO\nN\nA\nL\nPrivate Real Estate Advisor\nFind your home\nMessage your realtor\nREAL ESTATE\nPERSONAL. TRUSTED. EXCEPTIONAL.\nFounder & Advisor\nFind your home\nMessage your realtor\nSaved Homes\nYour saved properties\nDirect Line Concierge\nTap to contact your realtor\nHome\nListings\nSaved\nChat\nProfile\nREAL ESTATE\nTHE JOURNAL\nA PERSONAL PERSPECTIVE\nA PERSONAL INTRODUCTION\nPrivate Real Estate Advisor\nDiscover the collection\nMessage your realtor\nHome\nListings\nSaved\nChat\nProfile\nREAL ESTATE\nPERSONAL GUIDANCE\nHi, I’m your realtor.\nYour direct line\nFind your home\nMessage your realtor\nHomes, locations, or features\nSaved Homes\nYOUR FAVORITES\nClient Concierge\nGET IN TOUCH\nSchedule a Call\nPICK A TIME\nRefer a Friend\nINTRODUCE SOMEONE\nHome\nListings\nSaved\nChat\nProfile\nPRIVATE REAL ESTATE ADVISOR\nPERSONAL GUIDANCE\nPRIVATE ACCESS\nYour direct line\nView the collection\nMessage your realtor\nYOUR PRIVATE ACCESS\nClient Concierge\nDirect\nMessaging\nChat with your realtor\nSaved\nHomes\nKeep your favorites close\nCurated\nMatches\nHomes selected for you\nShowing\nRequests\nBook a private tour\nHome\nListings\nSaved\nChat\nProfile\nPRIVATE REAL ESTATE ADVISOR\nFIND MORE THAN A HOME.\nFind your home\nMessage your realtor\nBUY A HOME\nFind your next home\nSELL YOUR HOME\nGet in touch\nEXPLORE LISTINGS\nHomes selected for you\nSCHEDULE A CALL\nBook a consultation\nHome\nListings\nSaved\nChat\nProfile\nPRIVATE REAL ESTATE ADVISOR\nPERSONAL GUIDANCE\nPrivate Real Estate Advisor\nFind your home\nMessage your realtor\nCONCIERGE\nFrom private showings to lifestyle requests, we handle the details.\nSaved homes\nYOUR FAVORITES\nHome\nListings\nSaved\nChat\nProfile\nBurgundy · Concierge  ·  5 of 7\nSwitch layouts, update your profile, and refine the words your clients see.\nEDIT THEME\nEDIT CONTENT\nLISTINGS\nYour listings\n0 LIVE\nNo listings yet\nClick here to import your first property from any public listing link.\nACTIVITY\nHow it's performing\n0\nLive listings\n0\nViewed today\n0\nShowing reqs\n18%\nEngagement\nLIVE ACTIVITY\nBrand updated\nToday\nMESSAGES, CLIENTS & MORE\nClient tools\nMessages\nYour direct line — open\nClients\nBuild your roster\nShowings\nNothing pending\nDocs\nCalendar\nPush\nFeeds\nInsights\nINVITE CLIENTS\nShare your private app.\nClients scan the QR code or enter the access code below to download your branded app — with your name, your face, and your listings.\n0 of 3 clients connected\nSETUP REQUIRED\nPublish your app to activate your permanent invitation and QR code.\nCONTINUE SETUP\nSupport\nPlans\nmyrealtorapp.com\nPrivacy\nTerms\nDELETE MY ACCOUNT\nMY REALTOR · PRIVATE STUDIO\nYour Brand,\nYour App\nAdd your website, documents, and photos. We'll build a branded starting point that fits your style.\nPrivate\nClient Codes\nShare a unique 6-character code with your clients. They enter it once and unlock an app tailored exclusively to you.\nBeautiful\nListings\nShowcase properties with rich imagery, market insights, saved favorites, and a curated editorial feel.\nStay\nConnected\nBuilt-in messaging, document sharing, appointment booking, and push notifications keep everyone in sync.\nYour App,\nReady to Use\nWe'll ask about anything we can't confirm. Finish setup to see your dashboard, then edit or switch layouts whenever you like.",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://cindycarlsonrealty.com/",
+      "status": 200,
+      "finalUrl": "https://cindycarlsonrealty.com/",
+      "title": "Cindy Carlson Realty – A Full Service Real Estate Agency",
+      "textLength": 1177,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 2,
+      "sample": "Skip to primary navigation\nSkip to main content\nSkip to primary sidebar\nCINDY CARLSON REALTY\n\nA Full Service Real Estate Agency\n\nHOME\n \nFEATURED LISTINGS\n \nPROPERTY SEARCH\n \nABOUT THE AREA\n \nABOUT US\n \nCONTACT US\nHome\nCindy Carlson Broker, Realtor®, ABR, CRS, GRI, RSPS\n\n                           Welcome To Cindy Carlson Realty\n\n\nWe specialize in Real Estate in the Silver Valley and North Idaho. The Silver Valley offers a wealth of opportunity and an outstanding quality of life!  Whether you are looking for land, recreational property, development property, a business opportunity or your dream home, we can help.\n\n\n\nPrimary Sidebar\nSTAY IN TOUCH:\n\n\n\nPROPERTY SEARCH:\nProperty Search\nFeatured Listings\nWE ARE LOCATED AT:\n\n202 W Cameron Avenue\nKellogg, ID 83837\nOffice: (208) 783-2544\nFax: (208) 783-2941\n\nFACEBOOK FEED\n\nCopyright © 2026 · Metro Pro On Genesis Framework · WordPress · Log in\n\nAll Rights Reserved © 2017 Cindy Carlson Realty. | A Full Service Real Estate Agency. All information provided is deemed reliable but is not guaranteed and should be independently verified. Properties subject to prior sale or rental. | Website Designed By: Opportunity Designs",
+      "challenge": false,
+      "screenshot": "dashboard-preview-back-source-0.png"
+    }
+  ],
+  "wallMs": 42885,
+  "window": {
+    "startedAt": "2026-10-09T16:32:57.260Z",
+    "endedAt": "2026-10-09T16:33:40.145Z"
+  },
+  "aiUsage": {
+    "calls": 0,
+    "blocked": 0,
+    "estimatedUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}
