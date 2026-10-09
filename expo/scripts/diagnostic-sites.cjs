@@ -188,6 +188,8 @@ async function studioWalk(page, r, studio) {
       history.replaceState = (st, t, u) => { log('replace', u); or(st, t, u); };
       window.addEventListener('popstate', () => log('popstate'), true);
       window.addEventListener('pagehide', () => log('pagehide'));
+      for (const type of ['blur', 'focus', 'resize', 'hashchange']) window.addEventListener(type, () => log(type), true);
+      document.addEventListener('visibilitychange', () => log('visibility', document.visibilityState), true);
     }, name);
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
