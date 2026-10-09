@@ -374,5 +374,77 @@
     "market": "",
     "holdout": false,
     "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "paonia-realty",
+    "url": "https://www.paoniarealty.com/",
+    "category": "agent website",
+    "market": "Paonia, CO",
+    "holdout": false,
+    "addedFor": "Oct 8 2026: user test"
+  },
+  {
+    "category": "Website change during setup",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 8 2026: cross-website isolation",
+    "id": "cindy-then-paonia",
+    "url": "https://cindycarlsonrealty.com/",
+    "then": [
+      {
+        "url": "https://www.paoniarealty.com/",
+        "how": "change"
+      }
+    ]
+  },
+  {
+    "category": "Website change during setup",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 8 2026: cross-website isolation",
+    "id": "paonia-then-cindy",
+    "url": "https://www.paoniarealty.com/",
+    "then": [
+      {
+        "url": "https://cindycarlsonrealty.com/",
+        "how": "change"
+      }
+    ]
+  },
+  {
+    "category": "Website change during setup",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 8 2026: cross-website isolation",
+    "id": "cindy-paonia-cindy-paonia",
+    "url": "https://cindycarlsonrealty.com/",
+    "then": [
+      {
+        "url": "https://www.paoniarealty.com/",
+        "how": "change"
+      },
+      {
+        "url": "https://cindycarlsonrealty.com/",
+        "how": "change"
+      },
+      {
+        "url": "https://www.paoniarealty.com/",
+        "how": "change"
+      }
+    ]
+  },
+  {
+    "category": "Website change during setup",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 8 2026: cross-website isolation",
+    "id": "cindy-exit-mid-import-paonia",
+    "url": "https://cindycarlsonrealty.com/",
+    "then": [
+      {
+        "url": "https://www.paoniarealty.com/",
+        "how": "exit-mid-import"
+      }
+    ]
   }
 ]

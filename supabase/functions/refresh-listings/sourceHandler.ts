@@ -21,7 +21,7 @@ type Row = { value: Record<string, unknown>; rev: number };
 export const INVENTORY_JOB_DETAILS = 12;
 export const DETAIL_JOB_SIZE = 25;
 
-export async function runSourceSync(sb: Database, realtorId: string, body: { mode?: string; url?: string; sourceId?: string; since?: number; csv?: string; label?: string },
+export async function runSourceSync(sb: Database, realtorId: string, body: { mode?: string; url?: string; sourceId?: string; since?: number; csv?: string; label?: string; session?: string },
   fetchHtml: FetchHtml, scheduled: boolean, progress?: ImportProgress): Promise<{ body: Record<string, unknown>; status?: number } | null> {
   const sourceKey = `${realtorId}:listing-sources.v1`, listingKey = `${realtorId}:listings.v2`;
   const read = async (key: string): Promise<Row | null> => {
@@ -45,6 +45,10 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     throw new Error("Your listings changed during sync. Please retry.");
   };
   if (body.mode === "details") return runDetailJob(body, fetchHtml, read, save, listingKey, sourceKey, progress);
+  if (body.mode === "disconnect") {
+    if (scheduled) return { body: { ok: false, error: "Disconnect sources from your realtor account." }, status: 403 };
+    return disconnectSource(body, read, save, listingKey, sourceKey);
+  }
   if (body.mode === "import-file") {
     if (scheduled) return { body: { ok: false, error: "Import listing files from your realtor account." }, status: 403 };
     return importListingFile(body, read, save, listingKey, sourceKey, progress);
@@ -62,6 +66,15 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
       .sort((a, b) => a.nextSyncAt - b.nextSyncAt)[0];
   if (!connecting && !target) return body.sourceId ? { body: { ok: true, checked: 0 } } : null;
   if (connecting && sources.length >= 5 && !target) return { body: { ok: false, error: "You already have five connected sources. Use one of your connected pages." }, status: 400 };
+  // A setup import belongs to one setup session (one website the realtor is building from). Starting a new one
+  // supersedes the old: a slower import of the previous website can never save into the newer app.
+  const session = connecting && typeof body.session === "string" && /^[\w-]{8,64}$/.test(body.session) ? body.session : "";
+  if (session) await save(sourceKey, value => ({ ...value, setupSession: session }));
+  const superseded = async () => {
+    if (!session) return false;
+    const current = (await read(sourceKey))?.value?.setupSession;
+    return typeof current === "string" && current !== session;
+  };
   let inventory: SourceInventory;
   // One metered AI gateway for this import: navigation and page fallbacks share its budget and usage record.
   const ai = importAiGateway();
@@ -93,13 +106,26 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     }) }));
     return { body: { ok: false, error: message, code, aiUsage: ai.summary() }, status: 422 };
   }
+  if (await superseded()) {
+    console.log("[listing-sync] superseded import discarded");
+    return { body: { ok: false, code: "superseded", error: "A newer import replaced this one; nothing from it was saved." }, status: 409 };
+  }
   // Save the source first so an interrupted collection write remains recoverable by the next sync.
+  if (session) inventory = { ...inventory, source: { ...inventory.source, setupSession: session } };
+  let replacedByThisSetup: string[] = [];
   await save(sourceKey, value => {
     const all = (Array.isArray(value.sources) ? value.sources : []) as ListingSource[];
     const prior = all.find(source => source.id === inventory.source.id);
     if (prior && (prior.lastCheckedAt ?? 0) > (inventory.source.lastCheckedAt ?? 0)) return value;
+    // Websites connected by an earlier setup session were replaced by this one (the realtor changed the website).
+    replacedByThisSetup = session ? all.filter(source => source.id !== inventory.source.id && source.kind !== "listing-file" &&
+      typeof source.setupSession === "string" && source.setupSession !== session).map(source => source.id) : [];
     return { ...value, sources: [...all.filter(source => source.id !== inventory.source.id), inventory.source] };
   });
+  if (replacedByThisSetup.length) {
+    await retireSources(new Set(replacedByThisSetup), save, listingKey, sourceKey);
+    console.log("[listing-sync] replaced website sources retired", replacedByThisSetup.length);
+  }
   const old = await read(listingKey);
   const oldItems = (Array.isArray(old?.value.items) ? old!.value.items : []) as SyncListing[];
   const missing = oldItems.filter(item => item.sourceId === inventory.source.id && item.sourceUrl && !inventory.listings.some(home => home.sourceUrl === item.sourceUrl)).length;
@@ -113,6 +139,8 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     const latestSources = (Array.isArray(sourceRow?.value.sources) ? sourceRow!.value.sources : []) as ListingSource[];
     const currentSource = latestSources.find(s => s.id === inventory.source.id);
     if ((currentSource?.lastCheckedAt ?? 0) > (inventory.source.lastCheckedAt ?? 0)) return value;
+    // Superseded between the source save and this write: the newer setup session owns the collection.
+    if (session && typeof sourceRow?.value.setupSession === "string" && sourceRow.value.setupSession !== session) return value;
     const latest = (Array.isArray(value.items) ? value.items : []) as SyncListing[];
     // Verification updates source fields only; preserve current notes/visibility and newly changed URLs.
     const enriched = latest.map(item => {
@@ -187,6 +215,43 @@ async function importListingFile(body: { csv?: string; label?: string }, read: R
     .map(item => item.sourceId === sourceId ? { ...item, detailAttemptAt: now } : item) }));
   progress?.finish("save", "done", { count: records.listings.length });
   return { body: { ok: true, source, imported: records.listings.length, checked: records.listings.length, complete: false, items: saved.items } };
+}
+
+const siteKey = (raw: string) => { try { const u = new URL(raw); return u.hostname.replace(/^www\./, "").toLowerCase(); } catch { return ""; } };
+
+/**
+ * The realtor replaced the website a source was imported from (during setup, "Change" website). The old source
+ * stops syncing and its listings leave the app: they are archived, not deleted, so reconnecting the same website
+ * brings them back with every note, tag and hidden state intact. Listings from other sources are untouched.
+ */
+async function disconnectSource(body: { url?: string; session?: string }, read: Read, save: Save, listingKey: string, sourceKey: string): Promise<{ body: Record<string, unknown>; status?: number }> {
+  const target = typeof body.url === "string" ? siteKey(body.url) : "";
+  if (!target) return { body: { ok: false, error: "Choose the website to disconnect." }, status: 400 };
+  // The new setup session starts here: any import still running for the replaced website is superseded.
+  const session = typeof body.session === "string" && /^[\w-]{8,64}$/.test(body.session) ? body.session : "";
+  if (session) await save(sourceKey, value => ({ ...value, setupSession: session }));
+  const row = await read(sourceKey);
+  const sources = (Array.isArray(row?.value?.sources) ? row!.value.sources : []) as ListingSource[];
+  const removed = sources.filter(source => source.kind !== "listing-file" && (siteKey(source.submittedUrl) === target || siteKey(source.url) === target));
+  if (!removed.length) return { body: { ok: true, removed: 0, archived: 0 } };
+  const { archived, items } = await retireSources(new Set(removed.map(source => source.id)), save, listingKey, sourceKey);
+  return { body: { ok: true, removed: removed.length, archived, items } };
+}
+
+/** Stop syncing the given sources and archive (never delete) their listings. */
+async function retireSources(ids: Set<string>, save: Save, listingKey: string, sourceKey: string) {
+  await save(sourceKey, value => ({ ...value, sources: ((Array.isArray(value.sources) ? value.sources : []) as ListingSource[]).filter(source => !ids.has(source.id)) }));
+  const now = Date.now();
+  let archived = 0;
+  const saved = await save(listingKey, value => {
+    archived = 0;
+    return { ...value, items: ((Array.isArray(value.items) ? value.items : []) as SyncListing[]).map(item => {
+      if (!item.sourceId || !ids.has(item.sourceId) || item.sourceArchived) return item;
+      archived++;
+      return { ...item, sourceArchived: true, sourceDisconnectedAt: now, updatedAt: now };
+    }) };
+  });
+  return { archived, items: saved.items };
 }
 
 type Read = (key: string) => Promise<Row | null>;

@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useListings } from "@/contexts/ListingsContext";
 
 /** The same public URL flow is used during setup and when connecting another source. */
-export default function ListingSourceImporter({ onImported, initialUrl = "" }: { onImported?: (count: number) => void; initialUrl?: string }) {
+export default function ListingSourceImporter({ onImported, initialUrl = "" }: { onImported?: (count: number, sourceId?: string) => void; initialUrl?: string }) {
   const [url, setUrl] = useState(initialUrl), [busy, setBusy] = useState(false);
   const [message, setMessage] = useState(""), [error, setError] = useState("");
   const { refresh } = useListings();
@@ -20,7 +20,7 @@ export default function ListingSourceImporter({ onImported, initialUrl = "" }: {
       await refresh();
       const count = result.imported ?? 0;
       setMessage(`${count} listing${count === 1 ? "" : "s"} connected. We’ll keep them updated automatically.${result.warning ? ` ${result.warning}` : ""}`);
-      onImported?.(count);
+      onImported?.(count, result.source?.id);
     } catch (e) { setError(e instanceof Error ? e.message : "We couldn’t find your listings on that page. Try pasting the page where all of your active listings are shown."); }
     finally { setBusy(false); }
   };
@@ -38,7 +38,7 @@ export default function ListingSourceImporter({ onImported, initialUrl = "" }: {
       await refresh();
       const count = result.imported ?? 0;
       setMessage(`${count} listing${count === 1 ? "" : "s"} imported from ${asset.name || "your file"}. Import the file again to update them.`);
-      onImported?.(count);
+      onImported?.(count, result.source?.id);
     } catch (e) { setError(e instanceof Error ? e.message : "That file could not be imported. Export your active listings as CSV and try again."); }
     finally { setBusy(false); }
   };

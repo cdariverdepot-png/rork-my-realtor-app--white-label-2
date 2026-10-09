@@ -8,6 +8,8 @@ export type ListingSource = {
   identity?: { phrases: string[]; words: string[] };
   /** Listings merged into another record of the same property (duplicate URL -> kept URL), so later syncs keep them merged. */
   mergedDuplicates?: Record<string, string>;
+  /** The app-builder setup session that connected this website (a later session with another website retires it). */
+  setupSession?: string;
   connectedAt: number; lastCheckedAt?: number; lastCompleteSyncAt?: number; nextSyncAt: number;
   state: "connected" | "unavailable"; error?: string; failures?: number; listingCount: number;
 };

@@ -25,7 +25,9 @@ import SetupReviewActions from "./SetupReviewActions";
 import {liveThemeDesign} from "@/constants/liveThemeDesigns";
 import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, hasVerifiedBuilderAuth, loadBuild, markBuildComplete, regenerateBuildCopy, saveBuildSources, uploadBuildFile, type SavedBuild } from "@/lib/appBuilder/buildService";
 import ListingSourceImporter from "./ListingSourceImporter";
-import { connectListingSource, ListingImportError } from "@/lib/listingSourceService";
+import { connectListingSource, disconnectListingSource, ListingImportError } from "@/lib/listingSourceService";
+import { connectedSourceIds } from "@/lib/appBuilder/connectedSources";
+import { beginImportSession, isActiveImportSession, listingsForSources } from "@/lib/appBuilder/importScope";
 import { mergeDiscoveredListings, saveDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -107,9 +109,17 @@ export default function InitialRealtorSetup() {
    */
   const [snapshotVersion, bumpSnapshot] = useReducer((n: number) => n + 1, 0);
   useEffect(() => { listingsSnapshot.current = existingListings; bumpSnapshot(); }, [existingListings]);
-  const reviewListings = useMemo(() => mergeDiscoveredListings(existingListings.length ? existingListings : listingsSnapshot.current, result?.draft.discoveredListings ?? []),
+  /**
+   * The import session this screen belongs to, and the listing sources it connected. The review and both
+   * previews show only those sources' homes: another website imported earlier into this account (or a slower
+   * import of it still finishing) never appears as this website's listings.
+   */
+  const importSession = useRef("");
+  const [reviewSourceIds, setReviewSourceIds] = useState<string[]>([]);
+  const reviewListings = useMemo(() => mergeDiscoveredListings(listingsForSources(existingListings.length ? existingListings : listingsSnapshot.current, reviewSourceIds),
+    result?.draft.discoveredListings ?? []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [existingListings, result, snapshotVersion]);
+    [existingListings, result, snapshotVersion, reviewSourceIds]);
   const savedListingCount = reviewListings.filter(item => !item.hidden && !item.sourceArchived).length;
   // What the app shows: the saved collection once it is there (duplicates merged by the detail jobs are gone
   // from it), the import's own count only until the collection arrives.
@@ -176,6 +186,8 @@ export default function InitialRealtorSetup() {
     // Historical onboarding URLs must not reopen a completed build. URL refresh
     // remains available in Studio and can still reuse this completed source.
     if (saved.status === 'complete') { router.dismissTo('/admin'); return; }
+    // Returning to a review: its homes are those of the sources connected now (a replaced website was disconnected).
+    if (auth.realtorId) { const ids = await connectedSourceIds(auth.realtorId); if (ids) setReviewSourceIds(ids); }
     setSources(saved.sources);
     const primary = saved.sources.find(source => source.kind === "url");
     if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
@@ -187,7 +199,7 @@ export default function InitialRealtorSetup() {
       const found = saved.draft.discoveredListings ?? [];
       setImportedListingCount(count => Math.max(count, found.length, listingsSnapshot.current.filter(item => !item.hidden && !item.sourceArchived).length));
     }
-  }, [brand, router, saveListings]);
+  }, [brand, router, saveListings, auth.realtorId]);
 
   // Product model: real users sign up/in BEFORE /admin/build. Guest REALTOR codes
   // are owner-test only and use the local builder — never an account panel.
@@ -344,10 +356,23 @@ export default function InitialRealtorSetup() {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
     // Lock in the website from the main field, replacing an older one if it changed.
+    // A new import session: results of any earlier import (another website, or a slower run) are ignored from here on.
+    const session = beginImportSession();
+    importSession.current = session;
+    const stale = () => !isActiveImportSession(session);
+    setReviewSourceIds([]);
+    setImportedListingCount(0);
+    setHasConnectedSource(false);
     if (websiteUri && primarySource?.uri !== websiteUri) {
       const fresh = urlSource(websiteUri);
       current = await saveSources([fresh, ...sources.filter(source => source.id !== primaryId)]);
       setPrimaryId(fresh.id);
+      // A replaced website takes its imported listings with it (archived on the server, so reconnecting it
+      // restores them with their notes): the new app shows only the new website's homes.
+      if (primarySource?.kind === "url" && primarySource.uri && auth.realtorId) {
+        try { await disconnectListingSource(primarySource.uri, auth.realtorId, session); } catch { /* the review is scoped to this import regardless */ }
+        await refreshListings();
+      }
     }
     if (!current.some(source => source.kind !== "contacts")) throw new Error("Paste the public page where your listings live.");
     setEditingSources(false);
@@ -363,16 +388,19 @@ export default function InitialRealtorSetup() {
       setActivity(requestStarted(requestStarted([], "listings"), "build"));
       // The listing import and the profile build are independent requests, so they run together.
       // The build is told this page is being imported here, so it does not crawl it a second time.
-      const listingImport = connectListingSource(listingUrl, auth.realtorId, report("listings"))
+      const listingImport = connectListingSource(listingUrl, auth.realtorId, report("listings"), session)
         .then(connected => { setActivity(lines => requestFinished(lines, "listings", true)); return connected; },
           error => { setActivity(lines => requestFinished(lines, "listings", false)); throw error; });
       const profileBuild = analyzeBuild({ connectedListingSources: [listingUrl], onEvent: report("build") })
         .then(saved => { setActivity(lines => requestFinished(lines, "build", true)); return saved; },
           error => { setActivity(lines => requestFinished(lines, "build", false)); throw error; });
       const [listingOutcome, buildOutcome] = await Promise.allSettled([listingImport, profileBuild]);
+      // A newer import started while this one ran: its results belong to a website the realtor left.
+      if (stale()) return;
       if (listingOutcome.status === "fulfilled") {
         const connected = listingOutcome.value;
         const connectedItems = connected.items ?? [];
+        setReviewSourceIds(connected.source?.id ? [connected.source.id] : []);
         savedListings = connected.imported ?? connectedItems.length;
         setImportedListingCount(savedListings);
         setHasConnectedSource(true);
@@ -658,7 +686,8 @@ export default function InitialRealtorSetup() {
         {/* The import already ran from the website address. When it brought listings in, say so; only when nothing
             was imported is a different source offered (never the same address again: that repeats the same import). */}
         {listingCount > 0 ? <View style={{flexDirection:"row",alignItems:"center",gap:12}}><Check size={20} color="#CDE1D9"/><Text style={{color:"#E8EFE9",fontSize:15,lineHeight:23}}>{listingCount} {listingCount === 1 ? "listing" : "listings"} imported from your website.</Text></View>
-          : listingsHydrated ? <ListingSourceImporter onImported={count => { setImportedListingCount(count); setHasConnectedSource(true); }} /> : null}
+          : listingsHydrated ? <ListingSourceImporter onImported={(count, sourceId) => { setImportedListingCount(count); setHasConnectedSource(true);
+            if (sourceId) setReviewSourceIds(ids => ids.includes(sourceId) ? ids : [...ids, sourceId]); }} /> : null}
       </View>
 
       {errorFor("listings")}

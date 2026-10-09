@@ -3260,7 +3260,14 @@ async function discoverListings(
     // Public fragments and provider APIs are transport by construction; only navigated pages are judged.
     const offSite = !next.fragment && seedScopes.length > 0 && !seedScopes.some(scope => registrableDomain(finalUrl.hostname) === scope.domain) && !MLS_INVENTORY_HOST.test(finalUrl.hostname);
     let unscopedOffSite = false;
-    if (found.length && offSite && !claimedNow) {
+    // An off-site collection is the agent's when every card is attributed to the site's own office (the IDX
+    // courtesy line names it); otherwise an unclaimed off-site collection is not imported.
+    const ownOffice = found.length > 0 && offSite && !claimedNow && (() => {
+      const offices = attributeListingOffices(html, found);
+      return found.every(item => offices.has(item.sourceUrl) && officeMatch(offices.get(item.sourceUrl)!, identity) === "strong");
+    })();
+    if (ownOffice) stages.push("offsite_collection_own_office");
+    if (found.length && offSite && !claimedNow && !ownOffice) {
       unscopedOffSite = true;
       excludedOtherOffice += found.length;
       marketPages.push(finalUrl.toString());

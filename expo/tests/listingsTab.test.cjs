@@ -95,3 +95,31 @@ test('Saved homes in the preview use the same cards, without a "picked for you" 
   assert.match(page, /if \(route === '\/favorites'\) return <ListingBrowser /);
   assert.match(page, /title="Saved homes"/);
 });
+
+test('the review shows only the homes of the sources this import connected', () => {
+  const scope = load('lib/appBuilder/importScope.ts', {});
+  const items = [{ title: 'Cindy 1', sourceId: 'cindy' }, { title: 'Paonia 1', sourceId: 'paonia' }, { title: 'Paonia old', sourceId: 'paonia', sourceArchived: true }, { title: 'No source' }];
+  assert.deepEqual(scope.listingsForSources(items, ['paonia']).map(i => i.title), ['Paonia 1']);
+  assert.deepEqual(scope.listingsForSources(items, []).map(i => i.title), [], 'a failed import shows no one else\'s homes');
+  assert.match(scope.newImportSession(), /^setup-[\w-]{8,57}$/);
+  assert.notEqual(scope.newImportSession(), scope.newImportSession());
+  // One active session for every builder screen: starting another supersedes the first, even from a new screen.
+  const first = scope.beginImportSession();
+  assert.equal(scope.isActiveImportSession(first), true);
+  const second = scope.beginImportSession();
+  assert.equal(scope.isActiveImportSession(first), false);
+  assert.equal(scope.isActiveImportSession(second), true);
+});
+
+test('changing the website starts a new import session; late results of the old one are ignored', () => {
+  const setup = read('components/InitialRealtorSetup.tsx');
+  assert.match(setup, /const session = beginImportSession\(\);\n    importSession\.current = session;\n    const stale = \(\) => !isActiveImportSession\(session\);/);
+  assert.match(setup, /setReviewSourceIds\(\[\]\);\n    setImportedListingCount\(0\);/);
+  assert.match(setup, /await disconnectListingSource\(primarySource\.uri, auth\.realtorId, session\)/);
+  assert.match(setup, /connectListingSource\(listingUrl, auth\.realtorId, report\("listings"\), session\)/);
+  assert.match(setup, /await Promise\.allSettled\(\[listingImport, profileBuild\]\);\n      \/\/[^\n]*\n      if \(stale\(\)\) return;/);
+  assert.match(setup, /listingsForSources\(/);
+  assert.match(setup, /setReviewSourceIds\(connected\.source\?\.id \? \[connected\.source\.id\] : \[\]\)/);
+  // Returning to a review scopes it to the sources connected now.
+  assert.match(setup, /const ids = await connectedSourceIds\(auth\.realtorId\); if \(ids\) setReviewSourceIds\(ids\);/);
+});
