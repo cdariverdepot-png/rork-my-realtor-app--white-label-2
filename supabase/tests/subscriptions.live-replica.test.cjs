@@ -33,18 +33,22 @@ test('live-replica subscription lifecycle restricts service actions, never acces
   R+':clients.v1',JSON.stringify([{id:'c1',name:'Client 1'}])]);
  // Apply the migration exactly as it will run in production.
  await exec(fs.readFileSync(path.join(__dirname,'../migrations/20261004061627_subscription_entitlements.sql'),'utf8'));
+ await exec(fs.readFileSync(path.join(__dirname,'../migrations/20261007200000_apple_entitlements.sql'),'utf8'));
 
  const state=async()=>{await as(OWNER);return scalar('select public.realtor_seat_state($1) result',[R]);};
  const access=async id=>{await as(id);return scalar('select public.experience_access($1) result',[R]);};
  const login=async(n,auth=uid(n))=>{await as(auth);return scalar('select public.verify_client_account($1,$2,$3) result',[R,`c${n}@example.com`,hash('pw'+n)]);};
  const read=async(id,key)=>{await as(id);return scalar('select public.secure_kv_get($1) result',[key]);};
  const write=async(id,key,value)=>{await as(id);return query('select public.secure_kv_set($1,$2::jsonb,$3)',[key,JSON.stringify(value),Date.now()]);};
- const expire=async(fields="trial_started_at=now()-interval '8 days'")=>{await admin();await query(`update private.billing_accounts set ${fields} where realtor_id=$1`,[R]);};
+ let signedAt=Date.now();
+ const apple=async(over={})=>{await admin();await query("set role service_role");return scalar('select public.apple_apply($1,$2::jsonb) result',[R,JSON.stringify({original_transaction_id:'2000000000000001',product_id:'monthly',environment:'Sandbox',expires_at:new Date(Date.now()+30*86400000).toISOString(),revoked_at:null,signed_at:new Date(signedAt+=1000).toISOString(),auto_renew:true,billing_issue:false,in_trial:false,...over})]);};
  const chat=async()=>(await read(OWNER,R+':c1:chat.v1')).value;
 
- await t.test('existing clients are backfilled as connected relationships and the trial starts now',async()=>{
-  const s=await state();assert.equal(s.active,true);assert.equal(s.used,3);assert.equal(s.connections.length,3);assert.equal(s.inactiveReason,null);
-  assert.ok(Date.parse(s.trialEnd)>Date.now()+6*86400000);
+ await t.test('existing clients stay connected; there is no local trial — service starts only with Apple',async()=>{
+  let s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'not_subscribed');assert.equal(s.used,3);assert.equal(s.connections.length,3);
+  for(const n of [1,2,3])assert.equal((await login(n)).ok,true,'existing clients sign in before any subscription');
+  await apple({in_trial:true,expires_at:new Date(Date.now()+7*86400000).toISOString()});
+  s=await state();assert.equal(s.active,true);assert.equal(s.status,'trial');assert.equal(s.limit,3);assert.ok(Date.parse(s.trialEnd)>Date.now()+6*86400000);
  });
  await t.test('active realtor retains full functionality',async()=>{
   for(const n of [1,2,3])assert.equal((await login(n)).ok,true);
@@ -55,9 +59,9 @@ test('live-replica subscription lifecycle restricts service actions, never acces
   assert.equal((await access(OWNER)).available,true);assert.equal((await access(uid(1))).available,true);
   await as(OWNER);assert.equal(await scalar('select public.authorize_push($1,$2) result',[R,'client']),true);
  });
- await t.test('trial expiration restricts service actions without any lockout',async()=>{
-  await expire();
-  const s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'trial_ended');assert.equal(s.paymentIssue,false);
+ await t.test('Apple trial expiration restricts service actions without any lockout',async()=>{
+  await apple({in_trial:true,expires_at:new Date(Date.now()-1000).toISOString()});
+  const s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'expired');assert.equal(s.paymentIssue,false);
   assert.equal(s.connections.length,3,'existing relationships survive');
   // Realtor still reads everything.
   assert.equal((await read(OWNER,R+':listings.v2')).value.items[0].id,'l1');assert.equal((await read(OWNER,R+':clients.v1')).value[0].id,'c1');
@@ -92,15 +96,17 @@ test('live-replica subscription lifecycle restricts service actions, never acces
   assert.equal(r.reason,'inactive');assert.equal(r.account_created,true);
   assert.equal((await state()).used,3,'no new active relationship');
  });
- await t.test('payment failure and cancellation report accurate reasons and still never lock anyone out',async()=>{
-  await expire("ever_paid=true,paid_through=now()-interval '1 day',payment_issue=true,status='past_due'");
-  let s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'payment_failed');assert.equal((await login(1)).ok,true);
-  await expire("payment_issue=false,status='canceled'");s=await state();assert.equal(s.inactiveReason,'canceled');
-  await expire("status='active',cancel_at_period_end=false");s=await state();assert.equal(s.inactiveReason,'expired');
+ await t.test('Apple billing retry, cancellation, expiry and refund report accurate reasons and never lock anyone out',async()=>{
+  const past=new Date(Date.now()-86400000).toISOString();
+  await apple({expires_at:past,billing_issue:true});
+  let s=await state();assert.equal(s.active,false);assert.equal(s.inactiveReason,'billing_retry');assert.equal((await login(1)).ok,true);
+  await apple({expires_at:past,billing_issue:false,auto_renew:false});s=await state();assert.equal(s.inactiveReason,'canceled');
+  await apple({expires_at:past,auto_renew:true});s=await state();assert.equal(s.inactiveReason,'expired');
+  await apple({expires_at:past,revoked_at:past});s=await state();assert.equal(s.inactiveReason,'refunded');
   assert.equal((await read(uid(1),R+':listings.v2')).value.items.length,1);
  });
  await t.test('restoring service restores restricted actions without recreating clients or data',async()=>{
-  await expire("paid_through=now()+interval '30 days'");
+  await apple({revoked_at:null});
   const s=await state();assert.equal(s.active,true);assert.equal(s.limit,-1);assert.equal(s.connections.length,3);
   await write(OWNER,R+':brand.v2',{realtor:{name:'Cindy Restored'}});
   await write(uid(1),R+':c1:chat.v1',[{id:'m6',role:'client',text:'Back',createdAt:6}]);
@@ -109,8 +115,8 @@ test('live-replica subscription lifecycle restricts service actions, never acces
  });
  await t.test('anon cannot call any entitlement or billing function',async()=>{
   await admin();await query('set role anon');
-  for(const sql of ["select public.experience_access('"+R+"')","select public.realtor_seat_state('"+R+"')","select public.realtor_service_active('"+R+"')","select public.billing_snapshot('"+R+"')"])
+  for(const sql of ["select public.experience_access('"+R+"')","select public.realtor_seat_state('"+R+"')","select public.realtor_service_active('"+R+"')","select public.apple_apply('"+R+"','{}')"])
    await assert.rejects(query(sql),/permission denied/);
-  await admin();await as(OWNER);await assert.rejects(query("select public.billing_snapshot($1)",[R]),/permission denied/);
+  await admin();await as(OWNER);await assert.rejects(query("select public.apple_apply($1,'{}'::jsonb)",[R]),/permission denied/);
  });
 });

@@ -14,7 +14,6 @@ function loader(stubs={},context={}){
   },m,m.exports,...Object.values(context));return m.exports;
  };return load;
 }
-const core=loader()(path.join(root,'supabase/functions/billing/core.ts'));
 test('subscription state never globally gates realtor or client navigation',()=>{
  const layout=fs.readFileSync(path.join(root,'expo/app/_layout.tsx'),'utf8');
  const gate=fs.readFileSync(path.join(root,'expo/components/ServiceAccessGate.tsx'),'utf8');
@@ -33,31 +32,9 @@ test('paid actions distinguish unknown entitlement and fail closed without block
 test('native subscription UI contains no private checkout path',()=>{
  const plans=fs.readFileSync(path.join(root,'expo/app/admin/plans.tsx'),'utf8');
  assert.doesNotMatch(plans,/billingRequest|verifiedBillingURL|TEST SUBSCRIPTION|checkout\.stripe/);
- assert.match(plans,/managed by Apple|APP STORE SUBSCRIPTION/);
+ assert.match(plans,/managed through Apple/);assert.match(plans,/RESTORE PURCHASES/);assert.match(plans,/MANAGE SUBSCRIPTION/);
 });
 
-const c={enabled:true,secret:'sk_test_fixture',webhookSecret:'whsec_fixture',monthPrice:'price_month',yearPrice:'price_year',origin:'https://app.example.com',failurePolicy:'paid_period'};
-const price=interval=>({id:interval==='month'?c.monthPrice:c.yearPrice,livemode:false,active:true,type:'recurring',currency:'usd',unit_amount:interval==='month'?4900:49000,recurring:{interval,interval_count:1}});
-const end=Math.floor(Date.now()/1000)+86400*30;
-const sub=interval=>({id:'sub_test',livemode:false,customer:'cus_test',status:'active',cancel_at_period_end:false,items:{data:[{quantity:1,price:price(interval),current_period_end:end}]},latest_invoice:{id:'in_test',livemode:false,status:'paid',customer:'cus_test',parent:{subscription_details:{subscription:'sub_test'}},lines:{data:[{pricing:{price_details:{price:price(interval).id}},parent:{subscription_item_details:{proration:false}},period:{start:end-86400*30,end}}]}}});
-async function signature(raw,secret=c.webhookSecret){const t=Math.floor(Date.now()/1000);const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);const s=await crypto.subtle.sign('HMAC',k,new TextEncoder().encode(`${t}.${raw}`));return `t=${t},v1=${Buffer.from(s).toString('hex')}`;}
-test('billing requires complete test configuration and the approved USD recurring amounts',()=>{
- assert.equal(core.configured(c),true);
- for(const change of [{enabled:false},{secret:'sk_live_disabled'},{webhookSecret:''},{monthPrice:''},{yearPrice:c.monthPrice},{origin:'http://app.example.com'},{failurePolicy:''}])assert.equal(core.configured({...c,...change}),false);
- assert.equal(core.offer(price('month'),'month').total,'$49.00');assert.equal(core.offer(price('year'),'year').total,'$490.00');assert.match(core.annualSavings(core.offer(price('month'),'month'),core.offer(price('year'),'year')),/98.*two months/);
- for(const change of [{livemode:true},{active:false},{unit_amount:5000},{currency:'eur'},{recurring:{interval:'year',interval_count:1}}])assert.throws(()=>core.offer({...price('month'),...change},'month'));
-});
-test('current Stripe invoice format and both intervals grant only verified paid periods',()=>{
- for(const interval of ['month','year']){const s=sub(interval);const r=core.subscriptionSnapshot(s,'cus_test',c);assert.equal(r.interval,interval);assert.equal(Date.parse(r.paid_through),end*1000);
-  for(const invoice of [undefined,{...s.latest_invoice,status:'open'},{...s.latest_invoice,customer:'cus_other'},{...s.latest_invoice,livemode:true},{...s.latest_invoice,parent:{subscription_details:{subscription:'sub_other'}}}])assert.equal(core.subscriptionSnapshot({...s,latest_invoice:invoice},'cus_test',c).paid_through,null);
- }
- const s=sub('month');assert.throws(()=>core.subscriptionSnapshot({...s,livemode:true},'cus_test',c));assert.throws(()=>core.subscriptionSnapshot(s,'cus_other',c));assert.throws(()=>core.subscriptionSnapshot({...s,items:{data:[]}},'cus_test',c));
- const prorated=structuredClone(s);prorated.latest_invoice.lines.data[0].parent.subscription_item_details.proration=true;assert.equal(core.subscriptionSnapshot(prorated,'cus_test',c).paid_through,null);
- assert.equal(core.subscriptionSnapshot({...s,status:'past_due',latest_invoice:{...s.latest_invoice,status:'open'}},'cus_test',c).payment_issue,true);
-});
-test('webhook signatures reject modification, expired delivery and incorrect keys',async()=>{
- const raw=JSON.stringify({id:'evt_example',livemode:false});const signed=await signature(raw);assert.equal(await core.verifySignature(raw,signed,c.webhookSecret),true);assert.equal(await core.verifySignature(raw+' ',signed,c.webhookSecret),false);assert.equal(await core.verifySignature(raw,signed,'whsec_wrong'),false);assert.equal(await core.verifySignature(raw,signed,c.webhookSecret,Date.now()/1000+301),false);
-});
 test('seat/network failures never silently grant unlimited access; disconnect uses stable account ID',async()=>{
  let rpcName,args;
  const backend={rpc:async(name,input)=>{rpcName=name;args=input;return {data:null,error:{message:'offline'}};}};
@@ -68,46 +45,7 @@ test('seat/network failures never silently grant unlimited access; disconnect us
 test('evaluation, custom fee, upfront annual billing and working inquiry remain consistent',()=>{
  const {PLAN_TIERS,CUSTOM_SETUP_PRICE,CUSTOM_INQUIRY_URL}=loader()(path.join(root,'expo/constants/plans.ts'));
  assert.equal(CUSTOM_SETUP_PRICE,'$499');const custom=PLAN_TIERS.find(t=>t.id==='bespoke');assert.match(custom.altPrice,/required.*49\/month.*490\/year, billed annually/);assert.match(custom.features.join(' '),/Hosting.*standard platform updates.*bug fixes.*separately quoted/);assert.match(custom.features.join(' '),/own Apple Developer account.*membership.*separate cost/);assert.match(CUSTOM_INQUIRY_URL,/^mailto:hello@myrealtorapp.com\?subject=/);
- const evalTier=PLAN_TIERS.find(t=>t.id==='evaluation');assert.match(evalTier.features.join(' '),/All standard features for 7 days.*3 connected.*No payment details.*pending invitations do not count/);assert.match(evalTier.priceNote,/7 days/);assert.match(PLAN_TIERS.find(t=>t.id==='pro').altPrice,/490\/year, billed annually.*40\.83.*98/);
-});
-test('billing handler verifies owner, canonical events, duplicate checkout and delayed payment refresh',async()=>{
- const rid='11111111-1111-4111-8111-111111111111';let handler,canonical=sub('month'),state={realtor_id:rid,provider_customer_id:null,provider_subscription_id:null,revision:0},checkout=null,events=new Set(),created=0;
- const env={BILLING_TEST_ENABLED:'true',STRIPE_TEST_SECRET_KEY:c.secret,STRIPE_TEST_WEBHOOK_SECRET:c.webhookSecret,STRIPE_TEST_MONTH_PRICE_ID:c.monthPrice,STRIPE_TEST_YEAR_PRICE_ID:c.yearPrice,BILLING_WEB_ORIGIN:c.origin,BILLING_PAYMENT_FAILURE_POLICY:c.failurePolicy,SUPABASE_URL:'https://supabase.example',SUPABASE_SERVICE_ROLE_KEY:'fixture',SUPABASE_ANON_KEY:'anon'};
- const db={auth:{getUser:async jwt=>({data:{user:jwt==='owner'?{id:'owner',email_confirmed_at:'yes'}:jwt==='client'?{id:'client'}:null},error:null})},from:()=>({select:()=>({eq:(_key,id)=>({maybeSingle:async()=>({data:id==='owner'?{id:rid}:null,error:null})})})}),rpc:async(name,a)=>{
-  let data;
-  if(name==='realtor_seat_state')data={ok:true,active:true,limit:state.paid_through?-1:3};
-  else if(name==='billing_snapshot')data={...state};
-  else if(name==='billing_customer')data=state.provider_customer_id===a.p_customer_id?{realtor_id:rid,provider_subscription_id:state.provider_subscription_id}:null;
-  else if(name==='billing_checkout'){
-   if(!a.p_request_key && state.checkout_key)data={ok:false,busy:true,session:state.checkout_session_id};
-   else{state={...state,checkout_key:'checkout-key',provider_customer_id:a.p_customer_id??state.provider_customer_id,checkout_session_id:a.p_session_id??state.checkout_session_id};data={...state,ok:true};}
-  }else if(name==='billing_apply'){
-   if(events.has(a.p_event_id))data={ok:true,duplicate:true};else if(a.p_expected_revision!==state.revision)data={ok:false,retry:true};else{state={...state,...a.p_snapshot,provider_subscription_id:a.p_snapshot.subscription,revision:state.revision+1};if(a.p_event_id)events.add(a.p_event_id);data={ok:true};}
-  }else throw new Error(name);return {data,error:null};
- }};
- const provider=async(url,options={})=>{
-  const u=new URL(url),p=u.pathname.replace('/v1/','');let data;
-  if(p.startsWith('prices/'))data=price(p.endsWith(c.monthPrice)?'month':'year');
-  else if(p==='customers')data={id:'cus_test'};
-  else if(p==='subscriptions')data={data:checkout?.status==='complete'?[canonical]:[],has_more:false};
-  else if(p.startsWith('subscriptions/')){if(options.method==='POST')canonical.cancel_at_period_end=options.body.get('cancel_at_period_end')==='true';data=canonical;}
-  else if(p==='checkout/sessions'){created++;assert.equal(options.body.get('line_items[0][price]'),c.monthPrice);assert.equal(options.body.get('success_url'),c.origin+'/admin/plans?checkout=returned');checkout={id:'cs_test',url:'https://checkout.stripe.com/c/pay/test',status:'open'};data=checkout;}
-  else if(p.startsWith('checkout/sessions/'))data=checkout;
-  else if(p==='billing_portal/sessions')data={url:'https://billing.stripe.com/p/session/test'};
-  else throw new Error(p);return new Response(JSON.stringify(data),{status:200});
- };
- loader({'npm:@supabase/supabase-js@2.95.3':{createClient:()=>db}},{Deno:{env:{get:k=>env[k]},serve:fn=>{handler=fn;}},fetch:provider})(path.join(root,'supabase/functions/billing/index.ts'));
- const request=async(action,jwt='owner',extra={})=>handler(new Request('https://edge.example/billing',{method:'POST',headers:{authorization:`Bearer ${jwt}`,'content-type':'application/json'},body:JSON.stringify({realtorId:rid,action,...extra})}));
- assert.equal((await request('status','')).status,401);assert.equal((await request('status','client')).status,403);assert.equal((await request('status','owner',{realtorId:'other'})).status,403);
- env.BILLING_TEST_ENABLED='false';assert.equal((await request('checkout','owner',{interval:'month'})).status,503);env.BILLING_TEST_ENABLED='true';
- assert.equal((await (await request('checkout','owner',{interval:'month',priceId:'price_forged'})).json()).url,checkout.url);await request('checkout','owner',{interval:'month'});assert.equal(created,1);assert.equal(state.paid_through,undefined);
- checkout.status='complete';await request('refresh');assert.equal(state.provider_subscription_id,'sub_test');assert.equal(Date.parse(state.paid_through),end*1000);
- const deliver=async event=>{const raw=JSON.stringify(event);return handler(new Request('https://edge.example/billing',{method:'POST',headers:{'stripe-signature':await signature(raw)},body:raw}));};
- const event={id:'evt_old',livemode:false,type:'customer.subscription.updated',data:{object:{id:'sub_test',customer:'cus_test',status:'canceled'}}};
- assert.equal((await deliver(event)).status,200);assert.equal(state.status,'active');const revision=state.revision;await deliver(event);assert.equal(state.revision,revision);
- const older={...event,id:'evt_oldsubscription',data:{object:{id:'sub_old',customer:'cus_test',status:'canceled'}}};assert.equal((await deliver(older)).status,200);assert.equal(state.provider_subscription_id,'sub_test');assert.equal(state.revision,revision);
- assert.equal((await deliver({...event,id:'evt_live',livemode:true})).status,400);assert.equal((await handler(new Request('https://edge.example/billing',{method:'POST',headers:{'stripe-signature':'invalid'},body:JSON.stringify(event)}))).status,400);
- await request('cancel');assert.equal(state.cancel_at_period_end,true);await request('resume');assert.equal(state.cancel_at_period_end,false);
+ const evalTier=PLAN_TIERS.find(t=>t.id==='evaluation');assert.match(evalTier.features.join(' '),/All standard features for 7 days.*3 connected.*Free trial through the App Store; renews unless canceled.*pending invitations do not count/);assert.match(evalTier.priceNote,/7 days/);assert.match(PLAN_TIERS.find(t=>t.id==='pro').altPrice,/490\/year, billed annually.*40\.83.*98/);
 });
 test('entitlement lookup failures resolve to unknown, never inactive',async()=>{
  const cases=[[{data:null,error:{message:'function public.experience_access does not exist',code:'PGRST202'}},'unknown'],[{data:null,error:{message:'offline'}},'unknown'],[{data:{},error:null},'unknown'],[{data:{available:false},error:null},'inactive'],[{data:{available:true},error:null},'active']];
@@ -121,10 +59,10 @@ test('entitlement lookup failures resolve to unknown, never inactive',async()=>{
 test('owner service notice is accurate to the actual inactive reason',()=>{
  const {serviceNoticeCopy}=loader()(path.join(root,'expo/lib/serviceNotice.ts'));
  assert.equal(serviceNoticeCopy(null),null);
- assert.match(serviceNoticeCopy('payment_failed').title,/couldn't process your payment/);
- assert.match(serviceNoticeCopy('payment_failed').body,/Update your billing information to restore publishing and client communication/);
- for(const reason of ['trial_ended','canceled','expired']){const c=serviceNoticeCopy(reason);assert.doesNotMatch(c.title+c.body,/payment/i,`${reason} never claims a payment failed`);assert.match(c.body,/remain available/);}
- assert.match(serviceNoticeCopy('trial_ended').title,/trial has ended/);
+ assert.match(serviceNoticeCopy('billing_retry').title,/Apple couldn't renew/);
+ assert.match(serviceNoticeCopy('billing_retry').body,/restore publishing and client communication/);
+ for(const reason of ['not_subscribed','canceled','expired','refunded']){const c=serviceNoticeCopy(reason);assert.doesNotMatch(c.title+c.body,/payment/i,`${reason} never claims a payment failed`);assert.match(c.body,/remain available/);}
+ assert.match(serviceNoticeCopy('not_subscribed').title,/7-day free trial/);assert.match(serviceNoticeCopy('refunded').title,/^Refunded/);assert.match(serviceNoticeCopy('expired').title,/^Expired/);assert.match(serviceNoticeCopy('canceled').title,/^Canceled/);
 });
 test('inactive or unknown seat state never becomes a lockout or a misleading capacity banner',()=>{
  const seats=fs.readFileSync(path.join(root,'expo/contexts/SeatsContext.tsx'),'utf8');
@@ -133,4 +71,29 @@ test('inactive or unknown seat state never becomes a lockout or a misleading cap
  for(const file of ['components/OnboardingGuard.tsx','app/_layout.tsx','app/index.tsx']){
   const body=fs.readFileSync(path.join(root,'expo',file),'utf8');assert.doesNotMatch(body,/useSeats|experience_access|serviceEntitlement|realtor_seat_state/,`${file} startup/navigation is billing-independent`);
  }
+});
+
+test('Apple is the only payment path: no private checkout code and no fabricated product IDs',()=>{
+ const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.name==='node_modules'||e.name.startsWith('.')?[]:e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
+ for(const file of [...walk(path.join(root,'expo/app')),...walk(path.join(root,'expo/components')),...walk(path.join(root,'expo/contexts')),...walk(path.join(root,'expo/lib')),...walk(path.join(root,'supabase/functions'))].filter(f=>/\.(ts|tsx)$/.test(f)))
+  assert.doesNotMatch(fs.readFileSync(file,'utf8'),/stripe|checkout\.session|card number/i,`${path.relative(root,file)} has no private payment path`);
+ assert.equal(fs.existsSync(path.join(root,'supabase/functions/billing')),false);
+ const config=fs.readFileSync(path.join(root,'expo/lib/appleSubscriptions.ts'),'utf8');
+ assert.match(config,/process\.env\.EXPO_PUBLIC_IOS_SUBSCRIPTION_MONTHLY_ID/);assert.doesNotMatch(config,/"(com|app)\.[a-z]+\.[a-z_.]+"/,'no hard-coded product IDs');
+ const lib=loader({'@/lib/supabase':{supabase:null,ensureSupabaseSession:async()=>{}}})(path.join(root,'expo/lib/appleSubscriptions.ts'));
+ assert.equal(lib.appleSubscriptionsConfigured(),!!(process.env.EXPO_PUBLIC_IOS_SUBSCRIPTION_MONTHLY_ID||process.env.EXPO_PUBLIC_IOS_SUBSCRIPTION_ANNUAL_ID));
+});
+test('StoreKit loads only in the iOS bundle; web and Android never import it',()=>{
+ const stub=fs.readFileSync(path.join(root,'expo/lib/storekit.ts'),'utf8'),ios=fs.readFileSync(path.join(root,'expo/lib/storekit.ios.ts'),'utf8');
+ assert.doesNotMatch(stub,/expo-iap/);assert.match(stub,/storeKitAvailable = false/);
+ assert.match(ios,/try \{ cached = require\("expo-iap"\) as typeof Iap; \} catch \{ cached = null; \}/,'native module loads lazily so Expo Go/preview clients never crash');assert.doesNotMatch(ios,/^import \{[^}]*\} from "expo-iap"/m);assert.match(ios,/appAccountToken: realtorId/);assert.match(ios,/finishTransaction\(\{ purchase: p\.raw as Purchase, isConsumable: false \}\)/);
+ const hook=fs.readFileSync(path.join(root,'expo/lib/useAppleSubscription.ts'),'utf8');
+ assert.match(hook,/if \(result\.ok\) for \(const p of purchases\) await finishPurchase/,'transactions finish only after server verification');
+});
+test('no global unavailable screen exists and demo/preview never load entitlement state',()=>{
+ const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
+ for(const file of [...walk(path.join(root,'expo/app')),...walk(path.join(root,'expo/components'))])assert.doesNotMatch(fs.readFileSync(file,'utf8'),/This app is currently unavailable/);
+ const seats=fs.readFileSync(path.join(root,'expo/contexts/SeatsContext.tsx'),'utf8');
+ assert.match(seats,/const tracked = isAdmin && !demoViewMode && !isDemoRealtor;/);
+ const ent=fs.readFileSync(path.join(root,'expo/lib/serviceEntitlement.ts'),'utf8');assert.match(ent,/if \(!realtorId \|\| !supabase\) return "unknown"/);
 });

@@ -49,3 +49,6 @@ jobs:
       - name: Deploy report-client-error
         run: supabase functions deploy report-client-error --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
 
+      - name: Deploy apple-subscription
+        run: supabase functions deploy apple-subscription --project-ref "$SUPABASE_PROJECT_REF" --use-api --no-verify-jwt
+

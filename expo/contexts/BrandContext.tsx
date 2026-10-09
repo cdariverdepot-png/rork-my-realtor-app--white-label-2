@@ -953,7 +953,7 @@ export const [BrandProvider, useBrand] = createContextHook(() => {
   const publishBrand = useCallback(async (next?: Brand) => {
     if (demoViewMode || !isAdmin || !realtorId) throw new Error("Sign in as the realtor to publish.");
     if (publishing.current) throw new Error("Publication is already in progress.");
-    if (seats.tracked && (!seats.loaded || !seats.active)) throw new Error(seats.loaded ? "Publishing is unavailable while your service is inactive. Update your subscription in Account & Billing to publish changes." : "Publishing is temporarily unavailable while your subscription status is verified.");
+    if (seats.tracked && (!seats.loaded || !seats.active)) throw new Error(seats.loaded ? "Publishing is unavailable while your subscription is inactive. Subscribe or restore your Apple subscription to publish changes." : "Publishing is temporarily unavailable while your subscription status is verified.");
     const candidate = next ?? draftRef.current ?? brandRef.current;
     if (!requiredStatus(candidate).complete) throw new Error("Complete the required business details before publishing.");
     publishing.current = true;

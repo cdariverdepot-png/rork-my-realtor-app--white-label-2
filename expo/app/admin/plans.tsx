@@ -22,9 +22,12 @@ import ScreenBackdrop from "@/components/ScreenBackdrop";
 import { tint } from "@/constants/backdrops";
 import { CUSTOM_INQUIRY_URL, PLAN_TIERS, type PlanTier } from "@/constants/plans";
 import { ANNUAL_EQUIVALENT } from "@/constants/subscriptionPricing";
-import { exportRealtorData } from "@/lib/billing";
+import { APPLE_SUBSCRIPTION_IDS as APPLE_IDS } from "@/lib/appleSubscriptions";
+import { exportRealtorData } from "@/lib/accountExport";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeats } from "@/contexts/SeatsContext";
+import { useAppleSubscription } from "@/lib/useAppleSubscription";
+import { serviceNoticeCopy } from "@/lib/serviceNotice";
 
 const GOLD = brand.gold;
 const LINE = "rgba(244,239,230,0.12)";
@@ -40,6 +43,9 @@ export default function Plans() {
   useLocalSearchParams<{ checkout?: string }>();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  // Apple handles purchase, renewal, billing and management; the server verifies the result.
+  const apple = useAppleSubscription(realtorId, tracked && session?.guestAccess !== true && session?.preview !== true, () => void seats.refresh());
+  const notice = serviceNoticeCopy(seats.inactiveReason);
 
   useEffect(() => {
     if (hydrated && !isAdmin) router.replace("/admin/login");
@@ -61,9 +67,9 @@ export default function Plans() {
       if (Platform.OS !== "web") void Haptics.selectionAsync();
       void Linking.openURL(CUSTOM_INQUIRY_URL).catch(() => setMessage("Please email hello@myrealtorapp.com about your custom app."));
     } else {
-      setMessage("App Store subscription setup is not configured in this build yet. No private checkout will be opened.");
+      void apple.subscribe("month");
     }
-  }, []);
+  }, [apple.subscribe]);
   const exportData = useCallback(async () => {
     if (!realtorId || busy || !tracked) return;
     setBusy(true); setMessage(null);
@@ -83,11 +89,18 @@ export default function Plans() {
 
   const statusLine = useMemo(() => {
     if (!tracked) return "You're on the showcase account — no limits apply.";
-    if (!seats.loaded) return "Checking account status…";
-    if (!seats.active) return "Inactive — your saved records are retained.";
-    if (unlimited) return `${used} clients connected · unlimited allowance`;
-    return `${used} of ${limit} clients connected.`;
-  }, [tracked, unlimited, used, limit, seats.loaded, seats.active]);
+    if (!seats.loaded) return "Checking subscription status…";
+    // Every state below comes from the verified Apple entitlement.
+    if (!seats.active) return notice?.title ?? "Subscription inactive.";
+    const until = (d: string | null) => (d ? new Date(d).toLocaleDateString() : "");
+    if (seats.status === "trial") {
+      const left = seats.trialEnd ? Math.max(0, Math.ceil((Date.parse(seats.trialEnd) - Date.now()) / 86400000)) : null;
+      return `7-day free trial${left === null ? "" : ` · ${left} ${left === 1 ? "day" : "days"} remaining`} · ${used} of ${limit} clients connected`;
+    }
+    if (seats.status === "grace_period") return `Billing retry · grace period until ${until(seats.serviceEnd)}`;
+    if (seats.cancelAtPeriodEnd && seats.serviceEnd) return `Canceled — active until ${until(seats.serviceEnd)}`;
+    return unlimited ? `Subscription active · ${used} clients connected` : "Subscription active.";
+  }, [tracked, unlimited, used, limit, seats.loaded, seats.active, seats.status, seats.trialEnd, seats.serviceEnd, seats.cancelAtPeriodEnd, notice]);
   const displayedTiers = PLAN_TIERS;
   const date = seats.cancelAtPeriodEnd ? seats.serviceEnd : seats.renewalAt;
   const dateText = date ? new Date(date).toLocaleDateString() : null;
@@ -115,8 +128,8 @@ export default function Plans() {
         >
           <View style={styles.header}>
             <Text style={styles.lede}>
-              Build your app with full access for 7 days and up to three connected clients.
-              Subscribe after the trial to keep your app active.
+              Start a 7-day free trial through the App Store with up to three connected clients.
+              It then renews at $49/month or $490/year unless canceled in your Apple account.
             </Text>
             <View style={[styles.statusPill, atLimit && styles.statusPillFull]}>
               <View
@@ -126,8 +139,15 @@ export default function Plans() {
             </View>
             {tracked ? <>
               <Text style={styles.footnote}>{session?.email}{seats.everPaid ? ` · ${seats.interval === "year" ? "Annual" : "Monthly"} subscription · ${seats.status}` : " · Evaluation"}{dateText ? ` · ${seats.cancelAtPeriodEnd ? "Service ends" : "Renewal"} ${dateText}` : ""}</Text>
-              {seats.paymentIssue ? <Text style={styles.footnote}>Your App Store subscription needs attention. Manage or restore it through Apple to restore paid service actions.</Text> : null}
-              <Text style={styles.footnote}>Subscriptions are managed by Apple. This build does not use a private credit-card checkout.</Text>
+              {notice ? <Text style={styles.footnote}>{notice.body}</Text> : null}
+              <Text style={styles.footnote}>Subscriptions are purchased and managed through Apple.</Text>
+              {apple.configured ? <>
+                <Pressable disabled={!!apple.busy} style={styles.cta} onPress={() => void apple.subscribe("month")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{apple.busy === "buy" ? "OPENING APP STORE…" : `SUBSCRIBE MONTHLY${apple.products[APPLE_IDS.month]?.displayPrice ? ` · ${apple.products[APPLE_IDS.month].displayPrice}` : ""}`}</Text></Pressable>
+                {APPLE_IDS.year ? <Pressable disabled={!!apple.busy} style={styles.cta} onPress={() => void apple.subscribe("year")}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{`SUBSCRIBE ANNUALLY${apple.products[APPLE_IDS.year]?.displayPrice ? ` · ${apple.products[APPLE_IDS.year].displayPrice}` : ""}`}</Text></Pressable> : null}
+                <Pressable disabled={!!apple.busy} style={styles.cta} onPress={() => void apple.restore()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>{apple.busy === "restore" ? "RESTORING…" : "RESTORE PURCHASES"}</Text></Pressable>
+              </> : <Text style={styles.footnote}>{apple.storeKitAvailable ? "App Store subscription products are not configured in this build yet." : "Subscribe or restore your subscription in the My Realtor App for iPhone."}</Text>}
+              <Pressable style={styles.cta} onPress={() => void apple.manage()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>MANAGE SUBSCRIPTION</Text></Pressable>
+              {apple.message ? <Text accessibilityRole="alert" style={styles.footnote}>{apple.message}</Text> : null}
               <Text style={styles.footnote}>Subscriptions renew automatically at the chosen interval until canceled. Annual billing charges $490 upfront. Cancellation keeps access through the paid service-end date.</Text>
               <Pressable disabled={busy} style={styles.cta} onPress={() => void seats.refresh()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>REFRESH ACCOUNT STATUS</Text></Pressable>
               <Pressable disabled={busy} style={styles.cta} onPress={() => void exportData()}><Text style={[styles.ctaText, { color: brand.goldLight }]}>EXPORT MY DATA</Text></Pressable>
