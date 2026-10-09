@@ -162,15 +162,22 @@ async function studioWalk(page, r, studio) {
   const modal = () => page.locator('[aria-modal="true"]').last();
   const cardTitles = async () => page.evaluate(() => [...document.querySelectorAll('[data-testid="listing-card"] [role="button"]')]
     .map(el => el.getAttribute('aria-label')).filter(label => label && !/^(Save home|Remove saved home)$/.test(label)));
+  // History probe: what the browser's history looks like at each step of a dashboard preview.
+  const probe = async label => ({ label, ...(await page.evaluate(() => ({ length: history.length, path: location.pathname, state: JSON.stringify(history.state).slice(0, 160),
+    modal: document.querySelectorAll('[aria-modal="true"]').length }))) });
+  st.historyProbe = st.historyProbe ?? [];
   const previewListings = async (button, name) => {
+    st.historyProbe.push(await probe(`${name}: before open`));
     await page.getByRole('button', { name: button, exact: true }).first().click();
     await page.waitForTimeout(2500);
+    st.historyProbe.push(await probe(`${name}: open`));
     await modal().getByRole('button', { name: 'Listings', exact: true }).last().click();
     await page.waitForTimeout(2000);
+    st.historyProbe.push(await probe(`${name}: listings`));
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
     // The preview's own Back steps out of it (Listings -> Home -> closed), leaving the dashboard as it was.
-    for (let i = 0; i < 4 && await page.locator('[aria-modal="true"]').count(); i++) { await modal().getByLabel('Back').first().click().catch(() => {}); await page.waitForTimeout(1500); }
+    for (let i = 0; i < 4 && await page.locator('[aria-modal="true"]').count(); i++) { await modal().getByLabel('Back').first().click().catch(() => {}); await page.waitForTimeout(1500); st.historyProbe.push(await probe(`${name}: back ${i + 1}`)); }
     await step(`${name}-closed`, { closedWithBack: !(await page.locator('[aria-modal="true"]').count()), url: page.url() });
     // Back to a fresh dashboard (the previews are read-only).
     await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 });
