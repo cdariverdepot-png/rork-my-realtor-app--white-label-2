@@ -59,3 +59,5 @@
 {"at":"2026-10-09T06:29:27.179Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-paonia-cindy-paonia","calls":7,"blocked":0,"estimatedUsd":0.1338,"inputTokens":90880,"outputTokens":3074}
 {"at":"2026-10-09T06:30:50.293Z","kind":"site","campaign":"gate-37893236814","level":"D","site":"cindy-exit-mid-import-paonia","calls":2,"blocked":0,"estimatedUsd":0.0282,"inputTokens":7510,"outputTokens":2323}
 {"at":"2026-10-09T06:36:34.779Z","kind":"site","campaign":"gate-37893995342","level":"D","site":"cindy-exit-mid-import-paonia","calls":4,"blocked":0,"estimatedUsd":0.0903,"inputTokens":51431,"outputTokens":2032}
+{"at":"2026-10-09T06:45:41.258Z","kind":"site","campaign":"gate-37894900802","level":"D","site":"cindy-then-paonia","calls":5,"blocked":0,"estimatedUsd":0.0978,"inputTokens":69292,"outputTokens":1811}
+{"at":"2026-10-09T06:46:51.450Z","kind":"site","campaign":"gate-37894900802","level":"D","site":"paonia-then-cindy","calls":5,"blocked":0,"estimatedUsd":0.1125,"inputTokens":69279,"outputTokens":1951}
