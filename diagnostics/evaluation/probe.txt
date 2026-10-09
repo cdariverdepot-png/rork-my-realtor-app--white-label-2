@@ -1,4 +1,2 @@
-Probe requested Thu Oct  8 23:53:24 UTC 2026: Tom Toole (Sierra) search-result pages that added other brokerages' listings on staging.
-probe: https://www.tomtoole.com/property-search/results/
-probe: https://www.tomtoole.com/property-search/results/?searchid=2460824
-probe: https://www.tomtoole.com/
+Probe requested Fri Oct  9 00:33:55 UTC 2026: Tom Toole site map (source of other brokerages' detail pages on staging).
+probe: https://www.tomtoole.com/property-search/site-map/
