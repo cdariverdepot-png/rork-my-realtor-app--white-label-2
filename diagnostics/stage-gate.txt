@@ -1,6 +1,6 @@
-Stage gate requested Fri Oct  9 14:43:01 UTC 2026: audit repairs, second run (history layers fix) on a branch build.
+Stage gate requested Fri Oct  9 14:54:45 UTC 2026: audit repairs, Studio walk and failed-import-after-success rerun.
 justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
 app-url:
-sites: cindy-then-paonia, paonia-then-cindy, cindy-back-same, cindy-then-empty-resume, cindy-studio-paonia
+sites: cindy-studio-paonia, cindy-then-empty-resume

@@ -169,7 +169,8 @@ async function studioWalk(page, r, studio) {
     await page.waitForTimeout(2000);
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
-    for (let i = 0; i < 6 && await page.locator('[aria-modal="true"]').count(); i++) { await page.goBack(); await page.waitForTimeout(900); }
+    // Close with the preview's own Back (browser Back past the preview would leave the dashboard).
+    for (let i = 0; i < 6 && await page.locator('[aria-modal="true"]').count(); i++) { await modal().getByLabel('Back').first().click().catch(() => {}); await page.waitForTimeout(1200); }
     return titles;
   };
   // 1. Publish the app built from the first website.
