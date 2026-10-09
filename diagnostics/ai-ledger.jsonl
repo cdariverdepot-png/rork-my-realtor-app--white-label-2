@@ -49,3 +49,6 @@
 {"at":"2026-10-09T04:38:42.730Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"freestone-properties","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
 {"at":"2026-10-09T04:45:53.497Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"flexmls-redefinedrealty--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
 {"at":"2026-10-09T04:53:03.848Z","kind":"site","campaign":"gate-37884465191","level":"D","site":"flexmls-columbiarealestate--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T04:59:47.905Z","kind":"site","campaign":"gate-37886066232","level":"D","site":"woods-n-water-real-estate","calls":1,"blocked":0,"estimatedUsd":0.0185,"inputTokens":4955,"outputTokens":1075}
+{"at":"2026-10-09T05:01:01.228Z","kind":"site","campaign":"gate-37886066232","level":"D","site":"tom-toole","calls":1,"blocked":0,"estimatedUsd":0.0187,"inputTokens":6565,"outputTokens":696}
+{"at":"2026-10-09T05:02:39.665Z","kind":"site","campaign":"gate-37886066232","level":"D","site":"redman-realty-group","calls":1,"blocked":0,"estimatedUsd":0.0182,"inputTokens":6421,"outputTokens":668}
