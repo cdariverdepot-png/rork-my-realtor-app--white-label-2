@@ -27,6 +27,8 @@ import PressableScale from "@/components/PressableScale";
 import { checkSite, useSiteCheck } from "@/lib/siteCheck";
 import { randomUUID } from "expo-crypto";
 import { analyzeBuild, loadBuild, saveBuildSources } from "@/lib/appBuilder/buildService";
+import { recordWebsiteChange } from "@/lib/appBuilder/pendingWebsite";
+import { websiteHost } from "@/lib/appBuilder/websiteSwitch";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
 import ThemeCarousel from "@/components/ThemeCarousel";
@@ -301,7 +303,7 @@ export default function StudioScreen() {
   const { isAdmin, hydrated, enterViewAsClient } = useAuth();
   const { brand: live, saveBrand, syncStatus, setDraftPreview } = useBrand();
   const [saving, setSaving] = useState(false);
-  const { all: liveListings, saveListings } = useListings();
+  const { all: liveListings, saveListings, draftWebsite } = useListings();
   const workflowDrafts = useWorkflowDrafts();
   const draftKey = params.section === 'theme' ? 'studio:theme' : 'studio:content';
   const resume = workflowDrafts.get(draftKey) as { draft: Brand; active: SectionId; dirty: boolean; listingEdits: Record<string, Partial<ManagedListing>> } | undefined;
@@ -551,8 +553,9 @@ export default function StudioScreen() {
         >
           <UpdateUrlSection setBrand={setBrand} />
           <NeutralContentCanvas draft={draft} onChange={setBrand}
-              listings={liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
-              onListingChange={(id, patch) => { editGen.current += 1; setListingEdits(edits => ({ ...edits, [id]: { ...edits[id], ...patch } })); setDirty(true); }} details={{
+              // While a website change waits for publication the draft shows that website's homes (read-only here).
+              listings={draftWebsite.listings ?? liveListings.map(l => ({ ...l, ...listingEdits[l.id] }))}
+              onListingChange={draftWebsite.listings ? undefined : (id, patch) => { editGen.current += 1; setListingEdits(edits => ({ ...edits, [id]: { ...edits[id], ...patch } })); setDirty(true); }} details={{
               hero: <><ProfileSection draft={draft} setBrand={setBrand} /><HeroSection draft={draft} setBrand={setBrand} /></>,
               note: <NoteSection draft={draft} setBrand={setBrand} />,
               credentials: <CredentialsSection draft={draft} setBrand={setBrand} />,
@@ -1077,7 +1080,8 @@ const LOOK_CARD_GAP = 10;
 const LOOKS_PER_PAGE = 3;
 
 function ThemeSection({ draft, setBrand, onPersist }: SectionProps & { onPersist?: (next: Brand) => void | Promise<void> }) {
-  const { all: listings } = useListings();
+  const { all, draftWebsite } = useListings();
+  const listings = draftWebsite.listings ?? all;
   const accentId: ThemeAccent = draft.theme?.accent ?? "gold";
   const fontId: ThemeFont = draft.theme?.displayFont ?? "playfair";
   const surfaceId: ThemeSurface = draft.theme?.surface ?? "ivory";
@@ -3021,6 +3025,7 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
   const [sourcesLoaded, setSourcesLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   useEffect(() => {
     let alive = true;
     void loadBuild().then(saved => {
@@ -3064,6 +3069,9 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
         setSourcesLoaded(true);
       }
       const primary = current.find(source => source.kind === "url") ?? null;
+      setNotice("");
+      // What the previous website said, so its name is replaced rather than kept as the realtor's own.
+      const previousFacts = resolveFacts((await loadBuild().catch(() => null))?.evidence ?? []);
       // Same rule as Build Your App: the website in the field replaces the older primary one.
       if (primary?.uri !== websiteUri) {
         const fresh: BuildSource = { id: randomUUID(), kind: "url", label: new URL(websiteUri).hostname, uri: websiteUri, status: "queued" };
@@ -3074,7 +3082,15 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
       const saved = await analyzeBuild();
       setSources(saved.sources);
       const facts = resolveFacts(saved.evidence);
-      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft), layoutId: d.layoutId, presentation: d.presentation, websiteVariant: d.websiteVariant, theme: d.theme }));
+      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft, { previousFacts }), layoutId: d.layoutId, presentation: d.presentation, websiteVariant: d.websiteVariant, theme: d.theme }));
+      // The draft now comes from this website, and so do its listings: the same website switch as Build Your App
+      // (lib/appBuilder/websiteSwitch) moves the app's listings when this draft is published, never before, so
+      // clients never see one website's branding with another website's homes.
+      const pending = await recordWebsiteChange(realtorId, primary?.uri, websiteUri);
+      if (pending) {
+        const found = saved.draft.discoveredListings?.length ?? 0;
+        setNotice(`${found} ${found === 1 ? "listing" : "listings"} found on ${websiteHost(websiteUri)}. Your app switches to this website’s listings when you publish.`);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Please try again.");
     } finally {
@@ -3111,6 +3127,7 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
             ? <Text style={{ color: "#FFBAA9", marginTop: 8 }}>We couldn’t read this site{primarySource.error ? ` — ${primarySource.error}` : ""}</Text>
             : websiteState === "valid" ? <Text style={{ color: "#8FD9B4", marginTop: 8 }}>Looks good</Text> : null}
         {error ? <Text accessibilityRole="alert" style={{ color: "#FFBAA9", marginTop: 12 }}>{error}</Text> : null}
+        {notice ? <Text accessibilityRole="alert" style={{ color: "#8FD9B4", marginTop: 12, lineHeight: 21 }}>{notice}</Text> : null}
         <PressableScale accessibilityRole="button" onPress={() => void update()} disabled={busy} haptic="medium" style={{ marginTop: 16 }}>
           <View style={{ minHeight: 52, borderRadius: 14, backgroundColor: "#C2A276", alignItems: "center", justifyContent: "center", opacity: busy ? 0.6 : 1 }}>
             {busy ? <ActivityIndicator color="#172027" />

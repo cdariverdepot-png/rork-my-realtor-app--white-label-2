@@ -1,0 +1,485 @@
+[
+  {
+    "realtorId": "6fa36092-1710-4113-a091-7252f093cf52",
+    "createdAt": "2026-10-09 15:31:41.104737+00",
+    "sources": [
+      {
+        "id": "source-xyp2xo",
+        "url": "https://cindycarlsonrealty.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "cindycarlsonrealty",
+            "cindy",
+            "carlson",
+            "service",
+            "agency"
+          ],
+          "phrases": [
+            "cindycarlsonrealty",
+            "afullservicerealestateagency"
+          ]
+        },
+        "nextSyncAt": 1791567126805,
+        "connectedAt": 1791559926805,
+        "listingCount": 8,
+        "setupSession": "setup-b977ffa2-fef3-4a94-99f8-223710e26d79",
+        "submittedUrl": "https://cindycarlsonrealty.com/",
+        "inventoryUrls": [
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24"
+        ],
+        "lastCheckedAt": 1791559926805,
+        "lastCompleteSyncAt": 1791559926805
+      }
+    ],
+    "listings": [
+      {
+        "title": "41723 O Road, Paonia, Colorado CO 81428",
+        "price": "$3,850,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/836012/41723-O-Road-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 1752,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Metal",
+          "Zoning": "Agriculture",
+          "Year Built": "2011",
+          "Subdivision": "Paonia Original"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "41675 O Road, Paonia, Colorado CO 81428",
+        "price": "$925,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/838026/41675-O-Road-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 519,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Metal",
+          "Zoning": "Agriculture,Residential Single Family",
+          "Cooling": "Evaporative Cooler",
+          "Year Built": "1998",
+          "Subdivision": "Other"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "128 Colorado Avenue, Paonia, Colorado CO 81428",
+        "price": "$675,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/834664/128-Colorado-Avenue-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 2373,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Metal, Wood Shingle",
+          "Zoning": "Residential Single Family",
+          "Year Built": "2018",
+          "Subdivision": "Rio Grande Heights"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "42224 Foothills Road, Paonia, Colorado CO 81428",
+        "price": "$659,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/834651/42224-Foothills-Road-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 1256,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Metal",
+          "Zoning": "Residential Single Family",
+          "Cooling": "Evaporative Cooler",
+          "Year Built": "1995",
+          "Subdivision": "Eastgate"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "938 Ryan Court, Hotchkiss, Colorado CO 81419",
+        "price": "$627,500",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/833292/938-Ryan-Court-Hotchkiss-CO-81419",
+        "photos": 1,
+        "descriptionLength": 2024,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Composition",
+          "Zoning": "Residential Single Family",
+          "Year Built": "1998",
+          "Subdivision": "Clara Vista"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "1200 3rd Street, Paonia, Colorado CO 81428",
+        "price": "$523,950",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/834540/1200-3rd-Street-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 2732,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Metal",
+          "Zoning": "Residential Single Family",
+          "Year Built": "2018",
+          "Subdivision": "SilverLeaf"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "516 4th Street, Paonia, Colorado CO 81428",
+        "price": "$518,976",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/836482/516-4th-Street-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 1592,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Composition",
+          "Zoning": "Residential Single Family",
+          "Year Built": "1935",
+          "Subdivision": "None"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "480 Hawthorn Drive, Hotchkiss, Colorado CO 81419",
+        "price": "$430,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/835572/480-Hawthorn-Drive-Hotchkiss-CO-81419",
+        "photos": 1,
+        "descriptionLength": 1332,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Composition",
+          "Zoning": "Residential Single Family",
+          "Year Built": "2020",
+          "Subdivision": "North Ridge Meadows"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "234 Delta Avenue, Paonia, Colorado CO 81428",
+        "price": "$430,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/838813/234-Delta-Avenue-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 1661,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Composition",
+          "Zoning": "Residential Single Family",
+          "Cooling": "Mini Split system",
+          "Year Built": "1947",
+          "Subdivision": "Hawkins & Moeller"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "100 Rio Grande Avenue, Paonia, Colorado CO 81428",
+        "price": "$340,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/834145/100-Rio-Grande-Avenue-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 1451,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Metal",
+          "Zoning": "Residential Single Family",
+          "Cooling": "Central A/C",
+          "Year Built": "1971",
+          "Subdivision": "Rovaart's Addition"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "208 W Main Street, Hotchkiss, Colorado CO 81419",
+        "price": "$315,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/834537/208-W-Main-Street-Hotchkiss-CO-81419",
+        "photos": 1,
+        "descriptionLength": 1552,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Roof": "Composition",
+          "Zoning": "Residential Single Family",
+          "Year Built": "1902",
+          "Subdivision": "Hotchkiss Original"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "38153 Coburn Road, Paonia, Colorado CO 81428",
+        "price": "$1,987,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/837984/38153-Coburn-Road-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 2589,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agriculture,Residential Single Family",
+          "Subdivision": "None"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "40967 M75 Road, Paonia, Colorado CO 81428",
+        "price": "$725,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/838032/40967-M75-Road-Paonia-CO-81428",
+        "photos": 1,
+        "descriptionLength": 388,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agriculture,Residential Single Family",
+          "Subdivision": "Other"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "480 Cedar Avenue, Crawford, Colorado CO 81428",
+        "price": "$111,000",
+        "sourceUrl": "https://paoniarealty.idxbroker.com/idx/details/listing/a187/839625/480-Cedar-Avenue-Crawford-CO-81428",
+        "photos": 1,
+        "descriptionLength": 427,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Subdivision": "Woods Addition"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "",
+        "listingOffice": "Paonia Realty LLC",
+        "ownership": "own"
+      },
+      {
+        "title": "409 Emerald Dr",
+        "price": "$429,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260824234708903208000000?from_filter=false",
+        "photos": 39,
+        "descriptionLength": 510,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Res",
+          "Basement": "Yes",
+          "Lot Acres": "0.21",
+          "Year Built": "1979",
+          "Garage Type": "Att Garage",
+          "Subdivision": "Mineral Subdiv.",
+          "Garage Stall": "2 Car"
+        },
+        "beds": 4,
+        "baths": 2.5,
+        "sqft": "2,129"
+      },
+      {
+        "title": "6113 Prichard Creek ST",
+        "price": "$325,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260924182429858488000000?from_filter=false",
+        "photos": 26,
+        "descriptionLength": 309,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Res",
+          "Basement": "No",
+          "Lot Acres": "0.41",
+          "Year Built": "1941",
+          "Garage Type": "Det Shop",
+          "Subdivision": "N/A",
+          "Garage Stall": "4+ Car"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": "1,472"
+      },
+      {
+        "title": "483 Paradise Lane",
+        "price": "$1,299,999",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260807005203244094000000?from_filter=false",
+        "photos": 106,
+        "descriptionLength": 1298,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "NR",
+          "Basement": "Yes",
+          "Lot Acres": "10",
+          "Year Built": "2001",
+          "Garage Type": "Det Garage",
+          "Subdivision": "N/A",
+          "Garage Stall": "1 Car"
+        },
+        "beds": 3,
+        "baths": 1.5,
+        "sqft": "3,183"
+      },
+      {
+        "title": "50 S Breeden Ave",
+        "price": "$64,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260717035909119737000000?from_filter=false",
+        "photos": 28,
+        "descriptionLength": 278,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "RES",
+          "Basement": "No",
+          "Lot Size": "Leased",
+          "Lot Acres": "0",
+          "Year Built": "1976",
+          "Garage Type": "None",
+          "Subdivision": "N/A",
+          "Garage Stall": "None"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": "624"
+      },
+      {
+        "title": "604 W Cameron Ave",
+        "price": "$388,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260630223652399830000000?from_filter=false",
+        "photos": 18,
+        "descriptionLength": 446,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Residential",
+          "Basement": "Yes",
+          "Lot Acres": "0.15",
+          "Year Built": "1950",
+          "Garage Type": "Att Carport",
+          "Subdivision": "Cameron Ave Addn",
+          "Garage Stall": "None"
+        },
+        "beds": 4,
+        "baths": 1.5,
+        "sqft": "2,382"
+      },
+      {
+        "title": "301 S Division St",
+        "price": "$220,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260811212901519945000000?from_filter=false",
+        "photos": 15,
+        "descriptionLength": 376,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Commercial",
+          "Basement": "Yes",
+          "Lot Acres": "0.08",
+          "Year Built": "1910"
+        },
+        "beds": 0,
+        "baths": 1,
+        "sqft": "792"
+      },
+      {
+        "title": "NKA May Court",
+        "price": "$130,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260321144127533557000000?from_filter=false",
+        "photos": 17,
+        "descriptionLength": 306,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "R2",
+          "Lot Acres": "0.8",
+          "Subdivision": "N/A"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "11 & 13 Kingston WAY",
+        "price": "$99,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260226190717870344000000?from_filter=false",
+        "photos": 6,
+        "descriptionLength": 188,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "RES",
+          "Lot Acres": "6.12",
+          "Subdivision": "Kingston Estates"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "0"
+      }
+    ]
+  }
+]

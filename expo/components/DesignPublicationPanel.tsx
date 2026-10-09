@@ -5,12 +5,27 @@ import { useBrand } from '@/contexts/BrandContext';
 import { useListings } from '@/contexts/ListingsContext';
 import { requiredStatus } from '@/constants/sections';
 import { refreshWebsiteDesign } from '@/lib/appBuilder/buildService';
+import { useAuth } from '@/contexts/AuthContext';
+import { applyPendingWebsite, type AppliedWebsite } from '@/lib/appBuilder/pendingWebsite';
+import { connectListingSource, disconnectListingSource } from '@/lib/listingSourceService';
+import { websiteHost } from '@/lib/appBuilder/websiteSwitch';
 import { refreshWebsitePresentation, restoreWebsiteOriginal, websiteCandidate } from '@/lib/websitePresentation';
 import ThemePreviewModal from './ThemePreviewModal';
 
 /** Reuses the existing owner draft, importer, portrait preview and publication boundary. */
 export default function DesignPublicationPanel() {
-  const router = useRouter(), model = useBrand(), { all } = useListings();
+  const router = useRouter(), model = useBrand(), { all, draftWebsite, refresh } = useListings(), { realtorId } = useAuth();
+  const pending = draftWebsite.pending;
+  /** Publishing a draft built from another website moves the app's listings to that website (see applyPendingWebsite). */
+  const switchListings = async (): Promise<AppliedWebsite | null> => {
+    if (!pending || !realtorId) return null;
+    const applied = await applyPendingWebsite(realtorId, pending, { connect: connectListingSource, disconnect: disconnectListingSource, afterDisconnect: refresh });
+    await refresh();
+    return applied;
+  };
+  const switchedNotice = (applied: AppliedWebsite | null, published: string) => !applied ? published
+    : applied.error ? `${published} Listings from ${applied.host} couldn’t be imported: ${applied.error} Add them from Listings → Add a listing; a CSV export works too.`
+    : `${published} Your app now shows ${applied.imported} ${applied.imported === 1 ? 'listing' : 'listings'} from ${applied.host}.${applied.warning ? ` ${applied.warning}` : ''}`;
   const [busy, setBusy] = useState<string | null>(null), [error, setError] = useState(''), [notice, setNotice] = useState('');
   const [preview, setPreview] = useState<'draft' | 'published' | null>(null);
   const run = async (name: string, action: () => Promise<void>) => {
@@ -30,8 +45,14 @@ export default function DesignPublicationPanel() {
       {button(publishLabel, () => void run(publishLabel, async () => {
         const firstPublication = !model.isPublished;
         await model.publishBrand();
-        if (firstPublication) router.push('/admin/ready'); else setNotice('Changes published. Your invitations and client data are preserved.');
+        let applied: AppliedWebsite | null = null;
+        try { applied = await switchListings(); }
+        catch (e) { throw new Error(`Your design is published, but your listings still come from ${websiteHost(pending?.from) || 'your previous website'}. ${e instanceof Error ? e.message : ''} Use “Switch listings to ${websiteHost(pending?.to)}” to finish.`.replace(/\s+/g, ' ')); }
+        if (firstPublication && !applied?.error) router.push('/admin/ready'); else setNotice(switchedNotice(applied, 'Changes published. Your invitations and client data are preserved.'));
       }), true, !requiredStatus(model.brand).complete || model.isPublished && !model.hasUnpublishedChanges)}
+      {pending && model.isPublished && !model.hasUnpublishedChanges && button(`Switch listings to ${websiteHost(pending.to)}`, () => void run('Switch listings', async () => {
+        setNotice(switchedNotice(await switchListings(), 'Done.'));
+      }), true)}
       {button('Refresh Website Design', () => void run('Refresh Website Design', async () => {
         const design = await refreshWebsiteDesign(model.brand.websiteDesign?.sourceUrl);
         await model.saveBrand(refreshWebsitePresentation(model.brand, design));
@@ -51,6 +72,6 @@ export default function DesignPublicationPanel() {
     </View>
     {!!error && <Text accessibilityRole="alert" style={{ color: '#FFBAA9', lineHeight: 22 }}>{error}</Text>}
     {!!notice && <Text accessibilityRole="alert" style={{ color: '#8FD9B4', lineHeight: 22 }}>{notice}</Text>}
-    <ThemePreviewModal visible={preview !== null} title={preview === 'published' ? 'Published client app' : 'Unpublished design draft'} subtitle="Preview · activity stays here" brand={preview === 'published' ? model.savedBrand : model.brand} listings={all} onClose={() => setPreview(null)} />
+    <ThemePreviewModal visible={preview !== null} title={preview === 'published' ? 'Published client app' : 'Unpublished design draft'} subtitle="Preview · activity stays here" brand={preview === 'published' ? model.savedBrand : model.brand} listings={preview === 'draft' && draftWebsite.listings ? draftWebsite.listings : all} onClose={() => setPreview(null)} />
   </View>;
 }

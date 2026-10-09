@@ -1,0 +1,10 @@
+{
+  "level": "D",
+  "sites": 1,
+  "perSiteEstimateUsd": 0.0502,
+  "estimateUsd": 0.0502,
+  "spentTodayUsd": 2.7142,
+  "levelLimitUsd": 2,
+  "dailyLimitUsd": 3,
+  "allowed": true
+}

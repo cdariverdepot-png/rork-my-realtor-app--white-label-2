@@ -12,6 +12,7 @@ import ThemeNavigation from "./ThemeNavigation";
 import ThemePreviewPage from './ThemePreviewPage';
 import { clientDestination } from '@/lib/clientNavigation';
 import { previewDestination, previousPreviewPage } from '@/lib/previewHistory';
+import { claimPop, historyLayers } from '@/lib/builderHistory';
 import { PreviewSandboxProvider } from './PreviewSandbox';
 import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 
@@ -19,9 +20,16 @@ import { liveThemeDesign } from '@/constants/liveThemeDesigns';
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
  * or by swiping right — the screen follows the finger and slides away.
  */
-export default function ThemePreviewModal({ visible, title, subtitle, note, brand, listings, portraitSource, initialRoute = "/", onClose }: {
+export default function ThemePreviewModal({ visible, title, subtitle, note, brand, listings, portraitSource, initialRoute = "/", onClose, browserHistory = false }: {
   visible: boolean; title: string; subtitle?: string; note?: string;
   brand: Brand; listings: ManagedListing[]; portraitSource?: number; initialRoute?:string; onClose: () => void;
+  /**
+   * Make the preview's pages browser history entries (web), so the browser's Back and Safari's edge swipe step
+   * through the preview instead of leaving the screen underneath. Used where the screen underneath is verified to
+   * keep its state across those history steps (the app builder's review). Elsewhere (the dashboard) a history step
+   * made the router remount the screen, which closed the preview and left the dashboard, so it is off there.
+   */
+  browserHistory?: boolean;
 }) {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -47,7 +55,11 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
    */
   const webEntries = useRef(0);
   const ignorePops = useRef(0);
-  const web = Platform.OS === "web" && typeof window !== "undefined" && !!window.history;
+  const web = browserHistory && Platform.OS === "web" && typeof window !== "undefined" && !!window.history;
+  // Set while the preview itself is being removed (its screen left or remounted): its history entries are then left
+  // in place, because walking back from a screen that is going away would leave the page.
+  const unmounting = useRef(false);
+  useEffect(() => () => { unmounting.current = true; }, []);
   const navigate = (path: string) => {
     const destination = clientDestination(path, true);
     if (destination === page) return;
@@ -72,16 +84,28 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     if (!web || !visible) return;
     window.history.pushState({ ...(window.history.state ?? {}), clientPreview: "open" }, "");
     webEntries.current = 1;
-    const onPop = () => {
+    // A history layer above whatever opened the preview (the app builder's review): its pops are the preview's.
+    historyLayers.open();
+    // Every pop while the preview is open is the preview's: handled here and kept from the router, which would
+    // otherwise reset the screen underneath to an older recorded state (lib/builderHistory).
+    const onPop = (event: PopStateEvent) => {
+      claimPop(event);
       if (ignorePops.current > 0) { ignorePops.current--; return; }
       if (webEntries.current > 0) webEntries.current--;
       stepBackRef.current();
     };
-    window.addEventListener("popstate", onPop);
+    window.addEventListener("popstate", onPop, true);
     return () => {
-      window.removeEventListener("popstate", onPop);
-      // Closed some other way: drop the preview's remaining history entries without leaving the page.
-      if (webEntries.current > 0) { const n = webEntries.current; webEntries.current = 0; window.history.go(-n); }
+      window.removeEventListener("popstate", onPop, true);
+      historyLayers.close();
+      // Closed some other way: drop the preview's remaining history entries without leaving the page. That pop
+      // is the preview's too, so it is kept from the router as well.
+      if (webEntries.current > 0 && !unmounting.current) {
+        const n = webEntries.current; webEntries.current = 0;
+        const swallow = (event: PopStateEvent) => { claimPop(event); window.removeEventListener("popstate", swallow, true); };
+        window.addEventListener("popstate", swallow, true);
+        window.history.go(-n);
+      }
     };
   }, [visible, web]);
   const swipeBack = useMemo(() => Gesture.Pan()

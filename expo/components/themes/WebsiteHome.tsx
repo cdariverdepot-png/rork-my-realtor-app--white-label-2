@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { isSeededPickedHeading, NEUTRAL_COLLECTION_HEADING } from "@/lib/collectionHeading";
+import { sizeLabel } from "@/lib/listingSpecs";
+import { listingDisplayTitle } from "@/lib/listingTitle";
 import { AccessibilityInfo, Animated, PixelRatio, Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Heart, ArrowRight } from 'lucide-react-native';
@@ -50,7 +53,9 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
     {!!intro && !!introFrame && !sameFile(intro.url, portraitUri) && <Image source={{ uri: intro.url }} contentFit={introFrame.fit} accessibilityIgnoresInvertColors style={{ width: introFrame.width * s, height: introFrame.height * s, alignSelf: introFrame.fit === 'contain' ? 'flex-start' : 'stretch', borderRadius: Math.min(12, a.radius) * s }} />}
     {!!heroSubtitle && <Text style={{ color: overlay ? '#ffffff' : a.ink, fontFamily: bodyFont, fontSize: 15 * s, lineHeight: 24 * s }}>{heroSubtitle}</Text>}
   </View>;
-  const collectionTitle = b.curated.title && !/explore|learn more|read more|view more|see more|click here/i.test(b.curated.title) ? b.curated.title : 'Available homes';
+  // The seeded "Homes I picked for you." is not the realtor's own claim: those homes are headed "Available Properties".
+  const collectionTitle = isSeededPickedHeading(b.curated.title) ? NEUTRAL_COLLECTION_HEADING
+    : b.curated.title && !/explore|learn more|read more|view more|see more|click here/i.test(b.curated.title) ? b.curated.title : 'Available homes';
   const collection = (title = collectionTitle) => <View style={{ gap: 18 * s, paddingVertical: a.spacing * s }}>
     <View style={{ paddingHorizontal: a.spacing * s, flexDirection: 'row', alignItems: 'center', gap: 12 }}><Text style={{ color: a.ink, fontFamily: headingFont, fontSize: 27 * s, flex: 1 }}>{title}</Text><Pressable accessibilityLabel="View all listings" onPress={() => navigate('/listings')} style={{ padding: 12 }}><ArrowRight color={a.accent} size={22 * s} /></Pressable></View>
     {!entries.length ? <Text style={{ color: a.ink, paddingHorizontal: a.spacing * s, lineHeight: 24 }}>New listings will appear here as your realtor adds them. Get in touch to discuss your search.</Text> : <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: a.spacing * s, gap: 16 * s }}>
@@ -60,7 +65,7 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
             <Image source={{ uri: l.images?.[0] || l.image }} contentFit="cover" style={{ width: '100%', height: 205 * s }} />
             {p.recommendedIds?.includes(l.id) && <View style={{ position: 'absolute', left: 12 * s, top: 12 * s, maxWidth: '78%', paddingHorizontal: 10 * s, paddingVertical: 6 * s, borderRadius: 999, backgroundColor: a.accent }}><Text style={{ color: contrast(a.accent), fontFamily: 'Inter_600SemiBold', fontSize: 10 * s }}>{p.recommendationLabel || 'Recommended by your realtor'}</Text></View>}
           </View>
-          <View style={{ padding: 18 * s, gap: 8 * s }}><Text style={{ color: a.ink, fontSize: 25 * s, fontFamily: headingFont }}>{l.price}</Text><Text style={{ color: a.ink, fontFamily: bodyFont, fontSize: 16 * s }}>{l.title}</Text><Text style={{ color: a.ink, fontSize: 13 * s }}>{[l.beds > 0 ? `${l.beds} beds` : '', l.baths > 0 ? `${l.baths} baths` : '', l.sqft && l.sqft !== '0' ? l.sqft : ''].filter(Boolean).join(' · ') || l.neighborhood}</Text></View>
+          <View style={{ padding: 18 * s, gap: 8 * s }}><Text style={{ color: a.ink, fontSize: 25 * s, fontFamily: headingFont }}>{l.price}</Text><Text style={{ color: a.ink, fontFamily: bodyFont, fontSize: 16 * s }}>{listingDisplayTitle(l)}</Text><Text style={{ color: a.ink, fontSize: 13 * s }}>{[l.beds > 0 ? `${l.beds} beds` : '', l.baths > 0 ? `${l.baths} baths` : '', sizeLabel(l.sqft)].filter(Boolean).join(' · ') || l.neighborhood}</Text></View>
         </Pressable><Pressable accessibilityLabel={p.isFavorite?.(l.id) ? 'Remove saved home' : 'Save home'} accessibilityRole="button" onPress={() => p.onFavorite?.(l.id)} style={{ position: 'absolute', top: 12, right: 12, padding: 12, borderRadius: 24, backgroundColor: a.background }}><Heart size={22 * s} color={a.ink} fill={p.isFavorite?.(l.id) ? a.accent : 'transparent'} /></Pressable>
       </View>)}
     </ScrollView>}

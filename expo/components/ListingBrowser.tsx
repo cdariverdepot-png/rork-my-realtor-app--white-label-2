@@ -6,6 +6,7 @@ import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
 import { listingStatusLabel } from "@/lib/listingStatusLabel";
 import { specLine } from "@/lib/listingSpecs";
+import { listingDisplayTitle } from "@/lib/listingTitle";
 import { homesCount, listingColumns, listingSurface, listingsHeading, type ListingSurface } from "@/lib/listingSurface";
 
 type CardProps = { item: ManagedListing; surface: ListingSurface; width: number; onOpen?: (id: string) => void;
@@ -27,7 +28,7 @@ export function ListingCard({ item, surface: t, width, onOpen, onFavorite, favor
       </View>
       <View style={{ padding: 16, gap: 6 }}>
         {!!item.price && <Text style={{ color: t.ink, fontFamily: t.headingFont, fontSize: 24 }}>{item.price}</Text>}
-        <Text numberOfLines={2} style={{ color: t.ink, fontFamily: t.bodyFont, fontSize: 16, lineHeight: 22 }}>{item.title}</Text>
+        <Text numberOfLines={2} style={{ color: t.ink, fontFamily: t.bodyFont, fontSize: 16, lineHeight: 22 }}>{listingDisplayTitle(item)}</Text>
         {!!item.neighborhood && <Text numberOfLines={1} style={{ color: t.muted, fontFamily: t.bodyFont, fontSize: 13 }}>{item.neighborhood}</Text>}
         {!!specs && <Text numberOfLines={1} style={{ color: t.ink, fontFamily: t.bodyFont, fontSize: 13, marginTop: 2 }}>{specs}</Text>}
       </View>

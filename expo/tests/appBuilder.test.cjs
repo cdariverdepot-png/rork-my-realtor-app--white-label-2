@@ -308,6 +308,15 @@ test('applyBuildDraft drops email-local-part names and prefers scraped identity'
       {},
     );
     assert.equal(keepsSignupName.realtor.name, 'Jerrod Taylor');
+
+    // Studio Update From URL (Oct 9 2026): a name that was read from the previous website is that website's,
+    // not the realtor's own, so the new website's name replaces it; a name the realtor has is still kept.
+    const fact = (field, value) => ({ field, value, evidence: [], needsClarification: false, conflictingValues: [] });
+    const fromCindy = { ...base, realtor: { ...base.realtor, name: 'Cindy Carlson' } };
+    const switched = applyBuildDraft(fromCindy, [fact('realtor.name', 'Bernadette Stech')], {}, { previousFacts: [fact('realtor.name', 'Cindy Carlson')] });
+    assert.equal(switched.realtor.name, 'Bernadette Stech');
+    const ownName = applyBuildDraft({ ...base, realtor: { ...base.realtor, name: 'Jerrod Taylor' } }, [fact('realtor.name', 'Bernadette Stech')], {}, { previousFacts: [fact('realtor.name', 'Cindy Carlson')] });
+    assert.equal(ownName.realtor.name, 'Jerrod Taylor');
   } finally {
     Module._load = originalLoad;
   }

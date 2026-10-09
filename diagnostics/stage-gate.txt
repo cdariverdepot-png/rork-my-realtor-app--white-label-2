@@ -1,5 +1,6 @@
-Stage gate requested Fri Oct  9 06:31:41 UTC 2026: leaving the builder mid-import (browser Back) and starting again from another website.
-justification: verify live that a previous website's import still running never fills the new website's app
+Stage gate requested Fri Oct  9 16:29:37 UTC 2026: dashboard preview Back (no import, no AI).
+justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
-sites: cindy-exit-mid-import-paonia
+app-url:
+sites: dashboard-preview-back

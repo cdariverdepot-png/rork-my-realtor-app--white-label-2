@@ -8,7 +8,7 @@ import type { Brand } from "@/contexts/BrandContext";
 import type { ManagedListing } from "@/contexts/ListingsContext";
 import { liveThemeDesign as themeDesign } from "@/constants/liveThemeDesigns";
 import { sectionState } from "@/constants/sections";
-import { hasValue, specParts } from "@/lib/listingSpecs";
+import { hasValue, specParts, sizeLabel } from "@/lib/listingSpecs";
 
 export default function ThemeCollection({ brand, listings, width: previewWidth, onOpen, onBrowse, onFavorite, isFavorite, recommendedIds, recommendationLabel }:
   { brand: Brand; listings: ManagedListing[]; width?: number; onOpen?: (id: string) => void;
@@ -36,7 +36,7 @@ export default function ThemeCollection({ brand, listings, width: previewWidth, 
   const specs = (item: ManagedListing, size = 9) => <View style={{ flexDirection: "row", alignItems: "center", gap: 5, flexWrap: "wrap", marginTop: 8 }}>
     {hasValue(item.beds) ? <><BedDouble size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.beds}</Text></> : null}
     {hasValue(item.baths) ? <><Bath size={12} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.baths}</Text></> : null}
-    {specParts({ sqft: item.sqft }).length ? <><Maximize size={11} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{item.sqft}</Text></> : null}
+    {specParts({ sqft: item.sqft }).length ? <><Maximize size={11} color={d.accent} /><Text style={{ color: d.muted, fontSize: size }}>{sizeLabel(item.sqft)}</Text></> : null}
   </View>;
   const image = (item: ManagedListing) => <Image source={{ uri: item.images?.[0] || item.image }} contentFit="cover" transition={0} style={{ position: "absolute", width: "100%", height: "100%" }} accessibilityLabel={item.title} />;
   const badge = (item: ManagedListing) => listingStatusLabel(item) ? <Text style={{ position: "absolute", left: 8, top: 10, maxWidth: "65%", paddingHorizontal: 7, paddingVertical: 5,

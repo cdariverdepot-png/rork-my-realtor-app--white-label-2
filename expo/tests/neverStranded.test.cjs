@@ -258,7 +258,8 @@ test('a guest/owner-test placeholder address is never shown as the realtor conta
 test('an unpublished listing status is never shown as an internal sync state', () => {
   const label = read('lib/listingStatusLabel.ts');
   assert.doesNotMatch(label, /Status unconfirmed/);
-  assert.match(label, /return item\.tag \|\| "Listing";/);
+  // No status published means no badge (Oct 9 2026: a generic "Listing" badge said nothing).
+  assert.match(label, /return item\.tag \|\| "";/);
 });
 
 test('an exhausted AI account is reported as unavailable on our side, not as the realtor\'s retry problem', () => quiet(async () => {

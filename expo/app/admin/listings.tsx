@@ -250,7 +250,7 @@ function ListingRow({
           <View style={styles.cardTopRow}>
             <View style={[styles.statusBadge, { borderColor: meta.color }]}>
               <View style={[styles.statusDot, { backgroundColor: meta.color }]} />
-              <Text style={[styles.statusText, { color: meta.color }]}>{listingStatusLabel(item).toUpperCase()}</Text>
+              <Text style={[styles.statusText, { color: meta.color }]}>{(listingStatusLabel(item) || "Listing").toUpperCase()}</Text>
             </View>
           </View>
           <Text style={styles.cardTitle} numberOfLines={1}>

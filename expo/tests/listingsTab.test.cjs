@@ -113,13 +113,13 @@ test('the review shows only the homes of the sources this import connected', () 
 
 test('changing the website starts a new import session; late results of the old one are ignored', () => {
   const setup = read('components/InitialRealtorSetup.tsx');
-  assert.match(setup, /const session = beginImportSession\(\);\n    importSession\.current = session;\n    const stale = \(\) => !isActiveImportSession\(session\);/);
+  // The website switch is the module Studio uses too (lib/appBuilder/websiteSwitch, Oct 9 2026).
   assert.match(setup, /setReviewSourceIds\(\[\]\);\n    setImportedListingCount\(0\);/);
-  assert.match(setup, /await disconnectListingSource\(primarySource\.uri, auth\.realtorId, session\)/);
-  assert.match(setup, /connectListingSource\(listingUrl, auth\.realtorId, report\("listings"\), session\)/);
+  assert.match(setup, /const websiteImport = startWebsiteImport\(\{ from: replacedWebsite, to: listingUrl, realtorId, onEvent: report\("listings"\),\n\s+deps: \{ connect: connectListingSource, disconnect: disconnectListingSource, afterDisconnect: refreshListings \} \}\);/);
+  assert.match(setup, /const stale = websiteImport\.isStale;/);
   assert.match(setup, /await Promise\.allSettled\(\[listingImport, profileBuild\]\);\n      \/\/[^\n]*\n      if \(stale\(\)\) return;/);
   assert.match(setup, /listingsForSources\(/);
   assert.match(setup, /setReviewSourceIds\(connected\.source\?\.id \? \[connected\.source\.id\] : \[\]\)/);
   // Returning to a review scopes it to the sources connected now.
-  assert.match(setup, /const ids = await connectedSourceIds\(auth\.realtorId\); if \(ids\) setReviewSourceIds\(ids\);/);
+  assert.match(setup, /resumedReviewScope\(auth\.realtorId \? await connectedSourceIds\(auth\.realtorId\) : null, listingsSnapshot\.current\.length\)/);
 });

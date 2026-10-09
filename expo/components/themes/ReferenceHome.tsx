@@ -11,6 +11,7 @@ import { visibleSections, type ClientSectionId } from "@/constants/sections";
 import { orderThemeSections } from "@/constants/themeStructure";
 import { themeDesign } from "@/constants/themeDesigns";
 import { withThemeSlots } from "@/constants/themeSlots";
+import { collectionHeading } from "@/lib/collectionHeading";
 import ThemeHero from "../ThemeHero";
 import ThemeContentSection from "../ThemeContentSection";
 import LiveThemeHome from "./LiveThemeHome";
@@ -141,7 +142,7 @@ function CarouselReferenceHome(p: ReferenceHomeProps) {
     case "private-collection": primary = <><ThemeHero {...heroProps} />{has("listings") && <View style={{ borderWidth: 1, borderColor: "#BD9A5933", borderRadius: 12 * s, marginHorizontal: 8 * s, marginTop: -2 * s, paddingBottom: 7 * s }}>{heading(b.curated.title || "Exclusive Listings", { eyebrow: true })}{row("burgundy")}</View>}{has("concierge") && burgundyUtilities}{has("social") && statsBand}</>; break;
     case "modern-editorial": primary = <><ThemeHero {...heroProps} />{featured}{has("concierge") && noraUtilities}{has("listings") && items.length > 1 && <>{heading(b.curated.title || "Curated for You", { small: true })}{row("nora", items.slice(1))}</>}</>; break;
     case "portrait-statement": primary = <><ThemeHero {...heroProps} /><View style={{ borderTopWidth: 1, borderColor: "#AD966433", borderTopLeftRadius: 10 * s, borderTopRightRadius: 10 * s }}>{has("listings") && <>{heading(b.curated.title || "Featured Properties", { small: true })}{row("mina")}</>}{has("concierge") && minaUtilities}</View></>; break;
-    default: primary = <><ThemeHero {...heroProps} />{has("listings") && <View style={{ backgroundColor: "#F8F0E5", paddingBottom: 20 * s }}>{heading(b.curated.title || "Homes I picked for you.", { light: true })}{row("editorial")}</View>}</>;
+    default: primary = <><ThemeHero {...heroProps} />{has("listings") && <View style={{ backgroundColor: "#F8F0E5", paddingBottom: 20 * s }}>{heading(collectionHeading(b.curated.title), { light: true })}{row("editorial")}</View>}</>;
   }
   const consumed: ClientSectionId[] = ["hero", "listings"];
   if (!["eliza-editorial", "advisor-journal"].includes(b.layoutId || "")) consumed.push("concierge");

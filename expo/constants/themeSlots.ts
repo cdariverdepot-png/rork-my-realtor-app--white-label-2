@@ -1,6 +1,7 @@
 import type { Brand } from "@/contexts/BrandContext";
 import { DEFAULT_CLIENT_LAYOUT } from "@/constants/clientLayouts";
 import { themeSlotCopy } from "@/constants/themeSamples";
+import { collectionHeading } from "@/lib/collectionHeading";
 
 /**
  * Generic wording every new profile is seeded with. It isn't something the
@@ -43,7 +44,10 @@ export function withThemeSlots(brand: Brand): Brand {
     curated: {
       ...brand.curated,
       eyebrow: blank(brand.curated.eyebrow) ? (copy.curatedEyebrow || (first ? `CURATED BY ${first.toUpperCase()}` : "")) : brand.curated.eyebrow,
-      title: blank(brand.curated.title) ? copy.collection : brand.curated.title,
+      // Filling a real profile's empty title with a theme's "Homes I picked for you." would claim a selection the
+      // realtor never made. (Theme samples carry their theme's copy verbatim and keep it.)
+      title: brand.curated.title === copy.collection ? brand.curated.title
+        : blank(brand.curated.title) ? collectionHeading(copy.collection) : brand.curated.title,
     },
     concierge: {
       ...brand.concierge,

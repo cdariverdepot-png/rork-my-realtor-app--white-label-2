@@ -27,7 +27,10 @@ import { analyzeBuild, appendBuildSources, BUILDER_AUTH_MESSAGE, hasVerifiedBuil
 import ListingSourceImporter from "./ListingSourceImporter";
 import { connectListingSource, disconnectListingSource, ListingImportError } from "@/lib/listingSourceService";
 import { connectedSourceIds } from "@/lib/appBuilder/connectedSources";
-import { beginImportSession, isActiveImportSession, listingsForSources } from "@/lib/appBuilder/importScope";
+import { listingsForSources, resumedReviewScope } from "@/lib/appBuilder/importScope";
+import { sameWebsite, startWebsiteImport } from "@/lib/appBuilder/websiteSwitch";
+import { clearPendingWebsite } from "@/lib/appBuilder/pendingWebsite";
+import { claimPop, createBuilderHistory } from "@/lib/builderHistory";
 import { mergeDiscoveredListings, saveDiscoveredListings } from "@/lib/appBuilder/importDiscoveredListings";
 import { applyBuildDraft } from "@/lib/appBuilder/applyDraft";
 import { resolveFacts, type BuildSource } from "@/lib/appBuilder/sourceModel";
@@ -128,6 +131,11 @@ export default function InitialRealtorSetup() {
   // Once a build starts, keep the progress surface mounted through failures.
   // Never dump the realtor back to URL entry because a downstream service failed.
   const phase: Phase = building ? "building" : result && draft && !editingSources ? "review" : "collect";
+  const phaseRef = useRef<Phase>(phase);
+  phaseRef.current = phase;
+  // On the web the review is a browser history entry above the website address (lib/builderHistory).
+  const builderHistory = useRef(Platform.OS === "web" && typeof window !== "undefined" && window.history ? createBuilderHistory(window.history) : null);
+  useEffect(() => { builderHistory.current?.sync(phase); }, [phase]);
   const isGuestAccess = !!auth.isGuestAccess;
   const authHydrated = !!auth.hydrated;
   // Guest REALTOR access codes: never gate. Edge (non-guest, no cloud auth): send to portal —
@@ -180,25 +188,21 @@ export default function InitialRealtorSetup() {
     const saved = await loadBuild();
     if (publicationInProgress.current) return;
     if (!saved) return;
-    // Restore the actual collection, not just the count displayed in the draft.
-    if (!listingsSnapshot.current.length) await applyDiscoveredListings(saved);
-    else setImportedListingCount(listingsSnapshot.current.length);
     // Historical onboarding URLs must not reopen a completed build. URL refresh
     // remains available in Studio and can still reuse this completed source.
     if (saved.status === 'complete') { router.dismissTo('/admin'); return; }
-    // Returning to a review: its homes are those of the sources connected now (a replaced website was disconnected).
-    if (auth.realtorId) { const ids = await connectedSourceIds(auth.realtorId); if (ids) setReviewSourceIds(ids); }
+    // Returning to a review: its homes and its count are those of the listing sources connected now. Homes of a
+    // replaced website (archived), hidden homes and anything else in the account never count as this import's.
+    const scope = resumedReviewScope(auth.realtorId ? await connectedSourceIds(auth.realtorId) : null, listingsSnapshot.current.length);
+    setReviewSourceIds(scope.reviewSourceIds);
+    setHasConnectedSource(scope.hasConnectedSource);
+    if (scope.restoreDraftListings) await applyDiscoveredListings(saved);
+    else setImportedListingCount(0);
     setSources(saved.sources);
     const primary = saved.sources.find(source => source.kind === "url");
     if (primary) { setUrl(primary.uri); setPrimaryId(primary.id); }
     setResult(saved);
-    if (saved.evidence.length) {
-      startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
-      // Imports save to the listing collection, not the build draft: the draft's list is empty after a
-      // website import, so it never lowers the count of listings already saved.
-      const found = saved.draft.discoveredListings ?? [];
-      setImportedListingCount(count => Math.max(count, found.length, listingsSnapshot.current.filter(item => !item.hidden && !item.sourceArchived).length));
-    }
+    if (saved.evidence.length) startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
   }, [brand, router, saveListings, auth.realtorId]);
 
   // Product model: real users sign up/in BEFORE /admin/build. Guest REALTOR codes
@@ -263,10 +267,28 @@ export default function InitialRealtorSetup() {
   };
   const leaveBuildRef = useRef(leaveBuild);
   leaveBuildRef.current = leaveBuild;
+  // Back follows the builder's own steps: from the review it returns to the website address (pre-filled, nothing
+  // re-imported); from the address it leaves the builder. The same on Android's Back button, the browser's Back
+  // and Safari's edge swipe as on the on-screen Back.
   useFocusEffect(useCallback(() => {
-    const subscription = BackHandler.addEventListener('hardwareBackPress', () => { void leaveBuildRef.current(); return true; });
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (phaseRef.current === "review") setEditingSources(true); else void leaveBuildRef.current();
+      return true;
+    });
     return () => subscription.remove();
   }, []));
+  useEffect(() => {
+    if (!builderHistory.current || typeof window === "undefined") return;
+    // Capture: runs before the router's listener, which must not reset its state for the builder's own entry.
+    const onPop = (event: PopStateEvent) => {
+      const popped = builderHistory.current?.popped();
+      if (!popped) return;
+      claimPop(event);
+      if (popped === "review" && phaseRef.current === "review") setEditingSources(true);
+    };
+    window.addEventListener("popstate", onPop, true);
+    return () => window.removeEventListener("popstate", onPop, true);
+  }, []);
 
   /** Edge case only: non-guest without cloud auth — send to portal (never invent signup here). */
   const goPortalAuth = useCallback(() => {
@@ -352,27 +374,26 @@ export default function InitialRealtorSetup() {
   });
   const analyze = () => {
     if (!isGuestAccess && builderReady === false) { goPortalAuth(); return; }
+    // Back from the review, then the same website again: its import already finished and its listings are saved, so
+    // the review comes back as it was instead of importing the same website a second time.
+    if (result && draft && hasConnectedSource && listingCount > 0 && websiteUri && primarySource?.uri === websiteUri && !building) {
+      setEditingSources(false);
+      return;
+    }
     void act("sources", async () => {
     let current = sources;
     if (url.trim() && !websiteUri) throw new Error("Check your website address, then try again.");
     // Lock in the website from the main field, replacing an older one if it changed.
-    // A new import session: results of any earlier import (another website, or a slower run) are ignored from here on.
-    const session = beginImportSession();
-    importSession.current = session;
-    const stale = () => !isActiveImportSession(session);
+    // Every import starts a new session (startWebsiteImport): results of any earlier import (another website, or a
+    // slower run) are ignored from here on, and a replaced website's listings leave the app.
     setReviewSourceIds([]);
     setImportedListingCount(0);
     setHasConnectedSource(false);
+    const replacedWebsite = primarySource?.kind === "url" && primarySource.uri && websiteUri && !sameWebsite(primarySource.uri, websiteUri) ? primarySource.uri : null;
     if (websiteUri && primarySource?.uri !== websiteUri) {
       const fresh = urlSource(websiteUri);
       current = await saveSources([fresh, ...sources.filter(source => source.id !== primaryId)]);
       setPrimaryId(fresh.id);
-      // A replaced website takes its imported listings with it (archived on the server, so reconnecting it
-      // restores them with their notes): the new app shows only the new website's homes.
-      if (primarySource?.kind === "url" && primarySource.uri && auth.realtorId) {
-        try { await disconnectListingSource(primarySource.uri, auth.realtorId, session); } catch { /* the review is scoped to this import regardless */ }
-        await refreshListings();
-      }
     }
     if (!current.some(source => source.kind !== "contacts")) throw new Error("Paste the public page where your listings live.");
     setEditingSources(false);
@@ -383,12 +404,21 @@ export default function InitialRealtorSetup() {
     let listingWarning = "";
     try {
       if (!auth.isAdmin || !auth.realtorId) throw new Error("Sign in to your realtor account to import listings.");
+      const realtorId = auth.realtorId;
       const listingUrl = websiteUri ?? current.find(source => source.kind === "url")!.uri;
       const report = (channel: ImportChannel) => (event: ImportEvent) => setActivity(lines => applyImportEvent(lines, channel, event));
       setActivity(requestStarted(requestStarted([], "listings"), "build"));
+      // Building from the website here replaces any website change still waiting in a Studio draft.
+      void clearPendingWebsite(realtorId).catch(() => {});
+      // The same website switch Studio uses: the replaced website's listings are archived on the server (restored
+      // with their notes if it is reconnected), then this website's listings are imported under the new session.
+      const websiteImport = startWebsiteImport({ from: replacedWebsite, to: listingUrl, realtorId, onEvent: report("listings"),
+        deps: { connect: connectListingSource, disconnect: disconnectListingSource, afterDisconnect: refreshListings } });
+      importSession.current = websiteImport.session;
+      const stale = websiteImport.isStale;
       // The listing import and the profile build are independent requests, so they run together.
       // The build is told this page is being imported here, so it does not crawl it a second time.
-      const listingImport = connectListingSource(listingUrl, auth.realtorId, report("listings"), session)
+      const listingImport = websiteImport.listings
         .then(connected => { setActivity(lines => requestFinished(lines, "listings", true)); return connected; },
           error => { setActivity(lines => requestFinished(lines, "listings", false)); throw error; });
       const profileBuild = analyzeBuild({ connectedListingSources: [listingUrl], onEvent: report("build") })
