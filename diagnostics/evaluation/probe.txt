@@ -1,5 +1,5 @@
-Probe requested Fri Oct  9 01:26:15 UTC 2026: Flexmls published access rules (robots.txt) before any use of its listing feed.
-probe: https://my.flexmls.com/robots.txt
-probe: https://www.flexmls.com/robots.txt
-probe: https://sparkplatform.com/robots.txt
-re-run Fri Oct  9 01:26:41 UTC 2026
+Probe requested Fri Oct  9 01:43:02 UTC 2026: Flexmls photo-view paging (10 cards per response?).
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=1&per_page=24
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=2&per_page=24
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=2&per_page=10
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=3&per_page=10

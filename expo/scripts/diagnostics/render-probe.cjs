@@ -6,7 +6,8 @@ const [out, ...urls] = process.argv.slice(2);
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 const title = html => (String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? '').trim().slice(0, 80);
 const summary = html => ({ bytes: String(html).length, title: title(html), prices: (String(html).match(/\$\s?\d{1,3}(?:,\d{3})+/g) ?? []).length,
-  detailLinks: (String(html).match(/listing_detail\/\d{10,}/g) ?? []).length });
+  detailLinks: (String(html).match(/listing_detail\/\d{10,}/g) ?? []).length,
+  listingIds: [...new Set(String(html).match(/listings\/(\d{20,})/g) ?? [])].map(s => s.slice(-8)).slice(0, 30) });
 
 async function plain(url, extra = {}) {
   const started = Date.now();
