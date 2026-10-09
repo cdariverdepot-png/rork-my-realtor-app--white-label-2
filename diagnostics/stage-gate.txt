@@ -1,6 +1,6 @@
-Stage gate requested Fri Oct  9 06:41:58 UTC 2026: the exact user sequence (Cindy -> Back -> Paonia -> Preview) and the reverse on the DEPLOYED preview of main f38c2ef.
-justification: confirm on the deployed iPhone preview that a changed website never shows the previous website's listings
+Stage gate requested Fri Oct  9 14:20:50 UTC 2026: audit repairs on a branch build (07d859d) — Studio website switch, builder Back and resume after a failed import, wording, card details, Listings at 430/768/1280.
+justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
-app-url: https://cdariverdepot-my-realtor--ftdrp6vfwp.expo.app
-sites: cindy-then-paonia, paonia-then-cindy
+app-url:
+sites: cindy-then-paonia, paonia-then-cindy, cindy-back-same, cindy-then-empty-resume, cindy-studio-paonia
