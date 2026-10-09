@@ -3070,6 +3070,8 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
       }
       const primary = current.find(source => source.kind === "url") ?? null;
       setNotice("");
+      // What the previous website said, so its name is replaced rather than kept as the realtor's own.
+      const previousFacts = resolveFacts((await loadBuild().catch(() => null))?.evidence ?? []);
       // Same rule as Build Your App: the website in the field replaces the older primary one.
       if (primary?.uri !== websiteUri) {
         const fresh: BuildSource = { id: randomUUID(), kind: "url", label: new URL(websiteUri).hostname, uri: websiteUri, status: "queued" };
@@ -3080,7 +3082,7 @@ function UpdateUrlSection({ setBrand }: { setBrand: (mutator: (d: Brand) => Bran
       const saved = await analyzeBuild();
       setSources(saved.sources);
       const facts = resolveFacts(saved.evidence);
-      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft), layoutId: d.layoutId, presentation: d.presentation, websiteVariant: d.websiteVariant, theme: d.theme }));
+      setBrand(d => ({ ...applyBuildDraft(d, facts, saved.draft, { previousFacts }), layoutId: d.layoutId, presentation: d.presentation, websiteVariant: d.websiteVariant, theme: d.theme }));
       // The draft now comes from this website, and so do its listings: the same website switch as Build Your App
       // (lib/appBuilder/websiteSwitch) moves the app's listings when this draft is published, never before, so
       // clients never see one website's branding with another website's homes.

@@ -13,7 +13,15 @@ export function isEmailLocalPartName(name: string, email: string): boolean {
 }
 
 /** The generated content becomes a local draft. Saving is a separate action. */
-export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildDraft): Brand {
+export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildDraft, options: {
+  /**
+   * Facts read from the website the draft came from before (Studio's Update From URL). A name that was read from
+   * that website is the previous website's, not the realtor's own signup name: the new website's name replaces it.
+   */
+  previousFacts?: ResolvedFact[];
+} = {}): Brand {
+  const sameName = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+  const nameFromPreviousWebsite = (options.previousFacts ?? []).some(fact => fact.field === "realtor.name" && !!fact.value && sameName(fact.value, base.realtor.name));
   const next: Brand = {
     ...base,
     realtor: { ...base.realtor },
@@ -32,7 +40,8 @@ export function applyBuildDraft(base: Brand, facts: ResolvedFact[], copy: BuildD
     if (
       fact.field === "realtor.name" &&
       next.realtor.name.trim() &&
-      !isEmailLocalPartName(next.realtor.name, next.realtor.email)
+      !isEmailLocalPartName(next.realtor.name, next.realtor.email) &&
+      !nameFromPreviousWebsite
     ) {
       continue;
     }

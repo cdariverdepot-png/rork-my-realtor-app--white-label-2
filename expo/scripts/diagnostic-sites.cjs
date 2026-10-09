@@ -169,8 +169,13 @@ async function studioWalk(page, r, studio) {
     await page.waitForTimeout(2000);
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
-    // Close with the preview's own Back (browser Back past the preview would leave the dashboard).
-    for (let i = 0; i < 6 && await page.locator('[aria-modal="true"]').count(); i++) { await modal().getByLabel('Back').first().click().catch(() => {}); await page.waitForTimeout(1200); }
+    // The preview's own Back steps out of it (Listings -> Home -> closed), leaving the dashboard as it was.
+    for (let i = 0; i < 4 && await page.locator('[aria-modal="true"]').count(); i++) { await modal().getByLabel('Back').first().click().catch(() => {}); await page.waitForTimeout(1500); }
+    await step(`${name}-closed`, { closedWithBack: !(await page.locator('[aria-modal="true"]').count()), url: page.url() });
+    // Back to a fresh dashboard (the previews are read-only).
+    await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.getByRole('button', { name: 'Preview draft', exact: true }).first().waitFor({ timeout: 60000 });
+    await page.waitForTimeout(3000);
     return titles;
   };
   // 1. Publish the app built from the first website.
