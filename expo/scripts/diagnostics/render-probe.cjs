@@ -6,13 +6,18 @@ const [out, ...urls] = process.argv.slice(2);
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 const title = html => (String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? '').trim().slice(0, 80);
 const summary = html => ({ bytes: String(html).length, title: title(html), prices: (String(html).match(/\$\s?\d{1,3}(?:,\d{3})+/g) ?? []).length,
-  detailLinks: (String(html).match(/listing_detail\/\d{10,}/g) ?? []).length });
+  detailLinks: (String(html).match(/listing_detail\/\d{10,}/g) ?? []).length,
+  listingIds: [...new Set(String(html).match(/listings\/(\d{20,})/g) ?? [])].map(s => s.slice(-8)).slice(0, 30) });
 
 async function plain(url, extra = {}) {
   const started = Date.now();
   try {
     const res = await fetch(url, { headers: { 'User-Agent': 'MyRealtorAppBuilder/1.0', Accept: 'text/html', ...extra }, signal: AbortSignal.timeout(20000) });
     const html = await res.text();
+    if (process.env.PROBE_SAVE_DIR && !extra['X-Requested-With']) {
+      fs.mkdirSync(process.env.PROBE_SAVE_DIR, { recursive: true });
+      fs.writeFileSync(require('node:path').join(process.env.PROBE_SAVE_DIR, 'plain-' + url.replace(/^https?:\/\//, '').replace(/[^a-z0-9]+/gi, '_').slice(0, 120) + '.txt'), html.slice(0, 200000));
+    }
     const frames = [...html.matchAll(/<iframe\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].slice(0, 200));
     const scripts = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].slice(0, 160)).filter(u => !/wp-includes|jquery|wp-content\/themes/.test(u));
     const links = [...new Set([...html.matchAll(/href=["'](https?:\/\/[^"']+)["']/gi)].map(m => m[1]).filter(u => !/wp-content|wordpress|studiopress|fonts/.test(u)))].slice(0, 40);

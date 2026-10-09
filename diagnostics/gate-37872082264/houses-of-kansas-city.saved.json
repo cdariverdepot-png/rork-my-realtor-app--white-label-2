@@ -1,0 +1,251 @@
+[
+  {
+    "realtorId": "c358166b-6c88-43eb-b947-2eea78f44fd8",
+    "createdAt": "2026-10-09 02:16:21.887296+00",
+    "sources": [
+      {
+        "id": "source-1636u8n",
+        "url": "https://www.housesofkansascity.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "housesofkansascity",
+            "anthony",
+            "expert",
+            "kansas"
+          ],
+          "phrases": [
+            "housesofkansascity",
+            "anthonywest",
+            "toprealestateexpertinkansascity"
+          ]
+        },
+        "nextSyncAt": 1791519387513,
+        "connectedAt": 1791512187513,
+        "listingCount": 12,
+        "submittedUrl": "https://www.housesofkansascity.com/",
+        "inventoryUrls": [
+          "https://housesofkansascity.com/",
+          "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D"
+        ],
+        "lastCheckedAt": 1791512187513
+      }
+    ],
+    "listings": [
+      {
+        "title": "11930 S Hallet Street, Olathe, KS 66062",
+        "price": "$419,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658836798997138427-11930-S-Hallet-Street",
+        "photos": 5,
+        "descriptionLength": 476,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.912243, -94.749239"
+        },
+        "beds": 3,
+        "baths": 2.5,
+        "sqft": "2,455",
+        "listingOffice": "ReeceNichols - Leawood",
+        "ownership": "featured"
+      },
+      {
+        "title": "5200 W 81st Street, Prairie Village, KS 66208",
+        "price": "$925,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658791415788231745-5200-W-81st-Street",
+        "photos": 5,
+        "descriptionLength": 1969,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.982433, -94.644821"
+        },
+        "beds": 4,
+        "baths": 2.5,
+        "sqft": "3,436",
+        "listingOffice": "Compass Realty Group",
+        "ownership": "featured"
+      },
+      {
+        "title": "1029 W 66th Street, Kansas City, MO 64113",
+        "price": "$899,950",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658661316659019397-1029-W-66th-Street",
+        "photos": 5,
+        "descriptionLength": 1228,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "39.009252, -94.601633"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": "2,386",
+        "listingOffice": "Sage Sotheby's International Realty",
+        "ownership": "featured"
+      },
+      {
+        "title": "6819 Caenen Avenue, Shawnee, KS 66216",
+        "price": "$375,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/665896777153376222-6819-Caenen-Avenue",
+        "photos": 5,
+        "descriptionLength": 1249,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "39.003645, -94.728681"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": "2,459",
+        "listingOffice": "ReeceNichols - Leawood",
+        "ownership": "featured"
+      },
+      {
+        "title": "27625 89th Street W, Lenexa, KS 66053",
+        "price": "$599,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658261327332414973-27625-89th-Street-W",
+        "photos": 5,
+        "descriptionLength": 1625,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.96698855, -94.90591356"
+        },
+        "beds": 5,
+        "baths": 4.5,
+        "sqft": "3,880",
+        "listingOffice": "Keller Williams Realty Partners Inc",
+        "ownership": "featured"
+      },
+      {
+        "title": "14505 Wedd Street, Overland Park, KS 66221",
+        "price": "$950,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658294787166740483-14505-Wedd-Street",
+        "photos": 5,
+        "descriptionLength": 2009,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.86355, -94.702227"
+        },
+        "beds": 4,
+        "baths": 4.5,
+        "sqft": "5,246",
+        "listingOffice": "Weichert, Realtors Welch & Co",
+        "ownership": "featured"
+      },
+      {
+        "title": "15836 W 153rd Terrace, Olathe, KS 66062",
+        "price": "$520,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658590175384778509-15836-W-153rd-Terrace",
+        "photos": 5,
+        "descriptionLength": 1695,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.849962, -94.769715"
+        },
+        "beds": 4,
+        "baths": 3.5,
+        "sqft": "3,036",
+        "listingOffice": "ReeceNichols - Leawood",
+        "ownership": "featured"
+      },
+      {
+        "title": "2549 Tracy Avenue, Kansas City, MO 64108",
+        "price": "$585,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658674103911810441-2549-Tracy-Avenue",
+        "photos": 0,
+        "descriptionLength": 142,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "39.079759, -94.567843"
+        },
+        "beds": 3,
+        "baths": 2.5,
+        "sqft": "1,949",
+        "listingOffice": "ReeceNichols- Leawood Town Center",
+        "ownership": "featured"
+      },
+      {
+        "title": "14134 S Pascal Street, Olathe, KS 66061",
+        "price": "$489,900",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658994332008783572-14134-S-Pascal-Street",
+        "photos": 5,
+        "descriptionLength": 1044,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.872293, -94.88731"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": "2,057",
+        "listingOffice": "Platinum Realty LLC",
+        "ownership": "featured"
+      },
+      {
+        "title": "3714 W 61st Terrace, Fairway, KS 66205",
+        "price": "$1,295,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658268519131112138-3714-W-61st-Terrace",
+        "photos": 5,
+        "descriptionLength": 1460,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "39.018043, -94.628798"
+        },
+        "beds": 4,
+        "baths": 3.5,
+        "sqft": "4,000",
+        "listingOffice": "Compass Realty Group",
+        "ownership": "featured"
+      },
+      {
+        "title": "11417 Cambridge Road, Leawood, KS 66211",
+        "price": "$1,940,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658339888962357958-11417-Cambridge-Road",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.92050587, -94.60836743"
+        },
+        "beds": 3,
+        "baths": 3.5,
+        "sqft": "4,426"
+      },
+      {
+        "title": "19813 Elmridge Street, Spring Hill, KS 66083",
+        "price": "$580,000",
+        "status": "active",
+        "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658758185968688092-19813-Elmridge-Street",
+        "photos": 1,
+        "descriptionLength": 0,
+        "detailsComplete": false,
+        "detailAttempted": true,
+        "facts": {
+          "Coordinates": "38.768228, -94.783894"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": "3,003"
+      }
+    ]
+  }
+]

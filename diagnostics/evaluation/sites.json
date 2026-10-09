@@ -262,5 +262,117 @@
     "market": "Greensburg, PA",
     "holdout": false,
     "addedFor": "Final integration (Oct 8 2026): rendered/fresh recording of howard-hanna-daniel-torri"
+  },
+  {
+    "id": "cindy-carlson-realty--transport",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Flexmls (agent website)",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-homesourceofyakima",
+    "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-columbiarealestate",
+    "url": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-shomerealestate",
+    "url": "https://my.flexmls.com/shomerealestate/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-redefinedrealty",
+    "url": "https://my.flexmls.com/redefinedrealty/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-elpaso",
+    "url": "https://my.flexmls.com/elpaso/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "cindy-carlson-realty--transport-2",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Flexmls (agent website)",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-homesourceofyakima--2",
+    "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-columbiarealestate--2",
+    "url": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-redefinedrealty--2",
+    "url": "https://my.flexmls.com/redefinedrealty/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-columbiarealestate--3",
+    "url": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-redefinedrealty--3",
+    "url": "https://my.flexmls.com/redefinedrealty/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-homesourceofyakima--3",
+    "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "cindy-carlson-realty--transport-3",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Flexmls (agent website)",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
   }
 ]

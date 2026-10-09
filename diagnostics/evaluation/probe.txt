@@ -1,2 +1,5 @@
-Probe requested Fri Oct  9 00:33:55 UTC 2026: Tom Toole site map (source of other brokerages' detail pages on staging).
-probe: https://www.tomtoole.com/property-search/site-map/
+Probe requested Fri Oct  9 01:43:02 UTC 2026: Flexmls photo-view paging (10 cards per response?).
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=1&per_page=24
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=2&per_page=24
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=2&per_page=10
+probe: https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=3&per_page=10

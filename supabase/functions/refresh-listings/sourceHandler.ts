@@ -4,6 +4,8 @@ import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, l
 import { discoveryReporter, type ImportProgress } from "../analyze-realtor-build/progress.ts";
 import { normalizeListingRecords, titleNeedsRepair, collapseDuplicates } from "../analyze-realtor-build/listingRecords.ts";
 import { importAiGateway, pageAi } from "./normalizePage.ts";
+import { parseListingCsv } from "../analyze-realtor-build/listingFiles.ts";
+import { normalizeListingStatus } from "../analyze-realtor-build/listingDiscovery.ts";
 
 type Database = ReturnType<typeof import("npm:@supabase/supabase-js@2")["createClient"]>;
 type Row = { value: Record<string, unknown>; rev: number };
@@ -19,7 +21,7 @@ type Row = { value: Record<string, unknown>; rev: number };
 export const INVENTORY_JOB_DETAILS = 12;
 export const DETAIL_JOB_SIZE = 25;
 
-export async function runSourceSync(sb: Database, realtorId: string, body: { mode?: string; url?: string; sourceId?: string; since?: number },
+export async function runSourceSync(sb: Database, realtorId: string, body: { mode?: string; url?: string; sourceId?: string; since?: number; csv?: string; label?: string },
   fetchHtml: FetchHtml, scheduled: boolean, progress?: ImportProgress): Promise<{ body: Record<string, unknown>; status?: number } | null> {
   const sourceKey = `${realtorId}:listing-sources.v1`, listingKey = `${realtorId}:listings.v2`;
   const read = async (key: string): Promise<Row | null> => {
@@ -43,6 +45,10 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     throw new Error("Your listings changed during sync. Please retry.");
   };
   if (body.mode === "details") return runDetailJob(body, fetchHtml, read, save, listingKey, sourceKey, progress);
+  if (body.mode === "import-file") {
+    if (scheduled) return { body: { ok: false, error: "Import listing files from your realtor account." }, status: 403 };
+    return importListingFile(body, read, save, listingKey, sourceKey, progress);
+  }
   const row = await read(sourceKey);
   const sources = (Array.isArray(row?.value?.sources) ? row!.value.sources : []) as ListingSource[];
   const connecting = body.mode === "connect";
@@ -50,7 +56,8 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   if (connecting && (!body.url || typeof body.url !== "string")) return { body: { ok: false, error: "Paste the page where your listings live." }, status: 400 };
   const now = Date.now();
   const target = connecting ? sources.find(source => source.url === body.url || source.submittedUrl === body.url) :
-    sources.filter(source => (!body.sourceId || source.id === body.sourceId) &&
+    // A listing file is a snapshot the realtor uploads again to update; it is never re-read on a schedule.
+    sources.filter(source => source.kind !== "listing-file" && (!body.sourceId || source.id === body.sourceId) &&
       (scheduled ? source.nextSyncAt <= now : !source.lastCheckedAt || now - source.lastCheckedAt > 60_000))
       .sort((a, b) => a.nextSyncAt - b.nextSyncAt)[0];
   if (!connecting && !target) return body.sourceId ? { body: { ok: true, checked: 0 } } : null;
@@ -130,6 +137,56 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
     ...(excludedOtherOffice || featured ? { scope: { excludedOtherOffice, featured } } : {}),
     ...(incomplete?{warning:`${incomplete} listing${incomplete===1?" has":"s have"} incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.`}:{}),
     checked: inventory.listings.length, complete: inventory.complete, items: saved.items, aiUsage: ai.summary() } };
+}
+
+const fileHash = (value: string) => { let n = 2166136261; for (const ch of value) n = Math.imul(n ^ ch.charCodeAt(0), 16777619); return (n >>> 0).toString(36); };
+const INACTIVE_FILE_STATUS = new Set(["sold", "off_market"]);
+
+/**
+ * A listing export (CSV from the MLS, a spreadsheet) through the same save boundary as a website import: one
+ * normalizer, one listing store, the same reconciliation (re-uploading the same file updates its properties,
+ * keeps the realtor's edits, hidden state and notes). Rows without a public property URL get a stable
+ * provenance identity from the export; nothing is invented. Sold and off-market rows are not imported.
+ */
+async function importListingFile(body: { csv?: string; label?: string }, read: Read, save: Save, listingKey: string, sourceKey: string,
+  progress?: ImportProgress): Promise<{ body: Record<string, unknown>; status?: number }> {
+  const csv = typeof body.csv === "string" ? body.csv : "";
+  if (!csv.trim()) return { body: { ok: false, error: "Choose a CSV listing export." }, status: 400 };
+  if (csv.length > 2_000_000) return { body: { ok: false, error: "Use a CSV under 2 MB (about 1,000 listings)." }, status: 413 };
+  const label = (typeof body.label === "string" ? body.label : "").replace(/[^\w .()-]/g, "").trim().slice(0, 100) || "listings.csv";
+  progress?.start("listings");
+  let rows: DiscoveredListing[];
+  try { rows = parseListingCsv(csv); }
+  catch (error) { progress?.finish("listings", "failed"); return { body: { ok: false, code: "unreadable", error: error instanceof Error ? error.message : "This CSV could not be read." }, status: 422 }; }
+  const sourceId = `file-${fileHash(label.toLowerCase())}`;
+  const kept = rows.flatMap(row => {
+    const raw = (row as DiscoveredListing & { fileStatus?: string }).fileStatus;
+    const status = raw ? normalizeListingStatus(raw) : undefined;
+    if (status && INACTIVE_FILE_STATUS.has(status)) return [];
+    const { fileStatus: _ignored, importKey, ...rest } = row as DiscoveredListing & { fileStatus?: string; importKey?: string };
+    const sourceUrl = rest.sourceUrl || `file:///${encodeURIComponent(label)}/${fileHash((rest.listingNumber || importKey || rest.title + "|" + rest.neighborhood).toLowerCase())}`;
+    return [{ ...rest, sourceUrl, ...(status ? { status } : {}) } as DiscoveredListing];
+  });
+  const records = normalizeListingRecords(kept);
+  if (!records.listings.length) {
+    progress?.finish("listings", "done", { count: 0 });
+    return { body: { ok: false, code: "no_listings", error: "No active property rows were found. Export your active listings with addresses, prices and MLS numbers." }, status: 422 };
+  }
+  progress?.finish("listings", "done", { count: records.listings.length });
+  const now = Date.now();
+  const source: ListingSource = { id: sourceId, url: `file:${label}`, submittedUrl: `file:${label}`, kind: "listing-file" as ListingSource["kind"],
+    inventoryUrls: [], connectedAt: now, lastCheckedAt: now, nextSyncAt: Number.MAX_SAFE_INTEGER, state: "connected", failures: 0, listingCount: records.listings.length };
+  await save(sourceKey, value => {
+    const all = (Array.isArray(value.sources) ? value.sources : []) as ListingSource[];
+    const prior = all.find(item => item.id === sourceId);
+    return { ...value, sources: [...all.filter(item => item.id !== sourceId), { ...source, connectedAt: prior?.connectedAt ?? now }] };
+  });
+  progress?.start("save", { total: records.listings.length });
+  const inventory = { source, listings: records.listings, complete: false, meta: { visited: [], hops: 0, found: records.listings.length, maxDepth: 0, inventoryUrls: [], outcome: "found" } } as unknown as SourceInventory;
+  const saved = await save(listingKey, value => ({ ...value, items: reconcileInventory((Array.isArray(value.items) ? value.items : []) as SyncListing[], inventory, now)
+    .map(item => item.sourceId === sourceId ? { ...item, detailAttemptAt: now } : item) }));
+  progress?.finish("save", "done", { count: records.listings.length });
+  return { body: { ok: true, source, imported: records.listings.length, checked: records.listings.length, complete: false, items: saved.items } };
 }
 
 type Read = (key: string) => Promise<Row | null>;

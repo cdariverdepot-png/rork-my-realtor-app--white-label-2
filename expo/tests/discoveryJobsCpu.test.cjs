@@ -80,6 +80,15 @@ const REVIEWED_DETAIL_GAINS = {
   'houses-of-kansas-city': { complete: 10, described: 10 },
 };
 
+// Reviewed: requests the importer now makes that a recording predates. Such a request is not in the recording
+// (so the replay cannot answer it); it is allowed only if it matches the declared transport, and the recorded
+// inventory must still be reproduced exactly. Live behaviour is checked by its own capture.
+const REVIEWED_NEW_REQUESTS = {
+  // Oct 8 capture: Flexmls showed the collection document a browser check. The importer now reads the
+  // collection's published photo-view transport (live capture cindy-carlson-realty--transport: 8 listings).
+  'cindy-carlson-realty': /^https:\/\/my\.flexmls\.com\/CiindyCarlson\/search\/office_listing_categories\/Active\/listings\?list_view=photo&page=1&per_page=24$/,
+};
+
 let engine;
 const cpu = () => { const u = process.cpuUsage(); return (u.user + u.system) / 1000; };
 for (const file of files) {
@@ -107,7 +116,10 @@ for (const file of files) {
       assert.deepEqual(now.listings, was.listings);
       assert.equal(now.outcome, was.outcome);
       assert.equal(now.coverage, was.coverage);
-      for (const url of now.failed ?? []) assert.ok((was.failed ?? []).includes(url), `new failed request ${url}`);
+      for (const url of now.failed ?? []) {
+        const unrecordedTransport = full.missing.includes(url) && REVIEWED_NEW_REQUESTS[id]?.test(url);
+        assert.ok((was.failed ?? []).includes(url) || unrecordedTransport, `new failed request ${url}`);
+      }
     }
 
     const inventoryJob = { ...fixture, options: { ...fixture.options, detailBudget: INVENTORY_JOB_DETAILS } };

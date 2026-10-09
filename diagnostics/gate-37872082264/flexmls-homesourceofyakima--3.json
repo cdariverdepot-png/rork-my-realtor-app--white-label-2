@@ -1,0 +1,181 @@
+{
+  "id": "flexmls-homesourceofyakima--3",
+  "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+  "category": "Flexmls collection",
+  "timeline": [
+    {
+      "at": 49,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1053,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1254,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading your website"
+    },
+    {
+      "at": 1857,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 10 listings so far · 3 pages checked\nReading your website"
+    },
+    {
+      "at": 2057,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 listings so far · 3 pages checked\nReading your website\nReading listing details · 0 of 11"
+    },
+    {
+      "at": 2660,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 listings so far · 3 pages checked\nReading your website\nReading listing details · 1 of 11"
+    },
+    {
+      "at": 2861,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 listings so far · 3 pages checked\nReading your website\nReading listing details · 6 of 11"
+    },
+    {
+      "at": 3262,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 active listings\nReading your website\nRead full details for all 11 listings"
+    },
+    {
+      "at": 3663,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaving 11 listings"
+    },
+    {
+      "at": 3864,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaved 11 listings"
+    },
+    {
+      "at": 31188,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaved 11 listings\nWriting your profile and app copy"
+    },
+    {
+      "at": 34000,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaved 11 listings\nYour profile could not be written"
+    },
+    {
+      "at": 34201,
+      "screen": "Building your app\nBUILD STOPPED\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaved 11 listings\nYour profile could not be written\nThe build stopped\nNo usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page.\n11 listings were imported and saved. They are kept.\nRetry\nChange website"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 674,
+      "totalMs": 33930,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 30072
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 30072
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 30072
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "failed",
+          "at": 32996
+        }
+      ],
+      "result": {
+        "status": 422,
+        "body": {
+          "code": "profile_empty",
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 886,
+            "outputTokens": 210,
+            "estimatedUsd": 0.003452,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.003452
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 886,
+                "cachedInputTokens": 0,
+                "outputTokens": 210,
+                "estimatedUsd": 0.003452,
+                "priced": true
+              }
+            ]
+          },
+          "error": "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page."
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "flexmls-homesourceofyakima--3-00-url.png",
+    "flexmls-homesourceofyakima--3-01-stuck.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 5,
+    "text": []
+  },
+  "submittedAt": 4505,
+  "reviewMs": null,
+  "finalBuildScreen": "Building your app\nBUILD STOPPED\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaved 11 listings\nYour profile could not be written\nThe build stopped\nNo usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page.\n11 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "reviewText": "Exit\nAPP BUILDER\nmy.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings\nBuilding your app\nBUILD STOPPED\nFound 11 active listings\nReading your website\nRead full details for all 11 listings\nSaved 11 listings\nYour profile could not be written\nThe build stopped\nNo usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page.\n11 listings were imported and saved. They are kept.\nRetry\nChange website",
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+      "status": 200,
+      "finalUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+      "title": "Client Challenge",
+      "textLength": 83,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 0,
+      "sample": "Enter the characters seen in the image below:\n\nDownload audio CAPTCHA\nAnswer\nSubmit",
+      "challenge": true,
+      "screenshot": "flexmls-homesourceofyakima--3-source-0.png"
+    }
+  ],
+  "wallMs": 429898,
+  "window": {
+    "startedAt": "2026-10-09T02:07:03.704Z",
+    "endedAt": "2026-10-09T02:14:13.602Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.003452,
+    "inputTokens": 886,
+    "outputTokens": 210
+  }
+}

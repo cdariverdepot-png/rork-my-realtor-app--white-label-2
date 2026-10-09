@@ -26,21 +26,68 @@ const sources = load(path.join(root, 'refresh-listings/sources.ts'));
 const discovery = load(path.join(root, 'analyze-realtor-build/listingDiscovery.ts'));
 const design = load(path.join(root, 'analyze-realtor-build/websiteDesign.ts'));
 
-test('Cindy Carlson (recorded Oct 8): the Flexmls browser check is reported as such, with only real alternatives', async () => {
-  const capture = readCapture(path.resolve(__dirname, '../../diagnostics/evaluation/captures/cindy-carlson-realty--rendered.json.gz'));
-  const { result, listings } = await replayCapture(await loadPipeline(), capture);
-  assert.equal(listings.length, 0);
-  const issue = result.meta.issues.find(row => row.code === 'requires-rendering');
-  assert.equal(new URL(issue.url).hostname, 'my.flexmls.com');
-  assert.equal(issue.interface, 'managed-challenge');
-  assert.ok(result.meta.obstacles.some(row => row.code === 'render_failed'), 'the renderer was tried and did not get past the check');
-  const message = sources.unreadableInventoryMessage(result.meta, false);
+test('a provider browser check is reported as such, with only real alternatives', () => {
+  const meta = { issues: [{ code: 'requires-rendering', url: 'https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings', interface: 'managed-challenge' }] };
+  const message = sources.unreadableInventoryMessage(meta, false);
   assert.match(message, /^Your listings are published on my\.flexmls\.com, which now shows automated readers a browser check/);
   assert.match(message, /We don't get around those checks\./);
   assert.match(message, /Paste another public page that shows your listings/);
   assert.match(message, /Add a listing/);
+  assert.match(message, /import a CSV export of your listings/);
   assert.doesNotMatch(message, /dynamically|upload|manually|dashboard/i);
-  assert.match(sources.unreadableInventoryMessage(result.meta, true), /Your existing listings are kept\./);
+  assert.match(sources.unreadableInventoryMessage(meta, true), /Your existing listings are kept\./);
+});
+
+test('Cindy Carlson (live, Oct 8): her Flexmls office collection is read through its published photo-view transport', async () => {
+  const capture = readCapture(path.resolve(__dirname, '../../diagnostics/evaluation/captures/cindy-carlson-realty--transport.json.gz'));
+  const { result, listings } = await replayCapture(await loadPipeline(), capture);
+  assert.equal(listings.length, 8);
+  assert.ok(result.meta.stages.includes('provider_transport_after_check'));
+  assert.ok(!result.meta.stages.includes('browser_render_escalated'), 'no browser is spent on a check it cannot pass');
+  for (const item of listings) {
+    assert.match(item.sourceUrl, /^https:\/\/my\.flexmls\.com\/CiindyCarlson\/search\/office_listing_categories\/Active\/listings\/\d{20,}/);
+    assert.ok(item.price && item.description.length > 100 && item.images.length >= 6 && item.detailsComplete, item.title);
+    assert.ok(item.images.every(url => /sparkplatform\.com/.test(url)), item.title);
+  }
+  assert.equal(new Set(listings.map(item => item.sourceUrl)).size, 8);
+  assert.ok(listings.some(item => item.title === '483 Paradise Lane' && item.price === '$1,299,999'));
+});
+
+test('Cindy Carlson (Oct 5 responses, document now behind a check): the transport yields the same nine properties', async () => {
+  const fixture = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'fixtures/listing-compatibility/cindy-carlson-1791176729259.json'), 'utf8'));
+  const challenge = readCapture(path.resolve(__dirname, '../../diagnostics/evaluation/captures/cindy-carlson-realty--rendered.json.gz')).pages[2].html;
+  assert.match(challenge, /<title>Client Challenge<\/title>/);
+  const pipeline = await loadPipeline();
+  const original = await replayCapture(pipeline, fixture);
+  const checked = await replayCapture(pipeline, { ...fixture, pages: fixture.pages.map(page => page.url.endsWith('/Active/listings') && !page.fragment ? { ...page, html: challenge } : page) });
+  assert.equal(checked.missing.length, 0);
+  assert.deepEqual(checked.listings.map(item => item.sourceUrl).sort(), original.listings.map(item => item.sourceUrl).sort());
+  assert.equal(checked.listings.length, 9);
+});
+
+test('a Flexmls transport is derived only from a listing-category collection URL', () => {
+  assert.deepEqual(discovery.urlDerivedTransports(new URL('https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings')),
+    ['https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24']);
+  assert.deepEqual(discovery.urlDerivedTransports(new URL('https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings/20260226190717870344000000')),
+    ['https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24']);
+  for (const url of ['https://my.flexmls.com/Agent/search/new', 'https://my.flexmls.com/Agent/search/idx_links/2017/listings?_filter=County', 'https://agent.example/search/office_listing_categories/Active/listings',
+    'https://my.flexmls.com/Agent/search/office_listing_categories/Active/listings?list_view=photo&page=2&per_page=24']) assert.deepEqual(discovery.urlDerivedTransports(new URL(url)), [], url);
+  assert.equal(discovery.propertyDetailRequest('https://my.flexmls.com/Office/search/listing_categories/Active/listings/20260413223213928594000000').fragment, true);
+});
+
+test('a plain listing category behind a check is read only when the realtor submitted it or their site claimed it', async () => {
+  const challenge = '<html><head><title>Client Challenge</title></head><body><script src="/_fs-ch-1T1wmsGaOgGaSxcX/errors.js"></script></body></html>';
+  const category = 'https://my.flexmls.com/Region/search/listing_categories/Active/listings';
+  const photo = category + '?list_view=photo&page=1&per_page=24';
+  const card = n => `<div data-href="${category}/2026041322321392859400000${n}?from_filter=false" data-current-price="35000${n}.0" class="summary-card listingListItem"><span class="line-one">${n}0 Pine St</span><img src="https://cdn.resize.sparkplatform.com/x/${n}-o.jpg"> Active $35${n},000</div>`;
+  const pages = { [category]: challenge, [photo]: card(1) + card(2) + card(3), 'https://agent.example/': `<a href="${category}">Area market report</a>` };
+  const requested = [];
+  const read = async (url, options) => { requested.push(url + (options?.fragment ? ' [fragment]' : '')); return { html: pages[url] ?? '<html></html>', finalUrl: new URL(url) }; };
+  const unclaimed = await discovery.discoverListings(['https://agent.example/'], read, { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(unclaimed.listings.length, 0);
+  assert.ok(!requested.some(url => url.startsWith(photo)), requested.join('\n'));
+  const submitted = await discovery.discoverListings([category], read, { maxPages: 6, maxDetailPages: 0 });
+  assert.equal(submitted.listings.length, 3);
 });
 
 test('a page that draws listings without a browser check keeps the generic explanation', () => {
@@ -78,4 +125,15 @@ test('a portrait-shaped website image captioned with the agent\'s name is the ag
   assert.equal(design.imageCaptionedWithName(`<p>${img}</p>${'<p>Our office serves Kellogg and the Silver Valley.</p>'.repeat(30)}<p>Cindy Carlson</p>`, url, 'Cindy Carlson'), false);
   assert.equal(design.imageCaptionedWithName(`<p>${img} Cindy</p>`, url, 'Cindy'), false);
   assert.equal(design.imageCaptionedWithName(`<p>${img.replace(/Edit\.jpg/g, 'Kitchen.jpg')} Cindy Carlson</p>`, url, 'Cindy Carlson'), false);
+});
+
+test('Flexmls (live, another account): a 39-listing collection is read across its 10-card pages with full details', async () => {
+  const capture = readCapture(path.resolve(__dirname, '../../diagnostics/evaluation/captures/flexmls-redefinedrealty--3.json.gz'));
+  const { result, listings, missing } = await replayCapture(await loadPipeline(), capture);
+  assert.equal(missing.length, 0);
+  assert.equal(listings.length, 39);
+  assert.equal(new Set(listings.map(item => item.sourceUrl)).size, 39);
+  assert.equal(capture.pages.filter(page => /list_view=photo/.test(page.url)).length, 4, 'pages 1-4; page 4 is short, so paging stops');
+  assert.ok(listings.every(item => item.detailsComplete && item.description.length > 40 && item.images.length > 1 && item.price), 'every listing has its details');
+  assert.ok(result.meta.stages.includes('provider_transport_after_check'));
 });

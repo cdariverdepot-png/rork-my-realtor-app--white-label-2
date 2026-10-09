@@ -139,6 +139,7 @@ export const TERMS: LegalDoc = {
       heading: "Content you provide",
       body: [
         "You keep ownership of everything you upload. You grant us only the permission needed to store it, sync it between devices and display it to the people you are sharing it with. We do not use your content for anything else.",
+        "When you give us your website or another listing source, you confirm that you have the rights needed to provide the listing information it publishes, and you authorize us to retrieve, process, store, display and keep that information synchronized in your app. This does not replace any licence or access terms an MLS or listing provider requires.",
       ],
     },
     {
