@@ -1,5 +1,4 @@
-Stage gate requested Thu Oct  8 22:37:14 UTC 2026: end-to-end check of the DEPLOYED development preview of main 4d824b4 against the staging importer.
-justification: confirm the deployed preview uses the new importer (Real Geeks and Sierra sites imported 0 listings with the previous one) before handing it over
+Stage gate requested Fri Oct  9 00:41:14 UTC 2026: Cindy Carlson investigation fixes on staging, with a small cross-platform sample.
+justification: verify the provider browser-check message, captioned portrait and site-map scope fix on staging before updating the preview
 staging-ai: shared-key
-app-url: https://cdariverdepot-my-realtor--srxznbvflh.expo.app
-sites: chatman-realty-group, tom-toole
+sites: cindy-carlson-realty, tom-toole, chatman-realty-group, realm-partners-idaho, houses-of-kansas-city
