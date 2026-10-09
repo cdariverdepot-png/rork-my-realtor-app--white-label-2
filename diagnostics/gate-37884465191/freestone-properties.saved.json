@@ -1,0 +1,79 @@
+[
+  {
+    "realtorId": "1ce89411-e19f-40ee-a0e2-2f5a8df6d52b",
+    "createdAt": "2026-10-09 04:38:05.105219+00",
+    "sources": [
+      {
+        "id": "source-nkdipb",
+        "url": "https://www.freestoneproperties.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "freestoneproperties",
+            "freestone",
+            "asheville",
+            "black",
+            "mountain"
+          ],
+          "phrases": [
+            "freestoneproperties",
+            "ashevillerealestate",
+            "blackmountainncrealestate",
+            "freestone"
+          ]
+        },
+        "nextSyncAt": 1791527889520,
+        "connectedAt": 1791520689520,
+        "listingCount": 3,
+        "submittedUrl": "https://www.freestoneproperties.com/",
+        "inventoryUrls": [
+          "https://www.freestoneproperties.com/"
+        ],
+        "lastCheckedAt": 1791520689520
+      }
+    ],
+    "listings": [
+      {
+        "title": "200 Courtland Place Asheville",
+        "price": "$865,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/200-courtland-place-asheville/",
+        "photos": 16,
+        "descriptionLength": 136,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "808 Montreat Road Black Mountain",
+        "price": "$510,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/808-montreat-road-black-mountain/",
+        "photos": 49,
+        "descriptionLength": 141,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "120 Maple Ridge Road Candler",
+        "price": "$389,000",
+        "sourceUrl": "https://www.freestoneproperties.com/listings/120-maple-ridge-road-candler/",
+        "photos": 35,
+        "descriptionLength": 141,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

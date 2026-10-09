@@ -1,0 +1,173 @@
+{
+  "id": "irene-on-whidbey",
+  "url": "https://www.ireneonwhidbey.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 54,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1058,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1258,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 1459,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 4 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1661,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 4 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nReading linked pages · 1 of 7"
+    },
+    {
+      "at": 1861,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 5 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nReading linked pages · 5 of 7"
+    },
+    {
+      "at": 2062,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 5 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2264,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 6 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2465,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 7 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2868,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 8 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 5081,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 9 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 8296,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 9 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy\nFound Irene Echenique · Whidbey Island, WA"
+    },
+    {
+      "at": 8497,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 10 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy\nFound Irene Echenique · Whidbey Island, WA"
+    },
+    {
+      "at": 8900,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 11 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy\nFound Irene Echenique · Whidbey Island, WA"
+    },
+    {
+      "at": 9301,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 12 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy\nFound Irene Echenique · Whidbey Island, WA"
+    },
+    {
+      "at": 9702,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 13 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy\nFound Irene Echenique · Whidbey Island, WA"
+    },
+    {
+      "at": 10103,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [],
+  "screenshots": [
+    "irene-on-whidbey-00-url.png",
+    "irene-on-whidbey-01-review.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 3,
+    "text": []
+  },
+  "submittedAt": 4437,
+  "reviewMs": 10103,
+  "finalBuildScreen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 13 pages checked\nReading Whidbey Island Real Estate\nMatching your website’s design and imagery\nRead 7 linked pages\nIdentified your profile photo and logo\nSorted 39 website images by role\nWriting your profile and app copy\nFound Irene Echenique · Whidbey Island, WA",
+  "reviewText": "Back\nAPP BUILDER\nwww.ireneonwhidbey.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nWHIDBEY ISLAND, WA\nWhidbey Island Real Estate\nIrene Echenique is a real estate agent with Windermere on Whidbey Island, WA.  \nSERVICES\nSelling Whidbey Island Real Estate\nTHINK ABOUT THIS: YOU’RE A KEY PART IN HELPING SOMEONE’S NEXT CHAPTER BEGIN. So how do we get started? First, let’s meet and get to know one another. I want to know all about what you’re hoping for and your past experiences (if any) with selling. After we meet, the next step is a Market Analysis. I’ll take a quick tour of your home then get to work on crunching data and doing research. I’ll come back with options for what I think we can sell your home for (I never provide just one number).\nSERVICES\nBuying Whidbey Island Real Estate\nFirst things first, let’s meet and get to know one another. I want to know all about why you’re moving to Whidbey and how you envision your dream home as I get to know your timeline for moving forward. Pre approval is always the first step. We’ll discuss your lender, on-island lender choices, and why it matters so much. Now for the fun part: your ideal home. Likes. Dislikes. Absolute must-haves. We’ll discuss the current market, location, schools, and everything Whidbey Island has to offer.\nTHE AREA\nClinton\nZipcode: 98236 Discovering Clinton takes you on an adventure through rural back roads with surprises and beauty around every corner. This vibrant historical community has been around since the early 1800’s and has always been a travel destination. Clinton is located at the entrance of Whidbey Island and is the beginning of Whidbey Isle Scenic Byway as well as the beginning of the North Cascade Loop. View Clinton, WA waterfront homes for sale\nWhidbey Island Homes For Sale\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\nFROM THE SITE\nTop Whidbey Island Real Estate Agent\nA polished experience—from start to finish Buying or selling a home on Whidbey Island can be a rollercoaster full of emotions. Before anything else, let’s take a deep breath together—you’re in the right place. I’m here to make this experience seamless and efficient for you. I look at the process as a collaborative effort so I’ll keep you prepped and informed at every juncture. A proud New York native living on Whidbey Island, I have a “no BS” approach when I work with clients.\n(425) 328-0217\nirenee@windermere.com\nWindermere\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nA polished experience—start to finish on Whidbey Island.\nTry another opening line\nYOUR INTRODUCTION\nAs a proud New York native putting roots down on Whidbey Island, I bring two decades of real estate experience and a 'no BS' approach to helping you navigate the local market. With Windermere's backing and a collaborative mindset, I guide clients through one of life’s bigger moves with directness, care, and absolute dedication. Whether you’re after a waterfront dream or simply the next chapter, I keep you prepped, informed, and supported—because this is about your lifestyle, your investment, and your peace of mind. Let’s find your best on Whidbey.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nHave a listing spreadsheet? Import a CSV export\nWe couldn’t read your listings from that page: some of its pages could not be opened. Try pasting the page where all of your active listings are shown. The page must open without signing in.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Windermere\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "ui": {
+    "steps": [
+      {
+        "name": "review",
+        "file": "irene-on-whidbey-ui-00-review.png"
+      },
+      {
+        "name": "home",
+        "file": "irene-on-whidbey-ui-01-home.png",
+        "viewListingsButton": false,
+        "propertySection": true
+      },
+      {
+        "name": "listings-top",
+        "file": "irene-on-whidbey-ui-02-listings-top.png"
+      },
+      {
+        "name": "listings-end",
+        "file": "irene-on-whidbey-ui-03-listings-end.png",
+        "lastCardVisible": null
+      },
+      {
+        "name": "saved",
+        "file": "irene-on-whidbey-ui-04-saved.png",
+        "savedShown": true
+      },
+      {
+        "name": "closed",
+        "file": "irene-on-whidbey-ui-05-closed.png"
+      }
+    ],
+    "review": {
+      "importerOffered": true,
+      "imported": 0,
+      "url": "http://localhost:8081/admin/build"
+    },
+    "listings": {
+      "cards": 0,
+      "clipped": 0,
+      "widths": [],
+      "themeLabel": false,
+      "viewAll": false,
+      "pickedForYou": false,
+      "heading": "Irene’s listings",
+      "count": ""
+    },
+    "afterClosing": {
+      "url": "http://localhost:8081/admin/build",
+      "review": true,
+      "importerOffered": true,
+      "imported": 0
+    }
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://www.ireneonwhidbey.com/",
+      "status": 200,
+      "finalUrl": "https://www.ireneonwhidbey.com/",
+      "title": "Whidbey Island Real Estate | Windermere Agent Irene Echenique",
+      "textLength": 15712,
+      "priceCount": 42,
+      "uniquePrices": 28,
+      "propertyLinkCount": 33,
+      "sample": "By using this website, you agree to our use of cookies. We use cookies to provide you with a great experience and to help our website run effectively.\n\nACCEPT\nSKIP TO CONTENT\nACTIVE LISTINGS\nABOUT\nSELLING\nBUYING\nCOMMUNITIES\nCONTACT\nWhidbey Island Real Estate\n\nIrene Echenique is a Windermere real estate agent serving Whidbey Island, WA and the surrounding area with home purchases and listings. As your Realtor®, Irene is here to guide, create solutions, and champion you along the way.\n\nWhidbey Island Homes For Sale\nMultiple / All\nNorthwest MLS (NWMLS)\nMax Price\nMin Bedrooms\nMin Baths\nChoose a City\nAberdeen\nAcme\nAddy\nAdna\nAirway Heights\nAlgona\nAllyn\nAlmira\nAmanda Park\nAmboy\nAnacortes\nAnderson Island\nAriel\nArlington\nAshford\nAsotin\nAstoria\nAthena\nAuburn\nBainbridge Island\nBaker City\nBaring\nBattle Ground\nBay Center\nBeaux Arts\nBeaver\nBelfair\nBellevue\nBellingham\nBenton City\nBeverly\nBirch Bay\nBlack Diamond\nBlaine\nBlakely Island\nBoistfort\nBonney Lake\nBothell\nBow\nBremerton\nBrewster\nBridgeport\nBrier\nBrinnon\nBrush Prairie\nBuckley\nBucoda\nBurbank\nBurien\nBurlington\nCamano Island\nCamas\nCarbonado\nCarlsborg\nCarlton\nCarnation\nCarrolls\nCashmere\nCastle Rock\nCathlamet\nCenter Island\nCenterville\nCentralia\nC",
+      "challenge": false,
+      "screenshot": "irene-on-whidbey-source-0.png"
+    }
+  ],
+  "wallMs": 31507,
+  "window": {
+    "startedAt": "2026-10-09T04:37:31.477Z",
+    "endedAt": "2026-10-09T04:38:02.984Z"
+  },
+  "aiUsage": {
+    "calls": 0,
+    "blocked": 0,
+    "estimatedUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

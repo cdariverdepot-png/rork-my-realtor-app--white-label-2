@@ -1,0 +1,1924 @@
+[
+  {
+    "realtorId": "0817f1e7-88af-45a2-86d9-a244922cf8d2",
+    "createdAt": "2026-10-09 04:45:55.775885+00",
+    "sources": [
+      {
+        "id": "source-h9a7n1",
+        "url": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+        "kind": "flexmls",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "flexmls"
+          ],
+          "phrases": [
+            "flexmls"
+          ]
+        },
+        "nextSyncAt": 1791528364884,
+        "connectedAt": 1791521164884,
+        "listingCount": 100,
+        "submittedUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+        "inventoryUrls": [
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=2&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=3&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=4&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=5&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=6&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=7&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=8&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=9&per_page=24",
+          "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings?list_view=photo&page=10&per_page=24"
+        ],
+        "lastCheckedAt": 1791521164884
+      }
+    ],
+    "listings": [
+      {
+        "title": "6403 CHELAN DR",
+        "price": "$375,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260929154736575718000000?from_filter=false",
+        "photos": 36,
+        "descriptionLength": 794,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2004",
+          "Subdivision": "CASCADES",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "10900 W ALEXANDER DR",
+        "price": "$540,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260929200422612425000000?from_filter=false",
+        "photos": 62,
+        "descriptionLength": 964,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agricultural",
+          "Basement": "Yes",
+          "Year Built": "1974",
+          "Subdivision": "ROCHEPORT",
+          "Garage Capacity": "3"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "1508 PARK DEVILLE PL",
+        "price": "$179,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260728144018963982000000?from_filter=false",
+        "photos": 51,
+        "descriptionLength": 2682,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Multi-Family Res",
+          "Basement": "No",
+          "Subdivision": "PARK DEVILLE",
+          "Garage Capacity": "1"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "4909 FORSYTHIA FALLS LP",
+        "price": "$450,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260907221115068458000000?from_filter=false",
+        "photos": 85,
+        "descriptionLength": 661,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2014",
+          "Subdivision": "MAGNOLIA FALLS",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "1883 N WATERFRONT DR H",
+        "price": "$139,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260917225951834136000000?from_filter=false",
+        "photos": 16,
+        "descriptionLength": 777,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Multi-Family Res",
+          "Basement": "No",
+          "Year Built": "1988",
+          "Subdivision": "EDGEWATER",
+          "Garage Capacity": "0"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "2601 QUARTZ LN",
+        "price": "$1,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260917212303359044000000?from_filter=false",
+        "photos": 40,
+        "descriptionLength": 706,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "No",
+          "Subdivision": "GREYSTONE",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "301 W 5TH ST",
+        "price": "$339,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260828172044043619000000?from_filter=false",
+        "photos": 66,
+        "descriptionLength": 2430,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Multi-Family Res",
+          "Basement": "Yes",
+          "Year Built": "1880",
+          "Subdivision": "FULTON",
+          "Garage Capacity": "0"
+        },
+        "beds": 6,
+        "baths": 6,
+        "sqft": ""
+      },
+      {
+        "title": "16 GIPSON CT",
+        "price": "$299,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260811163200829154000000?from_filter=false",
+        "photos": 51,
+        "descriptionLength": 3158,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "1972",
+          "Subdivision": "PARKADE",
+          "Garage Level": "Main",
+          "Garage Capacity": "1"
+        },
+        "beds": 6,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "1709 GLENBROOK CT",
+        "price": "$699,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260907182827867770000000?from_filter=false",
+        "photos": 81,
+        "descriptionLength": 800,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1993",
+          "Subdivision": "QUAILS RUN",
+          "Garage Level": "Main",
+          "Garage Capacity": "3"
+        },
+        "beds": 5,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "4317 STEVENDAVE DR",
+        "price": "$185,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260926140157501077000000?from_filter=false",
+        "photos": 22,
+        "descriptionLength": 462,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1976",
+          "Subdivision": "ALUMNI HEIGHTS",
+          "Garage Capacity": "1"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "2016 LOVEJOY LN",
+        "price": "$334,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260918015837603287000000?from_filter=false",
+        "photos": 56,
+        "descriptionLength": 4465,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1967",
+          "Subdivision": "TANGLEWOOD SUB",
+          "Garage Capacity": "2"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "2662 COUNTY ROAD 1310",
+        "price": "$217,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20261002184144861974000000?from_filter=false",
+        "photos": 58,
+        "descriptionLength": 1704,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "None",
+          "Basement": "Yes",
+          "Year Built": "1981",
+          "Subdivision": "MOBERLY",
+          "Garage Capacity": "3"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "4501 W BAINBRIDGE DR",
+        "price": "$279,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260914175433588502000000?from_filter=false",
+        "photos": 37,
+        "descriptionLength": 799,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1980",
+          "Subdivision": "COUNTRY HILL",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "700 MANOR DR",
+        "price": "$340,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260926152228788203000000?from_filter=false",
+        "photos": 56,
+        "descriptionLength": 796,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1960",
+          "Subdivision": "HOUDERSHELDT",
+          "Garage Level": "Main",
+          "Garage Capacity": "1"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "1513 TIDE WATER DR",
+        "price": "$389,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20261001014503617781000000?from_filter=false",
+        "photos": 67,
+        "descriptionLength": 798,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2004",
+          "Subdivision": "AUBURN HILLS",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "5008 BROOKTHORN CT",
+        "price": "$575,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260826041855703288000000?from_filter=false",
+        "photos": 82,
+        "descriptionLength": 1533,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2011",
+          "Subdivision": "BRADBURY EST",
+          "Garage Capacity": "3"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "N BARNETT SCHOOL RD",
+        "price": "$189,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260830163228860561000000?from_filter=false",
+        "photos": 30,
+        "descriptionLength": 233,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "99.5 ACRES COUNTY ROAD 40",
+        "price": "$299,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251023234157708568000000?from_filter=false",
+        "photos": 18,
+        "descriptionLength": 782,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "None",
+          "Subdivision": "CROSS TIMBERS"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "303 W FRANCIS ST",
+        "price": "$342,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20261002230920340976000000?from_filter=false",
+        "photos": 1,
+        "descriptionLength": 568,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2026",
+          "Subdivision": "BAILEY PLACE",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "309 W FRANCIS ST",
+        "price": "$339,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20261002181111867086000000?from_filter=false",
+        "photos": 1,
+        "descriptionLength": 559,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2026",
+          "Subdivision": "BAILEY PLACE",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "5317 SMITH DR",
+        "price": "$2,800",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260917144223224809000000?from_filter=false",
+        "photos": 39,
+        "descriptionLength": 743,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "No",
+          "Year Built": "2022",
+          "Subdivision": "BRECKENRIDGE PARK",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "2113 OAK CLIFF DR",
+        "price": "$449,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260918162609743354000000?from_filter=false",
+        "photos": 66,
+        "descriptionLength": 1470,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1980",
+          "Subdivision": "OAK CLIFF",
+          "Garage Capacity": "2"
+        },
+        "beds": 5,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "104 N ELM ST",
+        "price": "$230,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20261001114855806347000000?from_filter=false",
+        "photos": 40,
+        "descriptionLength": 734,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "1975",
+          "Subdivision": "AUXVASSE",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "131 W HAVEN DR",
+        "price": "$249,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260930220157118747000000?from_filter=false",
+        "photos": 45,
+        "descriptionLength": 791,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1985",
+          "Subdivision": "JEFFERSON CITY",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "124 SOUTH BROADWAY",
+        "price": "$199,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260224201151736733000000?from_filter=false",
+        "photos": 48,
+        "descriptionLength": 1922,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Commercial"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "3060 S MAPLE BLUFF DR",
+        "price": "$625,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260807181204381309000000?from_filter=false",
+        "photos": 58,
+        "descriptionLength": 935,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1981",
+          "Subdivision": "MAPLE BLUFF AC",
+          "Garage Capacity": "2"
+        },
+        "beds": 5,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "1600 HWY 240",
+        "price": "$99,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260803164515793320000000?from_filter=false",
+        "photos": 27,
+        "descriptionLength": 780,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agricultural",
+          "Basement": "Yes",
+          "Year Built": "2024",
+          "Subdivision": "FAYETTE",
+          "Garage Capacity": "3"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "4309 FORUM BLVD",
+        "price": "$324,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260830024607287049000000?from_filter=false",
+        "photos": 50,
+        "descriptionLength": 639,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "1990",
+          "Subdivision": "WOODRAIL SOUTH",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "6733 ROCKING HORSE LN",
+        "price": "$459,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260828144803511083000000?from_filter=false",
+        "photos": 69,
+        "descriptionLength": 783,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2006",
+          "Subdivision": "FULTON",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "3317 APPALACHIAN DR",
+        "price": "$498,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260917213344163790000000?from_filter=false",
+        "photos": 99,
+        "descriptionLength": 750,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1994",
+          "Subdivision": "BROADWAY FARMS",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "5009 LILLIAN DR",
+        "price": "$375,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260826184954632654000000?from_filter=false",
+        "photos": 51,
+        "descriptionLength": 797,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2001",
+          "Subdivision": "THESSALIA",
+          "Garage Level": "Main",
+          "Garage Capacity": "3"
+        },
+        "beds": 5,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "3501 SAN MARCO DR",
+        "price": "$319,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260824181459407462000000?from_filter=false",
+        "photos": 77,
+        "descriptionLength": 1827,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2020",
+          "Subdivision": "TUSCANY RIDGE",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "116 W JAXON ST",
+        "price": "$394,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260922171746263048000000?from_filter=false",
+        "photos": 8,
+        "descriptionLength": 798,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2026",
+          "Subdivision": "BAILEY PLACE",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "1127 E MAIN ST",
+        "price": "$169,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260923201229431302000000?from_filter=false",
+        "photos": 27,
+        "descriptionLength": 1040,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1947",
+          "Subdivision": "LINN",
+          "Garage Capacity": "0"
+        },
+        "beds": 4,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "4008 W WORLEY ST 302",
+        "price": "$230,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260609153219657318000000?from_filter=false",
+        "photos": 46,
+        "descriptionLength": 748,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Multi-Family Res",
+          "Basement": "No",
+          "Year Built": "2007",
+          "Subdivision": "SMITHTON CROSSING CONDOS",
+          "Garage Capacity": "0"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "126 HWY 124",
+        "price": "$165,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260710211319648682000000?from_filter=false",
+        "photos": 20,
+        "descriptionLength": 397,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Office",
+          "Basement": "No",
+          "Year Built": "1965",
+          "Subdivision": "HALLSVILLE ORIGINAL TOWN",
+          "Garage Capacity": "0"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "1790 COUNTY ROAD 1815",
+        "price": "$429,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260812191135725922000000?from_filter=false",
+        "photos": 50,
+        "descriptionLength": 735,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Agricultural",
+          "Basement": "Yes",
+          "Year Built": "2009",
+          "Subdivision": "CAIRO",
+          "Garage Level": "Lower",
+          "Garage Capacity": "1"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "1224 HENRY ST",
+        "price": "$9,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260813221655393013000000?from_filter=false",
+        "photos": 3,
+        "descriptionLength": 684,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "MOBERLY"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1226 HENRY ST",
+        "price": "$9,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260813224051605560000000?from_filter=false",
+        "photos": 3,
+        "descriptionLength": 590,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "MOBERLY"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "3407 SNOW LEOPARD DR",
+        "price": "$364,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260822170342775644000000?from_filter=false",
+        "photos": 72,
+        "descriptionLength": 2444,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2007",
+          "Subdivision": "VANDERVEEN CROSSING",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "7650 N HWY VV",
+        "price": "$359,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260515210419031199000000?from_filter=false",
+        "photos": 83,
+        "descriptionLength": 597,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agricultural",
+          "Basement": "Yes",
+          "Subdivision": "COLUMBIA",
+          "Garage Capacity": "0"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "24000 SCHUNEMEYER RD",
+        "price": "$200,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260819114045045520000000?from_filter=false",
+        "photos": 11,
+        "descriptionLength": 0,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "1979",
+          "Subdivision": "CENTRALIA",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "3702 CHESTNUT DR",
+        "price": "$365,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260913141231561272000000?from_filter=false",
+        "photos": 36,
+        "descriptionLength": 668,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2015",
+          "Subdivision": "ARBOR POINTE",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "905 JACKSON ST",
+        "price": "$399,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260820170214757961000000?from_filter=false",
+        "photos": 41,
+        "descriptionLength": 2554,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Commercial",
+          "Lot Acres": "0.44"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1709 STEAMBOAT LN",
+        "price": "$190,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260910151602422136000000?from_filter=false",
+        "photos": 26,
+        "descriptionLength": 801,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "1991",
+          "Subdivision": "COLUMBIA",
+          "Garage Capacity": "1"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "4810 ANNANDALE CT",
+        "price": "$634,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260728182334391300000000?from_filter=false",
+        "photos": 50,
+        "descriptionLength": 800,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2015",
+          "Subdivision": "CREEKS EDGE",
+          "Garage Capacity": "3"
+        },
+        "beds": 5,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "2409 BOULDER SPRINGS DR",
+        "price": "$345,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260723145006372204000000?from_filter=false",
+        "photos": 44,
+        "descriptionLength": 681,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Multi-Family Res",
+          "Basement": "No",
+          "Year Built": "2011",
+          "Subdivision": "BOULDER SPRINGS",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "304 S HODGES ST",
+        "price": "$140,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260902165656200599000000?from_filter=false",
+        "photos": 31,
+        "descriptionLength": 685,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "None",
+          "Basement": "Yes",
+          "Year Built": "1917",
+          "Subdivision": "CALIFORNIA",
+          "Garage Capacity": "1"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "4753 BETHEL ST B",
+        "price": "$1,300",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260903152230755191000000?from_filter=false",
+        "photos": 16,
+        "descriptionLength": 392,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "Yes",
+          "Year Built": "1978",
+          "Subdivision": "CEDAR LAKE",
+          "Garage Capacity": "1"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "9131 W TERRAPIN HILLS RD",
+        "price": "$849,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260822152705662416000000?from_filter=false",
+        "photos": 114,
+        "descriptionLength": 798,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2012",
+          "Subdivision": "TERRAPIN HILLS",
+          "Garage Level": "Main",
+          "Garage Capacity": "3"
+        },
+        "beds": 4,
+        "baths": 5,
+        "sqft": ""
+      },
+      {
+        "title": "1322 RYAN DR",
+        "price": "$1,099,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260410142005338713000000?from_filter=false",
+        "photos": 128,
+        "descriptionLength": 796,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2005",
+          "Subdivision": "COUNTRY CLUB ESTATES",
+          "Garage Capacity": "4"
+        },
+        "beds": 6,
+        "baths": 7,
+        "sqft": ""
+      },
+      {
+        "title": "1802-1804 JUNIPER DR 1802",
+        "price": "$1,600",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260825164815682242000000?from_filter=false",
+        "photos": 17,
+        "descriptionLength": 590,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "No",
+          "Subdivision": "JUNIPER RIDGE",
+          "Garage Capacity": "1"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "7 E ALHAMBRA DR",
+        "price": "$265,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260806145344555183000000?from_filter=false",
+        "photos": 30,
+        "descriptionLength": 788,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1970",
+          "Subdivision": "ROCKBRIDGE",
+          "Garage Capacity": "1"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "4300 W BROOKVIEW TERR",
+        "price": "$275,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260812183409317126000000?from_filter=false",
+        "photos": 27,
+        "descriptionLength": 556,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "1990",
+          "Subdivision": "BROOKVIEW MEADOWS",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "401 HIGH ST",
+        "price": "$240,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260812171719713986000000?from_filter=false",
+        "photos": 54,
+        "descriptionLength": 280,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Commercial",
+          "Basement": "Yes",
+          "Subdivision": "BOONVILLE",
+          "Garage Capacity": "0"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "902-906 S SHERIDAN ST VARIOUS",
+        "price": "$1,050,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260727184156010669000000?from_filter=false",
+        "photos": 33,
+        "descriptionLength": 204,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "No",
+          "Subdivision": "KIRKSVILLE"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "2409 BOULDER SPRINGS DR",
+        "price": "$2,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260731153143547130000000?from_filter=false",
+        "photos": 44,
+        "descriptionLength": 461,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "No",
+          "Year Built": "2011",
+          "Subdivision": "BOULDER SPRINGS",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 3,
+        "sqft": ""
+      },
+      {
+        "title": "5389 E TRIKALLA DR",
+        "price": "$1,800",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260803134235695960000000?from_filter=false",
+        "photos": 30,
+        "descriptionLength": 461,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Basement": "Yes",
+          "Subdivision": "VALLEY CREEK",
+          "Garage Capacity": "2"
+        },
+        "beds": 4,
+        "baths": 4,
+        "sqft": ""
+      },
+      {
+        "title": "1211 4TH ST",
+        "price": "$156,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260618234030590977000000?from_filter=false",
+        "photos": 29,
+        "descriptionLength": 339,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "1952",
+          "Subdivision": "JACOB WYAN ADDITION",
+          "Garage Capacity": "1"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "4407 SILVER VALLEY DR",
+        "price": "$1,450,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260210144205208834000000?from_filter=false",
+        "photos": 76,
+        "descriptionLength": 1265,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Year Built": "2023",
+          "Subdivision": "COPPERSTONE",
+          "Garage Level": "Main",
+          "Garage Capacity": "3"
+        },
+        "beds": 5,
+        "baths": 5,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 13 BAILEY PLACE",
+        "price": "$57,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251203190309313415000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 14 BAILEY PLACE",
+        "price": "$57,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251203191845513601000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 20 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208163607993878000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 21 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208164907717051000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 23 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208165924885393000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 24 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208170704147387000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 25 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208171615558429000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 26 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208172354076613000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 28 BAILEY PLACE",
+        "price": "$59,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251210135545254646000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 29 BAILEY PLACE",
+        "price": "$59,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251208175930872910000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 31 BAILEY PLACE",
+        "price": "$63,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251209150703829653000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 32 BAILEY PLACE",
+        "price": "$63,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251209152731459352000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 33 BAILEY PLACE",
+        "price": "$63,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251209153716301474000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 34 BAILEY PLACE",
+        "price": "$61,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251209154657741555000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 35 BAILEY PLACE",
+        "price": "$89,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251209160132361991000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 36 BAILEY PLACE",
+        "price": "$69,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251209161127369579000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 37 BAILEY PLACE",
+        "price": "$69,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251211024235922803000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 38 BAILEY PLACE",
+        "price": "$67,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251212160641641673000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 39 BAILEY PLACE",
+        "price": "$69,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251212184857018566000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 43 BAILEY PLACE",
+        "price": "$79,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251212191721973226000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 44 BAILEY PLACE",
+        "price": "$74,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251212193754290361000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 45 BAILEY PLACE",
+        "price": "$64,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251212195249153167000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 46 BAILEY PLACE",
+        "price": "$79,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251212200706602676000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 48 BAILEY PLACE",
+        "price": "$63,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20241108192209221165000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 51 BAILEY PLACE",
+        "price": "$69,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260114232337620642000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 52 BAILEY PLACE",
+        "price": "$74,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260114233539965344000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 53 BAILEY PLACE",
+        "price": "$69,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260114235618281969000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 56 BAILEY PLACE",
+        "price": "$66,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260115001306258002000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 57 BAILEY PLACE",
+        "price": "$79,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260115002915547470000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 724,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "4.00 ACRES BOONVILLE MO",
+        "price": "$125,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260627012722551526000000?from_filter=false",
+        "photos": 8,
+        "descriptionLength": 651,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "BOONVILLE"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "3.96 ACRES BOONVILLE MO",
+        "price": "$125,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260627011545564264000000?from_filter=false",
+        "photos": 7,
+        "descriptionLength": 648,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "BOONVILLE"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "00000 MCLANE-DAILING RD",
+        "price": "$160,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260708145354700021000000?from_filter=false",
+        "photos": 17,
+        "descriptionLength": 623,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agricultural",
+          "Subdivision": "CENTRALIA"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1126 FRANKLIN ST",
+        "price": "$69,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260112173256669690000000?from_filter=false",
+        "photos": 28,
+        "descriptionLength": 386,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "Yes",
+          "Subdivision": "MOBERLY",
+          "Garage Capacity": "0"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "211 BRINKERHOFF ST",
+        "price": "$230,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260429225640420915000000?from_filter=false",
+        "photos": 40,
+        "descriptionLength": 797,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2026",
+          "Subdivision": "MOBERLY",
+          "Garage Capacity": "1"
+        },
+        "beds": 2,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "401 HIGH ST",
+        "price": "$240,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260504145612073872000000?from_filter=false",
+        "photos": 54,
+        "descriptionLength": 450,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Commercial"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 122 OLIVIA CT",
+        "price": "$59,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260527133102963665000000?from_filter=false",
+        "photos": 9,
+        "descriptionLength": 646,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "BOONVILLE"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "LOT 106A CLEAR CREEK ESTATES",
+        "price": "$377,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20251128193305034298000000?from_filter=false",
+        "photos": 21,
+        "descriptionLength": 633,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Single Family Res",
+          "Subdivision": "CLEAR CREEK ESTATES"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "9.04 ACRES N RIDGE RD",
+        "price": "$82,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260305214538641192000000?from_filter=false",
+        "photos": 9,
+        "descriptionLength": 315,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agricultural",
+          "Subdivision": "HARRISBURG"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "415 E BURKS ST",
+        "price": "$279,900",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260508145420432080000000?from_filter=false",
+        "photos": 46,
+        "descriptionLength": 639,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Garage": "Yes",
+          "Zoning": "Single Family Res",
+          "Basement": "No",
+          "Year Built": "2024",
+          "Subdivision": "STURGEON",
+          "Garage Level": "Main",
+          "Garage Capacity": "2"
+        },
+        "beds": 3,
+        "baths": 2,
+        "sqft": ""
+      },
+      {
+        "title": "10.61 TRACT 3 N HWY NN",
+        "price": "$112,015",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings/20260126200251801480000000?from_filter=false",
+        "photos": 5,
+        "descriptionLength": 219,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Agricultural",
+          "Subdivision": "STURGEON"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]

@@ -1,5 +1,5 @@
 import { useSetupDraft } from "@/hooks/useSetupDraft";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ActivityIndicator, Alert, BackHandler, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
 import { Check, FileText, ImageIcon, Link2, Users, X } from "lucide-react-native";
 import { Image } from "expo-image";
@@ -100,7 +100,20 @@ export default function InitialRealtorSetup() {
   const [confirmList, setConfirmList] = useState<{ field: ConfirmField; also: string[] }[]>([]);
   const localImages = useRef<Record<string, string>>({});
   const listingsSnapshot = useRef(existingListings);
-  useEffect(() => { listingsSnapshot.current = existingListings; }, [existingListings]);
+  /**
+   * The saved collection is the one source of truth for the review, its counts and the client preview. A ref
+   * alone does not re-render: the review used to show the collection from one render earlier until the realtor
+   * navigated away and back. Every change of the collection (or of the import result) re-renders the review.
+   */
+  const [snapshotVersion, bumpSnapshot] = useReducer((n: number) => n + 1, 0);
+  useEffect(() => { listingsSnapshot.current = existingListings; bumpSnapshot(); }, [existingListings]);
+  const reviewListings = useMemo(() => mergeDiscoveredListings(existingListings.length ? existingListings : listingsSnapshot.current, result?.draft.discoveredListings ?? []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [existingListings, result, snapshotVersion]);
+  const savedListingCount = reviewListings.filter(item => !item.hidden && !item.sourceArchived).length;
+  // What the app shows: the saved collection once it is there (duplicates merged by the detail jobs are gone
+  // from it), the import's own count only until the collection arrives.
+  const listingCount = savedListingCount || importedListingCount;
 
   // Once a build starts, keep the progress surface mounted through failures.
   // Never dump the realtor back to URL entry because a downstream service failed.
@@ -147,6 +160,7 @@ export default function InitialRealtorSetup() {
     }
     const merged = await saveDiscoveredListings(listingsSnapshot.current, found, saveListings);
     listingsSnapshot.current = merged;
+    bumpSnapshot();
     setImportedListingCount(found.length);
     return found.length;
   };
@@ -168,8 +182,10 @@ export default function InitialRealtorSetup() {
     setResult(saved);
     if (saved.evidence.length) {
       startReview(saved, applyBuildDraft(brand, resolveFacts(saved.evidence), saved.draft));
+      // Imports save to the listing collection, not the build draft: the draft's list is empty after a
+      // website import, so it never lowers the count of listings already saved.
       const found = saved.draft.discoveredListings ?? [];
-      setImportedListingCount(found.length);
+      setImportedListingCount(count => Math.max(count, found.length, listingsSnapshot.current.filter(item => !item.hidden && !item.sourceArchived).length));
     }
   }, [brand, router, saveListings]);
 
@@ -366,6 +382,7 @@ export default function InitialRealtorSetup() {
         if (connectedItems.length) {
           await saveListings(connectedItems);
           listingsSnapshot.current = connectedItems;
+          bumpSnapshot();
         } else {
           await refreshListings();
         }
@@ -601,7 +618,7 @@ export default function InitialRealtorSetup() {
         return <>
           <View style={{ marginTop: 18, alignItems: "center" }}>
             <View style={{ opacity: regenerating === "heroMessage" ? 0.55 : 1, width }}>
-              <OnboardingThemePreview brand={previewBrand} listings={mergeDiscoveredListings(listingsSnapshot.current,result?.draft.discoveredListings??[])} width={width}/>
+              <OnboardingThemePreview brand={previewBrand} listings={reviewListings} width={width}/>
             </View>
             <Text style={{ color: "#9AA4AA", marginTop: 10, textAlign: "center", fontSize: 13 }}>
               {design.name} · how your clients will see the opening screen
@@ -638,7 +655,10 @@ export default function InitialRealtorSetup() {
 
       {/* Listings imported via multi-hop crawl — or a soft ask for a better URL. */}
       <View style={{ marginTop: 26, padding: 18, borderRadius: 14, backgroundColor: "#171D22" }}>
-        {importedListingCount>0 ? <View style={{flexDirection:"row",alignItems:"center",gap:12}}><Check size={20} color="#CDE1D9"/><Text style={{color:"#E8EFE9",fontSize:15,lineHeight:23}}>{importedListingCount} listings imported from your website.</Text></View> : <ListingSourceImporter initialUrl={url} onImported={count => { setImportedListingCount(count); setHasConnectedSource(true); }} />}
+        {/* The import already ran from the website address. When it brought listings in, say so; only when nothing
+            was imported is a different source offered (never the same address again: that repeats the same import). */}
+        {listingCount > 0 ? <View style={{flexDirection:"row",alignItems:"center",gap:12}}><Check size={20} color="#CDE1D9"/><Text style={{color:"#E8EFE9",fontSize:15,lineHeight:23}}>{listingCount} {listingCount === 1 ? "listing" : "listings"} imported from your website.</Text></View>
+          : listingsHydrated ? <ListingSourceImporter onImported={count => { setImportedListingCount(count); setHasConnectedSource(true); }} /> : null}
       </View>
 
       {errorFor("listings")}
@@ -705,7 +725,7 @@ export default function InitialRealtorSetup() {
       {errorFor("review")}
       {missingLabels.length > 0 && error?.place !== "review"
         ? <Text style={{ color: "#D6BA91", marginTop: 16 }}>Still needed: {missingLabels.join(", ")}</Text> : null}
-      <SetupReviewActions draft={draft} listings={mergeDiscoveredListings(listingsSnapshot.current,result?.draft.discoveredListings??[])}
+      <SetupReviewActions draft={draft} listings={reviewListings}
         onChoose={setDraft} disabled={busy || !!regenerating}/>
       <PressableScale accessibilityRole="button" onPress={finish} disabled={busy || !!regenerating} haptic="medium" style={{ marginTop: 16 }}>
         <View style={{ minHeight: 58, borderRadius: 14, backgroundColor: "#171D22", borderWidth: 1, borderColor: "#646C70",

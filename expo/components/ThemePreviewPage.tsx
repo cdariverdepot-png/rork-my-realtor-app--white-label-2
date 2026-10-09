@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowUpRight, Heart, CalendarDays, MessageCircle, Layers } from 'lucide-react-native';
 import { previewFeatures } from '@/lib/clientNavigation';
 import ThemeCollection from './ThemeCollection';
+import ListingBrowser from './ListingBrowser';
 import { Image } from 'expo-image';
 import PreviewSandbox, { isSandboxPage } from './PreviewSandbox';
 import ListingPhotoGallery from './ListingPhotoGallery';
@@ -41,12 +42,15 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
     <Pressable accessibilityRole="button" onPress={() => onNavigate('/calendar')} style={{ padding: 16 }}><Text style={{ color: d.accent }}>Request a showing →</Text></Pressable>
     <Text style={{ color: d.muted, lineHeight: 22 }}>Layout preview only. Saved homes stay in this preview; no client data is changed.</Text>
   </View>;
+  // The Listings tab: every home as a complete card, in the realtor's own colors and type.
+  if (route === '/listings') return <ListingBrowser brand={brand} listings={listings} width={width} onOpen={id => onNavigate(`/listing/${id}`)}
+    onFavorite={onFavorite} isFavorite={id => savedIds.includes(id)} />;
   return <View style={{ padding: 24, gap: 22, minHeight: 640, overflow: 'hidden' }}>
     {brand.presentation !== 'website' && <View pointerEvents="none" style={{ position: 'absolute', inset: 0 }}>
       <Image source={material.photo} contentFit="cover" style={{ width: '100%', height: '100%' }} />
       <LinearGradient colors={[d.background + 'CC', d.background + 'BB', d.background]} style={{ position: 'absolute', inset: 0 }} />
     </View>}
-    <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>THEME PREVIEW</Text>
+    {route !== '/favorites' && <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>THEME PREVIEW</Text>}
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 34 }}>{feature?.title || (route === '/listings' ? 'Listings' : route === '/favorites' ? 'Saved homes' : 'App menu')}</Text>
     {route === '/listings' && !listings.some(item=>!item.hidden&&!item.sourceArchived) ? <Text style={{color:d.muted,lineHeight:24}}>No active listings were found for this realtor yet.</Text> : route === '/listings' || route === '/favorites' && savedIds.length ? <ThemeCollection brand={brand} listings={route === '/favorites' ? listings.filter(item => savedIds.includes(item.id)) : listings} width={width}
       onOpen={id => onNavigate(`/listing/${id}`)} onFavorite={onFavorite} isFavorite={id => savedIds.includes(id)} onBrowse={() => onNavigate('/listings')} /> : route === '/favorites' ? <Text style={{ color: d.muted, lineHeight: 24 }}>Tap a heart on any home to try saving it here. These saves stay in your layout preview.</Text> : feature ? <Text style={{ color: d.muted, lineHeight: 24 }}>{feature.copy}</Text> : <>
