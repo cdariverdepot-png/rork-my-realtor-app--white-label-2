@@ -40,9 +40,18 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     scrollY.setValue(offset);
     requestAnimationFrame(() => scrollRef.current?.scrollTo({ y: offset, animated: false }));
   };
+  /**
+   * On the web (including the iPhone preview in Safari) the browser's Back button and the edge swipe walk the
+   * browser history. Each preview page is a history entry, so Back steps through the preview and finally closes
+   * it, instead of leaving the app builder behind the preview.
+   */
+  const webEntries = useRef(0);
+  const ignorePops = useRef(0);
+  const web = Platform.OS === "web" && typeof window !== "undefined" && !!window.history;
   const navigate = (path: string) => {
     const destination = clientDestination(path, true);
     if (destination === page) return;
+    if (web) { window.history.pushState({ ...(window.history.state ?? {}), clientPreview: page }, ""); webEntries.current++; }
     showPage(previewDestination(history.current, page, destination));
   };
 
@@ -50,11 +59,31 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
     onClose();
   };
-  const back = () => {
+  const stepBack = () => {
     const previous = previousPreviewPage(history.current);
     if (previous !== null) showPage(previous);
     else close();
   };
+  // The on-screen Back and the swipe follow the same history as the browser's Back.
+  const back = () => { if (web && webEntries.current > 0) window.history.back(); else stepBack(); };
+  const stepBackRef = useRef(stepBack);
+  stepBackRef.current = stepBack;
+  useEffect(() => {
+    if (!web || !visible) return;
+    window.history.pushState({ ...(window.history.state ?? {}), clientPreview: "open" }, "");
+    webEntries.current = 1;
+    const onPop = () => {
+      if (ignorePops.current > 0) { ignorePops.current--; return; }
+      if (webEntries.current > 0) webEntries.current--;
+      stepBackRef.current();
+    };
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      // Closed some other way: drop the preview's remaining history entries without leaving the page.
+      if (webEntries.current > 0) { const n = webEntries.current; webEntries.current = 0; window.history.go(-n); }
+    };
+  }, [visible, web]);
   const swipeBack = useMemo(() => Gesture.Pan()
     .activeOffsetX(24)
     .failOffsetY([-12, 12])
@@ -120,7 +149,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
               {page === '/' ? <ReferenceHome brand={brand} portraitSource={portraitSource} listings={listings} width={previewWidth} scrollY={scrollY} onNavigate={navigate}
                 onOpen={id => navigate(`/listing/${id}`)} onFavorite={toggleSaved} isFavorite={id => savedIds.includes(id)}
                 onCall={() => navigate('/message')} onContact={() => navigate('/message')} /> :
-                <ThemePreviewPage route={page} brand={brand} listings={listings} onNavigate={navigate} savedIds={savedIds} onFavorite={toggleSaved} />}
+                <ThemePreviewPage route={page} brand={brand} listings={listings} onNavigate={navigate} savedIds={savedIds} onFavorite={toggleSaved} width={previewWidth} />}
             </View>
             {note ? <Text style={{ color: "#C5BDAF", padding: 24, textAlign: "center", lineHeight: 21 }}>{note}</Text> : null}
           </Animated.ScrollView>

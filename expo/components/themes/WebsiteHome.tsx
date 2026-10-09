@@ -27,9 +27,6 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
     opacity.setValue(0); Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }).start();
   }, [reducedMotion, a.motion, opacity, p.miniature]);
   const navigate = (route: ReferenceRoute) => p.onNavigate?.(route);
-  const button = (label: string, route: ReferenceRoute, filled = true) => <Pressable accessibilityRole="button" onPress={() => navigate(route)} style={{ minHeight: 48 * s, paddingHorizontal: 20 * s, paddingVertical: 14 * s, borderRadius: a.radius * s, borderWidth: 1, borderColor: a.accent, backgroundColor: filled ? a.accent : a.background, alignItems: 'center', justifyContent: 'center' }}>
-    <Text style={{ color: filled ? contrast(a.accent) : a.ink, fontFamily: 'Inter_600SemiBold', fontSize: 14 * s }}>{label}</Text>
-  </Pressable>;
   const heroTitle = optimized ? b.realtor.heroMessage || source.heroTitle : source.heroTitle || b.realtor.heroMessage;
   const heroSubtitle = optimized ? b.realtor.welcomeNote || source.heroSubtitle : source.heroSubtitle || b.realtor.welcomeNote;
   const dpr = Math.min(3, Math.max(1, PixelRatio.get?.() || 2));
@@ -52,7 +49,6 @@ export default function WebsiteHome(p: ReferenceHomeProps) {
     <Text style={{ color: overlay ? '#ffffff' : a.ink, fontFamily: headingFont, fontSize: a.headingSize * s, lineHeight: (a.headingSize + 8) * s }}>{heroTitle || b.realtor.brandName || b.realtor.name}</Text>
     {!!intro && !!introFrame && !sameFile(intro.url, portraitUri) && <Image source={{ uri: intro.url }} contentFit={introFrame.fit} accessibilityIgnoresInvertColors style={{ width: introFrame.width * s, height: introFrame.height * s, alignSelf: introFrame.fit === 'contain' ? 'flex-start' : 'stretch', borderRadius: Math.min(12, a.radius) * s }} />}
     {!!heroSubtitle && <Text style={{ color: overlay ? '#ffffff' : a.ink, fontFamily: bodyFont, fontSize: 15 * s, lineHeight: 24 * s }}>{heroSubtitle}</Text>}
-    <View style={{ gap: 10 * s }}>{button('View listings', '/listings')}</View>
   </View>;
   const collectionTitle = b.curated.title && !/explore|learn more|read more|view more|see more|click here/i.test(b.curated.title) ? b.curated.title : 'Available homes';
   const collection = (title = collectionTitle) => <View style={{ gap: 18 * s, paddingVertical: a.spacing * s }}>

@@ -61,6 +61,74 @@ async function sourceView(browser, site, inventoryUrls) {
   return views;
 }
 
+/**
+ * UI walkthrough of the review and client preview at phone size: what the review offers after the import, the
+ * Home screen, the Listings tab (every card fully inside the screen width, count of cards, scroll to the end),
+ * a property and back (on-screen Back and browser Back), saving a home, and the Saved tab. Screenshots are
+ * viewport-sized, as the phone shows them.
+ */
+async function uiWalk(page, r) {
+  const ui = r.ui = { steps: [] };
+  const modal = () => page.locator('[aria-modal="true"]').last();
+  const step = async (name, extra = {}) => {
+    const file = `${r.id}-ui-${String(ui.steps.length).padStart(2, '0')}-${name}.png`;
+    await page.screenshot({ path: path.join(out, file) }).catch(() => {});
+    ui.steps.push({ name, file, ...extra });
+  };
+  const text = async () => page.evaluate(() => document.body.innerText);
+  const review = await text();
+  ui.review = { importerOffered: /Bring in your listings/.test(review), imported: Number(review.match(/(\d+) listings? imported/)?.[1] ?? 0), url: page.url() };
+  await step('review');
+  const cards = async () => page.evaluate(() => [...document.querySelectorAll('[data-testid="listing-card"]')].map(el => {
+    const b = el.getBoundingClientRect(); return { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height) }; }));
+  await page.getByRole('button', { name: 'Preview My App' }).first().click();
+  await page.waitForTimeout(2500);
+  const home = await text();
+  await step('home', { viewListingsButton: /\bView listings\b/.test(home), propertySection: /Property Search|Available homes|listings/i.test(home) });
+  await modal().getByRole('button', { name: 'Listings', exact: true }).last().click();
+  await page.waitForTimeout(2000);
+  const listingText = await text();
+  const boxes = await cards();
+  const width = page.viewportSize().width;
+  ui.listings = { cards: boxes.length, clipped: boxes.filter(b => b.x < 0 || b.x + b.w > width + 1).length, widths: [...new Set(boxes.map(b => b.w))],
+    themeLabel: /THEME PREVIEW/.test(listingText), viewAll: /\bView all\b/.test(listingText), pickedForYou: /picked for you/i.test(listingText),
+    heading: (listingText.match(/[^\n]*’s listings|Available homes/) ?? [''])[0], count: (listingText.match(/\d+ homes?\b/) ?? [''])[0] };
+  await step('listings-top');
+  // Scroll the preview to the end: every card must be reachable.
+  await page.evaluate(() => { const scrollers = [...document.querySelectorAll('div')].filter(d => d.scrollHeight > d.clientHeight + 40 && getComputedStyle(d).overflowY !== 'visible');
+    const s = scrollers.sort((a, b) => b.scrollHeight - a.scrollHeight)[0]; if (s) s.scrollTop = s.scrollHeight; });
+  await page.waitForTimeout(1200);
+  await step('listings-end', { lastCardVisible: await page.evaluate(() => { const all = [...document.querySelectorAll('[data-testid="listing-card"]')]; const last = all.at(-1);
+    if (!last) return null; const b = last.getBoundingClientRect(); return b.bottom > 0 && b.top < innerHeight; }) });
+  await page.evaluate(() => { const scrollers = [...document.querySelectorAll('div')].filter(d => d.scrollHeight > d.clientHeight + 40); for (const s of scrollers) s.scrollTop = 0; });
+  await page.waitForTimeout(600);
+  if (boxes.length) {
+    await modal().getByRole('button', { name: 'Save home' }).first().click().catch(() => {});
+    await page.waitForTimeout(500);
+    await page.locator('[data-testid="listing-card"]').first().getByRole('button').first().click();
+    await page.waitForTimeout(1500);
+    await step('detail', { property: /PROPERTY PREVIEW/.test(await text()) });
+    await modal().getByLabel('Back').first().click();
+    await page.waitForTimeout(1200);
+    ui.backFromDetail = (await cards()).length > 0 ? 'listings' : 'other';
+    await page.locator('[data-testid="listing-card"]').first().getByRole('button').first().click();
+    await page.waitForTimeout(1200);
+    await page.goBack();
+    await page.waitForTimeout(1200);
+    ui.browserBackFromDetail = (await cards()).length > 0 ? 'listings' : (await page.locator('[aria-modal="true"]').count()) ? 'preview-other' : 'left-preview';
+    await step('after-browser-back');
+  }
+  await modal().getByRole('button', { name: 'Saved', exact: true }).last().click().catch(() => {});
+  await page.waitForTimeout(1200);
+  await step('saved', { savedShown: /Saved homes/.test(await text()) });
+  // Browser Back until the preview closes: the review must still be there, with the same import.
+  for (let i = 0; i < 6 && await page.locator('[aria-modal="true"]').count(); i++) { await page.goBack(); await page.waitForTimeout(900); }
+  const after = await text();
+  ui.afterClosing = { url: page.url(), review: /Here’s your app|Here's your app/.test(after), importerOffered: /Bring in your listings/.test(after),
+    imported: Number(after.match(/(\d+) listings? imported/)?.[1] ?? 0) };
+  await step('closed');
+}
+
 async function run(browser, site) {
   const context = await browser.newContext({ viewport: { width: 430, height: 932 } });
   const page = await context.newPage();
@@ -129,7 +197,8 @@ async function run(browser, site) {
     r.finalBuildScreen = r.timeline.filter(t => t.screen !== 'REVIEW').at(-1)?.screen ?? '';
     await shot(done ? 'review' : 'stuck');
     r.reviewText = (await page.evaluate(() => document.body.innerText)).slice(0, 6000);
-    if (done) {
+    if (done && process.env.UI_WALK) await uiWalk(page, r).catch(e => { r.ui = { ...(r.ui ?? {}), error: String(e.stack ?? e).slice(0, 800) }; });
+    if (done && !process.env.UI_WALK) {
       // Client preview: record each control and what it opens.
       const preview = page.getByRole('button', { name: 'Preview My App' });
       if (await preview.count()) {

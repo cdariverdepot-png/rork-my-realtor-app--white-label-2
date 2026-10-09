@@ -99,7 +99,9 @@ jobs:
             for i in $(seq 1 60); do curl -sf http://localhost:8081/ >/dev/null && break; sleep 2; done
             app=http://localhost:8081
           fi
-          APP_URL="$app" SITES="$(cat "$RUNNER_TEMP/gate-sites.json")" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
+          # A "ui-walk: yes" line adds the phone-size walkthrough of the review and client preview.
+          walk=""; if grep -qi '^ui-walk: *yes' diagnostics/stage-gate.txt; then walk=1; fi
+          UI_WALK="$walk" APP_URL="$app" SITES="$(cat "$RUNNER_TEMP/gate-sites.json")" NODE_PATH="$RUNNER_TEMP/diag/node_modules" node expo/scripts/diagnostic-sites.cjs
       - name: Saved listings per site (read-only)
         if: always()
         run: node expo/scripts/diagnostic-saved-listings.cjs diag-out || true
