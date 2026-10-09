@@ -12,6 +12,7 @@ import ThemeNavigation from "./ThemeNavigation";
 import ThemePreviewPage from './ThemePreviewPage';
 import { clientDestination } from '@/lib/clientNavigation';
 import { previewDestination, previousPreviewPage } from '@/lib/previewHistory';
+import { historyLayers } from '@/lib/builderHistory';
 import { PreviewSandboxProvider } from './PreviewSandbox';
 import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 
@@ -72,6 +73,8 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     if (!web || !visible) return;
     window.history.pushState({ ...(window.history.state ?? {}), clientPreview: "open" }, "");
     webEntries.current = 1;
+    // A history layer above whatever opened the preview (the app builder's review): its pops are the preview's.
+    historyLayers.open();
     const onPop = () => {
       if (ignorePops.current > 0) { ignorePops.current--; return; }
       if (webEntries.current > 0) webEntries.current--;
@@ -80,6 +83,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     window.addEventListener("popstate", onPop);
     return () => {
       window.removeEventListener("popstate", onPop);
+      historyLayers.close();
       // Closed some other way: drop the preview's remaining history entries without leaving the page.
       if (webEntries.current > 0) { const n = webEntries.current; webEntries.current = 0; window.history.go(-n); }
     };

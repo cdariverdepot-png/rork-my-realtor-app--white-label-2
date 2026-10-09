@@ -112,7 +112,9 @@ async function uiWalk(page, r) {
     await step('detail', { property: /PROPERTY PREVIEW/.test(await text()) });
     await modal().getByLabel('Back').first().click();
     await page.waitForTimeout(1200);
-    ui.backFromDetail = (await cards()).length > 0 ? 'listings' : 'other';
+    ui.backFromDetail = (await cards()).length > 0 ? 'listings' : (await page.locator('[aria-modal="true"]').count()) ? 'preview-other' : 'left-preview';
+    await step('after-on-screen-back');
+    if (!(await cards()).length) return;
     await page.locator('[data-testid="listing-card"]').first().getByRole('button').first().click();
     await page.waitForTimeout(1200);
     await page.goBack();

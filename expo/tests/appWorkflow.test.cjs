@@ -37,13 +37,14 @@ function browserHistory() {
 }
 /** The builder screen's use of lib/builderHistory, as InitialRealtorSetup wires it. */
 function builder() {
-  const { createBuilderHistory } = load('lib/builderHistory');
+  const { createBuilderHistory, historyLayers } = load('lib/builderHistory');
+  historyLayers.reset();
   const history = browserHistory();
   const screen = { step: 'collect', imports: 0 };
-  const steps = createBuilderHistory(history);
+  const steps = createBuilderHistory(history, historyLayers);
   const go = step => { screen.step = step; steps.sync(step); };
   history.onPop(() => { if (steps.popped() && screen.step === 'review') go('collect'); });
-  return { history, screen, go };
+  return { history, screen, go, historyLayers };
 }
 
 test('Back from the review returns to the website address without importing; the next Back leaves the builder', () => {
@@ -67,17 +68,25 @@ test('leaving the review on screen (Back or Change) drops its entry, so browser 
 });
 
 test('stepping back through the client app preview opened from the review never leaves the review', () => {
-  const { history, screen, go } = builder();
+  const { history, screen, go, historyLayers } = builder();
   go('review');
-  // The preview pushes its own pages, copying the current entry's state (ThemePreviewModal).
-  history.pushState({ ...history.state, clientPreview: 'open' });
-  history.pushState({ ...history.state, clientPreview: '/' });
+  // The preview pushes its own pages and registers as a layer while open (ThemePreviewModal). The router may
+  // replace history.state meanwhile, so nothing depends on data stored in it.
+  historyLayers.open();
+  history.pushState({ id: 'router' });
+  history.pushState({ id: 'router' });
   history.back();
   assert.equal(screen.step, 'review');
-  history.go(-1); // the preview closes and drops its remaining entry
+  // The preview closes and drops its remaining entry.
+  historyLayers.close();
+  history.go(-1);
   assert.equal(screen.step, 'review');
-  history.back(); // now Back pops the review itself
+  // Once the preview has settled, Back pops the review itself.
+  historyLayers.close(Date.now() - 5000);
+  history.back();
   assert.equal(screen.step, 'collect');
+  assert.match(read('components/ThemePreviewModal.tsx'), /historyLayers\.open\(\);/);
+  assert.match(read('components/ThemePreviewModal.tsx'), /historyLayers\.close\(\);\n\s+\/\/ Closed some other way/);
 });
 
 test('the builder wires its history, Android Back and the same-website shortcut', () => {

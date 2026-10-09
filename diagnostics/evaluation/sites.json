@@ -470,7 +470,7 @@
     "category": "Failed import after a successful one",
     "then": [
       {
-        "url": "https://example.com/",
+        "url": "https://www.ireneonwhidbey.com/",
         "how": "change",
         "resume": true
       }
