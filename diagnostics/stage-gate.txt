@@ -1,4 +1,5 @@
-Stage gate requested Fri Oct  9 01:55:18 UTC 2026: Flexmls provider transport and CSV import on staging, with a cross-platform sample.
-justification: verify Cindy Carlson's live listings and other Flexmls accounts import end to end on the staging importer, and that other platforms do not regress, before merging
+Stage gate requested Fri Oct  9 02:24:04 UTC 2026: end-to-end check of the DEPLOYED development preview of main 749a6f9 against the staging importer.
+justification: confirm Cindy Carlson's current listings import and display through the deployed iPhone preview
 staging-ai: shared-key
-sites: cindy-carlson-realty, flexmls-redefinedrealty--3, flexmls-homesourceofyakima--3, chatman-realty-group, realm-partners-idaho, houses-of-kansas-city, redman-realty-group, tom-toole
+app-url: https://cdariverdepot-my-realtor--5ces0zvejg.expo.app
+sites: cindy-carlson-realty, flexmls-redefinedrealty--3, tom-toole
