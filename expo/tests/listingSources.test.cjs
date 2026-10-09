@@ -671,3 +671,137 @@ test('isolation: another realtor account\'s listings and sources are never read 
   const foreign = await endpoint({ rows, body: { mode: 'connect', url: siteA, realtorId: other } });
   assert.equal(foreign.status, 403);
 });
+
+// Studio website switching (Oct 9 2026 audit: Update From URL changed the branding but left the old website's
+// listings connected). Studio and setup share lib/appBuilder/websiteSwitch; Studio applies it when the draft is
+// published. These run the real client modules against the real refresh-listings endpoint.
+const clientRoot = path.resolve(__dirname, '..');
+function loadClient(rel, stubs, cache = new Map()) {
+  const file = path.join(clientRoot, rel.replace(/\.ts$/, '') + '.ts');
+  if (cache.has(file)) return cache.get(file).exports;
+  const module = { exports: {} }; cache.set(file, module);
+  new Function('require', 'module', 'exports', compile(fs.readFileSync(file, 'utf8')))(id => {
+    if (id in stubs) return stubs[id];
+    if (id.startsWith('./')) return loadClient(path.join(path.dirname(rel), id), stubs, cache);
+    if (id.startsWith('@/')) return loadClient(id.slice(2), stubs, cache);
+    return require(id);
+  }, module, module.exports);
+  return module.exports;
+}
+function studio() {
+  const kv = new Map();
+  const kvStore = { kvGet: async key => kv.has(key) ? { value: kv.get(key), rev: 1 } : null, kvSet: async (key, value) => { kv.set(key, structuredClone(value)); } };
+  const cache = new Map();
+  const switcher = loadClient('lib/appBuilder/websiteSwitch', {}, cache);
+  const pendingStore = loadClient('lib/appBuilder/pendingWebsite', { '@/lib/kvStore': kvStore }, cache);
+  return { kv, switcher, pendingStore };
+}
+/** connect/disconnect as the app calls them, threading one account's rows through the real endpoint. */
+function accountDeps(state, pagesFor) {
+  return {
+    calls: [],
+    connect: async function (url, realtorId, onEvent, session) {
+      this.calls.push(['connect', url, session]);
+      const r = await endpoint({ rows: state.rows, body: { mode: 'connect', url, session }, pages: pagesFor(url) });
+      state.rows = r.rows;
+      if (r.status >= 400) throw Object.assign(new Error(r.result.error), { status: r.status, code: r.result.code });
+      return r.result;
+    },
+    disconnect: async function (url, realtorId, session) {
+      this.calls.push(['disconnect', url, session]);
+      const r = await endpoint({ rows: state.rows, body: { mode: 'disconnect', url, session } });
+      state.rows = r.rows;
+      return r.result;
+    },
+  };
+}
+const archivedTitles = rows => rows[`${REALTOR}:listings.v2`].value.items.filter(item => item.sourceArchived).map(item => item.title).sort();
+const csvExport = ['ListingId,StreetAddress,City,StateOrProvince,ListPrice,StandardStatus', '9-1,1 File Lane,Kellogg,ID,99500,Active'].join('\n');
+async function publishedCindyApp() {
+  const cindy = await endpoint({ body: { mode: 'connect', url: siteA, session: 'setup-aaaaaaaa' }, pages: sitePages(siteA, cindyHomes) });
+  const file = await endpoint({ rows: cindy.rows, body: { mode: 'import-file', csv: csvExport, label: 'export.csv' } });
+  return { rows: file.rows };
+}
+
+test('studio: changing the website keeps the published listings until publication, then switches them like setup', async () => {
+  const { kv, switcher, pendingStore } = studio();
+  const state = await publishedCindyApp();
+  assert.deepEqual(active(state.rows), ['1 File Lane', '409 Emerald Dr', '604 Cameron Ave']);
+  // Update From URL in Studio: the draft is rebuilt from Paonia; nothing about the live listings changes yet.
+  const pending = await pendingStore.recordWebsiteChange(REALTOR, siteA, siteB);
+  assert.deepEqual({ from: pending.from, to: pending.to }, { from: siteA, to: siteB });
+  assert.deepEqual(active(state.rows), ['1 File Lane', '409 Emerald Dr', '604 Cameron Ave'], 'clients keep the published app until publication');
+  // Publication applies the shared website switch.
+  const deps = accountDeps(state, url => url === siteB ? sitePages(siteB, paoniaHomes) : {});
+  const applied = await pendingStore.applyPendingWebsite(REALTOR, await pendingStore.readPendingWebsite(REALTOR), deps);
+  assert.equal(applied.imported, 3);
+  assert.equal(applied.host, 'paonia.example');
+  assert.deepEqual(deps.calls.map(([kind, url]) => [kind, url]), [['disconnect', siteA], ['connect', siteB]], 'the old website leaves before the new one arrives');
+  assert.equal(deps.calls[0][2], deps.calls[1][2], 'one import session for the whole switch');
+  assert.deepEqual(active(state.rows), ['1 File Lane', '12 Grand Ave', '40 Orchard Rd', '7 Lamborn Mesa'], 'Paonia\'s homes and the CSV home; none of Cindy\'s');
+  assert.deepEqual(archivedTitles(state.rows), ['409 Emerald Dr', '604 Cameron Ave'], 'Cindy\'s homes are archived, not deleted');
+  assert.equal(await pendingStore.readPendingWebsite(REALTOR), null, 'nothing is pending after the switch');
+  assert.ok(kv.size === 1);
+});
+
+test('studio: a failed import of the new website still removes the old website\'s homes; a failed disconnect changes nothing', async () => {
+  const { pendingStore } = studio();
+  // The new website publishes no listings.
+  let state = await publishedCindyApp();
+  await pendingStore.recordWebsiteChange(REALTOR, siteA, siteB);
+  const empty = accountDeps(state, () => ({ [siteB]: '<html><body><h1>Paonia Realty</h1><p>No listings at this time.</p></body></html>' }));
+  const failed = await pendingStore.applyPendingWebsite(REALTOR, await pendingStore.readPendingWebsite(REALTOR), empty);
+  assert.equal(failed.imported, 0);
+  assert.ok(failed.error, 'the importer\'s reason is reported');
+  assert.deepEqual(active(state.rows), ['1 File Lane'], 'no other website\'s homes under the new branding; the CSV home stays');
+  assert.equal(await pendingStore.readPendingWebsite(REALTOR), null);
+  // The old website cannot be disconnected (offline): nothing changes and the switch stays pending for a retry.
+  state = await publishedCindyApp();
+  await pendingStore.recordWebsiteChange(REALTOR, siteA, siteB);
+  const offline = accountDeps(state, url => sitePages(siteB, paoniaHomes));
+  offline.disconnect = async () => { throw new Error('Network request failed'); };
+  await assert.rejects(pendingStore.applyPendingWebsite(REALTOR, await pendingStore.readPendingWebsite(REALTOR), offline), /Network request failed/);
+  assert.deepEqual(offline.calls, [], 'no import of the new website before the old one is disconnected');
+  assert.deepEqual(active(state.rows), ['1 File Lane', '409 Emerald Dr', '604 Cameron Ave']);
+  assert.deepEqual((await pendingStore.readPendingWebsite(REALTOR)).to, siteB);
+});
+
+test('studio: changing the address twice keeps the original website; changing it back cancels the switch', async () => {
+  const { switcher, pendingStore } = studio();
+  await pendingStore.recordWebsiteChange(REALTOR, siteA, siteB);
+  const twice = await pendingStore.recordWebsiteChange(REALTOR, siteB, 'https://third.example/');
+  assert.deepEqual({ from: twice.from, to: twice.to }, { from: siteA, to: 'https://third.example/' });
+  assert.equal(await pendingStore.recordWebsiteChange(REALTOR, 'https://third.example/', 'https://www.cindy.example/about'), null);
+  assert.equal(await pendingStore.readPendingWebsite(REALTOR), null);
+  // The same website (www., path and case ignored) is never a switch.
+  assert.equal(switcher.nextPendingWebsite(null, 'https://Cindy.example/', 'https://www.cindy.example/listings'), null);
+  // No previous website: publishing still imports the new website.
+  assert.deepEqual(switcher.nextPendingWebsite(null, '', siteB, 5), { from: '', to: siteB, requestedAt: 5 });
+});
+
+test('studio and setup share one website switch; a newer switch supersedes an older one before it imports', async () => {
+  const { switcher } = studio();
+  const log = [];
+  let releaseDisconnect;
+  const deps = {
+    disconnect: (url) => { log.push(['disconnect', url]); return new Promise(resolve => { releaseDisconnect = resolve; }); },
+    connect: async (url, realtorId, onEvent, session) => { log.push(['connect', url, session]); return { ok: true, imported: 1 }; },
+  };
+  const older = switcher.startWebsiteImport({ from: siteA, to: siteB, realtorId: REALTOR, deps });
+  const newer = switcher.startWebsiteImport({ from: null, to: 'https://third.example/', realtorId: REALTOR, deps });
+  assert.equal(older.isStale(), true);
+  assert.equal(newer.isStale(), false);
+  releaseDisconnect();
+  await assert.rejects(older.listings, error => error.name === 'SupersededImportError');
+  assert.equal((await newer.listings).imported, 1);
+  assert.deepEqual(log.filter(([kind]) => kind === 'connect').map(([, url]) => url), ['https://third.example/'], 'the older switch never imported');
+  // Both screens use the shared module.
+  const setup = fs.readFileSync(path.join(clientRoot, 'components/InitialRealtorSetup.tsx'), 'utf8');
+  const panel = fs.readFileSync(path.join(clientRoot, 'components/DesignPublicationPanel.tsx'), 'utf8');
+  const studioScreen = fs.readFileSync(path.join(clientRoot, 'app/admin/studio.tsx'), 'utf8');
+  assert.match(setup, /startWebsiteImport\(/);
+  assert.match(fs.readFileSync(path.join(clientRoot, 'lib/appBuilder/pendingWebsite.ts'), 'utf8'), /startWebsiteImport\(/);
+  assert.match(studioScreen, /recordWebsiteChange\(realtorId, primary\?\.uri, websiteUri\)/);
+  assert.match(panel, /await model\.publishBrand\(\);\n\s+let applied[^\n]*\n\s+try \{ applied = await switchListings\(\); \}/);
+  assert.doesNotMatch(setup + studioScreen + panel, /disconnectListingSource\([^)]*\)\s*;/, 'no screen disconnects a website on its own');
+});

@@ -122,13 +122,114 @@ async function uiWalk(page, r) {
   }
   await modal().getByRole('button', { name: 'Saved', exact: true }).last().click().catch(() => {});
   await page.waitForTimeout(1200);
-  await step('saved', { savedShown: /Saved homes/.test(await text()) });
+  await step('saved', { savedShown: /Saved homes/.test(await text()), savedCards: (await cards()).length });
+  // Removing the saved home empties Saved again.
+  await modal().getByRole('button', { name: 'Remove saved home' }).first().click().catch(() => {});
+  await page.waitForTimeout(800);
+  await step('unsaved', { savedCards: (await cards()).length, emptyText: /Tap a heart on any home/.test(await text()) });
+  // The other tabs open their screens inside the preview.
+  for (const name of ['Chat', 'Profile', 'Home']) {
+    await modal().getByRole('button', { name, exact: true }).last().click().catch(() => {});
+    await page.waitForTimeout(1200);
+    const body = await page.evaluate(() => ([...document.querySelectorAll('[aria-modal="true"]')].at(-1) ?? document.body).innerText);
+    await step(`tab-${name.toLowerCase()}`, { opens: body.slice(0, 160).replace(/\s+/g, ' ') });
+  }
   // Browser Back until the preview closes: the review must still be there, with the same import.
   for (let i = 0; i < 6 && await page.locator('[aria-modal="true"]').count(); i++) { await page.goBack(); await page.waitForTimeout(900); }
   const after = await text();
   ui.afterClosing = { url: page.url(), review: /Here’s your app|Here's your app/.test(after), importerOffered: /Bring in your listings/.test(after),
     imported: Number(after.match(/(\d+) listings? imported/)?.[1] ?? 0) };
   await step('closed');
+}
+
+/**
+ * Published-app Studio website switch (site.studio = { url }): publish the app built from the first website, change
+ * the website in Studio (Edit Content -> Update From URL), save the draft, and check what each surface shows:
+ * the realtor's draft preview (the new website's homes), the published app before publishing (still the old
+ * website's homes), and the published app after publishing (only the new website's homes). Then the client
+ * Listings screen at tablet and desktop widths (cards per row, nothing clipped).
+ */
+async function studioWalk(page, r, studio) {
+  const st = r.studio = { url: studio.url, steps: [] };
+  const step = async (name, extra = {}) => {
+    const file = `${r.id}-studio-${String(st.steps.length).padStart(2, '0')}-${name}.png`;
+    await page.screenshot({ path: path.join(out, file) }).catch(() => {});
+    st.steps.push({ name, file, ...extra });
+  };
+  const text = async () => page.evaluate(() => document.body.innerText);
+  const modal = () => page.locator('[aria-modal="true"]').last();
+  const cardTitles = async () => page.evaluate(() => [...document.querySelectorAll('[data-testid="listing-card"] [role="button"]')]
+    .map(el => el.getAttribute('aria-label')).filter(label => label && !/^(Save home|Remove saved home)$/.test(label)));
+  const previewListings = async (button, name) => {
+    await page.getByRole('button', { name: button, exact: true }).first().click();
+    await page.waitForTimeout(2500);
+    await modal().getByRole('button', { name: 'Listings', exact: true }).last().click();
+    await page.waitForTimeout(2000);
+    const titles = await cardTitles();
+    await step(name, { cards: titles.length, titles });
+    for (let i = 0; i < 6 && await page.locator('[aria-modal="true"]').count(); i++) { await page.goBack(); await page.waitForTimeout(900); }
+    return titles;
+  };
+  // 1. Publish the app built from the first website.
+  await page.getByRole('button', { name: 'Publish My App' }).first().click({ timeout: 15000 });
+  for (let i = 0; i < 60 && /\/admin\/build/.test(page.url()); i++) await page.waitForTimeout(1000);
+  st.published = { url: page.url(), message: /\/admin\/build/.test(page.url()) ? (await text()).split('\n').filter(l => /Please add|couldn|unavailable|error/i.test(l)).slice(0, 4) : 'ok' };
+  await step('published');
+  if (st.published.message !== 'ok') return;
+  // 2. Studio: Edit Content -> Update From URL.
+  await page.goto(`${APP}/admin/studio`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  const field = page.getByLabel('Website or profile URL');
+  await field.waitFor({ timeout: 60000 });
+  await field.fill(studio.url);
+  await page.waitForTimeout(3000);
+  await page.getByText('Update From URL', { exact: true }).click({ timeout: 20000 });
+  const until = Date.now() + 300000;
+  await page.waitForTimeout(2000);
+  while (Date.now() < until && /Reading your website and building your profile/.test(await text())) await page.waitForTimeout(1000);
+  const afterUpdate = await text();
+  st.update = { notice: (afterUpdate.match(/\d+ listings? found on [^\n]*/) ?? [''])[0], error: (afterUpdate.match(/We couldn[^\n]*|Please try again[^\n]*/) ?? [''])[0] };
+  await step('updated', st.update);
+  // 3. Save the draft: Studio opens the app as clients will see it, here with the draft (realtor-only).
+  await page.getByText(/Save & continue|Save progress/).first().click({ timeout: 20000 });
+  await page.waitForTimeout(4000);
+  await step('draft-as-client-home');
+  const tab = page.getByRole('button', { name: 'Listings', exact: true }).last();
+  if (await tab.count()) { await tab.click(); await page.waitForTimeout(2500); }
+  st.draftAsClient = await cardTitles();
+  await step('draft-as-client-listings', { cards: st.draftAsClient.length, titles: st.draftAsClient });
+  // 4. Dashboard: the published app still shows the first website's homes; the draft shows the new website's.
+  await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.getByRole('button', { name: 'Preview draft', exact: true }).first().waitFor({ timeout: 60000 });
+  await page.waitForTimeout(3000);
+  st.publishedBefore = await previewListings('View published app', 'published-before');
+  st.draftPreview = await previewListings('Preview draft', 'draft-preview');
+  // 5. Publish the change.
+  await page.getByRole('button', { name: 'Publish Changes', exact: true }).first().click({ timeout: 20000 });
+  const done = Date.now() + 300000;
+  let notice = '';
+  while (Date.now() < done) {
+    notice = ((await text()).match(/Changes published[^\n]*|Your design is published[^\n]*/) ?? [''])[0];
+    if (notice) break;
+    await page.waitForTimeout(1000);
+  }
+  st.publishNotice = notice;
+  await step('publish-changes', { notice });
+  st.publishedAfter = await previewListings('View published app', 'published-after');
+  // 6. The client Listings screen at wider widths (the builder preview itself is a phone frame).
+  st.widths = [];
+  for (const [width, height] of [[430, 932], [768, 1024], [1280, 900]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(`${APP}/listings`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.waitForTimeout(5000);
+    const boxes = await page.evaluate(() => [...document.querySelectorAll('[data-testid="listing-card"]')].map(el => { const b = el.getBoundingClientRect();
+      return { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height) }; }));
+    const firstRow = boxes.filter(b => boxes.length && Math.abs(b.y - boxes[0].y) < 4);
+    const entry = { width, cards: boxes.length, perRow: firstRow.length, cardWidths: [...new Set(boxes.map(b => b.w))], clipped: boxes.filter(b => b.x < 0 || b.x + b.w > width + 1).length,
+      heading: ((await text()).match(/[^\n]*’s listings|Available homes/) ?? [''])[0] };
+    st.widths.push(entry);
+    await step(`client-listings-${width}`, entry);
+  }
+  await page.setViewportSize({ width: 430, height: 932 });
 }
 
 async function run(browser, site) {
@@ -222,8 +323,30 @@ async function run(browser, site) {
     r.changes = [];
     const plan = Array.isArray(site.then) ? site.then : site.replaceWith ? [{ url: site.replaceWith, how: 'change' }] : [];
     let previousUrl = site.url;
+    // Every importer request (listing import or profile build) the page sends.
+    const importerRequests = () => pending.length;
     for (const change of plan) {
       const host = new URL(change.url).hostname.replace(/^www\./, '');
+      if (change.how === 'back-same' && done) {
+        // Browser Back (the iPhone edge swipe) from the review, then the same website again.
+        await Promise.allSettled(pending);
+        const before = importerRequests();
+        await page.goBack();
+        await page.waitForTimeout(2000);
+        const field3 = page.getByPlaceholder('https://your-website.com');
+        const atAddress = await field3.isVisible().catch(() => false);
+        const back = { url: page.url(), atAddress, prefilled: atAddress ? await field3.inputValue() : null };
+        await shot('back-to-address');
+        await page.getByLabel('Import my listings').click({ timeout: 20000 });
+        done = await waitReview(host);
+        await page.waitForTimeout(2000);
+        back.reviewAgain = done;
+        back.newImporterRequests = importerRequests() - before;
+        r.changes.push({ url: change.url, how: change.how, review: done, ...back,
+          imported: Number((await page.evaluate(() => document.body.innerText)).match(/(\d+) listings? imported/)?.[1] ?? 0) });
+        await shot('back-same-review');
+        continue;
+      }
       if (change.how === 'exit-mid-import') {
         // Start the previous website again, then leave a few seconds in.
         if (done) { await page.getByText('Change', { exact: true }).first().click({ timeout: 10000 }); await submitUrl(previousUrl); }
@@ -241,12 +364,26 @@ async function run(browser, site) {
       }
       await submitUrl(change.url);
       done = await waitReview(host);
-      r.changes.push({ url: change.url, how: change.how, review: done, imported: Number((await page.evaluate(() => document.body.innerText)).match(/(\d+) listings? imported/)?.[1] ?? 0) });
+      const reviewNow = await page.evaluate(() => document.body.innerText);
+      const entry = { url: change.url, how: change.how, review: done, imported: Number(reviewNow.match(/(\d+) listings? imported/)?.[1] ?? 0), importerOffered: /Bring in your listings/.test(reviewNow) };
+      r.changes.push(entry);
       await shot(done ? `changed-${r.changes.length}` : `changed-${r.changes.length}-stuck`);
+      if (done && change.resume) {
+        // Leave the builder and come back: the review must state this import's homes, not the account's.
+        await page.goto(`${APP}/admin`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForTimeout(3000);
+        await page.goto(`${APP}/admin/build`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await waitReview(host);
+        await page.waitForTimeout(4000);
+        const resumed = await page.evaluate(() => document.body.innerText);
+        entry.resumed = { imported: Number(resumed.match(/(\d+) listings? imported/)?.[1] ?? 0), importerOffered: /Bring in your listings/.test(resumed) };
+        await shot(`changed-${r.changes.length}-resumed`);
+      }
       previousUrl = change.url;
       if (!done) break;
     }
     if (done && process.env.UI_WALK) await uiWalk(page, r).catch(e => { r.ui = { ...(r.ui ?? {}), error: String(e.stack ?? e).slice(0, 800) }; });
+    if (done && site.studio) await studioWalk(page, r, site.studio).catch(e => { r.studio = { ...(r.studio ?? {}), error: String(e.stack ?? e).slice(0, 800) }; });
     if (done && !process.env.UI_WALK) {
       // Client preview: record each control and what it opens.
       const preview = page.getByRole('button', { name: 'Preview My App' });

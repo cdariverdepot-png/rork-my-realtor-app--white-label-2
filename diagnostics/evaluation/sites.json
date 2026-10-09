@@ -446,5 +446,45 @@
         "how": "exit-mid-import"
       }
     ]
+  },
+  {
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 9 2026: audit repairs (builder Back, resume after a failed import, Studio website switch)",
+    "id": "cindy-back-same",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Builder Back navigation",
+    "then": [
+      {
+        "url": "https://cindycarlsonrealty.com/",
+        "how": "back-same"
+      }
+    ]
+  },
+  {
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 9 2026: audit repairs (builder Back, resume after a failed import, Studio website switch)",
+    "id": "cindy-then-empty-resume",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Failed import after a successful one",
+    "then": [
+      {
+        "url": "https://example.com/",
+        "how": "change",
+        "resume": true
+      }
+    ]
+  },
+  {
+    "market": "",
+    "holdout": false,
+    "addedFor": "Oct 9 2026: audit repairs (builder Back, resume after a failed import, Studio website switch)",
+    "id": "cindy-studio-paonia",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Published app Studio website switch",
+    "studio": {
+      "url": "https://www.paoniarealty.com/"
+    }
   }
 ]

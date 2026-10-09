@@ -20,6 +20,7 @@ import { LIVE_THEME_MATERIALS as materials } from "@/constants/liveThemeDesigns"
 import ThemeContentSection from "../ThemeContentSection";
 import { SCREEN_BG } from "@/constants/backdrops";
 import { withThemeSlots } from "@/constants/themeSlots";
+import { sizeLabel } from "@/lib/listingSpecs";
 import { visibleSections, type ClientSectionId } from "@/constants/sections";
 import { orderThemeSections } from "@/constants/themeStructure";
 import { usePortraitDimensions } from "@/hooks/usePortraitDimensions";
@@ -145,7 +146,7 @@ export default function LiveThemeHome(p: ReferenceHomeProps) {
     const facts = [
       item.beds > 0 ? `${item.beds} beds` : "",
       item.baths > 0 ? `${item.baths} baths` : "",
-      item.sqft && item.sqft !== "0" ? `${item.sqft} sqft` : "",
+      sizeLabel(item.sqft),
     ]
       .filter(Boolean)
       .join(" · ");
@@ -189,7 +190,7 @@ export default function LiveThemeHome(p: ReferenceHomeProps) {
                 colors={["#00000008", overlay ? "#000000DD" : "#00000022"]}
                 style={StyleSheet.absoluteFill}
               />
-              <View
+              {!!listingStatusLabel(item) && <View
                 style={{
                   position: "absolute",
                   top: 16,
@@ -203,7 +204,7 @@ export default function LiveThemeHome(p: ReferenceHomeProps) {
                 <Text style={{ color: "#FFFFFF", fontSize: 11 }}>
                   {listingStatusLabel(item)}
                 </Text>
-              </View>
+              </View>}
               {p.recommendedIds?.includes(item.id) && (
                 <View
                   style={{
@@ -249,7 +250,7 @@ export default function LiveThemeHome(p: ReferenceHomeProps) {
             </View>
           )}
           <View style={{ padding: 18, gap: 8 }}>
-            {!uri && label(listingStatusLabel(item))}
+            {!uri && !!listingStatusLabel(item) && label(listingStatusLabel(item))}
             {plan.collection === "journal" &&
               label(String(index + 1).padStart(2, "0") + " / PROPERTY NOTES")}
             {(!overlay || !uri) && (

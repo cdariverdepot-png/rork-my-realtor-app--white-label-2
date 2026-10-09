@@ -14,14 +14,22 @@ import { leavePreviewToDashboard } from '@/lib/navIntent';
 import BottomNav from './BottomNav';
 import PreviewSandbox, { PreviewSandboxProvider, isSandboxPage } from './PreviewSandbox';
 
+/** Whether the client app's bottom navigation is on screen (it is the way between Home, Listings, Saved, Chat, Profile). */
+export function useClientNavVisible(): boolean {
+  const path = usePathname();
+  const auth = useAuth(), brand = useBrand(), edit = useEditMode(), profile = useClientProfiles();
+  const preview = auth.isAdmin && auth.viewAsClient && !auth.demoViewMode;
+  return auth.hydrated && brand.hydrated && !auth.demoViewMode && !edit.editing &&
+    isClientPage(path) && requiredStatus(brand.brand).complete &&
+    (preview || (auth.isClient && profile.myProfileShared && profile.myEssentialsMet));
+}
+
 /** Lives outside the route stack: the footer keeps its identity and theme on every page. */
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const path = usePathname(), router = useRouter(), insets = useSafeAreaInsets();
-  const auth = useAuth(), brand = useBrand(), edit = useEditMode(), profile = useClientProfiles();
+  const auth = useAuth(), brand = useBrand(), edit = useEditMode();
   const preview = auth.isAdmin && auth.viewAsClient && !auth.demoViewMode;
-  const visible = auth.hydrated && brand.hydrated && !auth.demoViewMode && !edit.editing &&
-    isClientPage(path) && requiredStatus(brand.brand).complete &&
-    (preview || (auth.isClient && profile.myProfileShared && profile.myEssentialsMet));
+  const visible = useClientNavVisible();
   const d = themeDesign(brand.brand.layoutId, brand.brand.theme);
   return <PreviewSandboxProvider key={`${auth.realtorId}:${preview}`}><View style={{ flex: 1, backgroundColor: d.background }}>
     {visible && preview && path !== '/' ? <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 18, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 16 }}>

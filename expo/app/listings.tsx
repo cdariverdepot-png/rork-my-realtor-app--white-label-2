@@ -13,6 +13,7 @@ import { useBrand } from "@/contexts/BrandContext";
 import { bustedUri } from "@/lib/imageUri";
 import { ListingCard, listingGrid } from "@/components/ListingBrowser";
 import { homesCount, listingSurface, listingsHeading } from "@/lib/listingSurface";
+import { useClientNavVisible } from "@/components/ClientShell";
 
 /**
  * Full browse of every active listing the realtor represents: complete cards in natural vertical scroll, one
@@ -29,6 +30,8 @@ export default function AllListings() {
   const { currentClientId } = useAuth();
   const { getFeed } = useClientFeed();
   const { brand } = useBrand();
+  // Listings is a bottom-navigation destination: no Back arrow while that navigation is on screen.
+  const navVisible = useClientNavVisible();
   const t = listingSurface(brand);
   const grid = listingGrid(width);
   const recommendedIds = useMemo(
@@ -57,10 +60,10 @@ export default function AllListings() {
   return (
     <View style={{ flex: 1, backgroundColor: t.background }}>
       <View style={{ paddingTop: insets.top + 10, paddingHorizontal: 12, paddingBottom: 8, flexDirection: "row", alignItems: "center" }}>
-        <Pressable onPress={() => back()} hitSlop={14} accessibilityRole="button" accessibilityLabel="Back"
+        {!navVisible && <Pressable onPress={() => back()} hitSlop={14} accessibilityRole="button" accessibilityLabel="Back"
           style={{ width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center" }}>
           <ArrowLeft size={20} color={t.ink} strokeWidth={1.6} />
-        </Pressable>
+        </Pressable>}
       </View>
       <FlatList
         key={`columns-${single ? 1 : grid.columns}`}

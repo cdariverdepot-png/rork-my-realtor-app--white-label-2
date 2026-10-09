@@ -32,3 +32,19 @@ export function beginImportSession(): string {
 export function isActiveImportSession(session: string): boolean {
   return !!session && session === activeImportSession;
 }
+
+/**
+ * Returning to a review: its homes and its count belong to the listing sources connected now. A replaced website's
+ * archived homes, hidden homes or anything else saved in the account never count as this import's. Builds from
+ * before connected sources kept their homes in the build draft; those are restored only when nothing is connected
+ * and nothing is saved.
+ */
+export function resumedReviewScope(connectedSourceIds: readonly string[] | null, savedHomes: number) {
+  const ids = [...(connectedSourceIds ?? [])];
+  return { reviewSourceIds: ids, hasConnectedSource: ids.length > 0, restoreDraftListings: !ids.length && savedHomes === 0 };
+}
+
+/** The count the review states: this import's saved homes, or the import's own count until they arrive. */
+export function reviewListingCount<T extends Scoped & { hidden?: boolean }>(listings: T[], sourceIds: readonly string[], importedCount: number): number {
+  return listingsForSources(listings, sourceIds).filter(item => !item.hidden).length || importedCount;
+}

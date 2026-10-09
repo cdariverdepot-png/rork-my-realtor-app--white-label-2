@@ -79,7 +79,7 @@ const ListingCard = React.memo(function ListingCard({
           transition={0}
         />
         <></>
-        <View
+        {!!listingStatusLabel(item) && <View
           style={[
             styles.tag,
             { backgroundColor: theme.onBand.veil, borderColor: theme.onBand.veilLine },
@@ -89,7 +89,7 @@ const ListingCard = React.memo(function ListingCard({
           <Text style={[styles.tagText, { color: theme.onBand.text }]}>
             {listingStatusLabel(item).toUpperCase()}
           </Text>
-        </View>
+        </View>}
         <Pressable
           hitSlop={8}
           onPress={handleHeart}

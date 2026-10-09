@@ -12,7 +12,7 @@ import ListingBrowser from './ListingBrowser';
 import { Image } from 'expo-image';
 import PreviewSandbox, { isSandboxPage } from './PreviewSandbox';
 import ListingPhotoGallery from './ListingPhotoGallery';
-import { specLine } from "@/lib/listingSpecs";
+import { sizeLabel, specLine } from "@/lib/listingSpecs";
 
 /** Local, read-only navigation inside a theme sample; never enters an authenticated account route. */
 export default function ThemePreviewPage({ route, brand, listings, onNavigate, savedIds = [], onFavorite, width }: { route: string; brand: Brand; listings: ManagedListing[]; onNavigate: (path: string) => void; savedIds?: string[]; onFavorite?: (id: string) => void; width?: number }) {
@@ -21,7 +21,7 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
   const feature = previewFeatures[route];
   if (isSandboxPage(route)) return <PreviewSandbox route={route} brand={brand} onNavigate={onNavigate} />;
   if (route === '/note' || route === '/insights') return <View style={{ padding: 24, gap: 18 }}>
-    <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>THEME PREVIEW</Text>
+    <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>APP PREVIEW</Text>
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 32 }}>{route === '/note' ? brand.note.title : brand.beat.headline}</Text>
     {(route === '/note' ? brand.note.body : brand.beat.bullets.map(item => [item.label, item.copy].filter(Boolean).join('\n'))).filter(Boolean).map((copy,index) => <Text key={index} style={{ color: d.muted, lineHeight: 25 }}>{copy}</Text>)}
     <Pressable accessibilityRole="button" onPress={() => onNavigate('/message')} style={{ paddingVertical: 16 }}><Text style={{ color: d.accent }}>Message your realtor →</Text></Pressable>
@@ -33,7 +33,7 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
     <ListingPhotoGallery images={listing.images} cover={listing.image} title={listing.title} updatedAt={listing.updatedAt} />
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 32 }}>{listing.title}</Text>
     <Text style={{ color: d.accent, fontSize: 24 }}>{listing.price}</Text>
-    <Text style={{ color: d.muted }}>{[listing.neighborhood, specLine(listing, 'long', false), listing.sqft].filter(Boolean).join('\n')}</Text>
+    <Text style={{ color: d.muted }}>{[listing.neighborhood, specLine(listing, 'long', false), sizeLabel(listing.sqft)].filter(Boolean).join('\n')}</Text>
     {!!listing.description && <Text style={{ color: d.ink, lineHeight: 24 }}>{listing.description}</Text>}
     {!!listing.listingNumber && <Text style={{ color: d.muted }}>MLS number: {listing.listingNumber}</Text>}
     {!!listing.propertyType && <Text style={{ color: d.muted }}>{listing.propertyType}</Text>}
@@ -54,7 +54,7 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
       <Image source={material.photo} contentFit="cover" style={{ width: '100%', height: '100%' }} />
       <LinearGradient colors={[d.background + 'CC', d.background + 'BB', d.background]} style={{ position: 'absolute', inset: 0 }} />
     </View>}
-    {route !== '/favorites' && <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>THEME PREVIEW</Text>}
+    {route !== '/favorites' && <Text style={{ color: d.accent, fontSize: 11, letterSpacing: 2 }}>APP PREVIEW</Text>}
     <Text style={{ color: d.ink, fontFamily: 'CormorantGaramond_500Medium', fontSize: 34 }}>{feature?.title || (route === '/listings' ? 'Listings' : route === '/favorites' ? 'Saved homes' : 'App menu')}</Text>
     {route === '/listings' && !listings.some(item=>!item.hidden&&!item.sourceArchived) ? <Text style={{color:d.muted,lineHeight:24}}>No active listings were found for this realtor yet.</Text> : route === '/listings' || route === '/favorites' && savedIds.length ? <ThemeCollection brand={brand} listings={route === '/favorites' ? listings.filter(item => savedIds.includes(item.id)) : listings} width={width}
       onOpen={id => onNavigate(`/listing/${id}`)} onFavorite={onFavorite} isFavorite={id => savedIds.includes(id)} onBrowse={() => onNavigate('/listings')} /> : route === '/favorites' ? <Text style={{ color: d.muted, lineHeight: 24 }}>Tap a heart on any home to try saving it here. These saves stay in your layout preview.</Text> : feature ? <Text style={{ color: d.muted, lineHeight: 24 }}>{feature.copy}</Text> : <>

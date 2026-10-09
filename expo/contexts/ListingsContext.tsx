@@ -8,6 +8,8 @@ import { useKvSync } from "@/lib/kvSync";
 import { useAuth, DEMO_REALTOR_ID } from "@/contexts/AuthContext";
 import { invokeListingSync, readRemainingDetails } from "@/lib/listingSourceService";
 import { sameJson } from "@/lib/sameJson";
+import { usePendingWebsite } from "@/hooks/usePendingWebsite";
+import { isDraftHome } from "@/lib/draftHomes";
 
 export type ListingStatus = "active" | "pending" | "contingent" | "sold" | "off_market";
 
@@ -40,6 +42,8 @@ export type ManagedListing = Omit<SeedListing, "tag"> & {
   /** Optional long-form copy pulled in when a listing is imported/refreshed from a source URL. */
   description?: string;
 };
+
+const hasDraftHomes = (items: ManagedListing[]) => items.some(isDraftHome);
 
 const seed = (): ManagedListing[] =>
   seedListings.map((l) => ({
@@ -79,7 +83,11 @@ type SyncStatus = "idle" | "connecting" | "live" | "offline";
 type ListingsBlob = { items: ManagedListing[] };
 
 export const [ListingsProvider, useListings] = createContextHook(() => {
-  const { realtorId, demoViewMode } = useAuth();
+  const { realtorId, demoViewMode, viewAsClient } = useAuth();
+  // A website change waiting in a Studio draft: the realtor previewing the draft as a client sees the draft
+  // website's homes with the draft's branding. Clients, and every realtor screen that edits listings, keep the
+  // published collection until the change is published.
+  const draftWebsite = usePendingWebsite();
   const scope = realtorId ? realtorId : "demo";
   const STORAGE_KEY = `${scope}:listings.v2`;
   const REVISION_KEY = `${scope}:listings.rev.v2`;
@@ -285,9 +293,12 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
   }, []);
 
   const update = useCallback(
-    (next: ManagedListing[]) => {
+    (incoming: ManagedListing[]) => {
       // The Eliza Vance demo is a frozen, read-only showcase — never accept writes.
       if (demoViewMode) return;
+      // A collection derived from a preview of an unpublished website change is never saved.
+      if (hasDraftHomes(incoming)) return;
+      const next = incoming;
       const rev = Math.max(revRef.current, Date.now());
       revRef.current = rev;
       setRevision(rev);
@@ -298,8 +309,10 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
     [persist, broadcast, demoViewMode]
   );
 
-  const saveListings = useCallback(async (next: ManagedListing[]) => {
+  const saveListings = useCallback(async (incoming: ManagedListing[]) => {
     if (demoViewMode) throw new Error("The demo is read-only.");
+    if (hasDraftHomes(incoming)) throw new Error("Preview homes can’t be saved. Publish your website change to bring them in.");
+    const next = incoming;
     const rev = Math.max(revRef.current + 1, Date.now());
     if (supabase) await kvSet(KV_KEY, { items: next }, rev, true);
     await AsyncStorage.multiSet([[STORAGE_KEY, JSON.stringify(next)], [REVISION_KEY, String(rev)]]);
@@ -343,7 +356,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
   // Frozen demo data source — a dedicated, immutable copy of the Eliza Vance
   // listings that never reads realtor storage and is never mutated.
   const demoItems = useMemo(() => seed(), []);
-  const effectiveItems = demoViewMode ? demoItems : items;
+  const effectiveItems = demoViewMode ? demoItems : viewAsClient && draftWebsite.listings ? draftWebsite.listings : items;
   const getById = useCallback((id: string): ManagedListing | undefined => effectiveItems.find((x) => x.id === id), [effectiveItems]);
   const visible = useMemo(() => effectiveItems.filter((x) => !x.hidden && !x.sourceArchived), [effectiveItems]);
   const reset = useCallback(() => { update(isDemoScope ? seed() : []); }, [update, isDemoScope]);
@@ -373,5 +386,7 @@ export const [ListingsProvider, useListings] = createContextHook(() => {
   return useMemo(() => ({
     all: effectiveItems, visible, hydrated: demoViewMode ? true : hydrated, revision, syncStatus,
     add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, saveListings, refresh, refreshFromSource,
-  }), [effectiveItems, visible, demoViewMode, hydrated, revision, syncStatus, add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, saveListings, refresh, refreshFromSource]);
+    /** A website change waiting in a Studio draft and the homes of that website (previews of the draft only). */
+    draftWebsite,
+  }), [effectiveItems, visible, demoViewMode, hydrated, revision, syncStatus, add, upsert, remove, toggleHidden, move, reorder, getById, reset, seedDemo, update, saveListings, refresh, refreshFromSource, draftWebsite]);
 });
