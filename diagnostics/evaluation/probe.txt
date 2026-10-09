@@ -1,2 +1,4 @@
-Probe requested Fri Oct  9 00:33:55 UTC 2026: Tom Toole site map (source of other brokerages' detail pages on staging).
-probe: https://www.tomtoole.com/property-search/site-map/
+Probe requested Fri Oct  9 01:26:15 UTC 2026: Flexmls published access rules (robots.txt) before any use of its listing feed.
+probe: https://my.flexmls.com/robots.txt
+probe: https://www.flexmls.com/robots.txt
+probe: https://sparkplatform.com/robots.txt
