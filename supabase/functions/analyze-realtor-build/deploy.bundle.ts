@@ -359,6 +359,9 @@ function scoreInventoryLink(href: string, label: string, seed: URL): number {
       /(?:^|\.)(?:facebook|instagram|twitter|x|linkedin|youtube)\.com$/i.test(link.hostname) ||
       /^(?:www\.)?flexmls\.com$/i.test(link.hostname)) return 0;
   if (/\.(?:pdf|jpg|png|svg|zip|css|js)$/i.test(link.pathname)) return 0;
+  // A site map is a directory of the site (on IDX sites, of the whole MLS's newest listings), never a claim
+  // of the agent's own inventory.
+  if (/\bsite[\s_-]?map\b|sitemap/i.test(`${label} ${link.pathname}`)) return 0;
   const text = `${label} ${link.pathname} ${link.hostname}`.toLowerCase();
   let score = 0;
   if (CTA_LABEL.test(text)) score += 40;
@@ -4558,7 +4561,7 @@ function respondWithProgress(request: Request, headers: Record<string, string>,
 return { createImportProgress, discoveryReporter, respondWithProgress };
 })();
 
-const { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages } = (() => {
+const { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, imageCaptionedWithName } = (() => {
 /** Website markup is data, never executable UI. Both variants use native components. */
 type WebsiteVariant = 'original' | 'optimized';
 type WebsitePalette = { accent: string; background: string; ink: string; panel: string; muted: string };
@@ -5665,7 +5668,35 @@ function imageForTag(tag: string, images: ImageDiagnostic[], resolve: (raw: stri
 }
 
 const IMAGE_UPSCALE_LIMIT = MAX_UPSCALE;
-return { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages };
+
+
+/**
+ * Whether the page captions this image with the agent's name: the image's alt text, or the text right
+ * beside it ("Cindy Carlson Broker, Realtor®" under a headshot), names both the first and last name.
+ * Used only to accept the page's own portrait-shaped image as the agent's portrait; never guesses a face.
+ */
+function imageCaptionedWithName(html: string, imageUrl: string, name: string): boolean {
+  const words = name.toLowerCase().normalize("NFKD").replace(/[^a-z\s'-]/g, " ").split(/\s+/).filter(word => word.length >= 2);
+  if (words.length < 2) return false;
+  const [first, last] = [words[0], words[words.length - 1]];
+  let tail = "";
+  try { tail = new URL(imageUrl).pathname.split("/").filter(Boolean).slice(-3).join("/"); } catch { return false; }
+  if (!tail || tail.length < 6) return false;
+  const plain = (markup: string) => markup.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ")
+    .replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").toLowerCase();
+  const names = (value: string) => new RegExp(`\\b${first}\\b`).test(value) && new RegExp(`\\b${last}\\b`).test(value);
+  for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (!tag.includes(tail)) continue;
+    if (names(plain(attr(tag, "alt")))) return true;
+    const at = match.index ?? 0;
+    const after = plain(html.slice(at + tag.length, at + tag.length + 1500)).trim().slice(0, 160);
+    const before = plain(html.slice(Math.max(0, at - 800), at)).trim().slice(-120);
+    if (names(after) || names(before)) return true;
+  }
+  return false;
+}
+return { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, imageCaptionedWithName };
 })();
 
 /** The website's chosen images at full size (a resizer's blurred or thumbnail placeholder is not the image). */
@@ -5722,7 +5753,7 @@ const reply = (body: unknown, status = 200) => Response.json(body, {
  * ("signal timed out", "error sending request") say nothing about what to do next.
  */
 /** The supported ways to bring listings in when a site refuses automated readers (no workaround is attempted). */
-const BLOCKED_ALTERNATIVES = "Instead, paste a public page that lists your properties (your brokerage's “My listings” page, an IDX property list, or an MLS public sharing link), or upload a listing file (PDF, CSV, Word, text, or screenshots). You can also add properties yourself from your dashboard.";
+const BLOCKED_ALTERNATIVES = "Instead, paste another public page that shows your listings (your brokerage's listings page, an IDX property list, or a public agent profile). You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
 
 function readableSourceFailure(uri: string, error: string | undefined): string {
   let host = uri;
@@ -6508,6 +6539,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const progress = createImportProgress(sink);
   const fetchPage = memoizedPages();
   let websiteDesign: WebsiteDesign | undefined;
+  let designHtml = "";
   let payloadBytes = 0;
   let pageChars = 0;
   const designSource = sources.find(source => source?.kind === "url" && typeof source.uri === "string");
@@ -6516,6 +6548,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   if (webSources.length) progress.start("site");
   // Public pages are read concurrently; their text is still accepted in source order below.
   const pageReads = new Map(webSources.map(source => [source, readPage(source.uri, source === designSource ? async (html, url) => {
+    designHtml = html;
     const name = publishedSiteName(html);
     if (name) progress.emit({ kind: "site", name, host: new URL(url).hostname.replace(/^www\./, "") });
     progress.start("design");
@@ -6698,6 +6731,14 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     return reply({ code: "profile_empty", aiUsage: ai.summary(), error: "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page." }, 422);
   }
   const stated = (field: string) => result.evidence.find((fact: { field: string; value: string }) => fact.field === field)?.value?.trim() || undefined;
+  // The website's portrait-shaped image is the agent's portrait when the page captions it with the agent's
+  // name (alt text or the line beside it). File names like "Edit.jpg" and empty alt text are common.
+  const agentName = stated("realtor.name");
+  if (!stated("portraitUrl") && websiteDesign?.portraitImageUrl && designSource && agentName && /^https:\/\//.test(websiteDesign.portraitImageUrl) &&
+      imageCaptionedWithName(designHtml, websiteDesign.portraitImageUrl, agentName)) {
+    result.evidence.push({ field: "portraitUrl", sourceId: designSource.id, value: websiteDesign.portraitImageUrl.slice(0, 500), confidence: 0.8,
+      locator: "Website image captioned with the agent's name" });
+  }
   progress.emit({ kind: "profile", name: stated("realtor.name"), city: stated("realtor.city") });
   progress.finish("profile");
   const draftWithListings = {

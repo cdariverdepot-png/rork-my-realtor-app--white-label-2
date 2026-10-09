@@ -142,7 +142,7 @@ export async function fetchHtml(uri: string, options?: { fragment?: boolean; act
     /<form\b[^>]*id=["'](?:challenge-form|cf-challenge)/i.test(page.html) ||
     /^(?:\s*sign in|\s*log ?in)(?:\s*[|—-]|\s*$)/i.test(heading) && /<input\b[^>]*type=["']password["']/i.test(page.html) ||
     /\/(?:login|signin|sign-in)(?:\/|$)/i.test(page.finalUrl.pathname)) {
-    throw new Error("That page needs sign-in or blocks automatic access. Paste a public listings or profile URL that opens without signing in, or add the properties yourself from your dashboard.");
+    throw new Error("That page needs sign-in or blocks automatic access. Paste a public listings or profile URL that opens without signing in.");
   }
   return page;
 }

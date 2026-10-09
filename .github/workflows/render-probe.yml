@@ -1,0 +1,55 @@
+name: Render probe (diagnostic; plain request, renderer service, local headless browser; no AI)
+# Diagnoses why one page yields nothing: what a plain request receives, what the deployed renderer returns
+# (with timings and a long client timeout), and how a local headless browser's page evolves. Read-only.
+# URLs come from diagnostics/evaluation/probe.txt lines "probe: <url>".
+on:
+  push:
+    branches: [repair/compatibility-engine]
+    paths: [diagnostics/evaluation/probe.txt]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: render-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AI_MODE: offline
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/compatibility-engine
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Renderer endpoint and token from the existing Fly app
+        run: |
+          curl -fsSL https://fly.io/install.sh | sh
+          export PATH="$HOME/.fly/bin:$PATH"
+          raw=$(fly ssh console --app cdariver-listing-renderer -C "printenv LISTING_RENDER_TOKEN" </dev/null 2>/dev/null || true)
+          TOKEN=$(printf '%s\n' "$raw" | tr -d '\r' | grep -E '^[0-9a-f]{48}$' | tail -n 1 || true)
+          test -n "$TOKEN" || { echo "::error::could not read the renderer token"; exit 1; }
+          echo "::add-mask::$TOKEN"
+          echo "LISTING_RENDER_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+          echo "LISTING_RENDER_URL=https://cdariver-listing-renderer.fly.dev" >> "$GITHUB_ENV"
+          fly logs --app cdariver-listing-renderer --no-tail 2>/dev/null | tail -n 60 > "$RUNNER_TEMP/fly-before.log" || true
+      - name: Local headless browser (same Playwright as the renderer)
+        run: |
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw" && npm init -y >/dev/null && npm i playwright@1.63.0 --no-audit --no-fund >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+      - name: Probe
+        run: |
+          urls=$(grep -E '^probe:' diagnostics/evaluation/probe.txt | awk '{print $2}')
+          PROBE_SAVE_DIR=diagnostics/evaluation/probe-pages NODE_PATH="$RUNNER_TEMP/pw/node_modules" node expo/scripts/diagnostics/render-probe.cjs diagnostics/evaluation/probe-results.json $urls
+          export PATH="$HOME/.fly/bin:$PATH"
+          fly logs --app cdariver-listing-renderer --no-tail 2>/dev/null | tail -n 80 > diagnostics/evaluation/probe-renderer.log || true
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/evaluation && git commit -m "Render probe ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase origin repair/compatibility-engine && git push origin HEAD:repair/compatibility-engine && ok=1 && break; sleep $((i * 5)); done; [ "$ok" = 1 ]

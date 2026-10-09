@@ -11,7 +11,7 @@ function fullSizeDesign(design: WebsiteDesign): WebsiteDesign {
   return { ...design, heroImageUrl: upgrade(design.heroImageUrl), portraitImageUrl: upgrade(design.portraitImageUrl), logoUrl: upgrade(design.logoUrl) } as WebsiteDesign;
 }
 import { createImportProgress, discoveryReporter, respondWithProgress, type ImportEvent, type ImportProgress } from "./progress.ts";
-import { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, type WebsiteDesign, type WebsiteSection } from "./websiteDesign.ts";
+import { extractWebsiteDesign, websiteStylesheetUrls, websiteContentLinks, composeWebsiteSections, classifyWebsiteSection, websiteNeedsBrowser, websiteAsset, assignPageImages, describePageImages, imageCaptionedWithName, type WebsiteDesign, type WebsiteSection } from "./websiteDesign.ts";
 
 type Source = {
   id: string;
@@ -61,7 +61,7 @@ const reply = (body: unknown, status = 200) => Response.json(body, {
  * ("signal timed out", "error sending request") say nothing about what to do next.
  */
 /** The supported ways to bring listings in when a site refuses automated readers (no workaround is attempted). */
-const BLOCKED_ALTERNATIVES = "Instead, paste a public page that lists your properties (your brokerage's “My listings” page, an IDX property list, or an MLS public sharing link), or upload a listing file (PDF, CSV, Word, text, or screenshots). You can also add properties yourself from your dashboard.";
+const BLOCKED_ALTERNATIVES = "Instead, paste another public page that shows your listings (your brokerage's listings page, an IDX property list, or a public agent profile). You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
 
 function readableSourceFailure(uri: string, error: string | undefined): string {
   let host = uri;
@@ -847,6 +847,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const progress = createImportProgress(sink);
   const fetchPage = memoizedPages();
   let websiteDesign: WebsiteDesign | undefined;
+  let designHtml = "";
   let payloadBytes = 0;
   let pageChars = 0;
   const designSource = sources.find(source => source?.kind === "url" && typeof source.uri === "string");
@@ -855,6 +856,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   if (webSources.length) progress.start("site");
   // Public pages are read concurrently; their text is still accepted in source order below.
   const pageReads = new Map(webSources.map(source => [source, readPage(source.uri, source === designSource ? async (html, url) => {
+    designHtml = html;
     const name = publishedSiteName(html);
     if (name) progress.emit({ kind: "site", name, host: new URL(url).hostname.replace(/^www\./, "") });
     progress.start("design");
@@ -1037,6 +1039,14 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     return reply({ code: "profile_empty", aiUsage: ai.summary(), error: "No usable profile facts or introduction were extracted. Your sources are still saved; please retry or add your About page." }, 422);
   }
   const stated = (field: string) => result.evidence.find((fact: { field: string; value: string }) => fact.field === field)?.value?.trim() || undefined;
+  // The website's portrait-shaped image is the agent's portrait when the page captions it with the agent's
+  // name (alt text or the line beside it). File names like "Edit.jpg" and empty alt text are common.
+  const agentName = stated("realtor.name");
+  if (!stated("portraitUrl") && websiteDesign?.portraitImageUrl && designSource && agentName && /^https:\/\//.test(websiteDesign.portraitImageUrl) &&
+      imageCaptionedWithName(designHtml, websiteDesign.portraitImageUrl, agentName)) {
+    result.evidence.push({ field: "portraitUrl", sourceId: designSource.id, value: websiteDesign.portraitImageUrl.slice(0, 500), confidence: 0.8,
+      locator: "Website image captioned with the agent's name" });
+  }
   progress.emit({ kind: "profile", name: stated("realtor.name"), city: stated("realtor.city") });
   progress.finish("profile");
   const draftWithListings = {

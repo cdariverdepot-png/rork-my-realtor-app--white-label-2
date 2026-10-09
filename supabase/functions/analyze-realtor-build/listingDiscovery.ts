@@ -199,6 +199,9 @@ export function scoreInventoryLink(href: string, label: string, seed: URL): numb
       /(?:^|\.)(?:facebook|instagram|twitter|x|linkedin|youtube)\.com$/i.test(link.hostname) ||
       /^(?:www\.)?flexmls\.com$/i.test(link.hostname)) return 0;
   if (/\.(?:pdf|jpg|png|svg|zip|css|js)$/i.test(link.pathname)) return 0;
+  // A site map is a directory of the site (on IDX sites, of the whole MLS's newest listings), never a claim
+  // of the agent's own inventory.
+  if (/\bsite[\s_-]?map\b|sitemap/i.test(`${label} ${link.pathname}`)) return 0;
   const text = `${label} ${link.pathname} ${link.hostname}`.toLowerCase();
   let score = 0;
   if (CTA_LABEL.test(text)) score += 40;
