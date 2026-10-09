@@ -118,7 +118,7 @@ jobs:
         with:
           node-version: '24'
       - name: Isolated test compiler (same as the regression workflow)
-        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0
+        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0 react@19.2.3
       - name: Write the brief
         id: brief
         working-directory: expo
@@ -166,7 +166,7 @@ jobs:
         with:
           node-version: '24'
       - name: Isolated test compiler
-        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0
+        run: npm install --prefix "$RUNNER_TEMP/import-tests" --ignore-scripts --no-audit --no-fund typescript@6.0.3 @types/node@22.19.0 react@19.2.3
       - name: Protected gate from the base branch
         run: |
           git fetch origin "$BASE_BRANCH"
