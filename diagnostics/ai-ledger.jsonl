@@ -66,3 +66,8 @@
 {"at":"2026-10-09T14:29:23.735Z","kind":"site","campaign":"gate-37943496406","level":"D","site":"cindy-back-same","calls":1,"blocked":0,"estimatedUsd":0.0093,"inputTokens":17851,"outputTokens":6}
 {"at":"2026-10-09T14:36:47.195Z","kind":"site","campaign":"gate-37943496406","level":"D","site":"cindy-then-empty-resume","calls":2,"blocked":0,"estimatedUsd":0.0253,"inputTokens":21598,"outputTokens":1070}
 {"at":"2026-10-09T14:38:17.033Z","kind":"site","campaign":"gate-37943496406","level":"D","site":"cindy-studio-paonia","calls":1,"blocked":0,"estimatedUsd":0.0093,"inputTokens":17851,"outputTokens":7}
+{"at":"2026-10-09T14:47:59.783Z","kind":"site","campaign":"gate-37946266788","level":"D","site":"cindy-then-paonia","calls":3,"blocked":0,"estimatedUsd":0.0352,"inputTokens":23192,"outputTokens":1911}
+{"at":"2026-10-09T14:49:10.203Z","kind":"site","campaign":"gate-37946266788","level":"D","site":"paonia-then-cindy","calls":3,"blocked":0,"estimatedUsd":0.0796,"inputTokens":49853,"outputTokens":1083}
+{"at":"2026-10-09T14:50:02.942Z","kind":"site","campaign":"gate-37946266788","level":"D","site":"cindy-back-same","calls":1,"blocked":0,"estimatedUsd":0.0162,"inputTokens":3755,"outputTokens":1084}
+{"at":"2026-10-09T14:51:28.608Z","kind":"site","campaign":"gate-37946266788","level":"D","site":"cindy-then-empty-resume","calls":2,"blocked":0,"estimatedUsd":0.0258,"inputTokens":21604,"outputTokens":1130}
+{"at":"2026-10-09T14:53:36.817Z","kind":"site","campaign":"gate-37946266788","level":"D","site":"cindy-studio-paonia","calls":2,"blocked":0,"estimatedUsd":0.0195,"inputTokens":19440,"outputTokens":886}

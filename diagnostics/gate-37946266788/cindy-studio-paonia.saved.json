@@ -1,0 +1,208 @@
+[
+  {
+    "realtorId": "9155f02c-a010-4c99-937c-4e8eaafb9070",
+    "createdAt": "2026-10-09 14:51:30.608635+00",
+    "sources": [
+      {
+        "id": "source-xyp2xo",
+        "url": "https://cindycarlsonrealty.com/",
+        "kind": "agent-website",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "cindycarlsonrealty",
+            "cindy",
+            "carlson",
+            "service",
+            "agency"
+          ],
+          "phrases": [
+            "cindycarlsonrealty",
+            "afullservicerealestateagency"
+          ]
+        },
+        "nextSyncAt": 1791564696489,
+        "connectedAt": 1791557496489,
+        "listingCount": 8,
+        "setupSession": "setup-63b7a519-f410-433a-af0f-cdda5f8c766d",
+        "submittedUrl": "https://cindycarlsonrealty.com/",
+        "inventoryUrls": [
+          "https://cindycarlsonrealty.com/featured-listings/",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+          "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24"
+        ],
+        "lastCheckedAt": 1791557496489,
+        "lastCompleteSyncAt": 1791557496489
+      }
+    ],
+    "listings": [
+      {
+        "title": "409 Emerald Dr",
+        "price": "$429,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260824234708903208000000?from_filter=false",
+        "photos": 39,
+        "descriptionLength": 510,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Res",
+          "Basement": "Yes",
+          "Lot Acres": "0.21",
+          "Year Built": "1979",
+          "Garage Type": "Att Garage",
+          "Subdivision": "Mineral Subdiv.",
+          "Garage Stall": "2 Car"
+        },
+        "beds": 4,
+        "baths": 2.5,
+        "sqft": "2,129"
+      },
+      {
+        "title": "6113 Prichard Creek ST",
+        "price": "$325,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260924182429858488000000?from_filter=false",
+        "photos": 26,
+        "descriptionLength": 309,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Res",
+          "Basement": "No",
+          "Lot Acres": "0.41",
+          "Year Built": "1941",
+          "Garage Type": "Det Shop",
+          "Subdivision": "N/A",
+          "Garage Stall": "4+ Car"
+        },
+        "beds": 3,
+        "baths": 1,
+        "sqft": "1,472"
+      },
+      {
+        "title": "483 Paradise Lane",
+        "price": "$1,299,999",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260807005203244094000000?from_filter=false",
+        "photos": 106,
+        "descriptionLength": 1298,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "NR",
+          "Basement": "Yes",
+          "Lot Acres": "10",
+          "Year Built": "2001",
+          "Garage Type": "Det Garage",
+          "Subdivision": "N/A",
+          "Garage Stall": "1 Car"
+        },
+        "beds": 3,
+        "baths": 1.5,
+        "sqft": "3,183"
+      },
+      {
+        "title": "50 S Breeden Ave",
+        "price": "$64,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260717035909119737000000?from_filter=false",
+        "photos": 28,
+        "descriptionLength": 278,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "RES",
+          "Basement": "No",
+          "Lot Size": "Leased",
+          "Lot Acres": "0",
+          "Year Built": "1976",
+          "Garage Type": "None",
+          "Subdivision": "N/A",
+          "Garage Stall": "None"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": "624"
+      },
+      {
+        "title": "604 W Cameron Ave",
+        "price": "$388,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260630223652399830000000?from_filter=false",
+        "photos": 18,
+        "descriptionLength": 446,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Residential",
+          "Basement": "Yes",
+          "Lot Acres": "0.15",
+          "Year Built": "1950",
+          "Garage Type": "Att Carport",
+          "Subdivision": "Cameron Ave Addn",
+          "Garage Stall": "None"
+        },
+        "beds": 4,
+        "baths": 1.5,
+        "sqft": "2,382"
+      },
+      {
+        "title": "301 S Division St",
+        "price": "$220,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260811212901519945000000?from_filter=false",
+        "photos": 15,
+        "descriptionLength": 376,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "Commercial",
+          "Basement": "Yes",
+          "Lot Acres": "0.08",
+          "Year Built": "1910"
+        },
+        "beds": 0,
+        "baths": 1,
+        "sqft": "792"
+      },
+      {
+        "title": "NKA May Court",
+        "price": "$130,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260321144127533557000000?from_filter=false",
+        "photos": 17,
+        "descriptionLength": 306,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "R2",
+          "Lot Acres": "0.8",
+          "Subdivision": "N/A"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "11 & 13 Kingston WAY",
+        "price": "$99,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260226190717870344000000?from_filter=false",
+        "photos": 6,
+        "descriptionLength": 188,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Zoning": "RES",
+          "Lot Acres": "6.12",
+          "Subdivision": "Kingston Estates"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": "0"
+      }
+    ]
+  }
+]
