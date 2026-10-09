@@ -126,3 +126,14 @@ test('a portrait-shaped website image captioned with the agent\'s name is the ag
   assert.equal(design.imageCaptionedWithName(`<p>${img} Cindy</p>`, url, 'Cindy'), false);
   assert.equal(design.imageCaptionedWithName(`<p>${img.replace(/Edit\.jpg/g, 'Kitchen.jpg')} Cindy Carlson</p>`, url, 'Cindy Carlson'), false);
 });
+
+test('Flexmls (live, another account): a 39-listing collection is read across its 10-card pages with full details', async () => {
+  const capture = readCapture(path.resolve(__dirname, '../../diagnostics/evaluation/captures/flexmls-redefinedrealty--3.json.gz'));
+  const { result, listings, missing } = await replayCapture(await loadPipeline(), capture);
+  assert.equal(missing.length, 0);
+  assert.equal(listings.length, 39);
+  assert.equal(new Set(listings.map(item => item.sourceUrl)).size, 39);
+  assert.equal(capture.pages.filter(page => /list_view=photo/.test(page.url)).length, 4, 'pages 1-4; page 4 is short, so paging stops');
+  assert.ok(listings.every(item => item.detailsComplete && item.description.length > 40 && item.images.length > 1 && item.price), 'every listing has its details');
+  assert.ok(result.meta.stages.includes('provider_transport_after_check'));
+});

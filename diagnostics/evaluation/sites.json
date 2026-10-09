@@ -342,5 +342,37 @@
     "market": "",
     "holdout": false,
     "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-columbiarealestate--3",
+    "url": "https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-redefinedrealty--3",
+    "url": "https://my.flexmls.com/redefinedrealty/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "flexmls-homesourceofyakima--3",
+    "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+    "category": "Flexmls collection",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
+  },
+  {
+    "id": "cindy-carlson-realty--transport-3",
+    "url": "https://cindycarlsonrealty.com/",
+    "category": "Flexmls (agent website)",
+    "market": "",
+    "holdout": false,
+    "addedFor": "Flexmls transport validation (Oct 8 2026)"
   }
 ]
