@@ -95,12 +95,13 @@ async function uiWalk(page, r) {
     heading: (listingText.match(/[^\n]*’s listings|Available homes/) ?? [''])[0], count: (listingText.match(/\d+ homes?\b/) ?? [''])[0] };
   await step('listings-top');
   // Scroll the preview to the end: every card must be reachable.
-  await page.evaluate(() => { const scrollers = [...document.querySelectorAll('div')].filter(d => d.scrollHeight > d.clientHeight + 40 && getComputedStyle(d).overflowY !== 'visible');
-    const s = scrollers.sort((a, b) => b.scrollHeight - a.scrollHeight)[0]; if (s) s.scrollTop = s.scrollHeight; });
+  const vp = page.viewportSize();
+  await page.mouse.move(vp.width / 2, vp.height / 2);
+  for (let i = 0; i < 80; i++) { await page.mouse.wheel(0, 1500); await page.waitForTimeout(60); }
   await page.waitForTimeout(1200);
   await step('listings-end', { lastCardVisible: await page.evaluate(() => { const all = [...document.querySelectorAll('[data-testid="listing-card"]')]; const last = all.at(-1);
     if (!last) return null; const b = last.getBoundingClientRect(); return b.bottom > 0 && b.top < innerHeight; }) });
-  await page.evaluate(() => { const scrollers = [...document.querySelectorAll('div')].filter(d => d.scrollHeight > d.clientHeight + 40); for (const s of scrollers) s.scrollTop = 0; });
+  for (let i = 0; i < 80; i++) { await page.mouse.wheel(0, -1500); await page.waitForTimeout(40); }
   await page.waitForTimeout(600);
   if (boxes.length) {
     await modal().getByRole('button', { name: 'Save home' }).first().click().catch(() => {});
