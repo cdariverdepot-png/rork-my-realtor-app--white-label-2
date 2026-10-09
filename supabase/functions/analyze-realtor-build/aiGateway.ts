@@ -30,6 +30,9 @@ export type AiCallRecord = {
   priced: boolean;
   ms: number;
   reason?: string;
+  requestId?: string;
+  usageKnown?: boolean;
+  reservedUsd?: number;
 };
 
 export type AiUsageSummary = {
@@ -41,6 +44,8 @@ export type AiUsageSummary = {
   inputTokens: number;
   outputTokens: number;
   estimatedUsd: number;
+  unresolvedUsd: number;
+  inFlight: number;
   byStage: Record<string, { calls: number; estimatedUsd: number }>;
   records: Omit<AiCallRecord, "ms">[];
 };
@@ -55,6 +60,7 @@ export class AiBlockedError extends Error {
 /** USD per million tokens: [input, cached input, output]. List prices; verify against the provider's pricing page. */
 export const AI_LIST_PRICES: Record<string, [number, number, number]> = {
   "gpt-4.1": [2.0, 0.5, 8.0],
+  "gpt-5.4-mini": [0.75, 0.075, 4.5],
   "gpt-4.1-mini": [0.4, 0.1, 1.6],
   "gpt-4.1-nano": [0.1, 0.025, 0.4],
   "gpt-4o": [2.5, 1.25, 10.0],
@@ -77,7 +83,7 @@ function priceTable(env: Env): Record<string, [number, number, number]> {
     const parsed = JSON.parse(raw);
     const table = { ...AI_LIST_PRICES };
     for (const [model, rate] of Object.entries(parsed ?? {})) {
-      if (Array.isArray(rate) && rate.length === 3 && rate.every(n => typeof n === "number" && n >= 0)) table[model] = rate as [number, number, number];
+      if (Array.isArray(rate) && rate.length === 3 && rate.every(n => typeof n === "number" && Number.isFinite(n) && n >= 0)) table[model] = rate as [number, number, number];
     }
     return table;
   } catch { return AI_LIST_PRICES; }
@@ -88,8 +94,9 @@ export function estimateAiCost(model: string, usage: { inputTokens: number; cach
   table: Record<string, [number, number, number]> = AI_LIST_PRICES): { usd: number; priced: boolean } {
   const family = Object.keys(table).sort((a, b) => b.length - a.length).find(name => model === name || model.startsWith(`${name}-20`));
   const [input, cached, output] = family ? table[family] : UNKNOWN_MODEL_RATE;
-  const uncached = Math.max(0, usage.inputTokens - usage.cachedInputTokens);
-  const usd = (uncached * input + usage.cachedInputTokens * cached + usage.outputTokens * output) / 1_000_000;
+  const cachedTokens = Math.min(usage.inputTokens, usage.cachedInputTokens);
+  const uncached = Math.max(0, usage.inputTokens - cachedTokens);
+  const usd = (uncached * input + cachedTokens * cached + usage.outputTokens * output) / 1_000_000;
   return { usd: Math.round(usd * 1e6) / 1e6, priced: Boolean(family) };
 }
 
@@ -142,6 +149,22 @@ const STAGE_MODEL_ENV: Record<AiStage, string> = {
   "listing-files": "OPENAI_MODEL_LISTING_FILES", "page-normalizer": "OPENAI_MODEL_PAGE_NORMALIZER",
 };
 
+/** Output limits protect against unbounded responses without changing the selected model. */
+const OUTPUT_LIMITS: Record<AiStage, number> = {
+  profile: 4096, navigation: 512, "copy-variation": 1024, "listing-files": 16000, "page-normalizer": 12000,
+};
+
+/** Conservative text bound: UTF-8 bytes plus protocol overhead, with no cache discount.
+ * Documents/images cannot be priced from their base64 length: reserve the model's context envelope.
+ * This is an admission estimate, not a provider invoice. Unknown usage keeps its reservation.
+ */
+export function reserveAiCost(model: string, payload: string, outputTokens: number,
+  table: Record<string, [number, number, number]> = AI_LIST_PRICES): number {
+  const multimodal = /"type"\s*:\s*"input_(?:image|file)"/.test(payload);
+  const inputTokens = multimodal ? 1_100_000 : new TextEncoder().encode(payload).length + 2048;
+  return estimateAiCost(model, { inputTokens, cachedInputTokens: 0, outputTokens }, table).usd;
+}
+
 export function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?: typeof fetch;
   log?: (record: AiCallRecord) => void; now?: () => number }): AiGateway {
   const { env, channel } = options;
@@ -150,16 +173,19 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
   const policy = aiPolicy(env, channel);
   const table = priceTable(env);
   const records: AiCallRecord[] = [];
-  const completed = new Map<string, { status: number; text: string }>();
+  type Saved = { status: number; text: string; contentType: string };
+  const completed = new Map<string, Saved>();
+  const pending = new Map<string, Promise<Saved>>();
+  let attempts = 0, reserved = 0, unresolved = 0;
   const log = options.log ?? ((record: AiCallRecord) => console.log("[ai]", JSON.stringify(record)));
   const spent = () => records.reduce((sum, r) => sum + r.estimatedUsd, 0);
-  const sent = () => records.filter(r => r.outcome !== "blocked" && r.outcome !== "reused").length;
   const model = (stage: AiStage) => env(STAGE_MODEL_ENV[stage]) || env("OPENAI_BUILD_MODEL") || "gpt-4.1";
   const note = (record: AiCallRecord) => { records.push(record); try { log(record); } catch { /* logging never breaks an import */ } };
   const blocked = (stage: AiStage, code: AiBlockCode, message: string) => {
     note({ stage, model: model(stage), outcome: "blocked", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, estimatedUsd: 0, priced: true, ms: 0, reason: code });
     return new AiBlockedError(message, code);
   };
+  const responseOf = (saved: Saved) => new Response(saved.text, { status: saved.status, headers: { "Content-Type": saved.contentType } });
   return {
     policy,
     available: () => policy.mode === "live" && Boolean(aiKey(env, channel)),
@@ -170,40 +196,60 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
       if (!key) throw blocked(stage, "ai_key_missing", channel === "staging"
         ? "This test deployment has no separate AI key, so AI steps are switched off."
         : "The AI service is not configured.");
-      if (sent() >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
-      // Optional fallbacks never use the last capped call: the profile writer, which a build cannot finish
-      // without, always keeps one within the same limit.
-      if (stage !== "profile" && Number.isFinite(policy.maxCalls) && sent() >= policy.maxCalls - 1) {
+      const outputLimit = Math.min(OUTPUT_LIMITS[stage], Math.max(1, Math.floor(numberFrom(String(body.max_output_tokens ?? OUTPUT_LIMITS[stage]), OUTPUT_LIMITS[stage]))));
+      // Callers cannot override the policy-selected model or omit the output bound.
+      const payload = JSON.stringify({ ...body, model: model(stage), max_output_tokens: outputLimit });
+      const cacheKey = stage + ":" + payload;
+      const reuse = completed.get(cacheKey);
+      const running = pending.get(cacheKey);
+      if (reuse || running) {
+        const saved = reuse ?? await running!;
+        note({ stage, model: model(stage), outcome: "reused", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, estimatedUsd: 0, priced: true, ms: 0 });
+        return responseOf(saved);
+      }
+      if (attempts >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
+      if (stage !== "profile" && Number.isFinite(policy.maxCalls) && attempts >= policy.maxCalls - 1) {
         throw blocked(stage, "ai_budget", "The remaining AI call of this request is reserved for writing the profile.");
       }
-      if (spent() >= policy.maxUsd) throw blocked(stage, "ai_budget", `This request reached its AI spending limit ($${policy.maxUsd}).`);
-      // The model leads the body, as every request wrote it before the gateway existed.
-      const payload = JSON.stringify({ model: model(stage), ...body });
-      const reuse = completed.get(payload);
-      if (reuse) {
-        note({ stage, model: model(stage), outcome: "reused", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, estimatedUsd: 0, priced: true, ms: 0 });
-        return new Response(reuse.text, { status: reuse.status, headers: { "Content-Type": "application/json" } });
+      const reservation = reserveAiCost(model(stage), payload, outputLimit, table);
+      if (spent() + reserved + unresolved + reservation > policy.maxUsd) {
+        throw blocked(stage, "ai_budget", `This request cannot safely fit within its AI spending limit ($${policy.maxUsd}).`);
       }
+      // Reserve synchronously before the first await: concurrent requests cannot buy the same slot.
+      attempts++; reserved += reservation;
       const started = now();
-      let response: Response;
-      try {
-        response = await send("https://api.openai.com/v1/responses", { method: "POST", signal: init?.signal,
-          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: payload });
-      } catch (error) {
-        note({ stage, model: model(stage), outcome: "network-error", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, estimatedUsd: 0, priced: true,
-          ms: now() - started, reason: error instanceof Error ? error.name : "error" });
-        throw error;
-      }
-      const text = await response.text();
-      let parsed: unknown;
-      try { parsed = JSON.parse(text); } catch { parsed = undefined; }
-      const usage = readAiUsage(parsed);
-      const cost = estimateAiCost(usage.model ?? model(stage), usage, table);
-      note({ stage, model: usage.model ?? model(stage), outcome: response.status, inputTokens: usage.inputTokens, cachedInputTokens: usage.cachedInputTokens,
-        outputTokens: usage.outputTokens, estimatedUsd: cost.usd, priced: cost.priced, ms: now() - started });
-      const status = parsed && typeof parsed === "object" ? (parsed as { status?: unknown }).status : undefined;
-      if (response.ok && (status === undefined || status === "completed")) completed.set(payload, { status: response.status, text });
-      return new Response(text, { status: response.status, headers: { "Content-Type": response.headers.get("Content-Type") ?? "application/json" } });
+      const work = (async (): Promise<Saved> => {
+        let response: Response | undefined;
+        try {
+          response = await send("https://api.openai.com/v1/responses", { method: "POST", signal: init?.signal,
+            headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: payload });
+          const text = await response.text();
+          let parsed: any;
+          try { parsed = JSON.parse(text); } catch { parsed = undefined; }
+          const usage = readAiUsage(parsed);
+          const usageKnown = Number.isFinite(parsed?.usage?.input_tokens) && Number.isFinite(parsed?.usage?.output_tokens);
+          const cost = estimateAiCost(usage.model ?? model(stage), usage, table);
+          // A rejected request is not assumed charged. A successful response without usage is unresolved.
+          const held = !usageKnown && response.ok ? reservation : 0;
+          unresolved += held;
+          note({ stage, model: usage.model ?? model(stage), outcome: response.status, inputTokens: usage.inputTokens,
+            cachedInputTokens: usage.cachedInputTokens, outputTokens: usage.outputTokens, estimatedUsd: cost.usd,
+            priced: cost.priced, ms: now() - started, usageKnown, reservedUsd: held,
+            ...(response.headers.get("x-request-id") ? { requestId: response.headers.get("x-request-id")! } : {}) });
+          const saved = { status: response.status, text, contentType: response.headers.get("Content-Type") ?? "application/json" };
+          if (response.ok && parsed && (parsed.status === undefined || parsed.status === "completed")) completed.set(cacheKey, saved);
+          return saved;
+        } catch (error) {
+          unresolved += reservation;
+          note({ stage, model: model(stage), outcome: "network-error", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0,
+            estimatedUsd: 0, priced: true, usageKnown: false, reservedUsd: reservation,
+            ...(response?.headers.get("x-request-id") ? { requestId: response.headers.get("x-request-id")! } : {}),
+            ms: now() - started, reason: error instanceof Error ? error.name : "error" });
+          throw error;
+        } finally { reserved = Math.max(0, reserved - reservation); }
+      })();
+      pending.set(cacheKey, work);
+      try { return responseOf(await work); } finally { pending.delete(cacheKey); }
     },
     summary() {
       const byStage: Record<string, { calls: number; estimatedUsd: number }> = {};
@@ -212,11 +258,10 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
         const entry = byStage[r.stage] ??= { calls: 0, estimatedUsd: 0 };
         entry.calls++; entry.estimatedUsd = Math.round((entry.estimatedUsd + r.estimatedUsd) * 1e6) / 1e6;
       }
-      return { channel, mode: policy.mode, calls: sent(), blocked: records.filter(r => r.outcome === "blocked").length,
+      return { channel, mode: policy.mode, calls: attempts, blocked: records.filter(r => r.outcome === "blocked").length,
         reused: records.filter(r => r.outcome === "reused").length,
         inputTokens: records.reduce((s, r) => s + r.inputTokens, 0), outputTokens: records.reduce((s, r) => s + r.outputTokens, 0),
-        estimatedUsd: Math.round(spent() * 1e6) / 1e6, byStage,
-        // Durations stay in the function log; the summary itself is deterministic for identical work.
+        estimatedUsd: Math.round(spent() * 1e6) / 1e6, unresolvedUsd: Math.round(unresolved * 1e6) / 1e6, inFlight: pending.size, byStage,
         records: records.slice(0, 40).map(({ ms: _ms, ...rest }) => rest) };
     },
   };

@@ -581,8 +581,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const input = await request.json().catch(() => ({}));
   const url = Deno.env.get("SUPABASE_URL");
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!url || !key || !openaiKey) return reply({ error: "Build service is not configured." }, 503);
+  if (!url || !key) return reply({ error: "Build service is not configured." }, 503);
   // Every model request in this import goes through one metered gateway (stage, tokens, estimated cost, policy).
   const ai = createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL });
   const selectInventoryLinks = navigationSelector(ai);
@@ -597,10 +596,8 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const userId = auth.user.id;
   const { data: accountOwner, error: ownerError } = await admin.from("realtors").select("id").eq("auth_user_id", userId).maybeSingle();
   if (ownerError) return reply({ error: "Account access is unavailable." }, 503);
-  if (accountOwner) {
-    const access = await admin.rpc("realtor_service_active", { p_realtor_id: accountOwner.id });
-    if (access.error || access.data !== true) return reply({ error: "Service unavailable." }, 403);
-  }
+  // Importing and editing are setup actions, including after evaluation expires.
+  // Paid service entitlements are enforced at publishing, messaging and connection boundaries.
   // Testing-code builds have a valid anonymous session, keep their drafts on
   // the device, and may submit public URLs only. Never read/write an account
   // build for this path or accept uploaded storage paths from its payload.
