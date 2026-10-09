@@ -89,3 +89,9 @@ test('on the web, Back steps through the preview pages before closing it', () =>
   assert.match(modal, /addEventListener\("popstate"/);
   assert.match(modal, /window\.history\.go\(-n\)/);
 });
+
+test('Saved homes in the preview use the same cards, without a "picked for you" claim', () => {
+  const page = read('components/ThemePreviewPage.tsx');
+  assert.match(page, /if \(route === '\/favorites'\) return <ListingBrowser /);
+  assert.match(page, /title="Saved homes"/);
+});
