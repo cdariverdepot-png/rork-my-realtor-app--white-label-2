@@ -19,6 +19,23 @@ export type ListingSource = {
 export class SourceReadError extends Error {
   constructor(message: string, readonly code: "no_listings" | "unreadable" | "market_only") { super(message); this.name = "SourceReadError"; }
 }
+/** The supported way forward in the app: another public page, or one home at a time by its public link. */
+const PASTE_ANOTHER_PAGE = "Paste another public page that shows your listings, such as your brokerage's listings page or a public agent profile. You can also add homes one at a time from their public listing links (Listings, then Add a listing).";
+
+/**
+ * Why a source that needed a browser produced nothing. A provider that answers automated readers with a
+ * browser check is named as such (the importer does not get around those checks); otherwise the page draws
+ * its listings in a way the importer cannot read yet.
+ */
+export function unreadableInventoryMessage(meta: Pick<ListingDiscoveryMeta, "issues">, preserved: boolean): string {
+  const checked = (meta.issues ?? []).find(issue => issue.code === "requires-rendering" && (issue.interface === "managed-challenge" || issue.interface === "robot-validate") && issue.url);
+  let host = "";
+  try { host = checked?.url ? new URL(checked.url).hostname.replace(/^www\./, "") : ""; } catch { /* no host */ }
+  const kept = preserved ? " Your existing listings are kept." : "";
+  return host
+    ? `Your listings are published on ${host}, which now shows automated readers a browser check, so we couldn't import them. We don't get around those checks.${kept} ${PASTE_ANOTHER_PAGE}`
+    : `This site draws its listings in a way we can't read yet, so we couldn't import them.${kept} ${PASTE_ANOTHER_PAGE}`;
+}
 export type SourceInventory = { source: ListingSource; listings: DiscoveredListing[]; complete: boolean; meta: ListingDiscoveryMeta };
 const TWO_HOURS = 7_200_000;
 const key = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -105,7 +122,7 @@ export async function readSource(raw: string, fetchHtml: FetchHtml, existing?: L
       } catch { /* disappearance or blocked pages cannot establish sold status */ }
     }
   }
-  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new SourceReadError("This site loads its listings dynamically. We could not read the property data yet. Try its public listings page or an MLS public sharing link, or add properties yourself from your dashboard; your existing listings are preserved.", "unreadable");
+  if (!discovery.listings.length && !explicitEmpty && discovery.meta.issues?.some(issue => issue.code === "requires-rendering")) throw new SourceReadError(unreadableInventoryMessage(discovery.meta, !!existing), "unreadable");
   const excludedOtherOffice = discovery.meta.scope?.excludedOtherOffice ?? 0;
   if (!discovery.listings.length && !explicitEmpty && excludedOtherOffice) throw new SourceReadError(`That page shows homes listed by many different brokerages (a market search), not only yours. We import only listings attributed to you or your office, and none of the ${excludedOtherOffice} we checked were. Nothing was imported. Paste the page that shows your own listings.`, "market_only");
   if (!discovery.listings.length && !explicitEmpty) {

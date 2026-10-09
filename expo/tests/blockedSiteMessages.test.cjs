@@ -20,9 +20,10 @@ test('a site that refuses automated readers names the supported alternatives', (
   ]) {
     const message = readableSourceFailure('https://www.remax.com/real-estate-agents/someone', error);
     assert.ok(message.startsWith(start), message);
-    assert.match(message, /public page that lists your properties/);
-    assert.match(message, /upload a listing file \(PDF, CSV, Word, text, or screenshots\)/);
-    assert.match(message, /add properties yourself from your dashboard/);
+    // Only what the app offers: another public page, or homes one at a time by their public links.
+    assert.match(message, /paste another public page that shows your listings/);
+    assert.match(message, /add homes one at a time from their public listing links \(Listings, then Add a listing\)/);
+    assert.doesNotMatch(message, /upload|\bfiles?\b|dashboard|manually/i);
   }
 });
 

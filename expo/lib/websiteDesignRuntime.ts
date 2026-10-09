@@ -1104,3 +1104,31 @@ export function imageForTag(tag: string, images: ImageDiagnostic[], resolve: (ra
 }
 
 export const IMAGE_UPSCALE_LIMIT = MAX_UPSCALE;
+
+
+/**
+ * Whether the page captions this image with the agent's name: the image's alt text, or the text right
+ * beside it ("Cindy Carlson Broker, Realtor®" under a headshot), names both the first and last name.
+ * Used only to accept the page's own portrait-shaped image as the agent's portrait; never guesses a face.
+ */
+export function imageCaptionedWithName(html: string, imageUrl: string, name: string): boolean {
+  const words = name.toLowerCase().normalize("NFKD").replace(/[^a-z\s'-]/g, " ").split(/\s+/).filter(word => word.length >= 2);
+  if (words.length < 2) return false;
+  const [first, last] = [words[0], words[words.length - 1]];
+  let tail = "";
+  try { tail = new URL(imageUrl).pathname.split("/").filter(Boolean).slice(-3).join("/"); } catch { return false; }
+  if (!tail || tail.length < 6) return false;
+  const plain = (markup: string) => markup.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ")
+    .replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").toLowerCase();
+  const names = (value: string) => new RegExp(`\\b${first}\\b`).test(value) && new RegExp(`\\b${last}\\b`).test(value);
+  for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (!tag.includes(tail)) continue;
+    if (names(plain(attr(tag, "alt")))) return true;
+    const at = match.index ?? 0;
+    const after = plain(html.slice(at + tag.length, at + tag.length + 1500)).trim().slice(0, 160);
+    const before = plain(html.slice(Math.max(0, at - 800), at)).trim().slice(-120);
+    if (names(after) || names(before)) return true;
+  }
+  return false;
+}
