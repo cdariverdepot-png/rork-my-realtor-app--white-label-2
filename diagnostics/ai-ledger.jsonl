@@ -33,3 +33,11 @@
 {"at":"2026-10-09T00:50:53.143Z","kind":"site","campaign":"gate-37866036746","level":"D","site":"houses-of-kansas-city","calls":1,"blocked":0,"estimatedUsd":0.0268,"inputTokens":8355,"outputTokens":1255}
 {"at":"2026-10-09T00:59:05.590Z","kind":"site","campaign":"gate-37867268465","level":"D","site":"cindy-carlson-realty","calls":1,"blocked":0,"estimatedUsd":0.0159,"inputTokens":3753,"outputTokens":1047}
 {"at":"2026-10-09T01:00:25.319Z","kind":"site","campaign":"gate-37867268465","level":"D","site":"tom-toole","calls":1,"blocked":0,"estimatedUsd":0.0188,"inputTokens":6566,"outputTokens":707}
+{"at":"2026-10-09T01:59:54.384Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"cindy-carlson-realty","calls":2,"blocked":0,"estimatedUsd":0.052,"inputTokens":21597,"outputTokens":1096}
+{"at":"2026-10-09T02:07:03.704Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"flexmls-redefinedrealty--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T02:14:13.602Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"flexmls-homesourceofyakima--3","calls":1,"blocked":0,"estimatedUsd":0.0035,"inputTokens":886,"outputTokens":210}
+{"at":"2026-10-09T02:15:28.927Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"chatman-realty-group","calls":3,"blocked":0,"estimatedUsd":0.1758,"inputTokens":83771,"outputTokens":1036}
+{"at":"2026-10-09T02:16:19.464Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"realm-partners-idaho","calls":1,"blocked":0,"estimatedUsd":0.011,"inputTokens":3386,"outputTokens":532}
+{"at":"2026-10-09T02:17:15.024Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"houses-of-kansas-city","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T02:18:54.367Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"redman-realty-group","calls":1,"blocked":0,"estimatedUsd":0.0179,"inputTokens":6426,"outputTokens":629}
+{"at":"2026-10-09T02:20:09.090Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"tom-toole","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}

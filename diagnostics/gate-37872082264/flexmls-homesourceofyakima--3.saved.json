@@ -1,0 +1,220 @@
+[
+  {
+    "realtorId": "426968ee-3c46-4ffb-80ae-a34fdc05ba32",
+    "createdAt": "2026-10-09 02:07:06.158729+00",
+    "sources": [
+      {
+        "id": "source-1hgshtm",
+        "url": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+        "kind": "flexmls",
+        "state": "connected",
+        "failures": 0,
+        "identity": {
+          "words": [
+            "flexmls"
+          ],
+          "phrases": [
+            "flexmls"
+          ]
+        },
+        "nextSyncAt": 1791518831438,
+        "connectedAt": 1791511631438,
+        "listingCount": 11,
+        "submittedUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+        "inventoryUrls": [
+          "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings",
+          "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings?list_view=photo&page=1&per_page=24",
+          "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings?list_view=photo&page=2&per_page=24"
+        ],
+        "lastCheckedAt": 1791511631438
+      }
+    ],
+    "listings": [
+      {
+        "title": "nka Pomona Hts",
+        "price": "$49,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20251029194410011434000000?from_filter=false",
+        "photos": 4,
+        "descriptionLength": 58,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {},
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "707 S 14th Ave",
+        "price": "$239,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260812214032352187000000?from_filter=false",
+        "photos": 12,
+        "descriptionLength": 250,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1900",
+          "Garage Type": "None",
+          "Garage Capacity": "None"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "907 W Logan Ave",
+        "price": "$139,500",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260731191619592348000000?from_filter=false",
+        "photos": 5,
+        "descriptionLength": 153,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1940",
+          "Garage Type": "None",
+          "Garage Capacity": "None"
+        },
+        "beds": 1,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "1718 S 10th Ave",
+        "price": "$425,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260413223213928594000000?from_filter=false",
+        "photos": 9,
+        "descriptionLength": 171,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1985",
+          "Garage Capacity": "None"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1716 S 10th Ave",
+        "price": "$425,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260413221742996128000000?from_filter=false",
+        "photos": 3,
+        "descriptionLength": 171,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1985",
+          "Garage Capacity": "None"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "323 N 42nd Ave",
+        "price": "$140,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260808183129802418000000?from_filter=false",
+        "photos": 9,
+        "descriptionLength": 571,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1954",
+          "Garage Type": "Detached",
+          "Garage Capacity": "1"
+        },
+        "beds": 2,
+        "baths": 1,
+        "sqft": ""
+      },
+      {
+        "title": "18431 Washington 410 Ave",
+        "price": "$995,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260731210408244063000000?from_filter=false",
+        "photos": 40,
+        "descriptionLength": 372,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1940"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "18431 St Rt 410 Ave",
+        "price": "$4,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260702224529823915000000?from_filter=false",
+        "photos": 31,
+        "descriptionLength": 296,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1965"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1721 N Victor Pl",
+        "price": "$445,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260630194440371302000000?from_filter=false",
+        "photos": 9,
+        "descriptionLength": 123,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1976",
+          "Garage Capacity": "None"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1719 Victor Pl",
+        "price": "$470,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260630193350512794000000?from_filter=false",
+        "photos": 8,
+        "descriptionLength": 117,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1973",
+          "Garage Capacity": "2"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      },
+      {
+        "title": "1706 N Regal Pl",
+        "price": "$415,000",
+        "status": "active",
+        "sourceUrl": "https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings/20260630194714480141000000?from_filter=false",
+        "photos": 4,
+        "descriptionLength": 156,
+        "detailsComplete": true,
+        "detailAttempted": true,
+        "facts": {
+          "Year Built": "1969",
+          "Garage Capacity": "2"
+        },
+        "beds": 0,
+        "baths": 0,
+        "sqft": ""
+      }
+    ]
+  }
+]
