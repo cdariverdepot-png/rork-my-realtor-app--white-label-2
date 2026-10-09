@@ -1,6 +1,6 @@
-Stage gate requested Fri Oct  9 16:12:02 UTC 2026: router history snippets (temporary diagnostics).
+Stage gate requested Fri Oct  9 16:29:37 UTC 2026: dashboard preview Back (no import, no AI).
 justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
 app-url:
-sites: cindy-studio-paonia
+sites: dashboard-preview-back
