@@ -1815,6 +1815,26 @@ function inventoryFragmentsOf(html: string, base: URL): string[] {
   return [...new Set(out)];
 }
 
+/**
+ * Published listing transports that are fully determined by a provider collection's URL, so they can be read
+ * even when the collection's own document cannot be (it answers automated readers with a browser check).
+ * Flexmls publishes every office/agent listing category as a server-rendered photo-view fragment of the same
+ * filtered collection. The request keeps the exact agent/office/category scope and identifies itself honestly;
+ * it is used only where the provider's robots rules allow the importer (checked by the fetch layer).
+ */
+function urlDerivedTransports(base: URL): string[] {
+  if (!/(?:^|\.)flexmls\.com$/i.test(base.hostname) || base.searchParams.has("list_view")) return [];
+  // office_/agent_listing_categories are scoped by the provider; plain listing_categories are judged by the
+  // cards' office attribution like any other collection (a market category is never imported wholesale).
+  if (!/\/search\/(?:(?:office|agent)_)?listing_categories\/[^/]+\/listings(?:\/\d{20,})?\/?$/.test(base.pathname)) return [];
+  const url = new URL(base);
+  url.pathname = url.pathname.replace(/(\/listings)\/\d{20,}\/?$/, "$1");
+  url.searchParams.set("list_view", "photo");
+  url.searchParams.set("page", "1");
+  url.searchParams.set("per_page", "24");
+  return [url.toString()];
+}
+
 function visibleDocument(html: string): string {
   return documentOnce(html, "visible", () => visibleDocumentOf(html));
 }
@@ -3168,7 +3188,9 @@ async function discoverListings(
     if (isRobotChallenge(html)) {
       let obstacle = classifyObstacle(html) ?? "captcha_required";
       let carriedNetwork: { url: string; html: string }[] | null = null;
-      if (obstacle === "requires_rendering" && options?.renderPage && !renderedChallenges.has(finalUrl.origin) && Date.now() < deadline && rendersUsed < maxRenders) {
+      // A collection with a URL-derived published transport is read through it; a browser is not needed.
+      const transports = broad ? [] : urlDerivedTransports(finalUrl).filter(url => !visitedSet.has(url) && !queue.some(q => q.url === url));
+      if (obstacle === "requires_rendering" && !transports.length && options?.renderPage && !renderedChallenges.has(finalUrl.origin) && Date.now() < deadline && rendersUsed < maxRenders) {
         rendersUsed++;
         stages.push("browser_render_escalated");
         stages.push("browser:interstitial");
@@ -3203,6 +3225,10 @@ async function discoverListings(
         }
         if (!obstacles.some(row => row.url === finalUrl.toString() && row.code === obstacle)) obstacles.push({ code: obstacle, url: finalUrl.toString(), detail: options?.renderPage ? undefined : "No browser renderer is configured" });
         if (obstacle === "captcha_required" || obstacle === "authentication_required") stages.push("user_action_required");
+        if (transports.length) {
+          stages.push("provider_transport_after_check");
+          for (const url of transports) queue.push({ url, depth: next.depth, priority: 210, fragment: true, parent: finalUrl.toString(), claimed: !!next.claimed || agentScopedRequest(next.url) || agentScopedRequest(finalUrl.toString()) });
+        }
         continue;
       }
       pendingRenderNetwork = carriedNetwork;
