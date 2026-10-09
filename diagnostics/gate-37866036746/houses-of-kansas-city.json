@@ -1,0 +1,3285 @@
+{
+  "id": "houses-of-kansas-city",
+  "url": "https://www.housesofkansascity.com/",
+  "category": "independent-agent",
+  "timeline": [
+    {
+      "at": 60,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 865,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to read your website\nLooking for your listings"
+    },
+    {
+      "at": 1066,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading Anthony West\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 1268,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 1 of 9"
+    },
+    {
+      "at": 1470,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 4 of 9\nReading listing details · 0 of 12"
+    },
+    {
+      "at": 1677,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 7 of 9\nReading listing details · 2 of 12"
+    },
+    {
+      "at": 1879,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nReading linked pages · 8 of 9\nReading listing details · 4 of 12"
+    },
+    {
+      "at": 2081,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nReading listing details · 8 of 12\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 2283,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nReading listing details · 11 of 12\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3496,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 listings so far · 2 pages checked\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3697,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4302,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaving 12 listings"
+    },
+    {
+      "at": 5108,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours"
+    },
+    {
+      "at": 13989,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours\nFound Anthony West · Mission Woods, KS"
+    },
+    {
+      "at": 14592,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 485,
+      "totalMs": 4924,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 120
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 1,
+          "found": 0,
+          "at": 435
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 0,
+          "at": 491
+        },
+        {
+          "kind": "listings",
+          "host": "housesofkansascity.com",
+          "pages": 2,
+          "found": 12,
+          "at": 711
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 12,
+          "succeeded": 0,
+          "at": 711
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 12,
+          "succeeded": 1,
+          "at": 1036
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 12,
+          "succeeded": 2,
+          "at": 1053
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 12,
+          "succeeded": 3,
+          "at": 1072
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 12,
+          "succeeded": 4,
+          "at": 1125
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 12,
+          "succeeded": 5,
+          "at": 1363
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 12,
+          "succeeded": 5,
+          "at": 1382
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 7,
+          "total": 12,
+          "succeeded": 5,
+          "at": 1407
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 8,
+          "total": 12,
+          "succeeded": 6,
+          "at": 1442
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 9,
+          "total": 12,
+          "succeeded": 7,
+          "at": 1521
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 10,
+          "total": 12,
+          "succeeded": 8,
+          "at": 1538
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 11,
+          "total": 12,
+          "succeeded": 9,
+          "at": 1552
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 12,
+          "total": 12,
+          "succeeded": 10,
+          "at": 2885
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 12,
+          "at": 2894
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 12,
+          "at": 3657
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 12,
+          "at": 4377
+        },
+        {
+          "kind": "scope",
+          "excluded": 0,
+          "featured": 10,
+          "at": 4378
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-1636u8n",
+            "url": "https://www.housesofkansascity.com/",
+            "submittedUrl": "https://www.housesofkansascity.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://housesofkansascity.com/",
+              "https://housesofkansascity.com/api-gw/graphql?query=query+Properties%28%0A++++%24agentIds%3A+%5BID%21%5D%0A++++%24teamIds%3A+%5BID%21%5D%0A++++%24neighborhoodIds%3A+%5BID%21%5D%0A++++%24officeIds%3A+%5BID%21%5D%0A++++%24propertyId%3A+ID%0A++++%24companyId%3A+String%0A++++%24networkId%3A+String%0A++++%24network%3A+Boolean%0A++++%24statusId%3A+String%0A++++%24propertyIds%3A+%5BID%21%5D%0A++++%24prioritizeIds%3A+Boolean%0A++++%24statusIds%3A+%5BString%21%5D%0A++++%24excludeStatusId%3A+%5BString%21%5D%0A++++%24neighborhoodId%3A+String%0A++++%24addressState%3A+%5BString%21%5D%0A++++%24addressCity%3A+%5BString%21%5D%0A++++%24relatedNeighborhoodPropertyId%3A+String%0A++++%24developmentId%3A+String%0A++++%24featuredListing%3A+Boolean%0A++++%24leaseProperty%3A+Boolean%0A++++%24search%3A+String%0A++++%24searchTermMode%3A+SearchTermModeEnum%0A++++%24globalProperty%3A+Boolean%0A++++%24archived%3A+Boolean%0A++++%24salesPriceGTE%3A+Float%0A++++%24salesPriceLTE%3A+Float%0A++++%24leasePriceGTE%3A+Float%0A++++%24leasePriceLTE%3A+Float%0A++++%24livingSpaceSizeGTE%3A+Float%0A++++%24livingSpaceSizeLTE%3A+Float%0A++++%24bathCountGTE%3A+Float%0A++++%24bathCountLTE%3A+Float%0A++++%24bedroomCountGTE%3A+Float%0A++++%24bedroomCountLTE%3A+Float%0A++++%24architectureStyle%3A+String%0A++++%24lifestyle%3A+String%0A++++%24propertyTypeId%3A+String%0A++++%24propertyTypeIds%3A+%5BString%21%5D%0A++++%24spaceTypeIds%3A+%5BID%21%5D%0A++++%24tag%3A+String%0A++++%24backfillMLSResults%3A+Boolean%0A++++%24displayMLSListings%3A+String%0A++++%24hostname%3A+String%0A++++%24websiteId%3A+ID%0A++++%24backfillProviders%3A+%5BString%21%5D%0A++++%24backfillMLSListingIds%3A+%5BString%21%5D%0A++++%24backfillMLSAgentIds%3A+%5BString%21%5D%0A++++%24backfillMLSOfficeIds%3A+%5BString%21%5D%0A++++%24backfillBoundary%3A+JSON%0A++++%24openHouse%3A+Boolean%0A++++%24withGeo%3A+Boolean%0A++++%24advancedFilters%3A+JSON%0A++++%24seasonalPriceId%3A+ID%0A++++%24offset%3A+Int%0A++++%24limit%3A+Int%0A++++%24sort%3A+String%0A++++%24sortDir%3A+SortDirectionEnum%0A++%29+%7B%0A++++properties%28%0A++++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++++relatedNeighborhoodPropertyId%3A+%24relatedNeighborhoodPropertyId%0A++++++backfillMLSResults%3A+%24backfillMLSResults%0A++++++hostname%3A+%24hostname%0A++++++websiteId%3A+%24websiteId%0A++++++backfillProviders%3A+%24backfillProviders%0A++++++backfillMLSListingIds%3A+%24backfillMLSListingIds%0A++++++backfillMLSAgentIds%3A+%24backfillMLSAgentIds%0A++++++backfillMLSOfficeIds%3A+%24backfillMLSOfficeIds%0A++++++backfillBoundary%3A+%24backfillBoundary%0A++++++offset%3A+%24offset%0A++++++limit%3A+%24limit%0A++++++sort%3A+%24sort%2C%0A++++++sortDir%3A+%24sortDir%0A++++%29%7B%0A++++++id%0A++++++name%0A++++++status%0A++++++originalStatus+%7B%0A++++++++id%0A++++++++name%0A++++++%7D%0A++++++salesPrice%0A++++++reducedPrice%0A++++++isPasswordProtected%0A++++++bedroomCount%0A++++++bathCount%0A++++++fullBathCount%0A++++++halfBathCount%0A++++++threeQuarterBathCount%0A++++++fullAddress%0A++++++addressLine1%0A++++++addressLine2%0A++++++addressCity%0A++++++addressState%0A++++++addressCountry%0A++++++postalCode%0A++++++description%0A++++++syncedAt%0A++++++officeName%0A++++++attributionContact%0A++++++neighborhood+%7B%0A++++++++id%0A++++++%7D%0A++++++media+%7B%0A++++++++smallUrl%0A++++++++mediumUrl%0A++++++++largeUrl%0A++++++++xLargeUrl%0A++++++++xxLargeUrl%0A++++++++height%0A++++++++width%0A++++++%7D%0A++++++seoTitle%0A++++++seoDescription%0A++++++slug%0A++++++fromMLS%0A++++++mlsId%0A++++++mlsLogo%0A++++++mlsAttribution%0A++++++openHouse%0A++++++openHouseHours%0A++++++priceUponRequest%0A++++++privateAddress%0A++++++leaseProperty%0A++++++leasePrice%0A++++++currency%0A++++++leaseTermFrequencyInterval%0A++++++leaseTermFrequencyCount%0A++++++leasePeriod%0A++++++livingSpaceSize%0A++++++livingSpaceUnits%0A++++++lotAreaSize%0A++++++lotAreaUnits%0A++++++tags%0A++++++latitude%0A++++++longitude%0A++++++soldDate%0A++++++timeZone%0A++++++buyerAgencyCompensation%0A++++++buyerAgencyCompensationType%0A++++++landIdUrl%0A++++%7D%0A++++propertiesCount%28%0A++++%0A++++++agentIds%3A+%24agentIds%0A++++++teamIds%3A+%24teamIds%0A++++++propertyId%3A+%24propertyId%0A++++++propertyIds%3A+%24propertyIds%0A++++++prioritizeIds%3A+%24prioritizeIds%0A++++++companyId%3A+%24companyId%0A++++++network%3A+%24network%0A++++++networkId%3A+%24networkId%0A++++++statusId%3A+%24statusId%0A++++++statusIds%3A+%24statusIds%0A++++++excludeStatusId%3A+%24excludeStatusId%0A++++++neighborhoodId%3A+%24neighborhoodId%0A++++++neighborhoodIds%3A+%24neighborhoodIds%0A++++++officeIds%3A+%24officeIds%0A++++++addressState%3A+%24addressState%0A++++++addressCity%3A+%24addressCity%0A++++++developmentId%3A+%24developmentId%0A++++++featuredListing%3A+%24featuredListing%0A++++++leaseProperty%3A+%24leaseProperty%0A++++++search%3A+%24search%0A++++++searchTermMode%3A+%24searchTermMode%0A++++++salesPriceGTE%3A+%24salesPriceGTE%0A++++++salesPriceLTE%3A+%24salesPriceLTE%0A++++++leasePriceGTE%3A+%24leasePriceGTE%0A++++++leasePriceLTE%3A+%24leasePriceLTE%0A++++++livingSpaceSizeGTE%3A+%24livingSpaceSizeGTE%0A++++++livingSpaceSizeLTE%3A+%24livingSpaceSizeLTE%0A++++++bathCountGTE%3A+%24bathCountGTE%0A++++++bathCountLTE%3A+%24bathCountLTE%0A++++++bedroomCountGTE%3A+%24bedroomCountGTE%0A++++++bedroomCountLTE%3A+%24bedroomCountLTE%0A++++++architectureStyle%3A+%24architectureStyle%0A++++++lifestyle%3A+%24lifestyle%0A++++++propertyTypeId%3A+%24propertyTypeId%0A++++++propertyTypeIds%3A+%24propertyTypeIds%0A++++++spaceTypeIds%3A+%24spaceTypeIds%0A++++++tag%3A+%24tag%0A++++++archived%3A+%24archived%0A++++++globalProperty%3A+%24globalProperty%0A++++++withGeo%3A+%24withGeo%0A++++++openHouse%3A+%24openHouse%0A++++++displayMLSListings%3A+%24displayMLSListings%0A++++++advancedFilters%3A+%24advancedFilters%0A++++++seasonalPriceId%3A+%24seasonalPriceId%0A%0A++++%29+%7B%0A++++++count%0A++++%7D%0A++%7D&variables=%7B%22sort%22%3A%22updatedAt%22%2C%22limit%22%3A12%2C%22order%22%3A%22updatedAt%22%2C%22offset%22%3A0%2C%22sortDir%22%3A%22DESC%22%2C%22companyId%22%3A%228a82bea4-52ad-4488-b560-527326a49096%22%2C%22agentIds%22%3A%5B%22e8007929-95d6-4357-8091-d08ef592c51f%22%5D%2C%22salesPriceGTE%22%3A350000%2C%22advancedFilters%22%3A%7B%22query%22%3A%7B%22statusIds%22%3A%7B%22in%22%3A%5B%225f528253-abb7-484e-95c3-330269ac1105%22%2C%2288b4ace6-f39b-4b25-a051-8f6dba976833%22%5D%7D%7D%7D%2C%22propertyTypeIds%22%3A%5B%229a70fec3-5946-4d04-9acb-74d98781f636%22%2C%22c68279bc-2904-4ab8-9e84-42ecf6af008c%22%2C%22daf8aaa2-8b6f-4f2d-a324-754e0316d2b6%22%5D%2C%22displayMLSListings%22%3A%22onlyMls%22%2C%22hostname%22%3A%22housesofkansascity.com%22%2C%22websiteId%22%3A%22e49fe4d3-5b24-4ea4-a618-502472486302%22%7D"
+            ],
+            "connectedAt": 1791506996837,
+            "lastCheckedAt": 1791506996837,
+            "nextSyncAt": 1791514196837,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 12,
+            "identity": {
+              "phrases": [
+                "housesofkansascity",
+                "anthonywest",
+                "toprealestateexpertinkansascity"
+              ],
+              "words": [
+                "housesofkansascity",
+                "anthony",
+                "expert",
+                "kansas"
+              ]
+            }
+          },
+          "imported": 12,
+          "scope": {
+            "excludedOtherOffice": 0,
+            "featured": 10
+          },
+          "warning": "2 listings have incomplete property details. The source did not expose a readable full description or gallery; previously saved details are preserved.",
+          "checked": 12,
+          "complete": false,
+          "items": [
+            {
+              "id": "listing-1ard7ud",
+              "title": "5817 W 101st Place, Overland Park, KS 66207",
+              "neighborhood": "",
+              "price": "$431,900",
+              "beds": 3,
+              "baths": 2,
+              "sqft": "1,972",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/665858277419468624-5817-W-101st-Place",
+              "description": "This move-in ready Overland Park single-family residence in the coveted Nall Hills neighborhood combines classic craftsmanship with modern updates throughout. Refinished hardwood flooring flows seamlessly across the spacious light-filled living room and formal dining room featuring elegant accent trim. The kitchen showcases granite countertops, stainless steel appliances, warm wood cabinetry, neutral tile backsplash, and durable tile flooring. Relax by the fireplace with custom mantel in the cozy family room, or step out to an expansive backyard retreat complete with a multi-level wooden deck featuring built-in bench seating, a brick patio, raised garden beds, mature shade trees, and a fenced lawn. Upstairs, three sunlit bedrooms include a primary suite with an updated private tiled shower. A full hall bathroom with a modern vanity and tiled shower-tub combo serves the remaining upper bedrooms. The finished lower level expands your living space with a large 33-by-17-foot recreation room ideal for a home theater, play area, or office, plus generous unfinished storage and laundry facilities. Complete with an attached two-car garage and wide double driveway, this home is served by top-rated Shawnee Mission schools including Trailwood Elementary, Indian Woods Middle, and Shawnee Mission South High School. Enjoy everyday convenience with nearby parks, shopping, and easy highway access. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.944571, -94.653482"
+              },
+              "listingOffice": "RE/MAX Heritage",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-u1o1s4",
+              "title": "15882 W 165th Terrace, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$745,000",
+              "beds": 4,
+              "baths": 3,
+              "sqft": "3,633",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658217688977458735-15882-W-165th-Terrace",
+              "description": "Former model home loaded with upgrades and custom finishes throughout! This impressive home features soaring 12' ceilings, beautiful hardwood floors, a stone fireplace and a stunning kitchen with waterfall granite island, oversized pantry, gas cooktop with pot filler and dedicated coffee bar. The primary suite features a custom walk-in shower and huge walk-in closet with convenient access to the laundry room. The finished lower level is built for entertaining with a walk-up bar, custom wine display, theater room with projector and screen, additional living space and two bedrooms with a full bath. Step outside to the covered patio featuring mechanical sunshades that drop from the ceiling to create a private, screened-in outdoor living space. The garage has also been upgraded with an epoxy floor, extensive built-in shelving and metal cabinetry. Extensive landscaping, fenced yard, sprinkler system, built-in networking and numerous additional upgrades throughout. Located in Stonebridge with access to pools, clubhouses, fitness center, parks and playgrounds. This is one you truly need to see in person! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.828348, -94.770239"
+              },
+              "listingOffice": "KW Diamond Partners",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-1a6xzq9",
+              "title": "16220 Birch Street, Overland Park, KS 66085",
+              "neighborhood": "",
+              "price": "$600,000",
+              "beds": 5,
+              "baths": 4,
+              "sqft": "3,156",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658568544398346588-16220-Birch-Street",
+              "description": "Come check out this Wilderness gem tucked into a quiet cul-de-sac! Offering 5 bedrooms, 3 full and 2-1/2 baths, this beautiful home features fresh interior paint, new designer stair carpet, gorgeous hardwood floors throughout the main level and new LVP flooring in the basement bedroom. Step inside the light-filled two-story foyer, where a formal dining room welcomes you just off the entry. The spacious kitchen features plenty of bar-top seating, stainless steel appliances, a gas cook-top and an eat-in dining area all overlooking the inviting family room. Custom accent wall and built-in shelving flank the TV on both sides, creating a beautiful focal point and plenty of display space. A convenient half bath and deck access are also just off the kitchen. One of the home’s most unique features is the private bedroom/office located at the mid-stair landing, complete with its own fireplace and en suite bath, perfect for guests, a home office or additional living space. Upstairs, retreat to the spacious primary suite with a private en suite bath. Two additional bedrooms share a convenient Jack-and-Jill bathroom. The finished lower level offers even more room to spread out, featuring an additional bedroom and a large family room that’s perfect for movie nights, game days, or hanging out. A current storage room is being used as an additional bedroom but can easily be converted back for extra storage. Outside, enjoy a private backyard surrounded by gorgeous mature trees and beautiful landscaping. All of this in a fantastic location near the exciting BluHawk area with incredible restaurants, shopping, entertainment, and easy highway access. Move right in and enjoy everything this Wilderness home has to offer! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.835029, -94.648697"
+              },
+              "listingOffice": "ReeceNichols - Leawood",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-b0yryf",
+              "title": "12527 S Hastings Street, Olathe, KS 66061",
+              "neighborhood": "",
+              "price": "$689,000",
+              "beds": 4,
+              "baths": 3,
+              "sqft": "2,943",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658341674878985854-12527-S-Hastings-Street",
+              "description": "Welcome to this beautiful reverse 1.5-story home in the highly desirable Forest View the Hills subdivision, located within the award-winning Olathe West School District. Set on a stunning wooded lot that backs completely to mature trees, this home offers exceptional privacy, peaceful views, and a beautiful natural setting. From the moment you enter, the grand entry draws you into the spacious great room, where large floor to ceiling windows provide beautiful backyard views and fill the home with natural light. Recent updates include all-new interior paint, refinished hardwood floors on the main level, and brand-new carpet throughout. The chef’s kitchen features stainless steel appliances, ample cabinetry, and a pantry with additional prep space and storage. The kitchen and dining area flow directly to the covered AND screened-in deck, the perfect space for relaxing or entertaining, with stairs leading down to the fully fenced backyard. The main level offers a spacious primary suite with a private bathroom and attached laundry room for day to day convenience, along with a second bedroom ideal for guests, an office, or additional living space. The finished walkout basement features a large recreation room, full bar with extra cabinet storage, two additional bedrooms, a full bathroom, plus 800+ square feet of unfinished storage space or future expansion. Forest View the Hills is a premier RODROCK Community and offers an array of neighborhood amenities, including swimming pools, play areas, pickleball courts, and miles of trails. With its sought-after floor plan, beautiful updates, exceptional privacy, and peaceful wooded setting, this is a wonderful opportunity to enjoy elevated living in Western Olathe. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.90116, -94.868685"
+              },
+              "listingOffice": "Real Broker, LLC",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-1t3tzdp",
+              "title": "15672 S Blackfoot Street, Olathe, KS 66062",
+              "neighborhood": "",
+              "price": "$439,900",
+              "beds": 5,
+              "baths": 3,
+              "sqft": "1,893",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658372556536226330-15672-S-Blackfoot-Street",
+              "description": "Welcome to this beautifully updated split-entry in the desirable Woodland Creek community! This move-in-ready home offers living space with vaulted ceilings, a spacious living room with fireplace, formal dining area, and an eat-in kitchen featuring granite countertops and updated finishes. The main level includes three bedrooms and two full baths, while the finished lower level offers two additional bedrooms and a full bath, perfect for guests, a home office, or additional living space. Recent updates include new carpet, updated tile in the kitchen and bathrooms, granite countertops, new sinks and faucets, a new kitchen stove, and an electric tankless water heater. Outside, relax on the deck or enjoy the spacious fenced backyard. Additional features include an attached 2-car garage with EV charger, Google Fiber, and a large, fenced backyard with deck. Enjoy Woodland Creek amenities including a community pool, lodge, playgrounds, and dog park. Conveniently located near parks, shopping, dining, schools, and major highways. Schedule your showing today! Woodland Creek amenities include a community pool, lodge, playgrounds, and dog park. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.84377, -94.765256"
+              },
+              "listingOffice": "Platinum Realty LLC",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-1ak865",
+              "title": "9248 Switzer Street, Overland Park, KS 66214",
+              "neighborhood": "",
+              "price": "$409,950",
+              "beds": 5,
+              "baths": 2,
+              "sqft": "1,738",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/10775dc2-65d6-4c2d-857a-b8eec7979fbe.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/a1299abf-286d-4f87-8f25-2207fb510eb4.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/6b306d5a-8c29-40d8-a409-ee51a5c91846.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/d920f8ab-fa39-4e9c-82b4-78e11311c5d7.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/95cd7d76-5dd5-4088-ba0f-be67fd8799cd.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/10775dc2-65d6-4c2d-857a-b8eec7979fbe.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658783993853853148-9248-Switzer-Street",
+              "description": "This classic Overland Park residence is dressed to impress from curb to kitchen with crisp, brand-new paint inside & out, as well as improved functionality with all new finishes, flooring, bathrooms and a custom kitchen at the heart of the home. Now outfitted with a waterfall edge island and floor-to-ceiling pantry cabinet, the kitchen is equipped for casual weeknight dinners, elaborate holiday meals and grab & go breakfasts. Whether it’s a quick morning routine or a relaxing evening soak, both bathrooms sparkle with tile surrounds paired with all new plumbing fixtures and vanities. All of it comes together with an additional living space that is ideal for entertaining alongside the moody brick of the fireplace. Beyond four dedicated bedrooms, there is a versatile bonus room that easily adapts to your lifestyle—whether you need a private home office, a vibrant playroom or a dedicated workout area. The sizable brick patio is the ultimate backdrop for summer BBQs, a cozy evening fire, and effortless outdoor entertaining. The location offers a blend of suburban tranquility and city connectivity with fast, easy access to I-35 and U.S. 69 as well as unbeatable proximity to parks, top-tier schools, and everyday conveniences. Prime location, effortless living–9248 Switzer has it all plus a sub-basement! Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.960107, -94.705255"
+              },
+              "listingOffice": "Keller Williams Realty Partners Inc",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-3lojpz",
+              "title": "1216 W 73rd Street, Kansas City, MO 64114",
+              "neighborhood": "",
+              "price": "$625,000",
+              "beds": 3,
+              "baths": 2.5,
+              "sqft": "2,294",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658673943985255300-1216-W-73rd-Street",
+              "description": "A RARE Brookside Find - This charming historic, stone Tudor Revival features a rebuilt, ATTACHED 2+ CAR GARAGE and rooftop deck. This home has the allure of a classic Brookside Tudor with all of the conveniences you'd want in a modern home. Brew your morning coffee in the newly renovated kitchen with quartz counters and modern appliances or cozy up by the fireplace in the formal living room on Sunday mornings. Work from home in the former sunroom turned main-floor office or start your day with sun salutations on the rooftop deck off of your bedroom suite. Host friends and family in the wainscoted formal dining room. Enjoy newly renovated bathrooms throughout the home including a separate makeup vanity in the suite. A main floor washer and dryer keeps you from running to the basement on laundry day while a walk in closet in the primary, keeps your bedroom tidy. Refinished hardwood floors throughout the first and second floor keep the home looking fresh yet connected to it's historic past. A finished, dry basement with egress allows for private guest space or additional recreation room. Park your cars off the street in your own private, well built, attached garage with ample space for two cars PLUS room for a golf cart, work area, or bike storage. Plant a garden or play bocce ball in the shade of the treed backyard. You could be home for the holidays in this cozy, yet spacious, Hallmark-movie-worthy, Kansas City home. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.996721, -94.604451"
+              },
+              "listingOffice": "RE/MAX Innovations",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-12x7xdt",
+              "title": "24739 W 92nd Street, Lenexa, KS 66227",
+              "neighborhood": "",
+              "price": "$699,000",
+              "beds": 4,
+              "baths": 3.5,
+              "sqft": "2,925",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/4cc5d16e-fdd9-4bed-a4ff-85da8ac5d8ef.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/527acc30-3103-437b-91da-52f3e4a10af9.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/1e49c098-4f8b-49ef-a10b-246abc1a161e.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/7904c8c7-b077-4e23-9e82-be2fd2a54cb1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/c70ae2cf-0e62-4ad5-8cf7-c5fb46fe23f3.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/4cc5d16e-fdd9-4bed-a4ff-85da8ac5d8ef.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658503427700499252-24739-W-92nd-Street",
+              "description": "Beautiful French inspired Drees Built home features soaring vaulted ceilings lined with gorgeous wooden beams that create an open airy atmosphere filled with natural light. This home has such a wow factor when you walk in the door. Be prepared to be impressed with the attention to detail and quality craftsmanship. There is no other home like this in Arbor Lake. This former parade of homes tour home features high-quality finishings throughout, the interior showcases a seamless blend of modern style and timeless comfort. The spacious living area flows effortlessly, highlighting newly refinished hardwood floors, distressed wood box beams, refined fixtures, and attention to detail at every turn. The kitchen is designed to impress with upscale glazed kitchen cabinets, quartz counter tops, wet bar and huge walk-in pantry. Main level primary offers a spa-like feel with elegant touches. 8 foot doors throughout the main level. Every element of this home has been carefully curated to provide both sophistication and everyday livability. Generous sized bedrooms on the second level with a cozy loft area and a laundry chute to boot. The flat private treed and fenced yard has an expanded patio perfect for entertaining and relaxing with that perfect glass of wine or cup of coffee. Don't miss the charming patio off the dining room in the front of the home. The pool is conveniently located just down the street. Arbor Lake HOA amenities include a community pool, trash service, snow removal, green space, playground, and more. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "38.960301, -94.87332"
+              },
+              "listingOffice": "Parkway Real Estate LLC",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-x3ce62",
+              "title": "5310 MISSION WOODS Road, Mission Woods, KS 66205",
+              "neighborhood": "",
+              "price": "$1,195,000",
+              "beds": 4,
+              "baths": 4.5,
+              "sqft": "3,856",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658792694406509624-5310-MISSION-WOODS-Road",
+              "description": "Gorgeous remodeled home situated on a private, treed lot in highly coveted Mission Woods. Offering an exceptional combination of privacy, luxury, and functionality, this home features a spacious, open floor plan with wonderful flexibility for everyday living and entertaining. The beautifully appointed kitchen features marble countertops, double ovens, a Viking range, beverage refrigerator, walk-in pantry, and built-in workstation. A large formal dining room with a beamed ceiling overlooks the private, treed lot. The spacious family room is warm and inviting with custom built-ins and a wood-burning fireplace, while French doors open to a fabulous oversized screened porch perfect for relaxing or entertaining while enjoying the beautiful setting. The secondary bedrooms are thoughtfully positioned for privacy, each offering generous closet space and its own updated en suite bath. The fabulous primary suite features high ceilings and beautiful windows overlooking the backyard. The primary bath includes separate vanities, abundant storage, and a walk-in shower, along with a large walk-in closet featuring custom built-ins. The finished lower level provides additional living and entertaining space, with even more storage available in the unfinished portion. Additional updates and features include a newer roof, zoned HVAC with one newer unit, interior and exterior paint, Thibaut wallpaper, Visual Comfort lighting, gorgeous hardwood floors, plantation shutters, and an abundance of storage. Outside, the very private, treed backyard creates a peaceful setting rarely found in such a central location. This exceptional home beautifully blends timeless character with thoughtful updates, offering an ideal balance of comfort, style, and charm. Central location with convenient access to the Country Club Plaza, Fairway, Westwood, Prairie Village, shopping, parks, and so much more. A wonderful opportunity to own a beautifully updated home in one of the area’s most coveted neighborhoods. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "39.032553, -94.61152"
+              },
+              "listingOffice": "Compass Realty Group",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-a1oehv",
+              "title": "5127 Walnut Street, Kansas City, MO 64112",
+              "neighborhood": "",
+              "price": "$480,000",
+              "beds": 3,
+              "baths": 3,
+              "sqft": "1,776",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/0.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/1.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/2.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/3.jpeg",
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/4.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658945516719142804-5127-Walnut-Street",
+              "description": "Tucked into the heart of one of Kansas City’s most vibrant areas, 5127 Walnut St offers the perfect blend of classic charm and modern ease. From the moment you step inside, the beautiful hardwood floors and abundant natural light—thanks to new windows throughout the entire home—create a warm, inviting atmosphere that makes you want to stay a while. The heart of the home is an impressive open kitchen designed for effortless hosting and daily living. Bonus area off the living room provides extra space for a home office, first floor playroom, etc. For ultimate convenience, you’ll find the laundry room situated right on the main floor, a rare and thoughtful feature for a home in this area. With three spacious bedrooms, two full baths, and two half baths, there is plenty of room to spread out. The finished walk-out basement adds a whole new dimension to the property, providing a flexible space for a media room, home office, or fitness area with direct access to the outdoors. The location is truly unbeatable. You are steps away from the best of the city, with a variety of local restaurants, green parks, and Whole Foods all within easy reach. Whether you’re grabbing a morning coffee or enjoying a sunset stroll, everything you need is just outside your front door. This is more than just a house; it’s a lifestyle of quality and convenience in the center of it all. Read more",
+              "detailsComplete": true,
+              "facts": {
+                "Coordinates": "39.033737, -94.585903"
+              },
+              "listingOffice": "Compass Realty Group",
+              "ownership": "featured",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-o6j0lr",
+              "title": "624 W 131 Terrace, Kansas City, MO 64145",
+              "neighborhood": "",
+              "price": "$485,000",
+              "beds": 3,
+              "baths": 3,
+              "sqft": "2,586",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646051/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646051/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658251347305312072-624-W-131-Terrace",
+              "facts": {
+                "Coordinates": "38.889722, -94.6013"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            },
+            {
+              "id": "listing-1wyptrz",
+              "title": "11417 Cambridge Road, Leawood, KS 66211",
+              "neighborhood": "",
+              "price": "$1,940,000",
+              "beds": 3,
+              "baths": 3.5,
+              "sqft": "4,426",
+              "images": [
+                "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2597255/0.jpeg"
+              ],
+              "image": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2597255/0.jpeg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://housesofkansascity.com/home-search/listings/6658339888962357958-11417-Cambridge-Road",
+              "facts": {
+                "Coordinates": "38.92050587, -94.60836743"
+              },
+              "status": "active",
+              "lastStatusVerifiedAt": 1791506994070,
+              "lastRefreshedAt": 1791506994070,
+              "lastSyncAttemptAt": 1791506994070,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791514194070,
+              "updatedAt": 1791506994070,
+              "sourceId": "source-1636u8n",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791506994070
+            }
+          ],
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 0,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedUsd": 0,
+            "byStage": {},
+            "records": []
+          },
+          "timings": {
+            "details": 2174,
+            "listings": 2774,
+            "save": 720,
+            "total": 4378
+          }
+        }
+      }
+    },
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 556,
+      "totalMs": 13808,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 0
+        },
+        {
+          "kind": "site",
+          "name": "Anthony West",
+          "host": "housesofkansascity.com",
+          "at": 160
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 160
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 9,
+          "at": 407
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 9,
+          "at": 421
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 9,
+          "at": 467
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 3,
+          "total": 9,
+          "at": 535
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 4,
+          "total": 9,
+          "at": 564
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 5,
+          "total": 9,
+          "at": 741
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 6,
+          "total": 9,
+          "at": 789
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 7,
+          "total": 9,
+          "at": 812
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 8,
+          "total": 9,
+          "at": 835
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 9,
+          "total": 9,
+          "at": 950
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 8,
+          "total": 9,
+          "at": 1055
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": false,
+          "images": 60,
+          "sections": 9,
+          "at": 1058
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 1058
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 1073
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 1073
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 1073
+        },
+        {
+          "kind": "profile",
+          "name": "Anthony West",
+          "city": "Mission Woods, KS",
+          "at": 13013
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 13013
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 648,
+            "design": 898,
+            "site": 1073,
+            "profile": 11940,
+            "total": 13013
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 8355,
+            "outputTokens": 1255,
+            "estimatedUsd": 0.02675,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.02675
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 8355,
+                "cachedInputTokens": 0,
+                "outputTokens": 1255,
+                "estimatedUsd": 0.02675,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "Anthony West",
+              "confidence": 1,
+              "locator": "Meta title, page header, about section"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "Global Real Estate Advisor",
+              "confidence": 0.95,
+              "locator": "About section: 'Anthony West is a luxury listing agent... Global Real Estate Advisor'"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "Mission Woods, KS",
+              "confidence": 1,
+              "locator": "Office address/footer across all pages"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "913.522.0329",
+              "confidence": 1,
+              "locator": "Footer and contact sections"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "[email protected]",
+              "confidence": 0.9,
+              "locator": "Footer and contact sections (obfuscated, but given as contact method)"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "Houses of Kansas City",
+              "confidence": 1,
+              "locator": "Page header/about section: 'Anthony leads Houses of Kansas City at Sage Sotheby’s International Realty'"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "Sage Sotheby's International Realty",
+              "confidence": 1,
+              "locator": "About section; footer across all pages"
+            },
+            {
+              "field": "credentials.license.number",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "#00233835 | 2013012910",
+              "confidence": 0.9,
+              "locator": "About page: 'License Number #00233835 | 2013012910'"
+            },
+            {
+              "field": "credentials.license.state",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "KS, MO, CA",
+              "confidence": 1,
+              "locator": "Footer and bio: 'Licensed in Kansas, Missouri, and California'"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "value": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/d05a6c83-8935-4211-9714-49786bf71f55",
+              "confidence": 1,
+              "locator": "About page; image is a clear headshot portrait for agent"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Kansas City's Trusted Real Estate Advisor",
+            "welcomeNote": "Welcome—let's have fun and do some business along the way! I’m here to make your real estate experience seamless, strategic, and even enjoyable across Kansas City and beyond.",
+            "tagline": "Local roots. Strategic results. Proven reach.",
+            "aboutParagraph": "I’m Anthony West, a Kansas City native and the force behind Houses of Kansas City at Sage Sotheby’s International Realty. With more than 13 years in real estate and deep experience in resale, new construction, and custom home building, I’ve had the pleasure of guiding clients through every facet of buying and selling across the KC metro. My approach is simple: combine proven results—$34M+ sold, 98% list-to-sale ratio, and a powerful digital network reaching over 500,000—with creativity and care. Whether you’re looking in Mission Hills, Leawood, Prairie Village, or beyond, you can count on an adventure where passion meets proficiency, and a process tailored to you. Let’s connect and get started.",
+            "conciergeLine": "Looking for that next step or need local insight? I’m just a call, text, or email away.",
+            "contactLine": "Ready to start your real estate journey? Contact me directly at 913.522.0329 or [email protected]",
+            "tone": "Warm, highly personal, strategic, and approachable with a hint of fun.",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "dc08c2b5-0521-453c-ac01-6168b6e75071"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://housesofkansascity.com/",
+              "analyzedAt": 1791506994598,
+              "portraitImageUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+              "heroTitle": "WELCOME",
+              "heroSubtitle": "Anthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas City metro. $34M+ sold · 98% list-to-sale ratio · 500K+ social reach. Licensed in KS, MO & CA.",
+              "sections": [
+                {
+                  "kind": "about",
+                  "title": "Anthony West",
+                  "body": "Primary phone 913.522.0329 Website http://HousesofKansasCity.com License Number #00233835 | 2013012910 Email [email protected] Address 2001 Shawnee Mission Pkwy Ste 210 Mission, KS 66205-3601",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Areas of Expertise",
+                  "body": "Westwood A charming suburban community known for its friendly atmosphere, beautiful homes, and convenient location. Situated just minutes from downtown Kansas City and near the…",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "testimonials",
+                  "title": "Work With Anthony",
+                  "body": "With Anthony, your Real Estate journey is not just a transaction; it's an adventure. Experience the Houses of Kansas City difference, where passion meets proficiency, and every deal is sealed with a touch of fun. Contact him today so he can guide you through the buying and selling process. Work with Anthony Home Search",
+                  "intent": "testimonials",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "What \"luxury\" means in Kansas City",
+                  "body": "Luxury real estate here isn't just a price point. It's homes with real architectural character, properties with history, land with development potential, and buyers and sellers who want an agent who understands what makes a property actually stand out, not just what it's listed for. That's the market I work in every day: Mission Hills, Leawood, Prairie Village, Fairway, Overland Park, Brookside, and the wider Kansas City metro on both sides of the state line.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "What Makes the Shakespeare Chateau Singular",
+                  "body": "Most historic homes have been compromised. Original windows replaced. Period details painted over or removed entirely. The Shakespeare Chateau is the exception that makes you realize how rare genuine architectural integrity actually is. 47 original stained-glass windows. Every single one installed in 1885 and still present.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "content",
+                  "title": "Frequently Asked Questions",
+                  "body": "What is Sage Sotheby's International Realty and how is it different from other brokerages? Sage Sotheby's International Realty is the Kansas City and Oklahoma City regional affiliate of Sotheby's International Realty, a global luxury real estate brand with over 1,000 offices in 80+ countries.",
+                  "intent": "content",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "services",
+                  "title": "Frequently Asked Questions",
+                  "body": "What is the average home price in Leawood, KS? Leawood home prices vary significantly by neighborhood and price point. Entry-level homes in established subdivisions typically start around $400,000, while luxury properties in neighborhoods like Hallbrook regularly exceed $1 million. The overall median sale price in Leawood consistently ranks among the highest in the Kansas City metro. How long do homes stay on the market in Leawood?",
+                  "intent": "services",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Featured Properties",
+                  "body": "For Sale",
+                  "imageUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2644900/-5927489953966887670.jpg",
+                  "imageFit": "contain",
+                  "imageRole": "article"
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Get in Touch",
+                  "body": "Middle Name Opt In/Disclaimer Consent: I agree to be contacted by Anthony West via call, email, and text for real estate services. To opt out, you can reply 'stop' at any time or reply 'help' for assistance. You can also click the unsubscribe link in the emails. Message and data rates may apply. Message frequency may vary. Privacy Policy . Submit ted"
+                }
+              ],
+              "imagery": {
+                "portrait": {
+                  "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                  "variants": [
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                      "width": 320
+                    },
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                      "width": 960
+                    },
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                      "width": 1280
+                    },
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                      "width": 1920
+                    },
+                    {
+                      "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                      "width": 1946
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                  "width": 960,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 360,
+                  "upscaleRatio": 1,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://www.facebook.com/tr?id=938291448837031&ev=PageView&noscript=1",
+                    "variants": [
+                      {
+                        "url": "https://www.facebook.com/tr?id=938291448837031&ev=PageView&noscript=1"
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://www.facebook.com/tr?id=938291448837031&ev=PageView&noscript=1",
+                    "width": 1,
+                    "height": 1,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 1,
+                    "renderedHeight": 1,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ii8i89fbyqlmixxk13rt",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/ii8i89fbyqlmixxk13rt",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ii8i89fbyqlmixxk13rt",
+                        "width": 500
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ii8i89fbyqlmixxk13rt",
+                    "width": 500,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/hbbugeofdctth4gdrtnr",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/hbbugeofdctth4gdrtnr",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/hbbugeofdctth4gdrtnr",
+                        "width": 500
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/hbbugeofdctth4gdrtnr",
+                    "width": 500,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/64c571f9-1c46-472a-a4bb-3055c626075f",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/64c571f9-1c46-472a-a4bb-3055c626075f"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/64c571f9-1c46-472a-a4bb-3055c626075f",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/52be8fcd-3261-4518-a97d-4053dcdb3dc5",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/52be8fcd-3261-4518-a97d-4053dcdb3dc5",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/52be8fcd-3261-4518-a97d-4053dcdb3dc5",
+                        "width": 677
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/52be8fcd-3261-4518-a97d-4053dcdb3dc5",
+                    "width": 677,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/afe7e90d-98a9-43b5-b086-e2e42cb82c4b",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/afe7e90d-98a9-43b5-b086-e2e42cb82c4b",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/afe7e90d-98a9-43b5-b086-e2e42cb82c4b",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/afe7e90d-98a9-43b5-b086-e2e42cb82c4b",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/afe7e90d-98a9-43b5-b086-e2e42cb82c4b",
+                        "width": 1800
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/afe7e90d-98a9-43b5-b086-e2e42cb82c4b",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/b2355940-b388-41ae-9bc3-60f352bc5566",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/b2355940-b388-41ae-9bc3-60f352bc5566",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/b2355940-b388-41ae-9bc3-60f352bc5566",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/b2355940-b388-41ae-9bc3-60f352bc5566",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/b2355940-b388-41ae-9bc3-60f352bc5566",
+                        "width": 1875
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/b2355940-b388-41ae-9bc3-60f352bc5566",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2644900/-5927489953966887670.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2644900/-5927489953966887670.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2644900/-5927489953966887670.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2633508/-2780389247546996882.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2633508/-2780389247546996882.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2633508/-2780389247546996882.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2624616/3687052349722006392.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2624616/3687052349722006392.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2624616/3687052349722006392.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637321/722118ce-8d6a-4f6e-bc27-14901e7fbe82.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637321/722118ce-8d6a-4f6e-bc27-14901e7fbe82.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637321/722118ce-8d6a-4f6e-bc27-14901e7fbe82.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/e892a1b5-5a9f-4e90-a58e-359b24a10948",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/e892a1b5-5a9f-4e90-a58e-359b24a10948"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/e892a1b5-5a9f-4e90-a58e-359b24a10948",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2629065/bb74774f-cb64-4dd3-8ea4-4ac409003416.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2629065/bb74774f-cb64-4dd3-8ea4-4ac409003416.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2629065/bb74774f-cb64-4dd3-8ea4-4ac409003416.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645306/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645306/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645306/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2470349/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2470349/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2470349/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640337/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640337/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640337/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582328/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582328/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2582328/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646267/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646267/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646267/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2477326/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2477326/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2477326/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633555/a073db92-f5c5-4a42-a53e-52582d7607eb.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633555/a073db92-f5c5-4a42-a53e-52582d7607eb.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2633555/a073db92-f5c5-4a42-a53e-52582d7607eb.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616212/4fc7e6fd-1db4-455b-b203-8da33005334f.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616212/4fc7e6fd-1db4-455b-b203-8da33005334f.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2616212/4fc7e6fd-1db4-455b-b203-8da33005334f.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638060/6d31e5f5-48f1-4273-86b9-a12976057a9b.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638060/6d31e5f5-48f1-4273-86b9-a12976057a9b.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2638060/6d31e5f5-48f1-4273-86b9-a12976057a9b.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2643926/0.jpeg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2643926/0.jpeg"
+                      }
+                    ],
+                    "role": "listing",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2643926/0.jpeg",
+                    "destination": "listing",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/as1ddiwljluhcue2jiot",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/rfqwkjlbpcanggs7nezl",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/rfqwkjlbpcanggs7nezl",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/rfqwkjlbpcanggs7nezl",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/rfqwkjlbpcanggs7nezl",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rfqwkjlbpcanggs7nezl",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/rfqwkjlbpcanggs7nezl",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/daikzaf6353aefbhbnqt",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/g3nytywghwg4gcyrw2yc",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/g3nytywghwg4gcyrw2yc",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/g3nytywghwg4gcyrw2yc",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/g3nytywghwg4gcyrw2yc",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/g3nytywghwg4gcyrw2yc",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/g3nytywghwg4gcyrw2yc",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/kbmeksxilgr13il6o3gk",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/kbmeksxilgr13il6o3gk",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/kbmeksxilgr13il6o3gk",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/kbmeksxilgr13il6o3gk",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/kbmeksxilgr13il6o3gk",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/kbmeksxilgr13il6o3gk",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sbdwjvsqi6t3dwwn7rlr",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/znpsnkcodruig3causfv",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/p4ed0mzifinrjmpbahm8",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/q6djms1ydd0jcrgmozb8",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/q6djms1ydd0jcrgmozb8",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/q6djms1ydd0jcrgmozb8",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/q6djms1ydd0jcrgmozb8",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/q6djms1ydd0jcrgmozb8",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/q6djms1ydd0jcrgmozb8",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ijuxxkqjghuqsoluotjk",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2508364/1840608984783020724.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2508364/1840608984783020724.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2508364/1840608984783020724.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2482676/3362366146304402354.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2482676/3362366146304402354.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2482676/3362366146304402354.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2485656/-3449194727426205054.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2485656/-3449194727426205054.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2485656/-3449194727426205054.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2558490/1819425033414996252.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2558490/1819425033414996252.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2558490/1819425033414996252.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2582194/-6535023259331456694.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2582194/-6535023259331456694.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2582194/-6535023259331456694.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2598256/-4573441968882549865.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2598256/-4573441968882549865.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2598256/-4573441968882549865.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2408100/6722346890150561044.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2408100/6722346890150561044.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2408100/6722346890150561044.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2408096/1235228909724696026.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2408096/1235228909724696026.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2408096/1235228909724696026.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2437663/2901648589282623586.jpg",
+                    "variants": [
+                      {
+                        "url": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2437663/2901648589282623586.jpg"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://dlajgvw9htjpb.cloudfront.net/cms/8a82bea4-52ad-4488-b560-527326a49096/2437663/2901648589282623586.jpg",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/fqldjzgveofs3gbx0myi",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/yxm2s3rw3g3t4w1nkmo1",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/yxm2s3rw3g3t4w1nkmo1",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/yxm2s3rw3g3t4w1nkmo1",
+                        "width": 774
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/yxm2s3rw3g3t4w1nkmo1",
+                    "width": 774,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=452/https://media-production.lp-cdn.com/media/3ea69cb0-a40c-49b2-ac5a-a31b434b95c1",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=452/https://media-production.lp-cdn.com/media/3ea69cb0-a40c-49b2-ac5a-a31b434b95c1"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=452/https://media-production.lp-cdn.com/media/3ea69cb0-a40c-49b2-ac5a-a31b434b95c1",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/rxsltcdb7nw63dorxb77",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                        "width": 2880
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/08758aa4-38b3-4bea-952f-3dabc2e83a5b",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=3456/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/ad9c8d5f-7bb0-4c9a-bcee-acb8edef29a6",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                        "width": 2953
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/76603709-ba40-4a11-85f1-eea4534e6a4e",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=3456/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/566a723a-bc5c-4ae7-b445-06614c294a63",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/75fe1e05-21a2-4e8a-8bce-9d75814fe796",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/75fe1e05-21a2-4e8a-8bce-9d75814fe796",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/75fe1e05-21a2-4e8a-8bce-9d75814fe796",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/75fe1e05-21a2-4e8a-8bce-9d75814fe796",
+                        "width": 1600
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/75fe1e05-21a2-4e8a-8bce-9d75814fe796",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/2f31d5d5-46df-4a72-beae-b6ee937314ca",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/2f31d5d5-46df-4a72-beae-b6ee937314ca",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/2f31d5d5-46df-4a72-beae-b6ee937314ca",
+                        "width": 1200
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/2f31d5d5-46df-4a72-beae-b6ee937314ca",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/d9b3a37a-75b0-4545-92bb-2cebdd2fbeb2",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/d9b3a37a-75b0-4545-92bb-2cebdd2fbeb2",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/d9b3a37a-75b0-4545-92bb-2cebdd2fbeb2",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/d9b3a37a-75b0-4545-92bb-2cebdd2fbeb2",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/d9b3a37a-75b0-4545-92bb-2cebdd2fbeb2",
+                        "width": 2048
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/d9b3a37a-75b0-4545-92bb-2cebdd2fbeb2",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=3456/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                        "width": 3456
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/f22ae281-7e32-420c-b198-d653d6dc4857",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/10fbba80-b879-4bea-8a8d-a12019887220",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/10fbba80-b879-4bea-8a8d-a12019887220",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/10fbba80-b879-4bea-8a8d-a12019887220",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/10fbba80-b879-4bea-8a8d-a12019887220",
+                        "width": 1366
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/10fbba80-b879-4bea-8a8d-a12019887220",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/media/16fbc14a-a53c-47cc-a051-9c632b41ecc4",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/media/16fbc14a-a53c-47cc-a051-9c632b41ecc4"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/media/16fbc14a-a53c-47cc-a051-9c632b41ecc4",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=2560/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                        "width": 2560
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                        "width": 2921
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/97b2d36c-0a00-4b49-9ba2-d2199f7e4dd7",
+                    "width": 960,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/media/c67d1e3d-c350-40ce-b9c1-f3a199b1d432",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/media/c67d1e3d-c350-40ce-b9c1-f3a199b1d432"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/media/c67d1e3d-c350-40ce-b9c1-f3a199b1d432",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/media/dd5926fb-fd37-42e4-9309-f24c86d19a29",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/media/dd5926fb-fd37-42e4-9309-f24c86d19a29"
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://media-production.lp-cdn.com/media/dd5926fb-fd37-42e4-9309-f24c86d19a29",
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 320,
+                    "renderedHeight": 200,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                    "variants": [
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=320/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                        "width": 320
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                        "width": 960
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                        "width": 1280
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                        "width": 1920
+                      },
+                      {
+                        "url": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                        "width": 1946
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/sz1akneutqnnlbir2ex1",
+                    "width": 960,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 360,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#002349",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Open Sans",
+                "headingFontFamily": "MercuryDisplayRoman",
+                "layout": "portrait-split",
+                "spacing": 16,
+                "radius": 32,
+                "headingSize": 52,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#002349",
+                "background": "#ffffff",
+                "ink": "#000000",
+                "panel": "#fffdf9",
+                "muted": "#000000",
+                "fontFamily": "Open Sans",
+                "headingFontFamily": "MercuryDisplayRoman",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 32,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://fonts.googleapis.com/css?family=Open%20Sans:300,400,500,600,700,800,300i,400i,500i,600i,700i,800i",
+                  "https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css",
+                  "https://styles.luxurypresence.com/masterpiece/index.css"
+                ],
+                "colors": [
+                  "#000000",
+                  "#e1e4e9",
+                  "#ed5565",
+                  "#da4453",
+                  "#a43540",
+                  "#999999",
+                  "#dddddd",
+                  "#cccccc",
+                  "#92bce0",
+                  "#428bca",
+                  "#ffffff",
+                  "#b9d4ec",
+                  "#cbcfd5",
+                  "#b4b9be",
+                  "#939ba7",
+                  "#919ba5",
+                  "#9f9f9f",
+                  "#3071a9",
+                  "#d1d6e0",
+                  "#e0e4ea",
+                  "#a3adc1",
+                  "#20b426",
+                  "#18891d",
+                  "#e9e6e6",
+                  "#7685a2",
+                  "#c3c7cd",
+                  "#48536a",
+                  "#dedede",
+                  "#ee22fa",
+                  "#a804b2"
+                ],
+                "fonts": [
+                  "Open Sans",
+                  "Arial",
+                  "sans-serif",
+                  "monospace",
+                  "MercuryDisplayRoman"
+                ],
+                "routing": [
+                  {
+                    "source": "Meet Anthony",
+                    "intent": "profile",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Sell",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Instant Home Valuation",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Properties",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Let's Connect",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home Valuation",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Communities",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Testimonials",
+                    "intent": "testimonials",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "House Hype",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sotheby's",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sotheby's Auction House",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sage Sotheby's International Realty",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Sotheby's International Realty",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Create Your Own Account",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Privacy Policy",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Follow @awestkc",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Learn More",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Get Home Value",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Inquire Now",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "{{{mediaImage media.[0] sizes=\"(max-width: 768px) 100vw, 50vw\" alt=name}}} {{nam",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Overland Park Learn More",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Leawood Learn More",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Mission Hills Learn More",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Leave a Message",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Thank you for your message. I will be in touch with you shortly.",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "WHERE DO YOU BELONG?",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "STUNNING LUXURY HOMES",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "WORLD-CLASS SERVICE",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "BESPOKE MARKETING",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "TRUSTED GLOBAL ADVISOR",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "POWERFUL TOGETHER",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "PROVEN RESULTS",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "10 Years+",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "3",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "$34M+",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "As Seen In",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Selling A Home?",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Buying A Home?",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "EXCEPTIONAL SERVICE. LOCAL EXPERTISE. GLOBAL CONNECTIONS.",
+                    "intent": "services",
+                    "canonical": "omit",
+                    "render": "omit"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://www.housesofkansascity.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://www.housesofkansascity.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "dc08c2b5-0521-453c-ac01-6168b6e75071",
+              "kind": "url",
+              "label": "www.housesofkansascity.com",
+              "uri": "https://www.housesofkansascity.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "houses-of-kansas-city-00-url.png",
+    "houses-of-kansas-city-01-review.png",
+    "houses-of-kansas-city-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 6,
+    "text": []
+  },
+  "submittedAt": 5047,
+  "reviewMs": 14592,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 12 active listings\nReading Anthony West\nMatching your website’s design and imagery\nRead 9 linked pages\nRead full details for 10 of 12 listings\nIdentified your profile photo\nSorted 60 website images by role\nWriting your profile and app copy\nSaved 12 listings\n10 listings from other offices will be shown as featured, not as yours\nFound Anthony West · Mission Woods, KS",
+  "reviewText": "Back\nAPP BUILDER\nwww.housesofkansascity.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nHouses of Kansas City\nMISSION WOODS, KS\nWELCOME\nAnthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas City metro. $34M+ sold · 98% list-to-sale ratio · 500K+ social reach. Licensed in KS, MO & CA.\nView listings\nABOUT\nAnthony West\nPrimary phone 913.522.0329 Website http://HousesofKansasCity.com License Number #00233835 | 2013012910 Email [email protected] Address 2001 Shawnee Mission Pkwy Ste 210 Mission, KS 66205-3601\nTHE AREA\nAreas of Expertise\nWestwood A charming suburban community known for its friendly atmosphere, beautiful homes, and convenient location. Situated just minutes from downtown Kansas City and near the…\nCLIENTS\nWork With Anthony\nWith Anthony, your Real Estate journey is not just a transaction; it's an adventure. Experience the Houses of Kansas City difference, where passion meets proficiency, and every deal is sealed with a touch of fun. Contact him today so he can guide you through the buying and selling process. Work with Anthony Home Search\nFROM THE SITE\nWhat \"luxury\" means in Kansas City\nLuxury real estate here isn't just a price point. It's homes with real architectural character, properties with history, land with development potential, and buyers and sellers who want an agent who understands what makes a property actually stand out, not just what it's listed for. That's the market I work in every day: Mission Hills, Leawood, Prairie Village, Fairway, Overland Park, Brookside, and the wider Kansas City metro on both sides of the state line.\nFROM THE SITE\nWhat Makes the Shakespeare Chateau Singular\nMost historic homes have been compromised. Original windows replaced. Period details painted over or removed entirely. The Shakespeare Chateau is the exception that makes you realize how rare genuine architectural integrity actually is. 47 original stained-glass windows. Every single one installed in 1885 and still present.\nFROM THE SITE\nFrequently Asked Questions\nWhat is Sage Sotheby's International Realty and how is it different from other brokerages? Sage Sotheby's International Realty is the Kansas City and Oklahoma City regional affiliate of Sotheby's International Realty, a global luxury real estate brand with over 1,000 offices in 80+ countries.\nFeatured Properties\n$431,900\n5817 W 101st Place, Overland Park, KS 66207\n3 beds · 2 baths · 1,972\n$745,000\n15882 W 165th Terrace, Olathe, KS 66062\n4 beds · 3 baths · 3,633\n$600,000\n16220 Birch Street, Overland Park, KS 66085\n5 beds · 4 baths · 3,156\n$689,000\n12527 S Hastings Street, Olathe, KS 66061\n4 beds · 3 baths · 2,943\n$439,900\n15672 S Blackfoot Street, Olathe, KS 66062\n5 beds · 3 baths · 1,893\n$409,950\n9248 Switzer Street, Overland Park, KS 66214\n5 beds · 2 baths · 1,738\n$625,000\n1216 W 73rd Street, Kansas City, MO 64114\n3 beds · 2.5 baths · 2,294\n$699,000\n24739 W 92nd Street, Lenexa, KS 66227\n4 beds · 3.5 baths · 2,925\n$1,195,000\n5310 MISSION WOODS Road, Mission Woods, KS 66205\n4 beds · 4.5 baths · 3,856\n$480,000\n5127 Walnut Street, Kansas City, MO 64112\n3 beds · 3 baths · 1,776\n913.522.0329\n[email protected]\nSage Sotheby's International Realty\n#00233835 | 2013012910\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nKansas City's Trusted Real Estate Advisor\nTry another opening line\nYOUR INTRODUCTION\nI’m Anthony West, a Kansas City native and the force behind Houses of Kansas City at Sage Sotheby’s International Realty. With more than 13 years in real estate and deep experience in resale, new construction, and custom home building, I’ve had the pleasure of guiding clients through every facet of buying and selling across the KC metro. My approach is simple: combine proven results—$34M+ sold, 98% list-to-sale ratio, and a powerful digital network reaching over 500,000—with creativity and care. Whether you’re looking in Mission Hills, Leawood, Prairie Village, or beyond, you can count on an adventure where passion meets proficiency, and a process tailored to you. Let’s connect and get started.\nTry another introduction\n12 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Sage Sotheby's International Realty · #00233835 | 2013012910 · KS, MO, CA\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nHouses of Kansas City\nMISSION WOODS, KS\nWELCOME\nAnthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas City metro. $34M+ sold · 98% list-to-sale ratio · 500K+ social reach. Licensed in KS, MO & CA.\nView listings\nABOUT\nAnthony West\nPrimary phone 913.522.0329 Website http://HousesofKansasCity.com License Number #00233835 | 2013012910 Email [email protected] Address 2001 Shawnee Mission Pkwy Ste 210 Mission, KS 66205-3601\nTHE AREA\nAreas of Expertise\nWestwood A charming suburban community known for its friendly atmosphere, beautiful homes, and convenient location. Situated just minutes from downtown Kansas City and near the…\nCLIENTS\nWork With Anthony\nWith Anthony, your Real Estate journey is not just a transaction; it's an adventure. Experience the Houses of Kansas City difference, where passion meets proficiency, and every deal is sealed with a touch of fun. Contact him today so he can guide you through the buying and selling process. Work with Anthony Home Search\nFROM THE SITE\nWhat \"luxury\" means in Kansas City\nLuxury real estate here isn't just a price point. It's homes with real architectural character, properties with history, land with development potential, and buyers and sellers who want an agent who understands what makes a property actually stand out, not just what it's listed for. That's the market I work in every day: Mission Hills, Leawood, Prairie Village, Fairway, Overland Park, Brookside, and the wider Kansas City metro on both sides of the state line.\nFROM THE SITE\nWhat Makes the Shakespeare Chateau Singular\nMost historic homes have been compromised. Original windows replaced. Period details painted over or removed entirely. The Shakespeare Chateau is the exception that makes you realize how rare genuine architectural integrity actually is. 47 original stained-glass windows. Every single one installed in 1885 and still present.\nFROM THE SITE\nFrequently Asked Questions\nWhat is Sage Sotheby's International Realty and how is it different from other brokerages? Sage Sotheby's International Realty is the Kansas City and Oklahoma City regional affiliate of Sotheby's International Realty, a global luxury real estate brand with over 1,000 offices in 80+ countries.\nFeatured Properties\n$431,900\n5817 W 101st Place, Overland Park, KS 66207\n3 beds · 2 baths · 1,972\n$745,000\n15882 W 165th Terrace, Olathe, KS 66062\n4 beds · 3 baths · 3,633\n$600,000\n16220 Birch Street, Overland Park, KS 66085\n5 beds · 4 baths · 3,156\n$689,000\n12527 S Hastings Street, Olathe, KS 66061\n4 beds · 3 baths · 2,943\n$439,900\n15672 S Blackfoot Street, Olathe, KS 66062\n5 beds · 3 baths · 1,893\n$409,950\n9248 Switzer Street, Overland Park, KS 66214\n5 beds · 2 baths · 1,738\n$625,000\n1216 W 73rd Street, Kansas City, MO 64114\n3 beds · 2.5 baths · 2,294\n$699,000\n24739 W 92nd Street, Lenexa, KS 66227\n4 beds · 3.5 baths · 2,925\n$1,195,000\n5310 MISSION WOODS Road, Missi",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all ACTIVE 5817 W 101st Place, Overland Park, KS 66207 $431,900 ACTIVE 15882 W 165th Terrace, Olathe, KS 66062 $745,000 ACTIVE 16220 Birch Street, ",
+        "textLength": 815,
+        "stillHome": false
+      },
+      {
+        "label": "5817 W 101st Place, Overland Park, KS 66207",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 5817 W 101st Place, Overland Park, KS 66207 $431,900 3 beds · 2 baths 1,972 This move-in ready Overland Park single-family residence in the coveted Nall Hills neighborho",
+        "textLength": 1725,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "15882 W 165th Terrace, Olathe, KS 66062",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 15882 W 165th Terrace, Olathe, KS 66062 $745,000 4 beds · 3 baths 3,633 Former model home loaded with upgrades and custom finishes throughout! This impressive home featu",
+        "textLength": 1432,
+        "stillHome": false
+      },
+      {
+        "label": "16220 Birch Street, Overland Park, KS 66085",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 16220 Birch Street, Overland Park, KS 66085 $600,000 5 beds · 4 baths 3,156 Come check out this Wilderness gem tucked into a quiet cul-de-sac! Offering 5 bedrooms, 3 ful",
+        "textLength": 2049,
+        "stillHome": false
+      },
+      {
+        "label": "12527 S Hastings Street, Olathe, KS 66061",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 12527 S Hastings Street, Olathe, KS 66061 $689,000 4 beds · 3 baths 2,943 Welcome to this beautiful reverse 1.5-story home in the highly desirable Forest View the Hills ",
+        "textLength": 2049,
+        "stillHome": false
+      },
+      {
+        "label": "15672 S Blackfoot Street, Olathe, KS 66062",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 15672 S Blackfoot Street, Olathe, KS 66062 $439,900 5 beds · 3 baths 1,893 Welcome to this beautifully updated split-entry in the desirable Woodland Creek community! Thi",
+        "textLength": 1470,
+        "stillHome": false
+      },
+      {
+        "label": "9248 Switzer Street, Overland Park, KS 66214",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 9248 Switzer Street, Overland Park, KS 66214 $409,950 5 beds · 2 baths 1,738 This classic Overland Park residence is dressed to impress from curb to kitchen with crisp, ",
+        "textLength": 1640,
+        "stillHome": false
+      },
+      {
+        "label": "1216 W 73rd Street, Kansas City, MO 64114",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 1216 W 73rd Street, Kansas City, MO 64114 $625,000 3 beds · 2.5 baths 2,294 A RARE Brookside Find - This charming historic, stone Tudor Revival features a rebuilt, ATTAC",
+        "textLength": 1761,
+        "stillHome": false
+      },
+      {
+        "label": "24739 W 92nd Street, Lenexa, KS 66227",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 24739 W 92nd Street, Lenexa, KS 66227 $699,000 4 beds · 3.5 baths 2,925 Beautiful French inspired Drees Built home features soaring vaulted ceilings lined with gorgeous ",
+        "textLength": 1848,
+        "stillHome": false
+      },
+      {
+        "label": "5310 MISSION WOODS Road, Mission Woods, KS 66205",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 5310 MISSION WOODS Road, Mission Woods, KS 66205 $1,195,000 4 beds · 4.5 baths 3,856 Gorgeous remodeled home situated on a private, treed lot in highly coveted Mission W",
+        "textLength": 2330,
+        "stillHome": false
+      },
+      {
+        "label": "5127 Walnut Street, Kansas City, MO 64112",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 5 photos 5127 Walnut Street, Kansas City, MO 64112 $480,000 3 beds · 3 baths 1,776 Tucked into the heart of one of Kansas City’s most vibrant areas, 5127 Walnut St offers the per",
+        "textLength": 1697,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app Houses of Kansas City MISSION WOODS, KS WELCOME Anthony West is a luxury listing agent with Sage Sotheby's International Realty serving Mission Hills, Leawood, Prairie Village and the greater Kansas ",
+        "textLength": 3244,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all ACTIVE 5817 W 101st Place, Overland Park, KS 66207 $431,900 ACTIVE 15882 W 165th Terrace, Olathe, KS 66062 $745,000 ACTIVE 16220 Birch Street, ",
+        "textLength": 815,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 12
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "5817 W 101st Place, Overland Park, KS 66207",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2640661/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 172582
+      }
+    },
+    {
+      "title": "15882 W 165th Terrace, Olathe, KS 66062",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642504/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 684,
+        "type": "jpg",
+        "bytes": 195728
+      }
+    },
+    {
+      "title": "16220 Birch Street, Overland Park, KS 66085",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2642799/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 131489
+      }
+    },
+    {
+      "title": "12527 S Hastings Street, Olathe, KS 66061",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637970/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 683,
+        "type": "jpg",
+        "bytes": 120028
+      }
+    },
+    {
+      "title": "15672 S Blackfoot Street, Olathe, KS 66062",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645179/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 144402
+      }
+    },
+    {
+      "title": "9248 Switzer Street, Overland Park, KS 66214",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2637587/10775dc2-65d6-4c2d-857a-b8eec7979fbe.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 683,
+        "type": "jpg",
+        "bytes": 183109
+      }
+    },
+    {
+      "title": "1216 W 73rd Street, Kansas City, MO 64114",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644619/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 682,
+        "type": "jpg",
+        "bytes": 182646
+      }
+    },
+    {
+      "title": "24739 W 92nd Street, Lenexa, KS 66227",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2614995/4cc5d16e-fdd9-4bed-a4ff-85da8ac5d8ef.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 686,
+        "type": "jpg",
+        "bytes": 88834
+      }
+    },
+    {
+      "title": "5310 MISSION WOODS Road, Mission Woods, KS 66205",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2644476/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 754,
+        "type": "jpg",
+        "bytes": 239140
+      }
+    },
+    {
+      "title": "5127 Walnut Street, Kansas City, MO 64112",
+      "photos": 5,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2645882/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 681,
+        "type": "jpg",
+        "bytes": 144624
+      }
+    },
+    {
+      "title": "624 W 131 Terrace, Kansas City, MO 64145",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2646051/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 681,
+        "type": "jpg",
+        "bytes": 122957
+      }
+    },
+    {
+      "title": "11417 Cambridge Road, Leawood, KS 66211",
+      "photos": 1,
+      "first": "https://dlajgvw9htjpb.cloudfront.net/mlsgrid/hmls/HMS2597255/0.jpeg",
+      "size": {
+        "status": 200,
+        "width": 1024,
+        "height": 680,
+        "type": "jpg",
+        "bytes": 130386
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://www.housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 30186,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-0.png"
+    },
+    {
+      "url": "https://housesofkansascity.com/",
+      "status": 200,
+      "finalUrl": "https://housesofkansascity.com/",
+      "title": "Anthony West | Top Real Estate Expert in Kansas City",
+      "textLength": 29914,
+      "priceCount": 20,
+      "uniquePrices": 15,
+      "propertyLinkCount": 13,
+      "sample": "MEET ANTHONY\nSELL\nPROPERTIES\nHOME SEARCH\nLET'S CONNECT\nCLOSE MENU\nHOME\nMEET ANTHONY\nPROPERTIES \nHOME SEARCH\nHOME VALUATION\nCOMMUNITIES\nTESTIMONIALS\nHOUSE HYPE\nSOTHEBY'S \nLET’S CONNECT\nCREATE YOUR OWN ACCOUNT\nLET'S CONNECT\nSEARCH\nPROVEN RESULTS\n\nAnthony leads Houses of Kansas City at Sage Sotheby's International Realty, bringing over a decade of experience in Residential Resale, Land Sales, New Construction, and Custom Home Building.\n\n98%\n\nMy listings sell for 98 % of the listing price on average, ensuring clients receive the best value while maintaining strong positioning in any market.\n\n650K+ SOCIAL REACH\n\n650K+ likes and tens of thousands of monthly view, a digital strategy that makes listings impossible to ignore.\n\n10 YEARS+\n\nMore than a decade of helping clients buy, sell, and build across Kansas City and with a reputation built on strategy, creativity, and results.\n\n3\n\nStates Licensed: KS, MO, CA\n\n$34M+\n\nReal Estate Volume Sold\n\nFOLLOW @AWESTKC\nAS SEEN IN\nWELCOME TO THE CHATEAU\n\nFew properties anywhere in America can claim what the Shakespeare Chateau offers: Over 140 years of architectural integrity, a nationally recognized historic designation, and a depth of original crafts",
+      "challenge": false,
+      "screenshot": "houses-of-kansas-city-source-1.png"
+    }
+  ],
+  "wallMs": 64865,
+  "window": {
+    "startedAt": "2026-10-09T00:49:48.278Z",
+    "endedAt": "2026-10-09T00:50:53.143Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.02675,
+    "inputTokens": 8355,
+    "outputTokens": 1255
+  }
+}
