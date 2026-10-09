@@ -1,4 +1,5 @@
-Stage gate requested Fri Oct  9 00:41:14 UTC 2026: Cindy Carlson investigation fixes on staging, with a small cross-platform sample.
-justification: verify the provider browser-check message, captioned portrait and site-map scope fix on staging before updating the preview
+Stage gate requested Fri Oct  9 00:56:05 UTC 2026: end-to-end check of the DEPLOYED development preview of main a933e3a against the staging importer.
+justification: confirm the deployed preview runs the Cindy Carlson investigation fixes (message, portrait, site-map scope)
 staging-ai: shared-key
-sites: cindy-carlson-realty, tom-toole, chatman-realty-group, realm-partners-idaho, houses-of-kansas-city
+app-url: https://cdariverdepot-my-realtor--r4z1osf03a.expo.app
+sites: cindy-carlson-realty, tom-toole
