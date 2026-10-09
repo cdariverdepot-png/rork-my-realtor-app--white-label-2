@@ -228,11 +228,12 @@ async function run(browser, site) {
         // Start the previous website again, then leave a few seconds in.
         if (done) { await page.getByText('Change', { exact: true }).first().click({ timeout: 10000 }); await submitUrl(previousUrl); }
         await page.waitForTimeout(4000);
-        await page.getByLabel('Back').first().click({ timeout: 10000 });
-        await page.waitForURL(u => !String(u).includes('/admin/build'), { timeout: 30000 }).catch(() => {});
-        await page.getByLabel('Page 5').click({ timeout: 30000 });
-        await page.getByText('BUILD MY APP', { exact: true }).click({ timeout: 30000 });
-        await page.waitForURL(u => String(u).includes('/admin/build'), { timeout: 60000 });
+        // The builder's own Exit is disabled while importing; the browser's Back is not.
+        await page.goBack();
+        await page.waitForTimeout(2000);
+        r.leftTo = page.url();
+        await page.goto(`${APP}/admin/build`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForTimeout(3000);
         const change2 = page.getByText('Change', { exact: true });
         if (await change2.count()) await change2.first().click().catch(() => {});
       } else if (done) {

@@ -1,5 +1,5 @@
-Stage gate requested Fri Oct  9 06:22:58 UTC 2026: cross-website isolation scenarios on the branch build (Cindy -> Paonia and back, consecutive changes, leaving mid-import).
-justification: verify live that no generated app shows another website's listings after website changes, before merging
+Stage gate requested Fri Oct  9 06:31:41 UTC 2026: leaving the builder mid-import (browser Back) and starting again from another website.
+justification: verify live that a previous website's import still running never fills the new website's app
 staging-ai: shared-key
 ui-walk: yes
-sites: cindy-then-paonia, paonia-then-cindy, cindy-paonia-cindy-paonia, cindy-exit-mid-import-paonia
+sites: cindy-exit-mid-import-paonia
