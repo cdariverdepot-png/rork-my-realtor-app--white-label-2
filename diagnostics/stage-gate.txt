@@ -1,6 +1,6 @@
-Stage gate requested Fri Oct  9 15:16:30 UTC 2026: Studio walk with dashboard history probe.
+Stage gate requested Fri Oct  9 15:27:19 UTC 2026: audit repairs, full rerun after the history fix (branch build).
 justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
 app-url:
-sites: cindy-studio-paonia
+sites: cindy-then-paonia, paonia-then-cindy, cindy-back-same, cindy-then-empty-resume, cindy-studio-paonia
