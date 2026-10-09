@@ -205,6 +205,20 @@ async function studioWalk(page, r, studio) {
     await page.waitForTimeout(3000);
     return titles;
   };
+  // Diagnostics: how the bundled router uses the browser history (snippets around history calls).
+  try {
+    const snippets = await page.evaluate(async () => {
+      const src = [...document.scripts].map(sc => sc.src).find(u => /entry-.*\.js/.test(u));
+      const text = await (await fetch(src)).text();
+      const out = [];
+      for (const re of [/addEventListener\(["']popstate["']/g, /history\.(back|go|forward)\(/g, /["']navigate["']/g, /window\.navigation/g]) {
+        let m; let count = 0;
+        while ((m = re.exec(text)) && count < 12) { out.push(text.slice(Math.max(0, m.index - 600), m.index + 400)); count++; }
+      }
+      return out;
+    });
+    fs.writeFileSync(path.join(out, `${r.id}-router-history-snippets.txt`), snippets.join('\n\n=====\n\n'));
+  } catch (e) { st.snippetError = String(e).slice(0, 200); }
   // 1. Publish the app built from the first website.
   await page.getByRole('button', { name: 'Publish My App' }).first().click({ timeout: 15000 });
   for (let i = 0; i < 60 && /\/admin\/build/.test(page.url()); i++) await page.waitForTimeout(1000);

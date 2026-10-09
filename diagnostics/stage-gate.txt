@@ -1,4 +1,4 @@
-Stage gate requested Fri Oct  9 16:04:36 UTC 2026: dashboard preview remount tracing (temporary diagnostics).
+Stage gate requested Fri Oct  9 16:12:02 UTC 2026: router history snippets (temporary diagnostics).
 justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes
