@@ -77,7 +77,8 @@ test('the review reads the saved collection and never offers the same website im
   assert.equal((setup.match(/listings=\{reviewListings\}/g) ?? []).length, 2, 'the inline preview and the full preview use the same collection');
   assert.doesNotMatch(setup, /listingsSnapshot\.current,result\?\.draft/);
   assert.doesNotMatch(setup, /<ListingSourceImporter initialUrl=\{url\}/);
-  assert.match(setup, /Math\.max\(savedListingCount, importedListingCount\) > 0/);
+  assert.match(setup, /const listingCount = savedListingCount \|\| importedListingCount;/);
+  assert.match(setup, /\{listingCount > 0 \?/);
   // Resuming the review never lowers the count to the build draft's (empty) list.
   assert.doesNotMatch(setup, /setImportedListingCount\(found\.length\);\n    \}\n  \}, \[brand/);
 });

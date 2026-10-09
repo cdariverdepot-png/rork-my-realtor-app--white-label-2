@@ -111,6 +111,9 @@ export default function InitialRealtorSetup() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [existingListings, result, snapshotVersion]);
   const savedListingCount = reviewListings.filter(item => !item.hidden && !item.sourceArchived).length;
+  // What the app shows: the saved collection once it is there (duplicates merged by the detail jobs are gone
+  // from it), the import's own count only until the collection arrives.
+  const listingCount = savedListingCount || importedListingCount;
 
   // Once a build starts, keep the progress surface mounted through failures.
   // Never dump the realtor back to URL entry because a downstream service failed.
@@ -654,7 +657,7 @@ export default function InitialRealtorSetup() {
       <View style={{ marginTop: 26, padding: 18, borderRadius: 14, backgroundColor: "#171D22" }}>
         {/* The import already ran from the website address. When it brought listings in, say so; only when nothing
             was imported is a different source offered (never the same address again: that repeats the same import). */}
-        {Math.max(savedListingCount, importedListingCount) > 0 ? <View style={{flexDirection:"row",alignItems:"center",gap:12}}><Check size={20} color="#CDE1D9"/><Text style={{color:"#E8EFE9",fontSize:15,lineHeight:23}}>{Math.max(savedListingCount, importedListingCount)} {Math.max(savedListingCount, importedListingCount) === 1 ? "listing" : "listings"} imported from your website.</Text></View>
+        {listingCount > 0 ? <View style={{flexDirection:"row",alignItems:"center",gap:12}}><Check size={20} color="#CDE1D9"/><Text style={{color:"#E8EFE9",fontSize:15,lineHeight:23}}>{listingCount} {listingCount === 1 ? "listing" : "listings"} imported from your website.</Text></View>
           : listingsHydrated ? <ListingSourceImporter onImported={count => { setImportedListingCount(count); setHasConnectedSource(true); }} /> : null}
       </View>
 
