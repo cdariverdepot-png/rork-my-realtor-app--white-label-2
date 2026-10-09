@@ -13,6 +13,10 @@ async function plain(url, extra = {}) {
   try {
     const res = await fetch(url, { headers: { 'User-Agent': 'MyRealtorAppBuilder/1.0', Accept: 'text/html', ...extra }, signal: AbortSignal.timeout(20000) });
     const html = await res.text();
+    if (process.env.PROBE_SAVE_DIR && !extra['X-Requested-With']) {
+      fs.mkdirSync(process.env.PROBE_SAVE_DIR, { recursive: true });
+      fs.writeFileSync(require('node:path').join(process.env.PROBE_SAVE_DIR, 'plain-' + url.replace(/^https?:\/\//, '').replace(/[^a-z0-9]+/gi, '_').slice(0, 120) + '.txt'), html.slice(0, 200000));
+    }
     const frames = [...html.matchAll(/<iframe\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].slice(0, 200));
     const scripts = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1].slice(0, 160)).filter(u => !/wp-includes|jquery|wp-content\/themes/.test(u));
     const links = [...new Set([...html.matchAll(/href=["'](https?:\/\/[^"']+)["']/gi)].map(m => m[1]).filter(u => !/wp-content|wordpress|studiopress|fonts/.test(u)))].slice(0, 40);
