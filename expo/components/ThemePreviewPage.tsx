@@ -45,6 +45,10 @@ export default function ThemePreviewPage({ route, brand, listings, onNavigate, s
   // The Listings tab: every home as a complete card, in the realtor's own colors and type.
   if (route === '/listings') return <ListingBrowser brand={brand} listings={listings} width={width} onOpen={id => onNavigate(`/listing/${id}`)}
     onFavorite={onFavorite} isFavorite={id => savedIds.includes(id)} />;
+  // Saved homes: the same cards for the homes the client hearted; tapping the heart again removes one.
+  if (route === '/favorites') return <ListingBrowser brand={brand} listings={listings.filter(item => savedIds.includes(item.id))} width={width} title="Saved homes"
+    emptyText="Tap a heart on any home to save it here. These saves stay in your preview." onOpen={id => onNavigate(`/listing/${id}`)}
+    onFavorite={onFavorite} isFavorite={id => savedIds.includes(id)} />;
   return <View style={{ padding: 24, gap: 22, minHeight: 640, overflow: 'hidden' }}>
     {brand.presentation !== 'website' && <View pointerEvents="none" style={{ position: 'absolute', inset: 0 }}>
       <Image source={material.photo} contentFit="cover" style={{ width: '100%', height: '100%' }} />

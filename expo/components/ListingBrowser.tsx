@@ -53,9 +53,11 @@ export function listingGrid(width: number) {
  * The Listings tab: every active home as a complete card in natural vertical scroll, one column on phones and a
  * balanced grid only where each card keeps a readable width. Used where the screen itself scrolls (preview).
  */
-export default function ListingBrowser({ brand, listings, width: givenWidth, onOpen, onFavorite, isFavorite, recommendedIds, recommendationLabel }: {
+export default function ListingBrowser({ brand, listings, width: givenWidth, onOpen, onFavorite, isFavorite, recommendedIds, recommendationLabel, title, emptyText }: {
   brand: Brand; listings: ManagedListing[]; width?: number; onOpen?: (id: string) => void; onFavorite?: (id: string) => void;
-  isFavorite?: (id: string) => boolean; recommendedIds?: string[]; recommendationLabel?: string }) {
+  isFavorite?: (id: string) => boolean; recommendedIds?: string[]; recommendationLabel?: string;
+  /** Heading for another collection of the same homes (Saved homes); defaults to the realtor's listings. */
+  title?: string; emptyText?: string }) {
   const window = useWindowDimensions();
   const width = givenWidth ?? window.width;
   const t = listingSurface(brand);
@@ -65,13 +67,13 @@ export default function ListingBrowser({ brand, listings, width: givenWidth, onO
   const card = items.length === 1 ? Math.min(grid.card * grid.columns + grid.gap * (grid.columns - 1), 560) : grid.card;
   return <View testID="listing-browser" style={{ backgroundColor: t.background, paddingTop: 24, paddingBottom: 32, minHeight: 640 }}>
     <View style={{ width: grid.content, alignSelf: "center", gap: 4, marginBottom: 20 }}>
-      <Text accessibilityRole="header" style={{ color: t.ink, fontFamily: t.headingFont, fontSize: 32, lineHeight: 38 }}>{listingsHeading(brand)}</Text>
-      <Text style={{ color: t.muted, fontFamily: t.bodyFont, fontSize: 14 }}>{items.length ? homesCount(items.length) : "No active listings yet"}</Text>
+      <Text accessibilityRole="header" style={{ color: t.ink, fontFamily: t.headingFont, fontSize: 32, lineHeight: 38 }}>{title ?? listingsHeading(brand)}</Text>
+      <Text style={{ color: t.muted, fontFamily: t.bodyFont, fontSize: 14 }}>{items.length ? homesCount(items.length) : title ? "None yet" : "No active listings yet"}</Text>
     </View>
     {items.length ? <View style={{ width: grid.content, alignSelf: "center", flexDirection: "row", flexWrap: "wrap", gap: grid.gap, justifyContent: items.length === 1 ? "center" : "flex-start" }}>
       {items.map(item => <ListingCard key={item.id} item={item} surface={t} width={card} onOpen={onOpen} onFavorite={onFavorite} favorite={isFavorite?.(item.id)}
         recommendation={recommendedIds?.includes(item.id) ? recommendationLabel || "Recommended by your realtor" : undefined} />)}
     </View> : <Text style={{ width: grid.content, alignSelf: "center", color: t.muted, fontFamily: t.bodyFont, fontSize: 15, lineHeight: 23 }}>
-      New homes will appear here as they become available. Get in touch to talk about what you’re looking for.</Text>}
+      {emptyText ?? "New homes will appear here as they become available. Get in touch to talk about what you’re looking for."}</Text>}
   </View>;
 }
