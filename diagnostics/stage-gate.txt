@@ -1,4 +1,4 @@
-Stage gate requested Fri Oct  9 15:39:36 UTC 2026: dashboard preview history trace.
+Stage gate requested Fri Oct  9 15:49:08 UTC 2026: dashboard preview close tracing (temporary diagnostics).
 justification: live end-to-end verification of the builder and published Studio workflows before merging the audit repairs
 staging-ai: shared-key
 ui-walk: yes

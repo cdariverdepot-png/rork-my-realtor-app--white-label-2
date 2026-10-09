@@ -169,6 +169,7 @@ async function studioWalk(page, r, studio) {
   st.historyTrace = st.historyTrace ?? [];
   page.on('console', m => { if (m.text().startsWith('[hist]')) st.historyTrace.push(m.text().slice(7)); });
   const previewListings = async (button, name, closeWith = 'on-screen') => {
+    await page.evaluate(() => { window.__mraHistoryTrace = true; });
     st.historyProbe.push(await probe(`${name}: before open`));
     await page.getByRole('button', { name: button, exact: true }).first().click();
     await page.waitForTimeout(2500);

@@ -92,7 +92,7 @@ test('stepping back through the client app preview opened from the review never 
   // Pops that belong to the preview or the builder never reach the router: it would reset the screen underneath
   // to an older recorded state (the dashboard preview closed and left the dashboard, Oct 9 2026 gate probe).
   const modal = read('components/ThemePreviewModal.tsx'), setup = read('components/InitialRealtorSetup.tsx');
-  assert.match(modal, /const onPop = \(event: PopStateEvent\) => \{\n\s+claimPop\(event\);/);
+  assert.match(modal, /const onPop = \(event: PopStateEvent\) => \{\n(?:\s+trace\([^\n]*\n)?\s+claimPop\(event\);/);
   assert.match(modal, /window\.addEventListener\("popstate", onPop, true\);/);
   assert.match(modal, /window\.addEventListener\("popstate", swallow, true\);\n\s+window\.history\.go\(-n\);/);
   assert.match(setup, /window\.addEventListener\("popstate", onPop, true\);/);

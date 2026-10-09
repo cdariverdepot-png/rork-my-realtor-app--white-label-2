@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useBrand } from '@/contexts/BrandContext';
@@ -16,6 +16,11 @@ import ThemePreviewModal from './ThemePreviewModal';
 export default function DesignPublicationPanel() {
   const router = useRouter(), model = useBrand(), { all, draftWebsite, refresh } = useListings(), { realtorId } = useAuth();
   const pending = draftWebsite.pending;
+  useEffect(() => {
+    const on = () => typeof window !== 'undefined' && (window as unknown as { __mraHistoryTrace?: boolean }).__mraHistoryTrace;
+    if (on()) console.log('[hist]', JSON.stringify({ tag: 'panel', kind: 'mount' }));
+    return () => { if (on()) console.log('[hist]', JSON.stringify({ tag: 'panel', kind: 'unmount', stack: (new Error().stack ?? '').split('\n').slice(2, 7).join(' | ') })); };
+  }, []);
   /** Publishing a draft built from another website moves the app's listings to that website (see applyPendingWebsite). */
   const switchListings = async (): Promise<AppliedWebsite | null> => {
     if (!pending || !realtorId) return null;

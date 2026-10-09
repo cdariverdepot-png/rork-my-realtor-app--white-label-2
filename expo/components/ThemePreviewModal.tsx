@@ -16,6 +16,9 @@ import { claimPop, historyLayers } from '@/lib/builderHistory';
 import { PreviewSandboxProvider } from './PreviewSandbox';
 import { liveThemeDesign } from '@/constants/liveThemeDesigns';
 
+/** Temporary diagnostics for the gate harness (only when the harness sets window.__mraHistoryTrace). */
+const trace = (kind: string, data: object) => { if (typeof window !== "undefined" && (window as unknown as { __mraHistoryTrace?: boolean }).__mraHistoryTrace) console.log("[hist]", JSON.stringify({ tag: "modal", kind, ...data, stack: (new Error().stack ?? "").split("\n").slice(2, 7).join(" | ") })); };
+
 /**
  * Full-screen, read-only theme preview. Leave with the Back button (top left)
  * or by swiping right — the screen follows the finger and slides away.
@@ -57,6 +60,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
   };
 
   const close = () => {
+    trace("close", { page, webEntries: webEntries.current });
     if (Platform.OS !== "web") Haptics.selectionAsync().catch(() => {});
     onClose();
   };
@@ -78,6 +82,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     // Every pop while the preview is open is the preview's: handled here and kept from the router, which would
     // otherwise reset the screen underneath to an older recorded state (lib/builderHistory).
     const onPop = (event: PopStateEvent) => {
+      trace("onPop", { webEntries: webEntries.current });
       claimPop(event);
       if (ignorePops.current > 0) { ignorePops.current--; return; }
       if (webEntries.current > 0) webEntries.current--;
@@ -85,6 +90,7 @@ export default function ThemePreviewModal({ visible, title, subtitle, note, bran
     };
     window.addEventListener("popstate", onPop, true);
     return () => {
+      trace("cleanup", { webEntries: webEntries.current });
       window.removeEventListener("popstate", onPop, true);
       historyLayers.close();
       // Closed some other way: drop the preview's remaining history entries without leaving the page. That pop
