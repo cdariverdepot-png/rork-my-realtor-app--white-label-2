@@ -1,5 +1,5 @@
-Stage gate requested Fri Oct  9 02:24:04 UTC 2026: end-to-end check of the DEPLOYED development preview of main 749a6f9 against the staging importer.
-justification: confirm Cindy Carlson's current listings import and display through the deployed iPhone preview
+Stage gate requested Fri Oct  9 04:33:44 UTC 2026: phone-size UI walkthrough of the review and client preview (Listings tab overhaul) on the branch build.
+justification: verify the Listings tab, Home, review and back navigation visually at iPhone size with real imports of 1 to 100 listings before merging
 staging-ai: shared-key
-app-url: https://cdariverdepot-my-realtor--5ces0zvejg.expo.app
-sites: cindy-carlson-realty, flexmls-redefinedrealty--3, tom-toole
+ui-walk: yes
+sites: cindy-carlson-realty, irene-on-whidbey, freestone-properties, flexmls-redefinedrealty--3, flexmls-columbiarealestate--3
