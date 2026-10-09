@@ -166,6 +166,8 @@ async function studioWalk(page, r, studio) {
   const probe = async label => ({ label, ...(await page.evaluate(() => ({ length: history.length, path: location.pathname, state: JSON.stringify(history.state).slice(0, 160),
     modal: document.querySelectorAll('[aria-modal="true"]').length }))) });
   st.historyProbe = st.historyProbe ?? [];
+  st.historyTrace = st.historyTrace ?? [];
+  page.on('console', m => { if (m.text().startsWith('[hist]')) st.historyTrace.push(m.text().slice(7)); });
   const previewListings = async (button, name, closeWith = 'on-screen') => {
     st.historyProbe.push(await probe(`${name}: before open`));
     await page.getByRole('button', { name: button, exact: true }).first().click();
@@ -174,6 +176,18 @@ async function studioWalk(page, r, studio) {
     await modal().getByRole('button', { name: 'Listings', exact: true }).last().click();
     await page.waitForTimeout(2000);
     st.historyProbe.push(await probe(`${name}: listings`));
+    // Trace every history call and popstate from here on (console survives a document change).
+    await page.evaluate(tag => {
+      const log = (kind, arg) => console.log('[hist]', JSON.stringify({ tag, kind, arg, path: location.pathname, state: JSON.stringify(history.state)?.slice(0, 90),
+        modal: document.querySelectorAll('[aria-modal="true"]').length, stack: (new Error().stack ?? '').split('\n').slice(2, 6).map(l => l.trim().slice(0, 140)).join(' | ') }));
+      const ob = history.back.bind(history), og = history.go.bind(history), op = history.pushState.bind(history), or = history.replaceState.bind(history);
+      history.back = () => { log('back'); ob(); };
+      history.go = n => { log('go', n); og(n); };
+      history.pushState = (st, t, u) => { log('push', u); op(st, t, u); };
+      history.replaceState = (st, t, u) => { log('replace', u); or(st, t, u); };
+      window.addEventListener('popstate', () => log('popstate'), true);
+      window.addEventListener('pagehide', () => log('pagehide'));
+    }, name);
     const titles = await cardTitles();
     await step(name, { cards: titles.length, titles });
     // The preview's own Back steps out of it (Listings -> Home -> closed), leaving the dashboard as it was.
