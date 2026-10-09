@@ -1,2 +1,7 @@
-Rendered capture requested Thu Oct  8 23:36:21 UTC 2026: Cindy Carlson zero-listing investigation (Flexmls Client Challenge).
-capture: cindy-carlson-realty--rendered https://cindycarlsonrealty.com/
+Rendered capture requested Fri Oct  9 01:32:03 UTC 2026: live Flexmls transport check (Cindy plus other Flexmls collections).
+capture: cindy-carlson-realty--transport https://cindycarlsonrealty.com/
+capture: flexmls-homesourceofyakima https://my.flexmls.com/homesourceofyakima/search/listing_categories/Active/listings
+capture: flexmls-columbiarealestate https://my.flexmls.com/ColumbiaRealEstate/search/listing_categories/Active/listings
+capture: flexmls-shomerealestate https://my.flexmls.com/shomerealestate/search/listing_categories/Active/listings
+capture: flexmls-redefinedrealty https://my.flexmls.com/redefinedrealty/search/listing_categories/Active/listings
+capture: flexmls-elpaso https://my.flexmls.com/elpaso/search/listing_categories/Active/listings
