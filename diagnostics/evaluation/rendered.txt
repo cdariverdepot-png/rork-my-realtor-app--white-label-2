@@ -1,2 +1,2 @@
-Rendered capture requested Fri Oct  9 06:06:04 UTC 2026: Paonia Realty (user test, import returned 422).
+Rendered capture requested Fri Oct  9 06:17:33 UTC 2026: Paonia Realty (IDX Broker featured page; user test import returned 422).
 capture: paonia-realty https://www.paoniarealty.com/
