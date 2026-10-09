@@ -1,5 +1,6 @@
-Stage gate requested Fri Oct  9 06:31:41 UTC 2026: leaving the builder mid-import (browser Back) and starting again from another website.
-justification: verify live that a previous website's import still running never fills the new website's app
+Stage gate requested Fri Oct  9 06:41:58 UTC 2026: the exact user sequence (Cindy -> Back -> Paonia -> Preview) and the reverse on the DEPLOYED preview of main f38c2ef.
+justification: confirm on the deployed iPhone preview that a changed website never shows the previous website's listings
 staging-ai: shared-key
 ui-walk: yes
-sites: cindy-exit-mid-import-paonia
+app-url: https://cdariverdepot-my-realtor--ftdrp6vfwp.expo.app
+sites: cindy-then-paonia, paonia-then-cindy
