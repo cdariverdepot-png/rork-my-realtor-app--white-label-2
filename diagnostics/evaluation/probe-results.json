@@ -1,15 +1,15 @@
 {
-  "at": "2026-10-09T00:34:42.436Z",
-  "runner": "GitHub Actions 1000000563",
+  "at": "2026-10-09T01:27:30.521Z",
+  "runner": "GitHub Actions 1000000569",
   "sites": [
     {
-      "url": "https://www.tomtoole.com/property-search/site-map/",
+      "url": "https://my.flexmls.com/robots.txt",
       "plain": {
-        "status": 403,
-        "ms": 181,
-        "finalUrl": "https://www.tomtoole.com/property-search/site-map/",
-        "bytes": 5460,
-        "title": "Just a moment...",
+        "status": 200,
+        "ms": 305,
+        "finalUrl": "https://my.flexmls.com/robots.txt",
+        "bytes": 554,
+        "title": "",
         "prices": 0,
         "detailLinks": 0,
         "frames": [],
@@ -17,11 +17,11 @@
         "links": []
       },
       "plainFragment": {
-        "status": 403,
-        "ms": 39,
-        "finalUrl": "https://www.tomtoole.com/property-search/site-map/",
-        "bytes": 5503,
-        "title": "Just a moment...",
+        "status": 200,
+        "ms": 172,
+        "finalUrl": "https://my.flexmls.com/robots.txt",
+        "bytes": 554,
+        "title": "",
         "prices": 0,
         "detailLinks": 0,
         "frames": [],
@@ -30,501 +30,192 @@
       },
       "service": {
         "status": 200,
-        "ms": 3113,
-        "finalUrl": "https://www.tomtoole.com/property-search/site-map/",
-        "bytes": 261916,
-        "title": "Greater Philadelphia Area MLS Listings",
+        "ms": 1516,
+        "finalUrl": "https://my.flexmls.com/robots.txt",
+        "bytes": 705,
+        "title": "",
         "prices": 0,
         "detailLinks": 0,
-        "network": [
-          {
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 252259,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 0,
-            "detailLinks": 0
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
-            "bytes": 0,
-            "title": "",
-            "prices": 0,
-            "detailLinks": 0
-          }
-        ]
+        "network": []
       },
       "serviceAgain": {
         "status": 200,
-        "ms": 4139,
-        "finalUrl": "https://www.tomtoole.com/property-search/site-map/",
-        "bytes": 271207,
-        "title": "Greater Philadelphia Area MLS Listings",
-        "prices": 140,
+        "ms": 1421,
+        "finalUrl": "https://my.flexmls.com/robots.txt",
+        "bytes": 705,
+        "title": "",
+        "prices": 0,
         "detailLinks": 0,
-        "network": [
-          {
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 252259,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 0,
-            "detailLinks": 0
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
-            "bytes": 104613,
-            "title": "",
-            "prices": 0,
-            "detailLinks": 0
-          },
-          {
-            "url": "https://www.tomtoole.com/property-search/sist_ajax/get_search_count.asp",
-            "bytes": 7223,
-            "title": "Access denied | www.tomtoole.com used Cloudflare to restrict access | www.tomtoo",
-            "prices": 0,
-            "detailLinks": 0
-          }
-        ]
+        "network": []
       },
       "local": {
         "timeline": [
           {
-            "at": 1130,
+            "at": 214,
             "event": "domcontentloaded",
-            "url": "https://www.tomtoole.com/property-search/site-map/"
+            "url": "https://my.flexmls.com/robots.txt"
           },
           {
-            "at": 2153,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 275225,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 3174,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 275215,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 6233,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 277488,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 7255,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 286898,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 8278,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 299652,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 10323,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 302890,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 11345,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 309677,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 12367,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 309869,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
-            "detailLinks": 0
-          },
-          {
-            "at": 21577,
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "bytes": 310079,
-            "title": "Greater Philadelphia Area MLS Listings",
-            "prices": 140,
+            "at": 1220,
+            "url": "https://my.flexmls.com/robots.txt",
+            "bytes": 705,
+            "title": "",
+            "prices": 0,
             "detailLinks": 0
           }
         ],
         "responses": [
           {
-            "url": "https://www.tomtoole.com/property-search/site-map/",
-            "status": 200,
-            "type": "text/html;charset=UTF-8"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/common-above-fold.js?v=20260316120005",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
-            "status": 200,
-            "type": "text/javascript;charset=UTF-8"
-          },
-          {
-            "url": "https://cdn.sitephotos.sierrastatic.com/5653_logo_tt-logo-20240424023033.png",
-            "status": 200,
-            "type": "image/png"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-inner-above-fold.js?v=202603161200",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/common-quick-search.js?v=20260316120001",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/css/listings-sitemap.css",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-regular.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/pt-sans/v11-latin-700.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/fontawesome-webfont.woff2?v=4.7.0",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v20260216120001/css/common.css",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202602161200/css/common-quick-search.css",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://cdn.sitephotos.sierrastatic.com/5653_hero_untitled-design-20240426084445.jpg",
-            "status": 200,
-            "type": "image/jpeg"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/images/templates/excelweb/flags.png",
-            "status": 200,
-            "type": "image/png"
-          },
-          {
-            "url": "https://accounts.google.com/gsi/client",
-            "status": 200,
-            "type": "application/javascript; charset=utf-8"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-600.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-700.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/pt-sans/v11-latin-700.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/source-sans-pro/v13-latin-regular.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/templates/excelweb/pt-sans/v11-latin-regular.woff2",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/fontawesome-webfont.woff2?v=4.7.0",
-            "status": 200,
-            "type": "application/font-woff2"
-          },
-          {
-            "url": "https://css.site-static.com/assets/dist/v202311021200/fonts/sierra-social-icons.ttf?bjnuhu",
-            "status": 200,
-            "type": "application/octet-stream"
-          },
-          {
-            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/scripts/jsd/main.js",
-            "status": 302,
-            "type": ""
-          },
-          {
-            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/scripts/jsd/4df4a60fa397/main.js?",
-            "status": 200,
-            "type": "application/javascript; charset=UTF-8"
-          },
-          {
-            "url": "https://www.googletagmanager.com/gtag/js?id=G-HRZCCMT0XJ",
-            "status": 200,
-            "type": "application/javascript; charset=UTF-8"
-          },
-          {
-            "url": "https://www.tomtoole.com/cdn-cgi/challenge-platform/h/g/jsd/oneshot/4df4a60fa397/0.7464260670853249:1791504157:VC_OihXL1dlJ_9v2BKyATyPJmh0yhO-0QsAyc7AZmHY/a4794",
-            "status": 200,
-            "type": "text/plain; charset=UTF-8"
-          },
-          {
-            "url": "https://connect.facebook.net/en_US/fbevents.js",
-            "status": 200,
-            "type": "application/x-javascript; charset=utf-8"
-          },
-          {
-            "url": "https://stats.g.doubleclick.net/g/collect?v=2&tid=G-HRZCCMT0XJ&cid=1058285502.1791506092&gtm=45je6a72v9249282964za208zd9249282964xf1&rcb=14&aip=1&dma=0&gcd=13l3",
-            "status": 204,
-            "type": "text/plain"
-          },
-          {
-            "url": "https://analytics.google.com/g/collect?v=2&tid=G-HRZCCMT0XJ&gtm=45je6a72v9249282964za208zd9249282964xf1&_p=1791506091715&_gaz=1&gcd=13l3l3l3l1l1&npa=0&dma=0&eci",
-            "status": 204,
-            "type": "text/plain"
-          },
-          {
-            "url": "https://www.tomtoole.com/property-search/sist_ajax/process_fb_tracking_event.asp",
-            "status": 403,
-            "type": "text/html; charset=UTF-8"
-          },
-          {
-            "url": "https://www.googletagmanager.com/gtag/js?id=AW-18087344730&cx=c&gtm=4e6a72",
-            "status": 200,
-            "type": "application/javascript; charset=UTF-8"
-          },
-          {
-            "url": "https://www.tomtoole.com/property-search/sist_ajax/get_search_count.asp",
-            "status": 200,
-            "type": "application/json"
-          },
-          {
-            "url": "https://ad.doubleclick.net/ccm/s/collect?_gsid=TqxY___76fUQOWOYWBWeNyCzwQmUGRWakg&auid=1671955050.1791506092&gtm=45be6a72z8f_AW-18087344730za208zb9249282964zd92",
-            "status": 204,
-            "type": ""
-          },
-          {
-            "url": "https://www.google.com/ccm/collect?rcb=11&frm=0&apvc=1&auid=1671955050.1791506092&dt=Greater%20Philadelphia%20Area%20MLS%20Listings&tid=AW-18087344730&en=page_v",
-            "status": 200,
-            "type": ""
-          },
-          {
-            "url": "https://www.google.com/rmkt/collect/18087344730/?random=1791506091910&cv=11&fst=1791506091910&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW-",
-            "status": 200,
-            "type": ""
-          },
-          {
-            "url": "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/18087344730/?random=1791506091910&cv=11&fst=1791506091910&bg=ffffff&guid=ON&async=1&en=gtag.con",
-            "status": 200,
-            "type": "text/javascript; charset=UTF-8"
-          },
-          {
-            "url": "https://connect.facebook.net/signals/config/523798467994449?v=2.9.415&r=stable&domain=www.tomtoole.com&hme=a4c28c8787325ac3f8f9eac68364f47df2a8c4266e43177443e5d",
-            "status": 200,
-            "type": "application/x-javascript; charset=utf-8"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input.js?v=202603161200",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://www.google.com/pagead/1p-user-list/18087344730/?random=1791506091910&cv=11&fst=1791504000000&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6a72z8f_AW",
-            "status": 200,
-            "type": "image/gif"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/common.js?v=202603161200",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/intl-tel-input-utils.js",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://www.tomtoole.com/assets/dist/js/templates/excelweb/ace-exec-inner.js?v=202603161200",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://www.facebook.com/tr/?id=523798467994449&ev=PageView&dl=https%3A%2F%2Fwww.tomtoole.com%2Fproperty-search%2Fsite-map%2F&rl=&if=false&ts=1791506092266&iw=f",
+            "url": "https://my.flexmls.com/robots.txt",
             "status": 200,
             "type": "text/plain"
-          },
-          {
-            "url": "https://www.tomtoole.com/cdn-cgi/rum?",
-            "status": 204,
-            "type": "text/plain"
-          },
-          {
-            "url": "https://cdn.sitephotos.sierrastatic.com/5653_footerlogo_ourblue-20260813111638.png",
-            "status": 200,
-            "type": "image/png"
-          },
-          {
-            "url": "https://assets.site-static.com/blogphotos/thumb/5653/26965-tom-google-blog-1200-x-900-px-.jpg",
-            "status": 200,
-            "type": "image/jpeg"
-          },
-          {
-            "url": "https://www.google.com/recaptcha/api.js?render=6LcYnbkqAAAAAOb5BdOwLCmKZmWU7IKHf_mXvXTs",
-            "status": 200,
-            "type": "text/javascript; charset=utf-8"
-          },
-          {
-            "url": "https://cdn.userway.org/widget.js",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://cdn.userway.org/widgetapp/2026-09-29-10-33-22/widget_app_base_1790678002737.js",
-            "status": 200,
-            "type": "application/javascript"
-          },
-          {
-            "url": "https://www.gstatic.com/recaptcha/releases/nY0xPItgwtlvjEjk2TqdwOQz/recaptcha__en.js",
-            "status": 200,
-            "type": "text/javascript"
-          },
-          {
-            "url": "https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LcYnbkqAAAAAOb5BdOwLCmKZmWU7IKHf_mXvXTs&co=aHR0cHM6Ly93d3cudG9tdG9vbGUuY29tOjQ0Mw..&hl=en&v=nY0xPItgwtlvjEj",
-            "status": 200,
-            "type": "text/html; charset=utf-8"
-          },
-          {
-            "url": "https://www.gstatic.com/recaptcha/releases/nY0xPItgwtlvjEjk2TqdwOQz/styles__ltr.css",
-            "status": 200,
-            "type": "text/css"
-          },
-          {
-            "url": "https://www.gstatic.com/recaptcha/releases/nY0xPItgwtlvjEjk2TqdwOQz/recaptcha__en.js",
-            "status": 200,
-            "type": "text/javascript"
-          },
-          {
-            "url": "https://www.gstatic.com/recaptcha/api2/logo_48.png",
-            "status": 200,
-            "type": "image/png"
-          },
-          {
-            "url": "https://fonts.gstatic.com/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2",
-            "status": 200,
-            "type": "font/woff2"
-          },
-          {
-            "url": "https://www.google.com/recaptcha/api2/webworker.js?hl=en&v=nY0xPItgwtlvjEjk2TqdwOQz",
-            "status": 200,
-            "type": "text/javascript; charset=utf-8"
-          },
-          {
-            "url": "https://api.userway.org/api/v1/tunings/XsZAJdd0RI",
-            "status": 200,
-            "type": "application/json; charset=utf-8"
           }
         ],
-        "cookies": [
+        "cookies": []
+      }
+    },
+    {
+      "url": "https://www.flexmls.com/robots.txt",
+      "plain": {
+        "status": 200,
+        "ms": 233,
+        "finalUrl": "https://www.flexmls.com/robots.txt",
+        "bytes": 4421,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [],
+        "links": []
+      },
+      "plainFragment": {
+        "status": 200,
+        "ms": 181,
+        "finalUrl": "https://www.flexmls.com/robots.txt",
+        "bytes": 4421,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [],
+        "links": []
+      },
+      "service": {
+        "status": 200,
+        "ms": 1461,
+        "finalUrl": "https://www.flexmls.com/robots.txt",
+        "bytes": 4598,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": []
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 1328,
+        "finalUrl": "https://www.flexmls.com/robots.txt",
+        "bytes": 4598,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": []
+      },
+      "local": {
+        "timeline": [
           {
-            "name": "siGUID",
-            "domain": "www.tomtoole.com"
+            "at": 206,
+            "event": "domcontentloaded",
+            "url": "https://www.flexmls.com/robots.txt"
           },
           {
-            "name": "siSharedSessionID",
-            "domain": "www.tomtoole.com"
-          },
-          {
-            "name": "sirecs",
-            "domain": "www.tomtoole.com"
-          },
-          {
-            "name": "siND",
-            "domain": "www.tomtoole.com"
-          },
-          {
-            "name": "ASPSESSIONIDQQBQVACS",
-            "domain": "www.tomtoole.com"
-          },
-          {
-            "name": "cf_clearance",
-            "domain": ".tomtoole.com"
-          },
-          {
-            "name": "_ga_HRZCCMT0XJ",
-            "domain": ".tomtoole.com"
-          },
-          {
-            "name": "_ga",
-            "domain": ".tomtoole.com"
-          },
-          {
-            "name": "siMLSRegionID",
-            "domain": "www.tomtoole.com"
-          },
-          {
-            "name": "ASPSESSIONIDSSXQEUAQ",
-            "domain": "www.tomtoole.com"
-          },
-          {
-            "name": "_gcl_au",
-            "domain": ".tomtoole.com"
-          },
-          {
-            "name": "test_cookie",
-            "domain": ".doubleclick.net"
-          },
-          {
-            "name": "_fbp",
-            "domain": ".tomtoole.com"
-          },
-          {
-            "name": "fr",
-            "domain": ".facebook.com"
+            "at": 1211,
+            "url": "https://www.flexmls.com/robots.txt",
+            "bytes": 4598,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
           }
-        ]
+        ],
+        "responses": [
+          {
+            "url": "https://www.flexmls.com/robots.txt",
+            "status": 200,
+            "type": "text/plain"
+          }
+        ],
+        "cookies": []
+      }
+    },
+    {
+      "url": "https://sparkplatform.com/robots.txt",
+      "plain": {
+        "status": 200,
+        "ms": 195,
+        "finalUrl": "https://sparkplatform.com/robots.txt",
+        "bytes": 554,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [],
+        "links": []
+      },
+      "plainFragment": {
+        "status": 200,
+        "ms": 279,
+        "finalUrl": "https://sparkplatform.com/robots.txt",
+        "bytes": 554,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "frames": [],
+        "scripts": [],
+        "links": []
+      },
+      "service": {
+        "status": 200,
+        "ms": 1383,
+        "finalUrl": "https://sparkplatform.com/robots.txt",
+        "bytes": 705,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": []
+      },
+      "serviceAgain": {
+        "status": 200,
+        "ms": 1181,
+        "finalUrl": "https://sparkplatform.com/robots.txt",
+        "bytes": 705,
+        "title": "",
+        "prices": 0,
+        "detailLinks": 0,
+        "network": []
+      },
+      "local": {
+        "timeline": [
+          {
+            "at": 156,
+            "event": "domcontentloaded",
+            "url": "https://sparkplatform.com/robots.txt"
+          },
+          {
+            "at": 1160,
+            "url": "https://sparkplatform.com/robots.txt",
+            "bytes": 705,
+            "title": "",
+            "prices": 0,
+            "detailLinks": 0
+          }
+        ],
+        "responses": [
+          {
+            "url": "https://sparkplatform.com/robots.txt",
+            "status": 200,
+            "type": "text/plain"
+          }
+        ],
+        "cookies": []
       }
     }
   ]

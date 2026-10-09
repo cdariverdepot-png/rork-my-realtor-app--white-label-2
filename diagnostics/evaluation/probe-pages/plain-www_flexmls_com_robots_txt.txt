@@ -1,0 +1,162 @@
+# =============================================================================
+# FLEXMLS Robots Policy
+# =============================================================================
+# By default, most crawling is allowed. Additional bot-specific paths are
+# further defined.
+#
+# Last updated: 2026-07-01
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# DEFAULT: Allow everything with some basic exceptions
+# -----------------------------------------------------------------------------
+User-agent: *
+Allow: /
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# -----------------------------------------------------------------------------
+# BOT-SPECIFIC Universal Blocks
+# -----------------------------------------------------------------------------
+
+# MJ12bot – Universally Denied
+User-agent: MJ12bot
+Disallow: /
+
+# Dotbot – Universally Denied
+User-agent: Dotbot
+Disallow: /
+
+# BLEXBot – Universally Denied
+User-agent: BLEXBot
+Disallow: /
+
+# CCBot – Universally Denied
+User-agent: CCBot
+Disallow: /
+
+# Voltron - Universally Denied
+User-agent: voltron
+Disallow: /
+
+# Awario bots - Universally Denied
+User-agent: AwarioRssBot
+User-agent: AwarioSmartBot
+Disallow: /
+
+# PetalBot - Universally Denied
+User-agent: PetalBot
+Disallow: /
+
+# ShapeBot - Universally Denied
+User-agent: ShapBot
+Disallow: /
+
+# Amazonbot - Universally Denied
+User-agent: amazonbot
+Disallow: /
+
+# -----------------------------------------------------------------------------
+# BOT-SPECIFIC OVERRIDES, SAFETY CHECKS
+# -----------------------------------------------------------------------------
+
+# ClaudeBot – Allowed WordPress Access; Denied Everything Else
+User-agent: ClaudeBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# Claude User – Allowed WordPress Access; Denied Everything Else
+User-agent: Claude-User
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# Claude SearchBot – Allowed WordPress Access; Denied Everything Else
+User-agent: Claude-SearchBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# GPTBot – Allowed WordPress Access; Denied Everything Else
+User-agent: GPTBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# ChatGPT-User – Allowed WordPress Access; Denied Everything Else
+User-agent: ChatGPT-User
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# Antropic AI – Allowed WordPress Access; Denied Everything Else
+User-agent: anthropic-ai
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# PerplexityBot – Allowed WordPress Access; Denied Everything Else
+User-agent: PerplexityBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# Open AI Search - Allowed WordPress Access; Denied Everything Else
+User-agent: OAI-SearchBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# Meta WebIndexer - Allowed WordPress Access; Denied Everything Else
+User-agent: meta-webindexer
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# Meta Trainer - Universally Denied
+User-agent: Meta-ExternalAgent
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+# AhrefsBot – Allowed WordPress Access; Denied Everything Else
+User-agent: AhrefsBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+
+# SemrushBot – Allowed WordPress Access; Denied Everything Else
+User-agent: SemrushBot
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+
+#ScreamingFrog - Allowed WordPress Access; Denied Everything Else
+User-agent: Screaming Frog SEO Spider
+Disallow: /
+Allow: /discover/
+Disallow: /discover/wp-admin/
+Allow: /discover/wp-admin/admin-ajax.php
+
+
+
+# -----------------------------------------------------------------------------
+# SITEMAP
+# -----------------------------------------------------------------------------
+Sitemap: https://flexmls.com/discover/sitemap_index.xml
