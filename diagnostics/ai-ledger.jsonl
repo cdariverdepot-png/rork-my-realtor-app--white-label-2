@@ -31,3 +31,5 @@
 {"at":"2026-10-09T00:48:55.185Z","kind":"site","campaign":"gate-37866036746","level":"D","site":"chatman-realty-group","calls":3,"blocked":0,"estimatedUsd":0.1754,"inputTokens":83766,"outputTokens":986}
 {"at":"2026-10-09T00:49:48.275Z","kind":"site","campaign":"gate-37866036746","level":"D","site":"realm-partners-idaho","calls":1,"blocked":0,"estimatedUsd":0.0113,"inputTokens":3389,"outputTokens":564}
 {"at":"2026-10-09T00:50:53.143Z","kind":"site","campaign":"gate-37866036746","level":"D","site":"houses-of-kansas-city","calls":1,"blocked":0,"estimatedUsd":0.0268,"inputTokens":8355,"outputTokens":1255}
+{"at":"2026-10-09T00:59:05.590Z","kind":"site","campaign":"gate-37867268465","level":"D","site":"cindy-carlson-realty","calls":1,"blocked":0,"estimatedUsd":0.0159,"inputTokens":3753,"outputTokens":1047}
+{"at":"2026-10-09T01:00:25.319Z","kind":"site","campaign":"gate-37867268465","level":"D","site":"tom-toole","calls":1,"blocked":0,"estimatedUsd":0.0188,"inputTokens":6566,"outputTokens":707}

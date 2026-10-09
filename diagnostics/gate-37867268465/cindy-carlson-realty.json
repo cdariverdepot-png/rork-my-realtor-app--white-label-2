@@ -1,0 +1,816 @@
+{
+  "id": "cindy-carlson-realty",
+  "url": "https://cindycarlsonrealty.com/",
+  "category": "flexmls",
+  "timeline": [
+    {
+      "at": 64,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 1679,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading your website\nLooking for your listings"
+    },
+    {
+      "at": 1880,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2083,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 2 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3493,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3693,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)"
+    },
+    {
+      "at": 8723,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nReading Cindy Carlson Realty\nLooking for listings · 3 pages checked\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nOpening my.flexmls.com in a browser (it requires one)\nFound Cindy Carlson · Kellogg, ID"
+    },
+    {
+      "at": 33749,
+      "screen": "Building your app\nIMPORT ACTIVITY\nReading Cindy Carlson Realty\nYour listings could not be read from this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nmy.flexmls.com did not finish loading in the browser\nFound Cindy Carlson · Kellogg, ID"
+    },
+    {
+      "at": 34249,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "analyze-realtor-build-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 1043,
+      "totalMs": 8487,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "start",
+          "at": 1
+        },
+        {
+          "kind": "site",
+          "name": "Cindy Carlson Realty",
+          "host": "cindycarlsonrealty.com",
+          "at": 124
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "start",
+          "at": 124
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 0,
+          "total": 2,
+          "at": 322
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 1,
+          "total": 2,
+          "at": 323
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "start",
+          "count": 2,
+          "total": 2,
+          "at": 323
+        },
+        {
+          "kind": "stage",
+          "stage": "pages",
+          "state": "done",
+          "count": 2,
+          "total": 2,
+          "at": 343
+        },
+        {
+          "kind": "design",
+          "portrait": true,
+          "logo": false,
+          "images": 5,
+          "sections": 4,
+          "at": 344
+        },
+        {
+          "kind": "stage",
+          "stage": "design",
+          "state": "done",
+          "at": 344
+        },
+        {
+          "kind": "stage",
+          "stage": "site",
+          "state": "done",
+          "count": 1,
+          "at": 350
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "skipped",
+          "reason": "connected",
+          "at": 350
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "start",
+          "at": 350
+        },
+        {
+          "kind": "profile",
+          "name": "Cindy Carlson",
+          "city": "Kellogg, ID",
+          "at": 7010
+        },
+        {
+          "kind": "stage",
+          "stage": "profile",
+          "state": "done",
+          "at": 7010
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "timings": {
+            "pages": 21,
+            "design": 220,
+            "site": 349,
+            "profile": 6660,
+            "total": 7010
+          },
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 3753,
+            "outputTokens": 1047,
+            "estimatedUsd": 0.015882,
+            "byStage": {
+              "profile": {
+                "calls": 1,
+                "estimatedUsd": 0.015882
+              }
+            },
+            "records": [
+              {
+                "stage": "profile",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 3753,
+                "cachedInputTokens": 0,
+                "outputTokens": 1047,
+                "estimatedUsd": 0.015882,
+                "priced": true
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "field": "realtor.name",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "Cindy Carlson",
+              "confidence": 1,
+              "locator": "About Us page text ('Cindy Carlson, Broker, Realtor®')"
+            },
+            {
+              "field": "realtor.title",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "Broker, Realtor®, ABR, CRS, GRI, RSPS",
+              "confidence": 1,
+              "locator": "About Us page text and homepage sidebar"
+            },
+            {
+              "field": "realtor.email",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "cindy@cindycarlsonrealty.com",
+              "confidence": 1,
+              "locator": "About Us page and main page, email links"
+            },
+            {
+              "field": "realtor.phone",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "(208) 512-0078",
+              "confidence": 1,
+              "locator": "About Us page ('Cell Phone (208) 512-0078')"
+            },
+            {
+              "field": "realtor.brandName",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "Cindy Carlson Realty",
+              "confidence": 1,
+              "locator": "Site title and About Us page"
+            },
+            {
+              "field": "realtor.city",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "Kellogg, ID",
+              "confidence": 1,
+              "locator": "About Us ('located in Kellogg, Idaho'), homepage and About The Area page"
+            },
+            {
+              "field": "credentials.license.brokerage",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "Cindy Carlson Realty",
+              "confidence": 1,
+              "locator": "About Us page ('Broker/owner of Cindy Carlson Realty')"
+            },
+            {
+              "field": "portraitUrl",
+              "sourceId": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "value": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=768%2C920&ssl=1",
+              "confidence": 1,
+              "locator": "Main page portrait image (headshot of Cindy Carlson)"
+            }
+          ],
+          "draft": {
+            "heroMessage": "Experienced Local Broker Serving Silver Valley & North Idaho",
+            "welcomeNote": "Welcome to Cindy Carlson Realty! We are passionate about helping you navigate the North Idaho real estate market, whether you’re seeking a mountain retreat, investment property, or your next family home.",
+            "tagline": "Rooted in Community, Dedicated to Your Success",
+            "aboutParagraph": "With over 18 years’ experience in North Idaho real estate and more than four decades living in the Silver Valley, Cindy Carlson combines deep local roots with unmatched professionalism. She’s built her business on a foundation of integrity, client advocacy, and ongoing education, earning multiple REALTOR® designations and leadership roles within the community. Cindy and her team understand the distinct character of the Silver Valley and are committed to providing personal, attentive service from first meeting to closing—and beyond.",
+            "conciergeLine": "Have questions about living in the Silver Valley? Reach out for genuine local insight and personal guidance.",
+            "contactLine": "Ready to make your move? Call Cindy Carlson directly at (208) 512-0078 or email cindy@cindycarlsonrealty.com for expert real estate advice.",
+            "tone": "Welcoming, knowledgeable, rooted in the local community, and service-focused",
+            "layoutId": "coastal-personal",
+            "portraitSourceId": null,
+            "potentialListingSources": [
+              "0deb6740-23e9-4a3c-9202-108b88fb1142"
+            ],
+            "websiteDesign": {
+              "version": 1,
+              "sourceUrl": "https://cindycarlsonrealty.com/",
+              "analyzedAt": 1791507493141,
+              "headerImageUrl": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/cropped-satincombinedlogoccr-1-2.png",
+              "backgroundImageUrl": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
+              "portraitImageUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=768%2C920&ssl=1",
+              "introImage": {
+                "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/office.jpg?w=372&ssl=1",
+                "fit": "contain",
+                "role": "article",
+                "width": 372,
+                "height": 250
+              },
+              "heroTitle": "Welcome To Cindy Carlson Realty",
+              "heroSubtitle": "Cindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.",
+              "sections": [
+                {
+                  "kind": "content",
+                  "title": "North Idaho’s Silver Valley",
+                  "body": "Nestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.",
+                  "intent": "area",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "about",
+                  "title": "Cindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor",
+                  "body": "Cindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.",
+                  "intent": "profile",
+                  "destination": "unique"
+                },
+                {
+                  "kind": "contact",
+                  "intent": "contact",
+                  "destination": "native",
+                  "native": "profile",
+                  "title": "Stay In Touch:",
+                  "body": ""
+                },
+                {
+                  "kind": "listings",
+                  "intent": "listings",
+                  "destination": "native",
+                  "native": "listings",
+                  "title": "Property Search:",
+                  "body": "Property Search Featured Listings"
+                }
+              ],
+              "imagery": {
+                "portrait": {
+                  "sourceUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=138%2C166&ssl=1",
+                  "variants": [
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?fit=3206%2C3840&ssl=1",
+                      "width": 3206,
+                      "height": 3840
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?fit=855%2C1024&ssl=1",
+                      "width": 855,
+                      "height": 1024
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=250%2C300&ssl=1",
+                      "width": 250,
+                      "height": 300
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=768%2C920&ssl=1",
+                      "width": 768,
+                      "height": 920
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=855%2C1024&ssl=1",
+                      "width": 855,
+                      "height": 1024
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?w=2000&ssl=1",
+                      "width": 2000
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?w=3000&ssl=1",
+                      "width": 3000
+                    },
+                    {
+                      "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=138%2C166&ssl=1",
+                      "width": 138,
+                      "height": 166
+                    }
+                  ],
+                  "role": "portrait",
+                  "selectedUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=768%2C920&ssl=1",
+                  "width": 3206,
+                  "height": 3840,
+                  "destination": "portrait",
+                  "fit": "contain",
+                  "renderedWidth": 280,
+                  "renderedHeight": 335,
+                  "upscaleRatio": 0.17,
+                  "crop": "none",
+                  "rank": 1
+                },
+                "images": [
+                  {
+                    "sourceUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=138%2C166&ssl=1",
+                    "variants": [
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?fit=3206%2C3840&ssl=1",
+                        "width": 3206,
+                        "height": 3840
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?fit=855%2C1024&ssl=1",
+                        "width": 855,
+                        "height": 1024
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=250%2C300&ssl=1",
+                        "width": 250,
+                        "height": 300
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=768%2C920&ssl=1",
+                        "width": 768,
+                        "height": 920
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=855%2C1024&ssl=1",
+                        "width": 855,
+                        "height": 1024
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?w=2000&ssl=1",
+                        "width": 2000
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?w=3000&ssl=1",
+                        "width": 3000
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=138%2C166&ssl=1",
+                        "width": 138,
+                        "height": 166
+                      }
+                    ],
+                    "role": "portrait",
+                    "selectedUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2018/05/Edit.jpg?resize=768%2C920&ssl=1",
+                    "width": 3206,
+                    "height": 3840,
+                    "destination": "portrait",
+                    "fit": "contain",
+                    "renderedWidth": 280,
+                    "renderedHeight": 335,
+                    "upscaleRatio": 0.17,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/office.jpg?resize=498%2C335&ssl=1",
+                    "variants": [
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/office.jpg?fit=372%2C250&ssl=1",
+                        "width": 372,
+                        "height": 250
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/office.jpg?w=372&ssl=1",
+                        "width": 372
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/office.jpg?resize=300%2C202&ssl=1",
+                        "width": 300,
+                        "height": 202
+                      }
+                    ],
+                    "role": "article",
+                    "selectedUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/office.jpg?w=372&ssl=1",
+                    "width": 372,
+                    "height": 250,
+                    "destination": "article",
+                    "fit": "contain",
+                    "renderedWidth": 251,
+                    "renderedHeight": 169,
+                    "upscaleRatio": 1.35,
+                    "crop": "rejected",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/equalhousinglogo.jpg?resize=69%2C69&ssl=1",
+                    "variants": [
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/equalhousinglogo.jpg?fit=774%2C600&ssl=1",
+                        "width": 774,
+                        "height": 600
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/equalhousinglogo.jpg?resize=150%2C150&ssl=1",
+                        "width": 150,
+                        "height": 150
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/equalhousinglogo.jpg?zoom=3&resize=69%2C69&ssl=1",
+                        "width": 207,
+                        "height": 69
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/equalhousinglogo.jpg?resize=69%2C69&ssl=1",
+                        "width": 69,
+                        "height": 69
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/equalhousinglogo.jpg?resize=150%2C150&ssl=1",
+                    "width": 774,
+                    "height": 600,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 83,
+                    "renderedHeight": 64,
+                    "upscaleRatio": 0.21,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/mlsrealtor.jpg?resize=85%2C45&ssl=1",
+                    "variants": [
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/mlsrealtor.jpg?fit=85%2C45&ssl=1",
+                        "width": 85,
+                        "height": 45
+                      },
+                      {
+                        "url": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/mlsrealtor.jpg?resize=85%2C45&ssl=1",
+                        "width": 85,
+                        "height": 45
+                      }
+                    ],
+                    "role": "icon",
+                    "selectedUrl": "https://i0.wp.com/cindycarlsonrealty.com/wp-content/uploads/2017/04/mlsrealtor.jpg?resize=85%2C45&ssl=1",
+                    "width": 85,
+                    "height": 45,
+                    "destination": "omit",
+                    "fit": "contain",
+                    "renderedWidth": 57,
+                    "renderedHeight": 30,
+                    "upscaleRatio": 1.35,
+                    "crop": "none",
+                    "rank": 1
+                  },
+                  {
+                    "sourceUrl": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
+                    "variants": [
+                      {
+                        "url": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg"
+                      }
+                    ],
+                    "role": "background",
+                    "selectedUrl": "https://cindycarlsonrealty.com/wp-content/uploads/2017/04/satin.jpg",
+                    "destination": "background",
+                    "fit": "contain",
+                    "renderedWidth": 390,
+                    "renderedHeight": 220,
+                    "upscaleRatio": 1,
+                    "crop": "none",
+                    "rank": 1
+                  }
+                ]
+              },
+              "original": {
+                "accent": "#990303",
+                "background": "#ffffff",
+                "ink": "#222222",
+                "panel": "#fffdf9",
+                "muted": "#222222",
+                "fontFamily": "Helvetica Neue",
+                "headingFontFamily": "Georgia",
+                "layout": "portrait-split",
+                "spacing": 20,
+                "radius": 0,
+                "headingSize": 31,
+                "motion": "fade"
+              },
+              "optimized": {
+                "accent": "#990303",
+                "background": "#ffffff",
+                "ink": "#222222",
+                "panel": "#fffdf9",
+                "muted": "#222222",
+                "fontFamily": "Helvetica Neue",
+                "headingFontFamily": "Georgia",
+                "layout": "portrait-split",
+                "spacing": 24,
+                "radius": 12,
+                "headingSize": 36,
+                "motion": "rise"
+              },
+              "evidence": {
+                "stylesheets": [
+                  "https://cindycarlsonrealty.com/wp-content/themes/metro-pro/style.css?ver=2.2.1",
+                  "https://cindycarlsonrealty.com/wp-includes/css/dist/theme/design-tokens.min.css?ver=7.1.3",
+                  "https://cindycarlsonrealty.com/wp-includes/css/dist/components/style.min.css?ver=7.1.3",
+                  "https://cindycarlsonrealty.com/wp-content/mu-plugins/vendor/wpex/godaddy-launch/includes/Dependencies/GoDaddy/Styles/build/latest.css?ver=2.0.2",
+                  "https://cindycarlsonrealty.com/wp-includes/css/dashicons.min.css?ver=7.1.3",
+                  "https://fonts.googleapis.com/css?family=Oswald:400&ver=2.2.1"
+                ],
+                "colors": [
+                  "#ffff00",
+                  "#000000",
+                  "#c0c0c0",
+                  "#ffffff",
+                  "#222222",
+                  "#333333",
+                  "#f96e5b",
+                  "#dddddd",
+                  "#999999",
+                  "#f5f5f5",
+                  "#565656",
+                  "#aaaaaa",
+                  "#990303",
+                  "#cccccc",
+                  "#ececec",
+                  "#a6a6a6",
+                  "#fcfcfc",
+                  "#f4f4f4",
+                  "#ecf0fa",
+                  "#c6f7cd",
+                  "#ebffed",
+                  "#deebfa",
+                  "#f3f9ff",
+                  "#fde6be",
+                  "#fff7e1",
+                  "#fee995",
+                  "#fff9ca",
+                  "#f6e6e3",
+                  "#fff6f5",
+                  "#2d2d2d"
+                ],
+                "fonts": [
+                  "sans-serif",
+                  "monospace",
+                  "Helvetica Neue",
+                  "dashicons",
+                  "Oswald",
+                  "-apple-system",
+                  "GD Sherpa"
+                ],
+                "routing": [
+                  {
+                    "source": "Skip to primary navigation",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Skip to main content",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Skip to primary sidebar",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Cindy Carlson Realty",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Home",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Featured Listings",
+                    "intent": "listings",
+                    "canonical": "listings",
+                    "render": "native"
+                  },
+                  {
+                    "source": "About The Area",
+                    "intent": "area",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "About Us",
+                    "intent": "profile",
+                    "canonical": "profile",
+                    "render": "native"
+                  },
+                  {
+                    "source": "Facebook Feed",
+                    "intent": "contact",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Metro Pro",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Genesis Framework",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "WordPress",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Log in",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  },
+                  {
+                    "source": "Primary Sidebar",
+                    "intent": "content",
+                    "canonical": "omit",
+                    "render": "omit"
+                  }
+                ],
+                "warnings": [
+                  "Native adaptation uses observed HTML and CSS; script-generated layouts and unavailable fonts may need a supported fallback."
+                ]
+              }
+            },
+            "discoveredListings": [],
+            "listingDiscovery": {
+              "visited": [],
+              "hops": 0,
+              "found": 0,
+              "maxDepth": 0,
+              "skipped": [
+                "https://cindycarlsonrealty.com/"
+              ]
+            }
+          },
+          "discoveredListings": [],
+          "listingDiscovery": {
+            "visited": [],
+            "hops": 0,
+            "found": 0,
+            "maxDepth": 0,
+            "skipped": [
+              "https://cindycarlsonrealty.com/"
+            ]
+          },
+          "sources": [
+            {
+              "id": "0deb6740-23e9-4a3c-9202-108b88fb1142",
+              "kind": "url",
+              "label": "cindycarlsonrealty.com",
+              "uri": "https://cindycarlsonrealty.com/",
+              "status": "ready"
+            }
+          ],
+          "status": "needs-input"
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "cindy-carlson-realty-00-url.png",
+    "cindy-carlson-realty-01-review.png",
+    "cindy-carlson-realty-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 4,
+    "text": []
+  },
+  "submittedAt": 7228,
+  "reviewMs": 34249,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nReading Cindy Carlson Realty\nYour listings could not be read from this page\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nmy.flexmls.com did not finish loading in the browser\nFound Cindy Carlson · Kellogg, ID",
+  "reviewText": "Back\nAPP BUILDER\ncindycarlsonrealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nExperienced Local Broker Serving Silver Valley & North Idaho\nTry another opening line\nYOUR INTRODUCTION\nWith over 18 years’ experience in North Idaho real estate and more than four decades living in the Silver Valley, Cindy Carlson combines deep local roots with unmatched professionalism. She’s built her business on a foundation of integrity, client advocacy, and ongoing education, earning multiple REALTOR® designations and leadership roles within the community. Cindy and her team understand the distinct character of the Silver Valley and are committed to providing personal, attentive service from first meeting to closing—and beyond.\nTry another introduction\nBring in your listings\nPaste the page where your listings live. We’ll figure out the rest.\nImport my listings\nYour listings are published on my.flexmls.com, which now shows automated readers a browser check, so we couldn't import them. We don't get around those checks. Paste another public page that shows your listings, such as your brokerage's listings page or a public agent profile. You can also add homes one at a time from their public listing links (Listings, then Add a listing).\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Cindy Carlson Realty\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\nNew listings will appear here as your realtor adds them. Get in touch to discuss your search.\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app Cindy Carlson Realty KELLOGG, ID Welcome To Cindy Carlson Realty Cindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho. View listings THE AREA North Idaho’s Silver Valley Ne",
+        "textLength": 1422,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings No active listings were found for this realtor yet. Home Listings Saved Chat Profile",
+        "textLength": 128,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [],
+  "listingImages": [],
+  "source": [
+    {
+      "url": "https://cindycarlsonrealty.com/",
+      "status": 200,
+      "finalUrl": "https://cindycarlsonrealty.com/",
+      "title": "Cindy Carlson Realty – A Full Service Real Estate Agency",
+      "textLength": 1177,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 2,
+      "sample": "Skip to primary navigation\nSkip to main content\nSkip to primary sidebar\nCINDY CARLSON REALTY\n\nA Full Service Real Estate Agency\n\nHOME\n \nFEATURED LISTINGS\n \nPROPERTY SEARCH\n \nABOUT THE AREA\n \nABOUT US\n \nCONTACT US\nHome\nCindy Carlson Broker, Realtor®, ABR, CRS, GRI, RSPS\n\n                           Welcome To Cindy Carlson Realty\n\n\nWe specialize in Real Estate in the Silver Valley and North Idaho. The Silver Valley offers a wealth of opportunity and an outstanding quality of life!  Whether you are looking for land, recreational property, development property, a business opportunity or your dream home, we can help.\n\n\n\nPrimary Sidebar\nSTAY IN TOUCH:\n\n\n\nPROPERTY SEARCH:\nProperty Search\nFeatured Listings\nWE ARE LOCATED AT:\n\n202 W Cameron Avenue\nKellogg, ID 83837\nOffice: (208) 783-2544\nFax: (208) 783-2941\n\nFACEBOOK FEED\n\nCopyright © 2026 · Metro Pro On Genesis Framework · WordPress · Log in\n\nAll Rights Reserved © 2017 Cindy Carlson Realty. | A Full Service Real Estate Agency. All information provided is deemed reliable but is not guaranteed and should be independently verified. Properties subject to prior sale or rental. | Website Designed By: Opportunity Designs",
+      "challenge": false,
+      "screenshot": "cindy-carlson-realty-source-0.png"
+    }
+  ],
+  "wallMs": 61551,
+  "window": {
+    "startedAt": "2026-10-09T00:58:04.039Z",
+    "endedAt": "2026-10-09T00:59:05.590Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.015882,
+    "inputTokens": 3753,
+    "outputTokens": 1047
+  }
+}
