@@ -41,3 +41,6 @@
 {"at":"2026-10-09T02:17:15.024Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"houses-of-kansas-city","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
 {"at":"2026-10-09T02:18:54.367Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"redman-realty-group","calls":1,"blocked":0,"estimatedUsd":0.0179,"inputTokens":6426,"outputTokens":629}
 {"at":"2026-10-09T02:20:09.090Z","kind":"site","campaign":"gate-37872082264","level":"D","site":"tom-toole","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T02:27:10.885Z","kind":"site","campaign":"gate-37874399194","level":"D","site":"cindy-carlson-realty","calls":1,"blocked":0,"estimatedUsd":0.0093,"inputTokens":17851,"outputTokens":6}
+{"at":"2026-10-09T02:34:20.754Z","kind":"site","campaign":"gate-37874399194","level":"D","site":"flexmls-redefinedrealty--3","calls":0,"blocked":0,"estimatedUsd":0,"inputTokens":0,"outputTokens":0}
+{"at":"2026-10-09T02:35:34.785Z","kind":"site","campaign":"gate-37874399194","level":"D","site":"tom-toole","calls":3,"blocked":0,"estimatedUsd":0.0561,"inputTokens":78402,"outputTokens":804}

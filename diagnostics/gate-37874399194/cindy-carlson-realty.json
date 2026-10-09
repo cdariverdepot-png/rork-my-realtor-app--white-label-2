@@ -1,0 +1,1120 @@
+{
+  "id": "cindy-carlson-realty",
+  "url": "https://cindycarlsonrealty.com/",
+  "category": "flexmls",
+  "timeline": [
+    {
+      "at": 63,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nAsking the importer to find your listings\nAsking the importer to read your website"
+    },
+    {
+      "at": 2074,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for your listings\nReading your website"
+    },
+    {
+      "at": 2275,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery"
+    },
+    {
+      "at": 2476,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 2 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3483,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 3 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 3684,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nLooking for listings · 4 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy"
+    },
+    {
+      "at": 4287,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 8 listings so far · 4 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nReading listing details · 0 of 8"
+    },
+    {
+      "at": 4689,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 8 listings so far · 4 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nReading listing details · 1 of 8"
+    },
+    {
+      "at": 4891,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 8 listings so far · 4 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nReading listing details · 2 of 8"
+    },
+    {
+      "at": 5092,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 8 listings so far · 4 pages checked\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nReading listing details · 6 of 8"
+    },
+    {
+      "at": 5494,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 8 active listings\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nRead full details for all 8 listings\nSaving 8 listings"
+    },
+    {
+      "at": 5897,
+      "screen": "Building your app\nLIVE IMPORT ACTIVITY\nFound 8 active listings\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nRead full details for all 8 listings\nSaved 8 listings"
+    },
+    {
+      "at": 10315,
+      "screen": "Building your app\nIMPORT ACTIVITY\nFound 8 active listings\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nRead full details for all 8 listings\nSaved 8 listings\nFound Cindy Carlson · Kellogg, ID"
+    },
+    {
+      "at": 10723,
+      "screen": "REVIEW"
+    }
+  ],
+  "console": [],
+  "failedResources": [],
+  "calls": [
+    {
+      "fn": "refresh-listings-staging",
+      "status": 200,
+      "contentType": "text/event-stream; charset=utf-8",
+      "ttfbMs": 1121,
+      "totalMs": 5667,
+      "events": [
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "start",
+          "at": 60
+        },
+        {
+          "kind": "listings",
+          "host": "cindycarlsonrealty.com",
+          "pages": 1,
+          "found": 0,
+          "at": 165
+        },
+        {
+          "kind": "listings",
+          "host": "cindycarlsonrealty.com",
+          "pages": 2,
+          "found": 0,
+          "at": 176
+        },
+        {
+          "kind": "listings",
+          "host": "my.flexmls.com",
+          "pages": 3,
+          "found": 0,
+          "at": 1481
+        },
+        {
+          "kind": "listings",
+          "host": "my.flexmls.com",
+          "pages": 4,
+          "found": 0,
+          "at": 1679
+        },
+        {
+          "kind": "listings",
+          "host": "my.flexmls.com",
+          "pages": 4,
+          "found": 8,
+          "at": 2142
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 0,
+          "total": 8,
+          "succeeded": 0,
+          "at": 2142
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 1,
+          "total": 8,
+          "succeeded": 1,
+          "at": 2670
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 2,
+          "total": 8,
+          "succeeded": 2,
+          "at": 2768
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 3,
+          "total": 8,
+          "succeeded": 3,
+          "at": 2955
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 4,
+          "total": 8,
+          "succeeded": 4,
+          "at": 2971
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 5,
+          "total": 8,
+          "succeeded": 5,
+          "at": 3014
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 6,
+          "total": 8,
+          "succeeded": 6,
+          "at": 3029
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "start",
+          "count": 7,
+          "total": 8,
+          "succeeded": 7,
+          "at": 3307
+        },
+        {
+          "kind": "stage",
+          "stage": "details",
+          "state": "done",
+          "count": 8,
+          "total": 8,
+          "succeeded": 8,
+          "at": 3338
+        },
+        {
+          "kind": "stage",
+          "stage": "listings",
+          "state": "done",
+          "count": 8,
+          "at": 3347
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "start",
+          "total": 8,
+          "at": 3490
+        },
+        {
+          "kind": "stage",
+          "stage": "save",
+          "state": "done",
+          "count": 8,
+          "at": 3729
+        }
+      ],
+      "result": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "source": {
+            "id": "source-xyp2xo",
+            "url": "https://cindycarlsonrealty.com/",
+            "submittedUrl": "https://cindycarlsonrealty.com/",
+            "kind": "agent-website",
+            "inventoryUrls": [
+              "https://cindycarlsonrealty.com/featured-listings/",
+              "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings",
+              "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings?list_view=photo&page=1&per_page=24"
+            ],
+            "connectedAt": 1791512783401,
+            "lastCheckedAt": 1791512783401,
+            "nextSyncAt": 1791519983401,
+            "state": "connected",
+            "failures": 0,
+            "listingCount": 8,
+            "identity": {
+              "phrases": [
+                "cindycarlsonrealty",
+                "afullservicerealestateagency"
+              ],
+              "words": [
+                "cindycarlsonrealty",
+                "cindy",
+                "carlson",
+                "service",
+                "agency"
+              ]
+            },
+            "lastCompleteSyncAt": 1791512783401
+          },
+          "imported": 8,
+          "checked": 8,
+          "complete": true,
+          "items": [
+            {
+              "id": "listing-102mhhq",
+              "title": "409 Emerald Dr",
+              "neighborhood": "Kellogg, ID",
+              "price": "$429,000",
+              "beds": 4,
+              "baths": 2.5,
+              "sqft": "2,129",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000833568641000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000858790983000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000851821713000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000926151947000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000930451526000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000924673696000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000933874894000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000942693718000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000949658384000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000958141881000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001040726502000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001017785938000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001025159013000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001031986809000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001041424739000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001049992005000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001055825870000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001101089399000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001106761207000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001145760699000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001133425019000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001139991642000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001155160183000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001159301644000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001203375290000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001207425965000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001154309284000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001212190677000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001216221193000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001212428686000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001218676343000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001223535573000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001228082186000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001244882042000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001237176854000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001308813536000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001313152081000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001317482664000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825001257351827000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000833568641000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260824234708903208000000?from_filter=false",
+              "description": "EXCEPTIONAL 4 BEDROOM LARGE FAMILY HOME IN A BEAUTIFUL NEIGHBORGOOD STEPS AWAY FROM SILVER MOUNTAIN. Pride of ownership is noticed from the minute you pull into the driveway with decades of maintenance and care. Over 2,100 square feet of livable space, a fully finished basement, large windows throughout, terrific sliding glass doors leading out to the scenic back yard with a large cedar deck to take in the stunning view and ample off street parking including a two car attached garage and a paved driveway.",
+              "detailsComplete": true,
+              "facts": {
+                "Basement": "Yes",
+                "Garage Type": "Att Garage",
+                "Garage Stall": "2 Car",
+                "Lot Acres": "0.21",
+                "Year Built": "1979",
+                "Zoning": "Res",
+                "Subdivision": "Mineral Subdiv."
+              },
+              "listingNumber": "26-8729",
+              "propertyType": "Residential - Single Family",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-pl7mje",
+              "title": "6113 Prichard Creek ST",
+              "neighborhood": "Murray, ID",
+              "price": "$325,000",
+              "beds": 3,
+              "baths": 1,
+              "sqft": "1,472",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190315975094000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190411041038000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190417966958000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190421982234000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190411991547000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190424035708000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190558549709000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924191005376241000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924191014424724000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190442027479000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190509230490000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190520483990000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190543906167000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190922314629000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190617086500000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190927968555000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190635928344000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190646406638000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190916043461000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190922265226000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190928319177000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190937663261000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924191019971081000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924191027577767000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924191036004984000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924191042451580000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190315975094000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260924182429858488000000?from_filter=false",
+              "description": "QUIET, PEACEFUL, SERENE & AWAY FROM IT ALL just begins to describe this 3 bedroom 1 bathroom home in Historic Murray, Idaho. The drive along the pristine Coeur d'Alene River brings a sense of calm in itself. The RV, the off road vehicles, there's plenty of space for them all in the 1,152 sqft insulated shop.",
+              "detailsComplete": true,
+              "facts": {
+                "Basement": "No",
+                "Garage Type": "Det Shop",
+                "Garage Stall": "4+ Car",
+                "Lot Acres": "0.41",
+                "Year Built": "1941",
+                "Zoning": "Res",
+                "Subdivision": "N/A"
+              },
+              "listingNumber": "26-9676",
+              "propertyType": "Residential - Single Family",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-s29pi7",
+              "title": "483 Paradise Lane",
+              "neighborhood": "Pinehurst, ID",
+              "price": "$1,299,999",
+              "beds": 3,
+              "baths": 1.5,
+              "sqft": "3,183",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827064119283093000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808183448216752000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808183502270584000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808183508698154000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807150148649597000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827064116580881000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075305764575000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075408375736000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075402967485000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075432929214000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075531793468000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075617887494000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075503760107000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075844997156000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075854426644000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075858992570000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075919897044000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075926166358000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075930352978000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075955726555000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075904963018000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080015820556000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080021120504000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080030597964000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080037275919000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080045418362000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080053891757000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080100827701000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080110050471000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080117404521000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080210493471000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080134377292000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080145992300000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807082217895553000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080157073835000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080204562734000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080332633684000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807075718274730000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080426273034000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080415891944000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080421068665000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080432331108000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080442005207000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080436821149000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080726021840000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080731952235000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080736442917000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080742828286000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080752801782000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080800543548000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080806930183000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080814392754000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080855150689000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080901859173000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080907289638000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080912497921000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080916867161000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080946894300000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807080954766384000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081003701336000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081258728271000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081045415047000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081053872502000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081100033163000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081107817133000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081114959868000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081119876349000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081123711365000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081150700909000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081157770042000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081128545064000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081134847884000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081145089946000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807081140140023000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808183456107844000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807083005308844000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014314978869000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014331974248000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014339980789000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014345306231000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014351301848000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014358167879000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014406174010000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014413276683000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014418207393000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014424242397000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014430182316000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014439385612000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014449522263000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014459853979000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014507903192000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014519889620000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014525806536000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014513424252000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014537574329000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014549169390000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014557563975000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014607826892000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827062635422183000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260808014324170199000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827062543607947000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827062558300755000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827062609985951000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807154301791666000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260807054443066925000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260921222912748392000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827064119283093000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260807005203244094000000?from_filter=false",
+              "description": "THIS ISN'T JUST A PLACE TO LIVE! Tired of ordinary? This one-of-a-kind artist-designed home breaks all the rules - in the best way. With creative spaces, distinctive design & endless character, it's perfect for someone who wants a home that's as original as they are. This isn't just a place to live-it's a place to be inspired. Perfect for artists, entrepreneurs, remote professionals, or anyone searching for a home as unique as they are, this property is a rare opportunity to own something truly unforgettable. If you've been waiting for a home with personality, vision, and soul, this is it. Home is already wired for an elevator! Beyond the main residence this property features a unique additional dwelling unit. Whether you are looking for a rental income, a private guest retreat, an inspiring artist studio, or a peaceful home office, this versatile space is ready to fit your vision. Every corner celebrates individuality, making it the perfect place. Motivated Seller!! for those who apprciate homes with purpose, and limitless potential. OPPORTUNITIES LIKE THIS DO NOT COME ALONG OFTEN. IF YOU HAVE BEEN WAITING FOR A HOME THAT DARES TO BE DIFFIERENT AND INSPIRES YOU EVERY DAY, THIS IS THE ONE. COME AND SEE IT FOR YOURSELF, YOU WON'T FIND ANOTHER QUITE LIKE IT. COME SEE IT YOURSELF.",
+              "detailsComplete": true,
+              "facts": {
+                "Basement": "Yes",
+                "Garage Type": "Det Garage",
+                "Garage Stall": "1 Car",
+                "Lot Acres": "10",
+                "Year Built": "2001",
+                "Zoning": "NR",
+                "Subdivision": "N/A"
+              },
+              "listingNumber": "26-8127",
+              "propertyType": "Residential - Single Family",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-wx8jqh",
+              "title": "50 S Breeden Ave",
+              "neighborhood": "Smelterville, ID",
+              "price": "$64,000",
+              "beds": 2,
+              "baths": 1,
+              "sqft": "624",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260910012454018150000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054401979687000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054554099664000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054622503384000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054707785908000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054748725597000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054817284855000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054848954908000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718054931301452000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260727025258548838000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260727025405917767000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055653059244000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260727025110708889000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260731063800793193000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055052543217000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055136093948000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055156470799000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055217483940000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055255178503000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055325487405000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260727025426509970000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055409104367000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055433439898000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260727025345557144000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055510193749000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718055552002622000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718062005204860000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260718062112982064000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260910012454018150000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260717035909119737000000?from_filter=false",
+              "description": "Nicely remodeled manufactured home. Easy access to I-90, Close to all conveniences. White shed in back yard is not included..Lot is leased, rent is $400 month. includes water, sewer, garbage and snow removal. Buyer must get approved by Silver Star Park management (208) 784-1178",
+              "detailsComplete": true,
+              "facts": {
+                "Basement": "No",
+                "Garage Type": "None",
+                "Garage Stall": "None",
+                "Lot Size": "Leased",
+                "Lot Acres": "0",
+                "Year Built": "1976",
+                "Zoning": "RES",
+                "Subdivision": "N/A"
+              },
+              "listingNumber": "26-7461",
+              "propertyType": "Residential - Mobile/Manufactured Homes",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-1uig91y",
+              "title": "604 W Cameron Ave",
+              "neighborhood": "Kellogg, ID",
+              "price": "$388,000",
+              "beds": 4,
+              "baths": 1.5,
+              "sqft": "2,382",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231844250144000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231849048594000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231857568419000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231905688625000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231906988841000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231908206049000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231909399693000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231910980157000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231913625655000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231914738826000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231916063593000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231917653606000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231928811333000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231930210944000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231931798833000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231933221379000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231934981025000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231936563172000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231844250144000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260630223652399830000000?from_filter=false",
+              "description": "Very well maintained 4 bedroom, 1 1/2 bath home in a wonderful neighborhood. Views of Silver Mountain from your front yard and quiet solitude while enjoying your back yard. Just minutes from Silver Mountain Resort. Turn the unfinished basement into whatever your needs require. The large open kitchen has plenty of room for a family sized dining table set, a dining hutch, along with a kitchen island with 4 chairs. Main floor laundry is a bonus!",
+              "detailsComplete": true,
+              "facts": {
+                "Basement": "Yes",
+                "Garage Type": "Att Carport",
+                "Garage Stall": "None",
+                "Lot Acres": "0.15",
+                "Year Built": "1950",
+                "Zoning": "Residential",
+                "Subdivision": "Cameron Ave Addn"
+              },
+              "listingNumber": "26-6754",
+              "propertyType": "Residential - Single Family",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-ifnnuw",
+              "title": "301 S Division St",
+              "neighborhood": "Kellogg, ID",
+              "price": "$220,000",
+              "beds": 0,
+              "baths": 1,
+              "sqft": "792",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221149125563000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811223657334706000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221332050369000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221259718640000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221256581632000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221250477761000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221308568350000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221313190469000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221303919262000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221247163063000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221243980368000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811223818076010000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811223745701663000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811224353667835000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221327332626000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221149125563000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260811212901519945000000?from_filter=false",
+              "description": "Here's your opportunity to acquire your own business building with land included. Beautifully redone office which includes spacious lobby/reception area, 4 private offices, a bathroom and storage area. Alley access for private parking for multiple vehicles is behind the building. Great location on a corner lot across from the Post Office for great exposure to your business.",
+              "detailsComplete": true,
+              "facts": {
+                "Basement": "Yes",
+                "Year Built": "1910",
+                "Lot Acres": "0.08",
+                "Zoning": "Commercial"
+              },
+              "listingNumber": "26-8307",
+              "propertyType": "Commercial",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-1xqg6m6",
+              "title": "NKA May Court",
+              "neighborhood": "Cataldo, ID",
+              "price": "$130,000",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260716171320995935000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260603191607496318000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260603191609916316000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260604193317014093000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260603191605492626000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260603191531709632000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260603191457403636000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144213868827000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144240854189000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144401102733000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144430153941000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144445977796000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144601479798000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144643305457000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260322144841642265000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260723025115641127000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260723025117233662000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260716171320995935000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260321144127533557000000?from_filter=false",
+              "description": "Back on Market thru no fault of owner. This beautiful .80 Lot in Cataldo is zoned for R-2 Multi-family. Close to Coeur D 'Alene with easy access to I90. Possibilities are endless. Water and Sewer hook-up fees are paid. OWN AND LIVE IN AMERICA'S PREMIER OUTDOOR DESTINATION AREA. Seller is related to agent.",
+              "detailsComplete": true,
+              "facts": {
+                "Zoning": "R2",
+                "Subdivision": "N/A",
+                "Lot Acres": "0.8"
+              },
+              "listingNumber": "26-2527",
+              "propertyType": "Land",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            },
+            {
+              "id": "listing-somk18",
+              "title": "11 & 13 Kingston WAY",
+              "neighborhood": "Kingston, ID",
+              "price": "$99,500",
+              "beds": 0,
+              "baths": 0,
+              "sqft": "0",
+              "images": [
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718285094000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718335058000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718376856000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718425157000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718470837000000-o.jpg",
+                "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718519839000000-o.jpg"
+              ],
+              "image": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718285094000000-o.jpg",
+              "tag": "",
+              "elizaTake": "",
+              "hidden": false,
+              "sourceUrl": "https://my.flexmls.com/CiindyCarlson/search/office_listing_categories/Active/listings/20260226190717870344000000?from_filter=false",
+              "description": "OVER 6 ACRES OF MOUNTAIN TOP PARADISE LESS THAN 40 MINUTES FROM COEUR D'ALENE. These parcels boast terrific North Idaho views, power and natural gas are close and lots of building options.",
+              "detailsComplete": true,
+              "facts": {
+                "Zoning": "RES",
+                "Subdivision": "Kingston Estates",
+                "Lot Acres": "6.12"
+              },
+              "listingNumber": "26-1644",
+              "propertyType": "Land",
+              "status": "active",
+              "lastStatusVerifiedAt": 1791512780120,
+              "lastRefreshedAt": 1791512780120,
+              "lastSyncAttemptAt": 1791512780120,
+              "syncFailures": 0,
+              "syncState": "verified",
+              "nextSyncAt": 1791519980120,
+              "updatedAt": 1791512780120,
+              "sourceId": "source-xyp2xo",
+              "sourceArchived": false,
+              "sourceMissingCount": 0,
+              "detailAttemptAt": 1791512780120
+            }
+          ],
+          "aiUsage": {
+            "channel": "staging",
+            "mode": "live",
+            "calls": 1,
+            "blocked": 0,
+            "reused": 0,
+            "inputTokens": 17851,
+            "outputTokens": 6,
+            "estimatedUsd": 0.009254,
+            "byStage": {
+              "page-normalizer": {
+                "calls": 1,
+                "estimatedUsd": 0.009254
+              }
+            },
+            "records": [
+              {
+                "stage": "page-normalizer",
+                "model": "gpt-4.1-2025-04-14",
+                "outcome": 200,
+                "inputTokens": 17851,
+                "cachedInputTokens": 17664,
+                "outputTokens": 6,
+                "estimatedUsd": 0.009254,
+                "priced": true
+              }
+            ]
+          },
+          "timings": {
+            "details": 1196,
+            "listings": 3287,
+            "save": 239,
+            "total": 3730
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "cindy-carlson-realty-00-url.png",
+    "cindy-carlson-realty-01-review.png",
+    "cindy-carlson-realty-02-preview.png"
+  ],
+  "validation": {
+    "enabled": true,
+    "waitedMs": 5,
+    "text": []
+  },
+  "submittedAt": 5326,
+  "reviewMs": 10723,
+  "finalBuildScreen": "Building your app\nIMPORT ACTIVITY\nFound 8 active listings\nReading Cindy Carlson Realty\nMatching your website’s design and imagery\nRead 2 linked pages\nIdentified your profile photo\nSorted 5 website images by role\nWriting your profile and app copy\nRead full details for all 8 listings\nSaved 8 listings\nFound Cindy Carlson · Kellogg, ID",
+  "reviewText": "Back\nAPP BUILDER\ncindycarlsonrealty.com\nChange\nHere’s your app\nYour branding, content and listings are ready to review. Explore themes or preview your app before publishing.\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\n$429,000\n409 Emerald Dr\n4 beds · 2.5 baths · 2,129\n$325,000\n6113 Prichard Creek ST\n3 beds · 1 baths · 1,472\n$1,299,999\n483 Paradise Lane\n3 beds · 1.5 baths · 3,183\n$64,000\n50 S Breeden Ave\n2 beds · 1 baths · 624\n$388,000\n604 W Cameron Ave\n4 beds · 1.5 baths · 2,382\n$220,000\n301 S Division St\n1 baths · 792\n$130,000\nNKA May Court\nCataldo, ID\n$99,500\n11 & 13 Kingston WAY\nKingston, ID\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile\nMy Website · how your clients will see the opening screen\nOPENING LINE\nYour Local Silver Valley & North Idaho Real Estate Expert\nTry another opening line\nYOUR INTRODUCTION\nCindy Carlson is deeply rooted in the Silver Valley, having made it her home for over four decades. As a broker and REALTOR® with ABR, CRS, GRI, and RSPS designations, she brings 18 years of real estate experience and a genuine dedication to serving her clients’ best interests. Cindy leads her team with a commitment to service, community involvement, and upholding the highest standards of integrity. Her knowledge spans residential, commercial, land, and recreational properties, all while staying at the forefront of local market trends and education.\nTry another introduction\n8 listings imported from your website.\nYour portrait\nShown on your app’s first screen.\nAdjust or replace photo\n▸ Brokerage & license (optional)\n✓ Cindy Carlson Realty\nMake it yours\nExplore themes with your imported content and listings, or preview the client experience. Publish whenever you’re ready.\nExplore Themes\nPreview My App\nPublish My App",
+  "preview": {
+    "home": "Back\nYour client app\nCindy Carlson Realty\nKELLOGG, ID\nWelcome To Cindy Carlson Realty\nCindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho.\nView listings\nTHE AREA\nNorth Idaho’s Silver Valley\nNestled in the foothills of the Rocky Mountains, in the heart of the Panhandle National Forest, the Silver Valley is most noted for its mining heritage, dating back to the 1880s. The Silver Valley is also famous for it’s Ski Resorts ~ Silver Mountain and Lookout Pass; it’s Bike Trails, ATV Trails and The World’s Longest Gondola. The narrow valley, about 40 miles in length, comprises a number of small towns along the South Fork of the Coeur d’Alene River and Interstate 90.\nABOUT\nCindy Carlson, Broker, Realtor ® , ABR, CRS, GRI, RSPS, RPAC Major Investor\nCindy Carlson, Broker/owner of Cindy Carlson Realty, located in Kellogg, Idaho, is a 18 year residential/commercial real estate veteran. With deep roots to this area, Cindy and her husband Denny, have raised their family and enjoyed this scenic area for over 40 years. After 25+ years as a well known figure at a local dentist office, she decided to take her personal skills and stellar work ethic and turn it into a real estate career.\nProperty Search:\n$429,000\n409 Emerald Dr\n4 beds · 2.5 baths · 2,129\n$325,000\n6113 Prichard Creek ST\n3 beds · 1 baths · 1,472\n$1,299,999\n483 Paradise Lane\n3 beds · 1.5 baths · 3,183\n$64,000\n50 S Breeden Ave\n2 beds · 1 baths · 624\n$388,000\n604 W Cameron Ave\n4 beds · 1.5 baths · 2,382\n$220,000\n301 S Division St\n1 baths · 792\n$130,000\nNKA May Court\nCataldo, ID\n$99,500\n11 & 13 Kingston WAY\nKingston, ID\n(208) 512-0078\ncindy@cindycarlsonrealty.com\nCindy Carlson Realty\nHome\nListings\nSaved\nChat\nProfile",
+    "controls": [
+      {
+        "label": "View listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all ACTIVE Kellogg, ID $429,000 ACTIVE Murray, ID $325,000 ACTIVE Pinehurst, ID $1,299,999 ACTIVE Smelterville, ID $64,000 ACTIVE Kellogg, ID $388,",
+        "textLength": 340,
+        "stillHome": false
+      },
+      {
+        "label": "409 Emerald Dr",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 39 photos 409 Emerald Dr $429,000 Kellogg, ID 4 beds · 2.5 baths 2,129 EXCEPTIONAL 4 BEDROOM LARGE FAMILY HOME IN A BEAUTIFUL NEIGHBORGOOD STEPS AWAY FROM SILVER MOUNTAIN. Pride ",
+        "textLength": 953,
+        "stillHome": false
+      },
+      {
+        "label": "Save home",
+        "skipped": "not found by text"
+      },
+      {
+        "label": "6113 Prichard Creek ST",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 26 photos 6113 Prichard Creek ST $325,000 Murray, ID 3 beds · 1 bath 1,472 QUIET, PEACEFUL, SERENE & AWAY FROM IT ALL just begins to describe this 3 bedroom 1 bathroom home in Hi",
+        "textLength": 742,
+        "stillHome": false
+      },
+      {
+        "label": "483 Paradise Lane",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 106 photos 483 Paradise Lane $1,299,999 Pinehurst, ID 3 beds · 1.5 baths 3,183 THIS ISN'T JUST A PLACE TO LIVE! Tired of ordinary? This one-of-a-kind artist-designed home breaks ",
+        "textLength": 1734,
+        "stillHome": false
+      },
+      {
+        "label": "50 S Breeden Ave",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 28 photos 50 S Breeden Ave $64,000 Smelterville, ID 2 beds · 1 bath 624 Nicely remodeled manufactured home. Easy access to I-90, Close to all conveniences. White shed in back yar",
+        "textLength": 728,
+        "stillHome": false
+      },
+      {
+        "label": "604 W Cameron Ave",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 18 photos 604 W Cameron Ave $388,000 Kellogg, ID 4 beds · 1.5 baths 2,382 Very well maintained 4 bedroom, 1 1/2 bath home in a wonderful neighborhood. Views of Silver Mountain fr",
+        "textLength": 901,
+        "stillHome": false
+      },
+      {
+        "label": "301 S Division St",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 15 photos 301 S Division St $220,000 Kellogg, ID 1 bath 792 Here's your opportunity to acquire your own business building with land included. Beautifully redone office which incl",
+        "textLength": 725,
+        "stillHome": false
+      },
+      {
+        "label": "NKA May Court",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 17 photos NKA May Court $130,000 Cataldo, ID Back on Market thru no fault of owner. This beautiful .80 Lot in Cataldo is zoned for R-2 Multi-family. Close to Coeur D 'Alene with ",
+        "textLength": 611,
+        "stillHome": false
+      },
+      {
+        "label": "11 & 13 Kingston WAY",
+        "opens": "Back Your client app PROPERTY PREVIEW 1 / 6 photos 11 & 13 Kingston WAY $99,500 Kingston, ID 0 OVER 6 ACRES OF MOUNTAIN TOP PARADISE LESS THAN 40 MINUTES FROM COEUR D'ALENE. These parcels boast terrific North Idaho views",
+        "textLength": 516,
+        "stillHome": false
+      },
+      {
+        "label": "Home",
+        "opens": "Back Your client app Cindy Carlson Realty KELLOGG, ID Welcome To Cindy Carlson Realty Cindy Carlson Realty A Full Service Real Estate Agency located in Kellogg Idaho. View listings THE AREA North Idaho’s Silver Valley Ne",
+        "textLength": 1712,
+        "stillHome": true
+      },
+      {
+        "label": "Listings",
+        "opens": "Back Your client app THEME PREVIEW Listings Homes I picked for you. View all ACTIVE Kellogg, ID $429,000 ACTIVE Murray, ID $325,000 ACTIVE Pinehurst, ID $1,299,999 ACTIVE Smelterville, ID $64,000 ACTIVE Kellogg, ID $388,",
+        "textLength": 340,
+        "stillHome": false
+      },
+      {
+        "label": "Saved",
+        "opens": "Back Your client app THEME PREVIEW Saved homes Tap a heart on any home to try saving it here. These saves stay in your layout preview. Home Listings Saved Chat Profile",
+        "textLength": 167,
+        "stillHome": false
+      },
+      {
+        "label": "Chat",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Messages Try a conversation. Preview messages are never delivered to an inbox. Message Send preview message Home Listings Saved Chat Profile",
+        "textLength": 191,
+        "stillHome": false
+      },
+      {
+        "label": "Profile",
+        "opens": "Back Your client app PREVIEW · ACTIVITY STAYS HERE Your profile Name Email Save preview profile Showings Notifications Documents Saved homes Home Listings Saved Chat Profile",
+        "textLength": 173,
+        "stillHome": false
+      }
+    ]
+  },
+  "listingJobs": [
+    {
+      "status": 200,
+      "mode": "single",
+      "imported": 8
+    }
+  ],
+  "listingImages": [
+    {
+      "title": "409 Emerald Dr",
+      "photos": 39,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260825000833568641000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 768,
+        "height": 1024,
+        "type": "jpg",
+        "bytes": 160898
+      }
+    },
+    {
+      "title": "6113 Prichard Creek ST",
+      "photos": 26,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260924190315975094000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 1365,
+        "height": 1024,
+        "type": "jpg",
+        "bytes": 446314
+      }
+    },
+    {
+      "title": "483 Paradise Lane",
+      "photos": 106,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260827064119283093000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 1179,
+        "height": 784,
+        "type": "jpg",
+        "bytes": 211353
+      }
+    },
+    {
+      "title": "50 S Breeden Ave",
+      "photos": 28,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260910012454018150000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 1179,
+        "height": 750,
+        "type": "jpg",
+        "bytes": 190279
+      }
+    },
+    {
+      "title": "604 W Cameron Ave",
+      "photos": 18,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260630231844250144000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 1365,
+        "height": 1024,
+        "type": "jpg",
+        "bytes": 357242
+      }
+    },
+    {
+      "title": "301 S Division St",
+      "photos": 15,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260811221149125563000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 1365,
+        "height": 1024,
+        "type": "jpg",
+        "bytes": 412770
+      }
+    },
+    {
+      "title": "NKA May Court",
+      "photos": 17,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260716171320995935000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 1179,
+        "height": 781,
+        "type": "jpg",
+        "bytes": 152790
+      }
+    },
+    {
+      "title": "11 & 13 Kingston WAY",
+      "photos": 6,
+      "first": "https://cdn.resize.sparkplatform.com/cda/1600x1200/true/20260226190718285094000000-o.jpg",
+      "size": {
+        "status": 200,
+        "width": 768,
+        "height": 1024,
+        "type": "jpg",
+        "bytes": 267945
+      }
+    }
+  ],
+  "source": [
+    {
+      "url": "https://cindycarlsonrealty.com/",
+      "status": 200,
+      "finalUrl": "https://cindycarlsonrealty.com/",
+      "title": "Cindy Carlson Realty – A Full Service Real Estate Agency",
+      "textLength": 1177,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 2,
+      "sample": "Skip to primary navigation\nSkip to main content\nSkip to primary sidebar\nCINDY CARLSON REALTY\n\nA Full Service Real Estate Agency\n\nHOME\n \nFEATURED LISTINGS\n \nPROPERTY SEARCH\n \nABOUT THE AREA\n \nABOUT US\n \nCONTACT US\nHome\nCindy Carlson Broker, Realtor®, ABR, CRS, GRI, RSPS\n\n                           Welcome To Cindy Carlson Realty\n\n\nWe specialize in Real Estate in the Silver Valley and North Idaho. The Silver Valley offers a wealth of opportunity and an outstanding quality of life!  Whether you are looking for land, recreational property, development property, a business opportunity or your dream home, we can help.\n\n\n\nPrimary Sidebar\nSTAY IN TOUCH:\n\n\n\nPROPERTY SEARCH:\nProperty Search\nFeatured Listings\nWE ARE LOCATED AT:\n\n202 W Cameron Avenue\nKellogg, ID 83837\nOffice: (208) 783-2544\nFax: (208) 783-2941\n\nFACEBOOK FEED\n\nCopyright © 2026 · Metro Pro On Genesis Framework · WordPress · Log in\n\nAll Rights Reserved © 2017 Cindy Carlson Realty. | A Full Service Real Estate Agency. All information provided is deemed reliable but is not guaranteed and should be independently verified. Properties subject to prior sale or rental. | Website Designed By: Opportunity Designs",
+      "challenge": false,
+      "screenshot": "cindy-carlson-realty-source-0.png"
+    },
+    {
+      "url": "https://cindycarlsonrealty.com/featured-listings/",
+      "status": 200,
+      "finalUrl": "https://cindycarlsonrealty.com/featured-listings/",
+      "title": "Featured Listings",
+      "textLength": 693,
+      "priceCount": 0,
+      "uniquePrices": 0,
+      "propertyLinkCount": 5,
+      "sample": "Skip to primary navigation\nSkip to main content\n\nCINDY CARLSON REALTY\n\nA Full Service Real Estate Agency\n\nHOME\n \nFEATURED LISTINGS\n \nPROPERTY SEARCH\n \nABOUT THE AREA\n \nABOUT US\n \nCONTACT US\nFeatured Listings\nSearch Our Featured Properties:\n\nWe can help you with your search. Give us a call: (208) 783-2544\n\n \n\nSearch our Featured Listings HERE\n\nCopyright © 2026 · Metro Pro On Genesis Framework · WordPress · Log in\n\nAll Rights Reserved © 2017 Cindy Carlson Realty. | A Full Service Real Estate Agency. All information provided is deemed reliable but is not guaranteed and should be independently verified. Properties subject to prior sale or rental. | Website Designed By: Opportunity Designs",
+      "challenge": false,
+      "screenshot": "cindy-carlson-realty-source-1.png"
+    }
+  ],
+  "wallMs": 58188,
+  "window": {
+    "startedAt": "2026-10-09T02:26:12.696Z",
+    "endedAt": "2026-10-09T02:27:10.884Z"
+  },
+  "aiUsage": {
+    "calls": 1,
+    "blocked": 0,
+    "estimatedUsd": 0.009254,
+    "inputTokens": 17851,
+    "outputTokens": 6
+  }
+}
