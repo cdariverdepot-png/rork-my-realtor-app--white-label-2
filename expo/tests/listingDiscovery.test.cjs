@@ -1319,3 +1319,18 @@ test('a card whose photo and price sit above its address link is bound by its UR
   // A lone container is not a repeated card pattern; nothing is borrowed from outside the anchor.
   assert.equal(engine.listingsFromCards('<main>' + card('A1', '12 Pine Rd', '$350,000', 3) + '</main>', base).length, 0);
 });
+
+test('an off-site collection is the agent\'s only when every card names the site\'s own office', async () => {
+  const site = 'https://lakerealty.example/', idx = 'https://lakerealty.idxhost.example/idx/featured';
+  const cell = (n, office) => `<div class="IDX-resultsCell"><a class="IDX-resultsAddressLink" href="https://lakerealty.idxhost.example/idx/details/listing/a1/${n}/${n}-Pine-Rd">${n} Pine Rd, Paonia, CO 81428</a>
+    <div class="IDX-resultsField-listingPrice">$${n},000</div><div class="IDX-detailsMLSCourtesy">Listing courtesy of ${office}</div></div>`;
+  const home = '<html><head><title>Lake Realty - Paonia Colorado Real Estate</title><meta property="og:site_name" content="Lake Realty"></head><body><h1>Lake Realty</h1><a href="' + idx + '">Lake Realty Listings</a></body></html>';
+  const run = cells => discoverListings([site], async url => ({ html: url === site ? home : url === idx ? '<html><body>' + cells + '</body></html>' : '<html></html>', finalUrl: new URL(url) }), { maxPages: 4, maxDetailPages: 0 });
+  const own = await run(cell(410, 'Lake Realty LLC') + cell(520, 'Lake Realty LLC') + cell(630, 'Lake Realty LLC'));
+  assert.equal(own.listings.length, 3);
+  assert.ok(own.meta.stages.includes('offsite_collection_own_office'));
+  const mixed = await run(cell(410, 'Lake Realty LLC') + cell(520, 'Other Brokers Inc') + cell(630, 'Lake Realty LLC'));
+  assert.equal(mixed.listings.length, 0, 'one other office makes it an unclaimed market page');
+  const unattributed = await run(cell(410, '') + cell(520, '') + cell(630, ''));
+  assert.equal(unattributed.listings.length, 0);
+});
