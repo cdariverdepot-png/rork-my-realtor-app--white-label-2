@@ -31,17 +31,17 @@ new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.resolv
 }).outputText)(presentationModule, presentationModule.exports);
 
 // Execute the real Edge Function with website/API boundaries replaced by fixtures.
-async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', invokeRenderer = false, serviceActive = true } = {}) {
+async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFacts = false, html, status = 'needs-input', invokeRenderer = false, serviceActive = true, trustedGuest = true, updatedAt, conflict = false } = {}) {
   const edge = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/index.ts'), 'utf8')
-    .replace(/^import .*createClient.*;\r?\n/, '')
+    .replace(/^import .*createClient.*;\r?\n/m, '')
     .replace(/^import .*listingDiscovery\.ts";\r?\n/m, '');
   // progress.ts has no imports; it is embedded as-is, exactly as the deployment bundle does.
   const progressModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/progress.ts'), 'utf8').replace(/^export /gm, '');
   // listingRecords.ts imports only types; it is embedded the same way.
   const recordsModule = fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build/listingRecords.ts'), 'utf8').replace(/^import type .*;\r?\n/gm, '').replace(/^export /gm, '');
   // aiGateway.ts and deployment.ts import nothing; they are embedded the same way.
-  const aiModules = ['aiGateway.ts', 'deployment.ts'].map(file => fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build', file), 'utf8').replace(/^export /gm, '')).join('\n');
-  const edgeWithoutFiles = progressModule + '\n' + recordsModule + '\n' + aiModules + '\n' + edge.replace(/^import .*aiGateway\.ts";\r?\n/m, '').replace(/^import .*deployment\.ts";\r?\n/m, '').replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '').replace(/^import .*listingRecords\.ts";\r?\n/m, '');
+  const aiModules = ['aiGateway.ts', 'aiPersistence.ts', 'deployment.ts'].map(file => fs.readFileSync(path.resolve(__dirname, '../../supabase/functions/analyze-realtor-build', file), 'utf8').replace(/^import type .*;\r?\n/gm, '').replace(/^export /gm, '')).join('\n');
+  const edgeWithoutFiles = progressModule + '\n' + recordsModule + '\n' + aiModules + '\n' + edge.replace(/^import .*aiPersistence\.ts";\r?\n/m, '').replace(/^import .*aiGateway\.ts";\r?\n/m, '').replace(/^import .*deployment\.ts";\r?\n/m, '').replace(/^import .*listingFiles\.ts";\r?\n/m, '').replace(/^import .*websiteDesign\.ts";\r?\n/m, '').replace(/^import .*progress\.ts";\r?\n/m, '').replace(/^import .*listingRecords\.ts";\r?\n/m, '');
   // Inline a minimal discoverListings so the edge function body still runs in fixtures.
   const discoveryStub = `
     async function discoverListings(seeds, fetchHtml, options) {
@@ -77,11 +77,14 @@ async function runWebsiteBuild({ guest = false, mode, unreadable = false, noFact
   const rendererPosts = [];
   const source = { id:'website', kind:'url', label:'Website', uri:'https://cindycarlsonrealty.com/', status:'queued' };
   const draft = { heroMessage:'Original opening', aboutParagraph:'Original introduction', tone:'warm', layoutId:'warm-concierge' };
-  const build = { sources:[source], evidence:[], draft, status };
-  const admin = { rpc:async()=>({data:serviceActive,error:null}), auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,email_confirmed_at:guest?null:'now'}}})}, from:table=> {
+  const build = { sources:[source], evidence:[], draft, status, updated_at:updatedAt };
+  const admin = { rpc:async()=>({data:serviceActive,error:null}), auth:{getUser:async()=>({data:{user:{id:'fixture',is_anonymous:guest,app_metadata:{importer_test_access:trustedGuest},email_confirmed_at:guest?null:'now'}}})}, from:table=> {
     if(table==='realtors')return {select:()=>({eq:()=>({maybeSingle:async()=>({data:{id:'realtor'},error:null})})})};
     reads++;
-    return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:async()=>{update=value;return {error:null};}}) };
+    return { select:()=>({eq:()=>({single:async()=>({data:build})})}), update:value=>({eq:()=>{
+      if(updatedAt)return {eq:(column,expected)=>{assert.equal(column,'updated_at');assert.equal(expected,updatedAt);return {select:async()=>{if(!conflict)update=value;return {data:conflict?[]:[{auth_user_id:'fixture',updated_at:'new-version'}],error:null}}}}};
+      update=value;return Promise.resolve({error:null});
+    }}) };
   } };
   const fetchFixture = async (url, options) => {
     if (String(url) === 'https://render.example/run') {
@@ -138,8 +141,8 @@ test('production onboarding invokes the configured renderer and continues discov
   assert.ok(r.result.discoveredListings.some(item => item.price === '$350,000'));
 });
 
-test('inactive account cannot bypass website service checks through a guest payload',async()=>{
-  for(const guest of [true,false]){const r=await runWebsiteBuild({guest,serviceActive:false});assert.equal(r.status,403);assert.equal(r.aiBody,undefined);assert.equal(r.update,undefined);}
+test('expired evaluation retains authenticated website setup for cloud and guest drafts',async()=>{
+  for(const guest of [true,false]){const r=await runWebsiteBuild({guest,serviceActive:false});assert.equal(r.status,200);assert.ok(r.aiBody);}
 });
 
 test('retries reread URLs for existing drafts with zero facts and change only selected copy', async () => {
@@ -369,4 +372,12 @@ test('completed guest drafts can refresh the same URL and retain saved content o
   saved=original; fail=true;
   await assert.rejects(mod.exports.analyzeBuild(),/Website unavailable/);
   assert.deepEqual(saved,original);
+});
+
+test('production rejects anonymous paid inference without server-owned tester authorization',async()=>{
+ const r=await runWebsiteBuild({guest:true,trustedGuest:false});assert.equal(r.status,403);assert.equal(r.aiBody,undefined);assert.equal(r.update,undefined);
+});
+test('an import cannot overwrite a draft edited after its snapshot',async()=>{
+ const r=await runWebsiteBuild({updatedAt:'original-version',conflict:true});assert.equal(r.status,409);assert.equal(r.result.code,'build_changed');assert.equal(r.update,undefined);
+ const saved=await runWebsiteBuild({updatedAt:'original-version'});assert.equal(saved.status,200);assert.ok(saved.update);
 });

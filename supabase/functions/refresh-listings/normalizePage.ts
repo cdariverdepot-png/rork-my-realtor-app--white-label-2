@@ -1,10 +1,11 @@
+import type { AiPersistence } from "../analyze-realtor-build/aiPersistence.ts";
 import { normalizeListingStatus, statusForProperty, type DiscoveredListing, type NavigationCandidate } from "../analyze-realtor-build/listingDiscovery.ts";
 import { createAiGateway, AiBlockedError, type AiGateway } from "../analyze-realtor-build/aiGateway.ts";
 import { DEPLOYMENT_CHANNEL } from "./deployment.ts";
 
 /** This deployment's metered AI gateway (one per import request; see aiGateway.ts for the policy). */
-export function importAiGateway(): AiGateway {
-  return createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL });
+export function importAiGateway(persistence?: AiPersistence): AiGateway {
+  return createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL, persistence });
 }
 
 /** The page-level AI fallbacks bound to one import's gateway, so its budget and usage cover both. */
@@ -41,7 +42,14 @@ async function normalizePublicPageWith(ai: AiGateway, html: string, base: URL): 
           }, required: ["title", "evidence", "price", "description", "beds", "baths", "sqft", "neighborhood", "images", "sourceUrl", "listingNumber", "propertyType"],
         } } }, required: ["listings"],
       } } },
-    }, { signal: AbortSignal.timeout(10000) });
+    }, { signal: AbortSignal.timeout(10000), cacheSeconds: 600, accept: payload => {
+      try {
+        const result = payload as {output?: {content?: {type?: string; text?: string}[]}[]};
+        const text = (result.output ?? []).flatMap(o=>o.content ?? []).filter(c=>c.type === "output_text").map(c=>c.text ?? "").join("");
+        const rows = JSON.parse(text).listings;
+        return Array.isArray(rows) && (rows.length === 0 || validateNormalizedRecords(rows, excerpt, base).length === rows.length);
+      } catch { return false; }
+    } });
   } catch (error) {
     if (error instanceof AiBlockedError) return [];
     throw error;

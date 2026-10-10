@@ -93,8 +93,8 @@ test('authenticated CSV endpoint imports multiple properties without AI or profi
   assert.equal(result.update.draft.heroMessage, 'Original profile');
   assert.equal(result.update.draft.aboutParagraph, 'Original introduction');
 });
-test('inactive realtor cannot import files or invoke model processing',async()=>{
- const r=await runImport({serviceActive:false});assert.equal(r.status,403);assert.equal(r.downloads,0);assert.equal(r.update,undefined);assert.equal(r.aiBody,undefined);
+test('expired evaluation retains account-owned CSV setup without model processing',async()=>{
+ const r=await runImport({serviceActive:false});assert.equal(r.status,200);assert.ok(r.downloads>0);assert.ok(r.update);assert.equal(r.aiBody,undefined);
 });
 
 test('file endpoint rejects guests and mixed-owner paths before storage reads', async () => {

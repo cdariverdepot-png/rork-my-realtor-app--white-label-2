@@ -19,7 +19,9 @@ function replayFetch(capture, seen) {
     if (url.startsWith('https://api.openai.com/')) {
       const body = JSON.parse(init.body);
       const format = body.text?.format?.name;
-      if (format !== 'inventory_navigation') aiRequest = body;
+      // Reader parity compares semantic inputs. Admission control is independently tested.
+      const { max_output_tokens: _outputBound, ...semanticBody } = body;
+      if (format !== 'inventory_navigation') aiRequest = semanticBody;
       return Response.json({ output: [{ content: [{ type: 'output_text', text: JSON.stringify(format === 'inventory_navigation' ? { ids: [] } : defaultProfile()) }] }] });
     }
     seen?.push(url);

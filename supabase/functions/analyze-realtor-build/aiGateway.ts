@@ -1,3 +1,4 @@
+import type { AiPersistence } from "./aiPersistence.ts";
 /**
  * The single metered path to the OpenAI Responses API for the importer functions.
  *
@@ -50,7 +51,7 @@ export type AiUsageSummary = {
   records: Omit<AiCallRecord, "ms">[];
 };
 
-export type AiBlockCode = "ai_offline" | "ai_key_missing" | "ai_budget";
+export type AiBlockCode = "ai_offline" | "ai_key_missing" | "ai_budget" | "ai_busy" | "ai_checkpoint";
 
 export class AiBlockedError extends Error {
   readonly code: AiBlockCode;
@@ -140,7 +141,7 @@ export type AiGateway = {
   available(): boolean;
   model(stage: AiStage): string;
   /** POST a Responses API body for a stage. Returns the provider's response (body readable once). */
-  request(stage: AiStage, body: Record<string, unknown>, init?: { signal?: AbortSignal }): Promise<Response>;
+  request(stage: AiStage, body: Record<string, unknown>, init?: { signal?: AbortSignal; accept?: (payload: unknown) => boolean; cacheSeconds?: number; intent?: string }): Promise<Response>;
   summary(): AiUsageSummary;
 };
 
@@ -166,7 +167,7 @@ export function reserveAiCost(model: string, payload: string, outputTokens: numb
 }
 
 export function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?: typeof fetch;
-  log?: (record: AiCallRecord) => void; now?: () => number }): AiGateway {
+  log?: (record: AiCallRecord) => void; now?: () => number; persistence?: AiPersistence }): AiGateway {
   const { env, channel } = options;
   const send = options.fetch ?? ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, init));
   const now = options.now ?? (() => Date.now());
@@ -198,8 +199,9 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
         : "The AI service is not configured.");
       const outputLimit = Math.min(OUTPUT_LIMITS[stage], Math.max(1, Math.floor(numberFrom(String(body.max_output_tokens ?? OUTPUT_LIMITS[stage]), OUTPUT_LIMITS[stage]))));
       // Callers cannot override the policy-selected model or omit the output bound.
-      const payload = JSON.stringify({ ...body, model: model(stage), max_output_tokens: outputLimit });
-      const cacheKey = stage + ":" + payload;
+      const { model: _ignoredModel, ...requestBody } = body;
+      const payload = JSON.stringify({ model: model(stage), ...requestBody, max_output_tokens: outputLimit });
+      const cacheKey = stage + ":" + (init?.intent ?? "") + ":" + payload;
       const reuse = completed.get(cacheKey);
       const running = pending.get(cacheKey);
       if (reuse || running) {
@@ -207,12 +209,12 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
         note({ stage, model: model(stage), outcome: "reused", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, estimatedUsd: 0, priced: true, ms: 0 });
         return responseOf(saved);
       }
-      if (attempts >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
-      if (stage !== "profile" && Number.isFinite(policy.maxCalls) && attempts >= policy.maxCalls - 1) {
+      if (!options.persistence && attempts >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
+      if (!options.persistence && stage !== "profile" && Number.isFinite(policy.maxCalls) && attempts >= policy.maxCalls - 1) {
         throw blocked(stage, "ai_budget", "The remaining AI call of this request is reserved for writing the profile.");
       }
       const reservation = reserveAiCost(model(stage), payload, outputLimit, table);
-      if (spent() + reserved + unresolved + reservation > policy.maxUsd) {
+      if (!options.persistence && spent() + reserved + unresolved + reservation > policy.maxUsd) {
         throw blocked(stage, "ai_budget", `This request cannot safely fit within its AI spending limit ($${policy.maxUsd}).`);
       }
       // Reserve synchronously before the first await: concurrent requests cannot buy the same slot.
@@ -220,7 +222,32 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
       const started = now();
       const work = (async (): Promise<Saved> => {
         let response: Response | undefined;
+        let attempt: string | undefined, providerStarted = false;
+        const persist = async (result: {response?: Saved; usage: unknown; cost: number; known: boolean; cacheSeconds: number}) => {
+          if (!attempt || !options.persistence) return;
+          try { await options.persistence.finish(attempt, result); }
+          catch { console.error("[ai] checkpoint reconciliation pending", attempt); }
+        };
         try {
+          if (options.persistence) {
+            const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("import-ai-v1:" + cacheKey));
+            const fingerprint = Array.from(new Uint8Array(digest), x => x.toString(16).padStart(2, "0")).join("");
+            const claim = await options.persistence.acquire(fingerprint, stage, reservation);
+            if (claim.state === "cached" && claim.response) {
+              attempts--;
+              note({stage,model:model(stage),outcome:"reused",inputTokens:0,cachedInputTokens:0,outputTokens:0,estimatedUsd:0,priced:true,ms:0});
+              completed.set(cacheKey, claim.response);
+              return claim.response;
+            }
+            if (claim.state === "budget") throw blocked(stage,"ai_budget","This import needs more AI capacity. Your saved work is retained; please try later.");
+            if (claim.state !== "acquired" || !claim.attempt) throw blocked(stage,"ai_busy","This analysis is already running or awaiting reconciliation. Your saved work is retained; please retry later.");
+            attempt = claim.attempt;
+            if (attempts > policy.maxCalls || (stage !== "profile" && attempts > policy.maxCalls - 1) || spent() + reserved + unresolved > policy.maxUsd) {
+              await persist({usage:{reason:"local_budget",sent:false},cost:0,known:true,cacheSeconds:0});
+              throw blocked(stage,"ai_budget","This request cannot safely fit within its AI budget. Your saved work is retained.");
+            }
+          }
+          providerStarted = true;
           response = await send("https://api.openai.com/v1/responses", { method: "POST", signal: init?.signal,
             headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: payload });
           const text = await response.text();
@@ -230,21 +257,33 @@ export function createAiGateway(options: { env: Env; channel: DeploymentChannel;
           const usageKnown = Number.isFinite(parsed?.usage?.input_tokens) && Number.isFinite(parsed?.usage?.output_tokens);
           const cost = estimateAiCost(usage.model ?? model(stage), usage, table);
           // A rejected request is not assumed charged. A successful response without usage is unresolved.
-          const held = !usageKnown && response.ok ? reservation : 0;
+          const settled = usageKnown || response.status >= 400 && response.status < 500;
+          const held = !settled ? reservation : 0;
           unresolved += held;
           note({ stage, model: usage.model ?? model(stage), outcome: response.status, inputTokens: usage.inputTokens,
             cachedInputTokens: usage.cachedInputTokens, outputTokens: usage.outputTokens, estimatedUsd: cost.usd,
             priced: cost.priced, ms: now() - started, usageKnown, reservedUsd: held,
             ...(response.headers.get("x-request-id") ? { requestId: response.headers.get("x-request-id")! } : {}) });
           const saved = { status: response.status, text, contentType: response.headers.get("Content-Type") ?? "application/json" };
-          if (response.ok && parsed && (parsed.status === undefined || parsed.status === "completed")) completed.set(cacheKey, saved);
+          const finished = response.ok && parsed && (parsed.status === undefined || parsed.status === "completed");
+          let accepted = false;
+          try { accepted = Boolean(finished && init?.accept?.(parsed)); } catch { /* invalid output is not durable */ }
+          if (finished && (!init?.accept || accepted)) completed.set(cacheKey, saved);
+          await persist({response: accepted ? saved : undefined, usage: records[records.length - 1], cost: cost.usd,
+            known: settled, cacheSeconds: accepted ? Math.min(604800, Math.max(0, init?.cacheSeconds ?? 0)) : 0});
           return saved;
         } catch (error) {
+          if (!providerStarted) {
+            attempts--;
+            if (error instanceof AiBlockedError) throw error;
+            throw blocked(stage,"ai_checkpoint","The import checkpoint service is unavailable. Your saved work is retained; please retry later.");
+          }
           unresolved += reservation;
           note({ stage, model: model(stage), outcome: "network-error", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0,
             estimatedUsd: 0, priced: true, usageKnown: false, reservedUsd: reservation,
             ...(response?.headers.get("x-request-id") ? { requestId: response.headers.get("x-request-id")! } : {}),
             ms: now() - started, reason: error instanceof Error ? error.name : "error" });
+          await persist({usage: records[records.length - 1],cost:0,known:false,cacheSeconds:0});
           throw error;
         } finally { reserved = Math.max(0, reserved - reservation); }
       })();

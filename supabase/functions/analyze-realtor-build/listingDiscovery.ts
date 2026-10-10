@@ -3140,11 +3140,6 @@ export async function discoverListings(
     if (found.length && !activeFound.length) stages.push("historical_inventory_ignored");
     const hint = !broad && !activeFound.length ? dynamicInterfaceHint(html) : undefined;
     if (hint) { interfaces.add(hint); inventoryUrls.add(finalUrl.toString()); }
-    if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
-      (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
-      aiNormalizations++;
-      try { found = await options.normalizePage(html, finalUrl); if (found.length) observation.resolution = "external-normalizer"; } catch { /* deterministic navigation continues */ }
-    }
     const activeFragments = collectInventoryFragments(html, finalUrl).filter(url => !historicalInventoryUrl(url));
     if (hint && !activeFound.length && !activeFragments.length && !kestrelInventoryRequests(html).length && !renderedChallenges.has(finalUrl.origin)) {
       let renderedNetwork: { url: string; html: string }[] = pendingRenderNetwork ?? [];
@@ -3217,6 +3212,24 @@ export async function discoverListings(
         stages.push("api_discovered");
         if (observation.resolution !== "known-pattern") observation.resolution = "navigation-only";
       }
+    }
+    // Acquire the widget/API/rendered data before asking a model to interpret markup.
+    // Provider challenges and empty application shells are not property evidence.
+    // Structural evidence is host-independent; it does not imply inventory completeness.
+    if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
+      (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
+    const propertyEvidence = /(?:[$€£]\s*[\d,]+|(?:listPrice|price)\s*["':=]\s*["']?\d{4,})/i.test(html) &&
+      /(?:\b\d{1,6}\s+[A-Za-z][^<>\n]{0,70}\b(?:st(?:reet)?|ave(?:nue)?|r(?:oa)?d|drive|dr|lane|ln|way|court|ct|blvd|boulevard|trail|trl)\b|streetAddress|addressLine1|unparsedAddress|\bMLS\s*(?:#|number|id)|listingNumber)/i.test(html);
+    const publishedTransport = propertyEvidence && (collectInventoryFragments(html, finalUrl).some(url => !visitedSet.has(url)) ||
+      kestrelInventoryRequests(html).length > 0 || publishedCollectionRequests(html, finalUrl).length > 0);
+    if (propertyEvidence && !publishedTransport && !classifyObstacle(html)) {
+      aiNormalizations++;
+      try {
+        found = await options.normalizePage(html, finalUrl);
+        stages.push(found.length ? "ai_normalizer_accepted" : "ai_normalizer_empty");
+        if (found.length) observation.resolution = "external-normalizer";
+      } catch { stages.push("ai_normalizer_unavailable"); /* deterministic navigation continues */ }
+    }
     }
     if (found.some(item => !historicalListing(item)) && next.fragment && next.parent) {
       // Once the shell's inventory loads, discard its toolbar/search alternatives.

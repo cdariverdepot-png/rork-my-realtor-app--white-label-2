@@ -1,5 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+type AiSavedResponse = { status: number; text: string; contentType: string };
+type AiPersistence = {
+  acquire(key: string, stage: AiStage, reserve: number): Promise<{
+    state: "acquired" | "cached" | "busy" | "budget";
+    attempt?: string; response?: AiSavedResponse;
+  }>;
+  finish(attempt: string, result: { response?: AiSavedResponse; usage: unknown; cost: number;
+    known: boolean; cacheSeconds: number }): Promise<void>;
+};
 type DiscoveredListing = {
   title: string;
   description: string;
@@ -77,7 +86,7 @@ type AiGateway = {
   available(): boolean;
   model(stage: AiStage): string;
   /** POST a Responses API body for a stage. Returns the provider's response (body readable once). */
-  request(stage: AiStage, body: Record<string, unknown>, init?: { signal?: AbortSignal }): Promise<Response>;
+  request(stage: AiStage, body: Record<string, unknown>, init?: { signal?: AbortSignal; accept?: (payload: unknown) => boolean; cacheSeconds?: number; intent?: string }): Promise<Response>;
   summary(): AiUsageSummary;
 };
 type ImportStage = "site" | "design" | "pages" | "listings" | "details" | "verify" | "profile" | "save";
@@ -162,6 +171,56 @@ type ImageDiagnostic = {
   /** Higher means the page asked for this job more clearly. CSS heroes outrank a nearby image. */
   rank: number;
 };
+const { createAiPersistence } = (() => {
+
+/** Server-only stage cache. Never use a domain or client-supplied owner as the cache identity. */
+type AiSavedResponse = { status: number; text: string; contentType: string };
+type AiPersistence = {
+  acquire(key: string, stage: AiStage, reserve: number): Promise<{
+    state: "acquired" | "cached" | "busy" | "budget";
+    attempt?: string; response?: AiSavedResponse;
+  }>;
+  finish(attempt: string, result: { response?: AiSavedResponse; usage: unknown; cost: number;
+    known: boolean; cacheSeconds: number }): Promise<void>;
+};
+
+function createAiPersistence(options: { owner: string; channel: DeploymentChannel;
+  env: (name: string) => string | undefined;
+  rpc: (name: string, args: Record<string, unknown>) => PromiseLike<{ data: any; error: unknown }> }): AiPersistence | undefined {
+  // Opt-in deployment flag permits rolling back independently from stored results.
+  if (options.env("AI_DURABLE_REUSE") !== "1") return undefined;
+  const limit = (name: string, fallback: number | null) => {
+    const raw = options.env(name);
+    if (raw === undefined || raw === "") return fallback;
+    const n = Number(raw);
+    if (!Number.isFinite(n) || n < 0) throw new Error(`Invalid ${name}`);
+    return n;
+  };
+  const daily = limit(options.channel === "staging" ? "AI_STAGING_DAILY_USD" : "AI_PRODUCTION_DAILY_USD", options.channel === "staging" ? 3 : null);
+  const actor = limit("AI_ACTOR_DAILY_USD", null);
+  return {
+    async acquire(key, stage, reserve) {
+      const { data, error } = await options.rpc("import_ai_acquire", {
+        p_owner: options.owner, p_channel: options.channel, p_key: key, p_stage: stage,
+        p_reserve: reserve, p_daily_limit: daily, p_actor_limit: actor,
+      });
+      if (error || !data || !["acquired", "cached", "busy", "budget"].includes(data.state)) {
+        throw new Error("The import checkpoint service is unavailable. Please retry; your saved work is retained.");
+      }
+      return data;
+    },
+    async finish(attempt, result) {
+      const { error } = await options.rpc("import_ai_finish", {
+        p_attempt: attempt, p_response: result.response ?? null, p_usage: result.usage,
+        p_cost: result.cost, p_known: result.known, p_cache_seconds: result.cacheSeconds,
+      });
+      if (error) throw new Error("Could not reconcile the import checkpoint.");
+    },
+  };
+}
+return { createAiPersistence };
+})();
+
 const { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv } = (() => {
 /**
  * Multi-hop listing inventory discovery for the realtor app builder.
@@ -3305,11 +3364,6 @@ async function discoverListings(
     if (found.length && !activeFound.length) stages.push("historical_inventory_ignored");
     const hint = !broad && !activeFound.length ? dynamicInterfaceHint(html) : undefined;
     if (hint) { interfaces.add(hint); inventoryUrls.add(finalUrl.toString()); }
-    if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
-      (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
-      aiNormalizations++;
-      try { found = await options.normalizePage(html, finalUrl); if (found.length) observation.resolution = "external-normalizer"; } catch { /* deterministic navigation continues */ }
-    }
     const activeFragments = collectInventoryFragments(html, finalUrl).filter(url => !historicalInventoryUrl(url));
     if (hint && !activeFound.length && !activeFragments.length && !kestrelInventoryRequests(html).length && !renderedChallenges.has(finalUrl.origin)) {
       let renderedNetwork: { url: string; html: string }[] = pendingRenderNetwork ?? [];
@@ -3382,6 +3436,24 @@ async function discoverListings(
         stages.push("api_discovered");
         if (observation.resolution !== "known-pattern") observation.resolution = "navigation-only";
       }
+    }
+    // Acquire the widget/API/rendered data before asking a model to interpret markup.
+    // Provider challenges and empty application shells are not property evidence.
+    // Structural evidence is host-independent; it does not imply inventory completeness.
+    if (!found.length && !broad && options?.normalizePage && aiNormalizations < 2 &&
+      (PATH_INVENTORY.test(finalUrl.pathname) || next.fragment) && Date.now() < deadline) {
+    const propertyEvidence = /(?:[$€£]\s*[\d,]+|(?:listPrice|price)\s*["':=]\s*["']?\d{4,})/i.test(html) &&
+      /(?:\b\d{1,6}\s+[A-Za-z][^<>\n]{0,70}\b(?:st(?:reet)?|ave(?:nue)?|r(?:oa)?d|drive|dr|lane|ln|way|court|ct|blvd|boulevard|trail|trl)\b|streetAddress|addressLine1|unparsedAddress|\bMLS\s*(?:#|number|id)|listingNumber)/i.test(html);
+    const publishedTransport = propertyEvidence && (collectInventoryFragments(html, finalUrl).some(url => !visitedSet.has(url)) ||
+      kestrelInventoryRequests(html).length > 0 || publishedCollectionRequests(html, finalUrl).length > 0);
+    if (propertyEvidence && !publishedTransport && !classifyObstacle(html)) {
+      aiNormalizations++;
+      try {
+        found = await options.normalizePage(html, finalUrl);
+        stages.push(found.length ? "ai_normalizer_accepted" : "ai_normalizer_empty");
+        if (found.length) observation.resolution = "external-normalizer";
+      } catch { stages.push("ai_normalizer_unavailable"); /* deterministic navigation continues */ }
+    }
     }
     if (found.some(item => !historicalListing(item)) && next.fragment && next.parent) {
       // Once the shell's inventory loads, discard its toolbar/search alternatives.
@@ -4316,7 +4388,7 @@ type AiUsageSummary = {
   records: Omit<AiCallRecord, "ms">[];
 };
 
-type AiBlockCode = "ai_offline" | "ai_key_missing" | "ai_budget";
+type AiBlockCode = "ai_offline" | "ai_key_missing" | "ai_budget" | "ai_busy" | "ai_checkpoint";
 
 class AiBlockedError extends Error {
   readonly code: AiBlockCode;
@@ -4406,7 +4478,7 @@ type AiGateway = {
   available(): boolean;
   model(stage: AiStage): string;
   /** POST a Responses API body for a stage. Returns the provider's response (body readable once). */
-  request(stage: AiStage, body: Record<string, unknown>, init?: { signal?: AbortSignal }): Promise<Response>;
+  request(stage: AiStage, body: Record<string, unknown>, init?: { signal?: AbortSignal; accept?: (payload: unknown) => boolean; cacheSeconds?: number; intent?: string }): Promise<Response>;
   summary(): AiUsageSummary;
 };
 
@@ -4432,7 +4504,7 @@ function reserveAiCost(model: string, payload: string, outputTokens: number,
 }
 
 function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?: typeof fetch;
-  log?: (record: AiCallRecord) => void; now?: () => number }): AiGateway {
+  log?: (record: AiCallRecord) => void; now?: () => number; persistence?: AiPersistence }): AiGateway {
   const { env, channel } = options;
   const send = options.fetch ?? ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, init));
   const now = options.now ?? (() => Date.now());
@@ -4464,8 +4536,9 @@ function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?
         : "The AI service is not configured.");
       const outputLimit = Math.min(OUTPUT_LIMITS[stage], Math.max(1, Math.floor(numberFrom(String(body.max_output_tokens ?? OUTPUT_LIMITS[stage]), OUTPUT_LIMITS[stage]))));
       // Callers cannot override the policy-selected model or omit the output bound.
-      const payload = JSON.stringify({ ...body, model: model(stage), max_output_tokens: outputLimit });
-      const cacheKey = stage + ":" + payload;
+      const { model: _ignoredModel, ...requestBody } = body;
+      const payload = JSON.stringify({ model: model(stage), ...requestBody, max_output_tokens: outputLimit });
+      const cacheKey = stage + ":" + (init?.intent ?? "") + ":" + payload;
       const reuse = completed.get(cacheKey);
       const running = pending.get(cacheKey);
       if (reuse || running) {
@@ -4473,12 +4546,12 @@ function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?
         note({ stage, model: model(stage), outcome: "reused", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, estimatedUsd: 0, priced: true, ms: 0 });
         return responseOf(saved);
       }
-      if (attempts >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
-      if (stage !== "profile" && Number.isFinite(policy.maxCalls) && attempts >= policy.maxCalls - 1) {
+      if (!options.persistence && attempts >= policy.maxCalls) throw blocked(stage, "ai_budget", `This request reached its limit of ${policy.maxCalls} AI calls.`);
+      if (!options.persistence && stage !== "profile" && Number.isFinite(policy.maxCalls) && attempts >= policy.maxCalls - 1) {
         throw blocked(stage, "ai_budget", "The remaining AI call of this request is reserved for writing the profile.");
       }
       const reservation = reserveAiCost(model(stage), payload, outputLimit, table);
-      if (spent() + reserved + unresolved + reservation > policy.maxUsd) {
+      if (!options.persistence && spent() + reserved + unresolved + reservation > policy.maxUsd) {
         throw blocked(stage, "ai_budget", `This request cannot safely fit within its AI spending limit ($${policy.maxUsd}).`);
       }
       // Reserve synchronously before the first await: concurrent requests cannot buy the same slot.
@@ -4486,7 +4559,32 @@ function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?
       const started = now();
       const work = (async (): Promise<Saved> => {
         let response: Response | undefined;
+        let attempt: string | undefined, providerStarted = false;
+        const persist = async (result: {response?: Saved; usage: unknown; cost: number; known: boolean; cacheSeconds: number}) => {
+          if (!attempt || !options.persistence) return;
+          try { await options.persistence.finish(attempt, result); }
+          catch { console.error("[ai] checkpoint reconciliation pending", attempt); }
+        };
         try {
+          if (options.persistence) {
+            const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("import-ai-v1:" + cacheKey));
+            const fingerprint = Array.from(new Uint8Array(digest), x => x.toString(16).padStart(2, "0")).join("");
+            const claim = await options.persistence.acquire(fingerprint, stage, reservation);
+            if (claim.state === "cached" && claim.response) {
+              attempts--;
+              note({stage,model:model(stage),outcome:"reused",inputTokens:0,cachedInputTokens:0,outputTokens:0,estimatedUsd:0,priced:true,ms:0});
+              completed.set(cacheKey, claim.response);
+              return claim.response;
+            }
+            if (claim.state === "budget") throw blocked(stage,"ai_budget","This import needs more AI capacity. Your saved work is retained; please try later.");
+            if (claim.state !== "acquired" || !claim.attempt) throw blocked(stage,"ai_busy","This analysis is already running or awaiting reconciliation. Your saved work is retained; please retry later.");
+            attempt = claim.attempt;
+            if (attempts > policy.maxCalls || (stage !== "profile" && attempts > policy.maxCalls - 1) || spent() + reserved + unresolved > policy.maxUsd) {
+              await persist({usage:{reason:"local_budget",sent:false},cost:0,known:true,cacheSeconds:0});
+              throw blocked(stage,"ai_budget","This request cannot safely fit within its AI budget. Your saved work is retained.");
+            }
+          }
+          providerStarted = true;
           response = await send("https://api.openai.com/v1/responses", { method: "POST", signal: init?.signal,
             headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: payload });
           const text = await response.text();
@@ -4496,21 +4594,33 @@ function createAiGateway(options: { env: Env; channel: DeploymentChannel; fetch?
           const usageKnown = Number.isFinite(parsed?.usage?.input_tokens) && Number.isFinite(parsed?.usage?.output_tokens);
           const cost = estimateAiCost(usage.model ?? model(stage), usage, table);
           // A rejected request is not assumed charged. A successful response without usage is unresolved.
-          const held = !usageKnown && response.ok ? reservation : 0;
+          const settled = usageKnown || response.status >= 400 && response.status < 500;
+          const held = !settled ? reservation : 0;
           unresolved += held;
           note({ stage, model: usage.model ?? model(stage), outcome: response.status, inputTokens: usage.inputTokens,
             cachedInputTokens: usage.cachedInputTokens, outputTokens: usage.outputTokens, estimatedUsd: cost.usd,
             priced: cost.priced, ms: now() - started, usageKnown, reservedUsd: held,
             ...(response.headers.get("x-request-id") ? { requestId: response.headers.get("x-request-id")! } : {}) });
           const saved = { status: response.status, text, contentType: response.headers.get("Content-Type") ?? "application/json" };
-          if (response.ok && parsed && (parsed.status === undefined || parsed.status === "completed")) completed.set(cacheKey, saved);
+          const finished = response.ok && parsed && (parsed.status === undefined || parsed.status === "completed");
+          let accepted = false;
+          try { accepted = Boolean(finished && init?.accept?.(parsed)); } catch { /* invalid output is not durable */ }
+          if (finished && (!init?.accept || accepted)) completed.set(cacheKey, saved);
+          await persist({response: accepted ? saved : undefined, usage: records[records.length - 1], cost: cost.usd,
+            known: settled, cacheSeconds: accepted ? Math.min(604800, Math.max(0, init?.cacheSeconds ?? 0)) : 0});
           return saved;
         } catch (error) {
+          if (!providerStarted) {
+            attempts--;
+            if (error instanceof AiBlockedError) throw error;
+            throw blocked(stage,"ai_checkpoint","The import checkpoint service is unavailable. Your saved work is retained; please retry later.");
+          }
           unresolved += reservation;
           note({ stage, model: model(stage), outcome: "network-error", inputTokens: 0, cachedInputTokens: 0, outputTokens: 0,
             estimatedUsd: 0, priced: true, usageKnown: false, reservedUsd: reservation,
             ...(response?.headers.get("x-request-id") ? { requestId: response.headers.get("x-request-id")! } : {}),
             ms: now() - started, reason: error instanceof Error ? error.name : "error" });
+          await persist({usage: records[records.length - 1],cost:0,known:false,cacheSeconds:0});
           throw error;
         } finally { reserved = Math.max(0, reserved - reservation); }
       })();
@@ -6381,8 +6491,6 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!url || !key) return reply({ error: "Build service is not configured." }, 503);
   // Every model request in this import goes through one metered gateway (stage, tokens, estimated cost, policy).
-  const ai = createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL });
-  const selectInventoryLinks = navigationSelector(ai);
   const jwt = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
   if (!jwt) return reply({ error: "Sign in is required." }, 401);
   const admin = createClient(url, key);
@@ -6391,9 +6499,15 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   if (authError || !auth.user || (!guest && (auth.user.is_anonymous || !auth.user.email_confirmed_at))) {
     return reply({ error: "A verified realtor account is required." }, 401);
   }
+  if (guest && auth.user.is_anonymous && DEPLOYMENT_CHANNEL === "production" && auth.user.app_metadata?.importer_test_access !== true) {
+    return reply({ error: "Sign in with a verified realtor account to analyze a website." }, 403);
+  }
   const userId = auth.user.id;
   const { data: accountOwner, error: ownerError } = await admin.from("realtors").select("id").eq("auth_user_id", userId).maybeSingle();
   if (ownerError) return reply({ error: "Account access is unavailable." }, 503);
+  const ai = createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL,
+    persistence: createAiPersistence({owner:accountOwner?.id ?? userId,channel:DEPLOYMENT_CHANNEL,env:name=>Deno.env.get(name),rpc:(name,args)=>admin.rpc(name,args)}) });
+  const selectInventoryLinks = navigationSelector(ai);
   // Importing and editing are setup actions, including after evaluation expires.
   // Paid service entitlements are enforced at publishing, messaging and connection boundaries.
   // Testing-code builds have a valid anonymous session, keep their drafts on
@@ -6405,8 +6519,17 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     evidence: Array.isArray(input.evidence) ? input.evidence : [],
     draft: input.draft && typeof input.draft === "object" ? input.draft : {}, status: "collecting",
   } } : await admin.from("realtor_builds")
-    .select("sources,evidence,draft,status").eq("auth_user_id", userId).single();
+    .select("sources,evidence,draft,status,updated_at").eq("auth_user_id", userId).single();
   if (!build) return reply({ error: "Start your app build first." }, 404);
+  // A response arriving after a website switch or manual edit must never overwrite newer work.
+  const saveBuild = async (patch: Record<string, unknown>) => {
+    const query = admin.from("realtor_builds").update({...patch, updated_at:new Date().toISOString()}).eq("auth_user_id",userId);
+    if (!build.updated_at) return await query; // Legacy rows and offline fixtures.
+    const {data,error} = await query.eq("updated_at",build.updated_at).select("auth_user_id,updated_at");
+    if (!error && !data?.length) return {error:{code:"build_changed",message:"Your draft changed while analysis was running. Your newer work was retained."}};
+    if (data?.[0]?.updated_at) build.updated_at=data[0].updated_at;
+    return {error};
+  };
   if (input?.mode === "refresh-design") {
     const source = (build.sources as Source[]).find(s => s.kind === 'url');
     if (!source) return reply({ error: 'Add your website URL before refreshing its design.' }, 422);
@@ -6475,8 +6598,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     }
     if (!value) return reply({ error: "We couldn’t create a new version this time. Your current wording is saved—please try again." }, 502);
     const draft = { ...build.draft, [target]: value.trim().slice(0, target === "aboutParagraph" ? 750 : 300) };
-    const { error } = guest ? { error: null } : await admin.from("realtor_builds").update({ draft, updated_at: new Date().toISOString() })
-      .eq("auth_user_id", userId);
+    const { error } = guest ? { error: null } : await saveBuild({draft});
     if (error) return reply({ error: "Could not save the new variation." }, 503);
     return reply({ draft });
   }
@@ -6554,7 +6676,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     const existing = Array.isArray(existingDraft.discoveredListings) ? existingDraft.discoveredListings : [];
     const imported = mergeFileListings([], extracted).slice(0, 100);
     const draft = { ...existingDraft, discoveredListings: mergeFileListings(existing, imported), listingImportWarnings: warnings };
-    const { error } = await admin.from("realtor_builds").update({ draft, updated_at: new Date().toISOString() }).eq("auth_user_id", userId);
+    const { error } = await saveBuild({draft});
     if (error) return reply({ error: "The listings were read but could not be saved. Your files are saved; please retry." }, 503);
     return reply({ draft, importedCount: imported.length, warnings });
   }
@@ -6760,7 +6882,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const readyIds = new Set(processed.filter((source) => source.status === "ready" && source.kind !== "contacts").map((source) => source.id));
   const imageIds = new Set(processed.filter(source => source.status === "ready" && source.kind === "image").map(source => source.id));
   if (!readyIds.size) {
-    if (!guest) await admin.from("realtor_builds").update({ sources: processed, status: "collecting" }).eq("auth_user_id", userId);
+    if (!guest) await saveBuild({sources:processed,status:"collecting"});
     const failures = processed.filter(source => source.status === "failed").map(source => readableSourceFailure(source.uri, source.error));
     console.log("[build] timings", progress.timings());
     return reply({ code: "sources_unreadable", sources: processed,
@@ -6793,7 +6915,12 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
             potentialListingSources: { type: "array", items: { type: "string" } },
             portraitSourceId: { type: ["string", "null"] },
           }, required: ["evidence", "copy", "tone", "layoutId", "potentialListingSources", "portraitSourceId"],
-        } } } }, { signal: AbortSignal.timeout(60_000) });
+        } } } }, { signal: AbortSignal.timeout(60_000), cacheSeconds: 86400,
+          accept: payload => {
+            try { const result = validate(JSON.parse(responseText(payload)), readyIds, imageIds);
+              return result.evidence.length > 0 && ["heroMessage","welcomeNote","tagline","aboutParagraph","conciergeLine","contactLine"].every(key => Boolean(result.draft[key as keyof typeof result.draft]));
+            } catch { return false; }
+          } });
   } catch (e) {
     if (e instanceof AiBlockedError) {
       progress.finish("profile", "failed");
@@ -6851,15 +6978,13 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     listingDiscovery,
   };
   if (!guest) progress.start("save");
-  const { error: saveError } = guest ? { error: null } : await admin.from("realtor_builds")
-    .update({ sources: processed, evidence: result.evidence, draft: draftWithListings,
-      selected_layout: result.draft.layoutId, status: "needs-input", updated_at: new Date().toISOString() })
-    .eq("auth_user_id", userId);
+  const { error: saveError } = guest ? { error: null } : await saveBuild({sources:processed,evidence:result.evidence,draft:draftWithListings,selected_layout:result.draft.layoutId,status:"needs-input"});
   if (!guest) progress.finish("save", saveError ? "failed" : "done");
   const timings = progress.timings();
   console.log("[build] timings", timings);
   const aiUsage = ai.summary();
   console.log("[ai] import", JSON.stringify({ calls: aiUsage.calls, estimatedUsd: aiUsage.estimatedUsd, byStage: aiUsage.byStage }));
+  if (saveError?.code === "build_changed") return reply({code:"build_changed",aiUsage,error:saveError.message},409);
   if (saveError) return reply({ code: "save_failed", aiUsage, error: "Analysis finished but could not be saved. Please retry." }, 503);
   return reply({
     timings,

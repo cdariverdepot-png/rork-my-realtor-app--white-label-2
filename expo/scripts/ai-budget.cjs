@@ -34,7 +34,7 @@ function readLedger(file = LEDGER) {
 }
 
 const day = at => new Date(at).toISOString().slice(0, 10);
-const spentOn = (ledger, date) => ledger.filter(entry => day(entry.at) === date).reduce((sum, entry) => sum + (entry.estimatedUsd ?? 0), 0);
+const spentOn = (ledger, date) => ledger.filter(entry => day(entry.at) === date).reduce((sum, entry) => sum + (entry.estimatedUsd ?? 0) + (entry.unresolvedUsd ?? 0), 0);
 
 /** Measured average spend per full build from the ledger, or the configured default. */
 function estimatePerBuild(config, ledger) {
@@ -79,9 +79,9 @@ function createCampaignMeter({ campaign, level, config = loadConfig(), ledger = 
     },
     recordSite(site, usages) {
       const total = usages.filter(Boolean).reduce((acc, u) => ({ calls: acc.calls + (u.calls ?? 0), blocked: acc.blocked + (u.blocked ?? 0),
-        estimatedUsd: acc.estimatedUsd + (u.estimatedUsd ?? 0), inputTokens: acc.inputTokens + (u.inputTokens ?? 0), outputTokens: acc.outputTokens + (u.outputTokens ?? 0) }),
-      { calls: 0, blocked: 0, estimatedUsd: 0, inputTokens: 0, outputTokens: 0 });
-      spent += total.estimatedUsd;
+        estimatedUsd: acc.estimatedUsd + (u.estimatedUsd ?? 0), unresolvedUsd: acc.unresolvedUsd + (u.unresolvedUsd ?? 0), inputTokens: acc.inputTokens + (u.inputTokens ?? 0), outputTokens: acc.outputTokens + (u.outputTokens ?? 0) }),
+      { calls: 0, blocked: 0, estimatedUsd: 0, unresolvedUsd: 0, inputTokens: 0, outputTokens: 0 });
+      spent += total.estimatedUsd + total.unresolvedUsd;
       write({ at: new Date(now()).toISOString(), kind: 'site', campaign, level, site, ...total, estimatedUsd: round(total.estimatedUsd) });
       if (!alerted && spent >= limit * config.alertFraction) { alerted = true; warn(`[ai-budget] ALERT: campaign ${campaign} has used $${round(spent)} of its $${round(limit)} limit.`); }
       if (spent >= limit) stopped = `Hard limit reached: $${round(spent)} of $${round(limit)}.`;

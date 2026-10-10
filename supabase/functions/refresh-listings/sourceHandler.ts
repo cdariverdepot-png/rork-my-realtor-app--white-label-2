@@ -1,3 +1,5 @@
+import { createAiPersistence } from "../analyze-realtor-build/aiPersistence.ts";
+import { DEPLOYMENT_CHANNEL } from "./deployment.ts";
 import { readSource, reconcileInventory, verifyMissing, SourceReadError, type ListingSource, type SourceInventory } from "./sources.ts";
 import { applyObservation, type SyncListing } from "./sync.ts";
 import { createListingRenderer, enrichPublicProperty, labelInventoryOwnership, listingRenderBackendFromEnv, type DiscoveredListing, type FetchHtml } from "../analyze-realtor-build/listingDiscovery.ts";
@@ -77,7 +79,7 @@ export async function runSourceSync(sb: Database, realtorId: string, body: { mod
   };
   let inventory: SourceInventory;
   // One metered AI gateway for this import: navigation and page fallbacks share its budget and usage record.
-  const ai = importAiGateway();
+  const ai = importAiGateway(createAiPersistence({owner:realtorId,channel:DEPLOYMENT_CHANNEL,env:name=>Deno.env.get(name),rpc:(name,args)=>sb.rpc(name,args)}));
   const fallbacks = pageAi(ai);
   progress?.start("listings");
   try {

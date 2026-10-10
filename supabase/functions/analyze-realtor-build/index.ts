@@ -1,3 +1,4 @@
+import { createAiPersistence } from "./aiPersistence.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { publicListingRequestHeaders, decodePublicListingResponse, discoverListings, continueAfterVerification, isRobotChallenge, isPublishedScriptGate, publishedScriptGateCookie, createListingRenderer, listingRenderBackendFromEnv, type DiscoveredListing, type NavigationCandidate } from "./listingDiscovery.ts";
 import { parseListingCsv, validateFileListings, mergeFileListings } from "./listingFiles.ts";
@@ -583,8 +584,6 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!url || !key) return reply({ error: "Build service is not configured." }, 503);
   // Every model request in this import goes through one metered gateway (stage, tokens, estimated cost, policy).
-  const ai = createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL });
-  const selectInventoryLinks = navigationSelector(ai);
   const jwt = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
   if (!jwt) return reply({ error: "Sign in is required." }, 401);
   const admin = createClient(url, key);
@@ -593,9 +592,15 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   if (authError || !auth.user || (!guest && (auth.user.is_anonymous || !auth.user.email_confirmed_at))) {
     return reply({ error: "A verified realtor account is required." }, 401);
   }
+  if (guest && auth.user.is_anonymous && DEPLOYMENT_CHANNEL === "production" && auth.user.app_metadata?.importer_test_access !== true) {
+    return reply({ error: "Sign in with a verified realtor account to analyze a website." }, 403);
+  }
   const userId = auth.user.id;
   const { data: accountOwner, error: ownerError } = await admin.from("realtors").select("id").eq("auth_user_id", userId).maybeSingle();
   if (ownerError) return reply({ error: "Account access is unavailable." }, 503);
+  const ai = createAiGateway({ env: name => Deno.env.get(name), channel: DEPLOYMENT_CHANNEL,
+    persistence: createAiPersistence({owner:accountOwner?.id ?? userId,channel:DEPLOYMENT_CHANNEL,env:name=>Deno.env.get(name),rpc:(name,args)=>admin.rpc(name,args)}) });
+  const selectInventoryLinks = navigationSelector(ai);
   // Importing and editing are setup actions, including after evaluation expires.
   // Paid service entitlements are enforced at publishing, messaging and connection boundaries.
   // Testing-code builds have a valid anonymous session, keep their drafts on
@@ -607,8 +612,17 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     evidence: Array.isArray(input.evidence) ? input.evidence : [],
     draft: input.draft && typeof input.draft === "object" ? input.draft : {}, status: "collecting",
   } } : await admin.from("realtor_builds")
-    .select("sources,evidence,draft,status").eq("auth_user_id", userId).single();
+    .select("sources,evidence,draft,status,updated_at").eq("auth_user_id", userId).single();
   if (!build) return reply({ error: "Start your app build first." }, 404);
+  // A response arriving after a website switch or manual edit must never overwrite newer work.
+  const saveBuild = async (patch: Record<string, unknown>) => {
+    const query = admin.from("realtor_builds").update({...patch, updated_at:new Date().toISOString()}).eq("auth_user_id",userId);
+    if (!build.updated_at) return await query; // Legacy rows and offline fixtures.
+    const {data,error} = await query.eq("updated_at",build.updated_at).select("auth_user_id,updated_at");
+    if (!error && !data?.length) return {error:{code:"build_changed",message:"Your draft changed while analysis was running. Your newer work was retained."}};
+    if (data?.[0]?.updated_at) build.updated_at=data[0].updated_at;
+    return {error};
+  };
   if (input?.mode === "refresh-design") {
     const source = (build.sources as Source[]).find(s => s.kind === 'url');
     if (!source) return reply({ error: 'Add your website URL before refreshing its design.' }, 422);
@@ -677,8 +691,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     }
     if (!value) return reply({ error: "We couldn’t create a new version this time. Your current wording is saved—please try again." }, 502);
     const draft = { ...build.draft, [target]: value.trim().slice(0, target === "aboutParagraph" ? 750 : 300) };
-    const { error } = guest ? { error: null } : await admin.from("realtor_builds").update({ draft, updated_at: new Date().toISOString() })
-      .eq("auth_user_id", userId);
+    const { error } = guest ? { error: null } : await saveBuild({draft});
     if (error) return reply({ error: "Could not save the new variation." }, 503);
     return reply({ draft });
   }
@@ -756,7 +769,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     const existing = Array.isArray(existingDraft.discoveredListings) ? existingDraft.discoveredListings : [];
     const imported = mergeFileListings([], extracted).slice(0, 100);
     const draft = { ...existingDraft, discoveredListings: mergeFileListings(existing, imported), listingImportWarnings: warnings };
-    const { error } = await admin.from("realtor_builds").update({ draft, updated_at: new Date().toISOString() }).eq("auth_user_id", userId);
+    const { error } = await saveBuild({draft});
     if (error) return reply({ error: "The listings were read but could not be saved. Your files are saved; please retry." }, 503);
     return reply({ draft, importedCount: imported.length, warnings });
   }
@@ -962,7 +975,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
   const readyIds = new Set(processed.filter((source) => source.status === "ready" && source.kind !== "contacts").map((source) => source.id));
   const imageIds = new Set(processed.filter(source => source.status === "ready" && source.kind === "image").map(source => source.id));
   if (!readyIds.size) {
-    if (!guest) await admin.from("realtor_builds").update({ sources: processed, status: "collecting" }).eq("auth_user_id", userId);
+    if (!guest) await saveBuild({sources:processed,status:"collecting"});
     const failures = processed.filter(source => source.status === "failed").map(source => readableSourceFailure(source.uri, source.error));
     console.log("[build] timings", progress.timings());
     return reply({ code: "sources_unreadable", sources: processed,
@@ -995,7 +1008,12 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
             potentialListingSources: { type: "array", items: { type: "string" } },
             portraitSourceId: { type: ["string", "null"] },
           }, required: ["evidence", "copy", "tone", "layoutId", "potentialListingSources", "portraitSourceId"],
-        } } } }, { signal: AbortSignal.timeout(60_000) });
+        } } } }, { signal: AbortSignal.timeout(60_000), cacheSeconds: 86400,
+          accept: payload => {
+            try { const result = validate(JSON.parse(responseText(payload)), readyIds, imageIds);
+              return result.evidence.length > 0 && ["heroMessage","welcomeNote","tagline","aboutParagraph","conciergeLine","contactLine"].every(key => Boolean(result.draft[key as keyof typeof result.draft]));
+            } catch { return false; }
+          } });
   } catch (e) {
     if (e instanceof AiBlockedError) {
       progress.finish("profile", "failed");
@@ -1053,15 +1071,13 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     listingDiscovery,
   };
   if (!guest) progress.start("save");
-  const { error: saveError } = guest ? { error: null } : await admin.from("realtor_builds")
-    .update({ sources: processed, evidence: result.evidence, draft: draftWithListings,
-      selected_layout: result.draft.layoutId, status: "needs-input", updated_at: new Date().toISOString() })
-    .eq("auth_user_id", userId);
+  const { error: saveError } = guest ? { error: null } : await saveBuild({sources:processed,evidence:result.evidence,draft:draftWithListings,selected_layout:result.draft.layoutId,status:"needs-input"});
   if (!guest) progress.finish("save", saveError ? "failed" : "done");
   const timings = progress.timings();
   console.log("[build] timings", timings);
   const aiUsage = ai.summary();
   console.log("[ai] import", JSON.stringify({ calls: aiUsage.calls, estimatedUsd: aiUsage.estimatedUsd, byStage: aiUsage.byStage }));
+  if (saveError?.code === "build_changed") return reply({code:"build_changed",aiUsage,error:saveError.message},409);
   if (saveError) return reply({ code: "save_failed", aiUsage, error: "Analysis finished but could not be saved. Please retry." }, 503);
   return reply({
     timings,

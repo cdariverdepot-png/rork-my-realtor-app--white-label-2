@@ -63,7 +63,15 @@ test('renderer keeps at most 30 same-origin JSON or search payloads and scrubs t
   assert.equal(selected.some(row => /ads\.example/.test(row.url)), false);
 });
 
-test('listing render server enforces auth, SSRF, failure cleanup and a bounded document', async () => {
+test('listing render server enforces auth, SSRF, failure cleanup and a bounded document', async t => {
+  // The browser is simulated, so DNS must be deterministic and offline too.
+  const dns = require('node:dns/promises');
+  t.mock.method(dns, 'lookup', async () => [{ address: '93.184.216.34', family: 4 }]);
+  require('node:module').syncBuiltinESMExports();
+  t.after(() => {
+    t.mock.restoreAll();
+    require('node:module').syncBuiltinESMExports();
+  });
   const { createListingRenderServer } = await import('../../services/listing-renderer/server.mjs');
   let closed = 0;
   const browser = {
@@ -115,6 +123,10 @@ test('listing render server enforces auth, SSRF, failure cleanup and a bounded d
     browser: new Proxy({}, { get: (_t, prop) => (...args) => (useFail ? failing : browser)[prop](...args) }),
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => new Promise(resolve => {
+    server.closeAllConnections();
+    server.close(resolve);
+  }));
   const port = server.address().port;
   const post = (headers, body) => new Promise(resolve => {
     const req = http.request({ hostname: '127.0.0.1', port, method: 'POST', path: '/', headers }, res => {
@@ -144,5 +156,4 @@ test('listing render server enforces auth, SSRF, failure cleanup and a bounded d
   const again = await post({ 'content-type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ url: 'https://example.com/listings' }));
   assert.equal(again.status, 200);
   assert.ok(closed >= 3);
-  await new Promise(resolve => server.close(resolve));
 });
