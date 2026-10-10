@@ -378,6 +378,8 @@ test('production rejects anonymous paid inference without server-owned tester au
  const r=await runWebsiteBuild({guest:true,trustedGuest:false});assert.equal(r.status,403);assert.equal(r.aiBody,undefined);assert.equal(r.update,undefined);
 });
 test('an import cannot overwrite a draft edited after its snapshot',async()=>{
- const r=await runWebsiteBuild({updatedAt:'original-version',conflict:true});assert.equal(r.status,409);assert.equal(r.result.code,'build_changed');assert.equal(r.update,undefined);
+ for (const mode of [undefined, 'regenerate', 'discover-listings']) {
+ const r=await runWebsiteBuild({mode,updatedAt:'original-version',conflict:true});assert.equal(r.status,409);assert.equal(r.result.code,'build_changed');assert.equal(r.update,undefined);
+ }
  const saved=await runWebsiteBuild({updatedAt:'original-version'});assert.equal(saved.status,200);assert.ok(saved.update);
 });

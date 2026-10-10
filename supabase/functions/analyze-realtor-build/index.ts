@@ -692,6 +692,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     if (!value) return reply({ error: "We couldn’t create a new version this time. Your current wording is saved—please try again." }, 502);
     const draft = { ...build.draft, [target]: value.trim().slice(0, target === "aboutParagraph" ? 750 : 300) };
     const { error } = guest ? { error: null } : await saveBuild({draft});
+    if (error?.code === "build_changed") return reply({code:error.code,error:error.message},409);
     if (error) return reply({ error: "Could not save the new variation." }, 503);
     return reply({ draft });
   }
@@ -770,6 +771,7 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
     const imported = mergeFileListings([], extracted).slice(0, 100);
     const draft = { ...existingDraft, discoveredListings: mergeFileListings(existing, imported), listingImportWarnings: warnings };
     const { error } = await saveBuild({draft});
+    if (error?.code === "build_changed") return reply({code:error.code,error:error.message},409);
     if (error) return reply({ error: "The listings were read but could not be saved. Your files are saved; please retry." }, 503);
     return reply({ draft, importedCount: imported.length, warnings });
   }
@@ -816,9 +818,8 @@ async function handle(request: Request, sink?: (event: ImportEvent) => void): Pr
       listingDiscovery: discovery.meta,
     };
     if (!guest) {
-      const { error } = await admin.from("realtor_builds").update({
-        draft, updated_at: new Date().toISOString(),
-      }).eq("auth_user_id", userId);
+      const { error } = await saveBuild({draft});
+      if (error?.code === "build_changed") return reply({code:error.code,error:error.message},409);
       if (error) return reply({ error: "Listings were found but could not be saved." }, 503);
     }
     return reply({
